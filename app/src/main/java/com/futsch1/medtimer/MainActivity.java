@@ -2,77 +2,28 @@ package com.futsch1.medtimer;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.View;
-
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.futsch1.medtimer.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    TabLayout tabLayout;
+    ViewPager2 viewPager;
+    ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tabs);
 
-        setSupportActionBar(binding.toolbar);
+        viewPagerAdapter = new ViewPagerAdapter(this);
+        viewPager.setAdapter(viewPagerAdapter);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText("OBJECT " + (position + 1))).attach();
     }
 }
