@@ -20,7 +20,7 @@ public class ViewPagerAdapter
         if (position == 0)
             fragment = new OverviewFragment();
         else if (position == 1)
-            fragment = new MedicineFragment();
+            fragment = new MedicinesFragment();
         else
             fragment = new SettingsFragment();
 
