@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.logic;
+package com.futsch1.medtimer.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

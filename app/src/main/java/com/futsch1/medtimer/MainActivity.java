@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.futsch1.medtimer.logic.Medicines;
+import com.futsch1.medtimer.database.Medicines;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
