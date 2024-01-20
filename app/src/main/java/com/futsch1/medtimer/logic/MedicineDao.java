@@ -4,17 +4,25 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
 @Dao
 public interface MedicineDao {
+    @Transaction
     @Query("SELECT * FROM Medicine")
-    List<Medicine> getAll();
+    List<Medicine> getMedicines();
 
     @Insert
-    void insertAll(Medicine... medicines);
+    void insertMedicines(Medicine... medicines);
+
+    @Insert
+    void insertReminders(Reminder... medicines);
 
     @Delete
-    void delete(Medicine medicine);
+    void deleteMedicine(Medicine medicine);
+
+    @Delete
+    void deleteReminder(Reminder reminder);
 }
