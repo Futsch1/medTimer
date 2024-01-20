@@ -30,8 +30,8 @@ public class MedicineFragment extends Fragment {
      * @return A new instance of fragment Status.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatusFragment newInstance(String param1, String param2) {
-        StatusFragment fragment = new StatusFragment();
+    public static OverviewFragment newInstance(String param1, String param2) {
+        OverviewFragment fragment = new OverviewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -52,6 +52,6 @@ public class MedicineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_status, container, false);
+        return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 }
