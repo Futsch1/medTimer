@@ -17,3 +17,4 @@ classDiagram
 
 - [AlarmManager](https://developer.android.com/reference/android/app/AlarmManager)
 - [Room](https://developer.android.com/training/data-storage/room/)
+- [Notification with action](https://developer.android.com/develop/ui/views/notifications/build-notification#Actions)

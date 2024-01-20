@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    Medicines medicines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +24,23 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabs);
 
-        viewPagerAdapter = new ViewPagerAdapter(this);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText("OBJECT " + (position + 1))).attach();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            int[] tabNames = new int[]{R.string.tab_overview, R.string.tab_medicine, R.string.tab_settings};
+            tab.setText(tabNames[position]);
+        }).attach();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "medTimer").build();
-        Medicines medicines = new Medicines(db.medicineDao());
+        new Thread(() -> {
+            this.medicines = new Medicines(db.medicineDao());
+        }).start();
     }
 }
