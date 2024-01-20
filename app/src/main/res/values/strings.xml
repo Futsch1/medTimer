@@ -5,4 +5,7 @@
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
     <string name="add_reminder">Add reminder</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="time">Time</string>
 </resources>

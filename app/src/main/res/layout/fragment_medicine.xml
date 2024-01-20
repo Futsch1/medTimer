@@ -24,14 +24,24 @@
             <TextView
                 android:id="@+id/medicineName"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="8" />
 
             <ImageButton
-                android:id="@+id/deleteMedicine"
+                android:id="@+id/editMedicine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/edit"
+                android:src="@android:drawable/ic_menu_edit" />
+
+            <ImageButton
+                android:id="@+id/deleteReminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#F44336"
+                android:contentDescription="@string/delete"
                 android:src="@android:drawable/ic_menu_delete" />
         </LinearLayout>
 
