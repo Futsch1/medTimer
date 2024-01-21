@@ -34,16 +34,16 @@ public final class AppDatabase_Impl extends AppDatabase {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `Medicine` (`uid` INTEGER NOT NULL, `name` TEXT, PRIMARY KEY(`uid`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `Reminder` (`reminderId` INTEGER NOT NULL, `medicineRelId` INTEGER NOT NULL, `timeInMinutes` INTEGER NOT NULL, `amount` TEXT, PRIMARY KEY(`reminderId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `Medicine` (`medicineId` INTEGER NOT NULL, `name` TEXT, PRIMARY KEY(`medicineId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `ReminderEntity` (`reminderId` INTEGER NOT NULL, `medicineRelId` INTEGER NOT NULL, `timeInMinutes` INTEGER NOT NULL, `amount` TEXT, PRIMARY KEY(`reminderId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2973a9537f52d9d95d8dbd1d33e38951')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f4d74733a807b16a9631c8ad19cc1579')");
       }
 
       @Override
       public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS `Medicine`");
-        db.execSQL("DROP TABLE IF EXISTS `Reminder`");
+        db.execSQL("DROP TABLE IF EXISTS `ReminderEntity`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -88,34 +88,34 @@ public final class AppDatabase_Impl extends AppDatabase {
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
         final HashMap<String, TableInfo.Column> _columnsMedicine = new HashMap<String, TableInfo.Column>(2);
-        _columnsMedicine.put("uid", new TableInfo.Column("uid", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMedicine.put("medicineId", new TableInfo.Column("medicineId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMedicine.put("name", new TableInfo.Column("name", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysMedicine = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesMedicine = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoMedicine = new TableInfo("Medicine", _columnsMedicine, _foreignKeysMedicine, _indicesMedicine);
         final TableInfo _existingMedicine = TableInfo.read(db, "Medicine");
         if (!_infoMedicine.equals(_existingMedicine)) {
-          return new RoomOpenHelper.ValidationResult(false, "Medicine(com.futsch1.medtimer.logic.Medicine).\n"
+          return new RoomOpenHelper.ValidationResult(false, "Medicine(com.futsch1.medtimer.database.Medicine).\n"
                   + " Expected:\n" + _infoMedicine + "\n"
                   + " Found:\n" + _existingMedicine);
         }
-        final HashMap<String, TableInfo.Column> _columnsReminder = new HashMap<String, TableInfo.Column>(4);
-        _columnsReminder.put("reminderId", new TableInfo.Column("reminderId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsReminder.put("medicineRelId", new TableInfo.Column("medicineRelId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsReminder.put("timeInMinutes", new TableInfo.Column("timeInMinutes", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsReminder.put("amount", new TableInfo.Column("amount", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysReminder = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesReminder = new HashSet<TableInfo.Index>(0);
-        final TableInfo _infoReminder = new TableInfo("Reminder", _columnsReminder, _foreignKeysReminder, _indicesReminder);
-        final TableInfo _existingReminder = TableInfo.read(db, "Reminder");
-        if (!_infoReminder.equals(_existingReminder)) {
-          return new RoomOpenHelper.ValidationResult(false, "Reminder(com.futsch1.medtimer.logic.Reminder).\n"
-                  + " Expected:\n" + _infoReminder + "\n"
-                  + " Found:\n" + _existingReminder);
+        final HashMap<String, TableInfo.Column> _columnsReminderEntity = new HashMap<String, TableInfo.Column>(4);
+        _columnsReminderEntity.put("reminderId", new TableInfo.Column("reminderId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminderEntity.put("medicineRelId", new TableInfo.Column("medicineRelId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminderEntity.put("timeInMinutes", new TableInfo.Column("timeInMinutes", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminderEntity.put("amount", new TableInfo.Column("amount", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysReminderEntity = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesReminderEntity = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoReminderEntity = new TableInfo("ReminderEntity", _columnsReminderEntity, _foreignKeysReminderEntity, _indicesReminderEntity);
+        final TableInfo _existingReminderEntity = TableInfo.read(db, "ReminderEntity");
+        if (!_infoReminderEntity.equals(_existingReminderEntity)) {
+          return new RoomOpenHelper.ValidationResult(false, "ReminderEntity(com.futsch1.medtimer.database.ReminderEntity).\n"
+                  + " Expected:\n" + _infoReminderEntity + "\n"
+                  + " Found:\n" + _existingReminderEntity);
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "2973a9537f52d9d95d8dbd1d33e38951", "fea356b9ed61b219150eff2f2280273f");
+    }, "f4d74733a807b16a9631c8ad19cc1579", "7aeefa1018ace18b835ca2bff94cadef");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -126,7 +126,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "Medicine","Reminder");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "Medicine","ReminderEntity");
   }
 
   @Override
@@ -136,7 +136,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     try {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `Medicine`");
-      _db.execSQL("DELETE FROM `Reminder`");
+      _db.execSQL("DELETE FROM `ReminderEntity`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();

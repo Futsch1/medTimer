@@ -12,7 +12,7 @@
         android:text="@string/add_medicine" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/medicines"
+        android:id="@+id/medicineEntities"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

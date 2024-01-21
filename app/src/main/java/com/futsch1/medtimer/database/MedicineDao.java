@@ -12,17 +12,17 @@ import java.util.List;
 public interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine")
-    List<Medicine> getMedicines();
+    List<MedicineWithReminders> getMedicines();
 
     @Insert
-    void insertMedicines(Medicine... medicines);
+    void insertMedicines(Medicine... medicineEntities);
 
     @Insert
-    void insertReminders(Reminder... medicines);
+    void insertReminders(ReminderEntity... medicines);
 
     @Delete
     void deleteMedicine(Medicine medicine);
 
     @Delete
-    void deleteReminder(Reminder reminder);
+    void deleteReminder(ReminderEntity reminder);
 }

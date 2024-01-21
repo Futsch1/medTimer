@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.futsch1.medtimer.database.Medicines;
+import com.futsch1.medtimer.adapters.ViewPagerAdapter;
+import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    Medicines medicines;
+    MedicineRepository medicineRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "medTimer").build();
         new Thread(() -> {
-            this.medicines = new Medicines(db.medicineDao());
+            this.medicineRepository = new MedicineRepository(db.medicineDao());
         }).start();
     }
 }
