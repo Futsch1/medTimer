@@ -45,7 +45,7 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `Medicine` (`medicineId`,`name`) VALUES (?,?)";
+        return "INSERT OR ABORT INTO `Medicine` (`medicineId`,`name`) VALUES (nullif(?, 0),?)";
       }
 
       @Override
@@ -62,7 +62,7 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `Reminder` (`reminderId`,`medicineRelId`,`timeInMinutes`,`amount`) VALUES (?,?,?,?)";
+        return "INSERT OR ABORT INTO `Reminder` (`reminderId`,`medicineRelId`,`timeInMinutes`,`amount`) VALUES (nullif(?, 0),?,?,?)";
       }
 
       @Override
@@ -187,13 +187,14 @@ public final class MedicineDao_Impl implements MedicineDao {
               final MedicineWithReminders _item;
               final Medicine _tmpMedicine;
               if (!(_cursor.isNull(_cursorIndexOfMedicineId) && _cursor.isNull(_cursorIndexOfName))) {
-                _tmpMedicine = new Medicine();
-                _tmpMedicine.medicineId = _cursor.getInt(_cursorIndexOfMedicineId);
+                final String _tmpName;
                 if (_cursor.isNull(_cursorIndexOfName)) {
-                  _tmpMedicine.name = null;
+                  _tmpName = null;
                 } else {
-                  _tmpMedicine.name = _cursor.getString(_cursorIndexOfName);
+                  _tmpName = _cursor.getString(_cursorIndexOfName);
                 }
+                _tmpMedicine = new Medicine(_tmpName);
+                _tmpMedicine.medicineId = _cursor.getInt(_cursorIndexOfMedicineId);
               } else {
                 _tmpMedicine = null;
               }

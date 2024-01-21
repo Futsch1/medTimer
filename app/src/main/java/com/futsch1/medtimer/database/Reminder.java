@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Reminder {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int reminderId;
 
     public int medicineRelId;

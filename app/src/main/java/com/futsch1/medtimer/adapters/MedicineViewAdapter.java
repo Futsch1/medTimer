@@ -39,7 +39,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
 
         @Override
         public boolean areContentsTheSame(@NonNull MedicineWithReminders oldItem, @NonNull MedicineWithReminders newItem) {
-            return oldItem.medicine.name.equals(newItem.medicine.name);
+            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
         }
     }
 }

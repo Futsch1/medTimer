@@ -5,16 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".MedicinesFragment">
 
-    <Button
-        android:id="@+id/addMedicine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_medicine" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/medicineEntities"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addMedicine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:clickable="true"
+        android:contentDescription="@string/add_medicine"
+        android:src="@android:drawable/ic_input_add" />
+
 </FrameLayout>
