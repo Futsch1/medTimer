@@ -4,7 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class ReminderEntity {
+public class Reminder {
     @PrimaryKey
     public int reminderId;
 

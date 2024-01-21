@@ -2,7 +2,9 @@ package com.futsch1.medtimer.database;
 
 import android.database.Cursor;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.collection.LongSparseArray;
+import androidx.lifecycle.LiveData;
 import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
@@ -13,6 +15,7 @@ import androidx.room.util.RelationUtil;
 import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import java.lang.Class;
+import java.lang.Exception;
 import java.lang.Long;
 import java.lang.Override;
 import java.lang.String;
@@ -21,6 +24,7 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import kotlin.Unit;
 
 @SuppressWarnings({"unchecked", "deprecation"})
@@ -29,11 +33,11 @@ public final class MedicineDao_Impl implements MedicineDao {
 
   private final EntityInsertionAdapter<Medicine> __insertionAdapterOfMedicine;
 
-  private final EntityInsertionAdapter<ReminderEntity> __insertionAdapterOfReminderEntity;
+  private final EntityInsertionAdapter<Reminder> __insertionAdapterOfReminder;
 
   private final EntityDeletionOrUpdateAdapter<Medicine> __deletionAdapterOfMedicine;
 
-  private final EntityDeletionOrUpdateAdapter<ReminderEntity> __deletionAdapterOfReminderEntity;
+  private final EntityDeletionOrUpdateAdapter<Reminder> __deletionAdapterOfReminder;
 
   public MedicineDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -54,16 +58,15 @@ public final class MedicineDao_Impl implements MedicineDao {
         }
       }
     };
-    this.__insertionAdapterOfReminderEntity = new EntityInsertionAdapter<ReminderEntity>(__db) {
+    this.__insertionAdapterOfReminder = new EntityInsertionAdapter<Reminder>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `ReminderEntity` (`reminderId`,`medicineRelId`,`timeInMinutes`,`amount`) VALUES (?,?,?,?)";
+        return "INSERT OR ABORT INTO `Reminder` (`reminderId`,`medicineRelId`,`timeInMinutes`,`amount`) VALUES (?,?,?,?)";
       }
 
       @Override
-      protected void bind(@NonNull final SupportSQLiteStatement statement,
-          final ReminderEntity entity) {
+      protected void bind(@NonNull final SupportSQLiteStatement statement, final Reminder entity) {
         statement.bindLong(1, entity.reminderId);
         statement.bindLong(2, entity.medicineRelId);
         statement.bindLong(3, entity.timeInMinutes);
@@ -86,23 +89,22 @@ public final class MedicineDao_Impl implements MedicineDao {
         statement.bindLong(1, entity.medicineId);
       }
     };
-    this.__deletionAdapterOfReminderEntity = new EntityDeletionOrUpdateAdapter<ReminderEntity>(__db) {
+    this.__deletionAdapterOfReminder = new EntityDeletionOrUpdateAdapter<Reminder>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "DELETE FROM `ReminderEntity` WHERE `reminderId` = ?";
+        return "DELETE FROM `Reminder` WHERE `reminderId` = ?";
       }
 
       @Override
-      protected void bind(@NonNull final SupportSQLiteStatement statement,
-          final ReminderEntity entity) {
+      protected void bind(@NonNull final SupportSQLiteStatement statement, final Reminder entity) {
         statement.bindLong(1, entity.reminderId);
       }
     };
   }
 
   @Override
-  public void insertMedicines(final Medicine... medicineEntities) {
+  public void insertMedicine(final Medicine medicineEntities) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
@@ -114,11 +116,11 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public void insertReminders(final ReminderEntity... medicines) {
+  public void insertReminder(final Reminder medicines) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
-      __insertionAdapterOfReminderEntity.insert(medicines);
+      __insertionAdapterOfReminder.insert(medicines);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -138,11 +140,11 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public void deleteReminder(final ReminderEntity reminder) {
+  public void deleteReminder(final Reminder reminder) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
-      __deletionAdapterOfReminderEntity.handle(reminder);
+      __deletionAdapterOfReminder.handle(reminder);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -150,73 +152,83 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public List<MedicineWithReminders> getMedicines() {
+  public LiveData<List<MedicineWithReminders>> getMedicines() {
     final String _sql = "SELECT * FROM Medicine";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
-    __db.assertNotSuspendingTransaction();
-    __db.beginTransaction();
-    try {
-      final Cursor _cursor = DBUtil.query(__db, _statement, true, null);
-      try {
-        final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
-        final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
-        final LongSparseArray<ArrayList<ReminderEntity>> _collectionReminders = new LongSparseArray<ArrayList<ReminderEntity>>();
-        while (_cursor.moveToNext()) {
-          final Long _tmpKey;
-          if (_cursor.isNull(_cursorIndexOfMedicineId)) {
-            _tmpKey = null;
-          } else {
-            _tmpKey = _cursor.getLong(_cursorIndexOfMedicineId);
-          }
-          if (_tmpKey != null) {
-            if (!_collectionReminders.containsKey(_tmpKey)) {
-              _collectionReminders.put(_tmpKey, new ArrayList<ReminderEntity>());
+    return __db.getInvalidationTracker().createLiveData(new String[] {"Reminder",
+        "Medicine"}, true, new Callable<List<MedicineWithReminders>>() {
+      @Override
+      @Nullable
+      public List<MedicineWithReminders> call() throws Exception {
+        __db.beginTransaction();
+        try {
+          final Cursor _cursor = DBUtil.query(__db, _statement, true, null);
+          try {
+            final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
+            final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+            final LongSparseArray<ArrayList<Reminder>> _collectionReminders = new LongSparseArray<ArrayList<Reminder>>();
+            while (_cursor.moveToNext()) {
+              final Long _tmpKey;
+              if (_cursor.isNull(_cursorIndexOfMedicineId)) {
+                _tmpKey = null;
+              } else {
+                _tmpKey = _cursor.getLong(_cursorIndexOfMedicineId);
+              }
+              if (_tmpKey != null) {
+                if (!_collectionReminders.containsKey(_tmpKey)) {
+                  _collectionReminders.put(_tmpKey, new ArrayList<Reminder>());
+                }
+              }
             }
-          }
-        }
-        _cursor.moveToPosition(-1);
-        __fetchRelationshipReminderEntityAscomFutsch1MedtimerDatabaseReminderEntity(_collectionReminders);
-        final List<MedicineWithReminders> _result = new ArrayList<MedicineWithReminders>(_cursor.getCount());
-        while (_cursor.moveToNext()) {
-          final MedicineWithReminders _item;
-          final Medicine _tmpMedicine;
-          if (!(_cursor.isNull(_cursorIndexOfMedicineId) && _cursor.isNull(_cursorIndexOfName))) {
-            _tmpMedicine = new Medicine();
-            _tmpMedicine.medicineId = _cursor.getInt(_cursorIndexOfMedicineId);
-            if (_cursor.isNull(_cursorIndexOfName)) {
-              _tmpMedicine.name = null;
-            } else {
-              _tmpMedicine.name = _cursor.getString(_cursorIndexOfName);
+            _cursor.moveToPosition(-1);
+            __fetchRelationshipReminderAscomFutsch1MedtimerDatabaseReminder(_collectionReminders);
+            final List<MedicineWithReminders> _result = new ArrayList<MedicineWithReminders>(_cursor.getCount());
+            while (_cursor.moveToNext()) {
+              final MedicineWithReminders _item;
+              final Medicine _tmpMedicine;
+              if (!(_cursor.isNull(_cursorIndexOfMedicineId) && _cursor.isNull(_cursorIndexOfName))) {
+                _tmpMedicine = new Medicine();
+                _tmpMedicine.medicineId = _cursor.getInt(_cursorIndexOfMedicineId);
+                if (_cursor.isNull(_cursorIndexOfName)) {
+                  _tmpMedicine.name = null;
+                } else {
+                  _tmpMedicine.name = _cursor.getString(_cursorIndexOfName);
+                }
+              } else {
+                _tmpMedicine = null;
+              }
+              final ArrayList<Reminder> _tmpRemindersCollection;
+              final Long _tmpKey_1;
+              if (_cursor.isNull(_cursorIndexOfMedicineId)) {
+                _tmpKey_1 = null;
+              } else {
+                _tmpKey_1 = _cursor.getLong(_cursorIndexOfMedicineId);
+              }
+              if (_tmpKey_1 != null) {
+                _tmpRemindersCollection = _collectionReminders.get(_tmpKey_1);
+              } else {
+                _tmpRemindersCollection = new ArrayList<Reminder>();
+              }
+              _item = new MedicineWithReminders();
+              _item.medicine = _tmpMedicine;
+              _item.reminders = _tmpRemindersCollection;
+              _result.add(_item);
             }
-          } else {
-            _tmpMedicine = null;
+            __db.setTransactionSuccessful();
+            return _result;
+          } finally {
+            _cursor.close();
           }
-          final ArrayList<ReminderEntity> _tmpRemindersCollection;
-          final Long _tmpKey_1;
-          if (_cursor.isNull(_cursorIndexOfMedicineId)) {
-            _tmpKey_1 = null;
-          } else {
-            _tmpKey_1 = _cursor.getLong(_cursorIndexOfMedicineId);
-          }
-          if (_tmpKey_1 != null) {
-            _tmpRemindersCollection = _collectionReminders.get(_tmpKey_1);
-          } else {
-            _tmpRemindersCollection = new ArrayList<ReminderEntity>();
-          }
-          _item = new MedicineWithReminders();
-          _item.medicine = _tmpMedicine;
-          _item.reminders = _tmpRemindersCollection;
-          _result.add(_item);
+        } finally {
+          __db.endTransaction();
         }
-        __db.setTransactionSuccessful();
-        return _result;
-      } finally {
-        _cursor.close();
+      }
+
+      @Override
+      protected void finalize() {
         _statement.release();
       }
-    } finally {
-      __db.endTransaction();
-    }
+    });
   }
 
   @NonNull
@@ -224,20 +236,20 @@ public final class MedicineDao_Impl implements MedicineDao {
     return Collections.emptyList();
   }
 
-  private void __fetchRelationshipReminderEntityAscomFutsch1MedtimerDatabaseReminderEntity(
-      @NonNull final LongSparseArray<ArrayList<ReminderEntity>> _map) {
+  private void __fetchRelationshipReminderAscomFutsch1MedtimerDatabaseReminder(
+      @NonNull final LongSparseArray<ArrayList<Reminder>> _map) {
     if (_map.isEmpty()) {
       return;
     }
     if (_map.size() > RoomDatabase.MAX_BIND_PARAMETER_CNT) {
       RelationUtil.recursiveFetchLongSparseArray(_map, true, (map) -> {
-        __fetchRelationshipReminderEntityAscomFutsch1MedtimerDatabaseReminderEntity(map);
+        __fetchRelationshipReminderAscomFutsch1MedtimerDatabaseReminder(map);
         return Unit.INSTANCE;
       });
       return;
     }
     final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `reminderId`,`medicineRelId`,`timeInMinutes`,`amount` FROM `ReminderEntity` WHERE `medicineRelId` IN (");
+    _stringBuilder.append("SELECT `reminderId`,`medicineRelId`,`timeInMinutes`,`amount` FROM `Reminder` WHERE `medicineRelId` IN (");
     final int _inputSize = _map.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -263,10 +275,10 @@ public final class MedicineDao_Impl implements MedicineDao {
       while (_cursor.moveToNext()) {
         final long _tmpKey;
         _tmpKey = _cursor.getLong(_itemKeyIndex);
-        final ArrayList<ReminderEntity> _tmpRelation = _map.get(_tmpKey);
+        final ArrayList<Reminder> _tmpRelation = _map.get(_tmpKey);
         if (_tmpRelation != null) {
-          final ReminderEntity _item_1;
-          _item_1 = new ReminderEntity();
+          final Reminder _item_1;
+          _item_1 = new Reminder();
           _item_1.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
           _item_1.medicineRelId = _cursor.getInt(_cursorIndexOfMedicineRelId);
           _item_1.timeInMinutes = _cursor.getLong(_cursorIndexOfTimeInMinutes);

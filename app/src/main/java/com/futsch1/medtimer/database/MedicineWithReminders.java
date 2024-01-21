@@ -10,7 +10,7 @@ public class MedicineWithReminders {
             parentColumn = "medicineId",
             entityColumn = "medicineRelId"
     )
-    public List<ReminderEntity> reminders;
+    public List<Reminder> reminders;
     @Embedded
     public Medicine medicine;
 }

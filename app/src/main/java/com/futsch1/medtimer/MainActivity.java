@@ -3,7 +3,6 @@ package com.futsch1.medtimer;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.futsch1.medtimer.adapters.ViewPagerAdapter;
@@ -33,15 +32,5 @@ public class MainActivity extends AppCompatActivity {
             tab.setText(tabNames[position]);
         }).attach();
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "medTimer").build();
-        new Thread(() -> {
-            this.medicineRepository = new MedicineRepository(db.medicineDao());
-        }).start();
     }
 }

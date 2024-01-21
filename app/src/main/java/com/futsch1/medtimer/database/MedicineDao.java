@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,17 +13,17 @@ import java.util.List;
 public interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine")
-    List<MedicineWithReminders> getMedicines();
+    LiveData<List<MedicineWithReminders>> getMedicines();
 
     @Insert
-    void insertMedicines(Medicine... medicineEntities);
+    void insertMedicine(Medicine medicineEntities);
 
     @Insert
-    void insertReminders(ReminderEntity... medicines);
+    void insertReminder(Reminder medicines);
 
     @Delete
     void deleteMedicine(Medicine medicine);
 
     @Delete
-    void deleteReminder(ReminderEntity reminder);
+    void deleteReminder(Reminder reminder);
 }
