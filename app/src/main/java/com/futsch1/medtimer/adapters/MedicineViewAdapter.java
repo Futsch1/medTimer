@@ -30,7 +30,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
         holder.bind(current.medicine);
     }
 
-    static class MedicineDiff extends DiffUtil.ItemCallback<MedicineWithReminders> {
+    public static class MedicineDiff extends DiffUtil.ItemCallback<MedicineWithReminders> {
 
         @Override
         public boolean areItemsTheSame(@NonNull MedicineWithReminders oldItem, @NonNull MedicineWithReminders newItem) {

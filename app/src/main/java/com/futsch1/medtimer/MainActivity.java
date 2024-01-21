@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.futsch1.medtimer.adapters.ViewPagerAdapter;
-import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -14,23 +13,20 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    MedicineRepository medicineRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // View pager
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabs);
-
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
-
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             int[] tabNames = new int[]{R.string.tab_overview, R.string.tab_medicine, R.string.tab_settings};
             tab.setText(tabNames[position]);
         }).attach();
-
     }
 }

@@ -15,17 +15,17 @@ public class MedicineRepository {
     // dependency. This adds complexity and much more code, and this sample is not about testing.
     // See the BasicSample in the android-architecture-components repository at
     // https://github.com/googlesamples
-    MedicineRepository(Application application) {
+    public MedicineRepository(Application application) {
         MedicineRoomDatabase db = MedicineRoomDatabase.getDatabase(application);
         medicineDao = db.medicineDao();
         medicinesWithReminders = medicineDao.getMedicines();
     }
 
-    LiveData<List<MedicineWithReminders>> getMedicines() {
+    public LiveData<List<MedicineWithReminders>> getMedicines() {
         return medicinesWithReminders;
     }
 
-    void insert(Medicine medicine) {
+    public void insert(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.insertMedicine(medicine);
         });
