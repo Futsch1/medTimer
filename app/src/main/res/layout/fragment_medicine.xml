@@ -27,6 +27,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="8" />
 
+            <TextView
+                android:id="@+id/remindersSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:text="TextView" />
+
             <ImageButton
                 android:id="@+id/editMedicine"
                 android:layout_width="wrap_content"
@@ -45,16 +52,6 @@
                 android:src="@android:drawable/ic_menu_delete" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/addReminder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_reminder" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reminders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </LinearLayout>
 
 </FrameLayout>

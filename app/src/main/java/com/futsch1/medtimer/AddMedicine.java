@@ -10,14 +10,14 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MedicineActivity extends AppCompatActivity {
+public class AddMedicine extends AppCompatActivity {
 
     EditText editMedicineName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medicine);
+        setContentView(R.layout.activity_add_medicine);
 
         editMedicineName = findViewById(R.id.editMedicineName);
 
