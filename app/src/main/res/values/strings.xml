@@ -9,4 +9,8 @@
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="amount">Amount</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="are_you_sure_delete_medicine">Do you really want to delete the medicine?</string>
 </resources>

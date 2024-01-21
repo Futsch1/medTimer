@@ -30,4 +30,10 @@ public class MedicineRepository {
             medicineDao.insertMedicine(medicine);
         });
     }
+
+    public void delete(Medicine medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteMedicine(medicine);
+        });
+    }
 }

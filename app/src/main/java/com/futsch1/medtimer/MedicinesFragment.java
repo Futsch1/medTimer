@@ -46,14 +46,13 @@ public class MedicinesFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
-        RecyclerView recyclerView = null;
-        recyclerView = fragmentView.findViewById(R.id.medicineEntities);
-        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
-
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineEntities);
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+
+        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), medicineViewModel);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), adapter::submitList);
 
@@ -63,7 +62,7 @@ public class MedicinesFragment extends Fragment {
             Intent intent = new Intent(getContext(), MedicineActivity.class);
             startActivityForResult(intent, MEDICINE_ACTIVITY_REQUEST_CODE);
         });
-        // Inflate the layout for this fragment
+
         return fragmentView;
     }
 }
