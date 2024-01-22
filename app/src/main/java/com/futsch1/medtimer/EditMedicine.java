@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPLY;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class EditMedicine extends AppCompatActivity {
 
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
+    int medicineId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,9 @@ public class EditMedicine extends AppCompatActivity {
             public void onChanged(@Nullable final List<MedicineWithReminders> newList) {
                 // Update the UI, in this case, a TextView.
                 if (newList != null) {
-                    int index = getIntent().getIntExtra("medicineIndex", 0);
-                    editMedicineName.setText(newList.get(index).medicine.name);
+                    Medicine medicine = newList.get(getIntent().getIntExtra("medicineIndex", 0)).medicine;
+                    medicineId = medicine.medicineId;
+                    editMedicineName.setText(medicine.name);
                 }
             }
         };
@@ -52,7 +56,8 @@ public class EditMedicine extends AppCompatActivity {
                 setResult(RESULT_CANCELED, replyIntent);
             } else {
                 String word = editMedicineName.getText().toString();
-                replyIntent.putExtra(EXTRA_REPLY, word);
+                replyIntent.putExtra(EXTRA_MEDICINE, word);
+                replyIntent.putExtra(EXTRA_ID, medicineId);
                 setResult(RESULT_OK, replyIntent);
             }
             finish();

@@ -34,6 +34,10 @@ public class MedicineViewModel extends AndroidViewModel {
         repository.insert(medicine);
     }
 
+    void update(Medicine medicine) {
+        repository.update(medicine);
+    }
+
     public void delete(Medicine medicine) {
         repository.delete(medicine);
     }

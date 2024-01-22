@@ -39,13 +39,15 @@ public final class MedicineDao_Impl implements MedicineDao {
 
   private final EntityDeletionOrUpdateAdapter<Reminder> __deletionAdapterOfReminder;
 
+  private final EntityDeletionOrUpdateAdapter<Medicine> __updateAdapterOfMedicine;
+
   public MedicineDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfMedicine = new EntityInsertionAdapter<Medicine>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `Medicine` (`medicineId`,`name`) VALUES (nullif(?, 0),?)";
+        return "INSERT OR ABORT INTO `Medicine` (`medicineId`,`medicineName`) VALUES (nullif(?, 0),?)";
       }
 
       @Override
@@ -101,14 +103,32 @@ public final class MedicineDao_Impl implements MedicineDao {
         statement.bindLong(1, entity.reminderId);
       }
     };
+    this.__updateAdapterOfMedicine = new EntityDeletionOrUpdateAdapter<Medicine>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "UPDATE OR ABORT `Medicine` SET `medicineId` = ?,`medicineName` = ? WHERE `medicineId` = ?";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement, final Medicine entity) {
+        statement.bindLong(1, entity.medicineId);
+        if (entity.name == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindString(2, entity.name);
+        }
+        statement.bindLong(3, entity.medicineId);
+      }
+    };
   }
 
   @Override
-  public void insertMedicine(final Medicine medicineEntities) {
+  public void insertMedicine(final Medicine medicine) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
-      __insertionAdapterOfMedicine.insert(medicineEntities);
+      __insertionAdapterOfMedicine.insert(medicine);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -116,11 +136,11 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public void insertReminder(final Reminder medicines) {
+  public void insertReminder(final Reminder reminder) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
-      __insertionAdapterOfReminder.insert(medicines);
+      __insertionAdapterOfReminder.insert(reminder);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -152,6 +172,20 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
+  public int updateMedicine(final Medicine medicine) {
+    __db.assertNotSuspendingTransaction();
+    int _total = 0;
+    __db.beginTransaction();
+    try {
+      _total += __updateAdapterOfMedicine.handle(medicine);
+      __db.setTransactionSuccessful();
+      return _total;
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
   public LiveData<List<MedicineWithReminders>> getMedicines() {
     final String _sql = "SELECT * FROM Medicine";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -165,7 +199,7 @@ public final class MedicineDao_Impl implements MedicineDao {
           final Cursor _cursor = DBUtil.query(__db, _statement, true, null);
           try {
             final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
-            final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+            final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
             final LongSparseArray<ArrayList<Reminder>> _collectionReminders = new LongSparseArray<ArrayList<Reminder>>();
             while (_cursor.moveToNext()) {
               final Long _tmpKey;

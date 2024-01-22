@@ -1,6 +1,6 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPLY;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +28,7 @@ public class AddMedicine extends AppCompatActivity {
                 setResult(RESULT_CANCELED, replyIntent);
             } else {
                 String word = editMedicineName.getText().toString();
-                replyIntent.putExtra(EXTRA_REPLY, word);
+                replyIntent.putExtra(EXTRA_MEDICINE, word);
                 setResult(RESULT_OK, replyIntent);
             }
             finish();

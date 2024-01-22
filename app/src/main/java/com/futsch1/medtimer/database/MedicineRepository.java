@@ -31,6 +31,12 @@ public class MedicineRepository {
         });
     }
 
+    public void update(Medicine medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.updateMedicine(medicine);
+        });
+    }
+
     public void delete(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.deleteMedicine(medicine);

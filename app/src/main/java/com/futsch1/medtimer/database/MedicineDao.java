@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,10 +17,13 @@ public interface MedicineDao {
     LiveData<List<MedicineWithReminders>> getMedicines();
 
     @Insert
-    void insertMedicine(Medicine medicineEntities);
+    void insertMedicine(Medicine medicine);
 
     @Insert
-    void insertReminder(Reminder medicines);
+    void insertReminder(Reminder reminder);
+
+    @Update
+    int updateMedicine(Medicine medicine);
 
     @Delete
     void deleteMedicine(Medicine medicine);

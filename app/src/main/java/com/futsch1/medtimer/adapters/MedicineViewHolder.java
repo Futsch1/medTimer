@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.EditMedicine;
@@ -33,7 +34,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view);
     }
 
-    public void bind(Medicine medicine, MedicineViewModel viewModel) {
+    public void bind(Medicine medicine, MedicineViewModel viewModel, ActivityResultLauncher<Intent> activityResultLauncher) {
         medicineNameView.setText(medicine.name);
 
         deleteButton.setOnClickListener(view -> {
@@ -49,7 +50,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         editButton.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), EditMedicine.class);
             intent.putExtra("medicineIndex", this.getAdapterPosition());
-            view.getContext().startActivity(intent);
+            activityResultLauncher.launch(intent);
         });
     }
 }

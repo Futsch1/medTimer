@@ -25,20 +25,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MedicinesFragment extends Fragment {
     private MedicineViewModel medicineViewModel;
 
-    ActivityResultLauncher<Intent> addMedicine = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+    ActivityResultLauncher<Intent> medicineActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
-                        Medicine medicine = null;
                         if (result.getData() != null) {
-                            medicine = new Medicine(result.getData().getStringExtra(ActivityCodes.EXTRA_REPLY));
-                            medicineViewModel.insert(medicine);
+                            String name = result.getData().getStringExtra(ActivityCodes.EXTRA_MEDICINE);
+                            int id = result.getData().getIntExtra(ActivityCodes.EXTRA_ID, -1);
+                            if (id > 0) {
+                                medicineViewModel.update(new Medicine(name, id));
+                            } else {
+                                medicineViewModel.insert(new Medicine(name));
+                            }
                         }
                     }
                 }
             });
-
 
     public MedicinesFragment() {
         // Required empty public constructor
@@ -59,7 +62,7 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), medicineViewModel);
+        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), medicineViewModel, medicineActivityResultLauncher);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -69,7 +72,7 @@ public class MedicinesFragment extends Fragment {
         FloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), AddMedicine.class);
-            addMedicine.launch(intent);
+            medicineActivityResultLauncher.launch(intent);
         });
 
         return fragmentView;
