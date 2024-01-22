@@ -51,7 +51,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             builder.setTitle(R.string.confirm);
             builder.setMessage(R.string.are_you_sure_delete_medicine);
             builder.setCancelable(false);
-            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> viewModel.delete(medicineWithReminders.medicine));
+            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> viewModel.deleteMedicine(medicineWithReminders.medicine));
             builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
             });
             builder.show();

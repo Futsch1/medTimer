@@ -25,21 +25,39 @@ public class MedicineRepository {
         return medicinesWithReminders;
     }
 
-    public void insert(Medicine medicine) {
+    public void insertMedicine(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.insertMedicine(medicine);
         });
     }
 
-    public void update(Medicine medicine) {
+    public void updateMedicine(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.updateMedicine(medicine);
         });
     }
 
-    public void delete(Medicine medicine) {
+    public void deleteMedicine(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.deleteMedicine(medicine);
+        });
+    }
+
+    public void insertReminder(Reminder reminder) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.insertReminder(reminder);
+        });
+    }
+
+    public void updateReminder(Reminder reminder) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.updateReminder(reminder);
+        });
+    }
+
+    public void deleteReminder(Reminder reminder) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteReminder(reminder);
         });
     }
 }

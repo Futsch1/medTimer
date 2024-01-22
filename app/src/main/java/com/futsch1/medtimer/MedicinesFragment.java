@@ -34,9 +34,9 @@ public class MedicinesFragment extends Fragment {
                             String name = result.getData().getStringExtra(ActivityCodes.EXTRA_MEDICINE);
                             int id = result.getData().getIntExtra(ActivityCodes.EXTRA_ID, -1);
                             if (id > 0) {
-                                medicineViewModel.update(new Medicine(name, id));
+                                medicineViewModel.updateMedicine(new Medicine(name, id));
                             } else {
-                                medicineViewModel.insert(new Medicine(name));
+                                medicineViewModel.insertMedicine(new Medicine(name));
                             }
                         }
                     }

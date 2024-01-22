@@ -8,15 +8,12 @@ import androidx.lifecycle.LiveData;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.Reminder;
 
 import java.util.List;
 
 public class MedicineViewModel extends AndroidViewModel {
 
-    // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
-    // - We can put an observer on the data (instead of polling for changes) and only update the
-    //   the UI when the data actually changes.
-    // - Repository is completely separated from the UI through the ViewModel.
     private final LiveData<List<MedicineWithReminders>> medicines;
     private final MedicineRepository repository;
 
@@ -30,15 +27,27 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicines;
     }
 
-    void insert(Medicine medicine) {
-        repository.insert(medicine);
+    void insertMedicine(Medicine medicine) {
+        repository.insertMedicine(medicine);
     }
 
-    void update(Medicine medicine) {
-        repository.update(medicine);
+    void updateMedicine(Medicine medicine) {
+        repository.updateMedicine(medicine);
     }
 
-    public void delete(Medicine medicine) {
-        repository.delete(medicine);
+    public void deleteMedicine(Medicine medicine) {
+        repository.deleteMedicine(medicine);
+    }
+
+    void insertReminder(Reminder reminder) {
+        repository.insertReminder(reminder);
+    }
+
+    void updateReminder(Reminder reminder) {
+        repository.updateReminder(reminder);
+    }
+
+    public void deleteReminder(Reminder reminder) {
+        repository.deleteReminder(reminder);
     }
 }

@@ -25,6 +25,9 @@ public interface MedicineDao {
     @Update
     void updateMedicine(Medicine medicine);
 
+    @Update
+    void updateReminder(Reminder reminder);
+
     @Delete
     void deleteMedicine(Medicine medicine);
 
