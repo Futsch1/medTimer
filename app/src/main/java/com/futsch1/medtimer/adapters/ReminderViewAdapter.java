@@ -1,10 +1,8 @@
 package com.futsch1.medtimer.adapters;
 
 
-import android.content.Intent;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -15,12 +13,10 @@ import com.futsch1.medtimer.database.Reminder;
 public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolder> {
 
     private final MedicineViewModel viewModel;
-    private final ActivityResultLauncher<Intent> activityResultLauncher;
 
-    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> medicineActivityResultLauncher) {
+    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback, MedicineViewModel medicineViewModel) {
         super(diffCallback);
         viewModel = medicineViewModel;
-        activityResultLauncher = medicineActivityResultLauncher;
     }
 
 
@@ -35,7 +31,7 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder current = getItem(position);
-        holder.bind(current, viewModel, activityResultLauncher);
+        holder.bind(current, viewModel);
     }
 
     public static class ReminderDiff extends DiffUtil.ItemCallback<Reminder> {

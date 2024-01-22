@@ -16,6 +16,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Medicine")
     LiveData<List<MedicineWithReminders>> getMedicines();
 
+    @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId")
+    LiveData<List<Reminder>> getReminders(int medicineId);
+
     @Insert
     void insertMedicine(Medicine medicine);
 

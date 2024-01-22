@@ -1,5 +1,8 @@
 package com.futsch1.medtimer.adapters;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -58,7 +61,8 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         });
         editButton.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), EditMedicine.class);
-            intent.putExtra("medicineIndex", this.getAdapterPosition());
+            intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
+            intent.putExtra(EXTRA_INDEX, getAdapterPosition());
             activityResultLauncher.launch(intent);
         });
     }

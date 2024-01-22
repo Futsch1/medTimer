@@ -13,4 +13,10 @@ public class Reminder {
     public long timeInMinutes;
 
     public String amount;
+
+    public Reminder(int medicineRelId) {
+        timeInMinutes = 480;
+        amount = "?";
+        this.medicineRelId = medicineRelId;
+    }
 }

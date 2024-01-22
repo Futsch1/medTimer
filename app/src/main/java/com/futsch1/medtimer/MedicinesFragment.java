@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.adapters.MedicineViewAdapter;
 import com.futsch1.medtimer.database.Medicine;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 public class MedicinesFragment extends Fragment {
     private MedicineViewModel medicineViewModel;
@@ -69,7 +69,7 @@ public class MedicinesFragment extends Fragment {
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), adapter::submitList);
 
         // FAB
-        FloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
+        ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), AddMedicine.class);
             medicineActivityResultLauncher.launch(intent);

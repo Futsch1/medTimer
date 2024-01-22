@@ -5,4 +5,5 @@ public class ActivityCodes {
 
     public static final String EXTRA_MEDICINE = "com.futsch1.medTimer.MEDICINE";
     public static final String EXTRA_ID = "com.futsch1.medTimer.ID";
+    public static final String EXTRA_INDEX = "com.futsch1.medTimer.INDEX";
 }

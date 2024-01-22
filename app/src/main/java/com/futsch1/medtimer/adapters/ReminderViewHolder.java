@@ -1,14 +1,12 @@
 package com.futsch1.medtimer.adapters;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
@@ -38,7 +36,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         return new ReminderViewHolder(view);
     }
 
-    public void bind(Reminder reminder, MedicineViewModel viewModel, ActivityResultLauncher<Intent> activityResultLauncher) {
+    public void bind(Reminder reminder, MedicineViewModel viewModel) {
         Date dt = new Date(reminder.timeInMinutes * 1000 * 60);
         String timeOfDay = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dt);
         editTime.setText(timeOfDay);
