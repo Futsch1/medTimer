@@ -21,18 +21,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/medicineName"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="8" />
-
-            <TextView
-                android:id="@+id/remindersSummary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:text="TextView" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/medicineName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/remindersSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/editMedicine"

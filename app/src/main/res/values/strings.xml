@@ -13,4 +13,9 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="are_you_sure_delete_medicine">Are you sure to delete the medicine?</string>
+    <string name="no_reminders">No reminders set</string>
+    <plurals name="reminders_per_day">
+        <item quantity="one">1 reminder per day</item>
+        <item quantity="other">%1d reminders per day</item>
+    </plurals>
 </resources>

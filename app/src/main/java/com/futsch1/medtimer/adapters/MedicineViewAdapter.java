@@ -35,7 +35,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         MedicineWithReminders current = getItem(position);
-        holder.bind(current.medicine, viewModel, activityResultLauncher);
+        holder.bind(current, viewModel, activityResultLauncher);
     }
 
     public static class MedicineDiff extends DiffUtil.ItemCallback<MedicineWithReminders> {
