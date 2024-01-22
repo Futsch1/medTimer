@@ -172,14 +172,12 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public int updateMedicine(final Medicine medicine) {
+  public void updateMedicine(final Medicine medicine) {
     __db.assertNotSuspendingTransaction();
-    int _total = 0;
     __db.beginTransaction();
     try {
-      _total += __updateAdapterOfMedicine.handle(medicine);
+      __updateAdapterOfMedicine.handle(medicine);
       __db.setTransactionSuccessful();
-      return _total;
     } finally {
       __db.endTransaction();
     }

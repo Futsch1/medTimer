@@ -23,7 +23,7 @@ public interface MedicineDao {
     void insertReminder(Reminder reminder);
 
     @Update
-    int updateMedicine(Medicine medicine);
+    void updateMedicine(Medicine medicine);
 
     @Delete
     void deleteMedicine(Medicine medicine);
