@@ -39,19 +39,20 @@ public class MedicineViewModel extends AndroidViewModel {
         repository.deleteMedicine(medicine);
     }
 
+
+    public LiveData<List<Reminder>> getReminders(int medicineId) {
+        return repository.getReminders(medicineId);
+    }
+
     void insertReminder(Reminder reminder) {
         repository.insertReminder(reminder);
     }
 
-    void updateReminder(Reminder reminder) {
+    public void updateReminder(Reminder reminder) {
         repository.updateReminder(reminder);
     }
 
     public void deleteReminder(Reminder reminder) {
         repository.deleteReminder(reminder);
-    }
-
-    public LiveData<List<Reminder>> getReminders(int medicineId) {
-        return repository.getReminders(medicineId);
     }
 }
