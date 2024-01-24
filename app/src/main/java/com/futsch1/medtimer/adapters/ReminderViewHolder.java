@@ -1,6 +1,9 @@
 package com.futsch1.medtimer.adapters;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +16,14 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
     private final ImageButton deleteButton;
+
+    public Reminder reminder;
 
 
     private ReminderViewHolder(View itemView) {
@@ -37,10 +40,39 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Reminder reminder, MedicineViewModel viewModel) {
-        Date dt = new Date(reminder.timeInMinutes * 1000 * 60);
-        String timeOfDay = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dt);
-        editTime.setText(timeOfDay);
+        this.reminder = reminder;
+
+        editTime.setText(minutesToTime(reminder.timeInMinutes));
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(editTime.getContext(), (view, hourOfDay, minute) -> {
+            String selectedTime = minutesToTime(hourOfDay * 60L + minute);
+            editTime.setText(selectedTime);
+            reminder.timeInMinutes = hourOfDay * 60L + minute;
+        }, 0, 0, true);
+        editTime.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                timePickerDialog.updateTime((int) (reminder.timeInMinutes / 60), (int) (reminder.timeInMinutes % 60));
+                timePickerDialog.show();
+            }
+        });
+
         editAmount.setText(reminder.amount);
+        editAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                reminder.amount = s.toString();
+            }
+        });
 
         deleteButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -52,5 +84,9 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             });
             builder.show();
         });
+    }
+
+    String minutesToTime(long minutes) {
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes / 60, minutes % 60);
     }
 }

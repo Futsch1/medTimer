@@ -20,7 +20,7 @@
         android:layout_gravity="bottom|end"
         android:clickable="true"
         android:contentDescription="@string/add_medicine"
-        android:text="@string/add_reminder"
+        android:text="@string/add_medicine"
         app:icon="@android:drawable/ic_menu_add" />
 
 </FrameLayout>

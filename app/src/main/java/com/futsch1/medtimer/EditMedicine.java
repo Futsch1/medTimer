@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.adapters.ReminderViewAdapter;
+import com.futsch1.medtimer.adapters.ReminderViewHolder;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
@@ -75,5 +76,17 @@ public class EditMedicine extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        RecyclerView recyclerView = findViewById(R.id.reminderList);
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
+            ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+
+            medicineViewModel.updateReminder(viewHolder.reminder);
+        }
     }
 }
