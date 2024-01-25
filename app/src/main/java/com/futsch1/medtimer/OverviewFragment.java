@@ -37,14 +37,14 @@ public class OverviewFragment extends Fragment {
         PendingIntent pendingDismissed = PendingIntent.getService(getContext(), 0, notifyDismissed, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.requireContext(), "com.medTimer.NOTIFICATIONS")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.capsule)
                 .setContentTitle("Test")
                 .setContentText("Test2")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingTaken)
                 .setDeleteIntent(pendingDismissed)
                 .setAutoCancel(true)
-                .addAction(R.drawable.ic_launcher_foreground, getString(R.string.notification_taken), pendingTaken);
+                .addAction(R.drawable.capsule, getString(R.string.notification_taken), pendingTaken);
 
         notificationManager.notify(12, builder.build());
 

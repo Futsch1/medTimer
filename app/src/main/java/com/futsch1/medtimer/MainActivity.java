@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.futsch1.medtimer.adapters.ViewPagerAdapter;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    MedicineViewModel medicineViewModel;
+    ReminderScheduler reminderScheduler;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
         createNotificationChannel();
+
+        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        reminderScheduler = new ReminderScheduler();
+        medicineViewModel.getMedicines().observe(this, reminderScheduler::update);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
@@ -69,6 +76,5 @@ public class MainActivity extends AppCompatActivity {
         // or other notification behaviors after this.
         NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-
     }
 }
