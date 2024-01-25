@@ -8,9 +8,10 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+public class DismissService extends Service {
+    public DismissService() {
+    }
 
-public class TakenService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         HandlerThread backgroundThread = new HandlerThread("BackgroundThread");
@@ -21,15 +22,14 @@ public class TakenService extends Service {
         notificationManager.cancel(12);
 
         Runnable task = () -> {
-            Toast.makeText(getApplicationContext(), "Start received", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Start dismissed", Toast.LENGTH_LONG).show();
         };
-        
+
         handler.post(task);
 
         return START_STICKY;
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

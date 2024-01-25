@@ -28,38 +28,21 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        /*Intent intent = new Intent(this.getContext(), EditMedicine.class);
-        intent.setAction(Intent.ACTION_QUICK_CLOCK);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getContext(), 1, intent, FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "Hello")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("My Notification")
-                .setContentText("This is a notification with two buttons.")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT).addAction(R.drawable.ic_launcher_background, "Snooze", pendingIntent);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.requireContext());
-        if (ActivityCompat.checkSelfPermission(this.requireContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            notificationManager.notify(1, builder.build());
-        }*/
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is not in the Support Library.
         NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
-
-        Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         Intent notifyTaken = new Intent(getContext(), TakenService.class);
         notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, 12);
         PendingIntent pendingTaken = PendingIntent.getService(getContext(), 0, notifyTaken, PendingIntent.FLAG_IMMUTABLE);
+        Intent notifyDismissed = new Intent(getContext(), TakenService.class);
+        PendingIntent pendingDismissed = PendingIntent.getService(getContext(), 0, notifyDismissed, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.requireContext(), "com.medTimer.NOTIFICATIONS")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Test")
                 .setContentText("Test2")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(pendingTaken)
+                .setDeleteIntent(pendingDismissed)
                 .setAutoCancel(true)
                 .addAction(R.drawable.ic_launcher_foreground, getString(R.string.notification_taken), pendingTaken);
 

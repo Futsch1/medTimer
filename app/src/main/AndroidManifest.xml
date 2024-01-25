@@ -15,9 +15,13 @@
         android:theme="@style/Theme.MedTimer"
         tools:targetApi="33">
         <service
+            android:name=".DismissService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
             android:name=".TakenService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".EditMedicine"
