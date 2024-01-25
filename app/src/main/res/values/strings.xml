@@ -4,12 +4,14 @@
     <string name="tab_overview">Overview</string>
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
+    <string name="medicine_name">Medicine name</string>
     <string name="add_reminder">Add reminder</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="amount">Amount</string>
     <string name="yes">Yes</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="are_you_sure_delete_medicine">Are you sure to delete the medicine?</string>

@@ -2,13 +2,9 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -56,20 +52,6 @@ public class EditMedicine extends AppCompatActivity {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getMedicines().observe(this, nameObserver);
 
-        final ImageButton button = findViewById(R.id.saveMedicineButton);
-        button.setOnClickListener(view -> {
-            Intent replyIntent = new Intent();
-            if (TextUtils.isEmpty(editMedicineName.getText())) {
-                setResult(RESULT_CANCELED, replyIntent);
-            } else {
-                String word = editMedicineName.getText().toString();
-                replyIntent.putExtra(EXTRA_MEDICINE, word);
-                replyIntent.putExtra(EXTRA_ID, medicineId);
-                setResult(RESULT_OK, replyIntent);
-            }
-            finish();
-        });
-
         RecyclerView recyclerView = findViewById(R.id.reminderList);
         final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineViewModel);
         recyclerView.setAdapter(adapter);
@@ -81,6 +63,9 @@ public class EditMedicine extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        String word = editMedicineName.getText().toString();
+        medicineViewModel.updateMedicine(new Medicine(word, medicineId));
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
         for (int i = 0; i < recyclerView.getChildCount(); i++) {

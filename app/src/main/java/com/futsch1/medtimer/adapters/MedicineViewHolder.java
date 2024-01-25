@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.EditMedicine;
@@ -39,7 +38,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view);
     }
 
-    public void bind(MedicineWithReminders medicineWithReminders, MedicineViewModel viewModel, ActivityResultLauncher<Intent> activityResultLauncher) {
+    public void bind(MedicineWithReminders medicineWithReminders, MedicineViewModel viewModel) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
         int len = medicineWithReminders.reminders.size();
         if (len == 0) {
@@ -63,7 +62,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             Intent intent = new Intent(view.getContext(), EditMedicine.class);
             intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
             intent.putExtra(EXTRA_INDEX, getAdapterPosition());
-            activityResultLauncher.launch(intent);
+            view.getContext().startActivity(intent);
         });
     }
 }
