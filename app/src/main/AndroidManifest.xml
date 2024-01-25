@@ -13,7 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer"
-        tools:targetApi="31">
+        tools:targetApi="33">
+        <service
+            android:name=".TakenService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".EditMedicine"
             android:exported="false" />

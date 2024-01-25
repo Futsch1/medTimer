@@ -20,4 +20,7 @@
         <item quantity="one">1 reminder per day</item>
         <item quantity="other">%1d reminders per day</item>
     </plurals>
+    <string name="channel_name">MedTimer</string>
+    <string name="channel_description">Notifications from MedTimer</string>
+    <string name="notification_taken">TAKEN</string>
 </resources>
