@@ -47,11 +47,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         TimePickerDialog timePickerDialog = new TimePickerDialog(editTime.getContext(), (view, hourOfDay, minute) -> {
             String selectedTime = minutesToTime(hourOfDay * 60L + minute);
             editTime.setText(selectedTime);
-            reminder.timeInMinutes = hourOfDay * 60L + minute;
+            reminder.timeInMinutes = hourOfDay * 60 + minute;
         }, 0, 0, true);
         editTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                timePickerDialog.updateTime((int) (reminder.timeInMinutes / 60), (int) (reminder.timeInMinutes % 60));
+                timePickerDialog.updateTime(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60);
                 timePickerDialog.show();
             }
         });

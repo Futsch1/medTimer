@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Medicine.class, Reminder.class}, version = 1)
+@Database(entities = {Medicine.class, Reminder.class, ReminderEvent.class}, version = 1)
 public abstract class MedicineRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =

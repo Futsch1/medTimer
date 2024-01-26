@@ -30,6 +30,10 @@ public class MedicineRepository {
         return medicineDao.getReminders(medicineId);
     }
 
+    public LiveData<List<ReminderEvent>> getReminderEvents() {
+        return medicineDao.getReminderEvents();
+    }
+
     public void insertMedicine(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.insertMedicine(medicine);

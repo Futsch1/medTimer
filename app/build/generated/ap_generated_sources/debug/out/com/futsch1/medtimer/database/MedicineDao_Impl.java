@@ -16,6 +16,7 @@ import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import java.lang.Class;
 import java.lang.Exception;
+import java.lang.IllegalArgumentException;
 import java.lang.Long;
 import java.lang.Override;
 import java.lang.String;
@@ -321,12 +322,67 @@ public final class MedicineDao_Impl implements MedicineDao {
             _tmpMedicineRelId = _cursor.getInt(_cursorIndexOfMedicineRelId);
             _item = new Reminder(_tmpMedicineRelId);
             _item.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
-            _item.timeInMinutes = _cursor.getLong(_cursorIndexOfTimeInMinutes);
+            _item.timeInMinutes = _cursor.getInt(_cursorIndexOfTimeInMinutes);
             if (_cursor.isNull(_cursorIndexOfAmount)) {
               _item.amount = null;
             } else {
               _item.amount = _cursor.getString(_cursorIndexOfAmount);
             }
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public LiveData<List<ReminderEvent>> getReminderEvents() {
+    final String _sql = "SELECT * FROM ReminderEvent";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    return __db.getInvalidationTracker().createLiveData(new String[] {"ReminderEvent"}, false, new Callable<List<ReminderEvent>>() {
+      @Override
+      @Nullable
+      public List<ReminderEvent> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfReminderEventId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderEventId");
+          final int _cursorIndexOfMedicineName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "status");
+          final int _cursorIndexOfRaisedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "raisedTimestamp");
+          final int _cursorIndexOfProcessedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "processedTimestamp");
+          final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
+          final List<ReminderEvent> _result = new ArrayList<ReminderEvent>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ReminderEvent _item;
+            _item = new ReminderEvent();
+            _item.reminderEventId = _cursor.getInt(_cursorIndexOfReminderEventId);
+            if (_cursor.isNull(_cursorIndexOfMedicineName)) {
+              _item.medicineName = null;
+            } else {
+              _item.medicineName = _cursor.getString(_cursorIndexOfMedicineName);
+            }
+            if (_cursor.isNull(_cursorIndexOfAmount)) {
+              _item.amount = null;
+            } else {
+              _item.amount = _cursor.getString(_cursorIndexOfAmount);
+            }
+            if (_cursor.isNull(_cursorIndexOfStatus)) {
+              _item.status = null;
+            } else {
+              _item.status = __ReminderStatus_stringToEnum(_cursor.getString(_cursorIndexOfStatus));
+            }
+            _item.raisedTimestamp = _cursor.getLong(_cursorIndexOfRaisedTimestamp);
+            _item.processedTimestamp = _cursor.getLong(_cursorIndexOfProcessedTimestamp);
+            _item.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
             _result.add(_item);
           }
           return _result;
@@ -393,7 +449,7 @@ public final class MedicineDao_Impl implements MedicineDao {
           _tmpMedicineRelId = _cursor.getInt(_cursorIndexOfMedicineRelId);
           _item_1 = new Reminder(_tmpMedicineRelId);
           _item_1.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
-          _item_1.timeInMinutes = _cursor.getLong(_cursorIndexOfTimeInMinutes);
+          _item_1.timeInMinutes = _cursor.getInt(_cursorIndexOfTimeInMinutes);
           if (_cursor.isNull(_cursorIndexOfAmount)) {
             _item_1.amount = null;
           } else {
@@ -404,6 +460,15 @@ public final class MedicineDao_Impl implements MedicineDao {
       }
     } finally {
       _cursor.close();
+    }
+  }
+
+  private ReminderEvent.ReminderStatus __ReminderStatus_stringToEnum(@NonNull final String _value) {
+    switch (_value) {
+      case "RAISED": return ReminderEvent.ReminderStatus.RAISED;
+      case "TAKEN": return ReminderEvent.ReminderStatus.TAKEN;
+      case "SKIPPED": return ReminderEvent.ReminderStatus.SKIPPED;
+      default: throw new IllegalArgumentException("Can't convert value to enum, unknown value: " + _value);
     }
   }
 }

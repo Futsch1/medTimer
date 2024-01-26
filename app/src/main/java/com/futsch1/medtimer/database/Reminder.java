@@ -10,7 +10,7 @@ public class Reminder {
 
     public int medicineRelId;
 
-    public long timeInMinutes;
+    public int timeInMinutes;
 
     public String amount;
 

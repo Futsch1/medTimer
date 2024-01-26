@@ -19,6 +19,8 @@ import com.futsch1.medtimer.adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.time.Instant;
+
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
@@ -46,8 +48,10 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-        reminderScheduler = new ReminderScheduler();
-        medicineViewModel.getMedicines().observe(this, reminderScheduler::update);
+        reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
+
+        }, Instant::now);
+        medicineViewModel.getMedicines().observe(this, reminderScheduler::updateMedicine);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
