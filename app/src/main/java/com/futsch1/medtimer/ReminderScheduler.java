@@ -37,22 +37,12 @@ public class ReminderScheduler {
                 Start start = getStart(sortedReminders);
                 int reminderIndex = start.reminderIndex;
                 LocalDate checkDate = start.startDate;
-                Instant now = this.getInstant.now();
-                boolean inThePast = checkDate.isBefore(toLocalDate(now));
-
-                while (true) {
-                    for (; reminderIndex < sortedReminders.size(); reminderIndex++) {
-                        Reminder nextReminder = sortedReminders.get(reminderIndex);
-                        this.listener.schedule(toInstant(checkDate).plusSeconds(nextReminder.timeInMinutes * 60L), getMedicine(nextReminder), nextReminder);
-                        if (!inThePast) {
-                            return;
-                        }
-                    }
-
+                if (reminderIndex >= sortedReminders.size()) {
                     reminderIndex = 0;
                     checkDate = checkDate.plusDays(1);
-                    inThePast = checkDate.isBefore(toLocalDate(now));
                 }
+                Reminder nextReminder = sortedReminders.get(reminderIndex);
+                this.listener.schedule(toInstant(checkDate).plusSeconds(nextReminder.timeInMinutes * 60L), getMedicine(nextReminder), nextReminder);
             }
         }
     }
@@ -74,14 +64,11 @@ public class ReminderScheduler {
 
             Reminder reminder = reminderList.stream().filter(r -> r.reminderId == lastReminderId).findFirst().orElse(null);
 
-            return new Start(reminderList.indexOf(reminder), LocalDate.from(Instant.ofEpochSecond(lastEvent.raisedTimestamp)));
-        } else {
-            return new Start(0, toLocalDate(this.getInstant.now()));
+            if (reminder != null) {
+                return new Start(reminderList.indexOf(reminder) + 1, toLocalDate(Instant.ofEpochSecond(lastEvent.raisedTimestamp)));
+            }
         }
-    }
-
-    private LocalDate toLocalDate(Instant i) {
-        return i.atZone(ZoneOffset.UTC).toLocalDate();
+        return new Start(0, toLocalDate(this.getInstant.now()));
     }
 
     private Instant toInstant(LocalDate d) {
@@ -92,6 +79,10 @@ public class ReminderScheduler {
         int medicineId = reminder.medicineRelId;
         //noinspection OptionalGetWithoutIsPresent
         return this.medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
+    }
+
+    private LocalDate toLocalDate(Instant i) {
+        return i.atZone(ZoneOffset.UTC).toLocalDate();
     }
 
     public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
@@ -112,7 +103,6 @@ public class ReminderScheduler {
         public final LocalDate startDate;
 
         public Start(int reminderIndex, LocalDate startDate) {
-
             this.reminderIndex = reminderIndex;
             this.startDate = startDate;
         }
