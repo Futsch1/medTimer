@@ -69,4 +69,10 @@ public class MedicineRepository {
             medicineDao.deleteReminder(reminder);
         });
     }
+
+    public void insertReminderEvent(ReminderEvent reminderEvent) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.insertReminderEvent(reminderEvent);
+        });
+    }
 }

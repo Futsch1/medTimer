@@ -22,5 +22,7 @@
     </plurals>
     <string name="channel_name">MedTimer</string>
     <string name="channel_description">Notifications from MedTimer</string>
+    <string name="notification_title">Medicine reminder</string>
+    <string name="notification_content">It is time to take %1s of %2s</string>
     <string name="notification_taken">TAKEN</string>
 </resources>

@@ -14,7 +14,7 @@ public class ReminderEvent {
     public long processedTimestamp;
     public int reminderId;
 
-    enum ReminderStatus {
+    public enum ReminderStatus {
         RAISED,
         TAKEN,
         SKIPPED

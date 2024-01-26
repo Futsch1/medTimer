@@ -36,6 +36,8 @@ public final class MedicineDao_Impl implements MedicineDao {
 
   private final EntityInsertionAdapter<Reminder> __insertionAdapterOfReminder;
 
+  private final EntityInsertionAdapter<ReminderEvent> __insertionAdapterOfReminderEvent;
+
   private final EntityDeletionOrUpdateAdapter<Medicine> __deletionAdapterOfMedicine;
 
   private final EntityDeletionOrUpdateAdapter<Reminder> __deletionAdapterOfReminder;
@@ -43,6 +45,8 @@ public final class MedicineDao_Impl implements MedicineDao {
   private final EntityDeletionOrUpdateAdapter<Medicine> __updateAdapterOfMedicine;
 
   private final EntityDeletionOrUpdateAdapter<Reminder> __updateAdapterOfReminder;
+
+  private final EntityDeletionOrUpdateAdapter<ReminderEvent> __updateAdapterOfReminderEvent;
 
   public MedicineDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -80,6 +84,37 @@ public final class MedicineDao_Impl implements MedicineDao {
         } else {
           statement.bindString(4, entity.amount);
         }
+      }
+    };
+    this.__insertionAdapterOfReminderEvent = new EntityInsertionAdapter<ReminderEvent>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "INSERT OR ABORT INTO `ReminderEvent` (`reminderEventId`,`medicineName`,`amount`,`status`,`raisedTimestamp`,`processedTimestamp`,`reminderId`) VALUES (nullif(?, 0),?,?,?,?,?,?)";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement,
+          final ReminderEvent entity) {
+        statement.bindLong(1, entity.reminderEventId);
+        if (entity.medicineName == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindString(2, entity.medicineName);
+        }
+        if (entity.amount == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.amount);
+        }
+        if (entity.status == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, __ReminderStatus_enumToString(entity.status));
+        }
+        statement.bindLong(5, entity.raisedTimestamp);
+        statement.bindLong(6, entity.processedTimestamp);
+        statement.bindLong(7, entity.reminderId);
       }
     };
     this.__deletionAdapterOfMedicine = new EntityDeletionOrUpdateAdapter<Medicine>(__db) {
@@ -144,6 +179,38 @@ public final class MedicineDao_Impl implements MedicineDao {
         statement.bindLong(5, entity.reminderId);
       }
     };
+    this.__updateAdapterOfReminderEvent = new EntityDeletionOrUpdateAdapter<ReminderEvent>(__db) {
+      @Override
+      @NonNull
+      protected String createQuery() {
+        return "UPDATE OR ABORT `ReminderEvent` SET `reminderEventId` = ?,`medicineName` = ?,`amount` = ?,`status` = ?,`raisedTimestamp` = ?,`processedTimestamp` = ?,`reminderId` = ? WHERE `reminderEventId` = ?";
+      }
+
+      @Override
+      protected void bind(@NonNull final SupportSQLiteStatement statement,
+          final ReminderEvent entity) {
+        statement.bindLong(1, entity.reminderEventId);
+        if (entity.medicineName == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindString(2, entity.medicineName);
+        }
+        if (entity.amount == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.amount);
+        }
+        if (entity.status == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, __ReminderStatus_enumToString(entity.status));
+        }
+        statement.bindLong(5, entity.raisedTimestamp);
+        statement.bindLong(6, entity.processedTimestamp);
+        statement.bindLong(7, entity.reminderId);
+        statement.bindLong(8, entity.reminderEventId);
+      }
+    };
   }
 
   @Override
@@ -164,6 +231,18 @@ public final class MedicineDao_Impl implements MedicineDao {
     __db.beginTransaction();
     try {
       __insertionAdapterOfReminder.insert(reminder);
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
+  public void insertReminderEvent(final ReminderEvent reminderEvent) {
+    __db.assertNotSuspendingTransaction();
+    __db.beginTransaction();
+    try {
+      __insertionAdapterOfReminderEvent.insert(reminderEvent);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -212,6 +291,18 @@ public final class MedicineDao_Impl implements MedicineDao {
     __db.beginTransaction();
     try {
       __updateAdapterOfReminder.handle(reminder);
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
+  public void updateReminderEvent(final ReminderEvent reminderEvent) {
+    __db.assertNotSuspendingTransaction();
+    __db.beginTransaction();
+    try {
+      __updateAdapterOfReminderEvent.handle(reminderEvent);
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
@@ -401,6 +492,15 @@ public final class MedicineDao_Impl implements MedicineDao {
   @NonNull
   public static List<Class<?>> getRequiredConverters() {
     return Collections.emptyList();
+  }
+
+  private String __ReminderStatus_enumToString(@NonNull final ReminderEvent.ReminderStatus _value) {
+    switch (_value) {
+      case RAISED: return "RAISED";
+      case TAKEN: return "TAKEN";
+      case SKIPPED: return "SKIPPED";
+      default: throw new IllegalArgumentException("Can't convert enum to string, unknown enum value: " + _value);
+    }
   }
 
   private void __fetchRelationshipReminderAscomFutsch1MedtimerDatabaseReminder(

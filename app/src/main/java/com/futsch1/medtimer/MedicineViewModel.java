@@ -9,6 +9,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.util.List;
 
@@ -54,5 +55,13 @@ public class MedicineViewModel extends AndroidViewModel {
 
     public void deleteReminder(Reminder reminder) {
         repository.deleteReminder(reminder);
+    }
+
+    public void insertReminderEvent(ReminderEvent reminderEvent) {
+        repository.insertReminderEvent(reminderEvent);
+    }
+
+    public LiveData<List<ReminderEvent>> getReminderEvents() {
+        return repository.getReminderEvents();
     }
 }

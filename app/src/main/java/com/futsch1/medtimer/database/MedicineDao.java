@@ -39,4 +39,10 @@ public interface MedicineDao {
 
     @Delete
     void deleteReminder(Reminder reminder);
+
+    @Insert
+    void insertReminderEvent(ReminderEvent reminderEvent);
+
+    @Update
+    void updateReminderEvent(ReminderEvent reminderEvent);
 }

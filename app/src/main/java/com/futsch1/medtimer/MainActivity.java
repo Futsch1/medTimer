@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter viewPagerAdapter;
     MedicineViewModel medicineViewModel;
     ReminderScheduler reminderScheduler;
+    ReminderProcessor reminderProcessor;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -48,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        reminderProcessor = new ReminderProcessor(getApplicationContext(), medicineViewModel, new Notifications(getApplicationContext()));
         reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
-
+            reminderProcessor.schedule(timestamp, medicine, reminder);
         }, Instant::now);
         medicineViewModel.getMedicines().observe(this, reminderScheduler::updateMedicine);
+        medicineViewModel.getReminderEvents().observe(this, reminderScheduler::updateReminderEvents);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
