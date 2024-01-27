@@ -30,36 +30,39 @@ public class ReminderProcessor extends BroadcastReceiver {
     }
 
     public void schedule(Instant timestamp, Medicine medicine, Reminder reminder) {
-        pendingMedicine = medicine;
-        pendingReminder = reminder;
         if (timestamp.isAfter(Instant.now())) {
-            Intent reminderIntent = new Intent(context, ReminderProcessor.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, reminderIntent, PendingIntent.FLAG_IMMUTABLE);
+            if (pendingReminder == null || (pendingReminder.timeInMinutes != reminder.timeInMinutes) || (pendingReminder.reminderId != reminder.reminderId)) {
+                pendingMedicine = medicine;
+                pendingReminder = reminder;
+                Intent reminderIntent = new Intent(context, ReminderProcessor.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, reminderIntent, PendingIntent.FLAG_IMMUTABLE);
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
 
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
-
-            Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
+                Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
+            }
         } else {
-            processReminder();
+            processReminder(reminder, medicine);
         }
     }
 
-    private void processReminder() {
+    private void processReminder(Reminder reminder, Medicine medicine) {
         ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.reminderId = pendingReminder.reminderId;
+        reminderEvent.reminderId = reminder.reminderId;
         reminderEvent.raisedTimestamp = Instant.now().getEpochSecond();
-        reminderEvent.amount = pendingReminder.amount;
-        reminderEvent.medicineName = pendingMedicine.name;
+        reminderEvent.amount = reminder.amount;
+        reminderEvent.medicineName = medicine.name;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
         reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
-        notifications.showNotification(pendingMedicine.name, pendingReminder.amount, reminderEvent.reminderEventId);
+        notifications.showNotification(medicine.name, reminder.amount, reminderEvent.reminderEventId);
         Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        processReminder();
+        processReminder(pendingReminder, pendingMedicine);
+        pendingReminder = null;
+        pendingMedicine = null;
     }
 }
