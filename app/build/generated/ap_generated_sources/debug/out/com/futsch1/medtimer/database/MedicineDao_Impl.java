@@ -71,13 +71,13 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `Reminder` (`reminderId`,`medicineRelId`,`timeInMinutes`,`amount`) VALUES (nullif(?, 0),?,?,?)";
+        return "INSERT OR ABORT INTO `Reminder` (`medicineRelId`,`reminderId`,`timeInMinutes`,`amount`) VALUES (?,nullif(?, 0),?,?)";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final Reminder entity) {
-        statement.bindLong(1, entity.reminderId);
-        statement.bindLong(2, entity.medicineRelId);
+        statement.bindLong(1, entity.medicineRelId);
+        statement.bindLong(2, entity.reminderId);
         statement.bindLong(3, entity.timeInMinutes);
         if (entity.amount == null) {
           statement.bindNull(4);
@@ -163,13 +163,13 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `Reminder` SET `reminderId` = ?,`medicineRelId` = ?,`timeInMinutes` = ?,`amount` = ? WHERE `reminderId` = ?";
+        return "UPDATE OR ABORT `Reminder` SET `medicineRelId` = ?,`reminderId` = ?,`timeInMinutes` = ?,`amount` = ? WHERE `reminderId` = ?";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final Reminder entity) {
-        statement.bindLong(1, entity.reminderId);
-        statement.bindLong(2, entity.medicineRelId);
+        statement.bindLong(1, entity.medicineRelId);
+        statement.bindLong(2, entity.reminderId);
         statement.bindLong(3, entity.timeInMinutes);
         if (entity.amount == null) {
           statement.bindNull(4);
@@ -402,8 +402,8 @@ public final class MedicineDao_Impl implements MedicineDao {
       public List<Reminder> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
-          final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
           final int _cursorIndexOfMedicineRelId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineRelId");
+          final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
           final int _cursorIndexOfTimeInMinutes = CursorUtil.getColumnIndexOrThrow(_cursor, "timeInMinutes");
           final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
           final List<Reminder> _result = new ArrayList<Reminder>(_cursor.getCount());
@@ -564,7 +564,7 @@ public final class MedicineDao_Impl implements MedicineDao {
       return;
     }
     final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `reminderId`,`medicineRelId`,`timeInMinutes`,`amount` FROM `Reminder` WHERE `medicineRelId` IN (");
+    _stringBuilder.append("SELECT `medicineRelId`,`reminderId`,`timeInMinutes`,`amount` FROM `Reminder` WHERE `medicineRelId` IN (");
     final int _inputSize = _map.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -583,8 +583,8 @@ public final class MedicineDao_Impl implements MedicineDao {
       if (_itemKeyIndex == -1) {
         return;
       }
-      final int _cursorIndexOfReminderId = 0;
-      final int _cursorIndexOfMedicineRelId = 1;
+      final int _cursorIndexOfMedicineRelId = 0;
+      final int _cursorIndexOfReminderId = 1;
       final int _cursorIndexOfTimeInMinutes = 2;
       final int _cursorIndexOfAmount = 3;
       while (_cursor.moveToNext()) {

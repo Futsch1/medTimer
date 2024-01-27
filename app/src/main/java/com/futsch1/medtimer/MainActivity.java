@@ -13,7 +13,6 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.futsch1.medtimer.adapters.ViewPagerAdapter;
@@ -24,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    MedicineViewModel medicineViewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -48,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         if (!ReminderSchedulerService.serviceRunning) {
             startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
         }
-
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)

@@ -7,11 +7,10 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Medicine {
 
+    @ColumnInfo(name = "medicineName")
+    public final String name;
     @PrimaryKey(autoGenerate = true)
     public int medicineId;
-
-    @ColumnInfo(name = "medicineName")
-    public String name;
 
     public Medicine(String name) {
         this.name = name;

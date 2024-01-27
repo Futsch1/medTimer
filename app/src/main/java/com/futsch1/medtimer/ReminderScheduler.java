@@ -91,10 +91,6 @@ public class ReminderScheduler {
         return i.atZone(ZoneOffset.UTC).toLocalDate();
     }
 
-    private Instant toInstant(LocalDate d) {
-        return d.atStartOfDay(ZoneOffset.UTC).toInstant();
-    }
-
     public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
         this.reminderEvents = reminderEvents;
         schedule();

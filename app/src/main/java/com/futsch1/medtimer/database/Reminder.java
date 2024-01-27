@@ -5,11 +5,9 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Reminder {
+    public final int medicineRelId;
     @PrimaryKey(autoGenerate = true)
     public int reminderId;
-
-    public int medicineRelId;
-
     public int timeInMinutes;
 
     public String amount;

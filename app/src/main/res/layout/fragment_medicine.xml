@@ -9,53 +9,48 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/medicineName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/remindersSummary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/editMedicine"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/medicineName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/edit"
-                android:src="@android:drawable/ic_menu_edit" />
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/deleteMedicine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#F44336"
-                android:contentDescription="@string/delete"
-                android:src="@android:drawable/ic_menu_delete" />
+            <TextView
+                android:id="@+id/remindersSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/editMedicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/edit"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/deleteMedicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#F44336"
+            android:contentDescription="@string/delete"
+            android:src="@android:drawable/ic_menu_delete" />
     </LinearLayout>
+
 
 </FrameLayout>

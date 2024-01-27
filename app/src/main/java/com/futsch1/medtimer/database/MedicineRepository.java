@@ -35,45 +35,31 @@ public class MedicineRepository {
     }
 
     public void insertMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.insertMedicine(medicine);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertMedicine(medicine));
     }
 
     public void updateMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.updateMedicine(medicine);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
     public void deleteMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.deleteMedicine(medicine);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicine));
     }
 
     public void insertReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.insertReminder(reminder);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminder(reminder));
     }
 
     public void updateReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.updateReminder(reminder);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminder(reminder));
     }
 
     public void deleteReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.deleteReminder(reminder);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(reminder));
     }
 
     public void insertReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.insertReminderEvent(reminderEvent);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminderEvent(reminderEvent));
     }
 
     public ReminderEvent getReminderEvent(int reminderEventId) {
@@ -81,8 +67,6 @@ public class MedicineRepository {
     }
 
     public void updateReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.updateReminderEvent(reminderEvent);
-        });
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
 }
