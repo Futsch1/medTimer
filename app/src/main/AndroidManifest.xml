@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -22,6 +23,10 @@
             android:name=".TakenService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".ReminderSchedulerService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity
             android:name=".EditMedicine"
@@ -35,6 +40,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".ReminderProcessor" />
     </application>
 
 </manifest>

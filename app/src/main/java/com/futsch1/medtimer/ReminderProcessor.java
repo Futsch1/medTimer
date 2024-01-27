@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.futsch1.medtimer.database.Medicine;
+import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -15,16 +16,16 @@ import java.time.Instant;
 public class ReminderProcessor extends BroadcastReceiver {
     private final AlarmManager alarmManager;
     private final Context context;
-    private final MedicineViewModel medicineViewModel;
+    private final MedicineRepository medicineRepository;
     private final Notifications notifications;
     private Medicine pendingMedicine;
     private Reminder pendingReminder;
 
 
-    public ReminderProcessor(Context context, MedicineViewModel medicineViewModel, Notifications notifications) {
+    public ReminderProcessor(Context context, MedicineRepository medicineRepository, Notifications notifications) {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         this.context = context;
-        this.medicineViewModel = medicineViewModel;
+        this.medicineRepository = medicineRepository;
         this.notifications = notifications;
     }
 
@@ -44,13 +45,13 @@ public class ReminderProcessor extends BroadcastReceiver {
     private void processReminder() {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.reminderId = pendingReminder.reminderId;
-        reminderEvent.raisedTimestamp = Instant.now().toEpochMilli();
+        reminderEvent.raisedTimestamp = Instant.now().getEpochSecond();
         reminderEvent.amount = pendingReminder.amount;
         reminderEvent.medicineName = pendingMedicine.name;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
-        medicineViewModel.insertReminderEvent(reminderEvent);
-        
+        medicineRepository.insertReminderEvent(reminderEvent);
+
         notifications.showNotification(pendingMedicine.name, pendingReminder.amount, reminderEvent.reminderEventId);
     }
 

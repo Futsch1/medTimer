@@ -489,6 +489,54 @@ public final class MedicineDao_Impl implements MedicineDao {
     });
   }
 
+  @Override
+  public ReminderEvent getReminderEvent(final int reminderEventId) {
+    final String _sql = "SELECT * FROM ReminderEvent WHERE reminderEventId= ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, reminderEventId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfReminderEventId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderEventId");
+      final int _cursorIndexOfMedicineName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
+      final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+      final int _cursorIndexOfStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "status");
+      final int _cursorIndexOfRaisedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "raisedTimestamp");
+      final int _cursorIndexOfProcessedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "processedTimestamp");
+      final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
+      final ReminderEvent _result;
+      if (_cursor.moveToFirst()) {
+        _result = new ReminderEvent();
+        _result.reminderEventId = _cursor.getInt(_cursorIndexOfReminderEventId);
+        if (_cursor.isNull(_cursorIndexOfMedicineName)) {
+          _result.medicineName = null;
+        } else {
+          _result.medicineName = _cursor.getString(_cursorIndexOfMedicineName);
+        }
+        if (_cursor.isNull(_cursorIndexOfAmount)) {
+          _result.amount = null;
+        } else {
+          _result.amount = _cursor.getString(_cursorIndexOfAmount);
+        }
+        if (_cursor.isNull(_cursorIndexOfStatus)) {
+          _result.status = null;
+        } else {
+          _result.status = __ReminderStatus_stringToEnum(_cursor.getString(_cursorIndexOfStatus));
+        }
+        _result.raisedTimestamp = _cursor.getLong(_cursorIndexOfRaisedTimestamp);
+        _result.processedTimestamp = _cursor.getLong(_cursorIndexOfProcessedTimestamp);
+        _result.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
   @NonNull
   public static List<Class<?>> getRequiredConverters() {
     return Collections.emptyList();

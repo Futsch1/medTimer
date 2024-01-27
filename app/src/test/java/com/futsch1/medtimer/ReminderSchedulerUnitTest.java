@@ -156,6 +156,16 @@ public class ReminderSchedulerUnitTest {
         }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
+
+        // All reminders already invoked, we are on the next day
+        when(mockDate.now()).thenReturn(Instant.ofEpochSecond(25 * 60 * 60));
+        scheduler.updateReminderEvents(new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(3, 4));
+            add(buildReminderEvent(2, 12));
+            add(buildReminderEvent(1, 16));
+        }});
+        verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
+        clearInvocations(mock);
     }
 
     private ReminderEvent buildReminderEvent(int reminderId, long raisedTimestamp) {

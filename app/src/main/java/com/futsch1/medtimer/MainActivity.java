@@ -5,6 +5,7 @@ import static com.futsch1.medtimer.ActivityCodes.NOTIFICATION_CHANNEL_ID;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,15 +20,11 @@ import com.futsch1.medtimer.adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.time.Instant;
-
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
     MedicineViewModel medicineViewModel;
-    ReminderScheduler reminderScheduler;
-    ReminderProcessor reminderProcessor;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -48,13 +45,11 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         createNotificationChannel();
 
+        if (!ReminderSchedulerService.serviceRunning) {
+            startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+        }
+
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-        reminderProcessor = new ReminderProcessor(getApplicationContext(), medicineViewModel, new Notifications(getApplicationContext()));
-        reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
-            reminderProcessor.schedule(timestamp, medicine, reminder);
-        }, Instant::now);
-        medicineViewModel.getMedicines().observe(this, reminderScheduler::updateMedicine);
-        medicineViewModel.getReminderEvents().observe(this, reminderScheduler::updateReminderEvents);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)

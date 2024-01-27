@@ -75,4 +75,14 @@ public class MedicineRepository {
             medicineDao.insertReminderEvent(reminderEvent);
         });
     }
+
+    public ReminderEvent getReminderEvent(int reminderEventId) {
+        return medicineDao.getReminderEvent(reminderEventId);
+    }
+
+    public void updateReminderEvent(ReminderEvent reminderEvent) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.updateReminderEvent(reminderEvent);
+        });
+    }
 }

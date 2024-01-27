@@ -29,7 +29,7 @@ public class Notifications {
         notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         PendingIntent pendingTaken = PendingIntent.getService(context, 0, notifyTaken, PendingIntent.FLAG_IMMUTABLE);
 
-        Intent notifyDismissed = new Intent(context, TakenService.class);
+        Intent notifyDismissed = new Intent(context, DismissService.class);
         notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         PendingIntent pendingDismissed = PendingIntent.getService(context, 0, notifyDismissed, PendingIntent.FLAG_IMMUTABLE);
 

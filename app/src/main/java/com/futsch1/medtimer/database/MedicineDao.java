@@ -45,4 +45,7 @@ public interface MedicineDao {
 
     @Update
     void updateReminderEvent(ReminderEvent reminderEvent);
+
+    @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
+    ReminderEvent getReminderEvent(int reminderEventId);
 }
