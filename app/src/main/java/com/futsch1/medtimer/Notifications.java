@@ -25,7 +25,7 @@ public class Notifications {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         Intent notifyTaken = new Intent(context, TakenService.class);
-        notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, notificationId++);
+        notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         PendingIntent pendingTaken = PendingIntent.getService(context, 0, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -43,6 +43,6 @@ public class Notifications {
                 .setAutoCancel(true)
                 .addAction(R.drawable.capsule, context.getString(R.string.notification_taken), pendingTaken);
 
-        notificationManager.notify(notificationId, builder.build());
+        notificationManager.notify(notificationId++, builder.build());
     }
 }
