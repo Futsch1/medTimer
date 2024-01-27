@@ -22,7 +22,6 @@ public class ReminderProcessor extends BroadcastReceiver {
     private Medicine pendingMedicine;
     private Reminder pendingReminder;
 
-
     public ReminderProcessor(Context context, MedicineRepository medicineRepository, Notifications notifications) {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         this.context = context;
@@ -53,7 +52,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         reminderEvent.medicineName = pendingMedicine.name;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
-        medicineRepository.insertReminderEvent(reminderEvent);
+        reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
         notifications.showNotification(pendingMedicine.name, pendingReminder.amount, reminderEvent.reminderEventId);
         Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));

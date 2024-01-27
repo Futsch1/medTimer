@@ -27,11 +27,11 @@ public class Notifications {
         Intent notifyTaken = new Intent(context, TakenService.class);
         notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, notificationId++);
         notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        PendingIntent pendingTaken = PendingIntent.getService(context, 0, notifyTaken, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingTaken = PendingIntent.getService(context, 0, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent notifyDismissed = new Intent(context, DismissService.class);
         notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        PendingIntent pendingDismissed = PendingIntent.getService(context, 0, notifyDismissed, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingDismissed = PendingIntent.getService(context, 0, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.capsule)

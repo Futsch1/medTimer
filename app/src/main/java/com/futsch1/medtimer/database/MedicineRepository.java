@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class MedicineRepository {
 
@@ -58,8 +60,16 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(reminder));
     }
 
-    public void insertReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminderEvent(reminderEvent));
+    public long insertReminderEvent(ReminderEvent reminderEvent) {
+        Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertReminderEvent(reminderEvent));
+        long rowId = 0;
+
+        try {
+            rowId = future.get();
+        } catch (InterruptedException | ExecutionException e1) {
+            e1.printStackTrace();
+        }
+        return rowId;
     }
 
     public ReminderEvent getReminderEvent(int reminderEventId) {
