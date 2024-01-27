@@ -11,7 +11,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/capsule"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer"
         tools:targetApi="33">
@@ -41,7 +41,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ReminderProcessor" />
         <receiver
             android:name=".Autostart"
             android:exported="true">
