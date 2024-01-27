@@ -1,5 +1,7 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -21,6 +23,7 @@ public class ReminderProcessor extends BroadcastReceiver {
     private final Notifications notifications;
     private Medicine pendingMedicine;
     private Reminder pendingReminder;
+    private PendingIntent pendingIntent;
 
     public ReminderProcessor(Context context, MedicineRepository medicineRepository, Notifications notifications) {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -32,11 +35,15 @@ public class ReminderProcessor extends BroadcastReceiver {
     public void schedule(Instant timestamp, Medicine medicine, Reminder reminder) {
         if (timestamp.isAfter(Instant.now())) {
             if (pendingReminder == null || (pendingReminder.timeInMinutes != reminder.timeInMinutes) || (pendingReminder.reminderId != reminder.reminderId)) {
+                if (pendingIntent != null) {
+                    alarmManager.cancel(pendingIntent);
+                }
                 pendingMedicine = medicine;
                 pendingReminder = reminder;
-                Intent reminderIntent = new Intent(context, ReminderProcessor.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, reminderIntent, PendingIntent.FLAG_IMMUTABLE);
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+
+                Intent reminderIntent = new Intent(REMINDER_ACTION);
+                pendingIntent = PendingIntent.getBroadcast(context, 100, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
 
                 Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
             }
@@ -61,8 +68,12 @@ public class ReminderProcessor extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        processReminder(pendingReminder, pendingMedicine);
+        Log.i("Reminder", "Received reminder intent");
+        Reminder reminder = pendingReminder;
+        Medicine medicine = pendingMedicine;
         pendingReminder = null;
         pendingMedicine = null;
+        pendingIntent = null;
+        processReminder(reminder, medicine);
     }
 }
