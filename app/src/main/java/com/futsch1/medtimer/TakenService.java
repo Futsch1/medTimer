@@ -1,7 +1,9 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -29,6 +31,9 @@ public class TakenService extends Service {
         HandlerThread backgroundThread = new HandlerThread("BackgroundThread");
         backgroundThread.start();
         Handler handler = new Handler(backgroundThread.getLooper());
+
+        NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
+        notificationManager.cancel(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
 
         Runnable task = () -> {
             ReminderEvent reminderEvent = medicineRepository.getReminderEvent(intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0));
