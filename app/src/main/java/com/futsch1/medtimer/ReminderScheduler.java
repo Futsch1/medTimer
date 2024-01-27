@@ -7,6 +7,9 @@ import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,14 @@ public class ReminderScheduler {
                     checkDate = checkDate.plusDays(1);
                 }
                 Reminder nextReminder = sortedReminders.get(reminderIndex);
-                this.listener.schedule(toInstant(checkDate).plusSeconds(nextReminder.timeInMinutes * 60L), getMedicine(nextReminder), nextReminder);
+
+                // Attention: Reminder time in minutes is given as local time, so we need to
+                // convert this local time to an UTC0 time first
+                ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(checkDate.atStartOfDay());
+                OffsetDateTime localTime = OffsetDateTime.of(checkDate, LocalTime.of(nextReminder.timeInMinutes / 60, nextReminder.timeInMinutes % 60), offset);
+                Instant targetDate = localTime.toInstant();
+
+                this.listener.schedule(targetDate, getMedicine(nextReminder), nextReminder);
             }
         }
     }
@@ -71,10 +81,6 @@ public class ReminderScheduler {
         return new Start(0, toLocalDate(this.getInstant.now()));
     }
 
-    private Instant toInstant(LocalDate d) {
-        return d.atStartOfDay(ZoneOffset.UTC).toInstant();
-    }
-
     private Medicine getMedicine(Reminder reminder) {
         int medicineId = reminder.medicineRelId;
         //noinspection OptionalGetWithoutIsPresent
@@ -83,6 +89,10 @@ public class ReminderScheduler {
 
     private LocalDate toLocalDate(Instant i) {
         return i.atZone(ZoneOffset.UTC).toLocalDate();
+    }
+
+    private Instant toInstant(LocalDate d) {
+        return d.atStartOfDay(ZoneOffset.UTC).toInstant();
     }
 
     public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
