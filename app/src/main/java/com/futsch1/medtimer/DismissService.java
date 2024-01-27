@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -32,6 +33,7 @@ public class DismissService extends Service {
             reminderEvent.status = ReminderEvent.ReminderStatus.SKIPPED;
             reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
             medicineRepository.updateReminderEvent(reminderEvent);
+            Log.i("Reminder", String.format("Dismissed reminder for %s", reminderEvent.medicineName));
         };
 
         handler.post(task);

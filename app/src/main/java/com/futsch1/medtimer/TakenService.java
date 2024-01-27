@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -34,6 +35,7 @@ public class TakenService extends Service {
             reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
             reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
             medicineRepository.updateReminderEvent(reminderEvent);
+            Log.i("Reminder", String.format("Taken reminder for %s", reminderEvent.medicineName));
         };
 
         handler.post(task);

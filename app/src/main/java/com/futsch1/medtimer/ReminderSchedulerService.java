@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,14 @@ public class ReminderSchedulerService extends LifecycleService {
 
         medicineRepository.getMedicines().observe(this, reminderScheduler::updateMedicine);
         medicineRepository.getReminderEvents().observe(this, reminderScheduler::updateReminderEvents);
+
+        Log.i("Scheduler", "Service created");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("Scheduler", "Service destroyed");
     }
 
     @Override

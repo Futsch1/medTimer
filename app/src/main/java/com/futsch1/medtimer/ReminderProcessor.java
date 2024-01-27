@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -37,6 +38,8 @@ public class ReminderProcessor extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, reminderIntent, PendingIntent.FLAG_IMMUTABLE);
 
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+
+            Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
         } else {
             processReminder();
         }
@@ -53,6 +56,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         medicineRepository.insertReminderEvent(reminderEvent);
 
         notifications.showNotification(pendingMedicine.name, pendingReminder.amount, reminderEvent.reminderEventId);
+        Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));
     }
 
     @Override
