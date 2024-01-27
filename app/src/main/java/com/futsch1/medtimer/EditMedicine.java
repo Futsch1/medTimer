@@ -3,8 +3,12 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -18,6 +22,8 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 
@@ -45,8 +51,33 @@ public class EditMedicine extends AppCompatActivity {
 
         ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> {
-            Reminder reminder = new Reminder(medicineId);
-            medicineViewModel.insertReminder(reminder);
+            TextInputLayout textInputLayout = new TextInputLayout(this);
+            TextInputEditText editText = new TextInputEditText(this);
+            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setHint(R.string.amount);
+            textInputLayout.addView(editText);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(textInputLayout);
+            builder.setTitle(R.string.add_reminder);
+            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+                Editable e = editText.getText();
+                if (e != null) {
+                    String amount = e.toString();
+                    Reminder reminder = new Reminder(medicineId);
+                    reminder.amount = amount;
+
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
+                        reminder.timeInMinutes = hourOfDay * 60 + minute;
+                        medicineViewModel.insertReminder(reminder);
+                    }, 8, 0, true);
+                    timePickerDialog.show();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.

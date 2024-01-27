@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.adapters;
 
+import static com.futsch1.medtimer.TimeHelper.minutesToTime;
+
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.text.Editable;
@@ -15,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
-
-import java.util.Locale;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
@@ -84,9 +84,5 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             });
             builder.show();
         });
-    }
-
-    String minutesToTime(long minutes) {
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes / 60, minutes % 60);
     }
 }
