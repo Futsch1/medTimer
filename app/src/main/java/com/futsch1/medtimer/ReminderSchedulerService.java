@@ -34,9 +34,7 @@ public class ReminderSchedulerService extends LifecycleService {
 
         MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
         reminderProcessor = new ReminderProcessor(getApplicationContext(), medicineRepository, new Notifications(getApplicationContext()));
-        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
-            reminderProcessor.schedule(timestamp, medicine, reminder);
-        }, Instant::now);
+        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> reminderProcessor.schedule(timestamp, medicine, reminder), Instant::now);
 
         medicineRepository.getMedicines().observe(this, reminderScheduler::updateMedicine);
         medicineRepository.getReminderEvents().observe(this, reminderScheduler::updateReminderEvents);
