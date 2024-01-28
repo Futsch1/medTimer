@@ -392,6 +392,37 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
+  public Medicine getMedicine(final int medicineId) {
+    final String _sql = "SELECT * FROM Medicine WHERE medicineId= ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, medicineId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
+      final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
+      final Medicine _result;
+      if (_cursor.moveToFirst()) {
+        final String _tmpName;
+        if (_cursor.isNull(_cursorIndexOfName)) {
+          _tmpName = null;
+        } else {
+          _tmpName = _cursor.getString(_cursorIndexOfName);
+        }
+        _result = new Medicine(_tmpName);
+        _result.medicineId = _cursor.getInt(_cursorIndexOfMedicineId);
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
   public LiveData<List<Reminder>> getReminders(final int medicineId) {
     final String _sql = "SELECT * FROM Reminder WHERE medicineRelId= ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
@@ -433,6 +464,41 @@ public final class MedicineDao_Impl implements MedicineDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public Reminder getReminder(final int reminderId) {
+    final String _sql = "SELECT * FROM Reminder WHERE reminderId= ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, reminderId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfMedicineRelId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineRelId");
+      final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
+      final int _cursorIndexOfTimeInMinutes = CursorUtil.getColumnIndexOrThrow(_cursor, "timeInMinutes");
+      final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+      final Reminder _result;
+      if (_cursor.moveToFirst()) {
+        final int _tmpMedicineRelId;
+        _tmpMedicineRelId = _cursor.getInt(_cursorIndexOfMedicineRelId);
+        _result = new Reminder(_tmpMedicineRelId);
+        _result.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
+        _result.timeInMinutes = _cursor.getInt(_cursorIndexOfTimeInMinutes);
+        if (_cursor.isNull(_cursorIndexOfAmount)) {
+          _result.amount = null;
+        } else {
+          _result.amount = _cursor.getString(_cursorIndexOfAmount);
+        }
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
   }
 
   @Override

@@ -1,5 +1,8 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
+import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 
 import android.app.AlarmManager;
@@ -46,6 +49,11 @@ public class ReminderProcessor extends BroadcastReceiver {
                 Intent reminderIntent = new Intent(REMINDER_ACTION);
                 pendingIntent = PendingIntent.getBroadcast(context, 100, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+
+                Intent nextReminderIntent = new Intent(NEXT_REMINDER_ACTION);
+                nextReminderIntent.putExtra(EXTRA_REMINDER_ID, reminder.reminderId);
+                nextReminderIntent.putExtra(EXTRA_REMINDER_TIME, timestamp);
+                context.sendBroadcast(nextReminderIntent);
 
                 Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
             }

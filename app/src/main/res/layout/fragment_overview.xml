@@ -10,18 +10,30 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_weight="2"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next_reminder" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next_reminder" />
+
+            <TextView
+                android:id="@+id/nextReminderInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="2" />
+        </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView

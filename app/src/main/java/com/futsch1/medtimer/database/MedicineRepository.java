@@ -27,9 +27,17 @@ public class MedicineRepository {
         return medicinesWithReminders;
     }
 
+    public Medicine getMedicine(int medicineId) {
+        return medicineDao.getMedicine(medicineId);
+    }
+
 
     public LiveData<List<Reminder>> getReminders(int medicineId) {
         return medicineDao.getReminders(medicineId);
+    }
+
+    public Reminder getReminder(int reminderId) {
+        return medicineDao.getReminder(reminderId);
     }
 
     public LiveData<List<ReminderEvent>> getReminderEvents(int limit) {

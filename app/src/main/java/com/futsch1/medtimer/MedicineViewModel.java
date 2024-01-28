@@ -28,6 +28,10 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicines;
     }
 
+    Medicine getMedicine(int medicineId) {
+        return medicineRepository.getMedicine(medicineId);
+    }
+
     void insertMedicine(Medicine medicine) {
         medicineRepository.insertMedicine(medicine);
     }
@@ -43,6 +47,10 @@ public class MedicineViewModel extends AndroidViewModel {
 
     public LiveData<List<Reminder>> getReminders(int medicineId) {
         return medicineRepository.getReminders(medicineId);
+    }
+
+    public Reminder getReminder(int reminderId) {
+        return medicineRepository.getReminder(reminderId);
     }
 
     void insertReminder(Reminder reminder) {
