@@ -8,8 +8,6 @@
     app:cardElevation="2dp"
     app:contentPadding="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
