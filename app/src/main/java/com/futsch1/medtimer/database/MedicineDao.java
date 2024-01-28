@@ -15,11 +15,11 @@ public interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine")
     LiveData<List<MedicineWithReminders>> getMedicines();
-    
+
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
     Medicine getMedicine(int medicineId);
 
-    @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId")
+    @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
     LiveData<List<Reminder>> getReminders(int medicineId);
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
