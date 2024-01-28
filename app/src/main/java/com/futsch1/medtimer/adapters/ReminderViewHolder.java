@@ -9,8 +9,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +21,7 @@ import com.futsch1.medtimer.database.Reminder;
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
-    private final ImageButton deleteButton;
+    private final Button deleteButton;
 
     public Reminder reminder;
 

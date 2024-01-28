@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -15,41 +14,54 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_gravity="fill_horizontal"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editReminderTime"
+            <TextView
+                android:id="@+id/labelEditReminderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/time"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="time"
                 android:labelFor="@id/editReminderTime"
                 android:text="@string/time" />
 
             <EditText
-                android:id="@+id/editAmount"
+                android:id="@+id/editReminderTime"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="time"
+                android:text="@string/time" />
+
+            <TextView
+                android:id="@+id/labelEditAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:labelFor="@id/editAmount"
+                android:text="@string/amount" />
+
+            <EditText
+                android:id="@+id/editAmount"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/amount"
-                tools:text="@string/amount" />
+                android:text="@string/amount" />
         </LinearLayout>
 
-        <ImageButton
+        <Button
             android:id="@+id/deleteReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#F44336"
-            android:contentDescription="@string/delete"
-            android:src="@android:drawable/ic_menu_delete" />
+            android:layout_gravity="center_vertical|end"
+            android:text="@string/delete"
+            app:icon="@android:drawable/ic_menu_delete" />
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
