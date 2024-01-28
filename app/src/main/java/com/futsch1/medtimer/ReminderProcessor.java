@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.futsch1.medtimer.database.Medicine;
@@ -48,7 +50,8 @@ public class ReminderProcessor extends BroadcastReceiver {
                 Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", pendingMedicine.name, timestamp));
             }
         } else {
-            processReminder(reminder, medicine);
+            final Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(() -> processReminder(reminder, medicine), 5000);
         }
     }
 
