@@ -6,14 +6,11 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.TextView;
-
-import androidx.annotation.RequiresApi;
 
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
@@ -35,7 +32,6 @@ public class NextReminderListener extends BroadcastReceiver {
         this.thread.start();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("ReminderListener", "Next reminder received");

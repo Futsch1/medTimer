@@ -5,14 +5,12 @@ import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +26,6 @@ public class OverviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -7,10 +7,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager2.widget.ViewPager2;
@@ -24,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void checkPermissions() {
 
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

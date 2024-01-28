@@ -5,13 +5,11 @@ import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LifecycleService;
 
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -32,7 +30,6 @@ public class ReminderSchedulerService extends LifecycleService {
         return null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onCreate() {
         super.onCreate();

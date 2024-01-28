@@ -424,7 +424,7 @@ public final class MedicineDao_Impl implements MedicineDao {
 
   @Override
   public LiveData<List<Reminder>> getReminders(final int medicineId) {
-    final String _sql = "SELECT * FROM Reminder WHERE medicineRelId= ?";
+    final String _sql = "SELECT * FROM Reminder WHERE medicineRelId= ? ORDER BY timeInMinutes";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     _statement.bindLong(_argIndex, medicineId);
