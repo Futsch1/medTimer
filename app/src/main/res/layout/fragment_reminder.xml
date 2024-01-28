@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:contentPadding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,6 +28,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="time"
+                android:labelFor="@id/editReminderTime"
                 android:text="@string/time" />
 
             <EditText
@@ -52,4 +52,4 @@
             android:src="@android:drawable/ic_menu_delete" />
     </LinearLayout>
 
-</FrameLayout>
+</com.google.android.material.card.MaterialCardView>
