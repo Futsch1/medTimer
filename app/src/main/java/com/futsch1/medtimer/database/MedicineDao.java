@@ -22,6 +22,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM ReminderEvent")
     LiveData<List<ReminderEvent>> getReminderEvents();
 
+    @Query("SELECT * FROM ReminderEvent ORDER BY raisedTimestamp DESC LIMIT :limit")
+    LiveData<List<ReminderEvent>> getLatestReminderEvents(int limit);
+
     @Insert
     void insertMedicine(Medicine medicine);
 

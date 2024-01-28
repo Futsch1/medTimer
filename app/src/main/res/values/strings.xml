@@ -25,4 +25,8 @@
     <string name="notification_title">Medicine reminder</string>
     <string name="notification_content">It is time to take %1s of %2s</string>
     <string name="notification_taken">TAKEN</string>
+    <string name="taken">Taken</string>
+    <string name="skipped">Skipped</string>
+    <string name="reminder_event">Taken %1s of %2s\n%3s</string>
+    <string name="recent_reminders">Recent reminders</string>
 </resources>

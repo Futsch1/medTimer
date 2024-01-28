@@ -32,8 +32,10 @@ public class MedicineRepository {
         return medicineDao.getReminders(medicineId);
     }
 
-    public LiveData<List<ReminderEvent>> getReminderEvents() {
-        return medicineDao.getReminderEvents();
+    public LiveData<List<ReminderEvent>> getReminderEvents(int limit) {
+        if (limit > 0) {
+            return medicineDao.getLatestReminderEvents(limit);
+        } else return medicineDao.getReminderEvents();
     }
 
     public void insertMedicine(Medicine medicine) {

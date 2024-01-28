@@ -54,17 +54,17 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `Medicine` (`medicineId`,`medicineName`) VALUES (nullif(?, 0),?)";
+        return "INSERT OR ABORT INTO `Medicine` (`medicineName`,`medicineId`) VALUES (?,nullif(?, 0))";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final Medicine entity) {
-        statement.bindLong(1, entity.medicineId);
         if (entity.name == null) {
-          statement.bindNull(2);
+          statement.bindNull(1);
         } else {
-          statement.bindString(2, entity.name);
+          statement.bindString(1, entity.name);
         }
+        statement.bindLong(2, entity.medicineId);
       }
     };
     this.__insertionAdapterOfReminder = new EntityInsertionAdapter<Reminder>(__db) {
@@ -145,17 +145,17 @@ public final class MedicineDao_Impl implements MedicineDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `Medicine` SET `medicineId` = ?,`medicineName` = ? WHERE `medicineId` = ?";
+        return "UPDATE OR ABORT `Medicine` SET `medicineName` = ?,`medicineId` = ? WHERE `medicineId` = ?";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final Medicine entity) {
-        statement.bindLong(1, entity.medicineId);
         if (entity.name == null) {
-          statement.bindNull(2);
+          statement.bindNull(1);
         } else {
-          statement.bindString(2, entity.name);
+          statement.bindString(1, entity.name);
         }
+        statement.bindLong(2, entity.medicineId);
         statement.bindLong(3, entity.medicineId);
       }
     };
@@ -238,12 +238,13 @@ public final class MedicineDao_Impl implements MedicineDao {
   }
 
   @Override
-  public void insertReminderEvent(final ReminderEvent reminderEvent) {
+  public long insertReminderEvent(final ReminderEvent reminderEvent) {
     __db.assertNotSuspendingTransaction();
     __db.beginTransaction();
     try {
-      __insertionAdapterOfReminderEvent.insert(reminderEvent);
+      final long _result = __insertionAdapterOfReminderEvent.insertAndReturnId(reminderEvent);
       __db.setTransactionSuccessful();
+      return _result;
     } finally {
       __db.endTransaction();
     }
@@ -322,8 +323,8 @@ public final class MedicineDao_Impl implements MedicineDao {
         try {
           final Cursor _cursor = DBUtil.query(__db, _statement, true, null);
           try {
-            final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
             final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
+            final int _cursorIndexOfMedicineId = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineId");
             final LongSparseArray<ArrayList<Reminder>> _collectionReminders = new LongSparseArray<ArrayList<Reminder>>();
             while (_cursor.moveToNext()) {
               final Long _tmpKey;
@@ -344,7 +345,7 @@ public final class MedicineDao_Impl implements MedicineDao {
             while (_cursor.moveToNext()) {
               final MedicineWithReminders _item;
               final Medicine _tmpMedicine;
-              if (!(_cursor.isNull(_cursorIndexOfMedicineId) && _cursor.isNull(_cursorIndexOfName))) {
+              if (!(_cursor.isNull(_cursorIndexOfName) && _cursor.isNull(_cursorIndexOfMedicineId))) {
                 final String _tmpName;
                 if (_cursor.isNull(_cursorIndexOfName)) {
                   _tmpName = null;
@@ -438,6 +439,63 @@ public final class MedicineDao_Impl implements MedicineDao {
   public LiveData<List<ReminderEvent>> getReminderEvents() {
     final String _sql = "SELECT * FROM ReminderEvent";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    return __db.getInvalidationTracker().createLiveData(new String[] {"ReminderEvent"}, false, new Callable<List<ReminderEvent>>() {
+      @Override
+      @Nullable
+      public List<ReminderEvent> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfReminderEventId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderEventId");
+          final int _cursorIndexOfMedicineName = CursorUtil.getColumnIndexOrThrow(_cursor, "medicineName");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "status");
+          final int _cursorIndexOfRaisedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "raisedTimestamp");
+          final int _cursorIndexOfProcessedTimestamp = CursorUtil.getColumnIndexOrThrow(_cursor, "processedTimestamp");
+          final int _cursorIndexOfReminderId = CursorUtil.getColumnIndexOrThrow(_cursor, "reminderId");
+          final List<ReminderEvent> _result = new ArrayList<ReminderEvent>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ReminderEvent _item;
+            _item = new ReminderEvent();
+            _item.reminderEventId = _cursor.getInt(_cursorIndexOfReminderEventId);
+            if (_cursor.isNull(_cursorIndexOfMedicineName)) {
+              _item.medicineName = null;
+            } else {
+              _item.medicineName = _cursor.getString(_cursorIndexOfMedicineName);
+            }
+            if (_cursor.isNull(_cursorIndexOfAmount)) {
+              _item.amount = null;
+            } else {
+              _item.amount = _cursor.getString(_cursorIndexOfAmount);
+            }
+            if (_cursor.isNull(_cursorIndexOfStatus)) {
+              _item.status = null;
+            } else {
+              _item.status = __ReminderStatus_stringToEnum(_cursor.getString(_cursorIndexOfStatus));
+            }
+            _item.raisedTimestamp = _cursor.getLong(_cursorIndexOfRaisedTimestamp);
+            _item.processedTimestamp = _cursor.getLong(_cursorIndexOfProcessedTimestamp);
+            _item.reminderId = _cursor.getInt(_cursorIndexOfReminderId);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public LiveData<List<ReminderEvent>> getLatestReminderEvents(final int limit) {
+    final String _sql = "SELECT * FROM ReminderEvent ORDER BY raisedTimestamp DESC LIMIT ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, limit);
     return __db.getInvalidationTracker().createLiveData(new String[] {"ReminderEvent"}, false, new Callable<List<ReminderEvent>>() {
       @Override
       @Nullable
