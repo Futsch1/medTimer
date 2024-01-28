@@ -22,7 +22,7 @@
     <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
-    <string name="reminder_event">%1s von %2s\\n%3s</string>
+    <string name="reminder_event">%1s von %2s\n%3s</string>
     <string name="recent_reminders">Kürzliche Erinnerungen</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="reminders_per_day">
