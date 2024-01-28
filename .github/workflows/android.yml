@@ -28,8 +28,18 @@ jobs:
         run: ./gradlew build
       - name: Release bundle
         run: ./gradlew bundleRelease
+      - name: Sign AAB
+        id: sign_aab
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
+          alias: ${{ secrets.SIGNING_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+      - run: echo "Build status report=${{ job.status }}."
       - name: Upload App Bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v1
         with:
           name: aab
-          path: app/build/outputs/bundle/release/
+          path: ${{steps.sign_aab.outputs.signedReleaseFile}}
