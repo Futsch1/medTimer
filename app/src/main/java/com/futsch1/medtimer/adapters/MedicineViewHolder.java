@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,8 +21,8 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
     private final TextView remindersSummaryView;
-    private final ImageButton editButton;
-    private final ImageButton deleteButton;
+    private final Button editButton;
+    private final Button deleteButton;
 
     private MedicineViewHolder(View itemView) {
         super(itemView);
