@@ -15,7 +15,14 @@
         android:layout_weight="2"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
-        app:contentPadding="10dp" />
+        app:contentPadding="10dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_reminder" />
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

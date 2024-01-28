@@ -29,4 +29,5 @@
     <string name="skipped">Skipped</string>
     <string name="reminder_event">%1s of %2s\n%3s</string>
     <string name="recent_reminders">Recent reminders</string>
+    <string name="next_reminder">Next reminder</string>
 </resources>
