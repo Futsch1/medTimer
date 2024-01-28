@@ -11,13 +11,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/editMedicineNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medicine_name" />
 
         <EditText
             android:id="@+id/editMedicineName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:importantForAutofill="no"
             android:inputType="text"
             android:labelFor="@id/editMedicineName" />
