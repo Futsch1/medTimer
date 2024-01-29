@@ -82,9 +82,9 @@ public class ReminderProcessor extends BroadcastReceiver {
         Log.i("Reminder", "Received reminder intent");
         Reminder reminder = pendingReminder;
         Medicine medicine = pendingMedicine;
+        processReminder(reminder, medicine);
         pendingReminder = null;
         pendingMedicine = null;
         pendingIntent = null;
-        processReminder(reminder, medicine);
     }
 }
