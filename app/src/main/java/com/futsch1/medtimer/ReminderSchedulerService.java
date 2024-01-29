@@ -14,7 +14,8 @@ import androidx.lifecycle.LifecycleService;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class ReminderSchedulerService extends LifecycleService {
     public static boolean serviceRunning = false;
@@ -38,7 +39,17 @@ public class ReminderSchedulerService extends LifecycleService {
 
         MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
         reminderProcessor = new ReminderProcessor(getApplicationContext(), medicineRepository, new Notifications(getApplicationContext()));
-        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> reminderProcessor.schedule(timestamp, medicine, reminder), Instant::now);
+        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> reminderProcessor.schedule(timestamp, medicine, reminder), new ReminderScheduler.TimeAccess() {
+            @Override
+            public ZoneId systemZone() {
+                return ZoneId.systemDefault();
+            }
+
+            @Override
+            public LocalDate localDate() {
+                return LocalDate.now();
+            }
+        });
 
         medicineRepository.getMedicines().observe(this, reminderScheduler::updateMedicine);
         medicineRepository.getReminderEvents(0).observe(this, reminderScheduler::updateReminderEvents);

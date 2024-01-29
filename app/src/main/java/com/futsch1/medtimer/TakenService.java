@@ -20,20 +20,23 @@ import java.time.Instant;
 
 public class TakenService extends Service {
     private MedicineRepository medicineRepository;
+    private HandlerThread backgroundThread;
 
     @Override
     public void onCreate() {
         medicineRepository = new MedicineRepository(this.getApplication());
+        backgroundThread = new HandlerThread("BackgroundThread");
+        backgroundThread.start();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        HandlerThread backgroundThread = new HandlerThread("BackgroundThread");
-        backgroundThread.start();
         Handler handler = new Handler(backgroundThread.getLooper());
 
         NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
-        notificationManager.cancel(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
+        int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0);
+        Log.d("Reminder", String.format("Dismissing notification %d", notificationId));
+        notificationManager.cancel(notificationId);
 
         Runnable task = () -> {
             ReminderEvent reminderEvent = medicineRepository.getReminderEvent(intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0));
@@ -46,6 +49,12 @@ public class TakenService extends Service {
         handler.post(task);
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        backgroundThread.quitSafely();
     }
 
     @Nullable

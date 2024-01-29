@@ -13,16 +13,17 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ReminderScheduler {
     private final ScheduleListener listener;
-    private final GetInstant getInstant;
+    private final TimeAccess timeAccess;
     private List<MedicineWithReminders> medicineWithReminders;
     private List<ReminderEvent> reminderEvents;
 
-    public ReminderScheduler(ScheduleListener listener, GetInstant getInstant) {
+    public ReminderScheduler(ScheduleListener listener, TimeAccess timeAccess) {
         this.listener = listener;
-        this.getInstant = getInstant;
+        this.timeAccess = timeAccess;
     }
 
     public void updateMedicine(List<MedicineWithReminders> medicineWithReminders) {
@@ -35,20 +36,20 @@ public class ReminderScheduler {
             ArrayList<Reminder> sortedReminders = getSortedReminders();
 
             if (sortedReminders.size() > 0) {
-
-                // Now start at the last reminderEvent
-                Start start = getStart(sortedReminders);
-                int reminderIndex = start.reminderIndex;
-                LocalDate checkDate = start.startDate;
-                if (reminderIndex >= sortedReminders.size()) {
-                    reminderIndex = 0;
-                    checkDate = checkDate.plusDays(1);
+                Reminder nextReminder = null;
+                LocalDate checkDate = this.timeAccess.localDate();
+                for (Reminder reminder : sortedReminders) {
+                    if (!wasRaisedToday(reminder)) {
+                        nextReminder = reminder;
+                        break;
+                    }
                 }
-                Reminder nextReminder = sortedReminders.get(reminderIndex);
+                if (nextReminder == null) {
+                    checkDate = checkDate.plusDays(1);
+                    nextReminder = sortedReminders.get(0);
+                }
 
-                // Attention: Reminder time in minutes is given as local time, so we need to
-                // convert this local time to an UTC0 time first
-                ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(checkDate.atStartOfDay());
+                ZoneOffset offset = timeAccess.systemZone().getRules().getOffset(checkDate.atStartOfDay());
                 OffsetDateTime localTime = OffsetDateTime.of(checkDate, LocalTime.of(nextReminder.timeInMinutes / 60, nextReminder.timeInMinutes % 60), offset);
                 Instant targetDate = localTime.toInstant();
 
@@ -67,18 +68,20 @@ public class ReminderScheduler {
         return sortedReminders;
     }
 
-    private Start getStart(List<Reminder> reminderList) {
-        if (this.reminderEvents.size() > 0) {
-            ReminderEvent lastEvent = this.reminderEvents.get(this.reminderEvents.size() - 1);
-            int lastReminderId = lastEvent.reminderId;
-
-            Reminder reminder = reminderList.stream().filter(r -> r.reminderId == lastReminderId).findFirst().orElse(null);
-
-            if (reminder != null) {
-                return new Start(reminderList.indexOf(reminder) + 1, toLocalDate(Instant.ofEpochSecond(lastEvent.raisedTimestamp)));
+    private boolean wasRaisedToday(Reminder reminder) {
+        boolean raisedToday = false;
+        ListIterator<ReminderEvent> i = reminderEvents.listIterator(reminderEvents.size());
+        while (i.hasPrevious()) {
+            ReminderEvent reminderEvent = i.previous();
+            if (!isToday(reminderEvent)) {
+                break;
+            }
+            if (reminderEvent.reminderId == reminder.reminderId) {
+                raisedToday = true;
+                break;
             }
         }
-        return new Start(0, toLocalDate(this.getInstant.now()));
+        return raisedToday;
     }
 
     private Medicine getMedicine(Reminder reminder) {
@@ -87,8 +90,11 @@ public class ReminderScheduler {
         return this.medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
     }
 
-    private LocalDate toLocalDate(Instant i) {
-        return i.atZone(ZoneOffset.UTC).toLocalDate();
+    private boolean isToday(ReminderEvent reminderEvent) {
+        Instant i = Instant.ofEpochSecond(reminderEvent.raisedTimestamp);
+        ZoneId zoneId = timeAccess.systemZone();
+        LocalDate d = i.atZone(zoneId).toLocalDate();
+        return timeAccess.localDate().isEqual(d);
     }
 
     public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
@@ -100,17 +106,9 @@ public class ReminderScheduler {
         void schedule(Instant timestamp, Medicine medicine, Reminder reminder);
     }
 
-    public interface GetInstant {
-        Instant now();
-    }
+    public interface TimeAccess {
+        ZoneId systemZone();
 
-    private static class Start {
-        public final int reminderIndex;
-        public final LocalDate startDate;
-
-        public Start(int reminderIndex, LocalDate startDate) {
-            this.reminderIndex = reminderIndex;
-            this.startDate = startDate;
-        }
+        LocalDate localDate();
     }
 }
