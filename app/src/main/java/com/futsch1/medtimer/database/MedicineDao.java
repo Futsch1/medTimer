@@ -14,7 +14,11 @@ import java.util.List;
 public interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine")
-    LiveData<List<MedicineWithReminders>> getMedicines();
+    LiveData<List<MedicineWithReminders>> getLiveMedicines();
+
+    @Transaction
+    @Query("SELECT * FROM Medicine")
+    List<MedicineWithReminders> getMedicines();
 
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
     Medicine getMedicine(int medicineId);
@@ -25,11 +29,11 @@ public interface MedicineDao {
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
 
-    @Query("SELECT * FROM ReminderEvent")
-    LiveData<List<ReminderEvent>> getReminderEvents();
-
     @Query("SELECT * FROM ReminderEvent ORDER BY raisedTimestamp DESC LIMIT :limit")
-    LiveData<List<ReminderEvent>> getLatestReminderEvents(int limit);
+    LiveData<List<ReminderEvent>> getReminderEvents(int limit);
+
+    @Query("SELECT * FROM ReminderEvent WHERE raisedTimestamp > :fromTimestamp ORDER BY raisedTimestamp")
+    List<ReminderEvent> getReminderEvents(long fromTimestamp);
 
     @Insert
     void insertMedicine(Medicine medicine);

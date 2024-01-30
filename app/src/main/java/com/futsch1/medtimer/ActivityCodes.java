@@ -10,5 +10,6 @@ public class ActivityCodes {
 
     public static final String REMINDER_ACTION = "com.futsch1.medTimer.REMINDER_ACTION";
     public static final String NEXT_REMINDER_ACTION = "com.futsch1.medTimer.NEXT_REMINDER_ACTION";
+    public static final String RESCHEDULE_ACTION = "com.futsch1.medTimer.RESCHEDULE_ACTION";
     public static final String NOTIFICATION_CHANNEL_ID = "com.futsch1.medTimer.NOTIFICATION";
 }

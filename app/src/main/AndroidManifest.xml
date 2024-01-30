@@ -47,6 +47,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".ReminderProcessor"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.futsch1.medTimer.REMINDER_ACTION" />
+                <action android:name="com.futsch1.medTimer.RESCHEDULE_ACTION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

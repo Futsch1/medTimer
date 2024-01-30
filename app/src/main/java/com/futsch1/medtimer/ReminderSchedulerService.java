@@ -1,10 +1,8 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
+import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -13,13 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleService;
 
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.ReminderEvent;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.List;
 
 public class ReminderSchedulerService extends LifecycleService {
     public static boolean serviceRunning = false;
-    private ReminderProcessor reminderProcessor;
 
     public ReminderSchedulerService() {
     }
@@ -38,32 +36,31 @@ public class ReminderSchedulerService extends LifecycleService {
         serviceRunning = true;
 
         MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
-        reminderProcessor = new ReminderProcessor(getApplicationContext(), medicineRepository, new Notifications(getApplicationContext()));
-        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> reminderProcessor.schedule(timestamp, medicine, reminder), new ReminderScheduler.TimeAccess() {
-            @Override
-            public ZoneId systemZone() {
-                return ZoneId.systemDefault();
-            }
 
-            @Override
-            public LocalDate localDate() {
-                return LocalDate.now();
-            }
-        });
-
-        medicineRepository.getMedicines().observe(this, reminderScheduler::updateMedicine);
-        medicineRepository.getReminderEvents(0).observe(this, reminderScheduler::updateReminderEvents);
-
-        registerReceiver(reminderProcessor, new IntentFilter(REMINDER_ACTION), Context.RECEIVER_EXPORTED);
+        medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
+        medicineRepository.getLiveReminderEvents(0).observe(this, this::updateReminderEvents);
 
         Log.i("Scheduler", "Service created");
+    }
+
+    public void updateMedicine(List<MedicineWithReminders> medicineWithReminders) {
+        scheduleRequest();
+    }
+
+    public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
+        scheduleRequest();
+    }
+
+    private void scheduleRequest() {
+        Log.i("Scheduler", "Requesting reschedule");
+        Intent i = new Intent(RESCHEDULE_ACTION);
+        i.setClass(getApplicationContext(), ReminderProcessor.class);
+        sendBroadcast(i);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        unregisterReceiver(reminderProcessor);
 
         Log.i("Scheduler", "Service destroyed");
     }

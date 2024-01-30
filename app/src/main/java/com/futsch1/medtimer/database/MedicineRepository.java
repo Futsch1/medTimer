@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -11,20 +12,18 @@ import java.util.concurrent.Future;
 public class MedicineRepository {
 
     private final MedicineDao medicineDao;
-    private final LiveData<List<MedicineWithReminders>> medicinesWithReminders;
 
-    // Note that in order to unit test the WordRepository, you have to remove the Application
-    // dependency. This adds complexity and much more code, and this sample is not about testing.
-    // See the BasicSample in the android-architecture-components repository at
-    // https://github.com/googlesamples
     public MedicineRepository(Application application) {
         MedicineRoomDatabase db = MedicineRoomDatabase.getDatabase(application);
         medicineDao = db.medicineDao();
-        medicinesWithReminders = medicineDao.getMedicines();
     }
 
-    public LiveData<List<MedicineWithReminders>> getMedicines() {
-        return medicinesWithReminders;
+    public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
+        return medicineDao.getLiveMedicines();
+    }
+
+    public List<MedicineWithReminders> getMedicines() {
+        return medicineDao.getMedicines();
     }
 
     public Medicine getMedicine(int medicineId) {
@@ -32,7 +31,7 @@ public class MedicineRepository {
     }
 
 
-    public LiveData<List<Reminder>> getReminders(int medicineId) {
+    public LiveData<List<Reminder>> getLiveReminders(int medicineId) {
         return medicineDao.getReminders(medicineId);
     }
 
@@ -40,10 +39,12 @@ public class MedicineRepository {
         return medicineDao.getReminder(reminderId);
     }
 
-    public LiveData<List<ReminderEvent>> getReminderEvents(int limit) {
-        if (limit > 0) {
-            return medicineDao.getLatestReminderEvents(limit);
-        } else return medicineDao.getReminderEvents();
+    public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit) {
+        return medicineDao.getReminderEvents(limit);
+    }
+
+    public List<ReminderEvent> getLastDaysReminderEvents() {
+        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60));
     }
 
     public void insertMedicine(Medicine medicine) {

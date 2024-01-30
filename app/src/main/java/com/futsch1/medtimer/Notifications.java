@@ -14,14 +14,9 @@ import androidx.core.app.NotificationCompat;
 
 public class Notifications {
 
-    private final Context context;
-    private int notificationId = 1;
+    private static int notificationId = 1;
 
-    public Notifications(@NonNull Context context) {
-        this.context = context;
-    }
-
-    public void showNotification(String medicineName, String amount, int reminderEventId) {
+    public static void showNotification(@NonNull Context context, String medicineName, String amount, int reminderEventId) {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         Intent notifyTaken = new Intent(context, TakenService.class);
