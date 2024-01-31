@@ -12,7 +12,6 @@ import androidx.lifecycle.LifecycleService;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.util.List;
 
@@ -38,16 +37,11 @@ public class ReminderSchedulerService extends LifecycleService {
         MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
 
         medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
-        medicineRepository.getLiveReminderEvents(0).observe(this, this::updateReminderEvents);
 
         Log.i("Scheduler", "Service created");
     }
 
     public void updateMedicine(List<MedicineWithReminders> medicineWithReminders) {
-        scheduleRequest();
-    }
-
-    public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
         scheduleRequest();
     }
 
