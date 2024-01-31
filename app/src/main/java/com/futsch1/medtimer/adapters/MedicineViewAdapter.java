@@ -17,6 +17,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, MedicineViewModel medicineViewModel) {
         super(diffCallback);
         viewModel = medicineViewModel;
+        setHasStableIds(true);
     }
 
 
@@ -32,6 +33,11 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         MedicineWithReminders current = getItem(position);
         holder.bind(current, viewModel);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).medicine.medicineId;
     }
 
     public static class MedicineDiff extends DiffUtil.ItemCallback<MedicineWithReminders> {

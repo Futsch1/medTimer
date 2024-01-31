@@ -37,7 +37,7 @@ public class TakenWork extends Worker {
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
         medicineRepository.updateReminderEvent(reminderEvent);
-        Log.i("Reminder", String.format("Taken reminder for %s", reminderEvent.medicineName));
+        Log.i("Reminder", String.format("Taken reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
 
         return Result.success();
     }

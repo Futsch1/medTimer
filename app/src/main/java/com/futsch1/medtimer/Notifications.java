@@ -25,7 +25,7 @@ public class Notifications {
         notifyTaken.setAction(TAKEN_ACTION);
         notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        PendingIntent pendingTaken = PendingIntent.getBroadcast(context, 10, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent notifyDismissed = new Intent(context, ReminderProcessor.class);
         notifyDismissed.setAction(DISMISSED_ACTION);
@@ -39,7 +39,6 @@ public class Notifications {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingTaken)
                 .setDeleteIntent(pendingDismissed)
-                .setAutoCancel(true)
                 .addAction(R.drawable.capsule, context.getString(R.string.notification_taken), pendingTaken);
 
         notificationManager.notify(notificationId++, builder.build());
