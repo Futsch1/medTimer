@@ -14,14 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
         <service
-            android:name=".DismissService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".TakenService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
             android:name=".ReminderSchedulerService"
             android:enabled="true"
             android:exported="false" />
@@ -54,6 +46,8 @@
             <intent-filter>
                 <action android:name="com.futsch1.medTimer.REMINDER_ACTION" />
                 <action android:name="com.futsch1.medTimer.RESCHEDULE_ACTION" />
+                <action android:name="com.futsch1.medTimer.DISMISSED_ACTION" />
+                <action android:name="com.futsch1.medTimer.TAKEN_ACTION" />
             </intent-filter>
         </receiver>
     </application>
