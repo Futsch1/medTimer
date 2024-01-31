@@ -39,7 +39,6 @@ public class MedicinesFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
         RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
-        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
