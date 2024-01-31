@@ -16,6 +16,7 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
     public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback, MedicineViewModel medicineViewModel) {
         super(diffCallback);
         viewModel = medicineViewModel;
+        setHasStableIds(true);
     }
 
 
@@ -31,6 +32,11 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
     public void onBindViewHolder(@NonNull LatestRemindersViewHolder holder, final int position) {
         ReminderEvent current = getItem(position);
         holder.bind(current, viewModel);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).reminderEventId;
     }
 
     public static class ReminderEventDiff extends DiffUtil.ItemCallback<ReminderEvent> {
