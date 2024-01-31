@@ -1,5 +1,7 @@
 package com.futsch1.medtimer;
 
+import androidx.annotation.NonNull;
+
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
@@ -18,28 +20,21 @@ import java.util.ListIterator;
 public class ReminderScheduler {
     private final ScheduleListener listener;
     private final TimeAccess timeAccess;
-    private List<MedicineWithReminders> medicineWithReminders;
-    private List<ReminderEvent> reminderEvents;
 
     public ReminderScheduler(ScheduleListener listener, TimeAccess timeAccess) {
         this.listener = listener;
         this.timeAccess = timeAccess;
     }
 
-    public void updateMedicine(List<MedicineWithReminders> medicineWithReminders) {
-        this.medicineWithReminders = medicineWithReminders;
-        schedule();
-    }
-
-    private void schedule() {
-        if (this.reminderEvents != null && this.medicineWithReminders != null && this.medicineWithReminders.size() > 0) {
-            ArrayList<Reminder> sortedReminders = getSortedReminders();
+    public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, @NonNull List<ReminderEvent> reminderEvents) {
+        if (medicineWithReminders.size() > 0) {
+            ArrayList<Reminder> sortedReminders = getSortedReminders(medicineWithReminders);
 
             if (sortedReminders.size() > 0) {
                 Reminder nextReminder = null;
                 LocalDate checkDate = this.timeAccess.localDate();
                 for (Reminder reminder : sortedReminders) {
-                    if (!wasRaisedToday(reminder)) {
+                    if (!wasRaisedToday(reminder, reminderEvents)) {
                         nextReminder = reminder;
                         break;
                     }
@@ -53,12 +48,12 @@ public class ReminderScheduler {
                 OffsetDateTime localTime = OffsetDateTime.of(checkDate, LocalTime.of(nextReminder.timeInMinutes / 60, nextReminder.timeInMinutes % 60), offset);
                 Instant targetDate = localTime.toInstant();
 
-                this.listener.schedule(targetDate, getMedicine(nextReminder), nextReminder);
+                this.listener.schedule(targetDate, getMedicine(nextReminder, medicineWithReminders), nextReminder);
             }
         }
     }
 
-    private ArrayList<Reminder> getSortedReminders() {
+    private ArrayList<Reminder> getSortedReminders(List<MedicineWithReminders> medicineWithReminders) {
         ArrayList<Reminder> sortedReminders = new ArrayList<>();
         for (MedicineWithReminders medicineWithReminder : medicineWithReminders
         ) {
@@ -68,7 +63,7 @@ public class ReminderScheduler {
         return sortedReminders;
     }
 
-    private boolean wasRaisedToday(Reminder reminder) {
+    private boolean wasRaisedToday(Reminder reminder, List<ReminderEvent> reminderEvents) {
         boolean raisedToday = false;
         ListIterator<ReminderEvent> i = reminderEvents.listIterator(reminderEvents.size());
         while (i.hasPrevious()) {
@@ -84,10 +79,10 @@ public class ReminderScheduler {
         return raisedToday;
     }
 
-    private Medicine getMedicine(Reminder reminder) {
+    private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
         int medicineId = reminder.medicineRelId;
         //noinspection OptionalGetWithoutIsPresent
-        return this.medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
+        return medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
     }
 
     private boolean isToday(ReminderEvent reminderEvent) {
@@ -95,11 +90,6 @@ public class ReminderScheduler {
         ZoneId zoneId = timeAccess.systemZone();
         LocalDate d = i.atZone(zoneId).toLocalDate();
         return timeAccess.localDate().isEqual(d);
-    }
-
-    public void updateReminderEvents(List<ReminderEvent> reminderEvents) {
-        this.reminderEvents = reminderEvents;
-        schedule();
     }
 
     public interface ScheduleListener {

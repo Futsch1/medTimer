@@ -50,7 +50,7 @@
         <receiver
             android:name=".ReminderProcessor"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.futsch1.medTimer.REMINDER_ACTION" />
                 <action android:name="com.futsch1.medTimer.RESCHEDULE_ACTION" />

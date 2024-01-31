@@ -53,9 +53,9 @@ public class ReminderSchedulerService extends LifecycleService {
 
     private void scheduleRequest() {
         Log.i("Scheduler", "Requesting reschedule");
-        Intent i = new Intent(RESCHEDULE_ACTION);
-        i.setClass(getApplicationContext(), ReminderProcessor.class);
-        sendBroadcast(i);
+        Intent intent = new Intent(RESCHEDULE_ACTION);
+        intent.setClass(getApplicationContext(), ReminderProcessor.class);
+        sendBroadcast(intent);
     }
 
     @Override

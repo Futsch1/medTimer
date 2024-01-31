@@ -51,8 +51,7 @@ public class RescheduleWork extends Worker {
             }
         });
 
-        reminderScheduler.updateMedicine(medicineRepository.getMedicines());
-        reminderScheduler.updateReminderEvents(medicineRepository.getLastDaysReminderEvents());
+        reminderScheduler.schedule(medicineRepository.getMedicines(), medicineRepository.getLastDaysReminderEvents());
 
         return Result.success();
     }
