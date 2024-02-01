@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.adapters.LatestRemindersViewAdapter;
 
+import java.time.Instant;
+
 public class OverviewFragment extends Fragment {
     private NextReminderListener nextReminderListener;
 
@@ -44,7 +46,7 @@ public class OverviewFragment extends Fragment {
         latestReminders.setAdapter(adapter);
         latestReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
 
-        medicineViewModel.getReminderEvents(5).observe(getViewLifecycleOwner(), adapter::submitList);
+        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60)).observe(getViewLifecycleOwner(), adapter::submitList);
 
         return fragmentOverview;
     }

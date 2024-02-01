@@ -33,6 +33,9 @@ public interface MedicineDao {
     LiveData<List<ReminderEvent>> getReminderEvents(int limit);
 
     @Query("SELECT * FROM ReminderEvent WHERE remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
+    LiveData<List<ReminderEvent>> getLiveReminderEvents(long fromTimestamp);
+
+    @Query("SELECT * FROM ReminderEvent WHERE remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
     List<ReminderEvent> getReminderEvents(long fromTimestamp);
 
     @Insert
