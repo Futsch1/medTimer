@@ -19,6 +19,10 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 
 public class ReminderWork extends Worker {
     public ReminderWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -38,7 +42,8 @@ public class ReminderWork extends Worker {
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.raisedTimestamp = Instant.now().getEpochSecond();
+            reminderEvent.raisedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
+                    .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.name;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
