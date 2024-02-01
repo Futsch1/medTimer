@@ -78,7 +78,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         deleteButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle(R.string.confirm);
-            builder.setMessage(R.string.are_you_sure_delete_medicine);
+            builder.setMessage(R.string.are_you_sure_delete_reminder);
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> viewModel.deleteReminder(reminder));
             builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {

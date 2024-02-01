@@ -15,7 +15,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="confirm">Bestätigen</string>
-    <string name="are_you_sure_delete_medicine">Wollen Sie das Medikament wirklich löschen?</string>
+    <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
     <string name="notification_content">%1s - es ist Zeit %2s von %3s einzunehmen</string>
@@ -30,4 +30,5 @@
         <item quantity="other">%1d Erinnerungen pro Tag</item>
     </plurals>
     <string name="version">Version %1s</string>
+    <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
 </resources>
