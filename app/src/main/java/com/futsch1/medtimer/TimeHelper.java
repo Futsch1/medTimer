@@ -1,9 +1,11 @@
 package com.futsch1.medtimer;
 
-import java.util.Locale;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class TimeHelper {
     public static String minutesToTime(long minutes) {
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes / 60, minutes % 60);
+        return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
     }
 }

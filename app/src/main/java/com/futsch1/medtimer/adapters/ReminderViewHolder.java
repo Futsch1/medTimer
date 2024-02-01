@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             String selectedTime = minutesToTime(hourOfDay * 60L + minute);
             editTime.setText(selectedTime);
             reminder.timeInMinutes = hourOfDay * 60 + minute;
-        }, 0, 0, true);
+        }, 0, 0, DateFormat.is24HourFormat(editTime.getContext()));
         editTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 timePickerDialog.updateTime(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60);
