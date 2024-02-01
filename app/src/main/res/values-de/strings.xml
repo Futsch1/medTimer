@@ -29,4 +29,5 @@
         <item quantity="one">1 Erinnerung pro Tag</item>
         <item quantity="other">%1d Erinnerungen pro Tag</item>
     </plurals>
+    <string name="version">Version %1s</string>
 </resources>
