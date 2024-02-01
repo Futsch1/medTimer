@@ -1,9 +1,11 @@
 package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ public class ReminderWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Result r;
         Log.i("Reminder", "Do reminder work");
         Data inputData = getInputData();
 
@@ -44,11 +47,18 @@ public class ReminderWork extends Worker {
 
             Notifications.showNotification(getApplicationContext(), medicine.name, reminder.amount, reminderEvent.reminderEventId);
             Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));
-            return Result.success();
+            r = Result.success();
 
         } else {
             Log.e("Reminder", "Could not find reminder in database");
-            return Result.failure();
+            r = Result.failure();
         }
+
+        // Reminder shown, now schedule next reminder
+        Intent intent = new Intent(RESCHEDULE_ACTION);
+        intent.setClass(getApplicationContext(), ReminderProcessor.class);
+        getApplicationContext().sendBroadcast(intent);
+
+        return r;
     }
 }
