@@ -18,7 +18,7 @@ public class Notifications {
 
     private static int notificationId = 1;
 
-    public static void showNotification(@NonNull Context context, String medicineName, String amount, int reminderEventId) {
+    public static void showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId) {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         Intent notifyTaken = new Intent(context, ReminderProcessor.class);
@@ -35,7 +35,7 @@ public class Notifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_content, amount, medicineName))
+                .setContentText(context.getString(R.string.notification_content, remindTime, amount, medicineName))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingTaken)
                 .setDeleteIntent(pendingDismissed)

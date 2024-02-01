@@ -18,7 +18,7 @@
     <string name="are_you_sure_delete_medicine">Wollen Sie das Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="notification_content">Es ist Zeit %1s von %2s einzunehmen</string>
+    <string name="notification_content">%1s - es ist Zeit %2s von %3s einzunehmen</string>
     <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>

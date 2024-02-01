@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
+import static com.futsch1.medtimer.TimeHelper.minutesToTime;
 
 import android.app.Application;
 import android.content.Context;
@@ -50,7 +51,7 @@ public class ReminderWork extends Worker {
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
-            Notifications.showNotification(getApplicationContext(), medicine.name, reminder.amount, reminderEvent.reminderEventId);
+            Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
             Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));
             r = Result.success();
 
