@@ -155,7 +155,7 @@ public class ReminderSchedulerUnitTest {
     private ReminderEvent buildReminderEvent(int reminderId, long raisedTimestamp) {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.reminderId = reminderId;
-        reminderEvent.raisedTimestamp = raisedTimestamp;
+        reminderEvent.remindedTimestamp = raisedTimestamp;
         return reminderEvent;
     }
 }

@@ -42,7 +42,7 @@ public class ReminderWork extends Worker {
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.raisedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
+            reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
                     .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.name;

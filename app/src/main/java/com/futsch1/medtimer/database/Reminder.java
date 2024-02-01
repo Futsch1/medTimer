@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,6 +10,8 @@ public class Reminder {
     @PrimaryKey(autoGenerate = true)
     public int reminderId;
     public int timeInMinutes;
+    @ColumnInfo(defaultValue = "0")
+    public long createdTimestamp;
 
     public String amount;
 

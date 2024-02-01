@@ -2,14 +2,23 @@ package com.futsch1.medtimer.database;
 
 import android.content.Context;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.AutoMigrationSpec;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Medicine.class, Reminder.class, ReminderEvent.class}, version = 1)
+@Database(
+        entities = {Medicine.class, Reminder.class, ReminderEvent.class},
+        version = 2,
+        autoMigrations = {
+                @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
+        }
+)
 public abstract class MedicineRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
@@ -23,7 +32,6 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     MedicineRoomDatabase.class, "medTimer")
-//                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
@@ -32,4 +40,8 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
     }
 
     public abstract MedicineDao medicineDao();
+
+    @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")
+    static class AutoMigration1To2 implements AutoMigrationSpec {
+    }
 }

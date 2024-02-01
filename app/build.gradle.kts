@@ -1,5 +1,10 @@
 plugins {
     id("com.android.application")
+    id("androidx.room")
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 android {

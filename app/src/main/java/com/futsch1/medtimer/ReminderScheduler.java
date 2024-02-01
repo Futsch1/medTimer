@@ -86,7 +86,7 @@ public class ReminderScheduler {
     }
 
     private boolean isToday(ReminderEvent reminderEvent) {
-        Instant i = Instant.ofEpochSecond(reminderEvent.raisedTimestamp);
+        Instant i = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
         ZoneId zoneId = timeAccess.systemZone();
         LocalDate d = i.atZone(zoneId).toLocalDate();
         return timeAccess.localDate().isEqual(d);

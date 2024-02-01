@@ -10,7 +10,7 @@ public class ReminderEvent {
     public String medicineName;
     public String amount;
     public ReminderStatus status;
-    public long raisedTimestamp;
+    public long remindedTimestamp;
     public long processedTimestamp;
     public int reminderId;
 

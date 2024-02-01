@@ -40,7 +40,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(ReminderEvent reminderEvent, MedicineViewModel viewModel) {
-        String takenDateTime = Instant.ofEpochSecond(reminderEvent.raisedTimestamp).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
+        String takenDateTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
         reminderEventText.setText(reminderEventText.getContext().getString(R.string.reminder_event, reminderEvent.amount, reminderEvent.medicineName, takenDateTime));
 
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
