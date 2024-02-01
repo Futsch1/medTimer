@@ -30,7 +30,7 @@ public class Notifications {
         Intent notifyDismissed = new Intent(context, ReminderProcessor.class);
         notifyDismissed.setAction(DISMISSED_ACTION);
         notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, 11, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, notificationId, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.capsule)
