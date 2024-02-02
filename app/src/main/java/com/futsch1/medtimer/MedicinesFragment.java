@@ -25,18 +25,17 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
-    private final HandlerThread thread;
+    private HandlerThread thread;
     private MedicineViewModel medicineViewModel;
 
     public MedicinesFragment() {
-        // Required empty public constructor
-        this.thread = new HandlerThread("UpdateNextReminder");
-        this.thread.start();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread.start();
     }
 
     @Override
@@ -116,5 +115,11 @@ public class MedicinesFragment extends Fragment {
         });
 
         return fragmentView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        thread.quitSafely();
     }
 }

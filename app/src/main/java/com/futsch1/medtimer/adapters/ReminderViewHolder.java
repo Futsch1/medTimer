@@ -2,7 +2,6 @@ package com.futsch1.medtimer.adapters;
 
 import static com.futsch1.medtimer.TimeHelper.minutesToTime;
 
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +9,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +20,6 @@ import com.futsch1.medtimer.database.Reminder;
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
-    private final Button deleteButton;
 
     public Reminder reminder;
 
@@ -31,7 +28,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
-        deleteButton = itemView.findViewById(R.id.deleteReminder);
     }
 
     static ReminderViewHolder create(ViewGroup parent) {
@@ -73,17 +69,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             public void afterTextChanged(Editable s) {
                 reminder.amount = s.toString();
             }
-        });
-
-        deleteButton.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle(R.string.confirm);
-            builder.setMessage(R.string.are_you_sure_delete_reminder);
-            builder.setCancelable(false);
-            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> viewModel.deleteReminder(reminder));
-            builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-            });
-            builder.show();
         });
     }
 }

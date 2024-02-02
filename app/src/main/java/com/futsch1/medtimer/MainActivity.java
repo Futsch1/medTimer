@@ -40,8 +40,15 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         createNotificationChannel();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (!ReminderSchedulerService.serviceRunning) {
             startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+        } else {
+            ReminderProcessor.requestReschedule(this);
         }
     }
 

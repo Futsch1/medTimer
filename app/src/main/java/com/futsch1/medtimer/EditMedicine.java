@@ -6,13 +6,18 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.text.Editable;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,14 +37,24 @@ public class EditMedicine extends AppCompatActivity {
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
     int medicineId;
+    HandlerThread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread.start();
+
         setContentView(R.layout.activity_edit_medicine);
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
         medicineId = getIntent().getIntExtra(EXTRA_ID, 0);
+
+        RecyclerView recyclerView = findViewById(R.id.reminderList);
+        final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineViewModel);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
         editMedicineName = findViewById(R.id.editMedicineName);
         final Observer<List<MedicineWithReminders>> nameObserver = newList -> {
@@ -48,6 +63,42 @@ public class EditMedicine extends AppCompatActivity {
                 editMedicineName.setText(medicine.name);
             }
         };
+
+        // Swipe to delete
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditMedicine.this);
+                    builder.setTitle(R.string.confirm);
+                    builder.setMessage(R.string.are_you_sure_delete_reminder);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                        final Handler handler = new Handler(thread.getLooper());
+                        handler.post(() -> {
+                            Reminder reminder = medicineViewModel.getReminder((int) viewHolder.getItemId());
+                            medicineViewModel.deleteReminder(reminder);
+                            final Handler mainHandler = new Handler(Looper.getMainLooper());
+                            mainHandler.post(() -> {
+                                adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
+                            });
+                        });
+                    });
+                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                        adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
+                    });
+                    builder.show();
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
 
         ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> {
@@ -83,11 +134,6 @@ public class EditMedicine extends AppCompatActivity {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getMedicines().observe(this, nameObserver);
 
-        RecyclerView recyclerView = findViewById(R.id.reminderList);
-        final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineViewModel);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
     }
 
@@ -104,5 +150,7 @@ public class EditMedicine extends AppCompatActivity {
 
             medicineViewModel.updateReminder(viewHolder.reminder);
         }
+
+        thread.quitSafely();
     }
 }
