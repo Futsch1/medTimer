@@ -52,7 +52,7 @@ public class EditMedicine extends AppCompatActivity {
         medicineId = getIntent().getIntExtra(EXTRA_ID, 0);
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
-        final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineViewModel);
+        final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
@@ -84,14 +84,10 @@ public class EditMedicine extends AppCompatActivity {
                             Reminder reminder = medicineViewModel.getReminder((int) viewHolder.getItemId());
                             medicineViewModel.deleteReminder(reminder);
                             final Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> {
-                                adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
-                            });
+                            mainHandler.post(() -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
                         });
                     });
-                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
-                    });
+                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
                     builder.show();
                 }
             }

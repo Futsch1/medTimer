@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.EditMedicine;
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 
@@ -34,7 +33,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view);
     }
 
-    public void bind(MedicineWithReminders medicineWithReminders, MedicineViewModel viewModel) {
+    public void bind(MedicineWithReminders medicineWithReminders) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
         int len = medicineWithReminders.reminders.size();
         if (len == 0) {

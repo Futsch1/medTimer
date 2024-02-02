@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 
@@ -36,7 +35,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         return new ReminderViewHolder(view);
     }
 
-    public void bind(Reminder reminder, MedicineViewModel viewModel) {
+    public void bind(Reminder reminder) {
         this.reminder = reminder;
 
         editTime.setText(minutesToTime(reminder.timeInMinutes));

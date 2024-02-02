@@ -49,7 +49,7 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), medicineViewModel);
+        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -73,14 +73,10 @@ public class MedicinesFragment extends Fragment {
                             Medicine medicine = medicineViewModel.getMedicine((int) viewHolder.getItemId());
                             medicineViewModel.deleteMedicine(medicine);
                             final Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> {
-                                adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
-                            });
+                            mainHandler.post(() -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
                         });
                     });
-                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1);
-                    });
+                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
                     builder.show();
                 }
             }

@@ -7,16 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 
 public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, MedicineViewHolder> {
 
-    private final MedicineViewModel viewModel;
 
-    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, MedicineViewModel medicineViewModel) {
+    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback) {
         super(diffCallback);
-        viewModel = medicineViewModel;
         setHasStableIds(true);
     }
 
@@ -32,7 +29,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         MedicineWithReminders current = getItem(position);
-        holder.bind(current, viewModel);
+        holder.bind(current);
     }
 
     @Override
