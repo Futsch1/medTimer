@@ -3,12 +3,10 @@ package com.futsch1.medtimer.adapters;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,15 +19,13 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
     private final TextView remindersSummaryView;
-    private final Button editButton;
-    private final Button deleteButton;
+    private final View itemView;
 
     private MedicineViewHolder(View itemView) {
         super(itemView);
+        this.itemView = itemView;
         medicineNameView = itemView.findViewById(R.id.medicineName);
         remindersSummaryView = itemView.findViewById(R.id.remindersSummary);
-        editButton = itemView.findViewById(R.id.editMedicine);
-        deleteButton = itemView.findViewById(R.id.deleteMedicine);
     }
 
     static MedicineViewHolder create(ViewGroup parent) {
@@ -48,17 +44,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             remindersSummaryView.setText(reminders);
         }
 
-        deleteButton.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle(R.string.confirm);
-            builder.setMessage(R.string.are_you_sure_delete_medicine);
-            builder.setCancelable(false);
-            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> viewModel.deleteMedicine(medicineWithReminders.medicine));
-            builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-            });
-            builder.show();
-        });
-        editButton.setOnClickListener(view -> {
+        itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), EditMedicine.class);
             intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
             intent.putExtra(EXTRA_INDEX, getAdapterPosition());
