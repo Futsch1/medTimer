@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.format.DateFormat;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -117,7 +118,7 @@ public class EditMedicine extends AppCompatActivity {
                     TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
                         reminder.timeInMinutes = hourOfDay * 60 + minute;
                         medicineViewModel.insertReminder(reminder);
-                    }, 8, 0, true);
+                    }, 8, 0, DateFormat.is24HourFormat(view.getContext()));
                     timePickerDialog.show();
 
                 }
