@@ -31,6 +31,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.time.Instant;
 import java.util.List;
 
 public class EditMedicine extends AppCompatActivity {
@@ -114,6 +115,7 @@ public class EditMedicine extends AppCompatActivity {
                     String amount = e.toString();
                     Reminder reminder = new Reminder(medicineId);
                     reminder.amount = amount;
+                    reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
 
                     TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
                         reminder.timeInMinutes = hourOfDay * 60 + minute;
