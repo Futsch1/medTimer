@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -19,6 +20,27 @@ import androidx.work.WorkRequest;
 public class ReminderProcessor extends BroadcastReceiver {
 
     public ReminderProcessor() {
+    }
+
+    public static void requestReschedule(@NonNull Context context) {
+        Intent intent = new Intent(RESCHEDULE_ACTION);
+        intent.setClass(context, ReminderProcessor.class);
+        context.sendBroadcast(intent);
+    }
+
+    public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
+        Intent notifyDismissed = new Intent(context, ReminderProcessor.class);
+        notifyDismissed.setAction(DISMISSED_ACTION);
+        notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        return notifyDismissed;
+    }
+
+    public static Intent getTakenActionIntent(@NonNull Context context, int notificationId, int reminderEventId) {
+        Intent notifyTaken = new Intent(context, ReminderProcessor.class);
+        notifyTaken.setAction(TAKEN_ACTION);
+        notifyTaken.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        return notifyTaken;
     }
 
     @Override
@@ -51,7 +73,6 @@ public class ReminderProcessor extends BroadcastReceiver {
                             .build();
             workManager.enqueue(reminderWork);
         }
-
     }
 
 }

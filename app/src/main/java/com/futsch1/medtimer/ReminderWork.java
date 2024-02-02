@@ -1,12 +1,10 @@
 package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
 import static com.futsch1.medtimer.TimeHelper.minutesToTime;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -61,9 +59,7 @@ public class ReminderWork extends Worker {
         }
 
         // Reminder shown, now schedule next reminder
-        Intent intent = new Intent(RESCHEDULE_ACTION);
-        intent.setClass(getApplicationContext(), ReminderProcessor.class);
-        getApplicationContext().sendBroadcast(intent);
+        ReminderProcessor.requestReschedule(getApplicationContext());
 
         return r;
     }

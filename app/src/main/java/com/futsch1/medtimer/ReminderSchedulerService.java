@@ -1,7 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
-
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -47,9 +45,7 @@ public class ReminderSchedulerService extends LifecycleService {
 
     private void scheduleRequest() {
         Log.i("Scheduler", "Requesting reschedule");
-        Intent intent = new Intent(RESCHEDULE_ACTION);
-        intent.setClass(getApplicationContext(), ReminderProcessor.class);
-        sendBroadcast(intent);
+        ReminderProcessor.requestReschedule(this);
     }
 
     @Override

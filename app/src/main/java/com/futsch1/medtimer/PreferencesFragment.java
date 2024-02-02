@@ -1,9 +1,6 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
-
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -36,9 +33,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 });
                 builder.show();
-                Intent intent = new Intent(RESCHEDULE_ACTION);
-                intent.setClass(requireContext(), ReminderProcessor.class);
-                requireContext().sendBroadcast(intent);
+                ReminderProcessor.requestReschedule(requireContext());
                 return true;
             });
         }
