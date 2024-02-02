@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.MedTimer" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MedTimer" parent="Theme.Material3.DynamicColors.Light">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MedTimer" parent="Base.Theme.MedTimer"></style>
+    <style name="Theme.MedTimer" parent="Base.Theme.MedTimer" />
 </resources>

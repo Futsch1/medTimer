@@ -1,6 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.MedTimer" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MedTimer" parent="Theme.Material3.DynamicColors.Dark">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
