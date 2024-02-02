@@ -64,4 +64,7 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
     ReminderEvent getReminderEvent(int reminderEventId);
+
+    @Query("DELETE FROM ReminderEvent")
+    void deleteReminderEvents();
 }

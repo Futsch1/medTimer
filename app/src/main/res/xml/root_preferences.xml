@@ -1,6 +1,10 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
+        app:key="clear_events"
+        app:summary=""
+        app:title="@string/clear_events" />
+    <Preference
         app:key="version"
         app:summary=""
-        app:title="App version" />
+        app:title="@string/app_version" />
 </PreferenceScreen>

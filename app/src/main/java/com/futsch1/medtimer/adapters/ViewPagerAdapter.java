@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.futsch1.medtimer.MedicinesFragment;
 import com.futsch1.medtimer.OverviewFragment;
-import com.futsch1.medtimer.SettingsFragment;
+import com.futsch1.medtimer.PreferencesFragment;
 
 public class ViewPagerAdapter
         extends FragmentStateAdapter {
@@ -26,7 +26,7 @@ public class ViewPagerAdapter
         else if (position == 1)
             fragment = new MedicinesFragment();
         else
-            fragment = new SettingsFragment();
+            fragment = new PreferencesFragment();
 
         return fragment;
     }

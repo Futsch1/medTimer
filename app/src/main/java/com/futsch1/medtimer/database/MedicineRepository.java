@@ -93,4 +93,8 @@ public class MedicineRepository {
     public void updateReminderEvent(ReminderEvent reminderEvent) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
+
+    public void deleteReminderEvents() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvents());
+    }
 }
