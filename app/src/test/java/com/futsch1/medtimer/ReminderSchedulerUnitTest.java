@@ -150,9 +150,9 @@ public class ReminderSchedulerUnitTest {
 
         // All reminders already invoked, switch to next day
         scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
-            add(buildReminderEvent(3, 4));
-            add(buildReminderEvent(2, 12));
-            add(buildReminderEvent(1, 16));
+            add(buildReminderEvent(3, 4 * 60));
+            add(buildReminderEvent(2, 12 * 60));
+            add(buildReminderEvent(1, 16 * 60));
         }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
