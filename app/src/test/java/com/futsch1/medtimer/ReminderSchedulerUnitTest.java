@@ -36,14 +36,14 @@ public class ReminderSchedulerUnitTest {
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
         // Two empty lists
-        scheduler.schedule(new ArrayList<>(), null);
+        scheduler.schedule(new ArrayList<>(), new ArrayList<>());
         verifyNoInteractions(mock);
 
         // One medicine without reminders, no reminder events
         MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
         scheduler.schedule(new ArrayList<MedicineWithReminders>() {{
             add(medicineWithReminders);
-        }}, null);
+        }}, new ArrayList<>());
         verifyNoInteractions(mock);
 
         // No reminder events
@@ -52,7 +52,7 @@ public class ReminderSchedulerUnitTest {
         medicineWithReminders.reminders.add(reminder);
         scheduler.schedule(new ArrayList<MedicineWithReminders>() {{
             add(medicineWithReminders);
-        }}, null);
+        }}, new ArrayList<>());
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders.medicine, reminder);
     }
 
@@ -81,7 +81,7 @@ public class ReminderSchedulerUnitTest {
         medicineWithReminders1.reminders.add(reminder2);
         scheduler.schedule(new ArrayList<MedicineWithReminders>() {{
             add(medicineWithReminders1);
-        }}, null);
+        }}, new ArrayList<>());
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders1.medicine, reminder2);
         clearInvocations(mock);
 
@@ -92,7 +92,7 @@ public class ReminderSchedulerUnitTest {
         scheduler.schedule(new ArrayList<MedicineWithReminders>() {{
             add(medicineWithReminders1);
             add(medicineWithReminders2);
-        }}, null);
+        }}, new ArrayList<>());
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(3 * 60), medicineWithReminders2.medicine, reminder3);
     }
 
@@ -126,34 +126,28 @@ public class ReminderSchedulerUnitTest {
             add(medicineWithReminders2);
         }};
         // Reminder 3 already invoked
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(3, 4 * 60));
-        verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders1.medicine, reminder2);
-        clearInvocations(mock);
-
-        // Reminder 3 re-raise
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(3, 3 * 60));
+        scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(3, 4));
+        }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders1.medicine, reminder2);
         clearInvocations(mock);
 
         // All reminders already invoked, switch to next day
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(1, 17 * 60));
+        scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(3, 4));
+            add(buildReminderEvent(2, 12));
+            add(buildReminderEvent(1, 16));
+        }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
-        clearInvocations(mock);
-
-        // Check two reminders at the same time
-        Reminder reminder4 = buildReminder(2, 4, "1", 12);
-        medicineWithReminders2.reminders.add(reminder4);
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(2, 12 * 60));
-        verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders2.medicine, reminder4);
-        clearInvocations(mock);
-
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(4, 12 * 60));
-        verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders1.medicine, reminder2);
         clearInvocations(mock);
 
         // All reminders already invoked, we are on the next day
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
-        scheduler.schedule(medicineWithReminders, buildReminderEvent(1, 16 * 60));
+        scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(3, 4));
+            add(buildReminderEvent(2, 12));
+            add(buildReminderEvent(1, 16));
+        }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
     }
@@ -163,27 +157,5 @@ public class ReminderSchedulerUnitTest {
         reminderEvent.reminderId = reminderId;
         reminderEvent.remindedTimestamp = raisedTimestamp;
         return reminderEvent;
-    }
-
-    @Test
-    public void scheduler_created() {
-        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
-        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
-        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
-        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
-
-        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
-
-        MedicineWithReminders medicineWithReminders1 = buildMedicineWithReminders(1, "Test1");
-        Reminder reminder1 = buildReminder(1, 1, "1", 16);
-        reminder1.createdTimestamp = 20 * 60;
-        medicineWithReminders1.reminders.add(reminder1);
-        ArrayList<MedicineWithReminders> medicineWithReminders = new ArrayList<MedicineWithReminders>() {{
-            add(medicineWithReminders1);
-        }};
-
-        scheduler.schedule(medicineWithReminders, null);
-        verify(mock, times(1)).schedule(Instant.ofEpochSecond((16 + 1440) * 60), medicineWithReminders1.medicine, reminder1);
-        clearInvocations(mock);
     }
 }

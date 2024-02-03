@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -46,8 +47,8 @@ public class MedicineRepository {
         }
     }
 
-    public ReminderEvent getLastReminderEvent() {
-        return medicineDao.getLastReminderEvent();
+    public List<ReminderEvent> getLastDaysReminderEvents() {
+        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60));
     }
 
     public void insertMedicine(Medicine medicine) {
