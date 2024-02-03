@@ -127,9 +127,25 @@ public class ReminderSchedulerUnitTest {
         }};
         // Reminder 3 already invoked
         scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
-            add(buildReminderEvent(3, 4));
+            add(buildReminderEvent(3, 4 * 60));
         }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders1.medicine, reminder2);
+        clearInvocations(mock);
+
+        // Check two reminders at the same time
+        Reminder reminder4 = buildReminder(2, 4, "1", 12);
+        medicineWithReminders2.reminders.add(reminder4);
+        scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(2, 12 * 60));
+        }});
+        verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders2.medicine, reminder4);
+        clearInvocations(mock);
+
+        scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
+            add(buildReminderEvent(2, 12 * 60));
+            add(buildReminderEvent(4, 12 * 60));
+        }});
+        verify(mock, times(1)).schedule(Instant.ofEpochSecond(16 * 60), medicineWithReminders1.medicine, reminder1);
         clearInvocations(mock);
 
         // All reminders already invoked, switch to next day
@@ -144,9 +160,9 @@ public class ReminderSchedulerUnitTest {
         // All reminders already invoked, we are on the next day
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
         scheduler.schedule(medicineWithReminders, new ArrayList<ReminderEvent>() {{
-            add(buildReminderEvent(3, 4));
-            add(buildReminderEvent(2, 12));
-            add(buildReminderEvent(1, 16));
+            add(buildReminderEvent(3, 4 * 60));
+            add(buildReminderEvent(2, 12 * 60));
+            add(buildReminderEvent(1, 16 * 60));
         }});
         verify(mock, times(1)).schedule(Instant.ofEpochSecond((3 + 1440) * 60), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
