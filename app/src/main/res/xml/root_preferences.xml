@@ -1,5 +1,10 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
+        app:icon="@android:drawable/ic_menu_save"
+        app:key="export"
+        app:summary=""
+        app:title="@string/export" />
+    <Preference
         app:icon="@android:drawable/ic_notification_clear_all"
         app:key="clear_events"
         app:summary=""

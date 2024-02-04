@@ -35,4 +35,5 @@
     <string name="clear_events">Clear events</string>
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
+    <string name="export">Export data</string>
 </resources>

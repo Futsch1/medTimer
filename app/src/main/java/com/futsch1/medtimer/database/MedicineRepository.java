@@ -47,6 +47,10 @@ public class MedicineRepository {
         }
     }
 
+    public List<ReminderEvent> getAllReminderEvents() {
+        return medicineDao.getReminderEvents(0L);
+    }
+
     public List<ReminderEvent> getLastDaysReminderEvents() {
         return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60));
     }
