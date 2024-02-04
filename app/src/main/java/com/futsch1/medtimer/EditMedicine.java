@@ -104,6 +104,7 @@ public class EditMedicine extends AppCompatActivity {
             TextInputEditText editText = new TextInputEditText(this);
             editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             editText.setHint(R.string.amount);
+            editText.setSingleLine();
             textInputLayout.addView(editText);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
