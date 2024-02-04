@@ -18,18 +18,18 @@
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="notification_content">%1s - es ist Zeit %2s von %3s einzunehmen</string>
+    <string name="notification_content">%1$s - es ist Zeit %2$s von %3$s einzunehmen</string>
     <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
-    <string name="reminder_event">%1s von %2s\n%3s</string>
+    <string name="reminder_event">%1$s von %2$s\n%3$s</string>
     <string name="recent_reminders">Kürzliche Erinnerungen</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="reminders_per_day">
-        <item quantity="one">%1d Erinnerung pro Tag\n%2s</item>
-        <item quantity="other">%1d Erinnerungen pro Tag\n%2s</item>
+        <item quantity="one">%1$d Erinnerung pro Tag\n%2$s</item>
+        <item quantity="other">%1$d Erinnerungen pro Tag\n%2$s</item>
     </plurals>
-    <string name="version">Version %1s</string>
+    <string name="version">Version %ss</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
     <string name="clear_events">Ereignisse zurücksetzen</string>
     <string name="app_version">App-Version</string>
