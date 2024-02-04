@@ -26,7 +26,8 @@
             android:layout_height="48dp"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:labelFor="@id/editMedicineName" />
+            android:labelFor="@id/editMedicineName"
+            android:singleLine="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reminderList"
