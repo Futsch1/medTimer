@@ -15,7 +15,6 @@ import com.futsch1.medtimer.EditMedicine;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.TimeHelper;
 import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.database.Reminder;
 
 import java.util.ArrayList;
 
@@ -44,8 +43,9 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             remindersSummaryView.setText(R.string.no_reminders);
         } else {
             ArrayList<String> reminderTimes = new ArrayList<>();
-            for (Reminder reminder : medicineWithReminders.reminders) {
-                reminderTimes.add(TimeHelper.minutesToTime(reminder.timeInMinutes));
+            int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt((r) -> r.timeInMinutes).sorted().toArray();
+            for (int minute : timesInMinutes) {
+                reminderTimes.add(TimeHelper.minutesToTime(minute));
             }
             String reminders = remindersSummaryView.getResources().getQuantityString(R.plurals.reminders_per_day, len, len, String.join(", ", reminderTimes));
             remindersSummaryView.setText(reminders);
