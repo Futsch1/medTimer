@@ -17,6 +17,8 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import java.time.Duration;
+
 public class ReminderProcessor extends BroadcastReceiver {
 
     public ReminderProcessor() {
@@ -49,6 +51,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         if (RESCHEDULE_ACTION.equals(intent.getAction())) {
             WorkRequest rescheduleWork =
                     new OneTimeWorkRequest.Builder(RescheduleWork.class)
+                            .setInitialDelay(Duration.ofSeconds(1))
                             .build();
             workManager.enqueue(rescheduleWork);
         } else if (DISMISSED_ACTION.equals(intent.getAction())) {
