@@ -11,8 +11,11 @@ import com.futsch1.medtimer.database.Reminder;
 
 public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolder> {
 
-    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback) {
+    final ReminderViewHolder.DeleteCallback deleteCallback;
+
+    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback, ReminderViewHolder.DeleteCallback deleteCallback) {
         super(diffCallback);
+        this.deleteCallback = deleteCallback;
         setHasStableIds(true);
     }
 
@@ -28,7 +31,7 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder current = getItem(position);
-        holder.bind(current);
+        holder.bind(current, deleteCallback);
     }
 
     @Override

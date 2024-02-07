@@ -5,6 +5,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -40,6 +41,7 @@ public class EditMedicine extends AppCompatActivity {
     EditText editMedicineName;
     int medicineId;
     HandlerThread thread;
+    ReminderViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class EditMedicine extends AppCompatActivity {
         medicineId = getIntent().getIntExtra(EXTRA_ID, 0);
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
-        final ReminderViewAdapter adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff());
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
@@ -76,21 +78,7 @@ public class EditMedicine extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EditMedicine.this);
-                    builder.setTitle(R.string.confirm);
-                    builder.setMessage(R.string.are_you_sure_delete_reminder);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        final Handler handler = new Handler(thread.getLooper());
-                        handler.post(() -> {
-                            Reminder reminder = medicineViewModel.getReminder((int) viewHolder.getItemId());
-                            medicineViewModel.deleteReminder(reminder);
-                            final Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
-                        });
-                    });
-                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
-                    builder.show();
+                    EditMedicine.this.deleteItem(EditMedicine.this, viewHolder.getItemId(), viewHolder.getAdapterPosition());
                 }
             }
         };
@@ -135,6 +123,24 @@ public class EditMedicine extends AppCompatActivity {
         medicineViewModel.getMedicines().observe(this, nameObserver);
 
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
+    }
+
+    private void deleteItem(Context context, long itemId, int adapterPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.confirm);
+        builder.setMessage(R.string.are_you_sure_delete_reminder);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+            final Handler handler = new Handler(thread.getLooper());
+            handler.post(() -> {
+                Reminder reminder = medicineViewModel.getReminder((int) itemId);
+                medicineViewModel.deleteReminder(reminder);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        });
+        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        builder.show();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -27,6 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class MedicinesFragment extends Fragment {
     private HandlerThread thread;
     private MedicineViewModel medicineViewModel;
+    private MedicineViewAdapter adapter;
 
     public MedicinesFragment() {
     }
@@ -49,7 +51,7 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        final MedicineViewAdapter adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff());
+        adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), MedicinesFragment.this::deleteItem);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -63,21 +65,7 @@ public class MedicinesFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
-                    builder.setTitle(R.string.confirm);
-                    builder.setMessage(R.string.are_you_sure_delete_medicine);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        final Handler handler = new Handler(thread.getLooper());
-                        handler.post(() -> {
-                            Medicine medicine = medicineViewModel.getMedicine((int) viewHolder.getItemId());
-                            medicineViewModel.deleteMedicine(medicine);
-                            final Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
-                        });
-                    });
-                    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), viewHolder.getAdapterPosition() + 1));
-                    builder.show();
+                    deleteItem(fragmentView.getContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
                 }
             }
         };
@@ -112,6 +100,24 @@ public class MedicinesFragment extends Fragment {
         });
 
         return fragmentView;
+    }
+
+    private void deleteItem(Context context, long itemId, int adapterPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.confirm);
+        builder.setMessage(R.string.are_you_sure_delete_medicine);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+            final Handler handler = new Handler(thread.getLooper());
+            handler.post(() -> {
+                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
+                medicineViewModel.deleteMedicine(medicine);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        });
+        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        builder.show();
     }
 
     @Override
