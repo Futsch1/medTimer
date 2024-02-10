@@ -35,4 +35,7 @@
     <string name="app_version">App-Version</string>
     <string name="are_you_sure_delete_events">Ereignisse wirklich zurücksetzen?</string>
     <string name="export">Daten exportieren</string>
+    <string name="swipe_left">Wischen nach links</string>
+    <string name="long_press">Lange drücken</string>
+    <string name="delete_items">Einträge löschen</string>
 </resources>

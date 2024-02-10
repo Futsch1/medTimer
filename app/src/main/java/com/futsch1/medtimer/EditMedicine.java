@@ -6,6 +6,8 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +45,7 @@ public class EditMedicine extends AppCompatActivity {
     int medicineId;
     HandlerThread thread;
     ReminderViewAdapter adapter;
+    private SwipeHelper swipeHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +73,7 @@ public class EditMedicine extends AppCompatActivity {
         };
 
         // Swipe to delete
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
+        swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, this) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
@@ -82,7 +81,7 @@ public class EditMedicine extends AppCompatActivity {
                 }
             }
         };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
@@ -123,6 +122,18 @@ public class EditMedicine extends AppCompatActivity {
         medicineViewModel.getMedicines().observe(this, nameObserver);
 
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPref.getString("delete_items", "0").equals("0")) {
+            swipeHelper.setDefaultSwipeDirs(ItemTouchHelper.LEFT);
+        } else {
+            swipeHelper.setDefaultSwipeDirs(0);
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {

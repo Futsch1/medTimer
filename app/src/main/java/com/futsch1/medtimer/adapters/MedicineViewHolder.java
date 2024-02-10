@@ -5,12 +5,14 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.EditMedicine;
@@ -53,7 +55,12 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             remindersSummaryView.setText(reminders);
         }
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.itemView.getContext());
+
         itemView.setOnLongClickListener(v -> {
+            if (sharedPref.getString("delete_items", "0").equals("0")) {
+                return false;
+            }
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), this.itemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setOnMenuItemClickListener(item -> {
@@ -70,6 +77,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             popupMenu.show();
             return true;
         });
+
 
         itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), EditMedicine.class);

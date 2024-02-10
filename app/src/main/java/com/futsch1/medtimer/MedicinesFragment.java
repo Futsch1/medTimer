@@ -2,6 +2,8 @@ package com.futsch1.medtimer;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -15,6 +17,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +32,7 @@ public class MedicinesFragment extends Fragment {
     private HandlerThread thread;
     private MedicineViewModel medicineViewModel;
     private MedicineViewAdapter adapter;
+    private SwipeHelper swipeHelper;
 
     public MedicinesFragment() {
     }
@@ -56,12 +60,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
+        swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, requireContext()) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
@@ -69,7 +68,7 @@ public class MedicinesFragment extends Fragment {
                 }
             }
         };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         // Connect view model to recycler view adapter
@@ -102,6 +101,24 @@ public class MedicinesFragment extends Fragment {
         return fragmentView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        if (sharedPref.getString("delete_items", "0").equals("0")) {
+            swipeHelper.setDefaultSwipeDirs(ItemTouchHelper.LEFT);
+        } else {
+            swipeHelper.setDefaultSwipeDirs(0);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        thread.quitSafely();
+    }
+
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.confirm);
@@ -118,11 +135,5 @@ public class MedicinesFragment extends Fragment {
         });
         builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
         builder.show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        thread.quitSafely();
     }
 }

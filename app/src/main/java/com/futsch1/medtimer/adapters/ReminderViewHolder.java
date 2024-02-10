@@ -4,6 +4,7 @@ import static com.futsch1.medtimer.TimeHelper.minutesToTime;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
@@ -56,7 +58,13 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.itemView.getContext());
+
         itemView.setOnLongClickListener(v -> {
+            if (sharedPref.getString("delete_items", "0").equals("0")) {
+                return false;
+            }
+            
             PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.itemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setVisible(false);

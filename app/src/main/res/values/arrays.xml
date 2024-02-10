@@ -9,4 +9,13 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="delete_entries_titles">
+        <item>@string/swipe_left</item>
+        <item>@string/long_press</item>
+    </string-array>
+    <string-array name="delete_entries_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>

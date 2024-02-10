@@ -1,4 +1,14 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="0"
+        android:entries="@array/delete_entries_titles"
+        android:entryValues="@array/delete_entries_values"
+        android:title="@string/delete_items"
+        app:key="delete_items"
+        app:useSimpleSummaryProvider="true" />
     <Preference
         app:icon="@android:drawable/ic_menu_save"
         app:key="export"

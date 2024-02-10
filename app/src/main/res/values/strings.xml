@@ -37,4 +37,7 @@
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
     <string name="export">Export data</string>
     <string name="hourglass" translatable="false">⌛</string>
+    <string name="swipe_left">Swipe left</string>
+    <string name="long_press">Long press</string>
+    <string name="delete_items">Delete items</string>
 </resources>
