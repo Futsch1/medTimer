@@ -42,4 +42,11 @@
     <string name="delete_items">Delete items</string>
     <string name="actions">Actions</string>
     <string name="information">Information</string>
+    <string name="show_notifications">Show notifications</string>
+    <string name="overview_events">Overview display events</string>
+    <string name="four_hours">4 hours</string>
+    <string name="twelve_hours">12 hours</string>
+    <string name="twenty_four_hours">24 hours</string>
+    <string name="two_days">2 days</string>
+    <string name="three_days">3 days</string>
 </resources>

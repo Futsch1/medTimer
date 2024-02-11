@@ -40,4 +40,11 @@
     <string name="delete_items">Einträge löschen</string>
     <string name="actions">Aktionen</string>
     <string name="information">Information</string>
+    <string name="show_notifications">Benachrichtigungen anzeigen</string>
+    <string name="overview_events">Übersicht Erinnerungen anzeigen</string>
+    <string name="four_hours">4 Stunden</string>
+    <string name="twelve_hours">12 Stunden</string>
+    <string name="twenty_four_hours">24 Stunden</string>
+    <string name="two_days">2 Tage</string>
+    <string name="three_days">3 Tage</string>
 </resources>

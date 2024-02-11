@@ -5,9 +5,11 @@ import static com.futsch1.medtimer.TimeHelper.minutesToTime;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -48,8 +50,12 @@ public class ReminderWork extends Worker {
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
-            reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
-            medicineRepository.updateReminderEvent(reminderEvent);
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if (sharedPref.getBoolean("show_notification", true)) {
+                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
+                medicineRepository.updateReminderEvent(reminderEvent);
+            }
 
             Log.i("Reminder", String.format("Show reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
             r = Result.success();
