@@ -47,4 +47,9 @@
         app:key="version"
         app:summary=""
         app:title="@string/app_version" />
+    <Preference
+        app:icon="@android:drawable/ic_menu_directions"
+        app:key="app_url"
+        app:summary=""
+        app:title="@string/app_url" />
 </PreferenceScreen>

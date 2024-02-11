@@ -37,6 +37,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         if (preference != null) {
             preference.setTitle(getString(R.string.version, BuildConfig.VERSION_NAME));
         }
+        preference = getPreferenceScreen().findPreference("app_url");
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(preference12 -> {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Futsch1/medTimer"));
+                startActivity(myIntent);
+                return true;
+            });
+        }
 
         preference = getPreferenceScreen().findPreference("clear_events");
         if (preference != null) {
