@@ -31,7 +31,7 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
     @Override
     public void onBindViewHolder(@NonNull LatestRemindersViewHolder holder, final int position) {
         ReminderEvent current = getItem(position);
-        holder.bind(current, viewModel);
+        holder.bind(current);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderProcessor;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -40,7 +39,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         return new LatestRemindersViewHolder(view);
     }
 
-    public void bind(ReminderEvent reminderEvent, MedicineViewModel viewModel) {
+    public void bind(ReminderEvent reminderEvent) {
         String takenDateTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
         reminderEventText.setText(reminderEventText.getContext().getString(R.string.reminder_event, reminderEvent.amount, reminderEvent.medicineName, takenDateTime));
 
