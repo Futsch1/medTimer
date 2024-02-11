@@ -47,4 +47,5 @@
     <string name="twenty_four_hours">24 Stunden</string>
     <string name="two_days">2 Tage</string>
     <string name="three_days">3 Tage</string>
+    <string name="app_url">MedTimer bei GitHub</string>
 </resources>
