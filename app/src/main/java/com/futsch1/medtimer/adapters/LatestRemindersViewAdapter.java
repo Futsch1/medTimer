@@ -6,16 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> {
 
-    private final MedicineViewModel viewModel;
 
-    public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback, MedicineViewModel medicineViewModel) {
+    public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback) {
         super(diffCallback);
-        viewModel = medicineViewModel;
         setHasStableIds(true);
     }
 

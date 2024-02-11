@@ -42,7 +42,7 @@ public class OverviewFragment extends Fragment {
 
         RecyclerView latestReminders = fragmentOverview.findViewById(R.id.latestReminders);
 
-        final LatestRemindersViewAdapter adapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff(), medicineViewModel);
+        final LatestRemindersViewAdapter adapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
         latestReminders.setAdapter(adapter);
         latestReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
 
