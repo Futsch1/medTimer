@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".EditMedicine">
+    tools:context=".medicine.EditMedicine">
 
     <LinearLayout
         android:layout_width="match_parent"

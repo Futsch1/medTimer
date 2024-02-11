@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.adapters;
+package com.futsch1.medtimer.overview;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ReminderProcessor;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 

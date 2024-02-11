@@ -15,6 +15,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
 import java.io.IOException;

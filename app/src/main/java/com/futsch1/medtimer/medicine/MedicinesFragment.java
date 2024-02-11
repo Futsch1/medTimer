@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.medicine;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.adapters.MedicineViewAdapter;
+import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
+import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;

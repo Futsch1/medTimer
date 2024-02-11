@@ -1,6 +1,6 @@
-package com.futsch1.medtimer.adapters;
+package com.futsch1.medtimer.medicine;
 
-import static com.futsch1.medtimer.TimeHelper.minutesToTime;
+import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -64,7 +64,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             if (sharedPref.getString("delete_items", "0").equals("0")) {
                 return false;
             }
-            
+
             PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.itemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setVisible(false);

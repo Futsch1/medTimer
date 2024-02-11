@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.adapters;
+package com.futsch1.medtimer;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,9 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.futsch1.medtimer.MedicinesFragment;
-import com.futsch1.medtimer.OverviewFragment;
-import com.futsch1.medtimer.PreferencesFragment;
+import com.futsch1.medtimer.medicine.MedicinesFragment;
+import com.futsch1.medtimer.overview.OverviewFragment;
 
 public class ViewPagerAdapter
         extends FragmentStateAdapter {

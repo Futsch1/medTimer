@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.helpers;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

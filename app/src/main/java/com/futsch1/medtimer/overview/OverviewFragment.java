@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.overview;
 
 import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
 
@@ -18,7 +18,9 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.adapters.LatestRemindersViewAdapter;
+import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.NextReminderListener;
+import com.futsch1.medtimer.R;
 
 import java.time.Instant;
 

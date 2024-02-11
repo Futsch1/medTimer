@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.adapters;
+package com.futsch1.medtimer.medicine;
 
 
 import android.view.ViewGroup;

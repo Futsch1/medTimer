@@ -12,6 +12,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.futsch1.medtimer.reminders.ReminderProcessor;
+
 public class Notifications {
 
     public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId) {

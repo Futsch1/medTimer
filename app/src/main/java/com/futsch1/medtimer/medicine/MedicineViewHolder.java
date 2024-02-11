@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.adapters;
+package com.futsch1.medtimer.medicine;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
@@ -15,10 +15,9 @@ import android.widget.TextView;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.EditMedicine;
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.TimeHelper;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.util.ArrayList;
 

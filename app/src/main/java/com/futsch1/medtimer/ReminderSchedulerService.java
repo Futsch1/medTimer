@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleService;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.util.List;
 

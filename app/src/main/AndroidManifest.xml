@@ -20,7 +20,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".EditMedicine"
+            android:name=".medicine.EditMedicine"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -41,7 +41,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".ReminderProcessor"
+            android:name=".reminders.ReminderProcessor"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">

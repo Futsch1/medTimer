@@ -1,7 +1,7 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.reminders;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.TimeHelper.minutesToTime;
+import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.app.Application;
 import android.content.Context;
@@ -14,6 +14,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.Notifications;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;

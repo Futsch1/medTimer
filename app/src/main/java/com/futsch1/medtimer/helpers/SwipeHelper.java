@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.helpers;
 
 import static android.graphics.PorterDuff.Mode.CLEAR;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
@@ -19,28 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple and lightweight class that extends SimpleCallBack and can be used to attach a swipe listener to RecyclerView items.
- * Currently, it only supports left or right swipes with a LinearLayoutManager.
- * <p>
- * Example usage is given below:
- * RecyclerSwipeHelper mRecyclerSwipeHelper = new RecyclerSwipeHelper(swipeRightColor, swipeLeftColor, swipeRightIconResource, swipeLeftIconResource, context) {
- * &nbsp;
- * \@Override public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
- * mAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
- * //Handle left swipe
- * if (direction == ItemTouchHelper.LEFT)
- * //handle right swipe
- * else
- * }
- * };
- * ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mRecyclerSwipeHelper);
- * mItemTouchHelper.attachToRecyclerView(mRecyclerView);
- * <p>
- * You must call RecyclerView.Adapter.notifyItemChanged() in the onSwiped method to reset the swiped item back to its original state.
- * <p>
- * Further, if you wish to prevent an item from being swiped on, then in your adapter's onBindViewHolder() method, use ViewHolder.ItemView.setTag() method and set the tag to @link @TAG_NO_SWIPE;
- */
 
 public abstract class SwipeHelper extends SimpleCallback {
 
