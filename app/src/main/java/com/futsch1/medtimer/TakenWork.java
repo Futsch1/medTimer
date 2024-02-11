@@ -1,6 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 
 import android.app.Application;
@@ -27,13 +26,14 @@ public class TakenWork extends Worker {
     @Override
     public Result doWork() {
         NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
-        int notificationId = getInputData().getInt(EXTRA_NOTIFICATION_ID, 0);
-        Log.d("Reminder", String.format("Canceling notification %d", notificationId));
-        notificationManager.cancel(notificationId);
-
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
-
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(getInputData().getInt(EXTRA_REMINDER_EVENT_ID, 0));
+
+        if (reminderEvent.notificationId != 0) {
+            Log.d("Reminder", String.format("Canceling notification %d", reminderEvent.notificationId));
+            notificationManager.cancel(reminderEvent.notificationId);
+        }
+
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
         medicineRepository.updateReminderEvent(reminderEvent);

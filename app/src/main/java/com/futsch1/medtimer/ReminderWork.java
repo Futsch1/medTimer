@@ -48,9 +48,10 @@ public class ReminderWork extends Worker {
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+            reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
+            medicineRepository.updateReminderEvent(reminderEvent);
 
-            Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
-            Log.i("Reminder", String.format("Show reminder for %s", reminderEvent.medicineName));
+            Log.i("Reminder", String.format("Show reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
             r = Result.success();
 
         } else {

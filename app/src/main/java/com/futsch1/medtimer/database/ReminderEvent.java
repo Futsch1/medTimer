@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,6 +14,8 @@ public class ReminderEvent {
     public long remindedTimestamp;
     public long processedTimestamp;
     public int reminderId;
+    @ColumnInfo(defaultValue = "0")
+    public int notificationId;
 
     public enum ReminderStatus {
         RAISED,

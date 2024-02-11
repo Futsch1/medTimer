@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.adapters;
 
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ReminderProcessor;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -53,13 +54,13 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
             if (!checkedIds.isEmpty()) {
                 int checkedId = checkedIds.get(0);
                 if (checkedId == R.id.chipTaken) {
-                    reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
+                    Intent takenIntent = ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
+                    itemView.getContext().sendBroadcast(takenIntent);
                 }
                 if (checkedId == R.id.chipSkipped) {
-                    reminderEvent.status = ReminderEvent.ReminderStatus.SKIPPED;
+                    Intent takenIntent = ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
+                    itemView.getContext().sendBroadcast(takenIntent);
                 }
-                Log.d("ReminderEvent", "Updating reminder " + reminderEvent.reminderEventId);
-                viewModel.updateReminderEvent(reminderEvent);
             }
         });
     }

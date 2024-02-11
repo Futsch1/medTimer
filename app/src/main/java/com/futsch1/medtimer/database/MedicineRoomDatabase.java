@@ -14,9 +14,10 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 2,
+        version = 3,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
+                @AutoMigration(from = 2, to = 3)
         }
 )
 public abstract class MedicineRoomDatabase extends RoomDatabase {
