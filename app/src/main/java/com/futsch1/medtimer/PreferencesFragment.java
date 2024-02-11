@@ -15,12 +15,12 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
-import java.time.Instant;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
@@ -71,7 +71,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 handler.post(() -> {
                     Intent intentShareFile = new Intent(Intent.ACTION_SEND);
 
-                    File csvFile = new File(requireContext().getCacheDir(), String.format("medTimer_export_%s.csv", Instant.now().toString()));
+                    File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename());
                     MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
                     CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext());
                     try {
