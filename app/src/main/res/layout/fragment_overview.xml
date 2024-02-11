@@ -61,7 +61,7 @@
                 android:id="@+id/latestReminders"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollIndicators="right"
+                android:contentDescription="@string/recent_reminders"
                 android:scrollbars="vertical" />
 
         </LinearLayout>

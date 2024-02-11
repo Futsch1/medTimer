@@ -18,6 +18,7 @@
             android:id="@+id/editMedicineNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:labelFor="@id/editMedicineName"
             android:text="@string/medicine_name" />
 
         <EditText
@@ -26,7 +27,6 @@
             android:layout_height="48dp"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:labelFor="@id/editMedicineName"
             android:singleLine="true" />
 
         <androidx.recyclerview.widget.RecyclerView
