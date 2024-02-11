@@ -9,6 +9,10 @@
         android:title="@string/delete_items"
         app:key="delete_items"
         app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/actions"/>
     <Preference
         app:icon="@android:drawable/ic_menu_save"
         app:key="export"
@@ -19,6 +23,10 @@
         app:key="clear_events"
         app:summary=""
         app:title="@string/clear_events" />
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/information"/>
     <Preference
         app:icon="@android:drawable/ic_dialog_info"
         app:key="version"

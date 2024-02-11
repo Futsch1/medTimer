@@ -38,4 +38,6 @@
     <string name="swipe_left">Wischen nach links</string>
     <string name="long_press">Lange drücken</string>
     <string name="delete_items">Einträge löschen</string>
+    <string name="actions">Aktionen</string>
+    <string name="information">Information</string>
 </resources>

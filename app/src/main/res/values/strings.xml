@@ -40,4 +40,6 @@
     <string name="swipe_left">Swipe left</string>
     <string name="long_press">Long press</string>
     <string name="delete_items">Delete items</string>
+    <string name="actions">Actions</string>
+    <string name="information">Information</string>
 </resources>
