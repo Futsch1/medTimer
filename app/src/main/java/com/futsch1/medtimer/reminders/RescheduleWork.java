@@ -1,9 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
-import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
-import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -20,6 +17,7 @@ import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -57,23 +55,21 @@ public class RescheduleWork extends Worker {
     }
 
     private void schedule(Context context, AlarmManager alarmManager, Instant timestamp, Reminder reminder, Medicine medicine) {
+        // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
-            Intent reminderIntent = new Intent(REMINDER_ACTION);
-            reminderIntent.putExtra(EXTRA_REMINDER_ID, reminder.reminderId);
-            reminderIntent.setClass(getApplicationContext(), ReminderProcessor.class);
+            Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminder.reminderId);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
+            // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
-
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
 
-            Intent nextReminderIntent = new Intent(NEXT_REMINDER_ACTION);
-            nextReminderIntent.putExtra(EXTRA_REMINDER_ID, reminder.reminderId);
-            nextReminderIntent.putExtra(EXTRA_REMINDER_TIME, timestamp);
-            context.sendBroadcast(nextReminderIntent);
+            // Notify GUI listener
+            NextReminderListener.sendNextReminder(context, reminder.reminderId, timestamp);
 
             Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", medicine.name, timestamp));
         } else {
+            // Immediately schedule
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
                             .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminder.reminderId).build())

@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders;
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.TAKEN_ACTION;
 
@@ -41,6 +42,13 @@ public class ReminderProcessor extends BroadcastReceiver {
         notifyTaken.setAction(TAKEN_ACTION);
         notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         return notifyTaken;
+    }
+
+    public static Intent getReminderAction(@NonNull Context context, int reminderId) {
+        Intent reminderIntent = new Intent(REMINDER_ACTION);
+        reminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
+        reminderIntent.setClass(context, ReminderProcessor.class);
+        return reminderIntent;
     }
 
     @Override

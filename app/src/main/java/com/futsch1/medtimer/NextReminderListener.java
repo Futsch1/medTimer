@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
+import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
@@ -30,6 +33,13 @@ public class NextReminderListener extends BroadcastReceiver {
         this.medicineViewModel = medicineViewModel;
         this.thread = new HandlerThread("UpdateNextReminder");
         this.thread.start();
+    }
+
+    public static void sendNextReminder(@NonNull Context context, int reminderId, Instant timestamp) {
+        Intent nextReminderIntent = new Intent(NEXT_REMINDER_ACTION);
+        nextReminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
+        nextReminderIntent.putExtra(EXTRA_REMINDER_TIME, timestamp);
+        context.sendBroadcast(nextReminderIntent);
     }
 
     @Override
