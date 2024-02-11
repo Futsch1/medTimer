@@ -8,9 +8,8 @@ import android.util.Log;
 public class Autostart extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            Intent serviceIntent = new Intent(context, ReminderSchedulerService.class);
-            context.startForegroundService(serviceIntent);
-            Log.i("Service", "Started Reminder  SchedulerService");
+            Log.i("Autostart", "Requesting reschedule");
+            ReminderProcessor.requestReschedule(context);
         }
     }
 }
