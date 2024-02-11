@@ -14,7 +14,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/labelEditReminderTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@id/editReminderTime"
@@ -30,7 +29,6 @@
             android:text="@string/time" />
 
         <TextView
-            android:id="@+id/labelEditAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@id/editAmount"
