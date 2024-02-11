@@ -1,11 +1,13 @@
 package com.futsch1.medtimer.medicine;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,9 +16,15 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -26,6 +34,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.futsch1.medtimer.ColorPicker;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
@@ -33,6 +42,7 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -47,6 +57,18 @@ public class EditMedicine extends AppCompatActivity {
     HandlerThread thread;
     ReminderViewAdapter adapter;
     private SwipeHelper swipeHelper;
+    private SwitchMaterial enableColor;
+    private Button colorButton;
+    private int color;
+    ActivityResultLauncher<Intent> getColor = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult o) {
+            if (o.getResultCode() == RESULT_OK) {
+                color = o.getData() != null ? o.getData().getIntExtra(EXTRA_COLOR, Color.DKGRAY) : Color.DKGRAY;
+                colorButton.setBackgroundColor(color);
+            }
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +88,29 @@ public class EditMedicine extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
         editMedicineName = findViewById(R.id.editMedicineName);
+        enableColor = findViewById(R.id.enableColor);
+
+        colorButton = findViewById(R.id.selectColor);
+
         final Observer<List<MedicineWithReminders>> nameObserver = newList -> {
             if (newList != null) {
                 Medicine medicine = newList.get(getIntent().getIntExtra(EXTRA_INDEX, 0)).medicine;
                 editMedicineName.setText(medicine.name);
+
+                enableColor.setChecked(medicine.useColor);
+                enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    medicine.useColor = isChecked;
+                    colorButton.setVisibility(medicine.useColor ? View.VISIBLE : View.GONE);
+                });
+
+                colorButton.setBackgroundColor(medicine.color);
+                colorButton.setVisibility(medicine.useColor ? View.VISIBLE : View.GONE);
+                color = medicine.color;
+                colorButton.setOnClickListener(v -> {
+                    Intent i = new Intent(getApplicationContext(), ColorPicker.class);
+                    i.putExtra(EXTRA_COLOR, color);
+                    getColor.launch(i);
+                });
             }
         };
 
@@ -121,7 +162,6 @@ public class EditMedicine extends AppCompatActivity {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getMedicines().observe(this, nameObserver);
-
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
     }
 
@@ -160,7 +200,10 @@ public class EditMedicine extends AppCompatActivity {
         super.onDestroy();
 
         String word = editMedicineName.getText().toString();
-        medicineViewModel.updateMedicine(new Medicine(word, medicineId));
+        Medicine medicine = new Medicine(word, medicineId);
+        medicine.useColor = enableColor.isChecked();
+        medicine.color = color;
+        medicineViewModel.updateMedicine(medicine);
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
         for (int i = 0; i < recyclerView.getChildCount(); i++) {

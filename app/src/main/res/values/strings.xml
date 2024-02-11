@@ -50,4 +50,6 @@
     <string name="two_days">2 days</string>
     <string name="three_days">3 days</string>
     <string name="app_url">MedTimer on GitHub</string>
+    <string name="color">Color</string>
+    <string name="select_color">Select color</string>
 </resources>

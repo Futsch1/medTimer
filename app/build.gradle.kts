@@ -60,4 +60,6 @@ dependencies {
 
     implementation("org.mockito:mockito-core:4.1.0")
     testImplementation("org.mockito:mockito-inline:4.1.0")
+
+    implementation("com.github.skydoves:colorpickerview:2.3.0")
 }

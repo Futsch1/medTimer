@@ -28,6 +28,18 @@
             android:inputType="text"
             android:singleLine="true" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/enableColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/color" />
+
+        <Button
+            android:id="@+id/selectColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_color" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reminderList"
             android:layout_width="match_parent"
