@@ -30,8 +30,8 @@
                 android:id="@+id/nextReminderInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/hourglass_split"
-                android:lines="2" />
+                android:lines="2"
+                app:drawableStartCompat="@drawable/hourglass_split" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
