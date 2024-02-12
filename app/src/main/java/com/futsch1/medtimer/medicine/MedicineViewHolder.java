@@ -1,7 +1,9 @@
 package com.futsch1.medtimer.medicine;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,10 +65,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), this.itemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setOnMenuItemClickListener(item -> {
-                Intent intent = new Intent(itemView.getContext(), EditMedicine.class);
-                intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
-                intent.putExtra(EXTRA_INDEX, getAdapterPosition());
-                itemView.getContext().startActivity(intent);
+                startEditActivity(medicineWithReminders);
                 return true;
             });
             popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
@@ -78,12 +77,16 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         });
 
 
-        itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), EditMedicine.class);
-            intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
-            intent.putExtra(EXTRA_INDEX, getAdapterPosition());
-            view.getContext().startActivity(intent);
-        });
+        itemView.setOnClickListener(view -> startEditActivity(medicineWithReminders));
+    }
+
+    private void startEditActivity(MedicineWithReminders medicineWithReminders) {
+        Intent intent = new Intent(itemView.getContext(), EditMedicine.class);
+        intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
+        intent.putExtra(EXTRA_USE_COLOR, medicineWithReminders.medicine.useColor);
+        intent.putExtra(EXTRA_COLOR, medicineWithReminders.medicine.color);
+        intent.putExtra(EXTRA_MEDICINE_NAME, medicineWithReminders.medicine.name);
+        itemView.getContext().startActivity(intent);
     }
 
     public interface DeleteCallback {

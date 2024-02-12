@@ -2,7 +2,8 @@ package com.futsch1.medtimer.medicine;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_INDEX;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
@@ -27,7 +28,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -38,7 +38,6 @@ import com.futsch1.medtimer.ColorPicker;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -47,7 +46,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.Instant;
-import java.util.List;
 
 public class EditMedicine extends AppCompatActivity {
 
@@ -88,31 +86,22 @@ public class EditMedicine extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
         editMedicineName = findViewById(R.id.editMedicineName);
+        editMedicineName.setText(getIntent().getStringExtra(EXTRA_MEDICINE_NAME));
+
+        boolean useColor = getIntent().getBooleanExtra(EXTRA_USE_COLOR, false);
         enableColor = findViewById(R.id.enableColor);
+        enableColor.setChecked(useColor);
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
 
+        color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
         colorButton = findViewById(R.id.selectColor);
-
-        final Observer<List<MedicineWithReminders>> nameObserver = newList -> {
-            if (newList != null) {
-                Medicine medicine = newList.get(getIntent().getIntExtra(EXTRA_INDEX, 0)).medicine;
-                editMedicineName.setText(medicine.name);
-
-                enableColor.setChecked(medicine.useColor);
-                enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    medicine.useColor = isChecked;
-                    colorButton.setVisibility(medicine.useColor ? View.VISIBLE : View.GONE);
-                });
-
-                colorButton.setBackgroundColor(medicine.color);
-                colorButton.setVisibility(medicine.useColor ? View.VISIBLE : View.GONE);
-                color = medicine.color;
-                colorButton.setOnClickListener(v -> {
-                    Intent i = new Intent(getApplicationContext(), ColorPicker.class);
-                    i.putExtra(EXTRA_COLOR, color);
-                    getColor.launch(i);
-                });
-            }
-        };
+        colorButton.setBackgroundColor(color);
+        colorButton.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), ColorPicker.class);
+            i.putExtra(EXTRA_COLOR, color);
+            getColor.launch(i);
+        });
+        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
 
         // Swipe to delete
         swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, this) {
@@ -160,7 +149,6 @@ public class EditMedicine extends AppCompatActivity {
         });
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        medicineViewModel.getMedicines().observe(this, nameObserver);
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
     }
 
