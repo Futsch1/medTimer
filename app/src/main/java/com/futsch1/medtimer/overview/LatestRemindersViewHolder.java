@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -62,5 +63,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+        if (reminderEvent.useColor) {
+            ((MaterialCardView) itemView).setCardBackgroundColor(reminderEvent.color);
+        }
     }
 }

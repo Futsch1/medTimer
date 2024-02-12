@@ -6,6 +6,7 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -48,13 +49,16 @@ public class ReminderWork extends Worker {
                     .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.name;
+            reminderEvent.color = medicine.color;
+            reminderEvent.useColor = medicine.useColor;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             if (sharedPref.getBoolean("show_notification", true)) {
-                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId);
+                Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
+                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId, color);
                 medicineRepository.updateReminderEvent(reminderEvent);
             }
 

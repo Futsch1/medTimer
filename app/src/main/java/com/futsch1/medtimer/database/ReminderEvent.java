@@ -10,6 +10,10 @@ public class ReminderEvent {
     public int reminderEventId;
     public String medicineName;
     public String amount;
+    @ColumnInfo(defaultValue = "0")
+    public int color;
+    @ColumnInfo(defaultValue = "false")
+    public boolean useColor;
     public ReminderStatus status;
     public long remindedTimestamp;
     public long processedTimestamp;

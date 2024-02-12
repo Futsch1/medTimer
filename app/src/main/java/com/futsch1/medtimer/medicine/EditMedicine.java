@@ -126,7 +126,6 @@ public class EditMedicine extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-
         ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> {
             TextInputLayout textInputLayout = new TextInputLayout(this);
