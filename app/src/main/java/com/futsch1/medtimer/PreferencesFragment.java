@@ -1,14 +1,18 @@
 package com.futsch1.medtimer;
 
+import static android.Manifest.permission.SCHEDULE_EXACT_ALARM;
+
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
@@ -58,6 +62,26 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 });
                 builder.show();
                 ReminderProcessor.requestReschedule(requireContext());
+                return true;
+            });
+        }
+
+        // TODO: Proper permission handling
+        preference = getPreferenceScreen().findPreference("exact_reminders");
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference13, newValue) -> {
+                if ((Boolean) newValue) {
+                    if (ActivityCompat.checkSelfPermission(requireContext(), SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        requestPermissions(new String[]{SCHEDULE_EXACT_ALARM}, 1);
+                    }
+                }
                 return true;
             });
         }

@@ -23,7 +23,7 @@
     <string name="channel_name" translatable="false">MedTimer</string>
     <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Medicine reminder</string>
-    <string name="notification_content">%1$s - it is time to take %2$s of %3$s</string>
+    <string name="notification_content">It is %1$ - time to take %2$s of %3$s</string>
     <string name="notification_taken">TAKEN</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
@@ -53,4 +53,5 @@
     <string name="color">Color</string>
     <string name="select_color">Select color</string>
     <string name="take_over">Take over</string>
+    <string name="exact_reminders">Exact reminders</string>
 </resources>
