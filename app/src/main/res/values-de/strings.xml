@@ -50,4 +50,5 @@
     <string name="app_url">MedTimer bei GitHub</string>
     <string name="color">Farbe</string>
     <string name="select_color">Farbe auswählen</string>
+    <string name="take_over">Übernehmen</string>
 </resources>
