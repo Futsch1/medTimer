@@ -36,12 +36,12 @@
         android:layout_height="wrap_content"
         android:title="@string/actions" />
     <Preference
-        app:icon="@android:drawable/ic_menu_save"
+        app:icon="@drawable/floppy2"
         app:key="export"
         app:summary=""
         app:title="@string/export" />
     <Preference
-        app:icon="@android:drawable/ic_notification_clear_all"
+        app:icon="@drawable/x_circle"
         app:key="clear_events"
         app:summary=""
         app:title="@string/clear_events" />
@@ -50,12 +50,12 @@
         android:layout_height="wrap_content"
         android:title="@string/information" />
     <Preference
-        app:icon="@android:drawable/ic_dialog_info"
+        app:icon="@drawable/info_circle"
         app:key="version"
         app:summary=""
         app:title="@string/app_version" />
     <Preference
-        app:icon="@android:drawable/ic_menu_directions"
+        app:icon="@drawable/link"
         app:key="app_url"
         app:summary=""
         app:title="@string/app_url" />

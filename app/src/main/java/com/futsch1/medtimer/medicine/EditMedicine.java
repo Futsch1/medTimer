@@ -8,7 +8,6 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,10 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,7 +29,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.ColorPicker;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
@@ -44,6 +38,8 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.skydoves.colorpickerview.ColorPickerDialog;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
 
@@ -58,15 +54,6 @@ public class EditMedicine extends AppCompatActivity {
     private SwitchMaterial enableColor;
     private Button colorButton;
     private int color;
-    ActivityResultLauncher<Intent> getColor = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult o) {
-            if (o.getResultCode() == RESULT_OK) {
-                color = o.getData() != null ? o.getData().getIntExtra(EXTRA_COLOR, Color.DKGRAY) : Color.DKGRAY;
-                colorButton.setBackgroundColor(color);
-            }
-        }
-    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +84,19 @@ public class EditMedicine extends AppCompatActivity {
         colorButton = findViewById(R.id.selectColor);
         colorButton.setBackgroundColor(color);
         colorButton.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), ColorPicker.class);
-            i.putExtra(EXTRA_COLOR, color);
-            getColor.launch(i);
+            ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(this)
+                    .setTitle(R.string.color)
+                    .setPositiveButton(getString(R.string.confirm),
+                            (ColorEnvelopeListener) (envelope, fromUser) -> {
+                                color = envelope.getColor();
+                                colorButton.setBackgroundColor(color);
+                            })
+                    .setNegativeButton(getString(R.string.cancel),
+                            (dialogInterface, i) -> dialogInterface.dismiss())
+                    .setBottomSpace(12);
+            builder.getColorPickerView().setInitialColor(color);
+            builder.show();
+
         });
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
 

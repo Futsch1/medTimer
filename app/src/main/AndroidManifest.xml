@@ -14,11 +14,6 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
-        <activity
-            android:name=".ColorPicker"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:theme="@style/Theme.Material3.DayNight.Dialog" />
 
         <service
             android:name=".ReminderSchedulerService"

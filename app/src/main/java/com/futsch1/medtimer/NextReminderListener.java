@@ -54,8 +54,10 @@ public class NextReminderListener extends BroadcastReceiver {
                 Medicine medicine = medicineViewModel.getMedicine(reminder.medicineRelId);
                 String nextTime = timestamp.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
                 final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() ->
-                        nextReminder.setText(context.getString(R.string.reminder_event, reminder.amount, medicine.name, nextTime)));
+                mainHandler.post(() -> {
+                    nextReminder.setText(context.getString(R.string.reminder_event, reminder.amount, medicine.name, nextTime));
+                    nextReminder.setCompoundDrawables(null, null, null, null);
+                });
             }
         });
     }
