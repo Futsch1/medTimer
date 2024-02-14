@@ -46,6 +46,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
         });
+        chipGroup.setSelectionRequired(false);
         chipTaken.setChecked(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN);
         chipSkipped.setChecked(reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED);
         chipGroup.setSelectionRequired(true);
@@ -66,6 +67,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
         if (reminderEvent.useColor) {
             ((MaterialCardView) itemView).setCardBackgroundColor(reminderEvent.color);
+        } else {
+            int defaultColor = new MaterialCardView(itemView.getContext()).getCardBackgroundColor().getDefaultColor();
+            ((MaterialCardView) itemView).setCardBackgroundColor(defaultColor);
         }
     }
 }
