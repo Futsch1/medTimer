@@ -9,7 +9,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 public class Autostart extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        if (intent.getAction() != null && (intent.getAction().equals("android.intent.action.BOOT_COMPLETED") || intent.getAction().equals("android.intent.action.MY_PACKAGE_REPLACED"))) {
             Log.i("Autostart", "Requesting reschedule");
             ReminderProcessor.requestReschedule(context);
         }
