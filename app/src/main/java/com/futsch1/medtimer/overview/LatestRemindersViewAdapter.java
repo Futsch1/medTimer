@@ -40,7 +40,7 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
 
         @Override
         public boolean areItemsTheSame(@NonNull ReminderEvent oldItem, @NonNull ReminderEvent newItem) {
-            return oldItem == newItem;
+            return oldItem.reminderEventId == newItem.reminderEventId;
         }
 
         @Override
