@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,14 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.time.Instant;
+import java.util.List;
 
 public class OverviewFragment extends Fragment {
     private NextReminderListener nextReminderListener;
     private View fragmentOverview;
     private MedicineViewModel medicineViewModel;
     private LatestRemindersViewAdapter adapter;
+    private LiveData<List<ReminderEvent>> liveData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,11 @@ public class OverviewFragment extends Fragment {
         super.onResume();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
         long eventAgeHours = Long.parseLong(sharedPref.getString("overview_events", "24"));
-        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60)).observe(getViewLifecycleOwner(), adapter::submitList);
+        if (liveData != null) {
+            liveData.removeObservers(getViewLifecycleOwner());
+        }
+        liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60));
+        liveData.observe(getViewLifecycleOwner(), adapter::submitList);
     }
 
     @Override
