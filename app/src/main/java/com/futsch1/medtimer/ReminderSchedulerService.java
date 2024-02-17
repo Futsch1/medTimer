@@ -40,7 +40,7 @@ public class ReminderSchedulerService extends LifecycleService {
         Log.i("Scheduler", "Service created");
     }
 
-    public void updateMedicine(List<MedicineWithReminders> medicineWithReminders) {
+    public void updateMedicine(List<MedicineWithReminders> ignoredMedicineWithReminders) {
         scheduleRequest();
     }
 

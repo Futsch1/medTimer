@@ -36,7 +36,6 @@
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
     <string name="export">Export data</string>
-    <string name="hourglass" translatable="false">⌛</string>
     <string name="swipe_left">Swipe left</string>
     <string name="long_press">Long press</string>
     <string name="delete_items">Delete items</string>
@@ -52,7 +51,6 @@
     <string name="app_url">MedTimer on GitHub</string>
     <string name="color">Color</string>
     <string name="select_color">Select color</string>
-    <string name="take_over">Take over</string>
     <string name="exact_reminders">Exact reminders</string>
     <string name="change_color_toast">Note that changes in color only take effect in future reminders</string>
     <string name="permission_not_granted">Permission not granted</string>
