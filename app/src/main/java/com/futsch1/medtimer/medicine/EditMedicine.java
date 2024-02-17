@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +79,10 @@ public class EditMedicine extends AppCompatActivity {
         boolean useColor = getIntent().getBooleanExtra(EXTRA_USE_COLOR, false);
         enableColor = findViewById(R.id.enableColor);
         enableColor.setChecked(useColor);
-        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
+        });
 
         color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
         colorButton = findViewById(R.id.selectColor);
@@ -90,6 +94,7 @@ public class EditMedicine extends AppCompatActivity {
                             (ColorEnvelopeListener) (envelope, fromUser) -> {
                                 color = envelope.getColor();
                                 colorButton.setBackgroundColor(color);
+                                Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
                             })
                     .setNegativeButton(getString(R.string.cancel),
                             (dialogInterface, i) -> dialogInterface.dismiss())

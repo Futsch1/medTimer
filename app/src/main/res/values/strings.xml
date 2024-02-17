@@ -54,4 +54,5 @@
     <string name="select_color">Select color</string>
     <string name="take_over">Take over</string>
     <string name="exact_reminders">Exact reminders</string>
+    <string name="change_color_toast">Note that changes in color only take effect in future reminders</string>
 </resources>
