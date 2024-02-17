@@ -93,10 +93,11 @@ public class EditMedicine extends AppCompatActivity {
                             })
                     .setNegativeButton(getString(R.string.cancel),
                             (dialogInterface, i) -> dialogInterface.dismiss())
+                    .attachAlphaSlideBar(false)
                     .setBottomSpace(12);
-            builder.getColorPickerView().setInitialColor(color);
-            builder.show();
 
+            builder.show();
+            new Handler(getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
         });
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
 
