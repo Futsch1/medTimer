@@ -58,7 +58,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
-    implementation("org.mockito:mockito-core:4.1.0")
+    implementation("org.mockito:mockito-core:5.10.0")
     testImplementation("org.mockito:mockito-inline:4.1.0")
 
     implementation("com.github.skydoves:colorpickerview:2.3.0")
