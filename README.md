@@ -1,9 +1,13 @@
+[![Build status](https://github.com/Futsch1/medTimer/actions/workflows/android.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/android.yml)
+
 # MedTimer for Android
+
+## Play store description
 
 Stay In Control of Your Medications with MedTimer
 
-MedTimer is a robust medication reminder app designed to help you manage your medications
-effectively.
+MedTimer is a medication reminder app designed to help you manage your medications
+effectively and with full control of your sensitive data.
 
 Flexible & Personalized Reminders:
 
