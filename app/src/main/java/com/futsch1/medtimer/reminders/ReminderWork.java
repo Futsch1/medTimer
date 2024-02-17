@@ -1,11 +1,13 @@
 package com.futsch1.medtimer.reminders;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.util.Log;
 
@@ -55,8 +57,7 @@ public class ReminderWork extends Worker {
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if (sharedPref.getBoolean("show_notification", true)) {
+            if (canShowNotifications()) {
                 Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
                 reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId, color);
                 medicineRepository.updateReminderEvent(reminderEvent);
@@ -74,5 +75,13 @@ public class ReminderWork extends Worker {
         ReminderProcessor.requestReschedule(getApplicationContext());
 
         return r;
+    }
+
+    private boolean canShowNotifications() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean showNotificationSetInPreferences = sharedPref.getBoolean("show_notification", true);
+        boolean hasPermission = getApplicationContext().checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+
+        return showNotificationSetInPreferences && hasPermission;
     }
 }
