@@ -102,6 +102,7 @@ public class EditMedicine extends AppCompatActivity {
                     .setBottomSpace(12);
 
             builder.show();
+            // Workaround to make the brightness slider be setup correctly
             new Handler(getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
         });
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);

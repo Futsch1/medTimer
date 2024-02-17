@@ -1,5 +1,6 @@
 package com.futsch1.medtimer;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.SCHEDULE_EXACT_ALARM;
 
 import android.app.AlertDialog;
@@ -12,11 +13,14 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.helpers.PathHelper;
@@ -28,6 +32,14 @@ import java.net.URLConnection;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (!result) {
+                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean("exact_reminders", false).apply();
+                }
+            }
+    );
     private MedicineViewModel medicineViewModel;
     private HandlerThread backgroundThread;
 
@@ -66,20 +78,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             });
         }
 
-        // TODO: Proper permission handling
+        if (ActivityCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            preference = getPreferenceScreen().findPreference("show_notification");
+            if (preference != null) {
+                preference.setEnabled(false);
+                preference.setSummary(R.string.permission_not_granted);
+            }
+        }
+
         preference = getPreferenceScreen().findPreference("exact_reminders");
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if ((Boolean) newValue) {
                     if (ActivityCompat.checkSelfPermission(requireContext(), SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        requestPermissions(new String[]{SCHEDULE_EXACT_ALARM}, 1);
+                        requestPermissionLauncher.launch(SCHEDULE_EXACT_ALARM);
                     }
                 }
                 return true;

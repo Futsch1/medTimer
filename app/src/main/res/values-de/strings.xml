@@ -53,4 +53,5 @@
     <string name="take_over">Übernehmen</string>
     <string name="exact_reminders">Exakte Erinnerungen</string>
     <string name="change_color_toast">Änderungen an den Farben wirken sich nur auf neue Erinnerungen aus</string>
+    <string name="permission_not_granted">Berechtigung nicht erteilt</string>
 </resources>
