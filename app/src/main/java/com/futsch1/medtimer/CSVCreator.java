@@ -8,7 +8,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.TimeZone;
 
 public class CSVCreator {
     private final List<ReminderEvent> reminderEvents;
@@ -29,8 +33,8 @@ public class CSVCreator {
 
             for (ReminderEvent reminderEvent : reminderEvents) {
                 Instant remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
-                csvFile.write(String.format("%s;", remindedTime.toString()));
-
+                ZonedDateTime zonedDateTime = remindedTime.atZone(TimeZone.getDefault().toZoneId());
+                csvFile.write(String.format("%s;", zonedDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))));
                 csvFile.write(String.format("%s;", reminderEvent.medicineName));
                 csvFile.write(String.format("%s;", reminderEvent.amount));
                 csvFile.write(String.format("%s\n", reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : ""));
