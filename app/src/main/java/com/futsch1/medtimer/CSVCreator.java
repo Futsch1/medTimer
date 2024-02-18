@@ -34,7 +34,9 @@ public class CSVCreator {
             for (ReminderEvent reminderEvent : reminderEvents) {
                 Instant remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
                 ZonedDateTime zonedDateTime = remindedTime.atZone(TimeZone.getDefault().toZoneId());
-                csvFile.write(String.format("%s;", zonedDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))));
+                csvFile.write(String.format("%s %s;",
+                        zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
+                        zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))));
                 csvFile.write(String.format("%s;", reminderEvent.medicineName));
                 csvFile.write(String.format("%s;", reminderEvent.amount));
                 csvFile.write(String.format("%s\n", reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : ""));
