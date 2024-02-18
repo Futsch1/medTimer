@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
+        android:summary="@string/exact_reminders_summary"
         android:title="@string/exact_reminders"
-        app:isPreferenceVisible="false"
         app:key="exact_reminders" />
     <ListPreference
         android:layout_width="wrap_content"

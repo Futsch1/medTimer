@@ -7,9 +7,11 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -62,7 +64,12 @@ public class RescheduleWork extends Worker {
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
-            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+
+            if (canScheduleExactAlarms(alarmManager)) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+            } else {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+            }
 
             // Notify GUI listener
             NextReminderListener.sendNextReminder(context, reminder.reminderId, timestamp);
@@ -76,5 +83,12 @@ public class RescheduleWork extends Worker {
                             .build();
             WorkManager.getInstance(getApplicationContext()).enqueue(reminderWork);
         }
+    }
+
+    private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean exactReminders = sharedPref.getBoolean("exact_reminders", true);
+
+        return exactReminders && alarmManager.canScheduleExactAlarms();
     }
 }

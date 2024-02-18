@@ -1,8 +1,8 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
-import static android.Manifest.permission.SCHEDULE_EXACT_ALARM;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
@@ -11,16 +11,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.Settings;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.helpers.PathHelper;
@@ -31,15 +31,6 @@ import java.io.IOException;
 import java.net.URLConnection;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
-
-    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            result -> {
-                if (!result) {
-                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean("exact_reminders", false).apply();
-                }
-            }
-    );
     private MedicineViewModel medicineViewModel;
     private HandlerThread backgroundThread;
 
@@ -90,8 +81,21 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if ((Boolean) newValue) {
-                    if (ActivityCompat.checkSelfPermission(requireContext(), SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissionLauncher.launch(SCHEDULE_EXACT_ALARM);
+                    AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
+                    if (!alarmManager.canScheduleExactAlarms()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.enable_alarm_dialog).
+                                setPositiveButton(R.string.ok, (dialog, id) -> {
+                                    Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                                    requireContext().startActivity(intent);
+                                }).
+                                setNegativeButton(R.string.cancel, (dialog, id) -> {
+                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean("exact_reminders", false).apply();
+                                    setPreferenceScreen(null);
+                                    addPreferencesFromResource(R.xml.root_preferences);
+                                });
+
+                        builder.create().show();
                     }
                 }
                 return true;
@@ -128,6 +132,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 });
                 return true;
             });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SwitchPreference preference = getPreferenceScreen().findPreference("exact_reminders");
+        if (preference != null) {
+            AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                preference.setChecked(false);
+            }
         }
     }
 
