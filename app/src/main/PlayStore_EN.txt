@@ -1,10 +1,4 @@
-[![Build status](https://github.com/Futsch1/medTimer/actions/workflows/android.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/android.yml)
-
-# MedTimer for Android
-
-## Play store description
-
-**Med reminders and history with full offline privacy**
+Med reminders and history with full offline privacy
 
 Stay In Control of Your Medications with MedTimer
 
@@ -34,5 +28,3 @@ MedTimer is ideal for:
 - People who value privacy and offline data storage.
 
 MedTimer is a free, ad-free app.
-
-Keywords: Medication reminder, pill reminder, medication adherence, health app, privacy, offline
