@@ -2,16 +2,21 @@
 
 # MedTimer for Android
 
-![logo](app/src/main/logo-playstore.png)
+<img src="app/src/main/logo-playstore.png" width="150" />
 
 ## Play store description
 
 **Med reminders and history with full offline privacy**
 
-![screenshot_1](app/src/main/store_screenshot_1.png)
-![screenshot_2](app/src/main/store_screenshot_2.png)
-![screenshot_3](app/src/main/store_screenshot_3.png)
-![screenshot_4](app/src/main/store_screenshot_4.png)
+<p float="left">
+  <img src="app/src/main/store_screenshot_1.png" width="150" />
+  &nbsp;
+  <img src="app/src/main/store_screenshot_2.png" width="150" /> 
+  &nbsp;
+  <img src="app/src/main/store_screenshot_3.png" width="150" />
+  &nbsp;
+  <img src="app/src/main/store_screenshot_4.png" width="150" />
+</p>
 
 Stay In Control of Your Medications with MedTimer
 
