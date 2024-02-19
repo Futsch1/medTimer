@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.net.URLConnection;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
+    public static final String EXACT_REMINDERS = "exact_reminders";
+
     private MedicineViewModel medicineViewModel;
     private HandlerThread backgroundThread;
 
@@ -77,7 +79,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             }
         }
 
-        preference = getPreferenceScreen().findPreference("exact_reminders");
+        preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if ((Boolean) newValue) {
@@ -90,7 +92,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                                     requireContext().startActivity(intent);
                                 }).
                                 setNegativeButton(R.string.cancel, (dialog, id) -> {
-                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean("exact_reminders", false).apply();
+                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(EXACT_REMINDERS, false).apply();
                                     setPreferenceScreen(null);
                                     addPreferencesFromResource(R.xml.root_preferences);
                                 });
@@ -157,7 +159,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        SwitchPreference preference = getPreferenceScreen().findPreference("exact_reminders");
+        SwitchPreference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {

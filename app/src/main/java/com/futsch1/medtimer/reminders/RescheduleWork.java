@@ -20,6 +20,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.NextReminderListener;
+import com.futsch1.medtimer.PreferencesFragment;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -87,7 +88,7 @@ public class RescheduleWork extends Worker {
 
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean exactReminders = sharedPref.getBoolean("exact_reminders", true);
+        boolean exactReminders = sharedPref.getBoolean(PreferencesFragment.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
     }
