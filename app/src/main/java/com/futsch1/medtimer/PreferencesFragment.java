@@ -84,7 +84,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
                     if (!alarmManager.canScheduleExactAlarms()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.enable_alarm_dialog).
+                        builder.setMessage(R.string.enable_alarm_dialog).
                                 setPositiveButton(R.string.ok, (dialog, id) -> {
                                     Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                                     requireContext().startActivity(intent);
@@ -94,8 +94,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                                     setPreferenceScreen(null);
                                     addPreferencesFromResource(R.xml.root_preferences);
                                 });
-
-                        builder.create().show();
+                        AlertDialog d = builder.create();
+                        d.show();
                     }
                 }
                 return true;
