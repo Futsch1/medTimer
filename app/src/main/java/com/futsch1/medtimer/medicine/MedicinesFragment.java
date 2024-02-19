@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
+import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,7 +36,7 @@ public class MedicinesFragment extends Fragment {
     private MedicineViewModel medicineViewModel;
     private MedicineViewAdapter adapter;
     private SwipeHelper swipeHelper;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,20 +120,12 @@ public class MedicinesFragment extends Fragment {
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.confirm);
-        builder.setMessage(R.string.are_you_sure_delete_medicine);
-        builder.setCancelable(false);
-        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-            final Handler handler = new Handler(thread.getLooper());
-            handler.post(() -> {
-                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-                medicineViewModel.deleteMedicine(medicine);
-                final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-            });
+        DeleteHelper<MedicineViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
+        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_medicine, () -> {
+            Medicine medicine = medicineViewModel.getMedicine((int) itemId);
+            medicineViewModel.deleteMedicine(medicine);
+            final Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
         });
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        builder.show();
     }
 }
