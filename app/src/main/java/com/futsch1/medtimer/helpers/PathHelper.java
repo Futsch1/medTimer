@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 public class PathHelper {
-    private static final String ReservedChars = "[\\[|?*<\":>+/'\\],]";
+    private static final String RESERVED_CHARS = "[\\[|?*<\":>+/'\\],]";
 
     public static String getExportFilename() {
         String fileName = String.format("MedTimer Export %s.csv", ZonedDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
-        return fileName.replaceAll(ReservedChars, "_");
+        return fileName.replaceAll(RESERVED_CHARS, "_");
     }
 }
