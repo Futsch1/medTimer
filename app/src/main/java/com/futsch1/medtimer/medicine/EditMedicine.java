@@ -201,7 +201,7 @@ public class EditMedicine extends AppCompatActivity {
         for (int i = 0; i < recyclerView.getChildCount(); i++) {
             ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
-            medicineViewModel.updateReminder(viewHolder.reminder);
+            medicineViewModel.updateReminder(viewHolder.getReminder());
         }
 
         thread.quitSafely();
