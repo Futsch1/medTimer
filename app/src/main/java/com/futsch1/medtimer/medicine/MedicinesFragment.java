@@ -35,10 +35,7 @@ public class MedicinesFragment extends Fragment {
     private MedicineViewModel medicineViewModel;
     private MedicineViewAdapter adapter;
     private SwipeHelper swipeHelper;
-
-    public MedicinesFragment() {
-    }
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

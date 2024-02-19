@@ -21,9 +21,6 @@ import java.time.Duration;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
-    public ReminderProcessor() {
-    }
-
     public static void requestReschedule(@NonNull Context context) {
         Intent intent = new Intent(RESCHEDULE_ACTION);
         intent.setClass(context, ReminderProcessor.class);
