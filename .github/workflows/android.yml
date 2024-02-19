@@ -56,4 +56,3 @@ jobs:
         with:
           artifacts: "app/build/outputs/bundle/release/*.aab"
           generateReleaseNotes: true
-          draft: true
