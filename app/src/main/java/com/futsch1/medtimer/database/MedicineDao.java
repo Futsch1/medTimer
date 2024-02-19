@@ -39,7 +39,7 @@ public interface MedicineDao {
     List<ReminderEvent> getReminderEvents(long fromTimestamp);
 
     @Insert
-    void insertMedicine(Medicine medicine);
+    long insertMedicine(Medicine medicine);
 
     @Insert
     void insertReminder(Reminder reminder);

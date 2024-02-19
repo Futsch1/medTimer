@@ -45,6 +45,11 @@
         app:key="clear_events"
         app:summary=""
         app:title="@string/clear_events" />
+    <Preference
+        app:icon="@drawable/x_circle"
+        app:key="generate_test_data"
+        app:summary=""
+        app:title="@string/generate_test_data" />
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

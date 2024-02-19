@@ -56,4 +56,5 @@
     <string name="permission_not_granted">Permission not granted</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
+    <string name="generate_test_data">Generate test data</string>
 </resources>

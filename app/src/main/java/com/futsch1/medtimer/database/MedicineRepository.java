@@ -12,10 +12,11 @@ import java.util.concurrent.Future;
 public class MedicineRepository {
 
     private final MedicineDao medicineDao;
+    private final MedicineRoomDatabase database;
 
     public MedicineRepository(Application application) {
-        MedicineRoomDatabase db = MedicineRoomDatabase.getDatabase(application);
-        medicineDao = db.medicineDao();
+        database = MedicineRoomDatabase.getDatabase(application);
+        medicineDao = database.medicineDao();
     }
 
     public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
@@ -55,8 +56,13 @@ public class MedicineRepository {
         return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60));
     }
 
-    public void insertMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertMedicine(medicine));
+    public long insertMedicine(Medicine medicine) {
+        final Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine));
+        try {
+            return future.get();
+        } catch (ExecutionException | InterruptedException ignored) {
+        }
+        return 0;
     }
 
     public void updateMedicine(Medicine medicine) {
@@ -101,5 +107,9 @@ public class MedicineRepository {
 
     public void deleteReminderEvents() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
+    }
+
+    public void deleteAll() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(database::clearAllTables);
     }
 }

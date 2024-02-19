@@ -32,8 +32,8 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getMedicine(medicineId);
     }
 
-    public void insertMedicine(Medicine medicine) {
-        medicineRepository.insertMedicine(medicine);
+    public int insertMedicine(Medicine medicine) {
+        return (int) medicineRepository.insertMedicine(medicine);
     }
 
     public void updateMedicine(Medicine medicine) {
@@ -71,5 +71,9 @@ public class MedicineViewModel extends AndroidViewModel {
 
     public void deleteReminderEvents() {
         medicineRepository.deleteReminderEvents();
+    }
+
+    public void deleteAll() {
+        medicineRepository.deleteAll();
     }
 }

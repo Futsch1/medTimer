@@ -133,6 +133,25 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        preference = getPreferenceScreen().findPreference("generate_test_data");
+        if (preference != null) {
+            if (BuildConfig.DEBUG) {
+                preference.setVisible(true);
+                preference.setOnPreferenceClickListener(preference1 -> {
+                    final Handler handler = new Handler(backgroundThread.getLooper());
+                    handler.post(() -> {
+                        GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
+                        generateTestData.deleteAll();
+                        generateTestData.generateTestMedicine();
+                    });
+                    return true;
+                });
+            } else {
+                preference.setVisible(false);
+            }
+        }
+
     }
 
     @Override
