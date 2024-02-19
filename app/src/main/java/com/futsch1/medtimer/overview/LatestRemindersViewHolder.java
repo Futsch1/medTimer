@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -66,10 +67,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         });
 
         if (reminderEvent.useColor) {
-            ((MaterialCardView) itemView).setCardBackgroundColor(reminderEvent.color);
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, new TextView[]{reminderEventText}, reminderEvent.color);
         } else {
-            int defaultColor = new MaterialCardView(itemView.getContext()).getCardBackgroundColor().getDefaultColor();
-            ((MaterialCardView) itemView).setCardBackgroundColor(defaultColor);
+            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, new TextView[]{reminderEventText});
         }
     }
 }

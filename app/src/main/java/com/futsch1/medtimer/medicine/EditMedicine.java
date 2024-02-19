@@ -35,6 +35,7 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.SwipeHelper;
+import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
@@ -86,14 +87,14 @@ public class EditMedicine extends AppCompatActivity {
 
         color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
         colorButton = findViewById(R.id.selectColor);
-        colorButton.setBackgroundColor(color);
+        ViewColorHelper.setButtonBackground(colorButton, color);
         colorButton.setOnClickListener(v -> {
             ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(this)
                     .setTitle(R.string.color)
                     .setPositiveButton(getString(R.string.confirm),
                             (ColorEnvelopeListener) (envelope, fromUser) -> {
                                 color = envelope.getColor();
-                                colorButton.setBackgroundColor(color);
+                                ViewColorHelper.setButtonBackground(colorButton, color);
                                 Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
                             })
                     .setNegativeButton(getString(R.string.cancel),
