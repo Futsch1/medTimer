@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
@@ -43,7 +44,7 @@ public class ReminderScheduler {
                     if (!justCreated && isTimeForReminder) {
                         // Check if the reminder has already been processed for this instant
                         if (!wasProcessed(reminder, lastReminderEvents, targetInstant)) {
-                            Log.d("Scheduler",
+                            Log.d(LogTags.SCHEDULER,
                                     String.format("Scheduling reminder ID%d to %s, last was %s with ID %d",
                                             reminder.reminderId,
                                             targetInstant,
@@ -57,7 +58,7 @@ public class ReminderScheduler {
                 if (nextReminder == null) {
                     checkDate = checkDate.plusDays(1);
                     nextReminder = sortedReminders.get(0);
-                    Log.d("Scheduler",
+                    Log.d(LogTags.SCHEDULER,
                             String.format("Scheduling reminder ID %d to the next day",
                                     nextReminder.reminderId));
                 }

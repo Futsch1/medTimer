@@ -47,7 +47,7 @@ public class Notifications {
         }
 
         notificationManager.notify(notificationId, builder.build());
-        Log.d("Reminder", String.format("Created notification %d", notificationId));
+        Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
 
         context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE).edit().putInt("notificationId", notificationId + 1).apply();
 

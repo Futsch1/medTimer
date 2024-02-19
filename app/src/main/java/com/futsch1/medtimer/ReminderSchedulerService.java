@@ -17,8 +17,6 @@ import java.util.List;
 public class ReminderSchedulerService extends LifecycleService {
     public static boolean serviceRunning = false;
 
-    public ReminderSchedulerService() {
-    }
 
     @Nullable
     @Override
@@ -37,7 +35,7 @@ public class ReminderSchedulerService extends LifecycleService {
 
         medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
 
-        Log.i("Scheduler", "Service created");
+        Log.i(LogTags.SCHEDULER, "Service created");
     }
 
     public void updateMedicine(List<MedicineWithReminders> ignoredMedicineWithReminders) {
@@ -45,7 +43,7 @@ public class ReminderSchedulerService extends LifecycleService {
     }
 
     private void scheduleRequest() {
-        Log.i("Scheduler", "Requesting reschedule");
+        Log.i(LogTags.SCHEDULER, "Requesting reschedule");
         ReminderProcessor.requestReschedule(this);
     }
 
@@ -53,7 +51,7 @@ public class ReminderSchedulerService extends LifecycleService {
     public void onDestroy() {
         super.onDestroy();
 
-        Log.i("Scheduler", "Service destroyed");
+        Log.i(LogTags.SCHEDULER, "Service destroyed");
     }
 
     @Override

@@ -17,6 +17,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.Notifications;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -38,7 +39,7 @@ public class ReminderWork extends Worker {
     @Override
     public Result doWork() {
         Result r;
-        Log.i("Reminder", "Do reminder work");
+        Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
@@ -63,11 +64,11 @@ public class ReminderWork extends Worker {
                 medicineRepository.updateReminderEvent(reminderEvent);
             }
 
-            Log.i("Reminder", String.format("Show reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+            Log.i(LogTags.REMINDER, String.format("Show reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
             r = Result.success();
 
         } else {
-            Log.e("Reminder", "Could not find reminder in database");
+            Log.e(LogTags.REMINDER, "Could not find reminder in database");
             r = Result.failure();
         }
 

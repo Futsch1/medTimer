@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
 
+import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -17,14 +18,14 @@ public class NotificationAction {
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderId);
 
         if (reminderEvent.notificationId != 0) {
-            Log.d("Reminder", String.format("Canceling notification %d", reminderEvent.notificationId));
+            Log.d(LogTags.REMINDER, String.format("Canceling notification %d", reminderEvent.notificationId));
             notificationManager.cancel(reminderEvent.notificationId);
         }
 
         reminderEvent.status = status;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
         medicineRepository.updateReminderEvent(reminderEvent);
-        Log.i("Reminder", String.format("%s reminder %d for %s",
+        Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
                 status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
                 reminderEvent.reminderEventId,
                 reminderEvent.medicineName));
