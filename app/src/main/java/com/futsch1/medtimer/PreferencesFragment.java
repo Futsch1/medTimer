@@ -29,6 +29,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.TimeZone;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
     public static final String EXACT_REMINDERS = "exact_reminders";
@@ -115,7 +116,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
                     File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename());
                     MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
-                    CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext());
+                    CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId());
                     try {
                         csvCreator.create(csvFile);
 
