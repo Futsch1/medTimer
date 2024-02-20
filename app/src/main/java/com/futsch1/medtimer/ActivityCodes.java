@@ -15,4 +15,8 @@ public class ActivityCodes {
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";
     public static final String TAKEN_ACTION = "com.futsch1.medTimer.TAKEN_ACTION";
     public static final String NOTIFICATION_CHANNEL_ID = "com.futsch1.medTimer.NOTIFICATION";
+
+    private ActivityCodes() {
+        // Intended empty
+    }
 }
