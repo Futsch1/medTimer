@@ -41,13 +41,24 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        setupVersion();
+        setupAppURL();
+        setupClearEvents();
+        setupShowNotifications();
+        setupExactReminders();
+        setupExport();
+        setupGenerateTestData();
+    }
 
+    private void setupVersion() {
         Preference preference = getPreferenceScreen().findPreference("version");
         if (preference != null) {
             preference.setTitle(getString(R.string.version, BuildConfig.VERSION_NAME));
         }
-        preference = getPreferenceScreen().findPreference("app_url");
+    }
+
+    private void setupAppURL() {
+        Preference preference = getPreferenceScreen().findPreference("app_url");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference12 -> {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Futsch1/medTimer"));
@@ -55,8 +66,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
-        preference = getPreferenceScreen().findPreference("clear_events");
+    private void setupClearEvents() {
+        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+
+        Preference preference = getPreferenceScreen().findPreference("clear_events");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -71,16 +86,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
+    private void setupShowNotifications() {
         if (ActivityCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            preference = getPreferenceScreen().findPreference("show_notification");
+            Preference preference = getPreferenceScreen().findPreference("show_notification");
             if (preference != null) {
                 preference.setEnabled(false);
                 preference.setSummary(R.string.permission_not_granted);
             }
         }
+    }
 
-        preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
+    private void setupExactReminders() {
+        Preference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if ((Boolean) newValue) {
@@ -104,10 +123,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
+    void setupExport() {
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
-        preference = getPreferenceScreen().findPreference("export");
+        Preference preference = getPreferenceScreen().findPreference("export");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
                 final Handler handler = new Handler(backgroundThread.getLooper());
@@ -136,8 +157,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
-        preference = getPreferenceScreen().findPreference("generate_test_data");
+    void setupGenerateTestData() {
+        Preference preference = getPreferenceScreen().findPreference("generate_test_data");
         if (preference != null) {
             if (BuildConfig.DEBUG) {
                 preference.setVisible(true);
@@ -154,7 +177,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 preference.setVisible(false);
             }
         }
-
     }
 
     @Override
