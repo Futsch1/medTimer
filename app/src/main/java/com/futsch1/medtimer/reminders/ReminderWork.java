@@ -44,17 +44,10 @@ public class ReminderWork extends Worker {
 
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         Reminder reminder = medicineRepository.getReminder(inputData.getInt(EXTRA_REMINDER_ID, 0));
+
         if (reminder != null) {
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-            ReminderEvent reminderEvent = new ReminderEvent();
-            reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
-                    .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
-            reminderEvent.amount = reminder.amount;
-            reminderEvent.medicineName = medicine.name;
-            reminderEvent.color = medicine.color;
-            reminderEvent.useColor = medicine.useColor;
-            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+            ReminderEvent reminderEvent = buildReminderEvent(medicine, reminder);
 
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
@@ -78,11 +71,29 @@ public class ReminderWork extends Worker {
         return r;
     }
 
+    private ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.reminderId = reminder.reminderId;
+        reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
+                .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
+        reminderEvent.amount = reminder.amount;
+        reminderEvent.medicineName = medicine.name;
+        reminderEvent.color = medicine.color;
+        reminderEvent.useColor = medicine.useColor;
+        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+
+        return reminderEvent;
+    }
+
     private boolean canShowNotifications() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean showNotificationSetInPreferences = sharedPref.getBoolean("show_notification", true);
         boolean hasPermission = getApplicationContext().checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
 
         return showNotificationSetInPreferences && hasPermission;
+    }
+
+    private void tryShowNotification() {
+
     }
 }
