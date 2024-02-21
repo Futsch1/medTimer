@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReminderScheduler {
     private final ScheduleListener listener;
@@ -95,8 +96,13 @@ public class ReminderScheduler {
 
     private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
         int medicineId = reminder.medicineRelId;
-        //noinspection OptionalGetWithoutIsPresent
-        return medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
+
+        Optional<MedicineWithReminders> medicineOptional = medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst();
+        if (medicineOptional.isPresent()) {
+            return medicineOptional.get().medicine;
+        } else {
+            throw new Error();
+        }
     }
 
     private @Nullable ReminderEvent getLastReminderEvent(List<ReminderEvent> reminderEvents) {
@@ -109,10 +115,8 @@ public class ReminderScheduler {
 
     private boolean wasProcessed(Reminder reminder, List<ReminderEvent> reminderEvents, Instant targetInstant) {
         for (ReminderEvent reminderEvent : reminderEvents) {
-            if (reminderEvent.reminderId == reminder.reminderId) {
-                if (!Instant.ofEpochSecond(reminderEvent.remindedTimestamp).isBefore(targetInstant)) {
-                    return true;
-                }
+            if (reminderEvent.reminderId == reminder.reminderId && !Instant.ofEpochSecond(reminderEvent.remindedTimestamp).isBefore(targetInstant)) {
+                return true;
             }
         }
         return false;

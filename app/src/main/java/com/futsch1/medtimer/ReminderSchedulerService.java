@@ -16,8 +16,7 @@ import java.util.List;
 
 public class ReminderSchedulerService extends LifecycleService {
     public static boolean serviceRunning = false;
-
-
+    
     @Nullable
     @Override
     public IBinder onBind(@NonNull Intent intent) {
