@@ -11,6 +11,11 @@ import androidx.core.graphics.ColorUtils;
 import com.google.android.material.card.MaterialCardView;
 
 public class ViewColorHelper {
+
+    private ViewColorHelper() {
+        // Intentionally empty
+    }
+
     public static void setCardBackground(MaterialCardView cardView, TextView[] textViews, @ColorInt int backgroundColor) {
         int defaultTextViewColor = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorOnSurfaceVariant);
         double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor | 0xFF000000);

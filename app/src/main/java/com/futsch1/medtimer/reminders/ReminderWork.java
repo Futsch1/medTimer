@@ -92,8 +92,4 @@ public class ReminderWork extends Worker {
 
         return showNotificationSetInPreferences && hasPermission;
     }
-
-    private void tryShowNotification() {
-
-    }
 }
