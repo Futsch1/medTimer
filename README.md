@@ -1,4 +1,5 @@
 [![Build status](https://github.com/Futsch1/medTimer/actions/workflows/android.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/android.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7239138d83361232bba9/maintainability)](https://codeclimate.com/github/Futsch1/medTimer/maintainability)
 
 # MedTimer for Android
 

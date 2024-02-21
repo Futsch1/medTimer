@@ -1,5 +1,7 @@
 package com.futsch1.medtimer;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -19,6 +21,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReminderSchedulerUnitTest {
 
@@ -169,5 +172,106 @@ public class ReminderSchedulerUnitTest {
         reminderEvent.reminderId = reminderId;
         reminderEvent.remindedTimestamp = raisedTimestamp;
         return reminderEvent;
+    }
+
+    // schedules a reminder for the next occurrence
+    @Test
+    public void test_scheduleNextOccurrenceReminder() {
+        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
+        Reminder reminder = buildReminder(1, 1, "1", 16);
+        medicineWithReminders.reminders.add(reminder);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        scheduler.schedule(medicineList, reminderEventList);
+
+        verify(mock, times(1)).schedule(any(Instant.class), eq(medicineWithReminders.medicine), eq(reminder));
+    }
+
+    // schedules a reminder for the same day
+    @Test
+    public void test_scheduleSameDayReminder() {
+        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
+        Reminder reminder = buildReminder(1, 1, "1", 480);
+        medicineWithReminders.reminders.add(reminder);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        scheduler.schedule(medicineList, reminderEventList);
+
+        verify(mock, times(1)).schedule(any(Instant.class), eq(medicineWithReminders.medicine), eq(reminder));
+    }
+
+    // schedules a reminder for the next day
+    @Test
+    public void test_scheduleNextDayReminder() {
+        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
+        Reminder reminder = buildReminder(1, 1, "1", 1440);
+        medicineWithReminders.reminders.add(reminder);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        scheduler.schedule(medicineList, reminderEventList);
+
+        verify(mock, times(1)).schedule(any(Instant.class), eq(medicineWithReminders.medicine), eq(reminder));
+    }
+
+    // schedules a reminder for a different medicine
+    @Test
+    public void test_scheduleDifferentMedicineReminder() {
+        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders1 = buildMedicineWithReminders(1, "Test1");
+        Reminder reminder1 = buildReminder(1, 1, "1", 480);
+        medicineWithReminders1.reminders.add(reminder1);
+
+        MedicineWithReminders medicineWithReminders2 = buildMedicineWithReminders(2, "Test2");
+        Reminder reminder2 = buildReminder(2, 2, "2", 480);
+        medicineWithReminders2.reminders.add(reminder2);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders1);
+        medicineList.add(medicineWithReminders2);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        scheduler.schedule(medicineList, reminderEventList);
+
+        verify(mock, times(1)).schedule(any(Instant.class), eq(medicineWithReminders1.medicine), eq(reminder1));
     }
 }

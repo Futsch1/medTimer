@@ -19,7 +19,9 @@ import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.NextReminderListener;
+import com.futsch1.medtimer.PreferencesFragment;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -36,7 +38,7 @@ public class RescheduleWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i("Reminder", "Received scheduler request");
+        Log.i(LogTags.REMINDER, "Received scheduler request");
         AlarmManager alarmManager = getApplicationContext().getSystemService(AlarmManager.class);
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(getApplicationContext(), alarmManager, timestamp, reminder, medicine), new ReminderScheduler.TimeAccess() {
@@ -74,7 +76,7 @@ public class RescheduleWork extends Worker {
             // Notify GUI listener
             NextReminderListener.sendNextReminder(context, reminder.reminderId, timestamp);
 
-            Log.i("Scheduler", String.format("Scheduled reminder for %s to %s", medicine.name, timestamp));
+            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s to %s", medicine.name, timestamp));
         } else {
             // Immediately schedule
             WorkRequest reminderWork =
@@ -87,7 +89,7 @@ public class RescheduleWork extends Worker {
 
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean exactReminders = sharedPref.getBoolean("exact_reminders", true);
+        boolean exactReminders = sharedPref.getBoolean(PreferencesFragment.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
     }

@@ -29,8 +29,11 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.TimeZone;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
+    public static final String EXACT_REMINDERS = "exact_reminders";
+
     private MedicineViewModel medicineViewModel;
     private HandlerThread backgroundThread;
 
@@ -38,13 +41,24 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        setupVersion();
+        setupAppURL();
+        setupClearEvents();
+        setupShowNotifications();
+        setupExactReminders();
+        setupExport();
+        setupGenerateTestData();
+    }
 
+    private void setupVersion() {
         Preference preference = getPreferenceScreen().findPreference("version");
         if (preference != null) {
             preference.setTitle(getString(R.string.version, BuildConfig.VERSION_NAME));
         }
-        preference = getPreferenceScreen().findPreference("app_url");
+    }
+
+    private void setupAppURL() {
+        Preference preference = getPreferenceScreen().findPreference("app_url");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference12 -> {
                 Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Futsch1/medTimer"));
@@ -52,8 +66,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
-        preference = getPreferenceScreen().findPreference("clear_events");
+    private void setupClearEvents() {
+        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+
+        Preference preference = getPreferenceScreen().findPreference("clear_events");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -68,16 +86,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
+    private void setupShowNotifications() {
         if (ActivityCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            preference = getPreferenceScreen().findPreference("show_notification");
+            Preference preference = getPreferenceScreen().findPreference("show_notification");
             if (preference != null) {
                 preference.setEnabled(false);
                 preference.setSummary(R.string.permission_not_granted);
             }
         }
+    }
 
-        preference = getPreferenceScreen().findPreference("exact_reminders");
+    private void setupExactReminders() {
+        Preference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if ((Boolean) newValue) {
@@ -90,7 +112,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                                     requireContext().startActivity(intent);
                                 }).
                                 setNegativeButton(R.string.cancel, (dialog, id) -> {
-                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean("exact_reminders", false).apply();
+                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(EXACT_REMINDERS, false).apply();
                                     setPreferenceScreen(null);
                                     addPreferencesFromResource(R.xml.root_preferences);
                                 });
@@ -101,31 +123,24 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
+    void setupExport() {
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
-        preference = getPreferenceScreen().findPreference("export");
+
+        Preference preference = getPreferenceScreen().findPreference("export");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
-                    Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-
                     File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename());
                     MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
-                    CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext());
+                    CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId());
                     try {
                         csvCreator.create(csvFile);
 
-                        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", csvFile);
-
-                        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(csvFile.getName()));
-                        //Allow sharing apps to read the file Uri
-                        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        //Pass the file Uri instead of the path
-                        intentShareFile.putExtra(Intent.EXTRA_STREAM,
-                                uri);
-                        startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                        shareFile(csvFile);
                     } catch (IOException e) {
                         Log.e("Error", "IO exception creating file");
                     }
@@ -133,8 +148,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
 
-        preference = getPreferenceScreen().findPreference("generate_test_data");
+    void setupGenerateTestData() {
+        Preference preference = getPreferenceScreen().findPreference("generate_test_data");
         if (preference != null) {
             if (BuildConfig.DEBUG) {
                 preference.setVisible(true);
@@ -151,13 +168,25 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 preference.setVisible(false);
             }
         }
+    }
 
+    private void shareFile(File csvFile) {
+        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", csvFile);
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(csvFile.getName()));
+        //Allow sharing apps to read the file Uri
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //Pass the file Uri instead of the path
+        intentShareFile.putExtra(Intent.EXTRA_STREAM,
+                uri);
+        startActivity(Intent.createChooser(intentShareFile, "Share File"));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        SwitchPreference preference = getPreferenceScreen().findPreference("exact_reminders");
+        SwitchPreference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {

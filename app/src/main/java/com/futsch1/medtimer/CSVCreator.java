@@ -8,19 +8,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
-import java.util.TimeZone;
 
 public class CSVCreator {
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
+    private final ZoneId defaultZoneId;
 
-    public CSVCreator(List<ReminderEvent> reminderEvents, Context context) {
+    public CSVCreator(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
         this.reminderEvents = reminderEvents;
         this.context = context;
+        this.defaultZoneId = zoneId;
     }
 
     public void create(File file) throws IOException {
@@ -31,15 +33,18 @@ public class CSVCreator {
                     context.getString(R.string.amount),
                     context.getString(R.string.taken)));
 
+            Instant remindedTime;
+            ZonedDateTime zonedDateTime;
             for (ReminderEvent reminderEvent : reminderEvents) {
-                Instant remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
-                ZonedDateTime zonedDateTime = remindedTime.atZone(TimeZone.getDefault().toZoneId());
-                csvFile.write(String.format("%s %s;",
+                remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
+                zonedDateTime = remindedTime.atZone(defaultZoneId);
+                String line = String.format("%s %s;%s;%s;%s\n",
                         zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
-                        zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))));
-                csvFile.write(String.format("%s;", reminderEvent.medicineName));
-                csvFile.write(String.format("%s;", reminderEvent.amount));
-                csvFile.write(String.format("%s\n", reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : ""));
+                        zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
+                        reminderEvent.medicineName,
+                        reminderEvent.amount,
+                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
+                csvFile.write(line);
             }
         }
     }

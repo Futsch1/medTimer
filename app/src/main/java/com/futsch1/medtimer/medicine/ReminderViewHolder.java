@@ -5,8 +5,6 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editAmount;
     private final View itemView;
 
-    public Reminder reminder;
+    private Reminder reminder;
 
 
     private ReminderViewHolder(View itemView) {
@@ -77,22 +75,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         });
 
         editAmount.setText(reminder.amount);
-        editAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                reminder.amount = s.toString();
-            }
-        });
+    public Reminder getReminder() {
+        reminder.amount = editAmount.getText().toString();
+        return reminder;
     }
 
     public interface DeleteCallback {

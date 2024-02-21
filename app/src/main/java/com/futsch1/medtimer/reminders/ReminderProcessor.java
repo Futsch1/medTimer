@@ -13,6 +13,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
+import androidx.work.ListenableWorker;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
@@ -21,9 +22,6 @@ import java.time.Duration;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
-    public ReminderProcessor() {
-    }
-
     public static void requestReschedule(@NonNull Context context) {
         Intent intent = new Intent(RESCHEDULE_ACTION);
         intent.setClass(context, ReminderProcessor.class);
@@ -31,17 +29,18 @@ public class ReminderProcessor extends BroadcastReceiver {
     }
 
     public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
+        return buildActionIntent(context, reminderEventId, DISMISSED_ACTION);
+    }
+
+    private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
         Intent notifyDismissed = new Intent(context, ReminderProcessor.class);
-        notifyDismissed.setAction(DISMISSED_ACTION);
+        notifyDismissed.setAction(actionName);
         notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         return notifyDismissed;
     }
 
     public static Intent getTakenActionIntent(@NonNull Context context, int reminderEventId) {
-        Intent notifyTaken = new Intent(context, ReminderProcessor.class);
-        notifyTaken.setAction(TAKEN_ACTION);
-        notifyTaken.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        return notifyTaken;
+        return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
     }
 
     public static Intent getReminderAction(@NonNull Context context, int reminderId) {
@@ -61,22 +60,9 @@ public class ReminderProcessor extends BroadcastReceiver {
                             .build();
             workManager.enqueue(rescheduleWork);
         } else if (DISMISSED_ACTION.equals(intent.getAction())) {
-            WorkRequest dismissWork =
-                    new OneTimeWorkRequest.Builder(DismissWork.class)
-                            .setInputData(new Data.Builder()
-                                    .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
-                                    .build())
-
-                            .build();
-            workManager.enqueue(dismissWork);
+            workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
-            WorkRequest takenWork =
-                    new OneTimeWorkRequest.Builder(TakenWork.class)
-                            .setInputData(new Data.Builder()
-                                    .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
-                                    .build())
-                            .build();
-            workManager.enqueue(takenWork);
+            workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
         } else {
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
@@ -84,6 +70,14 @@ public class ReminderProcessor extends BroadcastReceiver {
                             .build();
             workManager.enqueue(reminderWork);
         }
+    }
+
+    private <T extends ListenableWorker> WorkRequest buildActionWorkRequest(Intent intent, Class<T> workerClass) {
+        return new OneTimeWorkRequest.Builder(workerClass)
+                .setInputData(new Data.Builder()
+                        .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                        .build())
+                .build();
     }
 
 }

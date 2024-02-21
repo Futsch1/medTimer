@@ -5,16 +5,22 @@ import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.card.MaterialCardView;
 
 public class ViewColorHelper {
-    public static void setCardBackground(MaterialCardView cardView, TextView[] textViews, int backgroundColor) {
+
+    private ViewColorHelper() {
+        // Intentionally empty
+    }
+
+    public static void setCardBackground(MaterialCardView cardView, TextView[] textViews, @ColorInt int backgroundColor) {
         int defaultTextViewColor = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorOnSurfaceVariant);
-        double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor);
+        double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor | 0xFF000000);
         int cardDefaultBackground = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorSurface);
-        double contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor);
+        double contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor | 0xFF000000);
         setTextColor(textViews, contrastTextView < contrastBackground ? cardDefaultBackground : defaultTextViewColor);
         cardView.setCardBackgroundColor(backgroundColor);
     }
@@ -25,22 +31,22 @@ public class ViewColorHelper {
         return themeColor.data;
     }
 
-    private static void setTextColor(TextView[] textViews, int color) {
+    private static void setTextColor(TextView[] textViews, @ColorInt int color) {
         for (TextView textView : textViews) {
             textView.setTextColor(color);
         }
     }
 
-    public static void setButtonBackground(Button button, int backgroundColor) {
+    public static void setButtonBackground(Button button, @ColorInt int backgroundColor) {
         int primaryColor = getThemeColor(button.getContext(), com.google.android.material.R.attr.colorPrimary);
         int onPrimaryColor = getThemeColor(button.getContext(), com.google.android.material.R.attr.colorOnPrimary);
-        double primaryContrast = ColorUtils.calculateContrast(primaryColor, backgroundColor);
-        double onPrimaryContrast = ColorUtils.calculateContrast(onPrimaryColor, backgroundColor);
+        double primaryContrast = ColorUtils.calculateContrast(primaryColor, backgroundColor | 0xFF000000);
+        double onPrimaryContrast = ColorUtils.calculateContrast(onPrimaryColor, backgroundColor | 0xFF000000);
         setTextColor(button, primaryContrast > onPrimaryContrast ? primaryColor : onPrimaryColor);
         button.setBackgroundColor(backgroundColor);
     }
 
-    private static void setTextColor(Button button, int buttonTextColor) {
+    private static void setTextColor(Button button, @ColorInt int buttonTextColor) {
         button.setTextColor(buttonTextColor);
     }
 

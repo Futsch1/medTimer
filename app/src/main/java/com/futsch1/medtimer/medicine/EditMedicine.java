@@ -34,6 +34,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -170,21 +171,13 @@ public class EditMedicine extends AppCompatActivity {
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.confirm);
-        builder.setMessage(R.string.are_you_sure_delete_reminder);
-        builder.setCancelable(false);
-        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-            final Handler handler = new Handler(thread.getLooper());
-            handler.post(() -> {
-                Reminder reminder = medicineViewModel.getReminder((int) itemId);
-                medicineViewModel.deleteReminder(reminder);
-                final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-            });
+        DeleteHelper<ReminderViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
+        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_reminder, () -> {
+            Reminder reminder = medicineViewModel.getReminder((int) itemId);
+            medicineViewModel.deleteReminder(reminder);
+            final Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
         });
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        builder.show();
     }
 
     @Override
@@ -201,7 +194,7 @@ public class EditMedicine extends AppCompatActivity {
         for (int i = 0; i < recyclerView.getChildCount(); i++) {
             ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
-            medicineViewModel.updateReminder(viewHolder.reminder);
+            medicineViewModel.updateReminder(viewHolder.getReminder());
         }
 
         thread.quitSafely();
