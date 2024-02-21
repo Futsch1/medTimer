@@ -128,28 +128,19 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     void setupExport() {
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+
         Preference preference = getPreferenceScreen().findPreference("export");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
-                    Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-
                     File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename());
                     MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
                     CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId());
                     try {
                         csvCreator.create(csvFile);
 
-                        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", csvFile);
-
-                        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(csvFile.getName()));
-                        //Allow sharing apps to read the file Uri
-                        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        //Pass the file Uri instead of the path
-                        intentShareFile.putExtra(Intent.EXTRA_STREAM,
-                                uri);
-                        startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                        shareFile(csvFile);
                     } catch (IOException e) {
                         Log.e("Error", "IO exception creating file");
                     }
@@ -177,6 +168,19 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 preference.setVisible(false);
             }
         }
+    }
+
+    private void shareFile(File csvFile) {
+        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", csvFile);
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(csvFile.getName()));
+        //Allow sharing apps to read the file Uri
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //Pass the file Uri instead of the path
+        intentShareFile.putExtra(Intent.EXTRA_STREAM,
+                uri);
+        startActivity(Intent.createChooser(intentShareFile, "Share File"));
     }
 
     @Override
