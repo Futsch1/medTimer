@@ -45,17 +45,10 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(MedicineWithReminders medicineWithReminders, DeleteCallback deleteCallback) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
-        int len = medicineWithReminders.reminders.size();
-        if (len == 0) {
+        if (medicineWithReminders.reminders.isEmpty()) {
             remindersSummaryView.setText(R.string.no_reminders);
         } else {
-            ArrayList<String> reminderTimes = new ArrayList<>();
-            int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt((r) -> r.timeInMinutes).sorted().toArray();
-            for (int minute : timesInMinutes) {
-                reminderTimes.add(TimeHelper.minutesToTime(minute));
-            }
-            String reminders = remindersSummaryView.getResources().getQuantityString(R.plurals.reminders_per_day, len, len, String.join(", ", reminderTimes));
-            remindersSummaryView.setText(reminders);
+            remindersSummaryView.setText(getRemindersSummary(medicineWithReminders));
         }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.itemView.getContext());
@@ -86,6 +79,17 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, new TextView[]{medicineNameView, remindersSummaryView});
         }
+    }
+
+    private String getRemindersSummary(MedicineWithReminders medicineWithReminders) {
+        ArrayList<String> reminderTimes = new ArrayList<>();
+        int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt((r) -> r.timeInMinutes).sorted().toArray();
+        for (int minute : timesInMinutes) {
+            reminderTimes.add(TimeHelper.minutesToTime(minute));
+        }
+        int len = medicineWithReminders.reminders.size();
+        return remindersSummaryView.getResources().getQuantityString(R.plurals.reminders_per_day, len, len, String.join(", ", reminderTimes));
+
     }
 
     private void startEditActivity(MedicineWithReminders medicineWithReminders) {
