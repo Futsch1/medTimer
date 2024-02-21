@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.Medicine;
@@ -29,44 +30,23 @@ public class ReminderScheduler {
     }
 
     public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, List<ReminderEvent> lastReminderEvents) {
-        if (medicineWithReminders.size() > 0) {
-            ArrayList<Reminder> sortedReminders = getSortedReminders(medicineWithReminders);
+        ArrayList<Reminder> sortedReminders = getSortedReminders(medicineWithReminders);
 
-            if (sortedReminders.size() > 0) {
-                Reminder nextReminder = null;
-                LocalDate checkDate = this.timeAccess.localDate();
-                ReminderEvent lastReminderEvent = lastReminderEvents.size() > 0 ? lastReminderEvents.get(lastReminderEvents.size() - 1) : null;
-                Instant lastReminder = lastReminderEvent != null ? Instant.ofEpochSecond(lastReminderEvent.remindedTimestamp) : Instant.EPOCH;
-                for (Reminder reminder : sortedReminders) {
-                    Instant targetInstant = getTargetInstant(reminder, checkDate);
-                    boolean justCreated = targetInstant.isBefore(Instant.ofEpochSecond(reminder.createdTimestamp));
-                    boolean isTimeForReminder = !targetInstant.isBefore(lastReminder);
-                    if (!justCreated && isTimeForReminder) {
-                        // Check if the reminder has already been processed for this instant
-                        if (!wasProcessed(reminder, lastReminderEvents, targetInstant)) {
-                            Log.d(LogTags.SCHEDULER,
-                                    String.format("Scheduling reminder ID%d to %s, last was %s with ID %d",
-                                            reminder.reminderId,
-                                            targetInstant,
-                                            lastReminder,
-                                            lastReminderEvent != null ? lastReminderEvent.reminderId : -1));
-                            nextReminder = reminder;
-                            break;
-                        }
-                    }
-                }
-                if (nextReminder == null) {
-                    checkDate = checkDate.plusDays(1);
-                    nextReminder = sortedReminders.get(0);
-                    Log.d(LogTags.SCHEDULER,
-                            String.format("Scheduling reminder ID %d to the next day",
-                                    nextReminder.reminderId));
-                }
+        if (sortedReminders.size() > 0) {
+            LocalDate checkDate = this.timeAccess.localDate();
+            Reminder nextReminder = findNextReminder(sortedReminders, lastReminderEvents, checkDate);
 
-                Instant targetInstant = getTargetInstant(nextReminder, checkDate);
-
-                this.listener.schedule(targetInstant, getMedicine(nextReminder, medicineWithReminders), nextReminder);
+            if (nextReminder == null) {
+                checkDate = checkDate.plusDays(1);
+                nextReminder = sortedReminders.get(0);
+                Log.d(LogTags.SCHEDULER,
+                        String.format("Scheduling reminder ID %d to the next day",
+                                nextReminder.reminderId));
             }
+
+            Instant targetInstant = getTargetInstant(nextReminder, checkDate);
+
+            this.listener.schedule(targetInstant, getMedicine(nextReminder, medicineWithReminders), nextReminder);
         }
     }
 
@@ -80,10 +60,43 @@ public class ReminderScheduler {
         return sortedReminders;
     }
 
+    private @Nullable Reminder findNextReminder(List<Reminder> sortedReminders, List<ReminderEvent> lastReminderEvents, LocalDate checkDate) {
+        Reminder nextReminder = null;
+
+        ReminderEvent lastReminderEvent = lastReminderEvents.size() > 0 ? lastReminderEvents.get(lastReminderEvents.size() - 1) : null;
+        Instant lastReminder = lastReminderEvent != null ? Instant.ofEpochSecond(lastReminderEvent.remindedTimestamp) : Instant.EPOCH;
+        for (Reminder reminder : sortedReminders) {
+
+            Instant targetInstant = getTargetInstant(reminder, checkDate);
+
+            boolean justCreated = targetInstant.isBefore(Instant.ofEpochSecond(reminder.createdTimestamp));
+            boolean isTimeForReminder = !targetInstant.isBefore(lastReminder);
+
+            if (!justCreated && isTimeForReminder && !wasProcessed(reminder, lastReminderEvents, targetInstant)) {
+                Log.d(LogTags.SCHEDULER,
+                        String.format("Scheduling reminder ID%d to %s, last was %s with ID %d",
+                                reminder.reminderId,
+                                targetInstant,
+                                lastReminder,
+                                lastReminderEvent != null ? lastReminderEvent.reminderId : -1));
+                nextReminder = reminder;
+                break;
+            }
+        }
+
+        return nextReminder;
+    }
+
     private Instant getTargetInstant(Reminder reminder, LocalDate targetDate) {
         ZoneOffset offset = timeAccess.systemZone().getRules().getOffset(targetDate.atStartOfDay());
-        OffsetDateTime localTime = OffsetDateTime.of(targetDate, LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60), offset);
+        OffsetDateTime localTime = OffsetDateTime.of(targetDate, LocalTime.of((reminder.timeInMinutes / 60) % 24, reminder.timeInMinutes % 60), offset);
         return localTime.toInstant();
+    }
+
+    private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
+        int medicineId = reminder.medicineRelId;
+        //noinspection OptionalGetWithoutIsPresent
+        return medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
     }
 
     private boolean wasProcessed(Reminder reminder, List<ReminderEvent> reminderEvents, Instant targetInstant) {
@@ -95,12 +108,6 @@ public class ReminderScheduler {
             }
         }
         return false;
-    }
-
-    private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
-        int medicineId = reminder.medicineRelId;
-        //noinspection OptionalGetWithoutIsPresent
-        return medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst().get().medicine;
     }
 
     public interface ScheduleListener {
