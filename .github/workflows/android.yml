@@ -24,7 +24,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
-
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          dependency-graph: generate-and-submit
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Run unit tests
