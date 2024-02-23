@@ -10,14 +10,16 @@ import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.List;
+
 public class ViewColorHelper {
 
     private ViewColorHelper() {
         // Intentionally empty
     }
 
-    public static void setCardBackground(MaterialCardView cardView, TextView[] textViews, @ColorInt int backgroundColor) {
-        int defaultTextViewColor = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorOnSurfaceVariant);
+    public static void setCardBackground(MaterialCardView cardView, List<TextView> textViews, @ColorInt int backgroundColor) {
+        int defaultTextViewColor = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorOnSurface);
         double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor | 0xFF000000);
         int cardDefaultBackground = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorSurface);
         double contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor | 0xFF000000);
@@ -31,7 +33,7 @@ public class ViewColorHelper {
         return themeColor.data;
     }
 
-    private static void setTextColor(TextView[] textViews, @ColorInt int color) {
+    private static void setTextColor(List<TextView> textViews, @ColorInt int color) {
         for (TextView textView : textViews) {
             textView.setTextColor(color);
         }
@@ -50,7 +52,7 @@ public class ViewColorHelper {
         button.setTextColor(buttonTextColor);
     }
 
-    public static void setDefaultColors(MaterialCardView cardView, TextView[] textViews) {
+    public static void setDefaultColors(MaterialCardView cardView, List<TextView> textViews) {
         int defaultTextViewColor = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorOnSurfaceVariant);
         int cardDefaultBackground = getThemeColor(cardView.getContext(), com.google.android.material.R.attr.colorSurface);
         cardView.setCardBackgroundColor(cardDefaultBackground);

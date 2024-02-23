@@ -24,6 +24,7 @@ import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
@@ -75,9 +76,9 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(view -> startEditActivity(medicineWithReminders));
 
         if (medicineWithReminders.medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, new TextView[]{medicineNameView, remindersSummaryView}, medicineWithReminders.medicine.color);
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, new TextView[]{medicineNameView, remindersSummaryView});
+            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
     }
 
