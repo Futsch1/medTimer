@@ -81,33 +81,9 @@ public class EditMedicine extends AppCompatActivity {
         boolean useColor = getIntent().getBooleanExtra(EXTRA_USE_COLOR, false);
         enableColor = findViewById(R.id.enableColor);
         enableColor.setChecked(useColor);
-        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
-        });
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
 
-        color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
-        colorButton = findViewById(R.id.selectColor);
-        ViewColorHelper.setButtonBackground(colorButton, color);
-        colorButton.setOnClickListener(v -> {
-            ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(this)
-                    .setTitle(R.string.color)
-                    .setPositiveButton(getString(R.string.confirm),
-                            (ColorEnvelopeListener) (envelope, fromUser) -> {
-                                color = envelope.getColor();
-                                ViewColorHelper.setButtonBackground(colorButton, color);
-                                Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
-                            })
-                    .setNegativeButton(getString(R.string.cancel),
-                            (dialogInterface, i) -> dialogInterface.dismiss())
-                    .attachAlphaSlideBar(false)
-                    .setBottomSpace(12);
-
-            builder.show();
-            // Workaround to make the brightness slider be setup correctly
-            new Handler(getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
-        });
-        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+        setupColorButton(useColor);
 
         // Swipe to delete
         swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, this) {
@@ -121,38 +97,7 @@ public class EditMedicine extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> {
-            TextInputLayout textInputLayout = new TextInputLayout(this);
-            TextInputEditText editText = new TextInputEditText(this);
-            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            editText.setHint(R.string.amount);
-            editText.setSingleLine();
-            textInputLayout.addView(editText);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(textInputLayout);
-            builder.setTitle(R.string.add_reminder);
-            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-                Editable e = editText.getText();
-                if (e != null) {
-                    String amount = e.toString();
-                    Reminder reminder = new Reminder(medicineId);
-                    reminder.amount = amount;
-                    reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
-
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
-                        reminder.timeInMinutes = hourOfDay * 60 + minute;
-                        medicineViewModel.insertReminder(reminder);
-                    }, 8, 0, DateFormat.is24HourFormat(view.getContext()));
-                    timePickerDialog.show();
-
-                }
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
+        setupAddReminderButton();
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
@@ -178,6 +123,69 @@ public class EditMedicine extends AppCompatActivity {
             final Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
         });
+    }
+
+    private void setupColorButton(boolean useColor) {
+        color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
+        colorButton = findViewById(R.id.selectColor);
+        ViewColorHelper.setButtonBackground(colorButton, color);
+        colorButton.setOnClickListener(v -> {
+            ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(this)
+                    .setTitle(R.string.color)
+                    .setPositiveButton(getString(R.string.confirm),
+                            (ColorEnvelopeListener) (envelope, fromUser) -> {
+                                color = envelope.getColor();
+                                ViewColorHelper.setButtonBackground(colorButton, color);
+                                Toast.makeText(this, R.string.change_color_toast, Toast.LENGTH_LONG).show();
+                            })
+                    .setNegativeButton(getString(R.string.cancel),
+                            (dialogInterface, i) -> dialogInterface.dismiss())
+                    .attachAlphaSlideBar(false)
+                    .setBottomSpace(12);
+
+            builder.show();
+            // Workaround to make the brightness slider be setup correctly
+            new Handler(getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
+        });
+        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupAddReminderButton() {
+        ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
+        fab.setOnClickListener(view -> {
+            TextInputLayout textInputLayout = new TextInputLayout(this);
+            TextInputEditText editText = new TextInputEditText(this);
+            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setHint(R.string.create_reminder_dosage_hint);
+            editText.setSingleLine();
+            textInputLayout.addView(editText);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(textInputLayout);
+            builder.setTitle(R.string.add_reminder);
+            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+                Editable e = editText.getText();
+                if (e != null) {
+                    createReminder(e.toString());
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+    }
+
+    private void createReminder(String amount) {
+        Reminder reminder = new Reminder(medicineId);
+        reminder.amount = amount;
+        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
+            reminder.timeInMinutes = hourOfDay * 60 + minute;
+            medicineViewModel.insertReminder(reminder);
+        }, 8, 0, DateFormat.is24HourFormat(getApplicationContext()));
+        timePickerDialog.show();
     }
 
     @Override

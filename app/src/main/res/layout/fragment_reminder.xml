@@ -33,17 +33,17 @@
             android:layout_height="wrap_content"
             android:labelFor="@id/editAmount"
             android:singleLine="true"
-            android:text="@string/amount" />
+            android:text="@string/dosage" />
 
         <EditText
             android:id="@+id/editAmount"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:ems="10"
-            android:hint="@string/amount"
+            android:hint="@string/dosage"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:text="@string/amount" />
+            android:text="@string/dosage" />
 
     </LinearLayout>
 

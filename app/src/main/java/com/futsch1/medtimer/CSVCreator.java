@@ -30,7 +30,7 @@ public class CSVCreator {
             csvFile.write(String.format("%s;%s;%s;%s\n",
                     context.getString(R.string.time),
                     context.getString(R.string.medicine_name),
-                    context.getString(R.string.amount),
+                    context.getString(R.string.dosage),
                     context.getString(R.string.taken)));
 
             Instant remindedTime;

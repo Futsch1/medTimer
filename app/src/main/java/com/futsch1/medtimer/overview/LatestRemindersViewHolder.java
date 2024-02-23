@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Collections;
 
 public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private final TextView reminderEventText;
@@ -67,9 +68,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         });
 
         if (reminderEvent.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, new TextView[]{reminderEventText}, reminderEvent.color);
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, new TextView[]{reminderEventText});
+            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
         }
     }
 }

@@ -56,5 +56,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "app/build/outputs/bundle/release/*.aab"
+          artifacts: "app/build/outputs/bundle/release/*.aab,app/build/outputs/apk/release/*.apk"
           generateReleaseNotes: true

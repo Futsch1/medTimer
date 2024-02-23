@@ -74,29 +74,7 @@ public class MedicinesFragment extends Fragment {
         // Connect view model to recycler view adapter
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), adapter::submitList);
 
-        // Floating add medicine button
-        ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
-        fab.setOnClickListener(view -> {
-            TextInputLayout textInputLayout = new TextInputLayout(requireContext());
-            TextInputEditText editText = new TextInputEditText(requireContext());
-            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            editText.setHint(R.string.medicine_name);
-            editText.setSingleLine();
-            textInputLayout.addView(editText);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setView(textInputLayout);
-            builder.setTitle(R.string.add_medicine);
-            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-                Editable e = editText.getText();
-                if (e != null) {
-                    medicineViewModel.insertMedicine(new Medicine(e.toString()));
-                }
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
+        setupAddMedicineButton(fragmentView);
 
         return fragmentView;
     }
@@ -126,6 +104,31 @@ public class MedicinesFragment extends Fragment {
             medicineViewModel.deleteMedicine(medicine);
             final Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        });
+    }
+
+    private void setupAddMedicineButton(View fragmentView) {
+        ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
+        fab.setOnClickListener(view -> {
+            TextInputLayout textInputLayout = new TextInputLayout(requireContext());
+            TextInputEditText editText = new TextInputEditText(requireContext());
+            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setHint(R.string.medicine_name);
+            editText.setSingleLine();
+            textInputLayout.addView(editText);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(textInputLayout);
+            builder.setTitle(R.string.add_medicine);
+            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+                Editable e = editText.getText();
+                if (e != null) {
+                    medicineViewModel.insertMedicine(new Medicine(e.toString()));
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
     }
 }
