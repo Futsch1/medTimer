@@ -166,17 +166,7 @@ public class EditMedicine extends AppCompatActivity {
             builder.setPositiveButton(R.string.ok, (dialog, which) -> {
                 Editable e = editText.getText();
                 if (e != null) {
-                    String amount = e.toString();
-                    Reminder reminder = new Reminder(medicineId);
-                    reminder.amount = amount;
-                    reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
-
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
-                        reminder.timeInMinutes = hourOfDay * 60 + minute;
-                        medicineViewModel.insertReminder(reminder);
-                    }, 8, 0, DateFormat.is24HourFormat(view.getContext()));
-                    timePickerDialog.show();
-
+                    createReminder(e.toString());
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -184,6 +174,18 @@ public class EditMedicine extends AppCompatActivity {
             dialog.show();
         });
 
+    }
+
+    private void createReminder(String amount) {
+        Reminder reminder = new Reminder(medicineId);
+        reminder.amount = amount;
+        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
+            reminder.timeInMinutes = hourOfDay * 60 + minute;
+            medicineViewModel.insertReminder(reminder);
+        }, 8, 0, DateFormat.is24HourFormat(getApplicationContext()));
+        timePickerDialog.show();
     }
 
     @Override
