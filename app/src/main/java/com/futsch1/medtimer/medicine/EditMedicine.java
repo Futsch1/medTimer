@@ -156,7 +156,7 @@ public class EditMedicine extends AppCompatActivity {
             TextInputLayout textInputLayout = new TextInputLayout(this);
             TextInputEditText editText = new TextInputEditText(this);
             editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            editText.setHint(R.string.amount);
+            editText.setHint(R.string.create_reminder_dosage_hint);
             editText.setSingleLine();
             textInputLayout.addView(editText);
 

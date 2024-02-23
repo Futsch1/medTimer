@@ -10,7 +10,7 @@
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <string name="time">Zeit</string>
-    <string name="amount">Anzahl</string>
+    <string name="dosage">Dosierung</string>
     <string name="yes">Ja</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
@@ -56,4 +56,5 @@
     <string name="exact_reminders_summary">Erinnerungen werden genau zur eingestellten Zeit erzeugt (erhöhter Batterieverbrauch)</string>
     <string name="enable_alarm_dialog">Um die Erstellung von exakten Erinnerungen zu ermöglichen, erlaube dies im folgenden Menü</string>
     <string name="generate_test_data">Testdaten generieren</string>
+    <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
 </resources>

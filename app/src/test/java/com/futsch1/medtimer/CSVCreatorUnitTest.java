@@ -48,7 +48,7 @@ public class CSVCreatorUnitTest {
         Context context = mock(Context.class);
         when(context.getString(R.string.time)).thenReturn("Time");
         when(context.getString(R.string.medicine_name)).thenReturn("Medicine Name");
-        when(context.getString(R.string.amount)).thenReturn("Amount");
+        when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
 
         // Create a mock File
@@ -85,7 +85,7 @@ public class CSVCreatorUnitTest {
         Context context = mock(Context.class);
         when(context.getString(R.string.time)).thenReturn("Time");
         when(context.getString(R.string.medicine_name)).thenReturn("Medicine Name");
-        when(context.getString(R.string.amount)).thenReturn("Amount");
+        when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
 
         // Create a mock File
