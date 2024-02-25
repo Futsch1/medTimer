@@ -1,7 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.NOTIFICATION_CHANNEL_ID;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,11 +15,12 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 public class Notifications {
 
-    public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId, Color color) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE);
-        sharedPreferences.edit().apply();
+    private Notifications() {
+        // Intentionally empty
+    }
 
-        int notificationId = sharedPreferences.getInt("notificationId", 1);
+    public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId, Color color) {
+        int notificationId = getNextNotificationId(context);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
@@ -34,7 +33,7 @@ public class Notifications {
         startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannelManager.getNotificationChannelId(context))
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(context.getString(R.string.notification_content, remindTime, amount, medicineName))
@@ -49,8 +48,16 @@ public class Notifications {
         notificationManager.notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
 
-        context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE).edit().putInt("notificationId", notificationId + 1).apply();
+        return notificationId;
+    }
+
+    private static int getNextNotificationId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE);
+        sharedPreferences.edit().apply();
+        int notificationId = sharedPreferences.getInt("notificationId", 1);
+        sharedPreferences.edit().putInt("notificationId", notificationId + 1).apply();
 
         return notificationId;
     }
+
 }

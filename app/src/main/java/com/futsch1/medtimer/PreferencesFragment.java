@@ -18,13 +18,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.takisoft.preferencex.PreferenceFragmentCompat;
+import com.takisoft.preferencex.RingtonePreference;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     private HandlerThread backgroundThread;
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
         setupVersion();
@@ -48,6 +49,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupExactReminders();
         setupExport();
         setupGenerateTestData();
+        setupNotificationTone();
     }
 
     private void setupVersion() {
@@ -167,6 +169,16 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             } else {
                 preference.setVisible(false);
             }
+        }
+    }
+
+    private void setupNotificationTone() {
+        RingtonePreference preference = getPreferenceScreen().findPreference("notification_ringtone");
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
+                NotificationChannelManager.updateNotificationChannel(requireContext(), (Uri) newValue);
+                return true;
+            });
         }
     }
 

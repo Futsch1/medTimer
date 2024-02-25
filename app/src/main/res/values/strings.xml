@@ -58,4 +58,5 @@
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
+    <string name="notification_tone_title">Notification tone</string>
 </resources>

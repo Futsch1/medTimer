@@ -62,4 +62,7 @@ dependencies {
     testImplementation("org.mockito:mockito-inline:5.2.0")
 
     implementation("com.github.skydoves:colorpickerview:2.3.0")
+
+    implementation("com.takisoft.preferencex:preferencex:1.1.0")
+    implementation("com.takisoft.preferencex:preferencex-ringtone:1.1.0")
 }
