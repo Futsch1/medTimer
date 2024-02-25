@@ -1,10 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
-import static com.futsch1.medtimer.ActivityCodes.NOTIFICATION_CHANNEL_ID;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }).attach();
 
         checkPermissions();
-        createNotificationChannel();
+        NotificationChannelManager.createNotificationChannel(getApplicationContext());
 
     }
 
@@ -67,18 +64,5 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(POST_NOTIFICATIONS);
         }
-    }
-
-    private void createNotificationChannel() {
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this.
-        NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
     }
 }
