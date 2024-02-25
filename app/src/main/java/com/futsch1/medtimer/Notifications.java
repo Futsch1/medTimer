@@ -15,6 +15,10 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 public class Notifications {
 
+    private Notifications() {
+        // Intentionally empty
+    }
+
     public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId, Color color) {
         int notificationId = getNextNotificationId(context);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);

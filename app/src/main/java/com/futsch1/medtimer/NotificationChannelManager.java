@@ -13,6 +13,10 @@ import androidx.preference.PreferenceManager;
 
 public class NotificationChannelManager {
 
+    private NotificationChannelManager() {
+        // Intentionally empty
+    }
+
     public static void createNotificationChannel(Context context) {
         NotificationChannel channel = getNotificationChannel(context);
         Uri sound = getNotificationSound(context);
