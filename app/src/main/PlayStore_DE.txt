@@ -2,7 +2,7 @@ Erinnerung an Medikamente mit vollem Offline-Datenschutz
 
 Behalten Sie die Kontrolle über Ihre Medikamente mit MedTimer
 
-MedTimer ist eine App zur Erinnerung an die Einnahme von Medikamenten, mit der Sie Ihre Medikamente effektiv und mit voller Kontrolle über Ihre sensiblen Daten zu verwalten.
+MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamenten, mit der Sie Ihre Medikamente effektiv und mit voller Kontrolle über Ihre sensiblen Daten zu verwalten.
 
 Flexible und personalisierte Erinnerungen:
 
@@ -19,10 +19,6 @@ Datenschutz und Offline-Zugriff:
 - Alle Daten werden sicher auf Ihrem Gerät gespeichert, so dass ein vollständiger Datenschutz und Offline-Zugriff gewährleistet ist.
 - Keine Internetverbindung erforderlich - Ihre Medikamentenerinnerungen sind immer verfügbar.
 
-MedTimer ist ideal für:
-
-- Personen, die mehrere Medikamente mit komplexer Dosierung verwalten.
-- Benutzer, die ein zuverlässiges und sicheres Werkzeug zur Erinnerung an ihre Medikamente suchen.
-- Personen, die Wert auf Privatsphäre und Offline-Datenspeicherung legen.
-
 MedTimer ist eine kostenlose, werbefreie App.
+
+Weitere Informationen auf GitHub: https://www.google.com/url?q=https://github.com/Futsch1/medTimer

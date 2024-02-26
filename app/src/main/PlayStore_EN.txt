@@ -2,8 +2,7 @@ Med reminders and history with full offline privacy
 
 Stay In Control of Your Medications with MedTimer
 
-MedTimer is a medication reminder app designed to help you manage your medications effectively and
-with full control of your sensitive data.
+MedTimer is an open-source medication reminder app designed to help you manage your medications effectively and with full control of your sensitive data.
 
 Flexible & Personalized Reminders:
 
@@ -21,10 +20,6 @@ Privacy & Offline Accessibility:
 - All data is stored securely on your device, ensuring complete privacy and offline accessibility.
 - No internet connection required – your medication reminders are always available.
 
-MedTimer is ideal for:
+MedTimer is a free app without adds.
 
-- Individuals managing multiple medications with complex dosing schedules.
-- Users seeking a reliable and secure medication reminder tool.
-- People who value privacy and offline data storage.
-
-MedTimer is a free, ad-free app.
+See the project page on GitHub: https://www.google.com/url?q=https://github.com/Futsch1/medTimer
