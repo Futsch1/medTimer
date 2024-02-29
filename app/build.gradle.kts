@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("androidx.room")
+    id("com.github.triplet.play") version "3.9.0"
 }
 
 room {
@@ -65,4 +66,9 @@ dependencies {
 
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
     implementation("com.takisoft.preferencex:preferencex-ringtone:1.1.0")
+}
+
+play {
+    track.set("internal")
+    defaultToAppBundles.set(true)
 }
