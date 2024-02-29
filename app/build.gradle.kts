@@ -72,3 +72,9 @@ play {
     track.set("internal")
     defaultToAppBundles.set(true)
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
