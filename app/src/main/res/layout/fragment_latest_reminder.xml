@@ -32,14 +32,19 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/taken" />
+                android:text="@string/taken"
+                app:checkedIcon="@drawable/check2_circle"
+                app:checkedIconVisible="true" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipSkipped"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/skipped" />
+                android:text="@string/skipped"
+                app:checkedIcon="@drawable/x_circle"
+                app:checkedIconVisible="true"
+                app:closeIconVisible="false" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
