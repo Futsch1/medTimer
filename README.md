@@ -3,20 +3,20 @@
 
 # MedTimer for Android
 
-<img src="app/src/main/logo-playstore.png" width="150" />
+<img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
 
 ## Play store description
 
 **Med reminders and history with full offline privacy**
 
 <p float="left">
-  <img src="app/src/main/store_screenshot_1.png" width="150" />
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/1.png" width="150" />
   &nbsp;
-  <img src="app/src/main/store_screenshot_2.png" width="150" /> 
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/2.png" width="150" /> 
   &nbsp;
-  <img src="app/src/main/store_screenshot_3.png" width="150" />
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/3.png" width="150" />
   &nbsp;
-  <img src="app/src/main/store_screenshot_4.png" width="150" />
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/4.png" width="150" />
 </p>
 
 Stay In Control of Your Medications with MedTimer
