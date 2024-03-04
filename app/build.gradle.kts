@@ -66,6 +66,9 @@ dependencies {
 
     implementation("com.takisoft.preferencex:preferencex:1.1.0")
     implementation("com.takisoft.preferencex:preferencex-ringtone:1.1.0")
+
+    implementation("com.github.wwdablu:SimplyPDF:2.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
 }
 
 play {
