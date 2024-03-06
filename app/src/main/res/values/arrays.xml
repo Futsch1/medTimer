@@ -21,4 +21,8 @@
         <item>48</item>
         <item>72</item>
     </string-array>
+    <string-array name="export_formats">
+        <item>CSV</item>
+        <item>PDF</item>
+    </string-array>
 </resources>

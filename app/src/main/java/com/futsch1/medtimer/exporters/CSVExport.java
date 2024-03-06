@@ -1,7 +1,8 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.exporters;
 
 import android.content.Context;
 
+import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.io.File;
@@ -14,18 +15,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 
-public class CSVCreator {
+public class CSVExport implements Exporter {
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
     private final ZoneId defaultZoneId;
 
-    public CSVCreator(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
+    public CSVExport(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
         this.reminderEvents = reminderEvents;
         this.context = context;
         this.defaultZoneId = zoneId;
     }
 
-    public void create(File file) throws IOException {
+    public void export(File file) throws IOException {
         try (FileWriter csvFile = new FileWriter(file)) {
             csvFile.write(String.format("%s;%s;%s;%s\n",
                     context.getString(R.string.time),
@@ -47,5 +48,10 @@ public class CSVCreator {
                 csvFile.write(line);
             }
         }
+    }
+
+    @Override
+    public String getExtension() {
+        return "csv";
     }
 }

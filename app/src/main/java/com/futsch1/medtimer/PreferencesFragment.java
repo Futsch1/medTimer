@@ -22,6 +22,9 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.exporters.CSVExport;
+import com.futsch1.medtimer.exporters.Exporter;
+import com.futsch1.medtimer.exporters.PDFExport;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
@@ -134,19 +137,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         Preference preference = getPreferenceScreen().findPreference("export");
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 -> {
-                final Handler handler = new Handler(backgroundThread.getLooper());
-                handler.post(() -> {
-                    File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename());
-                    MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
-                    CSVCreator csvCreator = new CSVCreator(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId());
-                    try {
-                        csvCreator.create(csvFile);
-
-                        shareFile(csvFile);
-                    } catch (IOException e) {
-                        Log.e("Error", "IO exception creating file");
-                    }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(R.string.select_format);
+                builder.setItems(R.array.export_formats, (dialog, which) -> {
+                    final Handler handler = new Handler(backgroundThread.getLooper());
+                    handler.post(() -> {
+                        MedicineRepository medicineRepository = new MedicineRepository((Application) requireContext().getApplicationContext());
+                        if (which == 0) {
+                            export(new CSVExport(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId()));
+                        } else {
+                            export(new PDFExport(medicineRepository.getAllReminderEvents(), requireContext(), TimeZone.getDefault().toZoneId()));
+                        }
+                    });
                 });
+                builder.show();
                 return true;
             });
         }
@@ -182,11 +186,22 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void shareFile(File csvFile) {
-        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", csvFile);
+    private void export(Exporter exporter) {
+        File csvFile = new File(requireContext().getCacheDir(), PathHelper.getExportFilename(exporter));
+        try {
+            exporter.export(csvFile);
+
+            shareFile(csvFile);
+        } catch (IOException e) {
+            Log.e("Error", "IO exception creating file");
+        }
+    }
+
+    private void shareFile(File file) {
+        Uri uri = FileProvider.getUriForFile(requireContext(), "com.futsch1.medtimer.fileprovider", file);
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
 
-        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(csvFile.getName()));
+        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()));
         //Allow sharing apps to read the file Uri
         intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //Pass the file Uri instead of the path

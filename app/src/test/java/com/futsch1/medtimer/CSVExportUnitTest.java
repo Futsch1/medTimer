@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.exporters.CSVExport;
 
 import org.junit.Test;
 import org.mockito.MockedConstruction;
@@ -22,7 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVCreatorUnitTest {
+public class CSVExportUnitTest {
 
 
     // create CSV file with correct headers and data for a list of ReminderEvents
@@ -56,11 +57,11 @@ public class CSVCreatorUnitTest {
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
             // Create the CSVCreator object
-            CSVCreator csvCreator = new CSVCreator(reminderEvents, context, ZoneId.of("Z"));
+            CSVExport csvExport = new CSVExport(reminderEvents, context, ZoneId.of("Z"));
 
             try {
                 // Call the create method
-                csvCreator.create(file);
+                csvExport.export(file);
 
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
@@ -93,11 +94,11 @@ public class CSVCreatorUnitTest {
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
             // Create the CSVCreator object
-            CSVCreator csvCreator = new CSVCreator(reminderEvents, context, ZoneId.of("Z"));
+            CSVExport csvExport = new CSVExport(reminderEvents, context, ZoneId.of("Z"));
 
             try {
                 // Call the create method
-                csvCreator.create(file);
+                csvExport.export(file);
 
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 

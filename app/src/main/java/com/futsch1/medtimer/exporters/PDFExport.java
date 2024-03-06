@@ -1,9 +1,10 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.exporters;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.print.PrintAttributes;
 
+import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.wwdablu.soumya.simplypdf.SimplyPdf;
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument;
@@ -29,20 +30,19 @@ import java.util.List;
 import kotlin.coroutines.EmptyCoroutineContext;
 import kotlinx.coroutines.BuildersKt;
 
-public class PDFCreator {
+public class PDFExport implements Exporter {
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
     private final ZoneId defaultZoneId;
 
-    public PDFCreator(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
+    public PDFExport(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
         this.reminderEvents = reminderEvents;
         this.context = context;
         this.defaultZoneId = zoneId;
     }
 
-    public void create(File file) throws IOException {
-        SimplyPdfDocument simplyPdfDocument = SimplyPdf.with(this.context, file)
-                .colorMode(DocumentInfo.ColorMode.COLOR)
+    public void export(File file) throws IOException {
+        SimplyPdfDocument simplyPdfDocument = SimplyPdf.with(this.context, file).colorMode(DocumentInfo.ColorMode.COLOR)
                 .paperSize(PrintAttributes.MediaSize.ISO_A4)
                 .margin(Margin.Companion.getDefault())
                 .pageModifier(new PageHeader(new ArrayList<>()))
@@ -93,6 +93,11 @@ public class PDFCreator {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String getExtension() {
+        return "pdf";
     }
 
 }
