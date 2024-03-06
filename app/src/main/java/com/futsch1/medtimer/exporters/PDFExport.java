@@ -2,6 +2,7 @@ package com.futsch1.medtimer.exporters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.print.PrintAttributes;
 
 import com.futsch1.medtimer.R;
@@ -59,13 +60,21 @@ public class PDFExport implements Exporter {
         textProperties.textColor = "#000000";
         textProperties.textSize = 12;
 
+        TextProperties headerProperties = new TextProperties();
+        textProperties.textColor = "#000000";
+        textProperties.textSize = 14;
+        headerProperties.typeface = Typeface.DEFAULT_BOLD;
+
         LinkedList<LinkedList<Cell>> rows = new LinkedList<>();
         // Create header
         LinkedList<Cell> header = new LinkedList<>();
         final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
+        final int pageWidth = simplyPdfDocument.getUsablePageWidth();
+        int[] columnWidths = {pageWidth / 4, pageWidth / 3, pageWidth / 4, pageWidth / 6};
+        int colIndex = 0;
 
         for (int headerText : headerTexts) {
-            header.add(new TextCell(context.getString(headerText), textProperties, simplyPdfDocument.getUsablePageWidth()));
+            header.add(new TextCell(context.getString(headerText), textProperties, columnWidths[colIndex++]));
         }
         rows.add(header);
 
@@ -79,10 +88,10 @@ public class PDFExport implements Exporter {
             String time = String.format("%s %s",
                     zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
                     zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
-            row.add(new TextCell(time, textProperties, simplyPdfDocument.getUsablePageWidth()));
-            row.add(new TextCell(reminderEvent.medicineName, textProperties, simplyPdfDocument.getUsablePageWidth()));
-            row.add(new TextCell(reminderEvent.amount, textProperties, simplyPdfDocument.getUsablePageWidth()));
-            row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, simplyPdfDocument.getUsablePageWidth()));
+            row.add(new TextCell(time, textProperties, columnWidths[0]));
+            row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
+            row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
+            row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));
             rows.add(row);
         }
 
