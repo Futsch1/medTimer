@@ -58,4 +58,5 @@
     <string name="generate_test_data">Testdaten generieren</string>
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="notification_tone_title">Benachrichtigungston</string>
+    <string name="select_format">Format auswählen</string>
 </resources>

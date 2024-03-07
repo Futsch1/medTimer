@@ -47,6 +47,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         reminderEventText.setText(reminderEventText.getContext().getString(R.string.reminder_event, reminderEvent.amount, reminderEvent.medicineName, takenDateTime));
 
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            // Intentionally empty
         });
         chipGroup.setSelectionRequired(false);
         chipTaken.setChecked(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN);
@@ -56,14 +57,11 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
                 int checkedId = checkedIds.get(0);
-                if (checkedId == R.id.chipTaken) {
-                    Intent takenIntent = ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
-                    itemView.getContext().sendBroadcast(takenIntent);
-                }
-                if (checkedId == R.id.chipSkipped) {
-                    Intent takenIntent = ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
-                    itemView.getContext().sendBroadcast(takenIntent);
-                }
+                Intent i =
+                        checkedId == R.id.chipTaken ?
+                                ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
+                                ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
+                itemView.getContext().sendBroadcast(i);
             }
         });
 
