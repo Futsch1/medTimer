@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.print.PrintAttributes;
 
+import androidx.annotation.NonNull;
+
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.wwdablu.soumya.simplypdf.SimplyPdf;
@@ -18,7 +20,6 @@ import com.wwdablu.soumya.simplypdf.document.Margin;
 import com.wwdablu.soumya.simplypdf.document.PageHeader;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -32,6 +33,7 @@ import kotlin.coroutines.EmptyCoroutineContext;
 import kotlinx.coroutines.BuildersKt;
 
 public class PDFExport implements Exporter {
+    public static final String BLACK = "#000000";
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
     private final ZoneId defaultZoneId;
@@ -42,66 +44,97 @@ public class PDFExport implements Exporter {
         this.defaultZoneId = zoneId;
     }
 
-    public void export(File file) throws IOException {
-        SimplyPdfDocument simplyPdfDocument = SimplyPdf.with(this.context, file).colorMode(DocumentInfo.ColorMode.COLOR)
+
+    public void export(File file) throws ExporterException {
+        SimplyPdfDocument simplyPdfDocument = getDocument(file);
+
+        LinkedList<LinkedList<Cell>> rows = new LinkedList<>();
+
+        final int pageWidth = simplyPdfDocument.getUsablePageWidth();
+        int[] columnWidths = {pageWidth / 4, pageWidth / 3, pageWidth / 4, pageWidth / 6};
+
+        LinkedList<Cell> header = getHeader(columnWidths);
+        rows.add(header);
+
+        TextProperties textProperties = getTextProperties();
+        for (ReminderEvent reminderEvent : reminderEvents) {
+            LinkedList<Cell> row = getCells(reminderEvent, textProperties, columnWidths);
+            rows.add(row);
+        }
+
+        simplyPdfDocument.getTable().draw(rows, getTableProperties());
+
+        try {
+            BuildersKt.runBlocking(EmptyCoroutineContext.INSTANCE, (scope, continuation) -> simplyPdfDocument.finish(continuation));
+        } catch (InterruptedException e) {
+            throw new ExporterException();
+        }
+    }
+
+    @NonNull
+    private SimplyPdfDocument getDocument(File file) {
+        return SimplyPdf.with(this.context, file).colorMode(DocumentInfo.ColorMode.COLOR)
                 .paperSize(PrintAttributes.MediaSize.ISO_A4)
                 .margin(Margin.Companion.getDefault())
                 .pageModifier(new PageHeader(new ArrayList<>()))
                 .firstPageBackgroundColor(Color.WHITE)
                 .paperOrientation(DocumentInfo.Orientation.PORTRAIT)
                 .build();
+    }
 
+    @NonNull
+    private LinkedList<Cell> getHeader(int[] columnWidths) {
+        TextProperties headerProperties = getHeaderProperties();
+        LinkedList<Cell> header = new LinkedList<>();
+        int colIndex = 0;
+        final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
+        for (int headerText : headerTexts) {
+            header.add(new TextCell(context.getString(headerText), headerProperties, columnWidths[colIndex++]));
+        }
+        return header;
+    }
+
+    @NonNull
+    private static TextProperties getTextProperties() {
+        TextProperties textProperties = new TextProperties();
+        textProperties.textColor = BLACK;
+        textProperties.textSize = 12;
+        return textProperties;
+    }
+
+    @NonNull
+    private LinkedList<Cell> getCells(ReminderEvent reminderEvent, TextProperties textProperties, int[] columnWidths) {
+        ZonedDateTime zonedDateTime;
+        Instant remindedTime;
+        LinkedList<Cell> row = new LinkedList<>();
+        remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
+        zonedDateTime = remindedTime.atZone(defaultZoneId);
+
+        String time = String.format("%s %s",
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
+        row.add(new TextCell(time, textProperties, columnWidths[0]));
+        row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
+        row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
+        row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));
+        return row;
+    }
+
+    @NonNull
+    private static TableProperties getTableProperties() {
         TableProperties tableProperties = new TableProperties();
-        tableProperties.borderColor = "#000000";
+        tableProperties.borderColor = BLACK;
         tableProperties.borderWidth = 1;
         tableProperties.drawBorder = true;
+        return tableProperties;
+    }
 
-        TextProperties textProperties = new TextProperties();
-        textProperties.textColor = "#000000";
-        textProperties.textSize = 12;
-
+    private static TextProperties getHeaderProperties() {
         TextProperties headerProperties = new TextProperties();
-        textProperties.textColor = "#000000";
-        textProperties.textSize = 14;
+        headerProperties.textColor = BLACK;
+        headerProperties.textSize = 14;
         headerProperties.typeface = Typeface.DEFAULT_BOLD;
-
-        LinkedList<LinkedList<Cell>> rows = new LinkedList<>();
-        // Create header
-        LinkedList<Cell> header = new LinkedList<>();
-        final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
-        final int pageWidth = simplyPdfDocument.getUsablePageWidth();
-        int[] columnWidths = {pageWidth / 4, pageWidth / 3, pageWidth / 4, pageWidth / 6};
-        int colIndex = 0;
-
-        for (int headerText : headerTexts) {
-            header.add(new TextCell(context.getString(headerText), textProperties, columnWidths[colIndex++]));
-        }
-        rows.add(header);
-
-        Instant remindedTime;
-        ZonedDateTime zonedDateTime;
-        for (ReminderEvent reminderEvent : reminderEvents) {
-            LinkedList<Cell> row = new LinkedList<>();
-            remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
-            zonedDateTime = remindedTime.atZone(defaultZoneId);
-
-            String time = String.format("%s %s",
-                    zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
-                    zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
-            row.add(new TextCell(time, textProperties, columnWidths[0]));
-            row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
-            row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
-            row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));
-            rows.add(row);
-        }
-
-        simplyPdfDocument.getTable().draw(rows, tableProperties);
-
-        try {
-            BuildersKt.runBlocking(EmptyCoroutineContext.INSTANCE, (scope, continuation) -> simplyPdfDocument.finish(continuation));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        return headerProperties;
     }
 
     @Override

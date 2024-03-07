@@ -31,7 +31,6 @@ import com.takisoft.preferencex.PreferenceFragmentCompat;
 import com.takisoft.preferencex.RingtonePreference;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URLConnection;
 import java.util.TimeZone;
 
@@ -192,7 +191,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             exporter.export(csvFile);
 
             shareFile(csvFile);
-        } catch (IOException e) {
+        } catch (Exporter.ExporterException e) {
             Log.e("Error", "IO exception creating file");
         }
     }

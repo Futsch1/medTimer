@@ -26,7 +26,7 @@ public class CSVExport implements Exporter {
         this.defaultZoneId = zoneId;
     }
 
-    public void export(File file) throws IOException {
+    public void export(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
             csvFile.write(String.format("%s;%s;%s;%s\n",
                     context.getString(R.string.time),
@@ -47,6 +47,8 @@ public class CSVExport implements Exporter {
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
                 csvFile.write(line);
             }
+        } catch (IOException e) {
+            throw new ExporterException();
         }
     }
 
