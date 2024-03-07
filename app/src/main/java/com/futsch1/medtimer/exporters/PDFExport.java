@@ -67,7 +67,7 @@ public class PDFExport implements Exporter {
         try {
             BuildersKt.runBlocking(EmptyCoroutineContext.INSTANCE, (scope, continuation) -> simplyPdfDocument.finish(continuation));
         } catch (InterruptedException e) {
-            throw new ExporterException();
+            Thread.currentThread().interrupt();
         }
     }
 
