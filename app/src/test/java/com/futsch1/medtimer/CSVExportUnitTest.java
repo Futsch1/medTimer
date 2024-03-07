@@ -11,6 +11,7 @@ import android.content.Context;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.exporters.CSVExport;
+import com.futsch1.medtimer.exporters.Exporter;
 
 import org.junit.Test;
 import org.mockito.MockedConstruction;
@@ -69,8 +70,8 @@ public class CSVExportUnitTest {
                 verify(fileWriter).write("Time;Medicine Name;Amount;Taken\n");
                 verify(fileWriter).write("5/3/21 12:00 AM;Medicine 1;10mg;x\n");
                 verify(fileWriter).write("5/3/21 12:30 AM;Medicine 2;20mg;\n");
-            } catch (IOException e) {
-                fail("IOException occurred");
+            } catch (Exporter.ExporterException | IOException e) {
+                fail("Exception occurred");
             }
         }
     }
@@ -104,8 +105,8 @@ public class CSVExportUnitTest {
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Time;Medicine Name;Amount;Taken\n");
-            } catch (IOException e) {
-                fail("IOException occurred");
+            } catch (Exporter.ExporterException | IOException e) {
+                fail("Exception occurred");
             }
         }
     }
