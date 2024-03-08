@@ -38,7 +38,7 @@ import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.skydoves.colorpickerview.ColorPickerDialog;
@@ -54,7 +54,7 @@ public class EditMedicine extends AppCompatActivity {
     HandlerThread thread;
     ReminderViewAdapter adapter;
     private SwipeHelper swipeHelper;
-    private SwitchMaterial enableColor;
+    private MaterialSwitch enableColor;
     private Button colorButton;
     private int color;
 

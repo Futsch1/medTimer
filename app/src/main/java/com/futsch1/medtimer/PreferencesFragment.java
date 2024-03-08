@@ -19,7 +19,7 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.exporters.CSVExport;
@@ -212,7 +212,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        SwitchPreference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
+        SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {

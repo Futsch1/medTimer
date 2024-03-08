@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="true"
@@ -13,7 +13,7 @@
         android:title="@string/notification_tone_title"
         app:key="notification_ringtone"
         app:pref_summaryHasRingtone="%s" />
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
