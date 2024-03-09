@@ -2,8 +2,8 @@ package com.futsch1.medtimer.exporters;
 
 import android.content.Context;
 
-import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.TableHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.io.File;
@@ -25,11 +25,8 @@ public class CSVExport implements Exporter {
 
     public void export(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
-            csvFile.write(String.format("%s;%s;%s;%s\n",
-                    context.getString(R.string.time),
-                    context.getString(R.string.medicine_name),
-                    context.getString(R.string.dosage),
-                    context.getString(R.string.taken)));
+            List<String> headerTexts = TableHelper.getTableHeaders(context);
+            csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {
                 String line = String.format("%s;%s;%s;%s\n",

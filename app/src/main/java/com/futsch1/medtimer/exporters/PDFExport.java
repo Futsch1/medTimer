@@ -7,8 +7,8 @@ import android.print.PrintAttributes;
 
 import androidx.annotation.NonNull;
 
-import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.TableHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.wwdablu.soumya.simplypdf.SimplyPdf;
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument;
@@ -84,9 +84,8 @@ public class PDFExport implements Exporter {
         TextProperties headerProperties = getHeaderProperties();
         LinkedList<Cell> header = new LinkedList<>();
         int colIndex = 0;
-        final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
-        for (int headerText : headerTexts) {
-            header.add(new TextCell(context.getString(headerText), headerProperties, columnWidths[colIndex++]));
+        for (String headerText : TableHelper.getTableHeaders(context)) {
+            header.add(new TextCell(headerText, headerProperties, columnWidths[colIndex++]));
         }
         return header;
     }

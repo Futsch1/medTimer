@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.reminderTable;
+package com.futsch1.medtimer.remindertable;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +42,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, S
     public void onBindCellViewHolder(@NonNull AbstractViewHolder holder, String cellItemModel, int
             columnPosition, int rowPosition) {
         ReminderTableCellViewHolder viewHolder = (ReminderTableCellViewHolder) holder;
-        viewHolder.textView.setText(cellItemModel);
+        viewHolder.getTextView().setText(cellItemModel);
 
-        viewHolder.textView.requestLayout();
+        viewHolder.getTextView().requestLayout();
     }
 
     @NonNull
@@ -57,9 +57,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, S
     public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, String columnHeaderItemModel, int
             position) {
         ReminderTableCellViewHolder columnHeaderViewHolder = (ReminderTableCellViewHolder) holder;
-        columnHeaderViewHolder.textView.setText(columnHeaderItemModel);
+        columnHeaderViewHolder.getTextView().setText(columnHeaderItemModel);
 
-        columnHeaderViewHolder.textView.requestLayout();
+        columnHeaderViewHolder.getTextView().requestLayout();
     }
 
     @NonNull
@@ -71,9 +71,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, S
     @Override
     public void onBindRowHeaderViewHolder(@NonNull AbstractViewHolder abstractViewHolder, @Nullable String s, int i) {
         ReminderTableCellViewHolder rowHeaderViewHolder = (ReminderTableCellViewHolder) abstractViewHolder;
-        rowHeaderViewHolder.textView.setText(s);
+        rowHeaderViewHolder.getTextView().setText(s);
 
-        rowHeaderViewHolder.textView.requestLayout();
+        rowHeaderViewHolder.getTextView().requestLayout();
     }
 
     @NonNull
@@ -87,10 +87,10 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, S
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<String> cell = new ArrayList<>();
+            cell.add(TimeHelper.toLocalizedTimeString(reminderEvent.processedTimestamp, defaultZoneId));
             cell.add(reminderEvent.medicineName);
             cell.add(reminderEvent.amount);
             cell.add(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
-            cell.add(TimeHelper.toLocalizedTimeString(reminderEvent.processedTimestamp, defaultZoneId));
             cells.add(cell);
         }
 

@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.reminderTable;
+package com.futsch1.medtimer.remindertable;
 
 import android.view.View;
 import android.widget.TextView;
@@ -8,10 +8,14 @@ import com.futsch1.medtimer.R;
 
 public class ReminderTableCellViewHolder extends AbstractViewHolder {
 
-    public TextView textView;
+    private final TextView textView;
 
     public ReminderTableCellViewHolder(View view) {
         super(view);
         this.textView = view.findViewById(R.id.tableCellTextView);
+    }
+
+    public TextView getTextView() {
+        return textView;
     }
 }
