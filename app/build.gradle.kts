@@ -71,6 +71,8 @@ dependencies {
 
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
+
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
 }
 
 play {

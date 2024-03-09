@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.futsch1.medtimer.medicine.MedicinesFragment;
 import com.futsch1.medtimer.overview.OverviewFragment;
+import com.futsch1.medtimer.reminderTable.ReminderTableFragment;
 
 public class ViewPagerAdapter
         extends FragmentStateAdapter {
@@ -24,6 +25,8 @@ public class ViewPagerAdapter
             fragment = new OverviewFragment();
         else if (position == 1)
             fragment = new MedicinesFragment();
+        else if (position == 2)
+            fragment = new ReminderTableFragment();
         else
             fragment = new PreferencesFragment();
 
@@ -32,6 +35,6 @@ public class ViewPagerAdapter
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }
