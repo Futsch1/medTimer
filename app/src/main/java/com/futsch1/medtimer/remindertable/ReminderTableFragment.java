@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.reminderTable;
+package com.futsch1.medtimer.remindertable;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.helpers.TableHelper;
 
 public class ReminderTableFragment extends Fragment {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -32,6 +28,7 @@ public class ReminderTableFragment extends Fragment {
         ReminderTableAdapter adapter = new ReminderTableAdapter();
 
         tableView.setAdapter(adapter);
+        adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));
         medicineViewModel.getReminderEvents(0, 0).observe(getViewLifecycleOwner(), adapter::submitList);
 
         return fragmentView;
