@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.futsch1.medtimer.R;
@@ -20,8 +21,10 @@ import java.util.TimeZone;
 
 public class ReminderTableAdapter extends AbstractTableAdapter<String, String, ReminderTableCellModel> {
     private final ZoneId defaultZoneId;
+    private final TableView tableView;
 
-    public ReminderTableAdapter() {
+    public ReminderTableAdapter(TableView tableView) {
+        this.tableView = tableView;
         defaultZoneId = TimeZone.getDefault().toZoneId();
     }
 
@@ -43,7 +46,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
             columnPosition, int rowPosition) {
         ReminderTableCellViewHolder viewHolder = (ReminderTableCellViewHolder) holder;
         if (cellItemModel != null) {
-            String modelContent = (String) cellItemModel.getContent();
+            String modelContent = cellItemModel.getRepresentation();
             viewHolder.getTextView().setText(modelContent);
         }
 
@@ -53,16 +56,16 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
     @NonNull
     @Override
     public AbstractViewHolder onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return getTextCellViewHolder(parent);
+        View layout = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.reminder_table_column_header, parent, false);
+        return new ReminderTableColumnHeaderViewHolder(layout, tableView);
     }
 
     @Override
     public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, String columnHeaderItemModel, int
             position) {
-        ReminderTableCellViewHolder columnHeaderViewHolder = (ReminderTableCellViewHolder) holder;
-        columnHeaderViewHolder.getTextView().setText(columnHeaderItemModel);
-
-        columnHeaderViewHolder.getTextView().requestLayout();
+        ReminderTableColumnHeaderViewHolder columnHeaderViewHolder = (ReminderTableColumnHeaderViewHolder) holder;
+        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel);
     }
 
     @NonNull
@@ -90,10 +93,10 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(TimeHelper.toLocalizedTimeString(reminderEvent.processedTimestamp, defaultZoneId), reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.processedTimestamp, TimeHelper.toLocalizedTimeString(reminderEvent.processedTimestamp, defaultZoneId), reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.status, reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", reminderEvent.reminderId));
             cells.add(cell);
         }
 

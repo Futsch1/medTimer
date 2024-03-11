@@ -114,4 +114,5 @@
     <string name="cycle_reminders">Cyclic reminders</string>
     <string name="weekday_limited">Limited to some weekdays</string>
     <string name="reminders">Reminders</string>
+    <string name="sort">Sort</string>
 </resources>

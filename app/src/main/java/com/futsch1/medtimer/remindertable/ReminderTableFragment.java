@@ -25,7 +25,7 @@ public class ReminderTableFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_reminder_table, container, false);
         TableView tableView = fragmentView.findViewById(R.id.reminder_table);
 
-        ReminderTableAdapter adapter = new ReminderTableAdapter();
+        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView);
 
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));

@@ -7,11 +7,13 @@ import com.evrencoskun.tableview.filter.IFilterableModel;
 import com.evrencoskun.tableview.sort.ISortableModel;
 
 public class ReminderTableCellModel implements ISortableModel, IFilterableModel {
-    private final String content;
+    private final Object content;
     private final int id;
+    private final String representation;
 
-    public ReminderTableCellModel(String content, int id) {
+    public ReminderTableCellModel(Object content, String representation, int id) {
         this.content = content;
+        this.representation = representation;
         this.id = id;
     }
 
@@ -31,6 +33,10 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
     @Override
     @SuppressWarnings("java:S4144")
     public String getFilterableKeyword() {
-        return content;
+        return representation;
+    }
+
+    public String getRepresentation() {
+        return representation;
     }
 }
