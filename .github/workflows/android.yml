@@ -34,10 +34,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
       - name: Release bundle
-        if: startsWith(github.ref, 'refs/tags/v')
         run: ./gradlew bundleRelease
+
       - name: Sign AAB
-        if: startsWith(github.ref, 'refs/tags/v')
         id: sign_aab
         uses: r0adkll/sign-android-release@v1
         with:
@@ -52,6 +51,30 @@ jobs:
         with:
           name: aab
           path: ${{steps.sign_aab.outputs.signedReleaseFile}}
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+      - name: Sign APK
+        id: sign_apk
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
+          alias: ${{ secrets.SIGNING_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      - name: Upload App Package
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk
+          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@v1
