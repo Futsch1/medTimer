@@ -34,7 +34,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
       - name: Release bundle
-        if: startsWith(github.ref, 'refs/tags/v')
         run: ./gradlew bundleRelease
 
       - name: Sign AAB
