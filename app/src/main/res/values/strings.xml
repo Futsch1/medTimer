@@ -61,4 +61,5 @@
     <string name="notification_tone_title">Notification tone</string>
     <string name="select_format">Select format</string>
     <string name="reminders">Reminders</string>
+    <string name="sort">Sort</string>
 </resources>

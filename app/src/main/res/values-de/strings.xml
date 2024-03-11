@@ -60,4 +60,5 @@
     <string name="notification_tone_title">Benachrichtigungston</string>
     <string name="select_format">Format auswählen</string>
     <string name="reminders">Erinnerungen</string>
+    <string name="sort">Sortieren</string>
 </resources>
