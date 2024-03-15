@@ -40,7 +40,7 @@ jobs:
 
       - name: Sign AAB
         run: |
-          echo "$SIGNING_KEY" >> $AAB_RELEASE_DIRECTORY/signingKey.jks
+          echo -n "$SIGNING_KEY" | base64 --decode >> $AAB_RELEASE_DIRECTORY/signingKey.jks
           jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass $KEY_STORE_PASSWORD \
             -keypass $KEY_PASSWORD $AAB_RELEASE_DIRECTORY/MedTimer-release.aab $ALIAS
         env:
@@ -64,7 +64,7 @@ jobs:
         run: |
           $BUILD_TOOLS_PATH/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
-          echo "$SIGNING_KEY" >> $APK_RELEASE_DIRECTORY/signingKey.jks
+          echo -n "$SIGNING_KEY" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
           $BUILD_TOOLS_PATH/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
             --ks-pass pass:$KEY_STORE_PASSWORD --key-pass pass:$KEY_PASSWORD \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
