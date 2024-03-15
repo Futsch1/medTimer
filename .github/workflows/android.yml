@@ -10,6 +10,9 @@ on:
       - main
     tags:
       - '*'
+env:
+  APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
+
 
 jobs:
   build:
@@ -58,22 +61,25 @@ jobs:
           BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
           echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
       - name: Sign APK
-        id: sign_apk
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
-          alias: ${{ secrets.SIGNING_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+        run: |
+          zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
+            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
+          echo $SIGNING_KEY > $APK_RELEASE_DIRECTORY/signingKey.jks
+          apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
+            --ks-pass pass:$KEY_STORE_PASSWORD --key-pass pass:$KEY_PASSWORD \
+            --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk
         env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
+          ALIAS: ${{ secrets.SIGNING_ALIAS }}
+          KEY_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
         with:
           name: apk
-          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+          path: ${{env.APK_RELEASE_DIRECTORY}}/MedTimer-release-signed.apk
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
