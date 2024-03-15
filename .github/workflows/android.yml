@@ -2,14 +2,11 @@ name: Android CI
 
 on:
   workflow_dispatch:
+  push:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - '*'
-    tags:
-      - '*'
+
 env:
   APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
   AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/release
@@ -45,7 +42,7 @@ jobs:
         run: |
           echo $SIGNING_KEY > $AAB_RELEASE_DIRECTORY/signingKey.jks
           jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass $KEY_STORE_PASSWORD \
-            -keypass $KEY_PASSWORD $AAB_RELEASE_DIRECTORY/MedTimer-release.aab
+            -keypass $KEY_PASSWORD $AAB_RELEASE_DIRECTORY/MedTimer-release.aab $ALIAS
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
           ALIAS: ${{ secrets.SIGNING_ALIAS }}
