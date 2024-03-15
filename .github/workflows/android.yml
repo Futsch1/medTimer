@@ -7,11 +7,12 @@ on:
       - main
   push:
     branches:
-      - main
+      - '*'
     tags:
       - '*'
 env:
   APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
+  BUILD_TOOLS_HOME: /usr/local/lib/android/sdk/build-tools
 
 
 jobs:
@@ -58,14 +59,14 @@ jobs:
       - name: Setup build tool version variable
         shell: bash
         run: |
-          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
-          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -n 1)
+          echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
         run: |
-          zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
+          $BUILD_TOOLS_PATH/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
           echo $SIGNING_KEY > $APK_RELEASE_DIRECTORY/signingKey.jks
-          apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
+          $BUILD_TOOLS_PATH/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
             --ks-pass pass:$KEY_STORE_PASSWORD --key-pass pass:$KEY_PASSWORD \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk
         env:
