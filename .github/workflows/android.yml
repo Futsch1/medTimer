@@ -2,14 +2,15 @@ name: Android CI
 
 on:
   workflow_dispatch:
+  push:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
-    tags:
-      - '*'
+
+env:
+  APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
+  AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/release
+  BUILD_TOOLS_HOME: /usr/local/lib/android/sdk/build-tools
 
 jobs:
   build:
@@ -37,43 +38,48 @@ jobs:
         run: ./gradlew bundleRelease
 
       - name: Sign AAB
-        id: sign_aab
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
-          alias: ${{ secrets.SIGNING_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+        run: |
+          echo -n "$SIGNING_KEY" | base64 --decode >> $AAB_RELEASE_DIRECTORY/signingKey.jks
+          jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass $KEY_STORE_PASSWORD \
+            -keypass $KEY_PASSWORD $AAB_RELEASE_DIRECTORY/MedTimer-release.aab $ALIAS
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
+          ALIAS: ${{ secrets.SIGNING_ALIAS }}
+          KEY_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
       - name: Upload App Bundle
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
         with:
           name: aab
-          path: ${{steps.sign_aab.outputs.signedReleaseFile}}
+          path: ${{env.AAB_RELEASE_DIRECTORY}}/MedTimer-release.aab
 
       - name: Setup build tool version variable
         shell: bash
         run: |
-          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
-          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -n 1)
+          echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
-        id: sign_apk
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
-          alias: ${{ secrets.SIGNING_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+        run: |
+          $BUILD_TOOLS_PATH/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
+            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
+          echo -n "$SIGNING_KEY" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
+          $BUILD_TOOLS_PATH/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
+            --ks-pass pass:$KEY_STORE_PASSWORD --key-pass pass:$KEY_PASSWORD \
+            --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
+            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
         env:
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
+          ALIAS: ${{ secrets.SIGNING_ALIAS }}
+          KEY_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+          BUILD_TOOLS_PATH: ${{ env.BUILD_TOOLS_PATH }}
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
         with:
           name: apk
-          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+          path: ${{env.APK_RELEASE_DIRECTORY}}/MedTimer-release-signed.apk
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
