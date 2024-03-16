@@ -33,7 +33,7 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
     @Override
     @SuppressWarnings("java:S4144")
     public String getFilterableKeyword() {
-        return representation;
+        return getRepresentation();
     }
 
     public String getRepresentation() {

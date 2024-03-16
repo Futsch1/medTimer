@@ -38,16 +38,16 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
         // Default one
         View.OnClickListener mSortButtonClickListener = view -> {
             if (getSortState() == SortState.ASCENDING) {
-                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
+                tableView.sortColumn(getAdapterPosition(), SortState.UNSORTED);
             } else if (getSortState() == SortState.DESCENDING) {
                 tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
-            } else {
+            } else if (getSortState() == SortState.UNSORTED) {
                 // Default one
                 tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
             }
-
         };
         columnHeaderSortButton.setOnClickListener(mSortButtonClickListener);
+        itemView.setOnClickListener(mSortButtonClickListener);
     }
 
     /**
@@ -82,10 +82,10 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
     private void controlSortState(@NonNull SortState sortState) {
         if (sortState == SortState.ASCENDING) {
             columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.capsule);
+            columnHeaderSortButton.setImageResource(R.drawable.arrow_up_circle);
         } else if (sortState == SortState.DESCENDING) {
             columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.floppy2);
+            columnHeaderSortButton.setImageResource(R.drawable.arrow_down_circle);
         } else {
             columnHeaderSortButton.setVisibility(View.INVISIBLE);
         }
