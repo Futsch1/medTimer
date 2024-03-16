@@ -2,6 +2,7 @@ package com.futsch1.medtimer.medicine;
 
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,7 +22,8 @@ import com.futsch1.medtimer.database.Reminder;
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
-    private final View itemView;
+    private final EditText editDaysBetweenReminders;
+    private final View holderItemView;
 
     private Reminder reminder;
 
@@ -30,7 +32,8 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
-        this.itemView = itemView;
+        editDaysBetweenReminders = itemView.findViewById(R.id.daysBetweenReminders);
+        this.holderItemView = itemView;
     }
 
     static ReminderViewHolder create(ViewGroup parent) {
@@ -39,10 +42,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         return new ReminderViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     public void bind(Reminder reminder, DeleteCallback deleteCallback) {
         this.reminder = reminder;
 
         editTime.setText(minutesToTime(reminder.timeInMinutes));
+        editDaysBetweenReminders.setText(Integer.toString(reminder.daysBetweenReminders));
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(editTime.getContext(), (view, hourOfDay, minute) -> {
             String selectedTime = minutesToTime(hourOfDay * 60L + minute);
@@ -56,14 +61,14 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.itemView.getContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
 
-        itemView.setOnLongClickListener(v -> {
+        holderItemView.setOnLongClickListener(v -> {
             if (sharedPref.getString("delete_items", "0").equals("0")) {
                 return false;
             }
 
-            PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.itemView);
+            PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.holderItemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
             popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
@@ -79,6 +84,14 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();
+        try {
+            reminder.daysBetweenReminders = Integer.parseInt(editDaysBetweenReminders.getText().toString());
+            if (reminder.daysBetweenReminders <= 0) {
+                reminder.daysBetweenReminders = 1;
+            }
+        } catch (NumberFormatException e) {
+            reminder.daysBetweenReminders = 1;
+        }
         return reminder;
     }
 

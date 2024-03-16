@@ -45,6 +45,36 @@
             android:inputType="text"
             android:text="@string/dosage" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remind_every" />
+
+            <EditText
+                android:id="@+id/daysBetweenReminders"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/days"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:text="@string/days" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/days" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

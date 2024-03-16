@@ -1,5 +1,8 @@
 package com.futsch1.medtimer.medicine;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -33,6 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
     private HandlerThread thread;
+    @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
     private MedicineViewAdapter adapter;
     private SwipeHelper swipeHelper;
@@ -112,23 +116,29 @@ public class MedicinesFragment extends Fragment {
         fab.setOnClickListener(view -> {
             TextInputLayout textInputLayout = new TextInputLayout(requireContext());
             TextInputEditText editText = new TextInputEditText(requireContext());
-            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             editText.setHint(R.string.medicine_name);
             editText.setSingleLine();
             textInputLayout.addView(editText);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setView(textInputLayout);
-            builder.setTitle(R.string.add_medicine);
-            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-                Editable e = editText.getText();
-                if (e != null) {
-                    medicineViewModel.insertMedicine(new Medicine(e.toString()));
-                }
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            AlertDialog.Builder builder = getAlertBuilder(textInputLayout, editText);
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+    }
+
+    @NonNull
+    private AlertDialog.Builder getAlertBuilder(TextInputLayout textInputLayout, TextInputEditText editText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(textInputLayout);
+        builder.setTitle(R.string.add_medicine);
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+            Editable e = editText.getText();
+            if (e != null) {
+                medicineViewModel.insertMedicine(new Medicine(e.toString()));
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        return builder;
     }
 }

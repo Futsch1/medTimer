@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+@SuppressWarnings("java:S1104")
 public class Reminder {
     public final int medicineRelId;
     @PrimaryKey(autoGenerate = true)
@@ -12,6 +13,8 @@ public class Reminder {
     public int timeInMinutes;
     @ColumnInfo(defaultValue = "0")
     public long createdTimestamp;
+    @ColumnInfo(defaultValue = "1")
+    public int daysBetweenReminders;
 
     public String amount;
 

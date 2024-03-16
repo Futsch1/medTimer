@@ -60,4 +60,6 @@
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="notification_tone_title">Notification tone</string>
     <string name="select_format">Select format</string>
+    <string name="remind_every">Remind every</string>
+    <string name="days">days</string>
 </resources>
