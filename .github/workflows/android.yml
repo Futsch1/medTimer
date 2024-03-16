@@ -12,7 +12,6 @@ env:
   AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/release
   BUILD_TOOLS_HOME: /usr/local/lib/android/sdk/build-tools
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -53,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: aab
-          path: $AAB_RELEASE_DIRECTORY/MedTimer-release.aab
+          path: ${{env.AAB_RELEASE_DIRECTORY}}/MedTimer-release.aab
 
       - name: Setup build tool version variable
         shell: bash
