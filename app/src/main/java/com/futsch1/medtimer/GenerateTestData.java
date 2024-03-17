@@ -19,18 +19,18 @@ public class GenerateTestData {
     public void generateTestMedicine() {
         TestMedicine[] testMedicines = new TestMedicine[]{
                 new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, new TestReminder[]{
-                        new TestReminder("1", 9 * 60),
-                        new TestReminder("1", 18 * 60)
+                        new TestReminder("1", 9 * 60, 1),
+                        new TestReminder("1", 18 * 60, 2)
                 }),
                 new TestMedicine("B12 (500µg)", 0xFF8b0000, new TestReminder[]{
-                        new TestReminder("2", 7 * 60)
+                        new TestReminder("2", 7 * 60, 1)
                 }),
                 new TestMedicine("Ginseng (200mg)", 0xFF90EE90, new TestReminder[]{
-                        new TestReminder("1", 9 * 60)
+                        new TestReminder("1", 9 * 60, 1)
                 }),
                 new TestMedicine("Selen (200 µg)", null, new TestReminder[]{
-                        new TestReminder("2", 9 * 60),
-                        new TestReminder("1", 18 * 60)
+                        new TestReminder("2", 9 * 60, 1),
+                        new TestReminder("1", 18 * 60, 1)
                 })
         };
 
@@ -45,6 +45,7 @@ public class GenerateTestData {
                 Reminder reminder = new Reminder(medicineId);
                 reminder.amount = testReminder.amount;
                 reminder.timeInMinutes = testReminder.time;
+                reminder.daysBetweenReminders = testReminder.daysBetweenReminders;
                 viewModel.insertReminder(reminder);
             }
         }
@@ -63,12 +64,14 @@ public class GenerateTestData {
     }
 
     private static class TestReminder {
+        int daysBetweenReminders;
         String amount;
         int time;
 
-        public TestReminder(String amount, int time) {
+        public TestReminder(String amount, int time, int daysBetweenReminders) {
             this.amount = amount;
             this.time = time;
+            this.daysBetweenReminders = daysBetweenReminders;
         }
     }
 }

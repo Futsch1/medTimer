@@ -29,13 +29,13 @@ import java.util.Arrays;
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
     private final TextView remindersSummaryView;
-    private final View itemView;
+    private final View holderItemView;
 
-    private MedicineViewHolder(View itemView) {
-        super(itemView);
-        this.itemView = itemView;
-        medicineNameView = itemView.findViewById(R.id.medicineName);
-        remindersSummaryView = itemView.findViewById(R.id.remindersSummary);
+    private MedicineViewHolder(View holderItemView) {
+        super(holderItemView);
+        this.holderItemView = holderItemView;
+        medicineNameView = holderItemView.findViewById(R.id.medicineName);
+        remindersSummaryView = holderItemView.findViewById(R.id.remindersSummary);
     }
 
     static MedicineViewHolder create(ViewGroup parent) {
@@ -52,20 +52,20 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             remindersSummaryView.setText(getRemindersSummary(medicineWithReminders));
         }
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.itemView.getContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
 
-        itemView.setOnLongClickListener(v -> {
+        holderItemView.setOnLongClickListener(v -> {
             if (sharedPref.getString("delete_items", "0").equals("0")) {
                 return false;
             }
-            PopupMenu popupMenu = new PopupMenu(itemView.getContext(), this.itemView);
+            PopupMenu popupMenu = new PopupMenu(holderItemView.getContext(), this.holderItemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setOnMenuItemClickListener(item -> {
                 startEditActivity(medicineWithReminders);
                 return true;
             });
             popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
-                deleteCallback.deleteItem(itemView.getContext(), getItemId(), getAdapterPosition());
+                deleteCallback.deleteItem(holderItemView.getContext(), getItemId(), getAdapterPosition());
                 return true;
             });
             popupMenu.show();
@@ -73,33 +73,33 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         });
 
 
-        itemView.setOnClickListener(view -> startEditActivity(medicineWithReminders));
+        holderItemView.setOnClickListener(view -> startEditActivity(medicineWithReminders));
 
         if (medicineWithReminders.medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
+            ViewColorHelper.setCardBackground((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView));
+            ViewColorHelper.setDefaultColors((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
     }
 
     private String getRemindersSummary(MedicineWithReminders medicineWithReminders) {
         ArrayList<String> reminderTimes = new ArrayList<>();
-        int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt((r) -> r.timeInMinutes).sorted().toArray();
+        int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
         for (int minute : timesInMinutes) {
             reminderTimes.add(TimeHelper.minutesToTime(minute));
         }
         int len = medicineWithReminders.reminders.size();
-        return remindersSummaryView.getResources().getQuantityString(R.plurals.reminders_per_day, len, len, String.join(", ", reminderTimes));
+        return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
 
     }
 
     private void startEditActivity(MedicineWithReminders medicineWithReminders) {
-        Intent intent = new Intent(itemView.getContext(), EditMedicine.class);
+        Intent intent = new Intent(holderItemView.getContext(), EditMedicine.class);
         intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
         intent.putExtra(EXTRA_USE_COLOR, medicineWithReminders.medicine.useColor);
         intent.putExtra(EXTRA_COLOR, medicineWithReminders.medicine.color);
         intent.putExtra(EXTRA_MEDICINE_NAME, medicineWithReminders.medicine.name);
-        itemView.getContext().startActivity(intent);
+        holderItemView.getContext().startActivity(intent);
     }
 
     public interface DeleteCallback {
