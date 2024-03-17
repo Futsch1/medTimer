@@ -73,8 +73,9 @@ public class ReminderScheduler {
             boolean justCreated = targetInstant.isBefore(Instant.ofEpochSecond(reminder.createdTimestamp));
             boolean isTimeForReminder = !targetInstant.isBefore(lastReminder);
             boolean isDueToday = isDueToday(reminder, reminderEvents, checkDate);
+            boolean wasProcessed = wasProcessed(reminder, reminderEvents, targetInstant);
 
-            if (!justCreated && isTimeForReminder && !wasProcessed(reminder, reminderEvents, targetInstant) && isDueToday) {
+            if (!justCreated && isTimeForReminder && !wasProcessed && isDueToday) {
                 Log.d(LogTags.SCHEDULER,
                         String.format("Scheduling reminder ID%d to %s, last was %s with ID %d",
                                 reminder.reminderId,
@@ -119,12 +120,9 @@ public class ReminderScheduler {
         if (reminder.daysBetweenReminders > 1) {
             // Search for reminder n days in the past
             for (ReminderEvent event : reminderEvents) {
-                if (event.reminderId == reminder.reminderId) {
-                    OffsetDateTime eventDate = OffsetDateTime.ofInstant(Instant.ofEpochSecond(event.remindedTimestamp), timeAccess.systemZone());
-                    if (eventDate.toLocalDate().plusDays(reminder.daysBetweenReminders).isAfter(checkDate)) {
-                        dueToday = false;
-                        break;
-                    }
+                dueToday = isReminderDueToday(reminder, checkDate, event);
+                if (!dueToday) {
+                    break;
                 }
             }
         }
@@ -138,6 +136,17 @@ public class ReminderScheduler {
             }
         }
         return false;
+    }
+
+    private boolean isReminderDueToday(Reminder reminder, LocalDate checkDate, ReminderEvent event) {
+        boolean dueToday = true;
+        if (event.reminderId == reminder.reminderId) {
+            OffsetDateTime eventDate = OffsetDateTime.ofInstant(Instant.ofEpochSecond(event.remindedTimestamp), timeAccess.systemZone());
+            if (eventDate.toLocalDate().plusDays(reminder.daysBetweenReminders).isAfter(checkDate)) {
+                dueToday = false;
+            }
+        }
+        return dueToday;
     }
 
     public interface ScheduleListener {
