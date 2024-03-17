@@ -16,9 +16,9 @@
     <string name="confirm">Confirm</string>
     <string name="are_you_sure_delete_medicine">Are you sure to delete the medicine?</string>
     <string name="no_reminders">No reminders set</string>
-    <plurals name="reminders_per_day">
-        <item quantity="one">%1$d reminder per day\n%2$s</item>
-        <item quantity="other">%1$d reminders per day\n%2$s</item>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d reminder\n%2$s</item>
+        <item quantity="other">%1$d reminders\n%2$s</item>
     </plurals>
     <string name="channel_name" translatable="false">MedTimer</string>
     <string name="channel_description" translatable="false">Notifications from MedTimer</string>

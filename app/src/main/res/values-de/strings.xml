@@ -25,7 +25,7 @@
     <string name="reminder_event">%1$s von %2$s\n%3$s</string>
     <string name="recent_reminders">Kürzliche Erinnerungen</string>
     <string name="next_reminder">Nächste Erinnerung</string>
-    <plurals name="reminders_per_day">
+    <plurals name="sum_reminders">
         <item quantity="one">%1$d Erinnerung pro Tag\n%2$s</item>
         <item quantity="other">%1$d Erinnerungen pro Tag\n%2$s</item>
     </plurals>
