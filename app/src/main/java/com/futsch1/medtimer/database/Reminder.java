@@ -21,6 +21,7 @@ public class Reminder {
     public Reminder(int medicineRelId) {
         timeInMinutes = 480;
         amount = "?";
+        daysBetweenReminders = 1;
         this.medicineRelId = medicineRelId;
     }
 }
