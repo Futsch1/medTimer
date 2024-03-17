@@ -14,30 +14,33 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 3,
+        version = 4,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
-                @AutoMigration(from = 2, to = 3)
+                @AutoMigration(from = 2, to = 3),
+                @AutoMigration(from = 3, to = 4)
         }
 )
+@SuppressWarnings("java:S6548")
 public abstract class MedicineRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     // marking the instance as volatile to ensure atomic access to the variable
-    private static volatile MedicineRoomDatabase INSTANCE;
+    @SuppressWarnings("java:S3077")
+    private static volatile MedicineRoomDatabase instance;
 
     static MedicineRoomDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
+        if (instance == null) {
             synchronized (MedicineRoomDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                if (instance == null) {
+                    instance = Room.databaseBuilder(context.getApplicationContext(),
                                     MedicineRoomDatabase.class, "medTimer")
                             .build();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
 
     public abstract MedicineDao medicineDao();

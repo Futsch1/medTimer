@@ -34,16 +34,15 @@ public class ReminderScheduler {
     public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, List<ReminderEvent> reminderEvents) {
         ArrayList<Reminder> sortedReminders = getSortedReminders(medicineWithReminders);
 
-        if (sortedReminders.size() > 0) {
+        if (!sortedReminders.isEmpty()) {
             LocalDate checkDate = this.timeAccess.localDate();
-            Reminder nextReminder = findNextReminder(sortedReminders, reminderEvents, checkDate);
+            Reminder nextReminder = null;
 
-            if (nextReminder == null) {
-                checkDate = checkDate.plusDays(1);
-                nextReminder = sortedReminders.get(0);
-                Log.d(LogTags.SCHEDULER,
-                        String.format("Scheduling reminder ID %d to the next day",
-                                nextReminder.reminderId));
+            while (nextReminder == null) {
+                nextReminder = findNextReminder(sortedReminders, reminderEvents, checkDate);
+                if (nextReminder == null) {
+                    checkDate = checkDate.plusDays(1);
+                }
             }
 
             Instant targetInstant = getTargetInstant(nextReminder, checkDate);
@@ -73,8 +72,10 @@ public class ReminderScheduler {
 
             boolean justCreated = targetInstant.isBefore(Instant.ofEpochSecond(reminder.createdTimestamp));
             boolean isTimeForReminder = !targetInstant.isBefore(lastReminder);
+            boolean isDueToday = isDueToday(reminder, reminderEvents, checkDate);
+            boolean wasProcessed = wasProcessed(reminder, reminderEvents, targetInstant);
 
-            if (!justCreated && isTimeForReminder && !wasProcessed(reminder, reminderEvents, targetInstant)) {
+            if (!justCreated && isTimeForReminder && !wasProcessed && isDueToday) {
                 Log.d(LogTags.SCHEDULER,
                         String.format("Scheduling reminder ID%d to %s, last was %s with ID %d",
                                 reminder.reminderId,
@@ -107,11 +108,25 @@ public class ReminderScheduler {
     }
 
     private @Nullable ReminderEvent getLastReminderEvent(List<ReminderEvent> reminderEvents) {
-        return reminderEvents.size() > 0 ? reminderEvents.get(reminderEvents.size() - 1) : null;
+        return !reminderEvents.isEmpty() ? reminderEvents.get(reminderEvents.size() - 1) : null;
     }
 
     private Instant getReminderEventInstant(@Nullable ReminderEvent reminderEvent) {
         return reminderEvent != null ? Instant.ofEpochSecond(reminderEvent.remindedTimestamp) : Instant.EPOCH;
+    }
+
+    private boolean isDueToday(Reminder reminder, List<ReminderEvent> reminderEvents, LocalDate checkDate) {
+        boolean dueToday = true;
+        if (reminder.daysBetweenReminders > 1) {
+            // Search for reminder n days in the past
+            for (ReminderEvent event : reminderEvents) {
+                dueToday = isReminderDueToday(reminder, checkDate, event);
+                if (!dueToday) {
+                    break;
+                }
+            }
+        }
+        return dueToday;
     }
 
     private boolean wasProcessed(Reminder reminder, List<ReminderEvent> reminderEvents, Instant targetInstant) {
@@ -121,6 +136,17 @@ public class ReminderScheduler {
             }
         }
         return false;
+    }
+
+    private boolean isReminderDueToday(Reminder reminder, LocalDate checkDate, ReminderEvent event) {
+        boolean dueToday = true;
+        if (event.reminderId == reminder.reminderId) {
+            OffsetDateTime eventDate = OffsetDateTime.ofInstant(Instant.ofEpochSecond(event.remindedTimestamp), timeAccess.systemZone());
+            if (eventDate.toLocalDate().plusDays(reminder.daysBetweenReminders).isAfter(checkDate)) {
+                dueToday = false;
+            }
+        }
+        return dueToday;
     }
 
     public interface ScheduleListener {

@@ -16,8 +16,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 19
-        versionName = "1.2.2"
+        versionCode = 20
+        versionName = "1.3.0"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,35 +45,34 @@ android {
 }
 
 dependencies {
+    val roomVersion = "2.6.1"
+    val androidXNavigationVersion = "2.7.7"
+    val preferenceXVersion = "1.1.0"
+
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment:2.7.7")
-    implementation("androidx.navigation:navigation-ui:2.7.7")
+    implementation("androidx.navigation:navigation-fragment:$androidXNavigationVersion")
+    implementation("androidx.navigation:navigation-ui:$androidXNavigationVersion")
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("org.mockito:mockito-core:5.11.0")
+    implementation("com.github.skydoves:colorpickerview:2.3.0")
+    implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
+    implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
+    implementation("com.github.wwdablu:SimplyPDF:2.1.1")
+
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    val roomVersion = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-
-    implementation("org.mockito:mockito-core:5.11.0")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-
-    implementation("com.github.skydoves:colorpickerview:2.3.0")
-
-    implementation("com.takisoft.preferencex:preferencex:1.1.0")
-    implementation("com.takisoft.preferencex:preferencex-ringtone:1.1.0")
-
-    implementation("com.github.wwdablu:SimplyPDF:2.1.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
 }
 
 play {
