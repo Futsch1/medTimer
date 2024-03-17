@@ -5,6 +5,11 @@
 
 <img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
 
+The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13) making use of an Android Room
+database and Material 3 theming.
+
+<a href='https://play.google.com/store/apps/details?id=com.futsch1.medtimer'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width='150'/></a>
+
 ## Play store description
 
 **Med reminders and history with full offline privacy**
