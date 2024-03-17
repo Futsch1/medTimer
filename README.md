@@ -1,9 +1,13 @@
 [![Build status](https://github.com/Futsch1/medTimer/actions/workflows/android.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/android.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7239138d83361232bba9/maintainability)](https://codeclimate.com/github/Futsch1/medTimer/maintainability)
+[![Google play](https://play.google.com/store/apps/details?id=com.futsch1.medtimer)](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)
 
 # MedTimer for Android
 
 <img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
+
+The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13) making use of an Android Room
+database and Material 3 theming.
 
 ## Play store description
 
