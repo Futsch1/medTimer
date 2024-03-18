@@ -39,14 +39,10 @@ jobs:
 
       - name: Sign AAB
         run: |
-          echo -n "$SIGNING_KEY" | base64 --decode >> $AAB_RELEASE_DIRECTORY/signingKey.jks
-          jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass $KEY_STORE_PASSWORD \
-            -keypass $KEY_PASSWORD $AAB_RELEASE_DIRECTORY/MedTimer-release.aab $ALIAS
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
-          ALIAS: ${{ secrets.SIGNING_ALIAS }}
-          KEY_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $AAB_RELEASE_DIRECTORY/signingKey.jks
+          jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass ${{ secrets.SIGNING_KEYSTORE_PASSWORD }} \
+            -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $AAB_RELEASE_DIRECTORY/MedTimer-release.aab ${{ secrets.SIGNING_ALIAS }}
+        continue-on-error: true
       - name: Upload App Bundle
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
@@ -61,19 +57,14 @@ jobs:
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
         run: |
-          $BUILD_TOOLS_PATH/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
+          ${{ env.BUILD_TOOLS_PATH }}/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
-          echo -n "$SIGNING_KEY" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
-          $BUILD_TOOLS_PATH/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias $ALIAS \
-            --ks-pass pass:$KEY_STORE_PASSWORD --key-pass pass:$KEY_PASSWORD \
+          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
+          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+            --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEYSTORE }}
-          ALIAS: ${{ secrets.SIGNING_ALIAS }}
-          KEY_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
-          BUILD_TOOLS_PATH: ${{ env.BUILD_TOOLS_PATH }}
+        continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
