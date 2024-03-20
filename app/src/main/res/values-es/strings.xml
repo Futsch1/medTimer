@@ -60,4 +60,7 @@
     <string name="select_format">Seleccionar formato</string>
     <string name="remind_every">Recordar cada</string>
     <string name="days">días</string>
+    <string name="theme">Tema</string>
+    <string name="default_theme">Estándar</string>
+    <string name="alternative">Alternativo</string>
 </resources>
