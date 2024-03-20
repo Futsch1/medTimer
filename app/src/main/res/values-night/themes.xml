@@ -4,4 +4,12 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="Base.Theme.MedTimer2" parent="Theme.Material3.Dark">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@android:color/background_dark</item>
+        <item name="colorSurfaceContainer">@android:color/background_dark</item>
+        <item name="elevationOverlayColor">@android:color/background_dark</item>
+    </style>
+
 </resources>

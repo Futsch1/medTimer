@@ -38,6 +38,15 @@
         android:title="@string/delete_items"
         app:key="delete_items"
         app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="0"
+        android:entries="@array/theme_entries_titles"
+        android:entryValues="@array/theme_entries_values"
+        android:title="@string/theme"
+        app:key="theme"
+        app:useSimpleSummaryProvider="true" />
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

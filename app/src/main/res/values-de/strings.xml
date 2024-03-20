@@ -61,4 +61,7 @@
     <string name="select_format">Format auswählen</string>
     <string name="remind_every">Erinnere alle</string>
     <string name="days">Tage</string>
+    <string name="theme">Theme</string>
+    <string name="default_theme">Standard</string>
+    <string name="alternative">Alternativ</string>
 </resources>

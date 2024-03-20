@@ -3,13 +3,14 @@ package com.futsch1.medtimer;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
-                if (!result) {
+                if (Boolean.FALSE.equals(result)) {
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("show_notification", false).apply();
                 }
             }
@@ -33,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String theme = sharedPref.getString("theme", "0");
+        if (theme.equals("1")) {
+            setTheme(R.style.Theme_MedTimer2);
+        }
+
         setContentView(R.layout.activity_main);
 
         // View pager
@@ -47,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
         NotificationChannelManager.createNotificationChannel(getApplicationContext());
-
     }
 
     @Override
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(POST_NOTIFICATIONS);
         }
     }

@@ -62,4 +62,7 @@
     <string name="select_format">Select format</string>
     <string name="remind_every">Remind every</string>
     <string name="days">days</string>
+    <string name="theme">Theme</string>
+    <string name="default_theme">Default</string>
+    <string name="alternative">Alternative</string>
 </resources>

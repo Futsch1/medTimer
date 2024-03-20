@@ -14,7 +14,7 @@ import android.os.HandlerThread;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
@@ -48,6 +48,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupAppURL();
         setupClearEvents();
         setupShowNotifications();
+        setupTheme();
         setupExactReminders();
         setupExport();
         setupGenerateTestData();
@@ -93,7 +94,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupShowNotifications() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Preference preference = getPreferenceScreen().findPreference("show_notification");
             if (preference != null) {
                 preference.setEnabled(false);
@@ -102,11 +103,24 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
+    private void setupTheme() {
+        Preference preference = getPreferenceScreen().findPreference("theme");
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
+                Intent intent = requireActivity().getIntent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                requireActivity().finish();
+                startActivity(intent);
+                return true;
+            });
+        }
+    }
+
     private void setupExactReminders() {
         Preference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
-                if ((Boolean) newValue) {
+                if (Boolean.TRUE.equals(newValue)) {
                     AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
                     if (!alarmManager.canScheduleExactAlarms()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
