@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.medicine;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
@@ -16,6 +18,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +48,7 @@ import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class EditMedicine extends AppCompatActivity {
 
@@ -101,6 +105,8 @@ public class EditMedicine extends AppCompatActivity {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -155,7 +161,7 @@ public class EditMedicine extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             TextInputLayout textInputLayout = new TextInputLayout(this);
             TextInputEditText editText = new TextInputEditText(this);
-            editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             editText.setHint(R.string.create_reminder_dosage_hint);
             editText.setSingleLine();
             textInputLayout.addView(editText);
@@ -186,6 +192,15 @@ public class EditMedicine extends AppCompatActivity {
             medicineViewModel.insertReminder(reminder);
         }, 8, 0, DateFormat.is24HourFormat(getApplicationContext()));
         timePickerDialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
