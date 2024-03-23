@@ -65,4 +65,6 @@
     <string name="theme">Theme</string>
     <string name="default_theme">Default</string>
     <string name="alternative">Alternative</string>
+    <string name="instructions">Instructions</string>
+    <string name="three_dots" translatable="false">...</string>
 </resources>

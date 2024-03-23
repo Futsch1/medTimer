@@ -64,4 +64,5 @@
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
     <string name="alternative">Alternativ</string>
+    <string name="instructions">Hinweise</string>
 </resources>
