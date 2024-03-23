@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">MedTimer</string>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
-    <string name="tab_medicine">Medicamento</string>
+    <string name="tab_medicine">Medicación</string>
     <string name="add_medicine">Añadir medicamento</string>
     <string name="medicine_name">Nombre del medicamento</string>
     <string name="add_reminder">Añadir recordatorio</string>
@@ -16,7 +16,7 @@
     <string name="confirm">Confirmar</string>
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
         <item quantity="one">%1$d recordatorio\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
