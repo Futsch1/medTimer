@@ -23,7 +23,7 @@
     <string name="channel_name" translatable="false">MedTimer</string>
     <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Medicine reminder</string>
-    <string name="notification_content">It is %1$s - time to take %2$s of %3$s</string>
+    <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
     <string name="notification_taken">TAKEN</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
@@ -67,4 +67,9 @@
     <string name="alternative">Alternative</string>
     <string name="instructions">Instructions</string>
     <string name="three_dots" translatable="false">...</string>
+    <string name="no_instructions">no instructions</string>
+    <string name="before_meal">before the meal</string>
+    <string name="after_meal">after the meal</string>
+    <string name="time_before_meal">30 minutes before the meal</string>
+    <string name="time_after">2 hours after medicine</string>
 </resources>

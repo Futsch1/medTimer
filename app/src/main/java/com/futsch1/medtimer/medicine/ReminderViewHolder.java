@@ -3,6 +3,7 @@ package com.futsch1.medtimer.medicine;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
@@ -25,6 +27,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editDaysBetweenReminders;
     private final EditText editInstructions;
     private final View holderItemView;
+    private final Button instructionSuggestions;
 
     private Reminder reminder;
 
@@ -35,6 +38,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editAmount = itemView.findViewById(R.id.editAmount);
         editDaysBetweenReminders = itemView.findViewById(R.id.daysBetweenReminders);
         editInstructions = itemView.findViewById(R.id.editInstructions);
+        instructionSuggestions = itemView.findViewById(R.id.instructionSuggestions);
         this.holderItemView = itemView;
     }
 
@@ -83,6 +87,25 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         editAmount.setText(reminder.amount);
         editInstructions.setText(reminder.instructions);
+
+        setupInstructionSuggestions();
+    }
+
+    private void setupInstructionSuggestions() {
+        instructionSuggestions.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(holderItemView.getContext());
+            builder.setTitle(R.string.instructions);
+            builder.setItems(R.array.instructions_suggestions, (dialog, which) -> {
+                if (which > 0) {
+                    String[] instructionSuggestionsArray = holderItemView.getResources().getStringArray(R.array.instructions_suggestions);
+                    editInstructions.setText(instructionSuggestionsArray[which]);
+                } else {
+                    editInstructions.setText("");
+                }
+            });
+            builder.show();
+
+        });
     }
 
     public Reminder getReminder() {

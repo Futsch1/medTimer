@@ -33,4 +33,11 @@
         <item>CSV</item>
         <item>PDF</item>
     </string-array>
+    <string-array name="instructions_suggestions">
+        <item>@string/no_instructions</item>
+        <item>@string/before_meal</item>
+        <item>@string/after_meal</item>
+        <item>@string/time_before_meal</item>
+        <item>@string/time_after</item>
+    </string-array>
 </resources>

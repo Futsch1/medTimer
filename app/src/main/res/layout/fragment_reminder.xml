@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardCornerRadius="10dp"
@@ -108,28 +108,25 @@
                 android:id="@+id/instructions_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:labelFor="@+id/editInstructions"
                 android:maxLines="1"
                 android:text="@string/instructions" />
 
             <EditText
                 android:id="@+id/editInstructions"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"
                 android:layout_weight="1"
-                android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:text="@string/instructions" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/instructionSuggestions"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_weight="1"
                 android:maxLines="1"
                 android:text="@string/three_dots" />
         </LinearLayout>

@@ -18,7 +18,7 @@
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s einzunehmen</string>
+    <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
     <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
@@ -65,4 +65,9 @@
     <string name="default_theme">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="instructions">Hinweise</string>
+    <string name="no_instructions">keine Hinweise</string>
+    <string name="before_meal">vor der Mahlzeit</string>
+    <string name="after_meal">nach der Mahlzeit</string>
+    <string name="time_before_meal">30 Minuten vor der Mahlzeit</string>
+    <string name="time_after">2 Stunden nach Medikament</string>
 </resources>

@@ -19,7 +19,7 @@ public class Notifications {
         // Intentionally empty
     }
 
-    public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, int reminderEventId, Color color) {
+    public static int showNotification(@NonNull Context context, String remindTime, String medicineName, String amount, String instructions, int reminderEventId, Color color) {
         int notificationId = getNextNotificationId(context);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
@@ -33,10 +33,14 @@ public class Notifications {
         startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
+        if (!instructions.isEmpty()) {
+            instructions = " " + instructions;
+        }
+        
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannelManager.getNotificationChannelId(context))
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_content, remindTime, amount, medicineName))
+                .setContentText(context.getString(R.string.notification_content, remindTime, amount, medicineName, instructions))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
                 .setDeleteIntent(pendingDismissed)
