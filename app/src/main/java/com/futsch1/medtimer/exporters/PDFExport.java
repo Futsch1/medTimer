@@ -45,7 +45,7 @@ public class PDFExport implements Exporter {
     }
 
 
-    public void export(File file) throws ExporterException {
+    public void export(File file) {
         SimplyPdfDocument simplyPdfDocument = getDocument(file);
 
         LinkedList<LinkedList<Cell>> rows = new LinkedList<>();
