@@ -26,8 +26,8 @@
     <string name="recent_reminders">Kürzliche Erinnerungen</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d Erinnerung pro Tag\n%2$s</item>
-        <item quantity="other">%1$d Erinnerungen pro Tag\n%2$s</item>
+        <item quantity="one">%1$d Erinnerung\n%2$s</item>
+        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
     </plurals>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
