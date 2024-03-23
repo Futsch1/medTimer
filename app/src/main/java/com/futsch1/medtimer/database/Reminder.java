@@ -15,6 +15,8 @@ public class Reminder {
     public long createdTimestamp;
     @ColumnInfo(defaultValue = "1")
     public int daysBetweenReminders;
+    @ColumnInfo(defaultValue = "")
+    public String instructions;
 
     public String amount;
 

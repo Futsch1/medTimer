@@ -1,7 +1,5 @@
 package com.futsch1.medtimer;
 
-import androidx.annotation.Nullable;
-
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 
@@ -19,18 +17,18 @@ public class GenerateTestData {
     public void generateTestMedicine() {
         TestMedicine[] testMedicines = new TestMedicine[]{
                 new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1),
-                        new TestReminder("1", 18 * 60, 2)
+                        new TestReminder("1", 9 * 60, 1, ""),
+                        new TestReminder("1", 18 * 60, 2, "after meals")
                 }),
                 new TestMedicine("B12 (500µg)", 0xFF8b0000, new TestReminder[]{
-                        new TestReminder("2", 7 * 60, 1)
+                        new TestReminder("2", 7 * 60, 1, "")
                 }),
                 new TestMedicine("Ginseng (200mg)", 0xFF90EE90, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1)
+                        new TestReminder("1", 9 * 60, 1, "before breakfast")
                 }),
                 new TestMedicine("Selen (200 µg)", null, new TestReminder[]{
-                        new TestReminder("2", 9 * 60, 1),
-                        new TestReminder("1", 18 * 60, 1)
+                        new TestReminder("2", 9 * 60, 1, ""),
+                        new TestReminder("1", 18 * 60, 1, "")
                 })
         };
 
@@ -46,32 +44,19 @@ public class GenerateTestData {
                 reminder.amount = testReminder.amount;
                 reminder.timeInMinutes = testReminder.time;
                 reminder.daysBetweenReminders = testReminder.daysBetweenReminders;
+                reminder.instructions = testReminder.instructions;
                 viewModel.insertReminder(reminder);
             }
         }
     }
 
-    private static class TestMedicine {
-        String name;
-        Integer color;
-        TestReminder[] reminders;
-
-        public TestMedicine(String name, @Nullable Integer color, TestReminder[] reminders) {
-            this.name = name;
-            this.color = color;
-            this.reminders = reminders;
-        }
+    @SuppressWarnings("java:S6218")
+    private record TestMedicine(String name, Integer color, TestReminder[] reminders) {
+        // Record, intentionally empty
     }
 
-    private static class TestReminder {
-        int daysBetweenReminders;
-        String amount;
-        int time;
-
-        public TestReminder(String amount, int time, int daysBetweenReminders) {
-            this.amount = amount;
-            this.time = time;
-            this.daysBetweenReminders = daysBetweenReminders;
-        }
+    private record TestReminder(String amount, int time, int daysBetweenReminders,
+                                String instructions) {
+        // Record, intentionally empty
     }
 }

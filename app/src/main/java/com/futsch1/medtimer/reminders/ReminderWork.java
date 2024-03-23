@@ -53,7 +53,7 @@ public class ReminderWork extends Worker {
 
             if (canShowNotifications()) {
                 Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
-                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminderEvent.reminderEventId, color);
+                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminderEvent.reminderEventId, color);
                 medicineRepository.updateReminderEvent(reminderEvent);
             }
 
