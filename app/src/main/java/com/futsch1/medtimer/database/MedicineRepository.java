@@ -52,15 +52,19 @@ public class MedicineRepository {
         return medicineDao.getReminderEvents(0L);
     }
 
-    public List<ReminderEvent> getLastDaysReminderEvents() {
-        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - (24 * 60 * 60));
+    public List<ReminderEvent> getLastDaysReminderEvents(int days) {
+        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60));
     }
 
     public long insertMedicine(Medicine medicine) {
         final Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine));
         try {
             return future.get();
-        } catch (ExecutionException | InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e1) {
+            //noinspection CallToPrintStackTrace
+            e1.printStackTrace();
         }
         return 0;
     }
@@ -91,7 +95,10 @@ public class MedicineRepository {
 
         try {
             rowId = future.get();
-        } catch (InterruptedException | ExecutionException e1) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e1) {
+            //noinspection CallToPrintStackTrace
             e1.printStackTrace();
         }
         return rowId;

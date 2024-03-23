@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -38,7 +37,7 @@ public class ReminderSchedulerUnitTest {
         verifyNoInteractions(mock);
 
         // One medicine without reminders, no reminder events
-        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
         scheduler.schedule(new ArrayList<>() {{
             add(medicineWithReminders);
         }}, new ArrayList<>());
@@ -54,14 +53,6 @@ public class ReminderSchedulerUnitTest {
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(12 * 60), medicineWithReminders.medicine, reminder);
     }
 
-    private MedicineWithReminders buildMedicineWithReminders(int medicineId, String medicineName) {
-        MedicineWithReminders medicineWithReminders = new MedicineWithReminders();
-        medicineWithReminders.medicine = new Medicine(medicineName);
-        medicineWithReminders.medicine.medicineId = medicineId;
-        medicineWithReminders.reminders = new ArrayList<>();
-        return medicineWithReminders;
-    }
-
 
     @Test
     public void scheduler_reminders() {
@@ -72,9 +63,9 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders1 = buildMedicineWithReminders(1, "Test1");
-        Reminder reminder1 = buildReminder(1, 1, "1", 16, 1);
-        Reminder reminder2 = buildReminder(1, 1, "2", 12, 1);
+        MedicineWithReminders medicineWithReminders1 = TestHelper.buildMedicineWithReminders(1, "Test1");
+        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
+        Reminder reminder2 = TestHelper.buildReminder(1, 1, "2", 12, 1);
         medicineWithReminders1.reminders.add(reminder1);
         medicineWithReminders1.reminders.add(reminder2);
         scheduler.schedule(new ArrayList<>() {{
@@ -84,23 +75,14 @@ public class ReminderSchedulerUnitTest {
         clearInvocations(mock);
 
         // Now add a second medicine with an earlier reminder
-        MedicineWithReminders medicineWithReminders2 = buildMedicineWithReminders(2, "Test2");
-        Reminder reminder3 = buildReminder(2, 1, "1", 3, 1);
+        MedicineWithReminders medicineWithReminders2 = TestHelper.buildMedicineWithReminders(2, "Test2");
+        Reminder reminder3 = TestHelper.buildReminder(2, 1, "1", 3, 1);
         medicineWithReminders2.reminders.add(reminder3);
         scheduler.schedule(new ArrayList<>() {{
             add(medicineWithReminders1);
             add(medicineWithReminders2);
         }}, new ArrayList<>());
         verify(mock, times(1)).schedule(Instant.ofEpochSecond(3 * 60), medicineWithReminders2.medicine, reminder3);
-    }
-
-    private Reminder buildReminder(int medicineId, int reminderId, String amount, int timeInMinutes, int daysBetweenReminders) {
-        Reminder reminder = new Reminder(medicineId);
-        reminder.reminderId = reminderId;
-        reminder.amount = amount;
-        reminder.timeInMinutes = timeInMinutes;
-        reminder.daysBetweenReminders = daysBetweenReminders;
-        return reminder;
     }
 
     @Test
@@ -112,13 +94,13 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders1 = buildMedicineWithReminders(1, "Test1");
-        Reminder reminder1 = buildReminder(1, 1, "1", 16, 1);
-        Reminder reminder2 = buildReminder(1, 2, "2", 12, 1);
+        MedicineWithReminders medicineWithReminders1 = TestHelper.buildMedicineWithReminders(1, "Test1");
+        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
+        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 12, 1);
         medicineWithReminders1.reminders.add(reminder1);
         medicineWithReminders1.reminders.add(reminder2);
-        MedicineWithReminders medicineWithReminders2 = buildMedicineWithReminders(2, "Test2");
-        Reminder reminder3 = buildReminder(2, 3, "1", 3, 1);
+        MedicineWithReminders medicineWithReminders2 = TestHelper.buildMedicineWithReminders(2, "Test2");
+        Reminder reminder3 = TestHelper.buildReminder(2, 3, "1", 3, 1);
         medicineWithReminders2.reminders.add(reminder3);
         ArrayList<MedicineWithReminders> medicineWithReminders = new ArrayList<>() {{
             add(medicineWithReminders1);
@@ -132,7 +114,7 @@ public class ReminderSchedulerUnitTest {
         clearInvocations(mock);
 
         // Check two reminders at the same time
-        Reminder reminder4 = buildReminder(2, 4, "1", 12, 1);
+        Reminder reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1);
         medicineWithReminders2.reminders.add(reminder4);
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
             add(buildReminderEvent(2, 12 * 60));
@@ -188,8 +170,8 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
-        Reminder reminder = buildReminder(1, 1, "1", 480, 1);
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         medicineWithReminders.reminders.add(reminder);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
@@ -212,12 +194,12 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders1 = buildMedicineWithReminders(1, "Test1");
-        Reminder reminder1 = buildReminder(1, 1, "1", 480, 1);
+        MedicineWithReminders medicineWithReminders1 = TestHelper.buildMedicineWithReminders(1, "Test1");
+        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 480, 1);
         medicineWithReminders1.reminders.add(reminder1);
 
-        MedicineWithReminders medicineWithReminders2 = buildMedicineWithReminders(2, "Test2");
-        Reminder reminder2 = buildReminder(2, 2, "2", 480, 1);
+        MedicineWithReminders medicineWithReminders2 = TestHelper.buildMedicineWithReminders(2, "Test2");
+        Reminder reminder2 = TestHelper.buildReminder(2, 2, "2", 480, 1);
         medicineWithReminders2.reminders.add(reminder2);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
@@ -241,8 +223,8 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
-        Reminder reminder = buildReminder(1, 1, "1", 480, 2);
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
@@ -271,10 +253,10 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
-        Reminder reminder = buildReminder(1, 1, "1", 480, 2);
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
-        Reminder reminder2 = buildReminder(1, 2, "2", 481, 1);
+        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 1);
         medicineWithReminders.reminders.add(reminder2);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
@@ -298,10 +280,10 @@ public class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = buildMedicineWithReminders(1, "Test");
-        Reminder reminder = buildReminder(1, 1, "1", 480, 2);
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
-        Reminder reminder2 = buildReminder(1, 2, "2", 481, 4);
+        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 4);
         medicineWithReminders.reminders.add(reminder2);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
