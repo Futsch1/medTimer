@@ -15,8 +15,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 import java.util.List;
 
 public class ReminderSchedulerService extends LifecycleService {
-    public static boolean serviceRunning = false;
-    
+
     @Nullable
     @Override
     public IBinder onBind(@NonNull Intent intent) {
@@ -27,8 +26,6 @@ public class ReminderSchedulerService extends LifecycleService {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        serviceRunning = true;
 
         MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
 
@@ -42,7 +39,6 @@ public class ReminderSchedulerService extends LifecycleService {
     }
 
     private void scheduleRequest() {
-        Log.i(LogTags.SCHEDULER, "Requesting reschedule");
         ReminderProcessor.requestReschedule(this);
     }
 
@@ -56,6 +52,7 @@ public class ReminderSchedulerService extends LifecycleService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        scheduleRequest();
         return START_STICKY;
     }
 }

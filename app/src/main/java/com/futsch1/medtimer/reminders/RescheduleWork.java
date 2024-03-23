@@ -56,7 +56,6 @@ public class RescheduleWork extends Worker {
             }
         });
 
-
         List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
         reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(MedicineHelper.getMaxDaysBetweenReminders(medicineWithReminders) + 1));
 
