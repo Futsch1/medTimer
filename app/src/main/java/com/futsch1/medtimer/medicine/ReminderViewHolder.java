@@ -23,6 +23,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
     private final EditText editDaysBetweenReminders;
+    private final EditText editInstructions;
     private final View holderItemView;
 
     private Reminder reminder;
@@ -33,6 +34,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
         editDaysBetweenReminders = itemView.findViewById(R.id.daysBetweenReminders);
+        editInstructions = itemView.findViewById(R.id.editInstructions);
         this.holderItemView = itemView;
     }
 
@@ -80,10 +82,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         });
 
         editAmount.setText(reminder.amount);
+        editInstructions.setText(reminder.instructions);
     }
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();
+        reminder.instructions = editInstructions.getText().toString();
         try {
             reminder.daysBetweenReminders = Integer.parseInt(editDaysBetweenReminders.getText().toString());
             if (reminder.daysBetweenReminders <= 0) {

@@ -108,13 +108,18 @@
                 android:id="@+id/instructions_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:labelFor="@+id/editInstructions"
                 android:maxLines="1"
                 android:text="@string/instructions" />
 
             <EditText
-                android:id="@+id/instructions"
+                android:id="@+id/editInstructions"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
@@ -122,8 +127,10 @@
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:maxLines="1"
                 android:text="@string/three_dots" />
         </LinearLayout>
 

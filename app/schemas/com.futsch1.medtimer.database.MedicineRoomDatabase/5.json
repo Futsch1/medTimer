@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "0ad793840f818d0bf374caab71525e3d",
+    "identityHash": "d2673f77bbfea4929249affb4ba7a180",
     "entities": [
       {
         "tableName": "Medicine",
@@ -46,7 +46,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `daysBetweenReminders` INTEGER NOT NULL DEFAULT 1, `reminderNoteIndex` INTEGER NOT NULL DEFAULT 0, `amount` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `daysBetweenReminders` INTEGER NOT NULL DEFAULT 1, `instructions` TEXT DEFAULT '', `amount` TEXT)",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -81,11 +81,11 @@
             "defaultValue": "1"
           },
           {
-            "fieldPath": "reminderNoteIndex",
-            "columnName": "reminderNoteIndex",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
+            "fieldPath": "instructions",
+            "columnName": "instructions",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "''"
           },
           {
             "fieldPath": "amount",
@@ -184,7 +184,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ad793840f818d0bf374caab71525e3d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd2673f77bbfea4929249affb4ba7a180')"
     ]
   }
 }

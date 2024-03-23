@@ -1,7 +1,5 @@
 package com.futsch1.medtimer;
 
-import androidx.annotation.Nullable;
-
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 
@@ -46,32 +44,16 @@ public class GenerateTestData {
                 reminder.amount = testReminder.amount;
                 reminder.timeInMinutes = testReminder.time;
                 reminder.daysBetweenReminders = testReminder.daysBetweenReminders;
+                reminder.instructions = "";
                 viewModel.insertReminder(reminder);
             }
         }
     }
 
-    private static class TestMedicine {
-        String name;
-        Integer color;
-        TestReminder[] reminders;
-
-        public TestMedicine(String name, @Nullable Integer color, TestReminder[] reminders) {
-            this.name = name;
-            this.color = color;
-            this.reminders = reminders;
-        }
+    @SuppressWarnings("java:S6218")
+    private record TestMedicine(String name, Integer color, TestReminder[] reminders) {
     }
 
-    private static class TestReminder {
-        int daysBetweenReminders;
-        String amount;
-        int time;
-
-        public TestReminder(String amount, int time, int daysBetweenReminders) {
-            this.amount = amount;
-            this.time = time;
-            this.daysBetweenReminders = daysBetweenReminders;
-        }
+    private record TestReminder(String amount, int time, int daysBetweenReminders) {
     }
 }
