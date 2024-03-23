@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -60,11 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!ReminderSchedulerService.serviceRunning) {
-            startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
-        } else {
-            ReminderProcessor.requestReschedule(this);
-        }
+        startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
     }
 
     private void checkPermissions() {

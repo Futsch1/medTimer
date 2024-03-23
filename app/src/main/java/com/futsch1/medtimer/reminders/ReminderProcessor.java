@@ -10,19 +10,22 @@ import static com.futsch1.medtimer.ActivityCodes.TAKEN_ACTION;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.ListenableWorker;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import java.time.Duration;
+import com.futsch1.medtimer.LogTags;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
     public static void requestReschedule(@NonNull Context context) {
+        Log.i(LogTags.SCHEDULER, "Requesting reschedule");
         Intent intent = new Intent(RESCHEDULE_ACTION);
         intent.setClass(context, ReminderProcessor.class);
         context.sendBroadcast(intent);
@@ -54,10 +57,10 @@ public class ReminderProcessor extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManager.getInstance(context);
         if (RESCHEDULE_ACTION.equals(intent.getAction())) {
-            WorkRequest rescheduleWork =
+            OneTimeWorkRequest rescheduleWork =
                     new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                            .setInitialDelay(Duration.ofSeconds(1))
                             .build();
+            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
             workManager.enqueue(rescheduleWork);
         } else if (DISMISSED_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
