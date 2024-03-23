@@ -52,9 +52,11 @@ public class GenerateTestData {
 
     @SuppressWarnings("java:S6218")
     private record TestMedicine(String name, Integer color, TestReminder[] reminders) {
+        // Record, intentionally empty
     }
 
     private record TestReminder(String amount, int time, int daysBetweenReminders,
                                 String instructions) {
+        // Record, intentionally empty
     }
 }

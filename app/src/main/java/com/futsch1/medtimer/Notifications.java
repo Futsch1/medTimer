@@ -29,18 +29,12 @@ public class Notifications {
         Intent notifyDismissed = ReminderProcessor.getDismissedActionIntent(context, reminderEventId);
         PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, notificationId, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent startApp = new Intent(context, MainActivity.class);
-        startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = getStartAppIntent(context, notificationId);
 
-        if (!instructions.isEmpty()) {
-            instructions = " " + instructions;
-        }
-        
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannelManager.getNotificationChannelId(context))
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_content, remindTime, amount, medicineName, instructions))
+                .setContentText(getNotificationString(context, remindTime, amount, medicineName, instructions))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
                 .setDeleteIntent(pendingDismissed)
@@ -62,6 +56,20 @@ public class Notifications {
         sharedPreferences.edit().putInt("notificationId", notificationId + 1).apply();
 
         return notificationId;
+    }
+
+    private static PendingIntent getStartAppIntent(@NonNull Context context, int notificationId) {
+        Intent startApp = new Intent(context, MainActivity.class);
+        startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private static String getNotificationString(@NonNull Context context, String remindTime, String amount, String medicineName, String instructions) {
+        if (!instructions.isEmpty()) {
+            instructions = " " + instructions;
+        }
+
+        return context.getString(R.string.notification_content, remindTime, amount, medicineName, instructions);
     }
 
 }
