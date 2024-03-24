@@ -109,7 +109,15 @@ public class MedicineRepository {
     }
 
     public void updateReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
+        @SuppressWarnings("unchecked") Future<Void> future = (Future<Void>) MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.updateReminderEvent(reminderEvent));
+        try {
+            future.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e1) {
+            //noinspection CallToPrintStackTrace
+            e1.printStackTrace();
+        }
     }
 
     public void deleteReminderEvents() {
