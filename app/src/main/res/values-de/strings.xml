@@ -22,7 +22,7 @@
     <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
-    <string name="reminder_event">%1$s von %2$s\n%3$s</string>
+    <string name="reminder_event">%1$s von %2$s, %3$s</string>
     <string name="recent_reminders">Kürzliche Erinnerungen</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="sum_reminders">
@@ -64,10 +64,11 @@
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="instructions">Hinweise</string>
-    <string name="no_instructions">keine Hinweise</string>
+    <string name="instructions">Hinweis</string>
+    <string name="no_instructions">kein Hinweis</string>
     <string name="before_meal">vor der Mahlzeit</string>
     <string name="after_meal">nach der Mahlzeit</string>
-    <string name="time_before_meal">30 Minuten vor der Mahlzeit</string>
-    <string name="time_after">2 Stunden nach Medikament</string>
+    <string name="time_before_meal">x Minuten vor der Mahlzeit</string>
+    <string name="time_after">x Stunden nach Medikament y</string>
+    <string name="instruction_templates">Hinweisvorlagen</string>
 </resources>

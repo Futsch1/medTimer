@@ -61,7 +61,6 @@ public class ReminderProcessor extends BroadcastReceiver {
                     new OneTimeWorkRequest.Builder(RescheduleWork.class)
                             .build();
             workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
-            workManager.enqueue(rescheduleWork);
         } else if (DISMISSED_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {

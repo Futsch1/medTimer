@@ -25,7 +25,7 @@
     <string name="notification_taken">TOMADO</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
-    <string name="reminder_event">%1$s de %2$s\n%3$s</string>
+    <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_reminders">Recordatorios recientes</string>
     <string name="next_reminder">Siguiente recordatorio</string>
     <string name="version">Versión %s</string>
@@ -67,6 +67,7 @@
     <string name="no_instructions">no hay instrucciones</string>
     <string name="before_meal">antes de la comida</string>
     <string name="after_meal">después de la comida</string>
-    <string name="time_before_meal">30 minutos antes de la comida</string>
-    <string name="time_after">2 horas después del medicamento</string>
+    <string name="time_before_meal">x minutos antes de la comida</string>
+    <string name="time_after">x horas después del medicamento y</string>
+    <string name="instruction_templates">Plantillas de instrucciones</string>
 </resources>

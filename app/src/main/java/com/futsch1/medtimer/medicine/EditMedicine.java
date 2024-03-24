@@ -20,7 +20,6 @@ import android.text.Editable;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -40,6 +39,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
@@ -59,7 +59,7 @@ public class EditMedicine extends AppCompatActivity {
     ReminderViewAdapter adapter;
     private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
-    private Button colorButton;
+    private MaterialButton colorButton;
     private int color;
 
     @Override

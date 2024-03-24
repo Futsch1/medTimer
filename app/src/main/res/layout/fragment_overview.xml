@@ -24,13 +24,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/next_reminder" />
+                android:text="@string/next_reminder"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/nextReminderInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lines="2"
                 app:drawableStartCompat="@drawable/hourglass_split" />
         </LinearLayout>
 
@@ -53,7 +53,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recent_reminders" />
+                android:text="@string/recent_reminders"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/latestReminders"
