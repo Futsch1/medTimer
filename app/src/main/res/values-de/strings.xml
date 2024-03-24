@@ -71,4 +71,5 @@
     <string name="time_before_meal">x Minuten vor der Mahlzeit</string>
     <string name="time_after">x Stunden nach Medikament y</string>
     <string name="instruction_templates">Hinweisvorlagen</string>
+    <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
 </resources>
