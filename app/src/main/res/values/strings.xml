@@ -66,7 +66,6 @@
     <string name="default_theme">Default</string>
     <string name="alternative">Alternative</string>
     <string name="instructions">Instructions</string>
-    <string name="three_dots" translatable="false">...</string>
     <string name="no_instructions">no instructions</string>
     <string name="before_meal">before the meal</string>
     <string name="after_meal">after the meal</string>

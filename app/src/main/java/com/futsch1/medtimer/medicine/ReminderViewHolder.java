@@ -11,7 +11,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.google.android.material.button.MaterialButton;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
@@ -27,7 +27,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editDaysBetweenReminders;
     private final EditText editInstructions;
     private final View holderItemView;
-    private final Button instructionSuggestions;
+    private final MaterialButton instructionSuggestions;
 
     private Reminder reminder;
 

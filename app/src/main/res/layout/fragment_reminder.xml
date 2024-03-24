@@ -6,7 +6,7 @@
     android:layout_margin="5dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="2dp"
-    app:contentPadding="10dp">
+    app:contentPadding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -123,12 +123,14 @@
                 android:inputType="text"
                 android:text="@string/instructions" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/instructionSuggestions"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:maxLines="1"
-                android:text="@string/three_dots" />
+                android:contentDescription="@string/instruction_templates"
+                android:minWidth="0dp"
+                app:icon="@drawable/clipboard_plus"
+                app:iconPadding="0dp" />
         </LinearLayout>
 
     </LinearLayout>
