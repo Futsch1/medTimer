@@ -67,6 +67,7 @@
     <string name="no_instructions">no hay instrucciones</string>
     <string name="before_meal">antes de la comida</string>
     <string name="after_meal">después de la comida</string>
-    <string name="time_before_meal">30 minutos antes de la comida</string>
-    <string name="time_after">2 horas después del medicamento</string>
+    <string name="time_before_meal">x minutos antes de la comida</string>
+    <string name="time_after">x horas después del medicamento y</string>
+    <string name="instruction_templates">Plantillas de instrucciones</string>
 </resources>

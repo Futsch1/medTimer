@@ -94,7 +94,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private void setupInstructionSuggestions() {
         instructionSuggestions.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(holderItemView.getContext());
-            builder.setTitle(R.string.instructions);
+            builder.setTitle(R.string.instruction_templates);
             builder.setItems(R.array.instructions_suggestions, (dialog, which) -> {
                 if (which > 0) {
                     String[] instructionSuggestionsArray = holderItemView.getResources().getStringArray(R.array.instructions_suggestions);
