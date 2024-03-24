@@ -6,46 +6,56 @@
     android:layout_margin="5dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
-    app:contentPadding="10dp">
+    app:contentPadding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/reminderEventText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center_vertical"
-            android:layout_weight="1" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/takenOrSkipped"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:importantForAccessibility="no"
-            app:singleSelection="true">
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipTaken"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/takenOrSkipped"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/taken"
-                app:checkedIcon="@drawable/check2_circle"
-                app:checkedIconVisible="true" />
+                android:importantForAccessibility="no"
+                app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSkipped"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/skipped"
-                app:checkedIcon="@drawable/x_circle"
-                app:checkedIconVisible="true"
-                app:closeIconVisible="false" />
-        </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTaken"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/taken"
+                    app:checkedIcon="@drawable/check2_circle"
+                    app:checkedIconVisible="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSkipped"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/skipped"
+                    app:checkedIcon="@drawable/x_circle"
+                    app:checkedIconVisible="true"
+                    app:closeIconVisible="false" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

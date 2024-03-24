@@ -25,7 +25,7 @@
     <string name="notification_taken">TOMADO</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
-    <string name="reminder_event">%1$s de %2$s\n%3$s</string>
+    <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_reminders">Recordatorios recientes</string>
     <string name="next_reminder">Siguiente recordatorio</string>
     <string name="version">Versión %s</string>
