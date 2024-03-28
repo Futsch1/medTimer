@@ -8,9 +8,16 @@
 The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13) making use of an Android Room
 database and Material 3 theming.
 
-<a href='https://play.google.com/store/apps/details?id=com.futsch1.medtimer'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width='150'/></a>
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.futsch1.medtimer/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.futsch1.medtimer)
 
-## Play store description
+Or download the latest APK from the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
+
+## Description
 
 **Med reminders and history with full offline privacy**
 
