@@ -23,6 +23,10 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
+        <activity
+            android:name=".PreferencesActivity"
+            android:exported="false"
+            android:label="@string/tab_settings" />
 
         <service
             android:name=".ReminderSchedulerService"

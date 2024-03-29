@@ -72,11 +72,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        optionsMenu.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         menu.setGroupDividerEnabled(true);
-        optionsMenu = new OptionsMenu(getApplicationContext(), menu, new MedicineViewModel(getApplication()));
+        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()));
         return true;
     }
 }

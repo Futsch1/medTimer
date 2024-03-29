@@ -22,16 +22,14 @@ public class ViewPagerAdapter
         Fragment fragment;
         if (position == 0)
             fragment = new OverviewFragment();
-        else if (position == 1)
-            fragment = new MedicinesFragment();
         else
-            fragment = new PreferencesFragment();
+            fragment = new MedicinesFragment();
 
         return fragment;
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

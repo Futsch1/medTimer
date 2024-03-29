@@ -44,8 +44,7 @@ public class OptionsMenu {
     private void setupSettings() {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
-            Intent intent = new Intent(context, PreferencesFragment.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(context, PreferencesActivity.class);
             context.startActivity(intent);
             return true;
         });
@@ -84,15 +83,16 @@ public class OptionsMenu {
     void setupExport() {
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+        Handler handler = new Handler(backgroundThread.getLooper());
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId()));
+            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId())));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId()));
+            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId())));
             return true;
         });
     }
