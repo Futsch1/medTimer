@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    OptionsMenu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,5 +69,14 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(POST_NOTIFICATIONS);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        menu.setGroupDividerEnabled(true);
+        optionsMenu = new OptionsMenu(getApplicationContext(), menu, new MedicineViewModel(getApplication()));
+        return true;
     }
 }

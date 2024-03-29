@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/settings_group">
+        <item
+            android:id="@+id/settings"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/tab_settings" />
+    </group>
+    <item
+        android:id="@+id/export"
+        android:icon="@drawable/floppy2"
+        android:title="@string/export">
+        <menu>
+            <item
+                android:id="@+id/export_csv"
+                android:title="@string/csv" />
+            <item
+                android:id="@+id/export_pdf"
+                android:title="@string/pdf" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/clear_events"
+        android:icon="@drawable/x_circle"
+        android:title="@string/clear_events" />
+    <item
+        android:id="@+id/generate_test_data"
+        android:icon="@drawable/x_circle"
+        android:title="@string/generate_test_data" />
+    <group android:id="@+id/information">
+        <item
+            android:id="@+id/version"
+            android:icon="@drawable/info_circle"
+            android:title="@string/app_version" />
+        <item
+            android:id="@+id/app_url"
+            android:icon="@drawable/link"
+            android:title="@string/app_url" />
+    </group>
+</menu>
