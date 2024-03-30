@@ -4,20 +4,26 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @SuppressWarnings("java:S1104")
 public class Reminder {
-    public final int medicineRelId;
+    public int medicineRelId;
     @PrimaryKey(autoGenerate = true)
     public int reminderId;
+    @Expose
     public int timeInMinutes;
     @ColumnInfo(defaultValue = "0")
     public long createdTimestamp;
     @ColumnInfo(defaultValue = "1")
+    @Expose
     public int daysBetweenReminders;
     @ColumnInfo(defaultValue = "")
+    @Expose
     public String instructions;
 
+    @Expose
     public String amount;
 
     public Reminder(int medicineRelId) {

@@ -47,37 +47,4 @@
         android:title="@string/theme"
         app:key="theme"
         app:useSimpleSummaryProvider="true" />
-    <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/actions" />
-    <Preference
-        app:icon="@drawable/floppy2"
-        app:key="export"
-        app:summary=""
-        app:title="@string/export" />
-    <Preference
-        app:icon="@drawable/x_circle"
-        app:key="clear_events"
-        app:summary=""
-        app:title="@string/clear_events" />
-    <Preference
-        app:icon="@drawable/x_circle"
-        app:key="generate_test_data"
-        app:summary=""
-        app:title="@string/generate_test_data" />
-    <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/information" />
-    <Preference
-        app:icon="@drawable/info_circle"
-        app:key="version"
-        app:summary=""
-        app:title="@string/app_version" />
-    <Preference
-        app:icon="@drawable/link"
-        app:key="app_url"
-        app:summary=""
-        app:title="@string/app_url" />
 </PreferenceScreen>

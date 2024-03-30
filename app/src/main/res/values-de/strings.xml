@@ -72,4 +72,12 @@
     <string name="time_after">x Stunden nach Medikament y</string>
     <string name="instruction_templates">Hinweisvorlagen</string>
     <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
+    <string name="backup_medicine">Backup der Medikamente</string>
+    <string name="create">Erstellen</string>
+    <string name="restore">Wiederherstellen</string>
+    <string name="restore_failed">Wiederherstellen fehlgeschlagen</string>
+    <string name="backup_failed">Erstellen fehlgeschlagen</string>
+    <string name="export_failed">Exportieren fehlgeschlagen</string>
+    <string name="restore_successful">Wiederherstellen erfolgreich</string>
+    <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
 </resources>

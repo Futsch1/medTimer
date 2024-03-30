@@ -17,4 +17,9 @@ public class PathHelper {
         String fileName = String.format("MedTimer Export %s.%s", ZonedDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), exporter.getExtension());
         return fileName.replaceAll(RESERVED_CHARS, "_");
     }
+
+    public static String getBackupFilename() {
+        String fileName = String.format("MedTimer Backup %s.json", ZonedDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
+        return fileName.replaceAll(RESERVED_CHARS, "_");
+    }
 }

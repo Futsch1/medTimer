@@ -71,4 +71,12 @@
     <string name="time_after">x horas después del medicamento y</string>
     <string name="instruction_templates">Plantillas de instrucciones</string>
     <string name="instructions_label">Instrucciones adicionales (por ejemplo, antes de las comidas)</string>
+    <string name="backup_medicine">Backup de los medicamentos</string>
+    <string name="create">Crear</string>
+    <string name="restore">Restaurar</string>
+    <string name="restore_failed">Error de restauración</string>
+    <string name="backup_failed">Error de creación</string>
+    <string name="export_failed">Error de exportación</string>
+    <string name="restore_successful">Restaurar con éxito</string>
+    <string name="restore_start">Esto reemplazará todos los ajustes de medicina.\n\n¿Continuar?</string>
 </resources>

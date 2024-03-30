@@ -67,4 +67,10 @@ public interface MedicineDao {
 
     @Query("DELETE FROM ReminderEvent")
     void deleteReminderEvents();
+
+    @Query("DELETE FROM Reminder")
+    void deleteReminders();
+
+    @Query("DELETE FROM Medicine")
+    void deleteMedicines();
 }

@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class MedicineRepository {
 
@@ -17,6 +16,10 @@ public class MedicineRepository {
     public MedicineRepository(Application application) {
         database = MedicineRoomDatabase.getDatabase(application);
         medicineDao = database.medicineDao();
+    }
+
+    public int getVersion() {
+        return database.getVersion();
     }
 
     public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
@@ -57,9 +60,12 @@ public class MedicineRepository {
     }
 
     public long insertMedicine(Medicine medicine) {
-        final Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine));
+        return internalInsert(medicine, medicineDao::insertMedicine);
+    }
+
+    private <T> long internalInsert(T insertType, Insert<T> f) {
         try {
-            return future.get();
+            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> f.insert(insertType)).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
@@ -90,18 +96,7 @@ public class MedicineRepository {
     }
 
     public long insertReminderEvent(ReminderEvent reminderEvent) {
-        Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertReminderEvent(reminderEvent));
-        long rowId = 0;
-
-        try {
-            rowId = future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
-        }
-        return rowId;
+        return internalInsert(reminderEvent, medicineDao::insertReminderEvent);
     }
 
     public ReminderEvent getReminderEvent(int reminderEventId) {
@@ -109,22 +104,26 @@ public class MedicineRepository {
     }
 
     public void updateReminderEvent(ReminderEvent reminderEvent) {
-        @SuppressWarnings("unchecked") Future<Void> future = (Future<Void>) MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.updateReminderEvent(reminderEvent));
-        try {
-            future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
-        }
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
 
     public void deleteReminderEvents() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
+    public void deleteReminders() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminders);
+    }
+
+    public void deleteMedicines() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicines);
+    }
+
     public void deleteAll() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(database::clearAllTables);
+    }
+
+    interface Insert<T> {
+        long insert(T item);
     }
 }
