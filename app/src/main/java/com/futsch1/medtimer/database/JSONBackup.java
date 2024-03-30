@@ -41,6 +41,18 @@ public class JSONBackup {
         }
     }
 
+    public void applyBackup(List<MedicineWithReminders> listOfMedicineWithReminders, MedicineRepository medicineRepository) {
+        medicineRepository.deleteReminders();
+        medicineRepository.deleteMedicines();
+
+        for (MedicineWithReminders medicineWithReminders : listOfMedicineWithReminders) {
+            medicineRepository.insertMedicine(medicineWithReminders.medicine);
+            for (Reminder reminder : medicineWithReminders.reminders) {
+                medicineRepository.insertReminder(reminder);
+            }
+        }
+    }
+
     private record DatabaseContentWithVersion(@Expose int version,
                                               @Expose List<MedicineWithReminders> medicinesWithReminders) {
     }

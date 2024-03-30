@@ -124,6 +124,14 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
+    public void deleteReminders() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminders);
+    }
+
+    public void deleteMedicines() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicines);
+    }
+
     public void deleteAll() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(database::clearAllTables);
     }
