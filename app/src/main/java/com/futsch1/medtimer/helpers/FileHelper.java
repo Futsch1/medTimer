@@ -1,19 +1,19 @@
 package com.futsch1.medtimer.helpers;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileHelper {
     private FileHelper() {
@@ -32,27 +32,36 @@ public class FileHelper {
         return true;
     }
 
-    public static @Nullable String readFromUri(@Nullable Uri uri) {
+    public static @Nullable String readFromUri(@Nullable Uri uri, ContentResolver resolver) {
         if (uri != null && uri.getPath() != null) {
-            File file = new File(uri.getPath());
-
             try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-                List<String> lines = new ArrayList<>();
-                try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-                    String line = reader.readLine();
-                    while (line != null) {
-                        lines.add(line);
-                        line = reader.readLine();
+                try (InputStream inputStream = resolver.openInputStream(uri)) {
+                    if (inputStream != null) {
+                        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                            StringBuilder stringBuilder = getStringBuilder(inputStreamReader);
+                            return stringBuilder.toString();
+                        }
                     }
                 }
-                return String.join("\n", lines);
             } catch (IOException e) {
                 Log.e("FileHelper", e.toString());
             }
 
         }
         return null;
+    }
+
+    @NonNull
+    private static StringBuilder getStringBuilder(InputStreamReader inputStreamReader) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
+            String line = reader.readLine();
+            while (line != null) {
+                stringBuilder.append(line);
+                stringBuilder.append("\n");
+                line = reader.readLine();
+            }
+        }
+        return stringBuilder;
     }
 }

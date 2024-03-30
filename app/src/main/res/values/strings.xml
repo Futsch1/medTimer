@@ -81,4 +81,6 @@
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>
     <string name="export_failed">Export failed</string>
+    <string name="restore_successful">Restore successful</string>
+    <string name="restore_start">This will replace all medicine settings.\n\nContinue?</string>
 </resources>

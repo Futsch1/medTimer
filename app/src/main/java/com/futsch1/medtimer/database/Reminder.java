@@ -9,13 +9,12 @@ import com.google.gson.annotations.Expose;
 @Entity
 @SuppressWarnings("java:S1104")
 public class Reminder {
-    public final int medicineRelId;
+    public int medicineRelId;
     @PrimaryKey(autoGenerate = true)
     public int reminderId;
     @Expose
     public int timeInMinutes;
     @ColumnInfo(defaultValue = "0")
-    @Expose
     public long createdTimestamp;
     @ColumnInfo(defaultValue = "1")
     @Expose

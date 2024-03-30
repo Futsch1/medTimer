@@ -61,9 +61,8 @@ public class MedicineRepository {
     }
 
     public long insertMedicine(Medicine medicine) {
-        final Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine));
         try {
-            return future.get();
+            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine)).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
@@ -94,18 +93,15 @@ public class MedicineRepository {
     }
 
     public long insertReminderEvent(ReminderEvent reminderEvent) {
-        Future<Long> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertReminderEvent(reminderEvent));
-        long rowId = 0;
-
         try {
-            rowId = future.get();
+            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertReminderEvent(reminderEvent)).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
             //noinspection CallToPrintStackTrace
             e1.printStackTrace();
         }
-        return rowId;
+        return 0;
     }
 
     public ReminderEvent getReminderEvent(int reminderEventId) {

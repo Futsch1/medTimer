@@ -137,7 +137,16 @@ public class OptionsMenu {
         });
 
         item = menu.findItem(R.id.restore_backup);
-        item.setOnMenuItemClickListener(menuItem -> handler.post(this::openBackup));
+        item.setOnMenuItemClickListener(menuItem -> {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.restore)
+                    .setMessage(R.string.restore_start)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup())
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    }).show();
+            return true;
+        });
     }
 
     private void export(Exporter exporter) {
@@ -162,7 +171,7 @@ public class OptionsMenu {
     private void openBackup() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/*");
+        intent.setType("application/json");
         openFileLauncher.launch(intent);
     }
 
@@ -184,7 +193,7 @@ public class OptionsMenu {
     }
 
     public void fileSelected(Uri data) {
-        String json = FileHelper.readFromUri(data);
+        String json = FileHelper.readFromUri(data, context.getContentResolver());
         boolean restoreSuccessful = false;
         if (json != null) {
             JSONBackup jsonBackup = new JSONBackup();
@@ -195,8 +204,10 @@ public class OptionsMenu {
             }
         }
 
-        if (!restoreSuccessful) {
-            Toast.makeText(context, R.string.restore_failed, Toast.LENGTH_LONG).show();
-        }
+        new AlertDialog.Builder(context)
+                .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                })
+                .show();
     }
 }

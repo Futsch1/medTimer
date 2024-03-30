@@ -78,4 +78,6 @@
     <string name="restore_failed">Wiederherstellen fehlgeschlagen</string>
     <string name="backup_failed">Erstellen fehlgeschlagen</string>
     <string name="export_failed">Exportieren fehlgeschlagen</string>
+    <string name="restore_successful">Wiederherstellen erfolgreich</string>
+    <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
 </resources>

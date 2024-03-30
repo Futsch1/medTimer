@@ -14,6 +14,7 @@ import com.google.gson.annotations.Expose;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.time.Instant;
 import java.util.List;
 
 public class JSONBackup {
@@ -46,8 +47,10 @@ public class JSONBackup {
         medicineRepository.deleteMedicines();
 
         for (MedicineWithReminders medicineWithReminders : listOfMedicineWithReminders) {
-            medicineRepository.insertMedicine(medicineWithReminders.medicine);
+            long medicineId = medicineRepository.insertMedicine(medicineWithReminders.medicine);
             for (Reminder reminder : medicineWithReminders.reminders) {
+                reminder.medicineRelId = (int) medicineId;
+                reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
                 medicineRepository.insertReminder(reminder);
             }
         }

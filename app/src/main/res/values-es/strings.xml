@@ -77,4 +77,6 @@
     <string name="restore_failed">Error de restauración</string>
     <string name="backup_failed">Error de creación</string>
     <string name="export_failed">Error de exportación</string>
+    <string name="restore_successful">Restaurar con éxito</string>
+    <string name="restore_start">Esto reemplazará todos los ajustes de medicina.\n\n¿Continuar?</string>
 </resources>
