@@ -26,14 +26,14 @@
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
     <string name="reminder_event">%1$s de %2$s, %3$s</string>
-    <string name="recent_reminders">Recordatorios recientes</string>
+    <string name="recent_reminders">Eventos recientes</string>
     <string name="next_reminder">Siguiente recordatorio</string>
     <string name="version">Versión %s</string>
     <string name="are_you_sure_delete_reminder">¿Quieres eliminar el recordatorio?</string>
     <string name="clear_events">Restablecer eventos</string>
     <string name="app_version">Versión de la aplicación</string>
     <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
-    <string name="export">Exportar datos</string>
+    <string name="export">Exportar eventos</string>
     <string name="swipe_left">Deslizar a la izquierda</string>
     <string name="long_press">Mantener pulsado</string>
     <string name="delete_items">Eliminar ítems</string>

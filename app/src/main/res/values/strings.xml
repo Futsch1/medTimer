@@ -28,14 +28,14 @@
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
     <string name="reminder_event">%1$s of %2$s, %3$s</string>
-    <string name="recent_reminders">Recent reminders</string>
+    <string name="recent_reminders">Recent events</string>
     <string name="next_reminder">Next reminder</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Are you sure to delete the reminder?</string>
     <string name="clear_events">Clear events</string>
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
-    <string name="export">Export data</string>
+    <string name="export">Export events</string>
     <string name="swipe_left">Swipe left</string>
     <string name="long_press">Long press</string>
     <string name="delete_items">Delete items</string>
