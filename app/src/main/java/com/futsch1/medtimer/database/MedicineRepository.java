@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class MedicineRepository {
 
@@ -109,15 +108,7 @@ public class MedicineRepository {
     }
 
     public void updateReminderEvent(ReminderEvent reminderEvent) {
-        @SuppressWarnings("unchecked") Future<Void> future = (Future<Void>) MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.updateReminderEvent(reminderEvent));
-        try {
-            future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
-        }
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
 
     public void deleteReminderEvents() {

@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 )
 @SuppressWarnings("java:S6548")
 public abstract class MedicineRoomDatabase extends RoomDatabase {
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 1;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     // marking the instance as volatile to ensure atomic access to the variable
