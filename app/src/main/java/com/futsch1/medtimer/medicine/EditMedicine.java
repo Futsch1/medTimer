@@ -1,13 +1,10 @@
 package com.futsch1.medtimer.medicine;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
 
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,12 +13,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.text.Editable;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,13 +32,12 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
+import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
@@ -158,28 +152,7 @@ public class EditMedicine extends AppCompatActivity {
 
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> {
-            TextInputLayout textInputLayout = new TextInputLayout(this);
-            TextInputEditText editText = new TextInputEditText(this);
-            editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-            editText.setHint(R.string.create_reminder_dosage_hint);
-            editText.setSingleLine();
-            textInputLayout.addView(editText);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(textInputLayout);
-            builder.setTitle(R.string.add_reminder);
-            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-                Editable e = editText.getText();
-                if (e != null) {
-                    createReminder(e.toString());
-                }
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
-
+        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(this, R.string.create_reminder_dosage_hint, R.string.add_reminder, this::createReminder));
     }
 
     private void createReminder(String amount) {

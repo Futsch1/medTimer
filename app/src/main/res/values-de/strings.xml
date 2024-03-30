@@ -80,4 +80,5 @@
     <string name="export_failed">Exportieren fehlgeschlagen</string>
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
     <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
+    <string name="log_manual_dose">Manuelle Dosis eintragen</string>
 </resources>
