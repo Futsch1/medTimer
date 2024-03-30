@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import android.graphics.Color;
 
@@ -10,7 +11,6 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -69,11 +69,40 @@ public class JSONBackupUnitTest {
   ]
 }""", result);
         // @formatter:on
+
+        List<MedicineWithReminders> parsedReminders = jsonBackup.parseBackup(result);
+        assertNotNull(parsedReminders);
+        compareListMedicineWithReminders(parsedReminders, medicinesWithReminders);
+    }
+
+    private void compareListMedicineWithReminders(List<MedicineWithReminders> actual, List<MedicineWithReminders> expected) {
+        assertEquals(actual.size(), expected.size());
+        for (int i = 0; i < actual.size(); i++) {
+            compareMedicineWithReminders(actual.get(i), expected.get(i));
+        }
+    }
+
+    private void compareMedicineWithReminders(MedicineWithReminders medicineWithReminders, MedicineWithReminders medicineWithReminders1) {
+        assertEquals(medicineWithReminders.reminders.size(), medicineWithReminders1.reminders.size());
+        for (int i = 0; i < medicineWithReminders.reminders.size(); i++) {
+            compareReminder(medicineWithReminders.reminders.get(i), medicineWithReminders1.reminders.get(i));
+        }
+        assertEquals(medicineWithReminders.medicine.name, medicineWithReminders1.medicine.name);
+        assertEquals(medicineWithReminders.medicine.useColor, medicineWithReminders1.medicine.useColor);
+        assertEquals(medicineWithReminders.medicine.color, medicineWithReminders1.medicine.color);
+    }
+
+    private void compareReminder(Reminder reminder, Reminder reminder1) {
+        assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes);
+        assertEquals(reminder.createdTimestamp, reminder1.createdTimestamp);
+        assertEquals(reminder.daysBetweenReminders, reminder1.daysBetweenReminders);
+        assertEquals(reminder.instructions, reminder1.instructions);
+        assertEquals(reminder.amount, reminder1.amount);
     }
 
     // iterates over the list of MedicineWithReminders and adds each one to the medicines array as a JSONObject
     @Test
-    public void test_iterates_over_medicinesWithReminders_and_adds_to_medicines_array() throws JSONException {
+    public void test_iterates_over_medicinesWithReminders_and_adds_to_medicines_array() {
         JSONBackup jsonBackup = new JSONBackup();
         List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
         MedicineWithReminders medicineWithReminders1 = new MedicineWithReminders();
@@ -155,6 +184,48 @@ public class JSONBackupUnitTest {
 }""", result);
         // @formatter:on
 
+        List<MedicineWithReminders> parsedReminders = jsonBackup.parseBackup(result);
+        assertNotNull(parsedReminders);
+        compareListMedicineWithReminders(parsedReminders, medicinesWithReminders);
+    }
+
+    @Test
+    public void test_parse_json_backup_missing_fields() {
+        // Arrange
+        JSONBackup jsonBackup = new JSONBackup();
+        String validJsonBackup = "{\"version\": 1, \"medicinesWithReminders\": [{\"reminders\": [], \"medicine\": {}}]}";
+
+        // Act
+        List<MedicineWithReminders> result = jsonBackup.parseBackup(validJsonBackup);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    public void test_parse_invalid_json_backup() {
+        // Arrange
+        JSONBackup jsonBackup = new JSONBackup();
+        String invalidJsonBackup = "invalid_json";
+
+        // Act
+        List<MedicineWithReminders> result = jsonBackup.parseBackup(invalidJsonBackup);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    public void test_parse_json_backup_with_missing_fields() {
+        // Arrange
+        JSONBackup jsonBackup = new JSONBackup();
+        String jsonBackupWithMissingFields = "{\"version\": 1}";
+
+        // Act
+        List<MedicineWithReminders> result = jsonBackup.parseBackup(jsonBackupWithMissingFields);
+
+        // Assert
+        assertNull(result);
     }
 
 }
