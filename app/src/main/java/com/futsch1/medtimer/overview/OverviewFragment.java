@@ -60,7 +60,15 @@ public class OverviewFragment extends Fragment {
         adapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
         latestReminders.setAdapter(adapter);
         latestReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
+        // Scroll to top as soon as a new item was inserted
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                latestReminders.scrollToPosition(0);
+            }
+        });
 
+        // Adding a manual dose needs to be done in a background thread since the database is accessed
         thread = new HandlerThread("SetupLogManualDose");
         thread.start();
         Handler handler = new Handler(thread.getLooper());
@@ -84,6 +92,7 @@ public class OverviewFragment extends Fragment {
 
     private void logManualDose(Medicine medicine) {
         ReminderEvent reminderEvent = new ReminderEvent();
+        // Manual dose is not assigned to an existing reminder
         reminderEvent.reminderId = -1;
         reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000;
         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp;
