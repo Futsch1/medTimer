@@ -54,7 +54,6 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "createdTimestamp": 0,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
           "amount": "1"
@@ -94,7 +93,6 @@ public class JSONBackupUnitTest {
 
     private void compareReminder(Reminder reminder, Reminder reminder1) {
         assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes);
-        assertEquals(reminder.createdTimestamp, reminder1.createdTimestamp);
         assertEquals(reminder.daysBetweenReminders, reminder1.daysBetweenReminders);
         assertEquals(reminder.instructions, reminder1.instructions);
         assertEquals(reminder.amount, reminder1.amount);
@@ -145,7 +143,6 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "createdTimestamp": 0,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
           "amount": "1"
@@ -161,14 +158,12 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "createdTimestamp": 0,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
           "amount": "1"
         },
         {
           "timeInMinutes": 120,
-          "createdTimestamp": 0,
           "daysBetweenReminders": 2,
           "instructions": "Take after meal",
           "amount": "2"
