@@ -207,6 +207,7 @@ public class OptionsMenu {
         new AlertDialog.Builder(context)
                 .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    // Intentionally empty
                 })
                 .show();
     }
