@@ -75,4 +75,6 @@
     <string name="create">Crear</string>
     <string name="restore">Restaurar</string>
     <string name="restore_failed">Error de restauración</string>
+    <string name="backup_failed">Error de creación</string>
+    <string name="export_failed">Error de exportación</string>
 </resources>

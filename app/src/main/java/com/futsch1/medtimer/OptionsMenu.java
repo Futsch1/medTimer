@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -145,10 +144,9 @@ public class OptionsMenu {
         File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
         try {
             exporter.export(csvFile);
-
             shareFile(csvFile);
         } catch (Exporter.ExporterException e) {
-            Log.e("Error", "IO exception creating file");
+            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -156,6 +154,8 @@ public class OptionsMenu {
         File file = new File(context.getCacheDir(), PathHelper.getBackupFilename());
         if (FileHelper.saveToFile(file, fileContent)) {
             shareFile(file);
+        } else {
+            Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -196,7 +196,7 @@ public class OptionsMenu {
         }
 
         if (!restoreSuccessful) {
-            Toast.makeText(context, R.string.restore_failed, Toast.LENGTH_LONG);
+            Toast.makeText(context, R.string.restore_failed, Toast.LENGTH_LONG).show();
         }
     }
 }
