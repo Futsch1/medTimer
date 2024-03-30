@@ -100,7 +100,7 @@ public class OverviewFragment extends Fragment {
         reminderEvent.color = medicine.color;
         reminderEvent.useColor = medicine.useColor;
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
-        DialogHelper.showTextInputDialog(requireContext(), R.string.create_reminder_dosage_hint, R.string.log_manual_dose, amount -> {
+        DialogHelper.showTextInputDialog(requireContext(), R.string.log_manual_dose, R.string.dosage, amount -> {
             reminderEvent.amount = amount;
             medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
         });

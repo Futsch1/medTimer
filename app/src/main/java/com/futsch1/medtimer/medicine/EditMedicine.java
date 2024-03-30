@@ -152,7 +152,7 @@ public class EditMedicine extends AppCompatActivity {
 
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(this, R.string.create_reminder_dosage_hint, R.string.add_reminder, this::createReminder));
+        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(this, R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
     }
 
     private void createReminder(String amount) {
