@@ -8,11 +8,13 @@ Recordatorios flexibles y personalizados:
 
 - Añada un número ilimitado de medicamentos con múltiples recordatorios diarios por medicamento.
 - Personaliza los recordatorios para adaptarlos a tu horario de dosificación.
+- Añade dosis manuales.
 
 Gestión de datos sencilla y segura:
 
 - Confirme o descarte los recordatorios para registrar con precisión el seguimiento de la medicación.
 - Exportar su historial de medicación como un archivo CSV para facilitar el mantenimiento de registros o compartir con profesionales de la salud.
+- Copia de seguridad y restaurar su lista de medicamentos como archivo JSON.
 
 Privacidad y accesibilidad sin conexión:
 

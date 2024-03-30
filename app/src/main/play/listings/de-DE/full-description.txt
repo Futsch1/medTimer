@@ -4,13 +4,15 @@ MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamente
 
 Flexible und personalisierte Erinnerungen:
 
-- Fügen Sie eine unbegrenzte Anzahl von Medikamenten mit mehreren täglichen Erinnerungen pro Medikament hinzu.
+- Verwalten Sie eine unbegrenzte Anzahl von Medikamenten mit mehreren täglichen Erinnerungen pro Medikament.
 - Passen Sie die Erinnerungen an Ihren individuellen Einnahmeplan an.
+- Fügen Sie manuelle Einnahmen hinzu.
 
 Einfache und sichere Datenverwaltung:
 
 - Bestätigen oder verwerfen Sie Erinnerungen, um die Medikamenteneinnahme genau zu erfassen.
 - Exportieren Sie Ihre Medikamentenhistorie als CSV-Datei für eine einfache Aufzeichnung oder Weitergabe an medizinisches Fachpersonal.
+- Sichern und Wiederherstellen Ihrer Medikamentenliste als JSON-Datei.
 
 Datenschutz und Offline-Zugriff:
 

@@ -6,14 +6,16 @@ MedTimer is an open-source medication reminder app designed to help you manage y
 
 Flexible & Personalized Reminders:
 
-- Add unlimited medications with multiple daily reminders per medication.
+- Manage unlimited medications with multiple daily reminders per medication.
 - Customize reminders to fit your unique dosing schedule.
+- Add manual doses.
 
 Simple & Secure Data Management:
 
 - Confirm or dismiss reminders to record medication adherence accurately.
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare
   professionals.
+- Backup and restore your medication list as JSON file.
 
 Privacy & Offline Accessibility:
 

@@ -23,7 +23,7 @@
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
     <string name="reminder_event">%1$s von %2$s, %3$s</string>
-    <string name="recent_reminders">Kürzliche Erinnerungen</string>
+    <string name="recent_reminders">Kürzliche Ereignisse</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d Erinnerung\n%2$s</item>
@@ -31,10 +31,10 @@
     </plurals>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
-    <string name="clear_events">Ereignisse zurücksetzen</string>
+    <string name="clear_events">" Ereignisse zurücksetzen"</string>
     <string name="app_version">App-Version</string>
     <string name="are_you_sure_delete_events">Ereignisse wirklich zurücksetzen?</string>
-    <string name="export">Daten exportieren</string>
+    <string name="export">Ereignisse exportieren</string>
     <string name="swipe_left">Wischen nach links</string>
     <string name="long_press">Lange drücken</string>
     <string name="delete_items">Einträge löschen</string>
@@ -80,4 +80,5 @@
     <string name="export_failed">Exportieren fehlgeschlagen</string>
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
     <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
+    <string name="log_manual_dose">Manuelle Dosis eintragen</string>
 </resources>
