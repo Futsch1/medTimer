@@ -82,7 +82,7 @@ public class OptionsMenu {
             builder.setMessage(R.string.are_you_sure_delete_events);
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> medicineViewModel.deleteReminderEvents());
-            builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+            builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> { // Intentionally left empty
             });
             builder.show();
             ReminderProcessor.requestReschedule(context);
@@ -90,7 +90,7 @@ public class OptionsMenu {
         });
     }
 
-    void setupExport() {
+    private void setupExport() {
         Handler handler = new Handler(backgroundThread.getLooper());
 
         MenuItem item = menu.findItem(R.id.export_csv);
@@ -143,7 +143,7 @@ public class OptionsMenu {
                     .setMessage(R.string.restore_start)
                     .setCancelable(true)
                     .setPositiveButton(R.string.ok, (dialog, which) -> openBackup())
-                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> { // Intentionally left empty
                     }).show();
             return true;
         });

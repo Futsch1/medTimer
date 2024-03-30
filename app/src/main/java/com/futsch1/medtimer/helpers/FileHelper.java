@@ -34,19 +34,14 @@ public class FileHelper {
 
     public static @Nullable String readFromUri(@Nullable Uri uri, ContentResolver resolver) {
         if (uri != null && uri.getPath() != null) {
-            try {
-                try (InputStream inputStream = resolver.openInputStream(uri)) {
-                    if (inputStream != null) {
-                        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-                            StringBuilder stringBuilder = getStringBuilder(inputStreamReader);
-                            return stringBuilder.toString();
-                        }
-                    }
+            try (InputStream inputStream = resolver.openInputStream(uri)) {
+                try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                    StringBuilder stringBuilder = getStringBuilder(inputStreamReader);
+                    return stringBuilder.toString();
                 }
             } catch (IOException e) {
                 Log.e("FileHelper", e.toString());
             }
-
         }
         return null;
     }

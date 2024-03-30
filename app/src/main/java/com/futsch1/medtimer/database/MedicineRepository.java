@@ -60,8 +60,12 @@ public class MedicineRepository {
     }
 
     public long insertMedicine(Medicine medicine) {
+        return internalInsert(medicine, medicineDao::insertMedicine);
+    }
+
+    private <T> long internalInsert(T insertType, Insert<T> f) {
         try {
-            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertMedicine(medicine)).get();
+            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> f.insert(insertType)).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
@@ -92,15 +96,7 @@ public class MedicineRepository {
     }
 
     public long insertReminderEvent(ReminderEvent reminderEvent) {
-        try {
-            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> medicineDao.insertReminderEvent(reminderEvent)).get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
-        }
-        return 0;
+        return internalInsert(reminderEvent, medicineDao::insertReminderEvent);
     }
 
     public ReminderEvent getReminderEvent(int reminderEventId) {
@@ -125,5 +121,9 @@ public class MedicineRepository {
 
     public void deleteAll() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(database::clearAllTables);
+    }
+
+    interface Insert<T> {
+        long insert(T item);
     }
 }
