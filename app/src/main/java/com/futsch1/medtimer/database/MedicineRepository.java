@@ -19,6 +19,10 @@ public class MedicineRepository {
         medicineDao = database.medicineDao();
     }
 
+    public int getVersion() {
+        return database.getVersion();
+    }
+
     public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
         return medicineDao.getLiveMedicines();
     }

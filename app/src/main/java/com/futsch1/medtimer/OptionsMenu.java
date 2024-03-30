@@ -9,29 +9,39 @@ import android.os.HandlerThread;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.FileProvider;
 
+import com.futsch1.medtimer.database.JSONBackup;
+import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
+import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.TimeZone;
 
 public class OptionsMenu {
     private final Menu menu;
     private final Context context;
     private final MedicineViewModel medicineViewModel;
-    private HandlerThread backgroundThread;
+    private final HandlerThread backgroundThread;
+    private final ActivityResultLauncher<Intent> openFileLauncher;
 
-    public OptionsMenu(Context context, Menu menu, MedicineViewModel medicineViewModel) {
+    public OptionsMenu(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
         this.menu = menu;
         this.context = context;
         this.medicineViewModel = medicineViewModel;
+        this.openFileLauncher = openFileLauncher;
+        backgroundThread = new HandlerThread("Export");
+        backgroundThread.start();
 
         setupSettings();
         setupVersion();
@@ -39,6 +49,7 @@ public class OptionsMenu {
         setupClearEvents();
         setupExport();
         setupGenerateTestData();
+        setupBackup();
     }
 
     private void setupSettings() {
@@ -81,8 +92,6 @@ public class OptionsMenu {
     }
 
     void setupExport() {
-        backgroundThread = new HandlerThread("Export");
-        backgroundThread.start();
         Handler handler = new Handler(backgroundThread.getLooper());
 
         MenuItem item = menu.findItem(R.id.export_csv);
@@ -115,6 +124,23 @@ public class OptionsMenu {
         }
     }
 
+    private void setupBackup() {
+        Handler handler = new Handler(backgroundThread.getLooper());
+
+        MenuItem item = menu.findItem(R.id.perform_backup);
+        item.setOnMenuItemClickListener(menuItem -> {
+            JSONBackup jsonBackup = new JSONBackup();
+            handler.post(() -> {
+                String jsonContent = jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(), medicineViewModel.medicineRepository.getMedicines());
+                createAndSave(jsonContent);
+            });
+            return true;
+        });
+
+        item = menu.findItem(R.id.restore_backup);
+        item.setOnMenuItemClickListener(menuItem -> handler.post(this::openBackup));
+    }
+
     private void export(Exporter exporter) {
         File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
         try {
@@ -124,6 +150,20 @@ public class OptionsMenu {
         } catch (Exporter.ExporterException e) {
             Log.e("Error", "IO exception creating file");
         }
+    }
+
+    private void createAndSave(String fileContent) {
+        File file = new File(context.getCacheDir(), PathHelper.getBackupFilename());
+        if (FileHelper.saveToFile(file, fileContent)) {
+            shareFile(file);
+        }
+    }
+
+    private void openBackup() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/*");
+        openFileLauncher.launch(intent);
     }
 
     private void shareFile(File file) {
@@ -141,5 +181,22 @@ public class OptionsMenu {
 
     public void onDestroy() {
         backgroundThread.quitSafely();
+    }
+
+    public void fileSelected(Uri data) {
+        String json = FileHelper.readFromUri(data);
+        boolean restoreSuccessful = false;
+        if (json != null) {
+            JSONBackup jsonBackup = new JSONBackup();
+            List<MedicineWithReminders> backupData = jsonBackup.parseBackup(json);
+            if (backupData != null) {
+                jsonBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
+                restoreSuccessful = true;
+            }
+        }
+
+        if (!restoreSuccessful) {
+            Toast.makeText(context, R.string.restore_failed, Toast.LENGTH_LONG);
+        }
     }
 }

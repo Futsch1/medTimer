@@ -76,4 +76,7 @@
     <string name="backup_medicine">Backup medicine settings</string>
     <string name="csv" translatable="false">CSV</string>
     <string name="pdf" translatable="false">PDF</string>
+    <string name="create">Create</string>
+    <string name="restore">Restore</string>
+    <string name="restore_failed">Restore failed</string>
 </resources>

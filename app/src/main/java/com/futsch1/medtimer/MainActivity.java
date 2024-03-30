@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -32,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
     OptionsMenu optionsMenu;
+    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            optionsMenu.fileSelected(result.getData().getData());
+        }
+    });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         menu.setGroupDividerEnabled(true);
-        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()));
+        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()), requestFileLauncher);
         return true;
     }
 }

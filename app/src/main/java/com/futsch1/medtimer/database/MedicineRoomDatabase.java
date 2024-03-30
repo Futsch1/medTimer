@@ -44,6 +44,10 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
         return instance;
     }
 
+    public int getVersion() {
+        return getOpenHelper().getReadableDatabase().getVersion();
+    }
+
     public abstract MedicineDao medicineDao();
 
     @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")

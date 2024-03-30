@@ -24,6 +24,18 @@
         android:icon="@drawable/x_circle"
         android:title="@string/clear_events" />
     <item
+        android:id="@+id/backup"
+        android:title="@string/backup_medicine">
+        <menu>
+            <item
+                android:id="@+id/perform_backup"
+                android:title="@string/create" />
+            <item
+                android:id="@+id/restore_backup"
+                android:title="@string/restore" />
+        </menu>
+    </item>
+    <item
         android:id="@+id/generate_test_data"
         android:icon="@drawable/x_circle"
         android:title="@string/generate_test_data" />
