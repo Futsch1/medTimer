@@ -70,6 +70,7 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")

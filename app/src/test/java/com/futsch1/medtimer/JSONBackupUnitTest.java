@@ -26,7 +26,7 @@ public class JSONBackupUnitTest {
 
     // creates a backup object with a version number and a medicines array
     @Test
-    public void test_creates_backup_with_version_and_medicines_array() throws JSONException {
+    public void test_creates_backup_with_version_and_medicines_array() {
         JSONBackup jsonBackup = new JSONBackup();
         List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
         MedicineWithReminders medicineWithReminders = new MedicineWithReminders();
@@ -41,30 +41,33 @@ public class JSONBackupUnitTest {
         medicineWithReminders.medicine.color = Color.RED;
         medicinesWithReminders.add(medicineWithReminders);
 
-        String result = jsonBackup.createBackup(medicinesWithReminders);
+        String result = jsonBackup.createBackup(5, medicinesWithReminders);
 
         assertNotNull(result);
 
         // @formatter:off
-        assertEquals(result, """
+        assertEquals("""
 {
-    "version": 1,
-    "medicines": [
+  "version": 5,
+  "medicinesWithReminders": [
+    {
+      "reminders": [
         {
-            "name": "Medicine A",
-            "useColor": true,
-            "color": -65536,
-            "reminders": [
-                {
-                    "time": 60,
-                    "amount": "1",
-                    "daysBetweenReminders": 1,
-                    "instructions": "Take with water"
-                }
-            ]
+          "timeInMinutes": 60,
+          "createdTimestamp": 0,
+          "daysBetweenReminders": 1,
+          "instructions": "Take with water",
+          "amount": "1"
         }
-    ]
-}""");
+      ],
+      "medicine": {
+        "name": "Medicine A",
+        "color": -65536,
+        "useColor": true
+      }
+    }
+  ]
+}""", result);
         // @formatter:on
     }
 
@@ -100,48 +103,56 @@ public class JSONBackupUnitTest {
         medicineWithReminders2.medicine.color = Color.BLUE;
         medicinesWithReminders.add(medicineWithReminders2);
 
-        String result = jsonBackup.createBackup(medicinesWithReminders);
+        String result = jsonBackup.createBackup(4, medicinesWithReminders);
 
         assertNotNull(result);
+
         // @formatter:off
-        assertEquals(result, """
+        assertEquals("""
 {
-    "version": 1,
-    "medicines": [
+  "version": 4,
+  "medicinesWithReminders": [
+    {
+      "reminders": [
         {
-            "name": "Medicine A",
-            "useColor": true,
-            "color": -65536,
-            "reminders": [
-                {
-                    "time": 60,
-                    "amount": "1",
-                    "daysBetweenReminders": 1,
-                    "instructions": "Take with water"
-                }
-            ]
+          "timeInMinutes": 60,
+          "createdTimestamp": 0,
+          "daysBetweenReminders": 1,
+          "instructions": "Take with water",
+          "amount": "1"
+        }
+      ],
+      "medicine": {
+        "name": "Medicine A",
+        "color": -65536,
+        "useColor": true
+      }
+    },
+    {
+      "reminders": [
+        {
+          "timeInMinutes": 60,
+          "createdTimestamp": 0,
+          "daysBetweenReminders": 1,
+          "instructions": "Take with water",
+          "amount": "1"
         },
         {
-            "name": "Medicine B",
-            "useColor": false,
-            "color": -16776961,
-            "reminders": [
-                {
-                    "time": 60,
-                    "amount": "1",
-                    "daysBetweenReminders": 1,
-                    "instructions": "Take with water"
-                },
-                {
-                    "time": 120,
-                    "amount": "2",
-                    "daysBetweenReminders": 2,
-                    "instructions": "Take after meal"
-                }
-            ]
+          "timeInMinutes": 120,
+          "createdTimestamp": 0,
+          "daysBetweenReminders": 2,
+          "instructions": "Take after meal",
+          "amount": "2"
         }
-    ]
-}""");
+      ],
+      "medicine": {
+        "name": "Medicine B",
+        "color": -16776961,
+        "useColor": false
+      }
+    }
+  ]
+}""", result);
         // @formatter:on
 
     }
