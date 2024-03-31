@@ -91,8 +91,10 @@ public class ReminderScheduler {
     }
 
     private Instant getTargetInstant(Reminder reminder, LocalDate targetDate) {
-        ZoneOffset offset = timeAccess.systemZone().getRules().getOffset(targetDate.atStartOfDay());
-        OffsetDateTime localTime = OffsetDateTime.of(targetDate, LocalTime.of((reminder.timeInMinutes / 60) % 24, reminder.timeInMinutes % 60), offset);
+        int hour = (reminder.timeInMinutes / 60) % 24;
+        int minute = reminder.timeInMinutes % 60;
+        ZoneOffset offset = timeAccess.systemZone().getRules().getOffset(targetDate.atTime(hour, minute));
+        OffsetDateTime localTime = OffsetDateTime.of(targetDate, LocalTime.of(hour, minute), offset);
         return localTime.toInstant();
     }
 
