@@ -21,6 +21,7 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import com.futsch1.medtimer.LogTags;
+import com.futsch1.medtimer.WorkManagerAccess;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
@@ -55,7 +56,7 @@ public class ReminderProcessor extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        WorkManager workManager = WorkManager.getInstance(context);
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         if (RESCHEDULE_ACTION.equals(intent.getAction())) {
             OneTimeWorkRequest rescheduleWork =
                     new OneTimeWorkRequest.Builder(RescheduleWork.class)
