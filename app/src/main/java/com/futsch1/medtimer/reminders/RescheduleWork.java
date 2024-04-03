@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -22,6 +21,7 @@ import androidx.work.WorkerParameters;
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.PreferencesFragment;
+import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -87,7 +87,7 @@ public class RescheduleWork extends Worker {
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
                             .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminder.reminderId).build())
                             .build();
-            WorkManager.getInstance(getApplicationContext()).enqueue(reminderWork);
+            WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
     }
 

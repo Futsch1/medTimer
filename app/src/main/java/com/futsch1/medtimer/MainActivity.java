@@ -16,13 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.ViewPager2;
-import androidx.work.Configuration;
-import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
@@ -70,13 +66,6 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
 
         NotificationChannelManager.createNotificationChannel(getApplicationContext());
-
-        // Make sure work manager runs in a single thread to avoid race conditions
-        WorkManager.initialize(
-                this,
-                new Configuration.Builder()
-                        .setExecutor(Executors.newFixedThreadPool(1))
-                        .build());
     }
 
     @Override
