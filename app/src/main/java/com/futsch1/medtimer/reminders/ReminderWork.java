@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
@@ -18,7 +19,6 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
-import com.futsch1.medtimer.Notifications;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -31,8 +31,12 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 
 public class ReminderWork extends Worker {
+    private final Context context;
+    private MedicineRepository medicineRepository;
+
     public ReminderWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        this.context = context;
     }
 
     @NonNull
@@ -42,18 +46,18 @@ public class ReminderWork extends Worker {
         Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
-        MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
+        medicineRepository = new MedicineRepository((Application) getApplicationContext());
         Reminder reminder = medicineRepository.getReminder(inputData.getInt(EXTRA_REMINDER_ID, 0));
+        int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
 
         if (reminder != null) {
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-            ReminderEvent reminderEvent = buildReminderEvent(medicine, reminder);
-
-            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+            ReminderEvent reminderEvent = reminderEventId == 0 ? buildReminderEvent(medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
 
             if (canShowNotifications()) {
                 Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
-                reminderEvent.notificationId = Notifications.showNotification(getApplicationContext(), minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminderEvent.reminderEventId, color);
+                Notifications notifications = new Notifications(context);
+                reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
                 medicineRepository.updateReminderEvent(reminderEvent);
             }
 
@@ -66,7 +70,7 @@ public class ReminderWork extends Worker {
         }
 
         // Reminder shown, now schedule next reminder
-        ReminderProcessor.requestReschedule(getApplicationContext());
+        ReminderProcessor.requestReschedule(context);
 
         return r;
     }
@@ -81,14 +85,15 @@ public class ReminderWork extends Worker {
         reminderEvent.color = medicine.color;
         reminderEvent.useColor = medicine.useColor;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+        reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
         return reminderEvent;
     }
 
     private boolean canShowNotifications() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         boolean showNotificationSetInPreferences = sharedPref.getBoolean("show_notification", true);
-        boolean hasPermission = getApplicationContext().checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        boolean hasPermission = context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
 
         return showNotificationSetInPreferences && hasPermission;
     }

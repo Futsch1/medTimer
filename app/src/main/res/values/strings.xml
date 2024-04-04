@@ -94,4 +94,5 @@
     <string name="minutes_30">30 minutes</string>
     <string name="minutes_60">60 minutes</string>
     <string name="notification_skip">SKIP</string>
+    <string name="notification_snooze">SNOOZE</string>
 </resources>

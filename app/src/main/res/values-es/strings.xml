@@ -90,4 +90,5 @@
     <string name="minutes_30">30 minutos</string>
     <string name="minutes_60">60 minutos</string>
     <string name="notification_skip">OMITIR</string>
+    <string name="notification_snooze">SNOOZE</string>
 </resources>
