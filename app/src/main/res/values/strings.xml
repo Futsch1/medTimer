@@ -84,4 +84,14 @@
     <string name="restore_successful">Restore successful</string>
     <string name="restore_start">This will replace all medicine settings.\n\nContinue?</string>
     <string name="log_manual_dose">Log manual dose</string>
+    <string name="dismiss_notification_action">Action when dismissing notification</string>
+    <string name="skip_reminder">Skip dose</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_duration">Snooze duration</string>
+    <string name="minutes_5">5 minutes</string>
+    <string name="minutes_10">10 minutes</string>
+    <string name="minutes_15">15 minutes</string>
+    <string name="minutes_30">30 minutes</string>
+    <string name="minutes_60">60 minutes</string>
+    <string name="notification_skip">SKIP</string>
 </resources>

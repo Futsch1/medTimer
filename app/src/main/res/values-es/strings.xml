@@ -80,4 +80,14 @@
     <string name="restore_successful">Restaurar con éxito</string>
     <string name="restore_start">Esto reemplazará todos los ajustes de medicina.\n\n¿Continuar?</string>
     <string name="log_manual_dose">Introducir dosis manual</string>
+    <string name="dismiss_notification_action">Acción al rechazar la notificación</string>
+    <string name="skip_reminder">Omitir dosis</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_duration">Duración de snooze</string>
+    <string name="minutes_5">5 minutos</string>
+    <string name="minutes_10">10 minutos</string>
+    <string name="minutes_15">15 minutos</string>
+    <string name="minutes_30">30 minutos</string>
+    <string name="minutes_60">60 minutos</string>
+    <string name="notification_skip">OMITIR</string>
 </resources>
