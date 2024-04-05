@@ -81,4 +81,15 @@
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
     <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
     <string name="log_manual_dose">Manuelle Dosis eintragen</string>
+    <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
+    <string name="skip_reminder">Einnahme überspringen</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_duration">Snooze Dauer</string>
+    <string name="minutes_5">5 Minuten</string>
+    <string name="minutes_10">10 Minuten</string>
+    <string name="minutes_15">15 Minuten</string>
+    <string name="minutes_30">30 Minuten</string>
+    <string name="minutes_60">60 Minuten</string>
+    <string name="notification_skipped">ÜBERSPRUNGEN</string>
+    <string name="notification_snooze">SNOOZE</string>
 </resources>

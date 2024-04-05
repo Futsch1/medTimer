@@ -13,6 +13,20 @@
         android:title="@string/notification_tone_title"
         app:key="notification_ringtone"
         app:pref_summaryHasRingtone="%s" />
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/dismiss_notification_action"
+        android:entryValues="@array/values_0_and_1"
+        android:key="dismiss_notification_action"
+        android:title="@string/dismiss_notification_action"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:defaultValue="15"
+        android:entries="@array/snooze_duration"
+        android:entryValues="@array/snooze_duration_values"
+        android:key="snooze_duration"
+        android:title="@string/snooze_duration"
+        app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +48,7 @@
         android:layout_height="wrap_content"
         android:defaultValue="0"
         android:entries="@array/delete_entries_titles"
-        android:entryValues="@array/delete_entries_values"
+        android:entryValues="@array/values_0_and_1"
         android:title="@string/delete_items"
         app:key="delete_items"
         app:useSimpleSummaryProvider="true" />

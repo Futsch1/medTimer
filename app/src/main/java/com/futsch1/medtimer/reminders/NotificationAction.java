@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -12,15 +13,17 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import java.time.Instant;
 
 public class NotificationAction {
-    static void processNotification(Context context, int reminderId, ReminderEvent.ReminderStatus status) {
+    private NotificationAction() {
+        // Intentionally empty
+    }
+
+    static void processNotification(Context context, int reminderEventId, ReminderEvent.ReminderStatus status) {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
-        ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderId);
+        ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
-        if (reminderEvent.notificationId != 0) {
-            Log.d(LogTags.REMINDER, String.format("Canceling notification %d", reminderEvent.notificationId));
-            notificationManager.cancel(reminderEvent.notificationId);
-        }
+        cancelNotification(reminderEvent, notificationManager);
+        cancelSnoozeAlarm(context, reminderEventId, reminderEvent);
 
         reminderEvent.status = status;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
@@ -30,5 +33,16 @@ public class NotificationAction {
                 reminderEvent.reminderEventId,
                 reminderEvent.medicineName));
 
+    }
+
+    private static void cancelNotification(ReminderEvent reminderEvent, NotificationManager notificationManager) {
+        if (reminderEvent.notificationId != 0) {
+            Log.d(LogTags.REMINDER, String.format("Canceling notification %d", reminderEvent.notificationId));
+            notificationManager.cancel(reminderEvent.notificationId);
+        }
+    }
+
+    private static void cancelSnoozeAlarm(Context context, int reminderEventId, ReminderEvent reminderEvent) {
+        context.getSystemService(AlarmManager.class).cancel(RescheduleWork.getPendingIntent(context, reminderEvent.reminderId, reminderEvent.notificationId, reminderEventId));
     }
 }

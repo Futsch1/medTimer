@@ -22,10 +22,8 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.PreferencesFragment;
 import com.futsch1.medtimer.WorkManagerAccess;
-import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.MedicineHelper;
 
 import java.time.Instant;
@@ -34,17 +32,22 @@ import java.time.ZoneId;
 import java.util.List;
 
 public class RescheduleWork extends Worker {
+    protected final Context context;
+    private final AlarmManager alarmManager;
+
     public RescheduleWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        this.context = context;
+        alarmManager = context.getSystemService(AlarmManager.class);
     }
 
     @NonNull
     @Override
     public Result doWork() {
         Log.i(LogTags.REMINDER, "Received scheduler request");
-        AlarmManager alarmManager = getApplicationContext().getSystemService(AlarmManager.class);
+
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
-        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(getApplicationContext(), alarmManager, timestamp, reminder, medicine), new ReminderScheduler.TimeAccess() {
+        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(timestamp, reminder.reminderId, medicine.name, -1, 0), new ReminderScheduler.TimeAccess() {
             @Override
             public ZoneId systemZone() {
                 return ZoneId.systemDefault();
@@ -62,11 +65,10 @@ public class RescheduleWork extends Worker {
         return Result.success();
     }
 
-    private void schedule(Context context, AlarmManager alarmManager, Instant timestamp, Reminder reminder, Medicine medicine) {
+    protected void schedule(Instant timestamp, int reminderId, String medicineName, int requestCode, int reminderEventId) {
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
-            Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminder.reminderId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId);
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
@@ -77,18 +79,22 @@ public class RescheduleWork extends Worker {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
             }
 
-            // Notify GUI listener
-            NextReminderListener.sendNextReminder(context, reminder.reminderId, timestamp);
+            notifyGUIListener(timestamp, reminderId);
 
-            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s to %s", medicine.name, timestamp));
+            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s/%d to %s", medicineName, reminderId, timestamp));
         } else {
             // Immediately schedule
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
-                            .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminder.reminderId).build())
+                            .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).build())
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
+    }
+
+    public static PendingIntent getPendingIntent(Context context, int reminderId, int requestCode, int reminderEventId) {
+        Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId);
+        return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
@@ -96,5 +102,10 @@ public class RescheduleWork extends Worker {
         boolean exactReminders = sharedPref.getBoolean(PreferencesFragment.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
+    }
+
+    protected void notifyGUIListener(Instant timestamp, int reminderId) {
+        // Notify GUI listener
+        NextReminderListener.sendNextReminder(context, reminderId, timestamp);
     }
 }
