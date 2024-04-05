@@ -90,6 +90,6 @@
     <string name="minutes_15">15 Minuten</string>
     <string name="minutes_30">30 Minuten</string>
     <string name="minutes_60">60 Minuten</string>
-    <string name="notification_skip">ÜBERSPRINGEN</string>
+    <string name="notification_skipped">ÜBERSPRUNGEN</string>
     <string name="notification_snooze">SNOOZE</string>
 </resources>
