@@ -5,7 +5,6 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +32,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -160,11 +159,10 @@ public class EditMedicine extends AppCompatActivity {
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (tpView, hourOfDay, minute) -> {
-            reminder.timeInMinutes = hourOfDay * 60 + minute;
+        new TimeHelper.TimePickerWrapper(getApplicationContext()).show(0, 0, minutes -> {
+            reminder.timeInMinutes = minutes;
             medicineViewModel.insertReminder(reminder);
-        }, 8, 0, DateFormat.is24HourFormat(getApplicationContext()));
-        timePickerDialog.show();
+        });
     }
 
     @Override

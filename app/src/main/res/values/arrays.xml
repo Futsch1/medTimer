@@ -54,4 +54,26 @@
         <item>30</item>
         <item>60</item>
     </string-array>
+    <string-array name="days">
+        <item>@string/monday</item>
+        <item>@string/tuesday</item>
+        <item>@string/wednesday</item>
+        <item>@string/thursday</item>
+        <item>@string/friday</item>
+        <item>@string/saturday</item>
+        <item>@string/sunday</item>
+    </string-array>
+    <string-array name="one_to_seven">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+    <string-array name="default_weekend_days">
+        <item>6</item>
+        <item>7</item>
+    </string-array>
 </resources>

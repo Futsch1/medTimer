@@ -92,4 +92,14 @@
     <string name="minutes_60">60 Minuten</string>
     <string name="notification_skipped">ÜBERSPRUNGEN</string>
     <string name="notification_snooze">SNOOZE</string>
+    <string name="weekend_mode">Wochenend-Modus</string>
+    <string name="weekend_mode_days">Tage</string>
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+    <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
 </resources>
