@@ -91,7 +91,7 @@ public class Notifications {
             builder.addAction(R.drawable.hourglass_split, context.getString(R.string.notification_snooze), pendingSnooze);
             builder.setDeleteIntent(pendingDismissed);
         } else {
-            builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skip), pendingSnooze);
+            builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skipped), pendingDismissed);
             builder.setDeleteIntent(pendingSnooze);
         }
     }

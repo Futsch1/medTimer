@@ -28,7 +28,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 public class ReminderWork extends Worker {
     private final Context context;
@@ -42,31 +42,24 @@ public class ReminderWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r;
+        Result r = Result.failure();
         Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
         medicineRepository = new MedicineRepository((Application) getApplicationContext());
-        Reminder reminder = medicineRepository.getReminder(inputData.getInt(EXTRA_REMINDER_ID, 0));
-        int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
+        Reminder reminder = getReminder(medicineRepository, inputData);
 
         if (reminder != null) {
+            int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
             ReminderEvent reminderEvent = reminderEventId == 0 ? buildReminderEvent(medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
 
-            if (canShowNotifications()) {
-                Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
-                Notifications notifications = new Notifications(context);
-                reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
-                medicineRepository.updateReminderEvent(reminderEvent);
+            if (reminderEvent != null && medicine != null) {
+                showNotification(medicine, reminderEvent, reminder);
+
+                Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+                r = Result.success();
             }
-
-            Log.i(LogTags.REMINDER, String.format("Show reminder %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
-            r = Result.success();
-
-        } else {
-            Log.e(LogTags.REMINDER, "Could not find reminder in database");
-            r = Result.failure();
         }
 
         // Reminder shown, now schedule next reminder
@@ -75,19 +68,41 @@ public class ReminderWork extends Worker {
         return r;
     }
 
-    private ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.reminderId = reminder.reminderId;
-        reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
-                .toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
-        reminderEvent.amount = reminder.amount;
-        reminderEvent.medicineName = medicine.name;
-        reminderEvent.color = medicine.color;
-        reminderEvent.useColor = medicine.useColor;
-        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
-        reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+    private Reminder getReminder(MedicineRepository medicineRepository, Data inputData) {
+        int reminderId = inputData.getInt(EXTRA_REMINDER_ID, 0);
+        Reminder reminder = medicineRepository.getReminder(reminderId);
+        if (reminder == null) {
+            Log.e(LogTags.REMINDER, String.format("Could not find reminder %d in database", reminderId));
+        }
+        return reminder;
+    }
 
-        return reminderEvent;
+    private ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
+        if (medicine != null && reminder != null) {
+            ReminderEvent reminderEvent = new ReminderEvent();
+            reminderEvent.reminderId = reminder.reminderId;
+            reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
+                    .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+            reminderEvent.amount = reminder.amount;
+            reminderEvent.medicineName = medicine.name;
+            reminderEvent.color = medicine.color;
+            reminderEvent.useColor = medicine.useColor;
+            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+
+            return reminderEvent;
+        } else {
+            return null;
+        }
+    }
+
+    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
+        if (canShowNotifications()) {
+            Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
+            Notifications notifications = new Notifications(context);
+            reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
+            medicineRepository.updateReminderEvent(reminderEvent);
+        }
     }
 
     private boolean canShowNotifications() {

@@ -68,8 +68,7 @@ public class RescheduleWork extends Worker {
     protected void schedule(Instant timestamp, int reminderId, String medicineName, int requestCode, int reminderEventId) {
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
-            Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId);
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
@@ -82,7 +81,7 @@ public class RescheduleWork extends Worker {
 
             notifyGUIListener(timestamp, reminderId);
 
-            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s to %s", medicineName, timestamp));
+            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s/%d to %s", medicineName, reminderId, timestamp));
         } else {
             // Immediately schedule
             WorkRequest reminderWork =
@@ -91,6 +90,11 @@ public class RescheduleWork extends Worker {
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
+    }
+
+    public static PendingIntent getPendingIntent(Context context, int reminderId, int requestCode, int reminderEventId) {
+        Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId);
+        return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
