@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <string name="app_name">Minuterie médicale</string>
+
+    <string name="tab_settings">Paramètres</string>
+
+    <string name="tab_overview">Aperçu</string>
+
+    <string name="tab_medicine">Médecine</string>
+
+    <string name="add_medicine">Ajouter un médicament</string>
+
+    <string name="medicine_name">Nom du médicament</string>
+
+    <string name="add_reminder">Ajouter un rappel</string>
+
+    <string name="edit">Modifier</string>
+
+    <string name="delete">Supprimer</string>
+
+    <string name="time">Temps</string>
+
+    <string name="dosage">Dosage</string>
+
+    <string name="yes">Oui</string>
+
+    <string name="ok">D\'ACCORD</string>
+
+    <string name="cancel">Annuler</string>
+
+    <string name="confirm">Confirmer</string>
+
+    <string name="are_you_sure_delete_medicine">Êtes-vous sûr de supprimer le médicament ?</string>
+
+    <string name="no_reminders">Aucun rappel défini</string>
+
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d rappel\n%2$s</item>
+        <item quantity="many">%1$d rappels\n%2$s</item>
+        <item quantity="other">%1$d rappels\n%2$s</item>
+    </plurals>
+
+    <string name="notification_title">Rappel de médicaments</string>
+
+    <string name="notification_content">Il est %1$s : il est temps de prendre %2$s sur %3$s%4$s</string>
+
+    <string name="notification_taken">PRIS</string>
+
+    <string name="taken">Pris</string>
+
+    <string name="skipped">Sauté</string>
+
+    <string name="reminder_event">%1$s sur %2$s, %3$s</string>
+
+    <string name="recent_reminders">Événements récents</string>
+
+    <string name="next_reminder">Prochain rappel</string>
+
+    <string name="version">Version %s</string>
+
+    <string name="are_you_sure_delete_reminder">Êtes-vous sûr de supprimer le rappel ?</string>
+
+    <string name="clear_events">Effacer les événements</string>
+
+    <string name="app_version">Version de l\'application</string>
+
+    <string name="are_you_sure_delete_events">Êtes-vous sûr de supprimer tous les événements ?</string>
+
+    <string name="export">Exporter des événements</string>
+
+    <string name="swipe_left">Balayez vers la gauche</string>
+
+    <string name="long_press">Appui long</string>
+
+    <string name="delete_items">Supprimer des éléments</string>
+
+    <string name="actions">Actions</string>
+
+    <string name="information">Information</string>
+
+    <string name="show_notifications">Afficher les notifications</string>
+
+    <string name="overview_events">Événements d’affichage d’aperçu</string>
+
+    <string name="four_hours">4 heures</string>
+
+    <string name="twelve_hours">12 heures</string>
+
+    <string name="twenty_four_hours">24 heures</string>
+
+    <string name="two_days">2 jours</string>
+
+    <string name="three_days">3 jours</string>
+
+    <string name="app_url">MedTimer sur GitHub</string>
+
+    <string name="color">Couleur</string>
+
+    <string name="select_color">Choisissez la couleur</string>
+
+    <string name="exact_reminders">Rappels précis</string>
+
+    <string name="change_color_toast">Notez que les changements de couleur ne prendront effet que lors des prochains rappels.</string>
+
+    <string name="permission_not_granted">Autorisation non accordée</string>
+
+    <string name="exact_reminders_summary">Les rappels sont programmés à l\'heure exacte (augmente l\'utilisation de la batterie)</string>
+
+    <string name="enable_alarm_dialog">Afin de permettre la programmation d\'alarmes exactes, activez-la pour MedTimer dans le menu suivant</string>
+
+    <string name="generate_test_data">Générer des données de test</string>
+
+    <string name="create_reminder_dosage_hint">Dosage pour nouveau rappel</string>
+
+    <string name="notification_tone_title">Tonalité de notification</string>
+
+    <string name="select_format">Sélectionnez le format</string>
+
+    <string name="remind_every">Rappelez à tous</string>
+
+    <string name="days">jours</string>
+
+    <string name="theme">Thème</string>
+
+    <string name="default_theme">Défaut</string>
+
+    <string name="alternative">Alternative</string>
+
+    <string name="instructions">Instructions</string>
+
+    <string name="no_instructions">aucune instruction</string>
+
+    <string name="before_meal">avant le repas</string>
+
+    <string name="after_meal">après le repas</string>
+
+    <string name="time_before_meal">x minutes avant le repas</string>
+
+    <string name="time_after">x heures après le médicament y</string>
+
+    <string name="instruction_templates">Modèles d\'instructions</string>
+
+    <string name="instructions_label">Instructions supplémentaires (par exemple avant les repas)</string>
+
+    <string name="backup_medicine">Paramètres de sauvegarde des médicaments</string>
+
+    <string name="create">Créer</string>
+
+    <string name="restore">Restaurer</string>
+
+    <string name="restore_failed">La restauration a échoué</string>
+
+    <string name="backup_failed">La sauvegarde a échoué</string>
+
+    <string name="export_failed">Échec de l\'exportation</string>
+
+    <string name="restore_successful">Restauration réussie</string>
+
+    <string name="restore_start">Cela remplacera tous les paramètres de médecine.\n\nContinuer?</string>
+
+    <string name="log_manual_dose">Enregistrer la dose manuelle</string>
+
+    <string name="dismiss_notification_action">Action en cas de rejet d\'une notification</string>
+
+    <string name="skip_reminder">Sauter une dose</string>
+
+    <string name="snooze">Somnoler</string>
+
+    <string name="snooze_duration">Durée de sommeil</string>
+
+    <string name="minutes_5">5 minutes</string>
+
+    <string name="minutes_10">10 minutes</string>
+
+    <string name="minutes_15">15 minutes</string>
+
+    <string name="minutes_30">30 minutes</string>
+
+    <string name="minutes_60">60 minutes</string>
+
+    <string name="notification_skipped">SAUTÉ</string>
+
+    <string name="notification_snooze">SOMNOLER</string>
+
+    <string name="weekend_mode">Mode week-end</string>
+
+    <string name="weekend_mode_days">Jours</string>
+
+    <string name="monday">Lundi</string>
+
+    <string name="tuesday">Mardi</string>
+
+    <string name="wednesday">Mercredi</string>
+
+    <string name="thursday">Jeudi</string>
+
+    <string name="friday">Vendredi</string>
+
+    <string name="saturday">Samedi</string>
+
+    <string name="sunday">Dimanche</string>
+
+    <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
+
+    <string name="custom">Coutume…</string>
+
+</resources>
