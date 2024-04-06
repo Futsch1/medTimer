@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -79,27 +80,42 @@ public class OverviewFragment extends Fragment {
 
     private void setupLogManualDose() {
         List<MedicineWithReminders> medicines = medicineViewModel.medicineRepository.getMedicines();
-        CharSequence[] names = new CharSequence[medicines.size()];
-        for (int i = 0; i < names.length; i++) {
-            names[i] = medicines.get(i).medicine.name;
+        CharSequence[] names = new CharSequence[medicines.size() + 1];
+        names[0] = getString(R.string.custom);
+        for (int i = 1; i < names.length; i++) {
+            names[i] = medicines.get(i - 1).medicine.name;
         }
         Button logManualDose = fragmentOverview.findViewById(R.id.logManualDose);
         logManualDose.setOnClickListener(v -> new AlertDialog.Builder(requireContext())
-                .setItems(names, (dialog, which) -> logManualDose(medicines.get(which).medicine))
+                .setItems(names, (dialog, which) -> logManualDose(which == 0 ? null : medicines.get(which - 1).medicine))
                 .setTitle(R.string.tab_medicine)
                 .show());
     }
 
-    private void logManualDose(Medicine medicine) {
+    private void logManualDose(@Nullable Medicine medicine) {
         ReminderEvent reminderEvent = new ReminderEvent();
         // Manual dose is not assigned to an existing reminder
         reminderEvent.reminderId = -1;
         reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000;
         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp;
-        reminderEvent.medicineName = medicine.name;
-        reminderEvent.color = medicine.color;
-        reminderEvent.useColor = medicine.useColor;
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
+        if (medicine != null) {
+            reminderEvent.medicineName = medicine.name;
+            reminderEvent.color = medicine.color;
+            reminderEvent.useColor = medicine.useColor;
+            getAmountAndLog(reminderEvent);
+        } else {
+            reminderEvent.color = 0;
+            reminderEvent.useColor = false;
+            DialogHelper.showTextInputDialog(requireContext(), R.string.log_manual_dose, R.string.medicine_name, name -> {
+                reminderEvent.medicineName = name;
+                getAmountAndLog(reminderEvent);
+            });
+
+        }
+    }
+
+    private void getAmountAndLog(ReminderEvent reminderEvent) {
         DialogHelper.showTextInputDialog(requireContext(), R.string.log_manual_dose, R.string.dosage, amount -> {
             reminderEvent.amount = amount;
             medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);

@@ -91,4 +91,5 @@
     <string name="minutes_60">60 minutos</string>
     <string name="notification_skipped">OMITIDO</string>
     <string name="notification_snooze">SNOOZE</string>
+    <string name="custom">Personalizado…</string>
 </resources>

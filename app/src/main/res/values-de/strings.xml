@@ -92,4 +92,5 @@
     <string name="minutes_60">60 Minuten</string>
     <string name="notification_skipped">ÜBERSPRUNGEN</string>
     <string name="notification_snooze">SNOOZE</string>
+    <string name="custom">Benutzerdefiniert…</string>
 </resources>
