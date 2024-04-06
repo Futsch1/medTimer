@@ -34,10 +34,12 @@ import java.util.List;
 public class RescheduleWork extends Worker {
     protected final Context context;
     private final AlarmManager alarmManager;
+    private final WeekendMode weekendMode;
 
     public RescheduleWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
+        this.weekendMode = new WeekendMode(PreferenceManager.getDefaultSharedPreferences(context));
         alarmManager = context.getSystemService(AlarmManager.class);
     }
 
@@ -66,6 +68,8 @@ public class RescheduleWork extends Worker {
     }
 
     protected void schedule(Instant timestamp, int reminderId, String medicineName, int requestCode, int reminderEventId) {
+        // Apply weekend mode shift
+        timestamp = weekendMode.adjustInstant(timestamp);
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
             PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId);

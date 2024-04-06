@@ -91,5 +91,15 @@
     <string name="minutes_60">60 minutos</string>
     <string name="notification_skipped">OMITIDO</string>
     <string name="notification_snooze">SNOOZE</string>
+    <string name="weekend_mode">Modo fin de semana</string>
+    <string name="weekend_mode_days">Días</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miércoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+    <string name="weekend_mode_summary">Retrasar las notificaciones de ciertos días de la semana hasta una hora determinada</string>
     <string name="custom">Personalizado…</string>
 </resources>

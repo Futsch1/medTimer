@@ -4,10 +4,8 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
@@ -55,15 +54,13 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editTime.setText(minutesToTime(reminder.timeInMinutes));
         editDaysBetweenReminders.setText(Integer.toString(reminder.daysBetweenReminders));
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(editTime.getContext(), (view, hourOfDay, minute) -> {
-            String selectedTime = minutesToTime(hourOfDay * 60L + minute);
-            editTime.setText(selectedTime);
-            reminder.timeInMinutes = hourOfDay * 60 + minute;
-        }, 0, 0, DateFormat.is24HourFormat(editTime.getContext()));
         editTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                timePickerDialog.updateTime(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60);
-                timePickerDialog.show();
+                new TimeHelper.TimePickerWrapper(editTime.getContext()).show(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60, minutes -> {
+                    String selectedTime = minutesToTime(minutes);
+                    editTime.setText(selectedTime);
+                    reminder.timeInMinutes = minutes;
+                });
             }
         });
 
