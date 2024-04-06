@@ -25,6 +25,7 @@ import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.helpers.MedicineHelper;
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
 import java.time.Instant;
 import java.time.LocalDate;

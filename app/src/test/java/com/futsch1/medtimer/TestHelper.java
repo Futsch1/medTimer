@@ -13,6 +13,7 @@ public class TestHelper {
         reminder.amount = amount;
         reminder.timeInMinutes = timeInMinutes;
         reminder.daysBetweenReminders = daysBetweenReminders;
+        reminder.createdTimestamp = 0;
         return reminder;
     }
 
