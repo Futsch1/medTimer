@@ -204,5 +204,6 @@
     <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
 
     <string name="custom">Coutume…</string>
+    <string name="advanced_settings">Configuration avancée</string>
 
 </resources>

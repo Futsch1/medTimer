@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/advanced_settings"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -68,68 +69,12 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/open_advanced_settings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/remind_every" />
-
-            <EditText
-                android:id="@+id/daysBetweenReminders"
-                android:layout_width="60dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:ems="10"
-                android:hint="@string/days"
-                android:importantForAutofill="no"
-                android:inputType="numberSigned"
-                android:text="@string/days" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/days" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/instructions_text"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editInstructions"
-            android:maxLines="1"
-            android:text="@string/instructions_label" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/editInstructions"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:layout_weight="1"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:text="@string/instructions" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/instructionSuggestions"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:contentDescription="@string/instruction_templates"
-                android:minWidth="0dp"
-                app:icon="@drawable/clipboard_plus"
-                app:iconPadding="0dp" />
-        </LinearLayout>
+            android:text="@string/advanced_settings"
+            app:icon="@drawable/gear" />
 
     </LinearLayout>
 

@@ -25,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
         <activity
+            android:name=".medicine.AdvancedReminderSettings"
+            android:exported="false" />
+        <activity
             android:name=".PreferencesActivity"
             android:exported="false"
             android:label="@string/tab_settings" />

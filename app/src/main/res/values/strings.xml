@@ -106,4 +106,5 @@
     <string name="sunday">Sunday</string>
     <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
     <string name="custom">Custom…</string>
+    <string name="advanced_settings">Advanced settings</string>
 </resources>

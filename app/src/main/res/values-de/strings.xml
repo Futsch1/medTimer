@@ -103,4 +103,5 @@
     <string name="sunday">Sonntag</string>
     <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
+    <string name="advanced_settings">Erweiterte Einstellungen</string>
 </resources>
