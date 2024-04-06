@@ -95,4 +95,14 @@
     <string name="minutes_60">60 minutes</string>
     <string name="notification_skipped">SKIPPED</string>
     <string name="notification_snooze">SNOOZE</string>
+    <string name="weekend_mode">Weekend mode</string>
+    <string name="weekend_mode_days">Days</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
 </resources>
