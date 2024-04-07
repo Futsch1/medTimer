@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:orientation="vertical"
+    android:padding="4dp"
     tools:context=".medicine.AdvancedReminderSettings">
 
     <LinearLayout
@@ -38,9 +40,26 @@
     </LinearLayout>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/remind_on" />
+
+    <TextView
+        android:id="@+id/remindOnDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:drawablePadding="16dp"
+        android:hint="@string/every_day"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/pencil_square" />
+
+    <TextView
         android:id="@+id/instructions_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:labelFor="@+id/editInstructions"
         android:maxLines="1"
         android:text="@string/instructions_label" />

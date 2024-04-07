@@ -107,4 +107,6 @@
     <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
     <string name="custom">Custom…</string>
     <string name="advanced_settings">Advanced settings</string>
+    <string name="remind_on">Remind on</string>
+    <string name="every_day">Every day</string>
 </resources>

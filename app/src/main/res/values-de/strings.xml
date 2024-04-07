@@ -104,4 +104,6 @@
     <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
+    <string name="remind_on">Erinnere an</string>
+    <string name="every_day">Tous les jours</string>
 </resources>

@@ -205,5 +205,7 @@
 
     <string name="custom">Coutume…</string>
     <string name="advanced_settings">Configuration avancée</string>
+    <string name="remind_on">Rappelez sur</string>
+    <string name="every_day">Jeden Tag</string>
 
 </resources>

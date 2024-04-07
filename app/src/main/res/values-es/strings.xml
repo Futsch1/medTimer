@@ -103,4 +103,6 @@
     <string name="weekend_mode_summary">Retrasar las notificaciones de ciertos días de la semana hasta una hora determinada</string>
     <string name="custom">Personalizado…</string>
     <string name="advanced_settings">Opciones avanzadas</string>
+    <string name="remind_on">Recordar en</string>
+    <string name="every_day">Todos los días</string>
 </resources>

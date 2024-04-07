@@ -7,6 +7,7 @@ import androidx.room.Database;
 import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.AutoMigrationSpec;
 
 import java.util.concurrent.ExecutorService;
@@ -14,14 +15,16 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 5,
+        version = 6,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
                 @AutoMigration(from = 3, to = 4),
-                @AutoMigration(from = 4, to = 5)
+                @AutoMigration(from = 4, to = 5),
+                @AutoMigration(from = 5, to = 6)
         }
 )
+@TypeConverters({Converters.class})
 @SuppressWarnings("java:S6548")
 public abstract class MedicineRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 1;
