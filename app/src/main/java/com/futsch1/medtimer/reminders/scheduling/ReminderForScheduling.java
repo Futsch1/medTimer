@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling;
 
+import androidx.annotation.Nullable;
+
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -19,36 +21,60 @@ public class ReminderForScheduling {
         this.timeAccess = timeAccess;
     }
 
-    public Instant getNextScheduledTime() {
+    public @Nullable Instant getNextScheduledTime() {
         LocalDate nextScheduledDate = getNextScheduledDate();
-        return nextScheduledDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
+        if (nextScheduledDate != null) {
+            return nextScheduledDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
+        } else {
+            return null;
+        }
     }
 
     private LocalDate getNextScheduledDate() {
+        // Bit map of possible days in the future on where the reminder may be raised
+        boolean[] possibleDays = new boolean[31];
+        // First, check if today it can be raised
+        long day = getCycleStart();
+        long today = today();
+        while (day < today + 31) {
+            if (day >= today) {
+                possibleDays[(int) (day - today)] = true;
+            }
+            day += reminder.daysBetweenReminders;
+        }
+        // Find earliest flag set
+        for (int i = 0; i < possibleDays.length; i++) {
+            if (possibleDays[i]) {
+                return timeAccess.localDate().plusDays(i);
+            }
+        }
+        return null;
+    }
+
+    private long getCycleStart() {
         if (createdToday()) {
             return tomorrow();
         } else if (neverRaised()) {
             return today();
         } else {
-            LocalDate lastRaised = localDateFromEpochSeconds(lastRemindedTimestamp());
-            return lastRaised.plusDays(reminder.daysBetweenReminders);
+            return localDateFromEpochSeconds(lastRemindedTimestamp()).plusDays(reminder.daysBetweenReminders).toEpochDay();
         }
+    }
+
+    private long today() {
+        return timeAccess.localDate().toEpochDay();
     }
 
     private boolean createdToday() {
         return isToday(reminder.createdTimestamp);
     }
 
-    private LocalDate tomorrow() {
-        return timeAccess.localDate().plusDays(1);
+    private long tomorrow() {
+        return timeAccess.localDate().plusDays(1).toEpochDay();
     }
 
     private boolean neverRaised() {
         return reminderEventList.isEmpty();
-    }
-
-    private LocalDate today() {
-        return timeAccess.localDate();
     }
 
     private LocalDate localDateFromEpochSeconds(long epochSeconds) {
@@ -60,6 +86,6 @@ public class ReminderForScheduling {
     }
 
     private boolean isToday(long epochSeconds) {
-        return localDateFromEpochSeconds(epochSeconds).isEqual(today());
+        return localDateFromEpochSeconds(epochSeconds).toEpochDay() == today();
     }
 }

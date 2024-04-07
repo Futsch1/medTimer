@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class Reminder {
         timeInMinutes = 480;
         amount = "?";
         daysBetweenReminders = 1;
-        days = List.of(true, true, true, true, true, true, true);
+        days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
         this.medicineRelId = medicineRelId;
     }
 }
