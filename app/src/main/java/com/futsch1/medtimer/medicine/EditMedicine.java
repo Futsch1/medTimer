@@ -159,7 +159,7 @@ public class EditMedicine extends AppCompatActivity {
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
 
-        new TimeHelper.TimePickerWrapper(getApplicationContext()).show(0, 0, minutes -> {
+        new TimeHelper.TimePickerWrapper(this).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;
             medicineViewModel.insertReminder(reminder);
         });
