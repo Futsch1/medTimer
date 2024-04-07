@@ -147,9 +147,9 @@ public class ReminderSchedulerUnitTest {
         // All reminders already invoked, we are on the next day
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, 4 * 60));
-            add(buildReminderEvent(2, 12 * 60));
-            add(buildReminderEvent(1, 16 * 60));
+            add(buildReminderEvent(3, on(2, 4).getEpochSecond()));
+            add(buildReminderEvent(2, on(2, 12).getEpochSecond()));
+            add(buildReminderEvent(1, on(2, 16).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(on(3, 3), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
