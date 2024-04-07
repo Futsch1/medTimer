@@ -65,7 +65,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
         setContentView(R.layout.activity_advanced_reminder_settings);
 
-        editDaysBetweenReminders = findViewById(R.id.daysBetweenReminders);
+        editDaysBetweenReminders = findViewById(R.id.consecutiveDays);
         editInstructions = findViewById(R.id.editInstructions);
         instructionSuggestions = findViewById(R.id.instructionSuggestions);
         remindOnDays = findViewById(R.id.remindOnDays);

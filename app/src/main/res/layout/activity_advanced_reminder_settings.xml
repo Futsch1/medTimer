@@ -18,10 +18,34 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/remind_every" />
+            android:text="@string/remind_cycle_part1" />
 
         <EditText
-            android:id="@+id/daysBetweenReminders"
+            android:id="@+id/consecutiveDays"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:ems="10"
+            android:hint="@string/days"
+            android:importantForAutofill="no"
+            android:inputType="numberSigned"
+            android:text="@string/days" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remind_cycle_part2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/pauseDays"
             android:layout_width="60dp"
             android:layout_height="48dp"
             android:layout_marginStart="3dp"
@@ -35,14 +59,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/days" />
+            android:text="@string/remind_cycle_part3" />
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/cycleStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="date" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/remind_on" />
 
     <TextView
@@ -59,7 +91,7 @@
         android:id="@+id/instructions_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:labelFor="@+id/editInstructions"
         android:maxLines="1"
         android:text="@string/instructions_label" />

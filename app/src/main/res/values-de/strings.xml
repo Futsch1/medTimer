@@ -59,7 +59,7 @@
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="notification_tone_title">Benachrichtigungston</string>
     <string name="select_format">Format auswählen</string>
-    <string name="remind_every">Erinnere alle</string>
+    <string name="remind_cycle_part1">Erinnere alle</string>
     <string name="days">Tage</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
@@ -106,4 +106,7 @@
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
     <string name="every_day">Tous les jours</string>
+    <string name="remind_cycle_part1">Erinnere für</string>
+    <string name="remind_cycle_part2">Tage hintereinander, dann pausiere für</string>
+    <string name="remind_cycle_part3">Tage beginnend am</string>
 </resources>

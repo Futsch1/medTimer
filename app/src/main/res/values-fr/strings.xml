@@ -117,7 +117,7 @@
 
     <string name="select_format">Sélectionnez le format</string>
 
-    <string name="remind_every">Rappelez à tous</string>
+    <string name="remind_cycle_part1">Rappel pendant</string>
 
     <string name="days">jours</string>
 
@@ -205,7 +205,9 @@
 
     <string name="custom">Coutume…</string>
     <string name="advanced_settings">Configuration avancée</string>
-    <string name="remind_on">Rappelez sur</string>
+    <string name="remind_on">Rappel sur</string>
     <string name="every_day">Jeden Tag</string>
+    <string name="remind_cycle_part2">"jours consécutifs, puis pause pendant "</string>
+    <string name="remind_cycle_part3">"jours à partir du "</string>
 
 </resources>
