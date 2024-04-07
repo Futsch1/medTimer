@@ -6,8 +6,7 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 
-import java.time.DayOfWeek;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @SuppressWarnings("java:S1104")
@@ -27,14 +26,15 @@ public class Reminder {
     public String instructions;
     @Expose
     public String amount;
-    @ColumnInfo(defaultValue = "[1, 2, 3, 4, 5, 6, 7]")
+    @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
-    public Set<DayOfWeek> days;
+    public List<Boolean> days;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = 480;
         amount = "?";
         daysBetweenReminders = 1;
+        days = List.of(true, true, true, true, true, true, true);
         this.medicineRelId = medicineRelId;
     }
 }

@@ -21,13 +21,13 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 import com.google.android.material.button.MaterialButton;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class AdvancedReminderSettings extends AppCompatActivity {
 
     private final HandlerThread backgroundThread;
+    private String[] daysArray;
     private EditText editDaysBetweenReminders;
     private EditText editInstructions;
     private MaterialButton instructionSuggestions;
@@ -38,6 +38,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     public AdvancedReminderSettings() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
         backgroundThread.start();
+
     }
 
 
@@ -46,6 +47,8 @@ public class AdvancedReminderSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::loadReminder);
+
+        daysArray = getResources().getStringArray(R.array.days);
     }
 
     private void loadReminder() {
@@ -96,42 +99,48 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     }
 
     private void setupRemindOnDays() {
+        setDaysText();
+
         remindOnDays.setOnClickListener(v -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle(R.string.remind_on)
                     .setCancelable(false);
 
-            DayOfWeek[] daysArray = new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY};
-            String[] daysArrayString = getResources().getStringArray(R.array.days);
             boolean[] checkedItems = new boolean[daysArray.length];
             for (int i = 0; i < daysArray.length; i++) {
-                if (reminder.days.contains(daysArray[i])) {
-                    checkedItems[i] = true;
-                }
+                checkedItems[i] = reminder.days.get(i);
             }
-            builder.setMultiChoiceItems(daysArrayString, checkedItems, (DialogInterface.OnMultiChoiceClickListener) (dialogInterface, i, b) -> {
-                checkedItems[i] = b;
-            });
+            builder.setMultiChoiceItems(daysArray, checkedItems, (DialogInterface.OnMultiChoiceClickListener) (dialogInterface, i, b) -> checkedItems[i] = b);
 
             builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                ArrayList<String> checkedDays = new ArrayList<>();
                 for (int j = 0; j < daysArray.length; j++) {
-                    if (checkedItems[j]) {
-                        reminder.days.add(daysArray[j]);
-                        checkedDays.add(daysArrayString[j]);
-                    } else {
-                        reminder.days.remove(daysArray[j]);
-                    }
+                    reminder.days.set(j, checkedItems[j]);
                 }
 
-                remindOnDays.setText(String.join(", ", checkedDays));
+                setDaysText();
             });
 
             builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
             // show dialog
             builder.show();
         });
+    }
+
+    private void setDaysText() {
+        ArrayList<String> checkedDays = new ArrayList<>();
+        for (int j = 0; j < daysArray.length; j++) {
+            if (Boolean.TRUE.equals(reminder.days.get(j))) {
+                checkedDays.add(daysArray[j]);
+            }
+        }
+
+        if (checkedDays.size() == daysArray.length) {
+            remindOnDays.setText(R.string.every_day);
+        } else {
+            remindOnDays.setText(String.join(", ", checkedDays));
+        }
+
     }
 
     @Override

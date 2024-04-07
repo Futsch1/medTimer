@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "b31fcc4e22d655b6de291c36c0e51368",
+    "identityHash": "b8a9931e15816619888cf09dc2cbc1ac",
     "entities": [
       {
         "tableName": "Medicine",
@@ -46,7 +46,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `daysBetweenReminders` INTEGER NOT NULL DEFAULT 1, `instructions` TEXT DEFAULT '', `amount` TEXT, `days` TEXT DEFAULT '[1, 2, 3, 4, 5, 6, 7]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `daysBetweenReminders` INTEGER NOT NULL DEFAULT 1, `instructions` TEXT DEFAULT '', `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]')",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -98,7 +98,7 @@
             "columnName": "days",
             "affinity": "TEXT",
             "notNull": false,
-            "defaultValue": "'[1, 2, 3, 4, 5, 6, 7]'"
+            "defaultValue": "'[true, true, true, true, true, true, true]'"
           }
         ],
         "primaryKey": {
@@ -191,7 +191,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b31fcc4e22d655b6de291c36c0e51368')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b8a9931e15816619888cf09dc2cbc1ac')"
     ]
   }
 }
