@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,5 +31,12 @@ public class TestHelper {
 
     public static Instant on(long day, long minutes) {
         return Instant.ofEpochSecond((day - 1) * 86400 + minutes * 60);
+    }
+
+    public static ReminderEvent buildReminderEvent(int reminderId, long raisedTimestamp) {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.remindedTimestamp = raisedTimestamp;
+        return reminderEvent;
     }
 }

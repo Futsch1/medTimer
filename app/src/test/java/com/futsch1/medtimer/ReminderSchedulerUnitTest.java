@@ -106,7 +106,7 @@ public class ReminderSchedulerUnitTest {
         }};
         // Reminder 3 already invoked
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, TestHelper.on(2, 3).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(TestHelper.on(2, 12), medicineWithReminders1.medicine, reminder2);
         clearInvocations(mock);
@@ -115,26 +115,26 @@ public class ReminderSchedulerUnitTest {
         Reminder reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1);
         medicineWithReminders2.reminders.add(reminder4);
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, TestHelper.on(2, 3).getEpochSecond()));
-            add(buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(TestHelper.on(2, 12), medicineWithReminders2.medicine, reminder4);
         clearInvocations(mock);
 
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond()));
-            add(buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
-            add(buildReminderEvent(4, TestHelper.on(2, 12).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(4, TestHelper.on(2, 12).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(TestHelper.on(2, 16), medicineWithReminders1.medicine, reminder1);
         clearInvocations(mock);
 
         // All reminders already invoked, switch to next day
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond() + 4 * 60));
-            add(buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
-            add(buildReminderEvent(1, TestHelper.on(2, 16).getEpochSecond()));
-            add(buildReminderEvent(4, TestHelper.on(2, 16).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond() + 4 * 60));
+            add(TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 16).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(4, TestHelper.on(2, 16).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(TestHelper.on(3, 3), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
@@ -142,19 +142,12 @@ public class ReminderSchedulerUnitTest {
         // All reminders already invoked, we are on the next day
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
         scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond()));
-            add(buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
-            add(buildReminderEvent(1, TestHelper.on(2, 16).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).getEpochSecond()));
+            add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 16).getEpochSecond()));
         }});
         verify(mock, times(1)).schedule(TestHelper.on(3, 3), medicineWithReminders2.medicine, reminder3);
         clearInvocations(mock);
-    }
-
-    private ReminderEvent buildReminderEvent(int reminderId, long raisedTimestamp) {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.remindedTimestamp = raisedTimestamp;
-        return reminderEvent;
     }
 
     // schedules a reminder for the same day
@@ -233,7 +226,7 @@ public class ReminderSchedulerUnitTest {
 
         verify(mock, times(1)).schedule(TestHelper.on(2, 480), medicineWithReminders.medicine, reminder);
 
-        reminderEventList.add(buildReminderEvent(1, TestHelper.on(2, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 480).getEpochSecond()));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
         scheduler.schedule(medicineList, reminderEventList);
@@ -260,7 +253,7 @@ public class ReminderSchedulerUnitTest {
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();
-        reminderEventList.add(buildReminderEvent(1, TestHelper.on(1, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).getEpochSecond()));
 
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
@@ -287,14 +280,14 @@ public class ReminderSchedulerUnitTest {
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();
-        reminderEventList.add(buildReminderEvent(1, 480 * 60));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, 480 * 60));
 
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(TestHelper.on(2, 481), medicineWithReminders.medicine, reminder2);
 
-        reminderEventList.add(buildReminderEvent(2, TestHelper.on(2, 481).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(2, TestHelper.on(2, 481).getEpochSecond()));
 
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(TestHelper.on(3, 480), medicineWithReminders.medicine, reminder);
@@ -305,12 +298,12 @@ public class ReminderSchedulerUnitTest {
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(TestHelper.on(3, 480), medicineWithReminders.medicine, reminder);
 
-        reminderEventList.add(buildReminderEvent(1, TestHelper.on(3, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(3, 480).getEpochSecond()));
 
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(TestHelper.on(5, 480), medicineWithReminders.medicine, reminder);
 
-        reminderEventList.add(buildReminderEvent(1, TestHelper.on(5, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 480).getEpochSecond()));
 
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(TestHelper.on(6, 481), medicineWithReminders.medicine, reminder2);

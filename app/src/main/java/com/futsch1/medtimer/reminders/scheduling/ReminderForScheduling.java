@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,11 +15,14 @@ public class ReminderForScheduling {
     private final Reminder reminder;
     private final ReminderScheduler.TimeAccess timeAccess;
     private final List<ReminderEvent> reminderEventList;
+    private final boolean[] possibleDays;
 
     public ReminderForScheduling(Reminder reminder, List<ReminderEvent> reminderEventList, ReminderScheduler.TimeAccess timeAccess) {
         this.reminder = reminder;
         this.reminderEventList = reminderEventList;
         this.timeAccess = timeAccess;
+        // Bit map of possible days in the future on where the reminder may be raised
+        this.possibleDays = new boolean[31];
     }
 
     public @Nullable Instant getNextScheduledTime() {
@@ -31,9 +35,14 @@ public class ReminderForScheduling {
     }
 
     private LocalDate getNextScheduledDate() {
-        // Bit map of possible days in the future on where the reminder may be raised
-        boolean[] possibleDays = new boolean[31];
-        // First, check if today it can be raised
+        setPossibleDaysByCycle();
+
+        clearPossibleDaysByWeekday();
+
+        return getEarliestPossibleDate();
+    }
+
+    private void setPossibleDaysByCycle() {
         long day = getCycleStart();
         long today = today();
         while (day < today + 31) {
@@ -42,7 +51,20 @@ public class ReminderForScheduling {
             }
             day += reminder.daysBetweenReminders;
         }
-        // Find earliest flag set
+    }
+
+    private void clearPossibleDaysByWeekday() {
+        DayOfWeek dayOfWeek = timeAccess.localDate().getDayOfWeek();
+        for (int i = 0; i < possibleDays.length; i++) {
+            if (Boolean.FALSE.equals(reminder.days.get(dayOfWeek.getValue() - 1))) {
+                possibleDays[i] = false;
+            }
+            dayOfWeek = dayOfWeek.plus(1);
+        }
+    }
+
+    @Nullable
+    private LocalDate getEarliestPossibleDate() {
         for (int i = 0; i < possibleDays.length; i++) {
             if (possibleDays[i]) {
                 return timeAccess.localDate().plusDays(i);
