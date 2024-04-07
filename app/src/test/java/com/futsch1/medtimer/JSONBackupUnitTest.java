@@ -35,6 +35,7 @@ public class JSONBackupUnitTest {
         reminder.amount = "1";
         reminder.daysBetweenReminders = 1;
         reminder.instructions = "Take with water";
+        reminder.days.set(0, false);
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -56,7 +57,16 @@ public class JSONBackupUnitTest {
           "timeInMinutes": 60,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
-          "amount": "1"
+          "amount": "1",
+          "days": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         }
       ],
       "medicine": {
@@ -121,6 +131,7 @@ public class JSONBackupUnitTest {
         reminder2.amount = "2";
         reminder2.daysBetweenReminders = 2;
         reminder2.instructions = "Take after meal";
+        reminder2.days.set(6, false);
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -145,7 +156,16 @@ public class JSONBackupUnitTest {
           "timeInMinutes": 60,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
-          "amount": "1"
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         }
       ],
       "medicine": {
@@ -160,13 +180,31 @@ public class JSONBackupUnitTest {
           "timeInMinutes": 60,
           "daysBetweenReminders": 1,
           "instructions": "Take with water",
-          "amount": "1"
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         },
         {
           "timeInMinutes": 120,
           "daysBetweenReminders": 2,
           "instructions": "Take after meal",
-          "amount": "2"
+          "amount": "2",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ]
         }
       ],
       "medicine": {
