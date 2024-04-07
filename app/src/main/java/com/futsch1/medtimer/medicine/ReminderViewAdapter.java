@@ -51,7 +51,7 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
         @Override
         public boolean areContentsTheSame(@NonNull Reminder oldItem, @NonNull Reminder newItem) {
             return oldItem.reminderId == newItem.reminderId && oldItem.amount.equals(newItem.amount)
-                    && oldItem.timeInMinutes == newItem.timeInMinutes && oldItem.daysBetweenReminders == newItem.daysBetweenReminders;
+                    && oldItem.timeInMinutes == newItem.timeInMinutes;
         }
     }
 }

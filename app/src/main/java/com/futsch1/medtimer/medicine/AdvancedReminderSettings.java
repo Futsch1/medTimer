@@ -5,6 +5,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,8 +20,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.button.MaterialButton;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -28,7 +31,9 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
     private final HandlerThread backgroundThread;
     private String[] daysArray;
-    private EditText editDaysBetweenReminders;
+    private EditText editConsecutiveDays;
+    private EditText editPauseDays;
+    private EditText editCycleStartDate;
     private EditText editInstructions;
     private MaterialButton instructionSuggestions;
     private MedicineViewModel medicineViewModel;
@@ -38,7 +43,6 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     public AdvancedReminderSettings() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
         backgroundThread.start();
-
     }
 
 
@@ -65,16 +69,20 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
         setContentView(R.layout.activity_advanced_reminder_settings);
 
-        editDaysBetweenReminders = findViewById(R.id.consecutiveDays);
+        editPauseDays = findViewById(R.id.pauseDays);
+        editConsecutiveDays = findViewById(R.id.consecutiveDays);
+        editCycleStartDate = findViewById(R.id.cycleStartDate);
         editInstructions = findViewById(R.id.editInstructions);
         instructionSuggestions = findViewById(R.id.instructionSuggestions);
         remindOnDays = findViewById(R.id.remindOnDays);
 
-        editDaysBetweenReminders.setText(Integer.toString(reminder.daysBetweenReminders));
+        editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
+        editPauseDays.setText(Integer.toString(reminder.pauseDays));
         editInstructions.setText(reminder.instructions);
 
         setupInstructionSuggestions();
         setupRemindOnDays();
+        setupCycleStartDate();
 
         String medicineName = getIntent().getStringExtra(EXTRA_MEDICINE_NAME);
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.advanced_settings) + " - " + medicineName);
@@ -127,6 +135,18 @@ public class AdvancedReminderSettings extends AppCompatActivity {
         });
     }
 
+    private void setupCycleStartDate() {
+        setCycleStartDate();
+        editCycleStartDate.setOnClickListener(v -> {
+            LocalDate startDate = LocalDate.ofEpochDay(reminder.cycleStartDay);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                reminder.cycleStartDay = LocalDate.of(year, month, dayOfMonth).toEpochDay();
+                setCycleStartDate();
+            }, startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
+            datePickerDialog.show();
+        });
+    }
+
     private void setDaysText() {
         ArrayList<String> checkedDays = new ArrayList<>();
         for (int j = 0; j < daysArray.length; j++) {
@@ -141,6 +161,10 @@ public class AdvancedReminderSettings extends AppCompatActivity {
             remindOnDays.setText(String.join(", ", checkedDays));
         }
 
+    }
+
+    private void setCycleStartDate() {
+        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDate(reminder.cycleStartDay));
     }
 
     @Override
@@ -158,12 +182,17 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
         reminder.instructions = editInstructions.getText().toString();
         try {
-            reminder.daysBetweenReminders = Integer.parseInt(editDaysBetweenReminders.getText().toString());
-            if (reminder.daysBetweenReminders <= 0) {
-                reminder.daysBetweenReminders = 1;
+            reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
+            if (reminder.consecutiveDays <= 0) {
+                reminder.consecutiveDays = 1;
             }
         } catch (NumberFormatException e) {
-            reminder.daysBetweenReminders = 1;
+            reminder.consecutiveDays = 1;
+        }
+        try {
+            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
+        } catch (NumberFormatException e) {
+            reminder.pauseDays = 0;
         }
 
         medicineViewModel.updateReminder(reminder);

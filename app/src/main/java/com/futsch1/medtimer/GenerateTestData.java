@@ -43,7 +43,7 @@ public class GenerateTestData {
                 Reminder reminder = new Reminder(medicineId);
                 reminder.amount = testReminder.amount;
                 reminder.timeInMinutes = testReminder.time;
-                reminder.daysBetweenReminders = testReminder.daysBetweenReminders;
+                reminder.consecutiveDays = testReminder.daysBetweenReminders;
                 reminder.instructions = testReminder.instructions;
                 viewModel.insertReminder(reminder);
             }

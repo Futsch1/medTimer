@@ -41,6 +41,7 @@ import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class EditMedicine extends AppCompatActivity {
@@ -160,6 +161,7 @@ public class EditMedicine extends AppCompatActivity {
         Reminder reminder = new Reminder(medicineId);
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
+        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
 
         new TimeHelper.TimePickerWrapper(this).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;

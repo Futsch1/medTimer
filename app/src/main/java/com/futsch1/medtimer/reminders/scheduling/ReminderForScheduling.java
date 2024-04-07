@@ -49,7 +49,7 @@ public class ReminderForScheduling {
             if (day >= today) {
                 possibleDays[(int) (day - today)] = true;
             }
-            day += reminder.daysBetweenReminders;
+            day += reminder.consecutiveDays;
         }
     }
 
@@ -79,7 +79,7 @@ public class ReminderForScheduling {
         } else if (neverRaised()) {
             return today();
         } else {
-            return localDateFromEpochSeconds(lastRemindedTimestamp()).plusDays(reminder.daysBetweenReminders).toEpochDay();
+            return localDateFromEpochSeconds(lastRemindedTimestamp()).plusDays(reminder.consecutiveDays).toEpochDay();
         }
     }
 

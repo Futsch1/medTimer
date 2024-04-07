@@ -15,7 +15,7 @@ public class TestHelper {
         reminder.reminderId = reminderId;
         reminder.amount = amount;
         reminder.timeInMinutes = timeInMinutes;
-        reminder.daysBetweenReminders = daysBetweenReminders;
+        reminder.consecutiveDays = daysBetweenReminders;
         reminder.createdTimestamp = 0;
         reminder.days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
         return reminder;

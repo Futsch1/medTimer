@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "b8a9931e15816619888cf09dc2cbc1ac",
+    "identityHash": "f7da50cf6d89514a424b64d40ef82094",
     "entities": [
       {
         "tableName": "Medicine",
@@ -46,7 +46,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `daysBetweenReminders` INTEGER NOT NULL DEFAULT 1, `instructions` TEXT DEFAULT '', `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 739348, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]')",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -74,11 +74,18 @@
             "defaultValue": "0"
           },
           {
-            "fieldPath": "daysBetweenReminders",
-            "columnName": "daysBetweenReminders",
+            "fieldPath": "consecutiveDays",
+            "columnName": "consecutiveDays",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "1"
+          },
+          {
+            "fieldPath": "pauseDays",
+            "columnName": "pauseDays",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "instructions",
@@ -86,6 +93,13 @@
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "''"
+          },
+          {
+            "fieldPath": "cycleStartDay",
+            "columnName": "cycleStartDay",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "739348"
           },
           {
             "fieldPath": "amount",
@@ -191,7 +205,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b8a9931e15816619888cf09dc2cbc1ac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7da50cf6d89514a424b64d40ef82094')"
     ]
   }
 }

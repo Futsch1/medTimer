@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -16,6 +17,10 @@ public class TimeHelper {
 
     public static String minutesToTime(long minutes) {
         return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    }
+
+    public static String daysSinceEpochToDate(long daysSinceEpoch) {
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(LocalDate.ofEpochDay(daysSinceEpoch));
     }
 
     public interface TimePickerResult {

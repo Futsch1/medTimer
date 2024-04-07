@@ -21,10 +21,16 @@ public class Reminder {
     public long createdTimestamp;
     @ColumnInfo(defaultValue = "1")
     @Expose
-    public int daysBetweenReminders;
+    public int consecutiveDays;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int pauseDays;
     @ColumnInfo(defaultValue = "")
     @Expose
     public String instructions;
+    @ColumnInfo(defaultValue = "739348") // 7.4.24
+    @Expose
+    public long cycleStartDay;
     @Expose
     public String amount;
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
@@ -34,7 +40,8 @@ public class Reminder {
     public Reminder(int medicineRelId) {
         timeInMinutes = 480;
         amount = "?";
-        daysBetweenReminders = 1;
+        consecutiveDays = 1;
+        pauseDays = 0;
         days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
         this.medicineRelId = medicineRelId;
     }
