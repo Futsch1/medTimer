@@ -3,6 +3,8 @@ package com.futsch1.medtimer;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 
+import java.time.LocalDate;
+
 public class GenerateTestData {
     private final MedicineViewModel viewModel;
 
@@ -17,18 +19,18 @@ public class GenerateTestData {
     public void generateTestMedicine() {
         TestMedicine[] testMedicines = new TestMedicine[]{
                 new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1, ""),
-                        new TestReminder("1", 18 * 60, 2, "after meals")
+                        new TestReminder("1", 9 * 60, 1, 0, ""),
+                        new TestReminder("1", 18 * 60, 2, 2, "after meals")
                 }),
                 new TestMedicine("B12 (500µg)", 0xFF8b0000, new TestReminder[]{
-                        new TestReminder("2", 7 * 60, 1, "")
+                        new TestReminder("2", 7 * 60, 1, 0, "")
                 }),
                 new TestMedicine("Ginseng (200mg)", 0xFF90EE90, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1, "before breakfast")
+                        new TestReminder("1", 9 * 60, 1, 0, "before breakfast")
                 }),
                 new TestMedicine("Selen (200 µg)", null, new TestReminder[]{
-                        new TestReminder("2", 9 * 60, 1, ""),
-                        new TestReminder("1", 18 * 60, 1, "")
+                        new TestReminder("2", 9 * 60, 1, 0, ""),
+                        new TestReminder("1", 18 * 60, 1, 1, "")
                 })
         };
 
@@ -43,8 +45,10 @@ public class GenerateTestData {
                 Reminder reminder = new Reminder(medicineId);
                 reminder.amount = testReminder.amount;
                 reminder.timeInMinutes = testReminder.time;
-                reminder.consecutiveDays = testReminder.daysBetweenReminders;
+                reminder.consecutiveDays = testReminder.consecutiveDays;
                 reminder.instructions = testReminder.instructions;
+                reminder.pauseDays = testReminder.pauseDays;
+                reminder.cycleStartDay = LocalDate.now().toEpochDay();
                 viewModel.insertReminder(reminder);
             }
         }
@@ -55,7 +59,8 @@ public class GenerateTestData {
         // Record, intentionally empty
     }
 
-    private record TestReminder(String amount, int time, int daysBetweenReminders,
+    private record TestReminder(String amount, int time, int consecutiveDays,
+                                int pauseDays,
                                 String instructions) {
         // Record, intentionally empty
     }
