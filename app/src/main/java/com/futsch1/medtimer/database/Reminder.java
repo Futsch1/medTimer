@@ -28,7 +28,7 @@ public class Reminder {
     @ColumnInfo(defaultValue = "")
     @Expose
     public String instructions;
-    @ColumnInfo(defaultValue = "739348") // 7.4.24
+    @ColumnInfo(defaultValue = "19823") // 10.4.24
     @Expose
     public long cycleStartDay;
     @Expose
