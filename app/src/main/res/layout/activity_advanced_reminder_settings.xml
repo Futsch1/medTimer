@@ -61,15 +61,17 @@
             android:layout_height="wrap_content"
             android:text="@string/remind_cycle_part3" />
 
-    </LinearLayout>
+        <EditText
+            android:id="@+id/cycleStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="3dp"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="date"
+            android:text="01/01/1970" />
 
-    <EditText
-        android:id="@+id/cycleStartDate"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:importantForAutofill="no"
-        android:inputType="date" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
