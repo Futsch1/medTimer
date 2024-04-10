@@ -35,22 +35,32 @@ public class ReminderForScheduling {
     }
 
     private LocalDate getNextScheduledDate() {
-        setPossibleDaysByCycle();
+        if (isCyclic()) {
+            setPossibleDaysByCycle();
+        } else {
+            canScheduleTodayOrTomorrow();
+        }
 
         clearPossibleDaysByWeekday();
 
         return getEarliestPossibleDate();
     }
 
+    private void canScheduleTodayOrTomorrow() {
+        possibleDays[0] = !createdToday() && notRaisedToday();
+        possibleDays[1] = true;
+    }
+
     private void setPossibleDaysByCycle() {
-        long day = getCycleStart();
-        long today = today();
-        while (day < today + 31) {
-            if (day >= today) {
-                possibleDays[(int) (day - today)] = true;
-            }
-            day += reminder.consecutiveDays;
+        long cycleStartDay = reminder.cycleStartDay;
+        long dayInCycle = today() - cycleStartDay;
+        int cycleLength = reminder.consecutiveDays + reminder.pauseDays;
+        for (int x = 0; x < possibleDays.length; x++) {
+            possibleDays[x] = dayInCycle % cycleLength < reminder.consecutiveDays;
+            dayInCycle++;
         }
+        // Only schedule today if it's not already raised
+        possibleDays[0] &= notRaisedToday();
     }
 
     private void clearPossibleDaysByWeekday() {
@@ -73,26 +83,20 @@ public class ReminderForScheduling {
         return null;
     }
 
-    private long getCycleStart() {
-        if (createdToday()) {
-            return tomorrow();
-        } else if (neverRaised()) {
-            return today();
-        } else {
-            return localDateFromEpochSeconds(lastRemindedTimestamp()).plusDays(reminder.consecutiveDays).toEpochDay();
-        }
+    private boolean isCyclic() {
+        return reminder.pauseDays != 0;
     }
 
     private long today() {
         return timeAccess.localDate().toEpochDay();
     }
 
-    private boolean createdToday() {
-        return isToday(reminder.createdTimestamp);
+    private boolean notRaisedToday() {
+        return neverRaised() || today() != localDateFromEpochSeconds(lastRemindedTimestamp()).toEpochDay();
     }
 
-    private long tomorrow() {
-        return timeAccess.localDate().plusDays(1).toEpochDay();
+    private boolean createdToday() {
+        return isToday(reminder.createdTimestamp);
     }
 
     private boolean neverRaised() {

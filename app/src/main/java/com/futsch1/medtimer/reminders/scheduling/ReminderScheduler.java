@@ -35,7 +35,7 @@ public class ReminderScheduler {
             List<ReminderEvent> filteredEvents = reminderEvents.stream().filter(event -> event.reminderId == reminder.reminderId).collect(Collectors.toList());
             ReminderForScheduling reminderForScheduling = new ReminderForScheduling(reminder, filteredEvents, this.timeAccess);
             Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
-            if (nextScheduledTime == null || reminderScheduledTime.isBefore(nextScheduledTime)) {
+            if (nextScheduledTime == null || (reminderScheduledTime != null && reminderScheduledTime.isBefore(nextScheduledTime))) {
                 nextScheduledTime = reminderScheduledTime;
                 nextReminder = reminder;
             }

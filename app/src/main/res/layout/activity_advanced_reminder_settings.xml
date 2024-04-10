@@ -32,12 +32,12 @@
             android:inputType="numberSigned"
             android:text="@string/days" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remind_cycle_part2" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remind_cycle_part2" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

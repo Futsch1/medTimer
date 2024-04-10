@@ -105,7 +105,7 @@
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
     <string name="every_day">Jeden Tag</string>
-    <string name="remind_cycle_part1">Erinnere für</string>
-    <string name="remind_cycle_part2">Tage hintereinander, dann pausiere für</string>
+    <string name="remind_cycle_part1">Erinnere an</string>
+    <string name="remind_cycle_part2">Tagen hintereinander, dann pausiere für</string>
     <string name="remind_cycle_part3">Tage beginnend am</string>
 </resources>
