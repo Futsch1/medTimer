@@ -206,7 +206,7 @@
     <string name="custom">Coutume…</string>
     <string name="advanced_settings">Configuration avancée</string>
     <string name="remind_on">Rappel sur</string>
-    <string name="every_day">Jeden Tag</string>
+    <string name="every_day">Tous les jours</string>
     <string name="remind_cycle_part2">"jours consécutifs, puis pause pendant "</string>
     <string name="remind_cycle_part3">"jours à partir du "</string>
 
