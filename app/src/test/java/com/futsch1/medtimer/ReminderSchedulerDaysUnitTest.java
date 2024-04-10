@@ -56,7 +56,7 @@ public class ReminderSchedulerDaysUnitTest {
 
         MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 6);
-        // Allow only on Mondays and only every 6 days. The start of the cycle will be on the 2.1.1970.
+        // Allow only on Mondays and only every 6 days. The start of the cycle will be on the 1.1.1970.
         reminder.days.set(1, false);
         reminder.days.set(2, false);
         reminder.days.set(3, false);
@@ -73,6 +73,6 @@ public class ReminderSchedulerDaysUnitTest {
 
         scheduler.schedule(medicineList, reminderEventList);
         // Expect it to be on the 26.1.1970
-        verify(mock, times(1)).schedule(on(26, 480), medicineWithReminders.medicine, reminder);
+        verify(mock, times(1)).schedule(on(19, 480), medicineWithReminders.medicine, reminder);
     }
 }

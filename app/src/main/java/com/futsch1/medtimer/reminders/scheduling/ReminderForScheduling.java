@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class ReminderForScheduling {
@@ -38,7 +39,7 @@ public class ReminderForScheduling {
         if (isCyclic()) {
             setPossibleDaysByCycle();
         } else {
-            canScheduleTodayOrTomorrow();
+            canScheduleEveryDay();
         }
 
         clearPossibleDaysByWeekday();
@@ -46,9 +47,9 @@ public class ReminderForScheduling {
         return getEarliestPossibleDate();
     }
 
-    private void canScheduleTodayOrTomorrow() {
+    private void canScheduleEveryDay() {
+        Arrays.fill(possibleDays, true);
         possibleDays[0] = !createdToday() && notRaisedToday();
-        possibleDays[1] = true;
     }
 
     private void setPossibleDaysByCycle() {
