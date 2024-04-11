@@ -31,8 +31,7 @@ public class ReminderScheduler {
         Reminder nextReminder = null;
 
         for (Reminder reminder : reminders) {
-            @SuppressWarnings("java:S6204")
-            List<ReminderEvent> filteredEvents = reminderEvents.stream().filter(event -> event.reminderId == reminder.reminderId).collect(Collectors.toList());
+            List<ReminderEvent> filteredEvents = getFilteredEvents(reminderEvents, reminder.reminderId);
             ReminderForScheduling reminderForScheduling = new ReminderForScheduling(reminder, filteredEvents, this.timeAccess);
             Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
             if (nextScheduledTime == null || (reminderScheduledTime != null && reminderScheduledTime.isBefore(nextScheduledTime))) {
@@ -41,9 +40,7 @@ public class ReminderScheduler {
             }
         }
 
-        if (nextReminder != null) {
-            this.listener.schedule(nextScheduledTime, getMedicine(nextReminder, medicineWithReminders), nextReminder);
-        }
+        processFoundNextReminder(medicineWithReminders, nextReminder, nextScheduledTime);
     }
 
     private ArrayList<Reminder> getReminders(List<MedicineWithReminders> medicineWithReminders) {
@@ -55,6 +52,16 @@ public class ReminderScheduler {
         return reminders;
     }
 
+    @SuppressWarnings("java:S6204")
+    private List<ReminderEvent> getFilteredEvents(List<ReminderEvent> reminderEvents, int reminderId) {
+        return reminderEvents.stream().filter(event -> event.reminderId == reminderId).collect(Collectors.toList());
+    }
+
+    private void processFoundNextReminder(@NonNull List<MedicineWithReminders> medicineWithReminders, Reminder nextReminder, Instant nextScheduledTime) {
+        if (nextReminder != null) {
+            this.listener.schedule(nextScheduledTime, getMedicine(nextReminder, medicineWithReminders), nextReminder);
+        }
+    }
 
     private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
         int medicineId = reminder.medicineRelId;
