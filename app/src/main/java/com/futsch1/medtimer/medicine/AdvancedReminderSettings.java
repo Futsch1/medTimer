@@ -137,13 +137,15 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
     private void setupCycleStartDate() {
         setCycleStartDate();
-        editCycleStartDate.setOnClickListener(v -> {
-            LocalDate startDate = LocalDate.ofEpochDay(reminder.cycleStartDay);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                reminder.cycleStartDay = LocalDate.of(year, month, dayOfMonth).toEpochDay();
-                setCycleStartDate();
-            }, startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
-            datePickerDialog.show();
+        editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                LocalDate startDate = LocalDate.ofEpochDay(reminder.cycleStartDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                    reminder.cycleStartDay = LocalDate.of(year, month, dayOfMonth).toEpochDay();
+                    setCycleStartDate();
+                }, startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
+                datePickerDialog.show();
+            }
         });
     }
 
