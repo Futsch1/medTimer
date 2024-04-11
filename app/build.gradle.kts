@@ -16,8 +16,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 28
-        versionName = "1.6.1"
+        versionCode = 29
+        versionName = "1.7.0-rc.1"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
