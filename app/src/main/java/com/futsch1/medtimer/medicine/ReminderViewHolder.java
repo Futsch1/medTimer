@@ -1,10 +1,12 @@
 package com.futsch1.medtimer.medicine;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +25,8 @@ import com.google.android.material.button.MaterialButton;
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
-    private final EditText editDaysBetweenReminders;
-    private final EditText editInstructions;
     private final View holderItemView;
-    private final MaterialButton instructionSuggestions;
+    private final MaterialButton advancedSettings;
 
     private Reminder reminder;
 
@@ -35,9 +35,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
-        editDaysBetweenReminders = itemView.findViewById(R.id.daysBetweenReminders);
-        editInstructions = itemView.findViewById(R.id.editInstructions);
-        instructionSuggestions = itemView.findViewById(R.id.instructionSuggestions);
+        advancedSettings = itemView.findViewById(R.id.open_advanced_settings);
         this.holderItemView = itemView;
     }
 
@@ -48,11 +46,10 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void bind(Reminder reminder, DeleteCallback deleteCallback) {
+    public void bind(Reminder reminder, String medicineName, DeleteCallback deleteCallback) {
         this.reminder = reminder;
 
         editTime.setText(minutesToTime(reminder.timeInMinutes));
-        editDaysBetweenReminders.setText(Integer.toString(reminder.daysBetweenReminders));
 
         editTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -62,6 +59,13 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                     reminder.timeInMinutes = minutes;
                 });
             }
+        });
+
+        advancedSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this.holderItemView.getContext(), AdvancedReminderSettings.class);
+            intent.putExtra(EXTRA_ID, reminder.reminderId);
+            intent.putExtra(EXTRA_MEDICINE_NAME, medicineName);
+            this.holderItemView.getContext().startActivity(intent);
         });
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
@@ -83,39 +87,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         });
 
         editAmount.setText(reminder.amount);
-        editInstructions.setText(reminder.instructions);
-
-        setupInstructionSuggestions();
     }
 
-    private void setupInstructionSuggestions() {
-        instructionSuggestions.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(holderItemView.getContext());
-            builder.setTitle(R.string.instruction_templates);
-            builder.setItems(R.array.instructions_suggestions, (dialog, which) -> {
-                if (which > 0) {
-                    String[] instructionSuggestionsArray = holderItemView.getResources().getStringArray(R.array.instructions_suggestions);
-                    editInstructions.setText(instructionSuggestionsArray[which]);
-                } else {
-                    editInstructions.setText("");
-                }
-            });
-            builder.show();
-
-        });
-    }
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();
-        reminder.instructions = editInstructions.getText().toString();
-        try {
-            reminder.daysBetweenReminders = Integer.parseInt(editDaysBetweenReminders.getText().toString());
-            if (reminder.daysBetweenReminders <= 0) {
-                reminder.daysBetweenReminders = 1;
-            }
-        } catch (NumberFormatException e) {
-            reminder.daysBetweenReminders = 1;
-        }
         return reminder;
     }
 

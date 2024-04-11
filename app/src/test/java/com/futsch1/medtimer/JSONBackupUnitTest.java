@@ -33,8 +33,11 @@ public class JSONBackupUnitTest {
         Reminder reminder = new Reminder(0);
         reminder.timeInMinutes = 60;
         reminder.amount = "1";
-        reminder.daysBetweenReminders = 1;
+        reminder.consecutiveDays = 1;
+        reminder.pauseDays = 0;
+        reminder.cycleStartDay = 12;
         reminder.instructions = "Take with water";
+        reminder.days.set(0, false);
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -54,9 +57,20 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "daysBetweenReminders": 1,
+          "consecutiveDays": 1,
+          "pauseDays": 0,
           "instructions": "Take with water",
-          "amount": "1"
+          "cycleStartDay": 12,
+          "amount": "1",
+          "days": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         }
       ],
       "medicine": {
@@ -93,7 +107,7 @@ public class JSONBackupUnitTest {
 
     private void compareReminder(Reminder reminder, Reminder reminder1) {
         assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes);
-        assertEquals(reminder.daysBetweenReminders, reminder1.daysBetweenReminders);
+        assertEquals(reminder.consecutiveDays, reminder1.consecutiveDays);
         assertEquals(reminder.instructions, reminder1.instructions);
         assertEquals(reminder.amount, reminder1.amount);
     }
@@ -107,7 +121,9 @@ public class JSONBackupUnitTest {
         Reminder reminder1 = new Reminder(0);
         reminder1.timeInMinutes = 60;
         reminder1.amount = "1";
-        reminder1.daysBetweenReminders = 1;
+        reminder1.consecutiveDays = 1;
+        reminder1.pauseDays = 0;
+        reminder1.cycleStartDay = 1234;
         reminder1.instructions = "Take with water";
         medicineWithReminders1.reminders = Collections.singletonList(reminder1);
         medicineWithReminders1.medicine = new Medicine("Medicine A");
@@ -119,8 +135,11 @@ public class JSONBackupUnitTest {
         Reminder reminder2 = new Reminder(0);
         reminder2.timeInMinutes = 120;
         reminder2.amount = "2";
-        reminder2.daysBetweenReminders = 2;
+        reminder2.consecutiveDays = 2;
+        reminder2.pauseDays = 1;
+        reminder2.cycleStartDay = 4567;
         reminder2.instructions = "Take after meal";
+        reminder2.days.set(6, false);
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -143,9 +162,20 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "daysBetweenReminders": 1,
+          "consecutiveDays": 1,
+          "pauseDays": 0,
           "instructions": "Take with water",
-          "amount": "1"
+          "cycleStartDay": 1234,
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         }
       ],
       "medicine": {
@@ -158,15 +188,37 @@ public class JSONBackupUnitTest {
       "reminders": [
         {
           "timeInMinutes": 60,
-          "daysBetweenReminders": 1,
+          "consecutiveDays": 1,
+          "pauseDays": 0,
           "instructions": "Take with water",
-          "amount": "1"
+          "cycleStartDay": 1234,
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
         },
         {
           "timeInMinutes": 120,
-          "daysBetweenReminders": 2,
+          "consecutiveDays": 2,
+          "pauseDays": 1,
           "instructions": "Take after meal",
-          "amount": "2"
+          "cycleStartDay": 4567,
+          "amount": "2",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ]
         }
       ],
       "medicine": {

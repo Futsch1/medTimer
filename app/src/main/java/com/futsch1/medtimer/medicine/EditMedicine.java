@@ -41,6 +41,7 @@ import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class EditMedicine extends AppCompatActivity {
@@ -66,14 +67,15 @@ public class EditMedicine extends AppCompatActivity {
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
         medicineId = getIntent().getIntExtra(EXTRA_ID, 0);
+        String medicineName = getIntent().getStringExtra(EXTRA_MEDICINE_NAME);
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem);
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem, medicineName);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
         editMedicineName = findViewById(R.id.editMedicineName);
-        editMedicineName.setText(getIntent().getStringExtra(EXTRA_MEDICINE_NAME));
+        editMedicineName.setText(medicineName);
 
         boolean useColor = getIntent().getBooleanExtra(EXTRA_USE_COLOR, false);
         enableColor = findViewById(R.id.enableColor);
@@ -99,6 +101,7 @@ public class EditMedicine extends AppCompatActivity {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         medicineViewModel.getReminders(medicineId).observe(this, adapter::submitList);
 
+        Objects.requireNonNull(getSupportActionBar()).setTitle(medicineName);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
@@ -158,6 +161,7 @@ public class EditMedicine extends AppCompatActivity {
         Reminder reminder = new Reminder(medicineId);
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
+        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
 
         new TimeHelper.TimePickerWrapper(this).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;

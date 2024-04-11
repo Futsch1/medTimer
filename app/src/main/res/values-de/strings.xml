@@ -31,7 +31,7 @@
     </plurals>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
-    <string name="clear_events">" Ereignisse zurücksetzen"</string>
+    <string name="clear_events">Ereignisse zurücksetzen</string>
     <string name="app_version">App-Version</string>
     <string name="are_you_sure_delete_events">Ereignisse wirklich zurücksetzen?</string>
     <string name="export">Ereignisse exportieren</string>
@@ -59,7 +59,6 @@
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="notification_tone_title">Benachrichtigungston</string>
     <string name="select_format">Format auswählen</string>
-    <string name="remind_every">Erinnere alle</string>
     <string name="days">Tage</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
@@ -80,7 +79,7 @@
     <string name="export_failed">Exportieren fehlgeschlagen</string>
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
     <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
-    <string name="log_manual_dose">Manuelle Dosis eintragen</string>
+    <string name="log_additional_dose">Zusätzliche Einnahme eintragen</string>
     <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
     <string name="skip_reminder">Einnahme überspringen</string>
     <string name="snooze">Snooze</string>
@@ -103,4 +102,10 @@
     <string name="sunday">Sonntag</string>
     <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
+    <string name="advanced_settings">Erweiterte Einstellungen</string>
+    <string name="remind_on">Erinnere an</string>
+    <string name="every_day">Jedem Tag</string>
+    <string name="remind_cycle_part1">Erinnere an</string>
+    <string name="remind_cycle_part2">Tagen hintereinander, dann pausiere für</string>
+    <string name="remind_cycle_part3">Tage beginnend am</string>
 </resources>

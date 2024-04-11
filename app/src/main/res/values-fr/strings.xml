@@ -117,7 +117,7 @@
 
     <string name="select_format">Sélectionnez le format</string>
 
-    <string name="remind_every">Rappelez à tous</string>
+    <string name="remind_cycle_part1">Rappel pendant</string>
 
     <string name="days">jours</string>
 
@@ -159,7 +159,7 @@
 
     <string name="restore_start">Cela remplacera tous les paramètres de médecine.\n\nContinuer?</string>
 
-    <string name="log_manual_dose">Enregistrer la dose manuelle</string>
+    <string name="log_additional_dose">Enregistrer une dose supplémentaire</string>
 
     <string name="dismiss_notification_action">Action en cas de rejet d\'une notification</string>
 
@@ -204,5 +204,10 @@
     <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
 
     <string name="custom">Coutume…</string>
+    <string name="advanced_settings">Configuration avancée</string>
+    <string name="remind_on">Rappel sur</string>
+    <string name="every_day">Tous les jours</string>
+    <string name="remind_cycle_part2">"jours consécutifs, puis pause pendant "</string>
+    <string name="remind_cycle_part3">"jours à partir du "</string>
 
 </resources>

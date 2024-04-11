@@ -24,7 +24,7 @@ import com.futsch1.medtimer.PreferencesFragment;
 import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.helpers.MedicineHelper;
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -62,7 +62,7 @@ public class RescheduleWork extends Worker {
         });
 
         List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
-        reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(MedicineHelper.getMaxDaysBetweenReminders(medicineWithReminders) + 1));
+        reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
 
         return Result.success();
     }
