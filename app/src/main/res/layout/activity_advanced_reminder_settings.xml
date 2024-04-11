@@ -83,10 +83,12 @@
         android:id="@+id/remindOnDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"
+        android:background="@android:drawable/editbox_background_normal"
         android:drawablePadding="16dp"
         android:hint="@string/every_day"
         android:padding="12dp"
+        android:text="@string/every_day"
+        android:textColor="?android:attr/colorForeground"
         app:drawableEndCompat="@drawable/pencil_square" />
 
     <TextView
