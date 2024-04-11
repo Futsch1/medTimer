@@ -107,7 +107,7 @@ public class OverviewFragment extends Fragment {
         } else {
             reminderEvent.color = 0;
             reminderEvent.useColor = false;
-            DialogHelper.showTextInputDialog(requireContext(), R.string.log_manual_dose, R.string.medicine_name, name -> {
+            DialogHelper.showTextInputDialog(requireContext(), R.string.log_additional_dose, R.string.medicine_name, name -> {
                 reminderEvent.medicineName = name;
                 getAmountAndLog(reminderEvent);
             });
@@ -116,7 +116,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void getAmountAndLog(ReminderEvent reminderEvent) {
-        DialogHelper.showTextInputDialog(requireContext(), R.string.log_manual_dose, R.string.dosage, amount -> {
+        DialogHelper.showTextInputDialog(requireContext(), R.string.log_additional_dose, R.string.dosage, amount -> {
             reminderEvent.amount = amount;
             medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
         });

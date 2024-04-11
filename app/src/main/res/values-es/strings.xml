@@ -79,7 +79,7 @@
     <string name="export_failed">Error de exportación</string>
     <string name="restore_successful">Restaurar con éxito</string>
     <string name="restore_start">Esto reemplazará todos los ajustes de medicina.\n\n¿Continuar?</string>
-    <string name="log_manual_dose">Introducir dosis manual</string>
+    <string name="log_additional_dose">Introducir dosis adicional</string>
     <string name="dismiss_notification_action">Acción al rechazar la notificación</string>
     <string name="skip_reminder">Omitir dosis</string>
     <string name="snooze">Snooze</string>

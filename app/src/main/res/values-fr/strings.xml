@@ -159,7 +159,7 @@
 
     <string name="restore_start">Cela remplacera tous les paramètres de médecine.\n\nContinuer?</string>
 
-    <string name="log_manual_dose">Enregistrer la dose manuelle</string>
+    <string name="log_additional_dose">Enregistrer une dose supplémentaire</string>
 
     <string name="dismiss_notification_action">Action en cas de rejet d\'une notification</string>
 

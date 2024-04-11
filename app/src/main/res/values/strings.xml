@@ -83,7 +83,7 @@
     <string name="export_failed">Export failed</string>
     <string name="restore_successful">Restore successful</string>
     <string name="restore_start">This will replace all medicine settings.\n\nContinue?</string>
-    <string name="log_manual_dose">Log manual dose</string>
+    <string name="log_additional_dose">Log additional dose</string>
     <string name="dismiss_notification_action">Action when dismissing notification</string>
     <string name="skip_reminder">Skip dose</string>
     <string name="snooze">Snooze</string>
