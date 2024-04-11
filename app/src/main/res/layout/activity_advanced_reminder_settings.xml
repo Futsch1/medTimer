@@ -69,7 +69,8 @@
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="date"
-            android:text="01/01/1970" />
+            android:text="01/01/1970"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 
