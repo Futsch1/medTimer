@@ -78,24 +78,10 @@ public class EditMedicine extends AppCompatActivity {
         editMedicineName.setText(medicineName);
 
         boolean useColor = getIntent().getBooleanExtra(EXTRA_USE_COLOR, false);
-        enableColor = findViewById(R.id.enableColor);
-        enableColor.setChecked(useColor);
-        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-
+        setupEnableColor(useColor);
         setupColorButton(useColor);
 
-        // Swipe to delete
-        swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, this) {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicine.this.deleteItem(EditMedicine.this, viewHolder.getItemId(), viewHolder.getAdapterPosition());
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
+        setupSwiping(recyclerView);
         setupAddReminderButton();
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -127,6 +113,12 @@ public class EditMedicine extends AppCompatActivity {
         });
     }
 
+    private void setupEnableColor(boolean useColor) {
+        enableColor = findViewById(R.id.enableColor);
+        enableColor.setChecked(useColor);
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+    }
+
     private void setupColorButton(boolean useColor) {
         color = getIntent().getIntExtra(EXTRA_COLOR, Color.DKGRAY);
         colorButton = findViewById(R.id.selectColor);
@@ -150,6 +142,19 @@ public class EditMedicine extends AppCompatActivity {
             new Handler(getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
         });
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupSwiping(RecyclerView recyclerView) {
+        swipeHelper = new SwipeHelper(Color.RED, android.R.drawable.ic_menu_delete, this) {
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    EditMedicine.this.deleteItem(EditMedicine.this, viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void setupAddReminderButton() {
