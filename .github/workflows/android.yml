@@ -44,7 +44,6 @@ jobs:
             -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $AAB_RELEASE_DIRECTORY/MedTimer-release.aab ${{ secrets.SIGNING_ALIAS }}
         continue-on-error: true
       - name: Upload App Bundle
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v1
         with:
           name: aab
