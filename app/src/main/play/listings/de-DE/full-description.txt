@@ -1,12 +1,10 @@
-Behalten Sie die Kontrolle über Ihre Medikamente mit MedTimer
+Behalten Sie den Überblick über Ihre Medikamente mit MedTimer
 
-MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamenten, mit der Sie Ihre
-Medikamente effektiv und mit voller Kontrolle über Ihre sensiblen Daten zu verwalten.
+MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamenten, mit der Sie Ihre Medikamente effektiv und mit voller Kontrolle über Ihre sensiblen Daten zu verwalten.
 
 Flexible und personalisierte Erinnerungen:
 
-- Verwalten eine unbegrenzte Anzahl Medikamente mit individuellen Erinnerungen pro Medikament
-(mit einfacher Standardeinstellung für tägliche Erinnerungen).
+- Verwalten eine unbegrenzte Anzahl Medikamente mit individuellen Erinnerungen pro Medikament (mit einfacher Standardeinstellung für tägliche Erinnerungen).
 - Erstelle flexible Erinnerungen mit Pausen und nur für bestimmten Tage (z.B. für die Antibabypille).
 - Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
 - Verschiebe ("snooze") Benachrichtigungen um später erneut erinnert zu werden.
@@ -15,14 +13,12 @@ Flexible und personalisierte Erinnerungen:
 Einfache und sichere Datenverwaltung:
 
 - Bestätige oder verwerfe Erinnerungen, um die Medikamenteneinnahme genau zu erfassen.
-- Exportiere deine Medikamentenhistorie als CSV-Datei für eine einfache Aufzeichnung oder Weitergabe
-an medizinisches Fachpersonal.
+- Exportiere deine Medikamentenhistorie als CSV-Datei für eine einfache Aufzeichnung oder Weitergabe an medizinisches Fachpersonal.
 - Sichern und Wiederherstellen deiner Medikamentenliste als JSON-Datei.
 
 Datenschutz und Offline-Zugriff:
 
-- Alle Daten werden sicher auf Ihrem Gerät gespeichert, so dass ein vollständiger Datenschutz und
-Offline-Zugriff gewährleistet ist.
+- Alle Daten werden sicher auf Ihrem Gerät gespeichert, so dass ein vollständiger Datenschutz und Offline-Zugriff gewährleistet ist.
 - Keine Internetverbindung erforderlich - deine Medikamentenerinnerungen sind immer verfügbar.
 
 MedTimer ist eine kostenlose, werbefreie App.
