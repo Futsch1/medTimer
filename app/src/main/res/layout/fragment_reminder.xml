@@ -16,56 +16,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:hint="@string/time">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/editReminderTime"
-                    android:text="@string/time" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editReminderTime"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:ems="10"
-                    android:importantForAutofill="no"
-                    android:inputType="time"
-                    android:text="@string/time" />
+                    android:layout_height="match_parent"
+                    android:inputType="time" />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:hint="@string/dosage">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/editAmount"
-                    android:singleLine="true"
-                    android:text="@string/dosage" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editAmount"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:ems="10"
-                    android:hint="@string/dosage"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:text="@string/dosage" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

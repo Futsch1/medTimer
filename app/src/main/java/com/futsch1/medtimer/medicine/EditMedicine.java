@@ -70,7 +70,7 @@ public class EditMedicine extends AppCompatActivity {
         String medicineName = getIntent().getStringExtra(EXTRA_MEDICINE_NAME);
 
         RecyclerView recyclerView = findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem, medicineName);
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem, medicineName, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
