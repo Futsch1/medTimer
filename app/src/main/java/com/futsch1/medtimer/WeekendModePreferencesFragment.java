@@ -46,7 +46,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
             preference.setSummary(TimeHelper.minutesToTime(defaultSharedPreferences.getInt(WEEKEND_TIME, 540)));
             preference.setOnPreferenceClickListener(preference1 -> {
                 int weekendTime = defaultSharedPreferences.getInt(WEEKEND_TIME, 540);
-                new TimeHelper.TimePickerWrapper(requireContext()).show(weekendTime / 60, weekendTime % 60, minutes -> {
+                new TimeHelper.TimePickerWrapper(getActivity()).show(weekendTime / 60, weekendTime % 60, minutes -> {
                     defaultSharedPreferences.edit().putInt(WEEKEND_TIME, minutes).apply();
                     preference1.setSummary(TimeHelper.minutesToTime(minutes));
                     requestReschedule();

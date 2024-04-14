@@ -5,11 +5,11 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,7 +21,9 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,8 +36,8 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     private EditText editConsecutiveDays;
     private EditText editPauseDays;
     private EditText editCycleStartDate;
-    private EditText editInstructions;
-    private MaterialButton instructionSuggestions;
+    private TextInputEditText editInstructions;
+    private TextInputLayout instructionSuggestions;
     private MedicineViewModel medicineViewModel;
     private Reminder reminder;
     private TextView remindOnDays;
@@ -73,7 +75,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
         editConsecutiveDays = findViewById(R.id.consecutiveDays);
         editCycleStartDate = findViewById(R.id.cycleStartDate);
         editInstructions = findViewById(R.id.editInstructions);
-        instructionSuggestions = findViewById(R.id.instructionSuggestions);
+        instructionSuggestions = findViewById(R.id.editInstructionsLayout);
         remindOnDays = findViewById(R.id.remindOnDays);
 
         editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
@@ -90,7 +92,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     }
 
     private void setupInstructionSuggestions() {
-        instructionSuggestions.setOnClickListener(v -> {
+        instructionSuggestions.setEndIconOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.instruction_templates);
             builder.setItems(R.array.instructions_suggestions, (dialog, which) -> {
@@ -140,11 +142,14 @@ public class AdvancedReminderSettings extends AppCompatActivity {
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 LocalDate startDate = LocalDate.ofEpochDay(reminder.cycleStartDay);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                    reminder.cycleStartDay = LocalDate.of(year, month, dayOfMonth).toEpochDay();
+                MaterialDatePicker<Long> datePickerDialog = MaterialDatePicker.Builder.datePicker()
+                        .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS)
+                        .build();
+                datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> {
+                    reminder.cycleStartDay = selectedDate / DateUtils.DAY_IN_MILLIS;
                     setCycleStartDate();
-                }, startDate.getYear(), startDate.getMonthValue(), startDate.getDayOfMonth());
-                datePickerDialog.show();
+                });
+                datePickerDialog.show(getSupportFragmentManager(), "date_picker");
             }
         });
     }
@@ -182,7 +187,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        reminder.instructions = editInstructions.getText().toString();
+        reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
         try {
             reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
             if (reminder.consecutiveDays <= 0) {

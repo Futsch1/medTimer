@@ -1,8 +1,11 @@
 package com.futsch1.medtimer.helpers;
 
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.text.format.DateFormat;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,15 +31,23 @@ public class TimeHelper {
     }
 
     public static class TimePickerWrapper {
-        Context context;
+        FragmentActivity activity;
 
-        public TimePickerWrapper(Context context) {
-            this.context = context;
+        public TimePickerWrapper(FragmentActivity activity) {
+            this.activity = activity;
         }
 
         public void show(int hourOfDay, int minute, TimePickerResult timePickerResult) {
-            TimePickerDialog timePickerDialog = new TimePickerDialog(context, (view, hourOfDayLocal, minuteLocal) -> timePickerResult.onTimeSelected(hourOfDayLocal * 60 + minuteLocal), hourOfDay, minute, DateFormat.is24HourFormat(context));
-            timePickerDialog.show();
+            MaterialTimePicker timePickerDialog = new MaterialTimePicker.Builder()
+                    .setTimeFormat(DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+                    .setHour(hourOfDay)
+                    .setMinute(minute)
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                    .build();
+
+            timePickerDialog.addOnPositiveButtonClickListener(view -> timePickerResult.onTimeSelected(timePickerDialog.getHour() * 60 + timePickerDialog.getMinute()));
+
+            timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");
         }
     }
 }

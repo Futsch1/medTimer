@@ -95,39 +95,19 @@
             android:text="@string/every_day" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/instructions_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:labelFor="@+id/editInstructions"
-        android:maxLines="1"
-        android:text="@string/instructions_label" />
-
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editInstructionsLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:hint="@string/instructions_label"
+        android:orientation="horizontal"
+        app:endIconDrawable="@drawable/clipboard_plus"
+        app:endIconMode="custom">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editInstructions"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_weight="1"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:text="@string/instructions" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/instructionSuggestions"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:contentDescription="@string/instruction_templates"
-            android:minWidth="0dp"
-            app:icon="@drawable/clipboard_plus"
-            app:iconPadding="0dp" />
-    </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,22 +28,25 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editAmount;
     private final View holderItemView;
     private final MaterialButton advancedSettings;
+    private final FragmentActivity fragmentActivity;
 
     private Reminder reminder;
 
 
-    private ReminderViewHolder(View itemView) {
+    private ReminderViewHolder(View itemView, FragmentActivity fragmentActivity) {
         super(itemView);
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
         advancedSettings = itemView.findViewById(R.id.open_advanced_settings);
+
         this.holderItemView = itemView;
+        this.fragmentActivity = fragmentActivity;
     }
 
-    static ReminderViewHolder create(ViewGroup parent) {
+    static ReminderViewHolder create(ViewGroup parent, FragmentActivity fragmentActivity) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_reminder, parent, false);
-        return new ReminderViewHolder(view);
+        return new ReminderViewHolder(view, fragmentActivity);
     }
 
     @SuppressLint("SetTextI18n")
@@ -53,7 +57,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         editTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                new TimeHelper.TimePickerWrapper(editTime.getContext()).show(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60, minutes -> {
+                new TimeHelper.TimePickerWrapper(fragmentActivity).show(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60, minutes -> {
                     String selectedTime = minutesToTime(minutes);
                     editTime.setText(selectedTime);
                     reminder.timeInMinutes = minutes;

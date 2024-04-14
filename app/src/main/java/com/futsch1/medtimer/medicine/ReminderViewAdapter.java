@@ -4,6 +4,7 @@ package com.futsch1.medtimer.medicine;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
@@ -13,11 +14,16 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
 
     private final ReminderViewHolder.DeleteCallback deleteCallback;
     private final String medicineName;
+    private final FragmentActivity fragmentActivity;
 
-    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback, ReminderViewHolder.DeleteCallback deleteCallback, String medicineName) {
+    public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback,
+                               ReminderViewHolder.DeleteCallback deleteCallback,
+                               String medicineName,
+                               FragmentActivity fragmentActivity) {
         super(diffCallback);
         this.deleteCallback = deleteCallback;
         this.medicineName = medicineName;
+        this.fragmentActivity = fragmentActivity;
         setHasStableIds(true);
     }
 
@@ -26,7 +32,7 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
     @NonNull
     @Override
     public ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ReminderViewHolder.create(parent);
+        return ReminderViewHolder.create(parent, fragmentActivity);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
