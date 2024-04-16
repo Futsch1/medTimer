@@ -31,11 +31,6 @@
         android:id="@+id/weekendModePreferencesFragment"
         android:name="com.futsch1.medtimer.WeekendModePreferencesFragment"
         android:label="WeekendModePreferencesFragment" />
-    <activity
-        android:id="@+id/advancedReminderSettings"
-        android:name="com.futsch1.medtimer.medicine.AdvancedReminderSettings"
-        android:label="activity_advanced_reminder_settings"
-        tools:layout="@layout/activity_advanced_reminder_settings" />
     <fragment
         android:id="@+id/editMedicine"
         android:name="com.futsch1.medtimer.medicine.EditMedicine"
@@ -53,5 +48,26 @@
         <argument
             android:name="color"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_editMedicine_to_advancedReminderSettings"
+            app:destination="@id/advancedReminderSettings" />
+    </fragment>
+    <argument
+        android:name="reminderId"
+        app:argType="integer" />
+    <argument
+        android:name="medicineName"
+        app:argType="string" />
+    <fragment
+        android:id="@+id/advancedReminderSettings"
+        android:name="com.futsch1.medtimer.medicine.AdvancedReminderSettings"
+        android:label="fragment_advanced_reminder_settings"
+        tools:layout="@layout/fragment_advanced_reminder_settings">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+        <argument
+            android:name="medicineName"
+            app:argType="string" />
     </fragment>
 </navigation>
