@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/overviewFragment">
+
+    <fragment
+        android:id="@+id/medicinesFragment"
+        android:name="com.futsch1.medtimer.medicine.MedicinesFragment"
+        android:label="fragment_medicines"
+        tools:layout="@layout/fragment_medicines">
+        <action
+            android:id="@+id/action_editMedicine"
+            app:destination="@id/editMedicine" />
+    </fragment>
+    <fragment
+        android:id="@+id/overviewFragment"
+        android:name="com.futsch1.medtimer.overview.OverviewFragment"
+        android:label="fragment_overview"
+        tools:layout="@layout/fragment_overview" />
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.futsch1.medtimer.PreferencesFragment"
+        android:label="PreferencesFragment">
+        <action
+            android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
+            app:destination="@id/weekendModePreferencesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weekendModePreferencesFragment"
+        android:name="com.futsch1.medtimer.WeekendModePreferencesFragment"
+        android:label="WeekendModePreferencesFragment" />
+    <activity
+        android:id="@+id/advancedReminderSettings"
+        android:name="com.futsch1.medtimer.medicine.AdvancedReminderSettings"
+        android:label="activity_advanced_reminder_settings"
+        tools:layout="@layout/activity_advanced_reminder_settings" />
+    <fragment
+        android:id="@+id/editMedicine"
+        android:name="com.futsch1.medtimer.medicine.EditMedicine"
+        android:label="activity_edit_medicine"
+        tools:layout="@layout/fragment_edit_medicine">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+        <argument
+            android:name="medicineName"
+            app:argType="string" />
+        <argument
+            android:name="useColor"
+            app:argType="boolean" />
+        <argument
+            android:name="color"
+            app:argType="integer" />
+    </fragment>
+</navigation>

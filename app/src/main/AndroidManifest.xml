@@ -27,18 +27,10 @@
         <activity
             android:name=".medicine.AdvancedReminderSettings"
             android:exported="false" />
-        <activity
-            android:name=".PreferencesActivity"
-            android:exported="false"
-            android:label="@string/tab_settings" />
 
         <service
             android:name=".ReminderSchedulerService"
             android:enabled="true"
-            android:exported="false" />
-
-        <activity
-            android:name=".medicine.EditMedicine"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
