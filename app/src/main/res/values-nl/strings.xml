@@ -17,7 +17,7 @@
   <string name="confirm">Bevestigen</string>
   <string name="are_you_sure_delete_medicine">Weet u zeker dat u het geneesmiddel wilt verwijderen?</string>
   <string name="no_reminders">Geen herinneringen ingesteld</string>
-  <plurals name="som_herinneringen">
+  <plurals name="sum_reminders">
        <item quantity="one">%1$d herinnering\n%2$s</item>
        <item quantity="other">%1$d herinneringen\n%2$s</item>
   </plurals>
