@@ -111,6 +111,4 @@
     <string name="every_day">Every day</string>
     <string name="remind_cycle_part2">consecutive days, then pause for</string>
     <string name="remind_cycle_part3">days beginning on</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
