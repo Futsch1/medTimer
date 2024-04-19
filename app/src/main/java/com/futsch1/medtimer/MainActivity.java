@@ -14,11 +14,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
@@ -29,15 +30,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
     );
-    TabLayout tabLayout;
-    ViewPager2 viewPager;
-    ViewPagerAdapter viewPagerAdapter;
     OptionsMenu optionsMenu;
     private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
             optionsMenu.fileSelected(result.getData().getData());
         }
     });
+    private AppBarConfiguration appBarConfiguration;
 
 
     @Override
@@ -53,19 +52,17 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Setup view pager
-        viewPager = findViewById(R.id.view_pager);
-        tabLayout = findViewById(R.id.tabs);
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
-        viewPager.setAdapter(viewPagerAdapter);
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            int[] tabNames = new int[]{R.string.tab_overview, R.string.tab_medicine, R.string.tab_settings};
-            tab.setText(tabNames[position]);
-        }).attach();
-
         checkPermissions();
 
         NotificationChannelManager.createNotificationChannel(getApplicationContext());
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                navController.getGraph())
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
 
     @Override
@@ -87,11 +84,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.navHost);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         menu.setGroupDividerEnabled(true);
-        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()), requestFileLauncher);
+        NavController navController = Navigation.findNavController(this, R.id.navHost);
+        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()), requestFileLauncher, navController);
         return true;
     }
 }

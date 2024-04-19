@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
@@ -29,6 +30,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupTheme();
         setupExactReminders();
         setupNotificationTone();
+        setupWeekendMode();
     }
 
     private void setupShowNotifications() {
@@ -91,6 +93,17 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
+    private void setupWeekendMode() {
+        Preference preference = getPreferenceScreen().findPreference("weekend_mode");
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(preference1 ->
+                    {
+                        Navigation.findNavController(requireView()).navigate(R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
+                        return true;
+                    }
+            );
+        }
+    }
 
     @Override
     public void onResume() {

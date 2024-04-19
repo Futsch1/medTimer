@@ -51,19 +51,21 @@ public class EditMedicine extends Fragment {
     private MaterialButton colorButton;
     private int color;
     private View fragmentEditMedicine;
-    private EditMedicineArgs editMedicineArgs;
+    private com.futsch1.medtimer.medicine.EditMedicineArgs editMedicineArgs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentEditMedicine = inflater.inflate(R.layout.fragment_overview, container, false);
+
+        fragmentEditMedicine = inflater.inflate(R.layout.fragment_edit_medicine, container, false);
 
         this.thread = new HandlerThread("DeleteMedicine");
         this.thread.start();
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        editMedicineArgs = EditMedicineArgs.fromBundle(getArguments());
+        assert getArguments() != null;
+        editMedicineArgs = com.futsch1.medtimer.medicine.EditMedicineArgs.fromBundle(getArguments());
         medicineId = editMedicineArgs.getMedicineId();
         String medicineName = editMedicineArgs.getMedicineName();
 
@@ -109,7 +111,7 @@ public class EditMedicine extends Fragment {
         medicine.color = color;
         medicineViewModel.updateMedicine(medicine);
 
-        RecyclerView recyclerView = editMedicineName.findViewById(R.id.reminderList);
+        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
         for (int i = 0; i < recyclerView.getChildCount(); i++) {
             ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
@@ -130,7 +132,7 @@ public class EditMedicine extends Fragment {
     }
 
     private void setupEnableColor(boolean useColor) {
-        enableColor = editMedicineName.findViewById(R.id.enableColor);
+        enableColor = fragmentEditMedicine.findViewById(R.id.enableColor);
         enableColor.setChecked(useColor);
         enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
     }

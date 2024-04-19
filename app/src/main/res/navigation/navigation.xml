@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/overviewFragment">
+    app:startDestination="@id/fragmentMain">
 
     <fragment
         android:id="@+id/medicinesFragment"
         android:name="com.futsch1.medtimer.medicine.MedicinesFragment"
         android:label="fragment_medicines"
-        tools:layout="@layout/fragment_medicines">
-        <action
-            android:id="@+id/action_editMedicine"
-            app:destination="@id/editMedicine" />
-    </fragment>
+        tools:layout="@layout/fragment_medicines" />
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.overview.OverviewFragment"
@@ -70,4 +66,15 @@
             android:name="medicineName"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentMain"
+        android:name="com.futsch1.medtimer.FragmentMain"
+        android:label="FragmentMain">
+        <action
+            android:id="@+id/action_fragmentMain_to_editMedicine"
+            app:destination="@id/editMedicine" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_preferencesFragment"
+        app:destination="@id/preferencesFragment" />
 </navigation>

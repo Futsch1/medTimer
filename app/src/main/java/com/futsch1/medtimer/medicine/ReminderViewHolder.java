@@ -1,12 +1,9 @@
 package com.futsch1.medtimer.medicine;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,8 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,10 +65,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         });
 
         advancedSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(this.holderItemView.getContext(), AdvancedReminderSettings.class);
-            intent.putExtra(EXTRA_ID, reminder.reminderId);
-            intent.putExtra(EXTRA_MEDICINE_NAME, medicineName);
-            this.holderItemView.getContext().startActivity(intent);
+            NavController navController = Navigation.findNavController(this.holderItemView);
+            EditMedicineDirections.ActionEditMedicineToAdvancedReminderSettings action = EditMedicineDirections.actionEditMedicineToAdvancedReminderSettings(
+                    reminder.reminderId,
+                    medicineName
+            );
+            navController.navigate(action);
         });
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());

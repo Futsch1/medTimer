@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.FileProvider;
+import androidx.navigation.NavController;
 
 import com.futsch1.medtimer.database.JSONBackup;
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -33,12 +34,14 @@ public class OptionsMenu {
     private final MedicineViewModel medicineViewModel;
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
+    private final NavController navController;
 
-    public OptionsMenu(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
+    public OptionsMenu(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher, NavController navController) {
         this.menu = menu;
         this.context = context;
         this.medicineViewModel = medicineViewModel;
         this.openFileLauncher = openFileLauncher;
+        this.navController = navController;
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
 
@@ -54,8 +57,7 @@ public class OptionsMenu {
     private void setupSettings() {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
-            Intent intent = new Intent(context, PreferencesActivity.class);
-            context.startActivity(intent);
+            navController.navigate(R.id.action_global_preferencesFragment);
             return true;
         });
     }
