@@ -66,8 +66,8 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         advancedSettings.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(this.holderItemView);
-            com.futsch1.medtimer.medicine.EditMedicineDirections.ActionEditMedicineToAdvancedReminderSettings action =
-                    com.futsch1.medtimer.medicine.EditMedicineDirections.actionEditMedicineToAdvancedReminderSettings(
+            com.futsch1.medtimer.medicine.EditMedicineFragmentDirections.ActionEditMedicineToAdvancedReminderSettings action =
+                    com.futsch1.medtimer.medicine.EditMedicineFragmentDirections.actionEditMedicineToAdvancedReminderSettings(
                             reminder.reminderId,
                             medicineName
                     );

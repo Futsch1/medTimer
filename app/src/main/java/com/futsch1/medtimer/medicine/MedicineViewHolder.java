@@ -13,7 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.futsch1.medtimer.FragmentMainDirections;
+import com.futsch1.medtimer.MainFragmentDirections;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -91,7 +91,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
         NavController navController = Navigation.findNavController(holderItemView);
-        FragmentMainDirections.ActionFragmentMainToEditMedicine action = FragmentMainDirections.actionFragmentMainToEditMedicine(
+        MainFragmentDirections.ActionFragmentMainToEditMedicine action = MainFragmentDirections.actionFragmentMainToEditMedicine(
                 medicineWithReminders.medicine.medicineId,
                 medicineWithReminders.medicine.name,
                 medicineWithReminders.medicine.useColor,

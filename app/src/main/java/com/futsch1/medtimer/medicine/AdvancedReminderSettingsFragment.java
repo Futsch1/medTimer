@@ -2,7 +2,6 @@ package com.futsch1.medtimer.medicine;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -28,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class AdvancedReminderSettings extends Fragment {
+public class AdvancedReminderSettingsFragment extends Fragment {
 
     private final HandlerThread backgroundThread;
     private String[] daysArray;
@@ -41,9 +40,9 @@ public class AdvancedReminderSettings extends Fragment {
     private Reminder reminder;
     private TextView remindOnDays;
     private View advancedReminderView;
-    private com.futsch1.medtimer.medicine.AdvancedReminderSettingsArgs args;
+    private com.futsch1.medtimer.medicine.AdvancedReminderSettingsFragmentArgs args;
 
-    public AdvancedReminderSettings() {
+    public AdvancedReminderSettingsFragment() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
         backgroundThread.start();
     }
@@ -56,7 +55,7 @@ public class AdvancedReminderSettings extends Fragment {
         handler.post(this::loadReminder);
 
         assert getArguments() != null;
-        args = com.futsch1.medtimer.medicine.AdvancedReminderSettingsArgs.fromBundle(getArguments());
+        args = com.futsch1.medtimer.medicine.AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
 
         daysArray = getResources().getStringArray(R.array.days);
 
@@ -123,7 +122,7 @@ public class AdvancedReminderSettings extends Fragment {
             for (int i = 0; i < daysArray.length; i++) {
                 checkedItems[i] = reminder.days.get(i);
             }
-            builder.setMultiChoiceItems(daysArray, checkedItems, (DialogInterface.OnMultiChoiceClickListener) (dialogInterface, i, b) -> checkedItems[i] = b);
+            builder.setMultiChoiceItems(daysArray, checkedItems, (dialogInterface, i, b) -> checkedItems[i] = b);
 
             builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 for (int j = 0; j < daysArray.length; j++) {

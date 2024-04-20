@@ -39,7 +39,7 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import java.time.Instant;
 import java.time.LocalDate;
 
-public class EditMedicine extends Fragment {
+public class EditMedicineFragment extends Fragment {
 
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
@@ -51,7 +51,7 @@ public class EditMedicine extends Fragment {
     private MaterialButton colorButton;
     private int color;
     private View fragmentEditMedicine;
-    private com.futsch1.medtimer.medicine.EditMedicineArgs editMedicineArgs;
+    private com.futsch1.medtimer.medicine.EditMedicineFragmentArgs editMedicineArgs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -65,12 +65,12 @@ public class EditMedicine extends Fragment {
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
         assert getArguments() != null;
-        editMedicineArgs = com.futsch1.medtimer.medicine.EditMedicineArgs.fromBundle(getArguments());
+        editMedicineArgs = com.futsch1.medtimer.medicine.EditMedicineFragmentArgs.fromBundle(getArguments());
         medicineId = editMedicineArgs.getMedicineId();
         String medicineName = editMedicineArgs.getMedicineName();
 
         RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicine.this::deleteItem, medicineName, requireActivity());
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicineFragment.this::deleteItem, medicineName, requireActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
@@ -167,7 +167,7 @@ public class EditMedicine extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicine.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
                 }
             }
         };
