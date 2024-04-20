@@ -51,15 +51,15 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(this::loadReminder);
-
         assert getArguments() != null;
         args = AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
 
         daysArray = getResources().getStringArray(R.array.days);
 
         advancedReminderView = inflater.inflate(R.layout.fragment_advanced_reminder_settings, container, false);
+
+        Handler handler = new Handler(backgroundThread.getLooper());
+        handler.post(this::loadReminder);
 
         return advancedReminderView;
     }

@@ -23,6 +23,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.scheduling.CyclesHelper;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -84,7 +85,7 @@ public class ReminderWork extends Worker {
             reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
                     .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
-            reminderEvent.medicineName = medicine.name;
+            reminderEvent.medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder);
             reminderEvent.color = medicine.color;
             reminderEvent.useColor = medicine.useColor;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
@@ -100,7 +101,7 @@ public class ReminderWork extends Worker {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
-            reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), medicine.name, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
+            reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }
