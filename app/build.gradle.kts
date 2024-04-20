@@ -48,9 +48,6 @@ android {
             isIncludeAndroidResources = true
         }
     }
-    sourceSets {
-        getByName("main").java.srcDirs("build/generated/source/navigation-args")
-    }
 }
 
 dependencies {

@@ -40,7 +40,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private Reminder reminder;
     private TextView remindOnDays;
     private View advancedReminderView;
-    private com.futsch1.medtimer.medicine.AdvancedReminderSettingsFragmentArgs args;
+    private AdvancedReminderSettingsFragmentArgs args;
 
     public AdvancedReminderSettingsFragment() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
@@ -55,7 +55,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         handler.post(this::loadReminder);
 
         assert getArguments() != null;
-        args = com.futsch1.medtimer.medicine.AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
+        args = AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
 
         daysArray = getResources().getStringArray(R.array.days);
 

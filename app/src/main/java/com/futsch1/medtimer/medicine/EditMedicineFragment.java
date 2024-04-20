@@ -51,7 +51,7 @@ public class EditMedicineFragment extends Fragment {
     private MaterialButton colorButton;
     private int color;
     private View fragmentEditMedicine;
-    private com.futsch1.medtimer.medicine.EditMedicineFragmentArgs editMedicineArgs;
+    private EditMedicineFragmentArgs editMedicineArgs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -65,7 +65,7 @@ public class EditMedicineFragment extends Fragment {
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
         assert getArguments() != null;
-        editMedicineArgs = com.futsch1.medtimer.medicine.EditMedicineFragmentArgs.fromBundle(getArguments());
+        editMedicineArgs = EditMedicineFragmentArgs.fromBundle(getArguments());
         medicineId = editMedicineArgs.getMedicineId();
         String medicineName = editMedicineArgs.getMedicineName();
 
