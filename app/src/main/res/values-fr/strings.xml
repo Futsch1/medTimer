@@ -117,7 +117,7 @@
 
     <string name="select_format">Sélectionnez le format</string>
 
-    <string name="cycle_consecutive_days">Jours de rappel consécutifs</string>
+    <string name="cycle_consecutive_days">Jours actifs</string>
 
     <string name="days">jours</string>
 
@@ -207,7 +207,7 @@
     <string name="advanced_settings">Configuration avancée</string>
     <string name="remind_on">Rappel sur</string>
     <string name="every_day">Tous les jours</string>
-    <string name="cycle_pause_days">Jours de pause de rappel</string>
+    <string name="cycle_pause_days">Jours de pause</string>
     <string name="cycle_start_date">Début du premier cycle</string>
     <string name="cycle_reminders">Rappels cycliques</string>
 

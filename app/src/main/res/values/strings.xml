@@ -60,7 +60,7 @@
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="notification_tone_title">Notification tone</string>
     <string name="select_format">Select format</string>
-    <string name="cycle_consecutive_days">Consecutive reminder days</string>
+    <string name="cycle_consecutive_days">Active days</string>
     <string name="days">days</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Default</string>
@@ -109,7 +109,7 @@
     <string name="advanced_settings">Advanced settings</string>
     <string name="remind_on">Remind on</string>
     <string name="every_day">Every day</string>
-    <string name="cycle_pause_days">Reminder pause days</string>
+    <string name="cycle_pause_days">Pause days</string>
     <string name="cycle_start_date">First cycle start</string>
     <string name="cycle_reminders">Cyclic reminders</string>
 </resources>

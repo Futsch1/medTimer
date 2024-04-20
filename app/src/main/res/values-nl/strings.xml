@@ -59,7 +59,7 @@
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
     <string name="notification_tone_title">Meldingstoon</string>
     <string name="select_format">Selecteer formaat</string>
-    <string name="cycle_consecutive_days">Opeenvolgende herinner dagen</string>
+    <string name="cycle_consecutive_days">Actieve dagen</string>
     <string name="days">dagen</string>
     <string name="theme">Thema</string>
     <string name="default_theme">Standaard</string>
@@ -107,7 +107,7 @@ Doorgaan?</string>
     <string name="advanced_settings">Geavanceerde instellingen</string>
     <string name="remind_on">Herinner aan</string>
     <string name="every_day">Elke dag</string>
-    <string name="cycle_pause_days">Herinnering pauzedagen</string>
+    <string name="cycle_pause_days">Pauzedagen</string>
     <string name="cycle_start_date">Start eerste cyclus</string>
     <string name="cycle_reminders">Cyclische herinneringen</string>
 </resources>

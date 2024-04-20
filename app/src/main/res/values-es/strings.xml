@@ -58,7 +58,7 @@
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
     <string name="notification_tone_title">Sonido de notificación</string>
     <string name="select_format">Seleccionar formato</string>
-    <string name="cycle_consecutive_days">Días consecutivos de recordatorio</string>
+    <string name="cycle_consecutive_days">Días activos</string>
     <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_theme">Estándar</string>
@@ -105,7 +105,7 @@
     <string name="advanced_settings">Opciones avanzadas</string>
     <string name="remind_on">Recordar en</string>
     <string name="every_day">Todos los días</string>
-    <string name="cycle_pause_days">Recordatorio días de pausa</string>
+    <string name="cycle_pause_days">Días de pausa</string>
     <string name="cycle_start_date">Inicio del primer ciclo</string>
     <string name="cycle_reminders">Recordatorios cíclicos</string>
 </resources>
