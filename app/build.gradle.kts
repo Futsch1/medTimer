@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("androidx.room")
     id("com.github.triplet.play") version "3.9.1"
+    id("androidx.navigation.safeargs")
 }
 
 room {

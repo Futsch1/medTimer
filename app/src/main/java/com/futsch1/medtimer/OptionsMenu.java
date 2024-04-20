@@ -7,11 +7,15 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+import androidx.core.view.MenuProvider;
+import androidx.navigation.NavController;
 
 import com.futsch1.medtimer.database.JSONBackup;
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -27,21 +31,53 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.TimeZone;
 
-public class OptionsMenu {
-    private final Menu menu;
+public class OptionsMenu implements MenuProvider {
     private final Context context;
     private final MedicineViewModel medicineViewModel;
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
+    private final NavController navController;
+    private Menu menu;
 
-    public OptionsMenu(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
-        this.menu = menu;
+    public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher, NavController navController) {
         this.context = context;
         this.medicineViewModel = medicineViewModel;
         this.openFileLauncher = openFileLauncher;
+        this.navController = navController;
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+    }
 
+    public void onDestroy() {
+        backgroundThread.quitSafely();
+    }
+
+    public void fileSelected(Uri data) {
+        String json = FileHelper.readFromUri(data, context.getContentResolver());
+        boolean restoreSuccessful = false;
+        if (json != null) {
+            JSONBackup jsonBackup = new JSONBackup();
+            List<MedicineWithReminders> backupData = jsonBackup.parseBackup(json);
+            if (backupData != null) {
+                jsonBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
+                restoreSuccessful = true;
+            }
+        }
+
+        new AlertDialog.Builder(context)
+                .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    // Intentionally empty
+                })
+                .show();
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.main, menu);
+        menu.setGroupDividerEnabled(true);
+
+        this.menu = menu;
         setupSettings();
         setupVersion();
         setupAppURL();
@@ -54,8 +90,7 @@ public class OptionsMenu {
     private void setupSettings() {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
-            Intent intent = new Intent(context, PreferencesActivity.class);
-            context.startActivity(intent);
+            navController.navigate(R.id.action_global_preferencesFragment);
             return true;
         });
     }
@@ -188,27 +223,8 @@ public class OptionsMenu {
         context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
     }
 
-    public void onDestroy() {
-        backgroundThread.quitSafely();
-    }
-
-    public void fileSelected(Uri data) {
-        String json = FileHelper.readFromUri(data, context.getContentResolver());
-        boolean restoreSuccessful = false;
-        if (json != null) {
-            JSONBackup jsonBackup = new JSONBackup();
-            List<MedicineWithReminders> backupData = jsonBackup.parseBackup(json);
-            if (backupData != null) {
-                jsonBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
-                restoreSuccessful = true;
-            }
-        }
-
-        new AlertDialog.Builder(context)
-                .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    // Intentionally empty
-                })
-                .show();
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
     }
 }

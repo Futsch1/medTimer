@@ -31,7 +31,7 @@ public class TimeHelper {
     }
 
     public static class TimePickerWrapper {
-        FragmentActivity activity;
+        final FragmentActivity activity;
 
         public TimePickerWrapper(FragmentActivity activity) {
             this.activity = activity;

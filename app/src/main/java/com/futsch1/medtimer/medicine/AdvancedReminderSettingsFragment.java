@@ -1,20 +1,19 @@
 package com.futsch1.medtimer.medicine;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.format.DateUtils;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.futsch1.medtimer.MedicineViewModel;
@@ -27,9 +26,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class AdvancedReminderSettings extends AppCompatActivity {
+public class AdvancedReminderSettingsFragment extends Fragment {
 
     private final HandlerThread backgroundThread;
     private String[] daysArray;
@@ -41,42 +39,49 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     private MedicineViewModel medicineViewModel;
     private Reminder reminder;
     private TextView remindOnDays;
+    private View advancedReminderView;
+    private AdvancedReminderSettingsFragmentArgs args;
 
-    public AdvancedReminderSettings() {
+    public AdvancedReminderSettingsFragment() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
         backgroundThread.start();
     }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::loadReminder);
 
+        assert getArguments() != null;
+        args = AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
+
         daysArray = getResources().getStringArray(R.array.days);
+
+        advancedReminderView = inflater.inflate(R.layout.fragment_advanced_reminder_settings, container, false);
+
+        return advancedReminderView;
     }
 
     private void loadReminder() {
-        int reminderId = getIntent().getIntExtra(EXTRA_ID, 0);
+        int reminderId = args.getReminderId();
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
         reminder = medicineViewModel.getReminder(reminderId);
 
-        runOnUiThread(this::setupView);
+        requireActivity().runOnUiThread(this::setupView);
     }
 
     @SuppressLint("SetTextI18n")
     private void setupView() {
 
-        setContentView(R.layout.activity_advanced_reminder_settings);
-
-        editPauseDays = findViewById(R.id.pauseDays);
-        editConsecutiveDays = findViewById(R.id.consecutiveDays);
-        editCycleStartDate = findViewById(R.id.cycleStartDate);
-        editInstructions = findViewById(R.id.editInstructions);
-        instructionSuggestions = findViewById(R.id.editInstructionsLayout);
-        remindOnDays = findViewById(R.id.remindOnDays);
+        editPauseDays = advancedReminderView.findViewById(R.id.pauseDays);
+        editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
+        editCycleStartDate = advancedReminderView.findViewById(R.id.cycleStartDate);
+        editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
+        instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
+        remindOnDays = advancedReminderView.findViewById(R.id.remindOnDays);
 
         editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
         editPauseDays.setText(Integer.toString(reminder.pauseDays));
@@ -85,15 +90,11 @@ public class AdvancedReminderSettings extends AppCompatActivity {
         setupInstructionSuggestions();
         setupRemindOnDays();
         setupCycleStartDate();
-
-        String medicineName = getIntent().getStringExtra(EXTRA_MEDICINE_NAME);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.advanced_settings) + " - " + medicineName);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupInstructionSuggestions() {
         instructionSuggestions.setEndIconOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setTitle(R.string.instruction_templates);
             builder.setItems(R.array.instructions_suggestions, (dialog, which) -> {
                 if (which > 0) {
@@ -113,7 +114,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
         remindOnDays.setOnClickListener(v -> {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
                     .setTitle(R.string.remind_on)
                     .setCancelable(false);
 
@@ -121,7 +122,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
             for (int i = 0; i < daysArray.length; i++) {
                 checkedItems[i] = reminder.days.get(i);
             }
-            builder.setMultiChoiceItems(daysArray, checkedItems, (DialogInterface.OnMultiChoiceClickListener) (dialogInterface, i, b) -> checkedItems[i] = b);
+            builder.setMultiChoiceItems(daysArray, checkedItems, (dialogInterface, i, b) -> checkedItems[i] = b);
 
             builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 for (int j = 0; j < daysArray.length; j++) {
@@ -149,7 +150,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
                     reminder.cycleStartDay = selectedDate / DateUtils.DAY_IN_MILLIS;
                     setCycleStartDate();
                 });
-                datePickerDialog.show(getSupportFragmentManager(), "date_picker");
+                datePickerDialog.show(getParentFragmentManager(), "date_picker");
             }
         });
     }
@@ -175,16 +176,7 @@ public class AdvancedReminderSettings extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
@@ -204,4 +196,5 @@ public class AdvancedReminderSettings extends AppCompatActivity {
 
         medicineViewModel.updateReminder(reminder);
     }
+
 }

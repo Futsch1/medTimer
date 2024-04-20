@@ -4,6 +4,7 @@ import static android.graphics.PorterDuff.Mode.CLEAR;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,6 +17,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,8 +34,8 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final ColorDrawable background = new ColorDrawable();
 
 
-    public SwipeHelper(@ColorInt int swipeLeftColor,
-                       @DrawableRes int swipeLeftIconResource, Context context) {
+    protected SwipeHelper(@ColorInt int swipeLeftColor,
+                          @DrawableRes int swipeLeftIconResource, Context context) {
         super(0, LEFT);
 
         clearPaint = new Paint();
@@ -47,6 +50,16 @@ public abstract class SwipeHelper extends SimpleCallback {
 
         intrinsicHeight = swipeLeftIcon.getIntrinsicHeight();
         intrinsicWidth = swipeLeftIcon.getIntrinsicWidth();
+    }
+
+    public void setup(@NonNull Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (sharedPref.getString("delete_items", "0").equals("0")) {
+            setDefaultSwipeDirs(ItemTouchHelper.LEFT);
+        } else {
+            setDefaultSwipeDirs(0);
+        }
     }
 
     @Override
