@@ -24,9 +24,6 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
-        <activity
-            android:name=".medicine.AdvancedReminderSettingsFragment"
-            android:exported="false" />
 
         <service
             android:name=".ReminderSchedulerService"
