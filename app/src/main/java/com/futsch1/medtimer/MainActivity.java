@@ -2,13 +2,10 @@ package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
     );
-    OptionsMenu optionsMenu;
-    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-            optionsMenu.fileSelected(result.getData().getData());
-        }
-    });
     private AppBarConfiguration appBarConfiguration;
 
 
@@ -78,25 +69,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        optionsMenu.onDestroy();
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.navHost);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        menu.setGroupDividerEnabled(true);
-        NavController navController = Navigation.findNavController(this, R.id.navHost);
-        optionsMenu = new OptionsMenu(this, menu, new MedicineViewModel(getApplication()), requestFileLauncher, navController);
-        return true;
     }
 }

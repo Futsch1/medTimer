@@ -1,11 +1,16 @@
 package com.futsch1.medtimer;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -16,6 +21,12 @@ public class FragmentMain extends Fragment {
     TabLayout tabLayout;
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    OptionsMenu optionsMenu;
+    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            optionsMenu.fileSelected(result.getData().getData());
+        }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +43,19 @@ public class FragmentMain extends Fragment {
             tab.setText(tabNames[position]);
         }).attach();
 
+        optionsMenu = new OptionsMenu(requireContext(),
+                new MedicineViewModel(requireActivity().getApplication()),
+                requestFileLauncher,
+                Navigation.findNavController(requireActivity(), R.id.navHost));
+
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        optionsMenu.onDestroy();
     }
 }
