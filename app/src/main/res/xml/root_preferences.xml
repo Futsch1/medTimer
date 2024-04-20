@@ -35,7 +35,6 @@
         android:title="@string/exact_reminders"
         app:key="exact_reminders" />
     <Preference
-        app:fragment="com.futsch1.medtimer.WeekendModePreferencesFragment"
         app:key="weekend_mode"
         app:summary="@string/weekend_mode_summary"
         app:title="@string/weekend_mode" />

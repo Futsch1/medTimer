@@ -5,7 +5,6 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,13 +84,7 @@ public class MedicinesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext());
-
-        if (sharedPref.getString("delete_items", "0").equals("0")) {
-            swipeHelper.setDefaultSwipeDirs(ItemTouchHelper.LEFT);
-        } else {
-            swipeHelper.setDefaultSwipeDirs(0);
-        }
+        swipeHelper.setup(requireContext());
     }
 
     @Override

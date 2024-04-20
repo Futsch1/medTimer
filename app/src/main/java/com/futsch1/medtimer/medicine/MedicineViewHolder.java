@@ -1,12 +1,6 @@
 package com.futsch1.medtimer.medicine;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_COLOR;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_NAME;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_USE_COLOR;
-
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.futsch1.medtimer.MainFragmentDirections;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -61,7 +58,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             PopupMenu popupMenu = new PopupMenu(holderItemView.getContext(), this.holderItemView);
             popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
             popupMenu.getMenu().findItem(R.id.edit).setOnMenuItemClickListener(item -> {
-                startEditActivity(medicineWithReminders);
+                navigateToEditFragment(medicineWithReminders);
                 return true;
             });
             popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
@@ -72,8 +69,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             return true;
         });
 
-
-        holderItemView.setOnClickListener(view -> startEditActivity(medicineWithReminders));
+        holderItemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
 
         if (medicineWithReminders.medicine.useColor) {
             ViewColorHelper.setCardBackground((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
@@ -93,13 +89,15 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    private void startEditActivity(MedicineWithReminders medicineWithReminders) {
-        Intent intent = new Intent(holderItemView.getContext(), EditMedicine.class);
-        intent.putExtra(EXTRA_ID, medicineWithReminders.medicine.medicineId);
-        intent.putExtra(EXTRA_USE_COLOR, medicineWithReminders.medicine.useColor);
-        intent.putExtra(EXTRA_COLOR, medicineWithReminders.medicine.color);
-        intent.putExtra(EXTRA_MEDICINE_NAME, medicineWithReminders.medicine.name);
-        holderItemView.getContext().startActivity(intent);
+    private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
+        NavController navController = Navigation.findNavController(holderItemView);
+        MainFragmentDirections.ActionFragmentMainToEditMedicine action = MainFragmentDirections.actionFragmentMainToEditMedicine(
+                medicineWithReminders.medicine.medicineId,
+                medicineWithReminders.medicine.name,
+                medicineWithReminders.medicine.useColor,
+                medicineWithReminders.medicine.color
+        );
+        navController.navigate(action);
     }
 
     public interface DeleteCallback {

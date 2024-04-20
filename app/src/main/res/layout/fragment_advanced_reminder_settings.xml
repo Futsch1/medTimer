@@ -8,7 +8,7 @@
     android:layout_margin="4dp"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context=".medicine.AdvancedReminderSettings">
+    tools:context=".medicine.AdvancedReminderSettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
