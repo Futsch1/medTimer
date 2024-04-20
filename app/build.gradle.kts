@@ -3,6 +3,7 @@ plugins {
     id("androidx.room")
     id("com.github.triplet.play") version "3.9.1"
     id("androidx.navigation.safeargs")
+    id("idea")
 }
 
 room {
@@ -30,6 +31,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
         }
     }
     compileOptions {
@@ -91,5 +93,12 @@ play {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+idea {
+    module {
+        sourceDirs.add(file("build/generated/source/navigation-args/debug"))
+        generatedSourceDirs.add(file("build/generated/source/navigation-args/debug"))
     }
 }
