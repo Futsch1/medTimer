@@ -23,7 +23,7 @@
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
     <string name="reminder_event">%1$s von %2$s, %3$s</string>
-    <string name="recent_reminders">Kürzliche Ereignisse</string>
+    <string name="recent_events">Kürzliche Ereignisse</string>
     <string name="next_reminder">Nächste Erinnerung</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d Erinnerung\n%2$s</item>
@@ -105,7 +105,8 @@
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
     <string name="every_day">Jedem Tag</string>
-    <string name="remind_cycle_part1">Erinnere an</string>
-    <string name="remind_cycle_part2">Tagen hintereinander, dann pausiere für</string>
-    <string name="remind_cycle_part3">Tage beginnend am</string>
+    <string name="cycle_consecutive_days">Tage aktiv</string>
+    <string name="cycle_pause_days">Tage Pause</string>
+    <string name="cycle_start_date">Beginn des ersten Zyklus</string>
+    <string name="cycle_reminders">Zyklische Erinnerungen</string>
 </resources>

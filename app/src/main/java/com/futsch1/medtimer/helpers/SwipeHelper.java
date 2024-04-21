@@ -7,14 +7,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -34,16 +33,15 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final ColorDrawable background = new ColorDrawable();
 
 
-    protected SwipeHelper(@ColorInt int swipeLeftColor,
-                          @DrawableRes int swipeLeftIconResource, Context context) {
+    protected SwipeHelper(Context context) {
         super(0, LEFT);
 
         clearPaint = new Paint();
         clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
 
-        this.swipeLeftColor = swipeLeftColor;
+        this.swipeLeftColor = Color.RED;
 
-        this.swipeLeftIcon = ContextCompat.getDrawable(context, swipeLeftIconResource);
+        this.swipeLeftIcon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_delete);
 
         if (swipeLeftIcon == null)
             throw new Resources.NotFoundException("There was an error trying to load the drawables");
