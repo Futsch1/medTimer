@@ -31,6 +31,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DialogHelper;
+import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.time.Instant;
 import java.util.List;
@@ -132,6 +133,8 @@ public class OverviewFragment extends Fragment {
         }
         liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60));
         liveData.observe(getViewLifecycleOwner(), adapter::submitList);
+
+        ReminderProcessor.requestReschedule(requireContext());
     }
 
     @Override

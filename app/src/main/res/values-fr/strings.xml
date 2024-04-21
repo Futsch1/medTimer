@@ -53,7 +53,7 @@
 
     <string name="reminder_event">%1$s sur %2$s, %3$s</string>
 
-    <string name="recent_reminders">Événements récents</string>
+    <string name="recent_events">Événements récents</string>
 
     <string name="next_reminder">Prochain rappel</string>
 
@@ -117,7 +117,7 @@
 
     <string name="select_format">Sélectionnez le format</string>
 
-    <string name="remind_cycle_part1">Rappel pendant</string>
+    <string name="cycle_consecutive_days">Jours actifs</string>
 
     <string name="days">jours</string>
 
@@ -207,7 +207,8 @@
     <string name="advanced_settings">Configuration avancée</string>
     <string name="remind_on">Rappel sur</string>
     <string name="every_day">Tous les jours</string>
-    <string name="remind_cycle_part2">"jours consécutifs, puis pause pendant "</string>
-    <string name="remind_cycle_part3">"jours à partir du "</string>
+    <string name="cycle_pause_days">Jours de pause</string>
+    <string name="cycle_start_date">Début du premier cycle</string>
+    <string name="cycle_reminders">Rappels cycliques</string>
 
 </resources>

@@ -26,7 +26,7 @@
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
     <string name="reminder_event">%1$s de %2$s, %3$s</string>
-    <string name="recent_reminders">Eventos recientes</string>
+    <string name="recent_events">Eventos recientes</string>
     <string name="next_reminder">Siguiente recordatorio</string>
     <string name="version">Versión %s</string>
     <string name="are_you_sure_delete_reminder">¿Quieres eliminar el recordatorio?</string>
@@ -58,7 +58,7 @@
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
     <string name="notification_tone_title">Sonido de notificación</string>
     <string name="select_format">Seleccionar formato</string>
-    <string name="remind_cycle_part1">Recordatorio durante</string>
+    <string name="cycle_consecutive_days">Días activos</string>
     <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_theme">Estándar</string>
@@ -105,6 +105,7 @@
     <string name="advanced_settings">Opciones avanzadas</string>
     <string name="remind_on">Recordar en</string>
     <string name="every_day">Todos los días</string>
-    <string name="remind_cycle_part2">"días consecutivos, luego pausa de "</string>
-    <string name="remind_cycle_part3">días a partir del</string>
+    <string name="cycle_pause_days">Días de pausa</string>
+    <string name="cycle_start_date">Inicio del primer ciclo</string>
+    <string name="cycle_reminders">Recordatorios cíclicos</string>
 </resources>
