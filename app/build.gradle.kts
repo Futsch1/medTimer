@@ -3,7 +3,6 @@ plugins {
     id("androidx.room")
     id("com.github.triplet.play") version "3.9.1"
     id("androidx.navigation.safeargs")
-    id("idea")
 }
 
 room {
@@ -31,7 +30,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
         }
     }
     compileOptions {
@@ -42,9 +40,11 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
     }
+    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -65,7 +65,7 @@ dependencies {
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.work:work-runtime:2.9.0")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("org.mockito:mockito-core:5.11.0")
@@ -93,12 +93,5 @@ play {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-idea {
-    module {
-        sourceDirs.add(file("build/generated/source/navigation-args/debug"))
-        generatedSourceDirs.add(file("build/generated/source/navigation-args/debug"))
     }
 }
