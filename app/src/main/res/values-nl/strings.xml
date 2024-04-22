@@ -110,4 +110,5 @@ Doorgaan?</string>
     <string name="cycle_pause_days">Pauzedagen</string>
     <string name="cycle_start_date">Start eerste cyclus</string>
     <string name="cycle_reminders">Cyclische herinneringen</string>
+    <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
 </resources>

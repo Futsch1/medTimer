@@ -112,4 +112,5 @@
     <string name="cycle_pause_days">Pause days</string>
     <string name="cycle_start_date">First cycle start</string>
     <string name="cycle_reminders">Cyclic reminders</string>
+    <string name="weekday_limited">Limited to some weekdays</string>
 </resources>
