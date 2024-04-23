@@ -31,10 +31,10 @@
     <string name="next_reminder">Volgende herinnering</string>
     <string name="version">Versie %s</string>
     <string name="are_you_sure_delete_reminder">Weet u zeker dat u de herinnering wilt verwijderen?</string>
-    <string name="clear_events">Herinneringen</string>
+    <string name="clear_events">Herinneringen verwijderen</string>
     <string name="app_version">App versie</string>
-    <string name="are_you_sure_delete_events">Weet je zeker dat je alle gebeurtenissen wilt verwijderen?</string>
-    <string name="export">Gebeurtenissen exporteren</string>
+    <string name="are_you_sure_delete_events">Weet je zeker dat je alle herinneringen wilt verwijderen?</string>
+    <string name="export">Herinneringen exporteren</string>
     <string name="swipe_left">Veeg naar links</string>
     <string name="long_press">Lang indrukken</string>
     <string name="delete_items">Verwijderen</string>
