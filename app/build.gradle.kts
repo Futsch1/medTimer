@@ -3,7 +3,6 @@ plugins {
     id("androidx.room")
     id("com.github.triplet.play") version "3.9.1"
     id("androidx.navigation.safeargs")
-    id("idea")
 }
 
 room {
@@ -18,8 +17,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 31
-        versionName = "1.7.1"
+        versionCode = 32
+        versionName = "1.7.2"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -31,7 +30,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
         }
     }
     compileOptions {
@@ -42,12 +40,22 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
     }
+    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+        }
+    }
+    sourceSets {
+        getByName("main") {
+            // There seems to be an issue with safeargs and Android Studio. Generated classes are not detected by the IDE and marked
+            // as an error. This statement fixes it, but causes tests to fail (since they use the generated release classes). So
+            // I will leave this commented here to be enabled during coding, but it may not be committed.
+            //java.srcDir("build/generated/source/navigation-args/debug")
         }
     }
 }
@@ -65,7 +73,7 @@ dependencies {
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.work:work-runtime:2.9.0")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("org.mockito:mockito-core:5.11.0")
@@ -93,12 +101,5 @@ play {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-idea {
-    module {
-        sourceDirs.add(file("build/generated/source/navigation-args/debug"))
-        generatedSourceDirs.add(file("build/generated/source/navigation-args/debug"))
     }
 }
