@@ -76,6 +76,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.tracing:tracing:1.2.0")
     implementation("org.mockito:mockito-core:5.11.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
@@ -87,8 +88,10 @@ dependencies {
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.12.1")
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha03")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
+    androidTestImplementation("androidx.test:rules:1.6.0-alpha03")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 }
