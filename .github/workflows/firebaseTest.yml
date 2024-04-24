@@ -20,6 +20,8 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Build with gradle
+        run: ./gradlew assembleDebug
       - name: Build tests with gradle
         run: ./gradlew assembleDebugAndroidTest
       - name: Run tests on Firebase Test Lab
