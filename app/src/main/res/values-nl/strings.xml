@@ -27,7 +27,7 @@
     <string name="taken">Ingenomen</string>
     <string name="skipped">Overgeslagen</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
-    <string name="recent_events">Recente gebeurtenissen</string>
+    <string name="recent_events">Recente herinneringen</string>
     <string name="next_reminder">Volgende herinnering</string>
     <string name="version">Versie %s</string>
     <string name="are_you_sure_delete_reminder">Weet u zeker dat u de herinnering wilt verwijderen?</string>
