@@ -88,7 +88,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         if (!weekdayLimited && !cyclic){
             strings.add(holderItemView.getContext().getString(R.string.every_day));
         }
-        if (!reminder.instructions.isEmpty()) {
+        if (reminder.instructions != null && !reminder.instructions.isEmpty()) {
             strings.add(holderItemView.getContext().getString(R.string.instructions));
         }
 
