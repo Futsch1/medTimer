@@ -242,6 +242,7 @@ public class BasicUITest {
                         childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
+        onView(isRoot()).perform(waitFor(100));
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction editText2 = onView(
@@ -270,7 +271,7 @@ public class BasicUITest {
                                 0),
                         isDisplayed()));
         tabView2.perform(click());
-        onView(isRoot()).perform(waitFor(2000));
+        onView(isRoot()).perform(waitFor(500));
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nextReminderInfo),
