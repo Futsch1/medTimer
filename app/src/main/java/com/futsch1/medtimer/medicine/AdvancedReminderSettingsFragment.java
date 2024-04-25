@@ -185,6 +185,29 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         super.onDestroy();
 
         reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+        putConsecutiveDaysIntoReminder();
+        putPauseDaysIntoReminder();
+        putStartDateIntoReminder();
+
+        medicineViewModel.updateReminder(reminder);
+    }
+
+    private void putStartDateIntoReminder() {
+        LocalDate startDate = getCycleStartDate();
+        if (startDate != null) {
+            reminder.cycleStartDay = startDate.toEpochDay();
+        }
+    }
+
+    private void putPauseDaysIntoReminder() {
+        try {
+            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
+        } catch (NumberFormatException e) {
+            reminder.pauseDays = 0;
+        }
+    }
+
+    private void putConsecutiveDaysIntoReminder() {
         try {
             reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
             if (reminder.consecutiveDays <= 0) {
@@ -193,17 +216,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         } catch (NumberFormatException e) {
             reminder.consecutiveDays = 1;
         }
-        try {
-            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
-        } catch (NumberFormatException e) {
-            reminder.pauseDays = 0;
-        }
-        LocalDate startDate = getCycleStartDate();
-        if (startDate != null) {
-            reminder.cycleStartDay = startDate.toEpochDay();
-        }
-
-        medicineViewModel.updateReminder(reminder);
     }
 
 }
