@@ -37,8 +37,10 @@ public class Reminder {
     @Expose
     public List<Boolean> days;
 
+    public static final int DEFAULT_TIME = 480;
+
     public Reminder(int medicineRelId) {
-        timeInMinutes = 480;
+        timeInMinutes = DEFAULT_TIME;
         amount = "?";
         consecutiveDays = 1;
         pauseDays = 0;

@@ -21,8 +21,16 @@ public class TimeHelper {
         // Intentionally empty
     }
 
-    public static String minutesToTime(long minutes) {
+    public static String minutesToTimeString(long minutes) {
         return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    }
+
+    public static int timeStringToMinutes(String timeString) {
+        try {
+            return LocalTime.parse(timeString, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)).toSecondOfDay() / 60;
+        } catch (DateTimeParseException e) {
+            return -1;
+        }
     }
 
     public static String daysSinceEpochToDateString(long daysSinceEpoch) {
