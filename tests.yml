@@ -1,0 +1,9 @@
+medium-phone-arm:
+  type: instrumentation
+  app: app/build/outputs/apk/debug/MedTimer-debug.apk
+  test: app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk
+  device:
+    - model: MediumPhone.arm
+      version: 34
+      locale: 'en'
+      orientation: portrait
