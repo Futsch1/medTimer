@@ -69,28 +69,41 @@ public class OverviewFragment extends Fragment {
                 latestReminders.scrollToPosition(0);
             }
         });
-
-        // Adding a manual dose needs to be done in a background thread since the database is accessed
-        thread = new HandlerThread("SetupLogManualDose");
+        
+        thread = new HandlerThread("LogManualDose");
         thread.start();
-        Handler handler = new Handler(thread.getLooper());
-        handler.post(this::setupLogManualDose);
+        setupLogManualDose();
 
         return fragmentOverview;
     }
 
     private void setupLogManualDose() {
-        List<MedicineWithReminders> medicines = medicineViewModel.medicineRepository.getMedicines();
+        Button logManualDose = fragmentOverview.findViewById(R.id.logManualDose);
+        logManualDose.setOnClickListener(v -> {
+            Handler handler = new Handler(thread.getLooper());
+            // Run the setup of the drop down in a separate thread to access the database
+            handler.post(() -> {
+                List<MedicineWithReminders> medicines = medicineViewModel.medicineRepository.getMedicines();
+                CharSequence[] names = getMedicineNames(medicines);
+
+                // But run the actual dialog on the UI thread again
+                this.requireActivity().runOnUiThread(() ->
+                    new AlertDialog.Builder(requireContext())
+                        .setItems(names, (dialog, which) -> logManualDose(which == 0 ? null : medicines.get(which - 1).medicine))
+                        .setTitle(R.string.tab_medicine)
+                        .show());
+            });
+        });
+    }
+
+    @NonNull
+    private CharSequence[] getMedicineNames(List<MedicineWithReminders> medicines) {
         CharSequence[] names = new CharSequence[medicines.size() + 1];
         names[0] = getString(R.string.custom);
         for (int i = 1; i < names.length; i++) {
             names[i] = medicines.get(i - 1).medicine.name;
         }
-        Button logManualDose = fragmentOverview.findViewById(R.id.logManualDose);
-        logManualDose.setOnClickListener(v -> new AlertDialog.Builder(requireContext())
-                .setItems(names, (dialog, which) -> logManualDose(which == 0 ? null : medicines.get(which - 1).medicine))
-                .setTitle(R.string.tab_medicine)
-                .show());
+        return names;
     }
 
     private void logManualDose(@Nullable Medicine medicine) {
