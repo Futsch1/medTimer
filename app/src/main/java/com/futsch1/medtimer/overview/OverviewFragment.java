@@ -140,8 +140,12 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        requireContext().unregisterReceiver(nextReminderListener);
-        thread.quitSafely();
-        nextReminderListener.stop();
+        if (thread != null) {
+            thread.quitSafely();
+        }
+        if (nextReminderListener != null) {
+            requireContext().unregisterReceiver(nextReminderListener);
+            nextReminderListener.stop();
+        }
     }
 }
