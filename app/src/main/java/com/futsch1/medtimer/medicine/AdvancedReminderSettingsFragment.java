@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -139,17 +140,17 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void setupCycleStartDate() {
-        setCycleStartDate();
+        setCycleStartDate(reminder.cycleStartDay);
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                LocalDate startDate = LocalDate.ofEpochDay(reminder.cycleStartDay);
+                LocalDate startDate = getCycleStartDate();
+                if (startDate == null ) {
+                    startDate = LocalDate.now();
+                }
                 MaterialDatePicker<Long> datePickerDialog = MaterialDatePicker.Builder.datePicker()
                         .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS)
                         .build();
-                datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> {
-                    reminder.cycleStartDay = selectedDate / DateUtils.DAY_IN_MILLIS;
-                    setCycleStartDate();
-                });
+                datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> setCycleStartDate(selectedDate / DateUtils.DAY_IN_MILLIS));
                 datePickerDialog.show(getParentFragmentManager(), "date_picker");
             }
         });
@@ -171,8 +172,12 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     }
 
-    private void setCycleStartDate() {
-        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDate(reminder.cycleStartDay));
+    private void setCycleStartDate(long daysSinceEpoch) {
+        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
+    }
+
+    private @Nullable LocalDate getCycleStartDate() {
+        return TimeHelper.dateStringToDate(editCycleStartDate.getText().toString());
     }
 
     @Override
@@ -192,6 +197,10 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
         } catch (NumberFormatException e) {
             reminder.pauseDays = 0;
+        }
+        LocalDate startDate = getCycleStartDate();
+        if (startDate != null) {
+            reminder.cycleStartDay = startDate.toEpochDay();
         }
 
         medicineViewModel.updateReminder(reminder);

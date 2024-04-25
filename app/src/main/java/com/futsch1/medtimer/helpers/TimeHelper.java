@@ -7,9 +7,12 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 
 public class TimeHelper {
@@ -22,8 +25,16 @@ public class TimeHelper {
         return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
     }
 
-    public static String daysSinceEpochToDate(long daysSinceEpoch) {
+    public static String daysSinceEpochToDateString(long daysSinceEpoch) {
         return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(LocalDate.ofEpochDay(daysSinceEpoch));
+    }
+
+    public static @Nullable LocalDate dateStringToDate(String date) {
+        try {
+            return LocalDate.parse(date, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
     public interface TimePickerResult {
