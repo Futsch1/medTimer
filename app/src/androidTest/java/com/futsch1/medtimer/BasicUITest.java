@@ -26,8 +26,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -242,7 +240,7 @@ public class BasicUITest {
                         childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
-        onView(isRoot()).perform(waitFor(100));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction editText2 = onView(
@@ -271,29 +269,13 @@ public class BasicUITest {
                                 0),
                         isDisplayed()));
         tabView2.perform(click());
-        onView(isRoot()).perform(waitFor(500));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nextReminderInfo),
                         withParent(withParent(IsInstanceOf.instanceOf(androidx.cardview.widget.CardView.class))),
                         isDisplayed()));
         textView.check(matches(withText(startsWith("2 of Test"))));
-    }
-
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
     }
 
     private static Matcher<View> childAtPosition(
