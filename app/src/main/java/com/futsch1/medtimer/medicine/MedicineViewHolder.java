@@ -82,7 +82,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         ArrayList<String> reminderTimes = new ArrayList<>();
         int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
         for (int minute : timesInMinutes) {
-            reminderTimes.add(TimeHelper.minutesToTime(minute));
+            reminderTimes.add(TimeHelper.minutesToTimeString(minute));
         }
         int len = medicineWithReminders.reminders.size();
         return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
