@@ -212,5 +212,6 @@
     <string name="cycle_reminders">Rappels cycliques</string>
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="reminders">Rappels</string>
+    <string name="filter">Filtre</string>
 
 </resources>

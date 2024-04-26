@@ -111,5 +111,5 @@
     <string name="cycle_reminders">Zyklische Erinnerungen</string>
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
-    <string name="sort">Sortieren</string>
+    <string name="filter">Filter</string>
 </resources>

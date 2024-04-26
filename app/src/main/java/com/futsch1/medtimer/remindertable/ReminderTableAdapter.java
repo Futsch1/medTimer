@@ -90,6 +90,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
 
     public void submitList(List<ReminderEvent> reminderEvents) {
         List<List<ReminderTableCellModel>> cells = new ArrayList<>();
+        List<String> rows = new ArrayList<>();
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
@@ -100,8 +101,11 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
                     reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "✔" : "",
                     reminderEvent.reminderId));
             cells.add(cell);
+            rows.add(reminderEvent.medicineName);
         }
 
         setCellItems(cells);
+        // This is not used in the table, but required for the filter to work
+        setRowHeaderItems(rows);
     }
 }

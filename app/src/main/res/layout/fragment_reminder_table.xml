@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".remindertable.ReminderTableFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:endIconDrawable="@drawable/x_circle"
+        app:endIconMode="custom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/filter"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.evrencoskun.tableview.TableView
         android:id="@+id/reminder_table"
@@ -16,4 +34,4 @@
         app:column_header_height="25dp"
         app:row_header_width="0dp" />
 
-</FrameLayout>
+</LinearLayout>
