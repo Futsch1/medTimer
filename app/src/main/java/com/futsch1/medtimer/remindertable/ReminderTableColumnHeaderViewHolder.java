@@ -87,7 +87,7 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
             columnHeaderSortButton.setVisibility(View.VISIBLE);
             columnHeaderSortButton.setImageResource(R.drawable.arrow_down_circle);
         } else {
-            columnHeaderSortButton.setVisibility(View.INVISIBLE);
+            columnHeaderSortButton.setVisibility(View.GONE);
         }
     }
 }
