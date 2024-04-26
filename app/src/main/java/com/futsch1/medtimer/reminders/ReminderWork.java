@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTime;
+import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 
 import android.app.Application;
 import android.content.Context;
@@ -101,7 +101,7 @@ public class ReminderWork extends Worker {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
-            reminderEvent.notificationId = notifications.showNotification(minutesToTime(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
+            reminderEvent.notificationId = notifications.showNotification(minutesToTimeString(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }
