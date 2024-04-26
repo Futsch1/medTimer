@@ -93,10 +93,12 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, String, R
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.processedTimestamp, TimeHelper.toLocalizedTimeString(reminderEvent.processedTimestamp, defaultZoneId), reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId), reminderEvent.reminderId));
             cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderId));
             cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.status, reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.status,
+                    reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "✔" : "",
+                    reminderEvent.reminderId));
             cells.add(cell);
         }
 

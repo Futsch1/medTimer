@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".medicine.MedicinesFragment">
+    tools:context=".remindertable.ReminderTableFragment">
 
     <com.evrencoskun.tableview.TableView
         android:id="@+id/reminder_table"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
+        android:scrollbarSize="4dp"
+        android:scrollbars="horizontal|vertical"
         app:column_header_height="25dp"
         app:row_header_width="0dp" />
 

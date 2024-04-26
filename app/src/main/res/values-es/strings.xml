@@ -109,4 +109,5 @@
     <string name="cycle_start_date">Inicio del primer ciclo</string>
     <string name="cycle_reminders">Recordatorios cíclicos</string>
     <string name="weekday_limited">Limitado a algunos días de la semana</string>
+    <string name="reminders">Recordatorios</string>
 </resources>
