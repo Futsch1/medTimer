@@ -81,4 +81,13 @@
         android:id="@+id/reminderTableFragment"
         android:name="com.futsch1.medtimer.remindertable.ReminderTableFragment"
         android:label="ReminderTableFragment" />
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_statisticsFragment_to_reminderTableFragment"
+            app:destination="@id/reminderTableFragment" />
+    </fragment>
 </navigation>
