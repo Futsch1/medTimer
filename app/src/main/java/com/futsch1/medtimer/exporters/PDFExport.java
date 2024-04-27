@@ -7,8 +7,9 @@ import android.print.PrintAttributes;
 
 import androidx.annotation.NonNull;
 
-import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.TableHelper;
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.wwdablu.soumya.simplypdf.SimplyPdf;
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument;
 import com.wwdablu.soumya.simplypdf.composers.properties.TableProperties;
@@ -20,11 +21,7 @@ import com.wwdablu.soumya.simplypdf.document.Margin;
 import com.wwdablu.soumya.simplypdf.document.PageHeader;
 
 import java.io.File;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -87,9 +84,8 @@ public class PDFExport implements Exporter {
         TextProperties headerProperties = getHeaderProperties();
         LinkedList<Cell> header = new LinkedList<>();
         int colIndex = 0;
-        final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
-        for (int headerText : headerTexts) {
-            header.add(new TextCell(context.getString(headerText), headerProperties, columnWidths[colIndex++]));
+        for (String headerText : TableHelper.getTableHeaders(context)) {
+            header.add(new TextCell(headerText, headerProperties, columnWidths[colIndex++]));
         }
         return header;
     }
@@ -104,16 +100,8 @@ public class PDFExport implements Exporter {
 
     @NonNull
     private LinkedList<Cell> getCells(ReminderEvent reminderEvent, TextProperties textProperties, int[] columnWidths) {
-        ZonedDateTime zonedDateTime;
-        Instant remindedTime;
         LinkedList<Cell> row = new LinkedList<>();
-        remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
-        zonedDateTime = remindedTime.atZone(defaultZoneId);
-
-        String time = String.format("%s %s",
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
-        row.add(new TextCell(time, textProperties, columnWidths[0]));
+        row.add(new TextCell(TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId), textProperties, columnWidths[0]));
         row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
         row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
         row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));

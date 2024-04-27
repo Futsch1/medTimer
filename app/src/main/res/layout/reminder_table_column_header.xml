@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableColumnHeaderContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="22dp"
+    android:backgroundTint="?attr/colorPrimarySurface"
+    android:padding="2dp">
+
+    <TextView
+        android:id="@+id/tableColumnHeaderTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="?attr/colorOnPrimarySurface" />
+
+    <ImageButton
+        android:id="@+id/tableColumnHeaderSortButton"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="end|center"
+        android:layout_marginStart="4dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/sort"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+</LinearLayout>

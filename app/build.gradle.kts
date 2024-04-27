@@ -17,8 +17,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 34
-        versionName = "1.7.4"
+        versionCode = 35
+        versionName = "1.8.0"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -94,6 +94,9 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.0-alpha03")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
+
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
 }
 
 play {

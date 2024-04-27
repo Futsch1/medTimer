@@ -2,17 +2,14 @@ package com.futsch1.medtimer.exporters;
 
 import android.content.Context;
 
-import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.TableHelper;
+import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 
 public class CSVExport implements Exporter {
@@ -28,20 +25,12 @@ public class CSVExport implements Exporter {
 
     public void export(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
-            csvFile.write(String.format("%s;%s;%s;%s\n",
-                    context.getString(R.string.time),
-                    context.getString(R.string.medicine_name),
-                    context.getString(R.string.dosage),
-                    context.getString(R.string.taken)));
+            List<String> headerTexts = TableHelper.getTableHeaders(context);
+            csvFile.write(String.join(";", headerTexts) + "\n");
 
-            Instant remindedTime;
-            ZonedDateTime zonedDateTime;
             for (ReminderEvent reminderEvent : reminderEvents) {
-                remindedTime = Instant.ofEpochSecond(reminderEvent.remindedTimestamp);
-                zonedDateTime = remindedTime.atZone(defaultZoneId);
-                String line = String.format("%s %s;%s;%s;%s\n",
-                        zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
-                        zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
+                String line = String.format("%s;%s;%s;%s\n",
+                        TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
