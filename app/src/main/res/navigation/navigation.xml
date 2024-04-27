@@ -77,4 +77,8 @@
     <action
         android:id="@+id/action_global_preferencesFragment"
         app:destination="@id/preferencesFragment" />
+    <fragment
+        android:id="@+id/reminderTableFragment"
+        android:name="com.futsch1.medtimer.remindertable.ReminderTableFragment"
+        android:label="ReminderTableFragment" />
 </navigation>

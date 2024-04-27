@@ -10,7 +10,10 @@ import com.google.android.material.timepicker.TimeFormat;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
@@ -68,5 +71,14 @@ public class TimeHelper {
 
             timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");
         }
+    }
+
+    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
+        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
+        ZonedDateTime zonedDateTime = remindedTime.atZone(zoneId);
+
+        return String.format("%s %s",
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
     }
 }
