@@ -69,6 +69,9 @@ public class Notifications {
     }
 
     private String getNotificationString(String remindTime, String amount, String medicineName, String instructions) {
+        if (instructions == null) {
+            instructions = "";
+        }
         if (!instructions.isEmpty()) {
             instructions = " " + instructions;
         }
