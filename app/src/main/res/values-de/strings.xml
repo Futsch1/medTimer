@@ -104,7 +104,7 @@
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
-    <string name="every_day">Jedem Tag</string>
+    <string name="every_day">Jeden Tag</string>
     <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
