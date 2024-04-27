@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -18,6 +20,7 @@ import com.anychart.charts.Pie;
 import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
 import com.futsch1.medtimer.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +30,23 @@ public class StatisticsFragment extends Fragment {
     private View statisticsView;
 
     public StatisticsFragment() {
-        backgroundThread = new HandlerThread("AdvancedReminderSettings");
+        backgroundThread = new HandlerThread("LoadStatistics");
         backgroundThread.start();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        statisticsView = inflater.inflate(R.layout.fragment_statistics, container, false);
+
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::populateStatistics);
 
-        statisticsView = inflater.inflate(R.layout.fragment_statistics, container, false);
+        MaterialButton reminderTableButton = statisticsView.findViewById(R.id.reminderTableButton);
+        reminderTableButton.setOnClickListener(view -> {
+            NavController navController = Navigation.findNavController(statisticsView);
+            navController.navigate(com.futsch1.medtimer.MainFragmentDirections.actionMainFragmentToReminderTableFragment());
+        });
 
         return statisticsView;
     }
@@ -50,7 +59,7 @@ public class StatisticsFragment extends Fragment {
 
         List<DataEntry> data = new ArrayList<>();
         data.add(new ValueDataEntry(context.getString(R.string.taken), 20));
-        data.add(new ValueDataEntry(R.string.skipped, 10));
+        data.add(new ValueDataEntry(context.getString(R.string.skipped), 10));
         pie.data(data);
 
 /*        pie.title("Fruits imported in 2015 (in kg)");
@@ -67,6 +76,7 @@ public class StatisticsFragment extends Fragment {
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
 
-        anyChartView.setChart(pie);
+        this.requireActivity().runOnUiThread(() ->
+                anyChartView.setChart(pie));
     }
 }
