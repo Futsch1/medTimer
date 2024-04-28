@@ -15,8 +15,15 @@
         android:text="@string/reminders" />
 
     <com.anychart.AnyChartView
+        android:id="@+id/medicinesPerDayChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <com.anychart.AnyChartView
         android:id="@+id/takenSkippedChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

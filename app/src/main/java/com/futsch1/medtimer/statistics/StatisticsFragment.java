@@ -15,9 +15,13 @@ import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.charts.Cartesian;
 import com.anychart.charts.Pie;
+import com.anychart.data.Mapping;
+import com.anychart.data.Set;
 import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
+import com.anychart.enums.ScaleStackMode;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
@@ -27,7 +31,9 @@ import java.util.List;
 public class StatisticsFragment extends Fragment {
     private final HandlerThread backgroundThread;
     private Pie takenSkippedChart;
-    private AnyChartView anyChartView;
+    private Cartesian medicinesPerDayChart;
+    private AnyChartView takenSkippedChartView;
+    private AnyChartView medicinesPerDayChartView;
 
     public StatisticsFragment() {
         backgroundThread = new HandlerThread("LoadStatistics");
@@ -46,13 +52,21 @@ public class StatisticsFragment extends Fragment {
             navController.navigate(com.futsch1.medtimer.MainFragmentDirections.actionMainFragmentToReminderTableFragment());
         });
 
-        anyChartView = statisticsView.findViewById(R.id.takenSkippedChart);
+        medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart);
+        takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
+
+        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
+        medicinesPerDayChart = AnyChart.column();
+        medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
+        medicinesPerDayChartView.setChart(medicinesPerDayChart);
+
+        APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
         takenSkippedChart = AnyChart.pie();
         takenSkippedChart.legend()
                 .position("center-bottom")
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
-        anyChartView.setChart(takenSkippedChart);
+        takenSkippedChartView.setChart(takenSkippedChart);
 
         return statisticsView;
     }
@@ -61,8 +75,6 @@ public class StatisticsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        APIlib.getInstance().setActiveAnyChartView(anyChartView);
-
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::populateStatistics);
     }
@@ -70,8 +82,23 @@ public class StatisticsFragment extends Fragment {
     private void populateStatistics() {
         StatisticsProvider statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()), requireContext());
 
-        List<DataEntry> data = statisticsProvider.getTakenSkippedData();
-        requireActivity().runOnUiThread(() -> takenSkippedChart.data(data));
+        StatisticsProvider.ColumnChartData columnChartData = statisticsProvider.getLastDaysReminders(7);
+        requireActivity().runOnUiThread(() -> {
+            APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
+            Set set = Set.instantiate();
+            set.data(columnChartData.seriesData());
+            int i = 1;
+            for (String series : columnChartData.series()) {
+                Mapping seriesMapping = set.mapAs(" { x: 'x', value: 'value" + i + "' }");
+                medicinesPerDayChart.column(seriesMapping).name(series);
+                i++;
+            }
+        });
 
+        List<DataEntry> data = statisticsProvider.getTakenSkippedData();
+        requireActivity().runOnUiThread(() -> {
+            APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
+            takenSkippedChart.data(data);
+        });
     }
 }
