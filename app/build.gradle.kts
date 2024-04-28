@@ -18,7 +18,7 @@ android {
         minSdk = 33
         targetSdk = 34
         versionCode = 35
-        versionName = "1.8.0"
+        versionName = "1.8.0-beta.1"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
