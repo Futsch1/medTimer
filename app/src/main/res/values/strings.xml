@@ -116,5 +116,6 @@
     <string name="reminders">Reminders</string>
     <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filter</string>
-    <string name="statistics">Statistics</string>
+    <string name="analysis">Analysis</string>
+    <string name="tabular_view">Tabular view</string>
 </resources>

@@ -10,9 +10,8 @@
         android:id="@+id/reminderTableButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_margin="4dp"
-        android:text="@string/reminders" />
+        android:text="@string/tabular_view" />
 
     <com.anychart.AnyChartView
         android:id="@+id/medicinesPerDayChart"

@@ -112,5 +112,6 @@
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
-    <string name="statistics">Statistiken</string>
+    <string name="analysis">Auswertung</string>
+    <string name="tabular_view">Tabellenansicht</string>
 </resources>
