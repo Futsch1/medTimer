@@ -34,6 +34,7 @@ public class StatisticsFragment extends Fragment {
     private Cartesian medicinesPerDayChart;
     private AnyChartView takenSkippedChartView;
     private AnyChartView medicinesPerDayChartView;
+    private boolean firstRun = true;
 
     public StatisticsFragment() {
         backgroundThread = new HandlerThread("LoadStatistics");
@@ -53,6 +54,7 @@ public class StatisticsFragment extends Fragment {
         });
 
         medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart);
+        medicinesPerDayChartView.setProgressBar(statisticsView.findViewById(R.id.progressBar));
         takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
 
         APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
@@ -68,6 +70,9 @@ public class StatisticsFragment extends Fragment {
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
         takenSkippedChartView.setChart(takenSkippedChart);
+
+        // TODO: Change number of days back
+        // TODO: Add second pie chart showing taken/skipped for number of days back
 
         return statisticsView;
     }
@@ -88,12 +93,15 @@ public class StatisticsFragment extends Fragment {
             APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
             Set set = Set.instantiate();
             set.data(columnChartData.seriesData());
-            int i = 0;
-            for (String series : columnChartData.series()) {
-                String valueString = i > 0 ? "value" + i : "value";
-                Mapping seriesMapping = set.mapAs(" { x: 'x', value: '" + valueString + "' }");
-                medicinesPerDayChart.column(seriesMapping).name(series);
-                i++;
+            if (firstRun) {
+                int i = 0;
+                for (String series : columnChartData.series()) {
+                    String valueString = i > 0 ? "value" + i : "value";
+                    Mapping seriesMapping = set.mapAs(" { x: 'x', value: '" + valueString + "' }");
+                    medicinesPerDayChart.column(seriesMapping).name(series);
+                    i++;
+                }
+                firstRun = false;
             }
         });
 

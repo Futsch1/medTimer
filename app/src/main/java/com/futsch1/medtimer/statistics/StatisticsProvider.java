@@ -40,9 +40,7 @@ public class StatisticsProvider {
     }
 
     public ColumnChartData getLastDaysReminders(int days) {
-        Map<String, int[]> medicineToDayCount = new HashMap<>();
-
-        calculateMedicineToDayMap(days, medicineToDayCount);
+        Map<String, int[]> medicineToDayCount = calculateMedicineToDayMap(days);
         List<DataEntry> data = calculateDataEntries(days, medicineToDayCount);
 
         return new ColumnChartData(data, new ArrayList<>(medicineToDayCount.keySet()));
@@ -52,7 +50,8 @@ public class StatisticsProvider {
     /**
      * @noinspection DataFlowIssue
      */
-    private void calculateMedicineToDayMap(int days, Map<String, int[]> medicineToDayCount) {
+    private Map<String, int[]> calculateMedicineToDayMap(int days) {
+        Map<String, int[]> medicineToDayCount = new HashMap<>();
         LocalDate earliestData = LocalDate.now().minusDays(days);
         for (ReminderEvent event : reminderEvents) {
             if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestData)) {
@@ -61,6 +60,8 @@ public class StatisticsProvider {
                 medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
             }
         }
+
+        return medicineToDayCount;
     }
 
     /**
@@ -70,6 +71,10 @@ public class StatisticsProvider {
     private static List<DataEntry> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
         List<DataEntry> data = new ArrayList<>();
         int seriesCount = medicineToDayCount.size();
+        if (seriesCount == 0) {
+            return data;
+        }
+        
         List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
         for (int i = days - 1; i >= 0; i--) {
             ValueDataEntry dataEntry = new ValueDataEntry(TimeHelper.daysSinceEpochToDateString(LocalDate.now().toEpochDay() - i), medicineToDayCount.get(medicineNames.get(0))[i]);
