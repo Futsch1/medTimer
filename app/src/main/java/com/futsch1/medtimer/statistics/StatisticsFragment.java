@@ -58,6 +58,7 @@ public class StatisticsFragment extends Fragment {
         APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
         medicinesPerDayChart = AnyChart.column();
         medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
+        medicinesPerDayChart.legend().enabled(true);
         medicinesPerDayChartView.setChart(medicinesPerDayChart);
 
         APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
@@ -87,9 +88,10 @@ public class StatisticsFragment extends Fragment {
             APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
             Set set = Set.instantiate();
             set.data(columnChartData.seriesData());
-            int i = 1;
+            int i = 0;
             for (String series : columnChartData.series()) {
-                Mapping seriesMapping = set.mapAs(" { x: 'x', value: 'value" + i + "' }");
+                String valueString = i > 0 ? "value" + i : "value";
+                Mapping seriesMapping = set.mapAs(" { x: 'x', value: '" + valueString + "' }");
                 medicinesPerDayChart.column(seriesMapping).name(series);
                 i++;
             }

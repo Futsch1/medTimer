@@ -2,6 +2,8 @@ package com.futsch1.medtimer.statistics;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.futsch1.medtimer.R;
@@ -37,21 +39,36 @@ public class StatisticsProvider {
         return data;
     }
 
+    public ColumnChartData getLastDaysReminders(int days) {
+        Map<String, int[]> medicineToDayCount = new HashMap<>();
+
+        calculateMedicineToDayMap(days, medicineToDayCount);
+        List<DataEntry> data = calculateDataEntries(days, medicineToDayCount);
+
+        return new ColumnChartData(data, new ArrayList<>(medicineToDayCount.keySet()));
+
+    }
+
     /**
      * @noinspection DataFlowIssue
      */
-    public ColumnChartData getLastDaysReminders(int days) {
-        List<DataEntry> data = new ArrayList<>();
-        // First, build a hash map of the medicines taken in the last days
+    private void calculateMedicineToDayMap(int days, Map<String, int[]> medicineToDayCount) {
         LocalDate earliestData = LocalDate.now().minusDays(days);
-        Map<String, int[]> medicineToDayCount = new HashMap<>();
         for (ReminderEvent event : reminderEvents) {
-            if (wasAfter(event.remindedTimestamp, earliestData)) {
+            if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestData)) {
                 String medicineName = normalizeMedicineName(event.medicineName);
                 medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
                 medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
             }
         }
+    }
+
+    /**
+     * @noinspection DataFlowIssue
+     */
+    @NonNull
+    private static List<DataEntry> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
+        List<DataEntry> data = new ArrayList<>();
         int seriesCount = medicineToDayCount.size();
         List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
         for (int i = days - 1; i >= 0; i--) {
@@ -61,9 +78,7 @@ public class StatisticsProvider {
             }
             data.add(dataEntry);
         }
-
-        return new ColumnChartData(data, medicineNames);
-
+        return data;
     }
 
     private boolean wasAfter(long secondsSinceEpoch, LocalDate date) {
