@@ -64,7 +64,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, String columnHeaderItemModel, int
             position) {
         ReminderTableColumnHeaderViewHolder columnHeaderViewHolder = (ReminderTableColumnHeaderViewHolder) holder;
-        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel);
+        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel, position == 0);
     }
 
     @NonNull

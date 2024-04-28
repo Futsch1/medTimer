@@ -53,13 +53,13 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
     /**
      * This method is calling from onBindColumnHeaderHolder on TableViewAdapter
      */
-    public void setColumnHeader(@Nullable String columnHeader) {
+    public void setColumnHeader(@Nullable String columnHeader, boolean firstColumn) {
         columnHeaderTextview.setText(columnHeader);
 
-        // If your TableView should have auto resize for cells & columns.
-        // Then you should consider the below lines. Otherwise, you can remove them.
+        if (firstColumn) {
+            onSortingStatusChanged(SortState.DESCENDING);
+        }
 
-        // It is necessary to remeasure itself.
         columnHeaderContainer.getLayoutParams().width = WRAP_CONTENT;
         columnHeaderTextview.requestLayout();
     }
@@ -68,7 +68,6 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
     public void onSortingStatusChanged(@NonNull SortState sortState) {
         super.onSortingStatusChanged(sortState);
 
-        // It is necessary to remeasure itself.
         columnHeaderContainer.getLayoutParams().width = WRAP_CONTENT;
 
         controlSortState(sortState);
@@ -82,10 +81,10 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
     private void controlSortState(@NonNull SortState sortState) {
         if (sortState == SortState.ASCENDING) {
             columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.arrow_up_circle);
+            columnHeaderSortButton.setImageResource(R.drawable.sort_up);
         } else if (sortState == SortState.DESCENDING) {
             columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.arrow_down_circle);
+            columnHeaderSortButton.setImageResource(R.drawable.sort_down);
         } else {
             columnHeaderSortButton.setVisibility(View.GONE);
         }
