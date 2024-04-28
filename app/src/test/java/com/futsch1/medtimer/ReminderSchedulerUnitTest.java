@@ -322,7 +322,7 @@ public class ReminderSchedulerUnitTest {
 
         MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 3);
-        reminder.cycleStartDay = 2;
+        reminder.cycleStartDay = 4;
         medicineWithReminders.reminders.add(reminder);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();
@@ -331,7 +331,19 @@ public class ReminderSchedulerUnitTest {
         List<ReminderEvent> reminderEventList = new ArrayList<>();
 
         scheduler.schedule(medicineList, reminderEventList);
-        verify(mock, times(1)).schedule(on(3, 480), medicineWithReminders.medicine, reminder);
+        verify(mock, times(1)).schedule(on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+
+        reset(mock);
+        scheduler.schedule(medicineList, reminderEventList);
+        verify(mock, times(1)).schedule(on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5));
+
+        reset(mock);
+        scheduler.schedule(medicineList, reminderEventList);
+        verify(mock, times(1)).schedule(on(8, 480), medicineWithReminders.medicine, reminder);
     }
 
 }
