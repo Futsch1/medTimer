@@ -95,15 +95,19 @@ public class StatisticsFragment extends Fragment {
 
     private void setupTakenSkippedChart() {
         APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
+        setupLicense(takenSkippedChartView);
         takenSkippedChart = AnyChart.pie();
         takenSkippedChart.legend().enabled(false);
+        takenSkippedChart.credits("");
         takenSkippedChartView.setChart(takenSkippedChart);
     }
 
     private void setupTakenSkippedTotalChart() {
         APIlib.getInstance().setActiveAnyChartView(takenSkippedTotalChartView);
+        setupLicense(takenSkippedTotalChartView);
         takenSkippedTotalChart = AnyChart.pie();
         takenSkippedTotalChart.title(requireContext().getString(R.string.total));
+        takenSkippedTotalChart.credits("");
         takenSkippedTotalChartView.setChart(takenSkippedTotalChart);
     }
 
@@ -129,6 +133,13 @@ public class StatisticsFragment extends Fragment {
         });
     }
 
+    private void setupLicense(AnyChartView anyChartView) {
+        String licenseKey = requireContext().getString(R.string.AnyChartLicense);
+        if (!licenseKey.isEmpty()) {
+            anyChartView.setLicenceKey(requireContext().getString(R.string.AnyChartLicense));
+        }
+    }
+
     private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
         APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
         setupMedicinesPerDayChart();
@@ -144,13 +155,15 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void setupMedicinesPerDayChart() {
-        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
         if (medicinesPerDayChart != null) {
             recreateMedicinesPerDayChartView();
         }
+        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
+        setupLicense(medicinesPerDayChartView);
         medicinesPerDayChart = AnyChart.column();
         medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
         medicinesPerDayChart.legend().enabled(true);
+        medicinesPerDayChart.legend("Powered by AnyChart");
         medicinesPerDayChartView.setChart(medicinesPerDayChart);
     }
 
