@@ -6,12 +6,25 @@
     android:orientation="vertical"
     tools:context=".statistics.StatisticsFragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/reminderTableButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="@string/tabular_view" />
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reminderTableButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/tabular_view" />
+
+        <Spinner
+            android:id="@+id/timeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:entries="@array/analysis_days" />
+    </LinearLayout>
 
     <com.anychart.AnyChartView
         android:id="@+id/medicinesPerDayChart"

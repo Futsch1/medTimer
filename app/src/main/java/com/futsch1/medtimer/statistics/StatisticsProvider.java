@@ -30,13 +30,22 @@ public class StatisticsProvider {
         this.context = context;
     }
 
-    public List<DataEntry> getTakenSkippedData() {
+    public List<DataEntry> getTakenSkippedData(int days) {
         List<DataEntry> data = new ArrayList<>();
-        long taken = reminderEvents.stream().filter(event -> event.status == ReminderEvent.ReminderStatus.TAKEN).count();
-        long skipped = reminderEvents.stream().filter(event -> event.status == ReminderEvent.ReminderStatus.SKIPPED).count();
+        long taken = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.TAKEN)).count();
+        long skipped = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.SKIPPED)).count();
         data.add(new ValueDataEntry(context.getString(R.string.taken), taken));
         data.add(new ValueDataEntry(context.getString(R.string.skipped), skipped));
         return data;
+    }
+
+    private boolean eventStatusDaysFilter(ReminderEvent event, int days, ReminderEvent.ReminderStatus status) {
+        return event.status == status && (days == 0 || wasAfter(event.remindedTimestamp, LocalDate.now().minusDays(days)));
+    }
+
+    private boolean wasAfter(long secondsSinceEpoch, LocalDate date) {
+        Instant instant = Instant.ofEpochSecond(secondsSinceEpoch);
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
     }
 
     public ColumnChartData getLastDaysReminders(int days) {
@@ -52,9 +61,9 @@ public class StatisticsProvider {
      */
     private Map<String, int[]> calculateMedicineToDayMap(int days) {
         Map<String, int[]> medicineToDayCount = new HashMap<>();
-        LocalDate earliestData = LocalDate.now().minusDays(days);
+        LocalDate earliestDate = LocalDate.now().minusDays(days);
         for (ReminderEvent event : reminderEvents) {
-            if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestData)) {
+            if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
                 String medicineName = normalizeMedicineName(event.medicineName);
                 medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
                 medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
@@ -74,7 +83,7 @@ public class StatisticsProvider {
         if (seriesCount == 0) {
             return data;
         }
-        
+
         List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
         for (int i = days - 1; i >= 0; i--) {
             ValueDataEntry dataEntry = new ValueDataEntry(TimeHelper.daysSinceEpochToDateString(LocalDate.now().toEpochDay() - i), medicineToDayCount.get(medicineNames.get(0))[i]);
@@ -84,11 +93,6 @@ public class StatisticsProvider {
             data.add(dataEntry);
         }
         return data;
-    }
-
-    private boolean wasAfter(long secondsSinceEpoch, LocalDate date) {
-        Instant instant = Instant.ofEpochSecond(secondsSinceEpoch);
-        return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
     }
 
     private String normalizeMedicineName(String medicineName) {

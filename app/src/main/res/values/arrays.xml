@@ -21,7 +21,7 @@
         <item>@string/twenty_four_hours</item>
         <item>@string/two_days</item>
         <item>@string/three_days</item>
-        <item>@string/one_week</item>
+        <item>@string/seven_days</item>
     </string-array>
     <string-array name="overview_events_values">
         <item>4</item>
@@ -30,6 +30,22 @@
         <item>48</item>
         <item>72</item>
         <item>168</item>
+    </string-array>
+    <string-array name="analysis_days">
+        <item>@string/twenty_four_hours</item>
+        <item>@string/two_days</item>
+        <item>@string/three_days</item>
+        <item>@string/seven_days</item>
+        <item>@string/fourteen_days</item>
+        <item>@string/thirty_days</item>
+    </string-array>
+    <string-array name="analysis_days_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
     </string-array>
     <string-array name="instructions_suggestions">
         <item>@string/no_instructions</item>

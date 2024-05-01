@@ -213,8 +213,10 @@
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="reminders">Rappels</string>
     <string name="filter">Filtre</string>
-    <string name="one_week">7 jours</string>
+    <string name="seven_days">7 jours</string>
     <string name="analysis">Analyse</string>
     <string name="tabular_view">Vue tabulaire</string>
+    <string name="fourteen_days">14 jours</string>
+    <string name="thirty_days">30 jours</string>
 
 </resources>
