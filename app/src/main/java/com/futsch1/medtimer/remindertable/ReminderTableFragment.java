@@ -44,6 +44,10 @@ public class ReminderTableFragment extends Fragment {
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));
         medicineViewModel.getReminderEvents(0, 0).observe(getViewLifecycleOwner(), adapter::submitList);
 
+        tableView.getCellRecyclerView().setItemAnimator(null);
+        tableView.getColumnHeaderRecyclerView().setItemAnimator(null);
+        tableView.getRowHeaderRecyclerView().setItemAnimator(null);
+
         return fragmentView;
     }
 
