@@ -40,9 +40,10 @@ public class StatisticsFragment extends Fragment {
     private AnyChartView takenSkippedChartView;
     private AnyChartView takenSkippedTotalChartView;
     private AnyChartView medicinesPerDayChartView;
-    private boolean medicinesPerDayColumnsNeedInitialization = true;
     private Spinner timeSpinner;
     private StatisticsProvider statisticsProvider;
+    private int dayColumns = 0;
+    private Set medicinesPerDayDataSet;
 
     public StatisticsFragment() {
         backgroundThread = new HandlerThread("LoadStatistics");
@@ -85,8 +86,6 @@ public class StatisticsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != analysisDays.getPosition()) {
                     analysisDays.setPosition(position);
-                    medicinesPerDayColumnsNeedInitialization = true;
-                    setupMedicinesPerDayChart();
                     Handler handler = new Handler(backgroundThread.getLooper());
                     handler.post(() -> populateStatistics());
                 }
@@ -151,18 +150,35 @@ public class StatisticsFragment extends Fragment {
 
     private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
         APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
-        Set set = Set.instantiate();
-        set.data(columnChartData.seriesData());
-        if (medicinesPerDayColumnsNeedInitialization) {
+        if (dayColumns == 0 || dayColumns != columnChartData.seriesData().size()) {
+            if (dayColumns != 0) {
+                recreateMedicinesPerDayChartView();
+            }
+            medicinesPerDayDataSet = Set.instantiate();
             int i = 0;
             for (String series : columnChartData.series()) {
                 String valueString = i > 0 ? "value" + i : "value";
-                Mapping seriesMapping = set.mapAs(" { x: 'x', value: '" + valueString + "' }");
+                Mapping seriesMapping = medicinesPerDayDataSet.mapAs(" { x: 'x', value: '" + valueString + "' }");
                 medicinesPerDayChart.column(seriesMapping).name(series);
                 i++;
             }
-            medicinesPerDayColumnsNeedInitialization = false;
+            dayColumns = columnChartData.seriesData().size();
         }
+        medicinesPerDayDataSet.data(columnChartData.seriesData());
+    }
+
+    private void recreateMedicinesPerDayChartView() {
+        // It is not possible to change the chart in the chart view to change
+        // a different number of columns and resetting the chart also does not work.
+        // So the whole view is recreated.
+        ViewGroup parent = (ViewGroup) medicinesPerDayChartView.getParent();
+        int index = parent.indexOfChild(medicinesPerDayChartView);
+        parent.removeView(medicinesPerDayChartView);
+        ViewGroup.LayoutParams layout = medicinesPerDayChartView.getLayoutParams();
+        medicinesPerDayChartView = new AnyChartView(requireContext());
+        medicinesPerDayChartView.setLayoutParams(layout);
+        parent.addView(medicinesPerDayChartView, index);
+        setupMedicinesPerDayChart();
     }
 
     @Override
