@@ -105,5 +105,6 @@ public class StatisticsProvider {
     }
 
     public record ColumnChartData(List<DataEntry> seriesData, List<String> series) {
+        // Intentionally empty (default record)
     }
 }
