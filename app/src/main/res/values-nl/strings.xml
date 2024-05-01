@@ -112,6 +112,7 @@
     <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="reminders">Herinneringen</string>
     <string name="filter">Filter</string>
+    <string name="one_week">7 dagen</string>
     <string name="analysis">Analyse</string>
     <string name="tabular_view">Tabelwergave</string>
 </resources>

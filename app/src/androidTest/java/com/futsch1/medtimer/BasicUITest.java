@@ -146,6 +146,7 @@ public class BasicUITest {
                                         0),
                                 1),
                         isDisplayed()));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
         materialButton4.perform(click());
 
         ViewInteraction checkableImageButton = onView(
@@ -269,7 +270,7 @@ public class BasicUITest {
                                 0),
                         isDisplayed()));
         tabView2.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nextReminderInfo),
