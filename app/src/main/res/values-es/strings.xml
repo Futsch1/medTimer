@@ -116,4 +116,6 @@
     <string name="tabular_view">Vista tabular</string>
     <string name="fourteen_days">14 días</string>
     <string name="thirty_days">30 días</string>
+    <string name="total">Total</string>
+    <string name="last_n_days">Últimos %1$d días</string>
 </resources>

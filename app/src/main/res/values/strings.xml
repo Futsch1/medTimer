@@ -121,4 +121,6 @@
     <string name="tabular_view">Tabular view</string>
     <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 days</string>
+    <string name="total">Total</string>
+    <string name="last_n_days">Last %1$d days</string>
 </resources>

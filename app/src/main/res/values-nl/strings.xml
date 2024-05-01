@@ -117,4 +117,6 @@
     <string name="tabular_view">Tabelwergave</string>
     <string name="fourteen_days">14 dagen</string>
     <string name="thirty_days">30 dagen</string>
+    <string name="total">Totaal</string>
+    <string name="last_n_days">Laatste %1$d dagen</string>
 </resources>

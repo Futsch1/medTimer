@@ -18,6 +18,11 @@
             android:layout_margin="4dp"
             android:text="@string/tabular_view" />
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <Spinner
             android:id="@+id/timeSpinner"
             android:layout_width="wrap_content"
@@ -44,7 +49,8 @@
             android:id="@+id/takenSkippedChartTotal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="NestedWeights" />
 
         <com.anychart.AnyChartView
             android:id="@+id/takenSkippedChart"

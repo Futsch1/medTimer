@@ -21,8 +21,6 @@ import com.anychart.charts.Cartesian;
 import com.anychart.charts.Pie;
 import com.anychart.data.Mapping;
 import com.anychart.data.Set;
-import com.anychart.enums.Align;
-import com.anychart.enums.LegendLayout;
 import com.anychart.enums.ScaleStackMode;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -41,9 +39,7 @@ public class StatisticsFragment extends Fragment {
     private AnyChartView takenSkippedTotalChartView;
     private AnyChartView medicinesPerDayChartView;
     private Spinner timeSpinner;
-    private StatisticsProvider statisticsProvider;
-    private int dayColumns = 0;
-    private Set medicinesPerDayDataSet;
+
 
     public StatisticsFragment() {
         backgroundThread = new HandlerThread("LoadStatistics");
@@ -64,7 +60,6 @@ public class StatisticsFragment extends Fragment {
 
         setupReminderTableButton(statisticsView);
         setupTimeSpinner();
-        setupMedicinesPerDayChart();
         setupTakenSkippedChart();
         setupTakenSkippedTotalChart();
 
@@ -98,38 +93,23 @@ public class StatisticsFragment extends Fragment {
         });
     }
 
-    private void setupMedicinesPerDayChart() {
-        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
-        medicinesPerDayChart = AnyChart.column();
-        medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
-        medicinesPerDayChart.legend().enabled(true);
-        medicinesPerDayChartView.setChart(medicinesPerDayChart);
-    }
-
     private void setupTakenSkippedChart() {
         APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
         takenSkippedChart = AnyChart.pie();
-        takenSkippedChart.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
+        takenSkippedChart.legend().enabled(false);
         takenSkippedChartView.setChart(takenSkippedChart);
     }
 
     private void setupTakenSkippedTotalChart() {
         APIlib.getInstance().setActiveAnyChartView(takenSkippedTotalChartView);
         takenSkippedTotalChart = AnyChart.pie();
-        takenSkippedTotalChart.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
+        takenSkippedTotalChart.title(requireContext().getString(R.string.total));
         takenSkippedTotalChartView.setChart(takenSkippedTotalChart);
     }
 
     private void populateStatistics() {
-        if (statisticsProvider == null) {
-            statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()), requireContext());
-        }
+        StatisticsProvider statisticsProvider;
+        statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()), requireContext());
         int days = analysisDays.getDays();
 
         StatisticsProvider.ColumnChartData columnChartData = statisticsProvider.getLastDaysReminders(days);
@@ -138,6 +118,7 @@ public class StatisticsFragment extends Fragment {
         List<DataEntry> data = statisticsProvider.getTakenSkippedData(days);
         requireActivity().runOnUiThread(() -> {
             APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
+            takenSkippedChart.title(requireContext().getString(R.string.last_n_days, days));
             takenSkippedChart.data(data);
         });
 
@@ -150,21 +131,27 @@ public class StatisticsFragment extends Fragment {
 
     private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
         APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
-        if (dayColumns == 0 || dayColumns != columnChartData.seriesData().size()) {
-            if (dayColumns != 0) {
-                recreateMedicinesPerDayChartView();
-            }
-            medicinesPerDayDataSet = Set.instantiate();
-            int i = 0;
-            for (String series : columnChartData.series()) {
-                String valueString = i > 0 ? "value" + i : "value";
-                Mapping seriesMapping = medicinesPerDayDataSet.mapAs(" { x: 'x', value: '" + valueString + "' }");
-                medicinesPerDayChart.column(seriesMapping).name(series);
-                i++;
-            }
-            dayColumns = columnChartData.seriesData().size();
+        setupMedicinesPerDayChart();
+        Set medicinesPerDayDataSet = Set.instantiate();
+        int i = 0;
+        for (String series : columnChartData.series()) {
+            String valueString = i > 0 ? "value" + i : "value";
+            Mapping seriesMapping = medicinesPerDayDataSet.mapAs(" { x: 'x', value: '" + valueString + "' }");
+            medicinesPerDayChart.column(seriesMapping).name(series);
+            i++;
         }
         medicinesPerDayDataSet.data(columnChartData.seriesData());
+    }
+
+    private void setupMedicinesPerDayChart() {
+        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
+        if (medicinesPerDayChart != null) {
+            recreateMedicinesPerDayChartView();
+        }
+        medicinesPerDayChart = AnyChart.column();
+        medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
+        medicinesPerDayChart.legend().enabled(true);
+        medicinesPerDayChartView.setChart(medicinesPerDayChart);
     }
 
     private void recreateMedicinesPerDayChartView() {
@@ -178,7 +165,6 @@ public class StatisticsFragment extends Fragment {
         medicinesPerDayChartView = new AnyChartView(requireContext());
         medicinesPerDayChartView.setLayoutParams(layout);
         parent.addView(medicinesPerDayChartView, index);
-        setupMedicinesPerDayChart();
     }
 
     @Override
