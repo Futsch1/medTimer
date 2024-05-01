@@ -10,11 +10,13 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
     private final Object content;
     private final int id;
     private final String representation;
+    private final String viewTag;
 
-    public ReminderTableCellModel(Object content, String representation, int id) {
+    public ReminderTableCellModel(Object content, String representation, int id, String viewTag) {
         this.content = content;
         this.representation = representation;
         this.id = id;
+        this.viewTag = viewTag;
     }
 
     @NonNull
@@ -38,5 +40,9 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
 
     public String getRepresentation() {
         return representation;
+    }
+
+    public String getViewTag() {
+        return viewTag;
     }
 }

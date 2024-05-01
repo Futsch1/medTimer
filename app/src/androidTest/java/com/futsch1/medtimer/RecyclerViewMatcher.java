@@ -18,12 +18,12 @@ public class RecyclerViewMatcher {
     public RecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
-
-    public Matcher<View> atPosition(final int position) {
-        return atPositionOnView(position, -1);
+    
+    public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
+        return atPositionOnView(position, targetViewId, null);
     }
 
-    public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
+    public Matcher<View> atPositionOnView(final int position, final int targetViewId, String targetViewTag) {
 
         return new TypeSafeMatcher<>() {
             Resources resources = null;
@@ -49,7 +49,7 @@ public class RecyclerViewMatcher {
 
                 if (childView == null) {
                     RecyclerView recyclerView =
-                            (RecyclerView) view.getRootView().findViewById(recyclerViewId);
+                            view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
                         if (viewHolder != null) {
@@ -58,16 +58,22 @@ public class RecyclerViewMatcher {
                     }
                 }
 
-                if (targetViewId == -1) {
+                if (targetViewId == -1 && targetViewTag == null) {
                     return view == childView;
                 } else if (childView == null) {
                     return false;
                 } else {
-                    View targetView = childView.findViewById(targetViewId);
+                    View targetView = targetViewTag != null ?
+                            childView.findViewWithTag(targetViewTag) :
+                            childView.findViewById(targetViewId);
                     return view == targetView;
                 }
 
             }
         };
+    }
+
+    public Matcher<View> atPositionOnView(final int position, String targetViewTag) {
+        return atPositionOnView(position, -1, targetViewTag);
     }
 }
