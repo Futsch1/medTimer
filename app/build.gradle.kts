@@ -20,6 +20,9 @@ android {
         versionCode = 37
         versionName = "1.8.0-beta.2"
         setProperty("archivesBaseName", "MedTimer")
+        buildConfigField(
+            "String", "ANYCHART_LICENSE_KEY", "\"" + findProperty("AnyChartLicenseKey") + "\""
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,10 +92,10 @@ dependencies {
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.12.1")
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha03")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
-    androidTestImplementation("androidx.test:rules:1.6.0-alpha03")
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha04")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha04")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha04")
+    androidTestImplementation("androidx.test:rules:1.6.0-alpha04")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")

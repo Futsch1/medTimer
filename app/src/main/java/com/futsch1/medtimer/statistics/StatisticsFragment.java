@@ -22,6 +22,7 @@ import com.anychart.charts.Pie;
 import com.anychart.data.Mapping;
 import com.anychart.data.Set;
 import com.anychart.enums.ScaleStackMode;
+import com.futsch1.medtimer.BuildConfig;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
@@ -134,10 +135,7 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void setupLicense(AnyChartView anyChartView) {
-        String licenseKey = requireContext().getString(R.string.AnyChartLicense);
-        if (!licenseKey.isEmpty()) {
-            anyChartView.setLicenceKey(requireContext().getString(R.string.AnyChartLicense));
-        }
+        anyChartView.setLicenceKey(BuildConfig.ANYCHART_LICENSE_KEY);
     }
 
     private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
