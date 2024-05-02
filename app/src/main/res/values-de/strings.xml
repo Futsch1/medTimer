@@ -119,4 +119,5 @@
     <string name="thirty_days">30 Tage</string>
     <string name="total">Gesamt</string>
     <string name="last_n_days">Letzte %1$d Tage</string>
+    <string name="name">Name</string>
 </resources>

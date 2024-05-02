@@ -123,4 +123,5 @@
     <string name="thirty_days">30 days</string>
     <string name="total">Total</string>
     <string name="last_n_days">Last %1$d days</string>
+    <string name="name">Name</string>
 </resources>

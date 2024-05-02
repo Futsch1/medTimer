@@ -220,5 +220,6 @@
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
     <string name="last_n_days">Dernier %1$d jours</string>
+    <string name="name">Nom</string>
 
 </resources>
