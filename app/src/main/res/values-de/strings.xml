@@ -112,4 +112,5 @@
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
+    <string name="one_week">7 Tage</string>
 </resources>
