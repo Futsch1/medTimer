@@ -160,6 +160,7 @@ public class StatisticsFragment extends Fragment {
         setupLicense(medicinesPerDayChartView);
         medicinesPerDayChart = AnyChart.column();
         medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
+        medicinesPerDayChart.yScale().ticks().allowFractional(false);
         medicinesPerDayChart.legend().enabled(true);
         medicinesPerDayChart.legend("Powered by AnyChart");
         medicinesPerDayChartView.setChart(medicinesPerDayChart);
