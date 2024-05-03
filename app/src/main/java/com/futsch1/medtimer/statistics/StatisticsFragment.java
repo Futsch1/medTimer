@@ -99,7 +99,7 @@ public class StatisticsFragment extends Fragment {
         setupLicense(takenSkippedChartView);
         takenSkippedChart = AnyChart.pie();
         takenSkippedChart.legend().enabled(false);
-        takenSkippedChart.credits("");
+        takenSkippedChart.credits().enabled(false);
         takenSkippedChartView.setChart(takenSkippedChart);
     }
 
@@ -107,8 +107,8 @@ public class StatisticsFragment extends Fragment {
         APIlib.getInstance().setActiveAnyChartView(takenSkippedTotalChartView);
         setupLicense(takenSkippedTotalChartView);
         takenSkippedTotalChart = AnyChart.pie();
+        takenSkippedTotalChart.credits().enabled(false);
         takenSkippedTotalChart.title(requireContext().getString(R.string.total));
-        takenSkippedTotalChart.credits("");
         takenSkippedTotalChartView.setChart(takenSkippedTotalChart);
     }
 
@@ -162,7 +162,7 @@ public class StatisticsFragment extends Fragment {
         medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
         medicinesPerDayChart.yScale().ticks().allowFractional(false);
         medicinesPerDayChart.legend().enabled(true);
-        medicinesPerDayChart.legend("Powered by AnyChart");
+        medicinesPerDayChart.credits("Powered by AnyChart");
         medicinesPerDayChartView.setChart(medicinesPerDayChart);
     }
 

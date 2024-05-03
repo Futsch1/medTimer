@@ -17,8 +17,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 37
-        versionName = "1.8.0-beta.2"
+        versionCode = 38
+        versionName = "1.8.0-rc.1"
         setProperty("archivesBaseName", "MedTimer")
         buildConfigField(
             "String", "ANYCHART_LICENSE_KEY", "\"" + findProperty("AnyChartLicenseKey") + "\""
