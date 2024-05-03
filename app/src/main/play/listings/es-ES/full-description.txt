@@ -15,6 +15,7 @@ Recordatorios flexibles y personalizados:
 Gestión de datos sencilla y segura:
 
 - Confirma o descarta los recordatorios para registrar con precisión el seguimiento de la medicación.
+- Obtenga una visión general de las dosis anteriores en un gráfico y una vista tabular.
 - Puedes exportar tu historial de medicación como un archivo CSV para facilitar el mantenimiento de registros o compartirlo con profesionales de la salud.
 - Haz una copia de seguridad y restaura tu lista de medicamentos como archivo JSON.
 
