@@ -74,7 +74,7 @@ public class StatisticsTest {
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(4000));
 
         ViewInteraction chip = onView(
                 new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));

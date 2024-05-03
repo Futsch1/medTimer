@@ -18,7 +18,7 @@ public class RecyclerViewMatcher {
     public RecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
-    
+
     public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
         return atPositionOnView(position, targetViewId, null);
     }
@@ -40,7 +40,7 @@ public class RecyclerViewMatcher {
                     }
                 }
 
-                description.appendText("with id: " + idDescription);
+                description.appendText("with id: " + idDescription + "/" + recyclerViewId);
             }
 
             public boolean matchesSafely(View view) {
