@@ -11,56 +11,50 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.time.Instant;
 import java.util.List;
 
-public class JSONBackup {
-    public String createBackup(int databaseVersion, List<MedicineWithReminders> medicinesWithReminders) {
-        DatabaseContentWithVersion content = new DatabaseContentWithVersion(databaseVersion, medicinesWithReminders);
+public abstract class JSONBackup<T> {
+
+    private final Class<T> contentClass;
+
+    protected JSONBackup(Class<T> contentClass) {
+        this.contentClass = contentClass;
+    }
+
+    public String createBackup(int databaseVersion, List<T> list) {
+        JSONBackup.DatabaseContentWithVersion<T> content = new JSONBackup.DatabaseContentWithVersion<>(databaseVersion, list);
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         return gson.toJson(content);
     }
 
-    public @Nullable List<MedicineWithReminders> parseBackup(String jsonFile) {
+    public @Nullable List<T> parseBackup(String jsonFile) {
         // In a first step, parse with the version set to 0
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .setVersion(0.0)
-                .registerTypeAdapter(Medicine.class, new FullDeserialize<Medicine>())
-                .registerTypeAdapter(Reminder.class, new FullDeserialize<Reminder>())
-                .create();
+        Gson gson = registerTypeAdapters(new GsonBuilder()).setVersion(0.0).create();
         try {
-            DatabaseContentWithVersion content = gson.fromJson(jsonFile, DatabaseContentWithVersion.class);
+            Type type = TypeToken.getParameterized(DatabaseContentWithVersion.class, contentClass).getType();
+            DatabaseContentWithVersion<T> content = gson.fromJson(jsonFile, type);
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version).create();
-            return gson.fromJson(jsonFile, DatabaseContentWithVersion.class).medicinesWithReminders;
+            content = gson.fromJson(jsonFile, type);
+            return content.list;
         } catch (JsonParseException e) {
             Log.e("JSONBackup", e.getMessage());
             return null;
         }
     }
 
-    public void applyBackup(List<MedicineWithReminders> listOfMedicineWithReminders, MedicineRepository medicineRepository) {
-        medicineRepository.deleteReminders();
-        medicineRepository.deleteMedicines();
+    protected abstract GsonBuilder registerTypeAdapters(GsonBuilder builder);
 
-        for (MedicineWithReminders medicineWithReminders : listOfMedicineWithReminders) {
-            long medicineId = medicineRepository.insertMedicine(medicineWithReminders.medicine);
-            for (Reminder reminder : medicineWithReminders.reminders) {
-                reminder.medicineRelId = (int) medicineId;
-                reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
-                medicineRepository.insertReminder(reminder);
-            }
-        }
+    public abstract void applyBackup(List<T> list, MedicineRepository medicineRepository);
+
+    protected record DatabaseContentWithVersion<T>(@Expose int version,
+                                                   @Expose List<T> list) {
     }
 
-    private record DatabaseContentWithVersion(@Expose int version,
-                                              @Expose List<MedicineWithReminders> medicinesWithReminders) {
-    }
-
-    private static class FullDeserialize<T> implements JsonDeserializer<T> {
+    protected static class FullDeserialize<T> implements JsonDeserializer<T> {
 
         public T deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException {
             T pojo = new Gson().fromJson(je, type);

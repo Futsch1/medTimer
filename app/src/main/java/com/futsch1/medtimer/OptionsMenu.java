@@ -17,7 +17,7 @@ import androidx.core.content.FileProvider;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
 
-import com.futsch1.medtimer.database.JSONBackup;
+import com.futsch1.medtimer.database.JSONMedicineBackup;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -56,10 +56,10 @@ public class OptionsMenu implements MenuProvider {
         String json = FileHelper.readFromUri(data, context.getContentResolver());
         boolean restoreSuccessful = false;
         if (json != null) {
-            JSONBackup jsonBackup = new JSONBackup();
-            List<MedicineWithReminders> backupData = jsonBackup.parseBackup(json);
+            JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
+            List<MedicineWithReminders> backupData = jsonMedicineBackup.parseBackup(json);
             if (backupData != null) {
-                jsonBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
+                jsonMedicineBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
                 restoreSuccessful = true;
             }
         }
@@ -163,9 +163,9 @@ public class OptionsMenu implements MenuProvider {
 
         MenuItem item = menu.findItem(R.id.perform_backup);
         item.setOnMenuItemClickListener(menuItem -> {
-            JSONBackup jsonBackup = new JSONBackup();
+            JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
             handler.post(() -> {
-                String jsonContent = jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(), medicineViewModel.medicineRepository.getMedicines());
+                String jsonContent = jsonMedicineBackup.createBackup(medicineViewModel.medicineRepository.getVersion(), medicineViewModel.medicineRepository.getMedicines());
                 createAndSave(jsonContent);
             });
             return true;
