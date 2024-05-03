@@ -116,5 +116,12 @@
     <string name="reminders">Reminders</string>
     <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filter</string>
-    <string name="one_week">7 days</string>
+    <string name="seven_days">7 days</string>
+    <string name="analysis">Analysis</string>
+    <string name="tabular_view">Tabular view</string>
+    <string name="fourteen_days">14 days</string>
+    <string name="thirty_days">30 days</string>
+    <string name="total">Total</string>
+    <string name="last_n_days">Last %1$d days</string>
+    <string name="name">Name</string>
 </resources>

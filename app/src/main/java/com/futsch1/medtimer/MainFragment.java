@@ -39,7 +39,7 @@ public class MainFragment extends Fragment {
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            int[] tabNames = new int[]{R.string.tab_overview, R.string.tab_medicine, R.string.reminders};
+            int[] tabNames = new int[]{R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
             tab.setText(tabNames[position]);
         }).attach();
 
@@ -56,6 +56,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        optionsMenu.onDestroy();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
     }
 }

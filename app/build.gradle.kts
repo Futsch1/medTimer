@@ -17,9 +17,12 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 35
+        versionCode = 39
         versionName = "1.8.0"
         setProperty("archivesBaseName", "MedTimer")
+        buildConfigField(
+            "String", "ANYCHART_LICENSE_KEY", "\"" + findProperty("AnyChartLicenseKey") + "\""
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -83,15 +86,16 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.12.1")
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha03")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
-    androidTestImplementation("androidx.test:rules:1.6.0-alpha03")
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha04")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha04")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha04")
+    androidTestImplementation("androidx.test:rules:1.6.0-alpha04")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")

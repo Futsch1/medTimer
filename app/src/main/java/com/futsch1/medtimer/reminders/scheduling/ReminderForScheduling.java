@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling;
 
+import static java.lang.Math.abs;
+
 import androidx.annotation.Nullable;
 
 import com.futsch1.medtimer.database.Reminder;
@@ -57,7 +59,7 @@ public class ReminderForScheduling {
         long dayInCycle = today() - cycleStartDay;
         int cycleLength = reminder.consecutiveDays + reminder.pauseDays;
         for (int x = 0; x < possibleDays.length; x++) {
-            possibleDays[x] = dayInCycle % cycleLength < reminder.consecutiveDays;
+            possibleDays[x] = abs(dayInCycle % cycleLength) < reminder.consecutiveDays && dayInCycle + x >= 0;
             dayInCycle++;
         }
         // Only schedule today if it's not already raised

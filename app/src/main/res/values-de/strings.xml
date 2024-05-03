@@ -104,7 +104,7 @@
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
-    <string name="every_day">Jedem Tag</string>
+    <string name="every_day">Jeden Tag</string>
     <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
@@ -112,5 +112,12 @@
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
-    <string name="one_week">7 Tage</string>
+    <string name="seven_days">7 Tage</string>
+    <string name="analysis">Analyse</string>
+    <string name="tabular_view">Tabellenansicht</string>
+    <string name="fourteen_days">14 Tage</string>
+    <string name="thirty_days">30 Tage</string>
+    <string name="total">Gesamt</string>
+    <string name="last_n_days">Letzte %1$d Tage</string>
+    <string name="name">Name</string>
 </resources>

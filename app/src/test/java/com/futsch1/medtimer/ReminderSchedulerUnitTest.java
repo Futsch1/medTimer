@@ -310,4 +310,40 @@ public class ReminderSchedulerUnitTest {
         scheduler.schedule(medicineList, reminderEventList);
         verify(mock, times(1)).schedule(on(5, 481), medicineWithReminders.medicine, reminder2);
     }
+
+    @Test
+    public void test_scheduleCycleInFuture() {
+        ReminderScheduler.ScheduleListener mock = mock(ReminderScheduler.ScheduleListener.class);
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mock, mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 3);
+        reminder.cycleStartDay = 4;
+        medicineWithReminders.reminders.add(reminder);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        scheduler.schedule(medicineList, reminderEventList);
+        verify(mock, times(1)).schedule(on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+
+        reset(mock);
+        scheduler.schedule(medicineList, reminderEventList);
+        verify(mock, times(1)).schedule(on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5));
+
+        reset(mock);
+        scheduler.schedule(medicineList, reminderEventList);
+        verify(mock, times(1)).schedule(on(8, 480), medicineWithReminders.medicine, reminder);
+    }
+
 }
