@@ -1,14 +1,11 @@
 package com.futsch1.medtimer.statistics;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,11 +19,9 @@ import java.util.regex.Pattern;
 public class StatisticsProvider {
     private static final Pattern CYCLIC_COUNT = Pattern.compile(" (\\(\\d?/\\d?)\\)");
     private final List<ReminderEvent> reminderEvents;
-    private final Context context;
 
-    public StatisticsProvider(MedicineRepository medicineRepository, Context context) {
+    public StatisticsProvider(MedicineRepository medicineRepository) {
         reminderEvents = medicineRepository.getAllReminderEvents();
-        this.context = context;
     }
 
     public TakenSkipped getTakenSkippedData(int days) {
@@ -44,12 +39,9 @@ public class StatisticsProvider {
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
     }
 
-    public ColumnChartData getLastDaysReminders(int days) {
+    public List<XYSeries> getLastDaysReminders(int days) {
         Map<String, int[]> medicineToDayCount = calculateMedicineToDayMap(days);
-        List<DataEntry> data = calculateDataEntries(days, medicineToDayCount);
-
-        return new ColumnChartData(data, new ArrayList<>(medicineToDayCount.keySet()));
-
+        return calculateDataEntries(days, medicineToDayCount);
     }
 
     /**
@@ -73,20 +65,22 @@ public class StatisticsProvider {
      * @noinspection DataFlowIssue
      */
     @NonNull
-    private static List<DataEntry> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
-        List<DataEntry> data = new ArrayList<>();
+    private static List<XYSeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
+        List<XYSeries> data = new ArrayList<>();
         int seriesCount = medicineToDayCount.size();
         if (seriesCount == 0) {
             return data;
         }
 
         List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
-        for (int i = days - 1; i >= 0; i--) {
-            ValueDataEntry dataEntry = new ValueDataEntry(TimeHelper.daysSinceEpochToDateString(LocalDate.now().toEpochDay() - i), medicineToDayCount.get(medicineNames.get(0))[i]);
-            for (int j = 1; j < seriesCount; j++) {
-                dataEntry.setValue("value" + j, medicineToDayCount.get(medicineNames.get(j))[i]);
+        for (int j = 0; j < seriesCount; j++) {
+            List<Number> xValues = new ArrayList<>();
+            List<Number> yValues = new ArrayList<>();
+            for (int i = days - 1; i >= 0; i--) {
+                xValues.add(LocalDate.now().toEpochDay() - i);
+                yValues.add(medicineToDayCount.get(medicineNames.get(j))[i]);
             }
-            data.add(dataEntry);
+            data.add(new SimpleXYSeries(xValues, yValues, medicineNames.get(j)));
         }
         return data;
     }
@@ -101,9 +95,5 @@ public class StatisticsProvider {
     }
 
     public record TakenSkipped(long taken, long skipped) {
-    }
-
-    public record ColumnChartData(List<DataEntry> seriesData, List<String> series) {
-        // Intentionally empty (default record)
     }
 }

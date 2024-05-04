@@ -15,14 +15,12 @@ import androidx.navigation.Navigation;
 
 import com.androidplot.pie.PieChart;
 import com.androidplot.xy.XYPlot;
-import com.anychart.APIlib;
-import com.anychart.AnyChart;
-import com.anychart.data.Mapping;
-import com.anychart.data.Set;
-import com.anychart.enums.ScaleStackMode;
+import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.List;
 
 public class StatisticsFragment extends Fragment {
     private final HandlerThread backgroundThread;
@@ -34,6 +32,7 @@ public class StatisticsFragment extends Fragment {
     private Spinner timeSpinner;
     private TakenSkippedChart takenSkippedChart;
     private TakenSkippedChart takenSkippedTotalChart;
+    private MedicinePerDayChart medicinesPerDayChart;
 
 
     public StatisticsFragment() {
@@ -55,6 +54,7 @@ public class StatisticsFragment extends Fragment {
         setupReminderTableButton(statisticsView);
         setupTimeSpinner();
         setupTakenSkippedCharts();
+        setupMedicinesPerDayChart();
 
         return statisticsView;
     }
@@ -91,47 +91,23 @@ public class StatisticsFragment extends Fragment {
         this.takenSkippedTotalChart = new TakenSkippedChart(takenSkippedTotalChartView, requireContext());
     }
 
+    private void setupMedicinesPerDayChart() {
+        this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView);
+    }
+
     private void populateStatistics() {
         StatisticsProvider statisticsProvider;
-        statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()), requireContext());
+        statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()));
         int days = analysisDays.getDays();
 
-        StatisticsProvider.ColumnChartData columnChartData = statisticsProvider.getLastDaysReminders(days);
-        requireActivity().runOnUiThread(() -> setMedicinesPerDayChartData(columnChartData));
+        List<XYSeries> series = statisticsProvider.getLastDaysReminders(days);
+        requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
 
         StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
         requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
 
         StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
-        requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), 0));
-    }
-
-    private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
-        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
-        setupMedicinesPerDayChart();
-        Set medicinesPerDayDataSet = Set.instantiate();
-        int i = 0;
-        for (String series : columnChartData.series()) {
-            String valueString = i > 0 ? "value" + i : "value";
-            Mapping seriesMapping = medicinesPerDayDataSet.mapAs(" { x: 'x', value: '" + valueString + "' }");
-            medicinesPerDayChart.column(seriesMapping).name(series);
-            i++;
-        }
-        medicinesPerDayDataSet.data(columnChartData.seriesData());
-    }
-
-    private void setupMedicinesPerDayChart() {
-        if (medicinesPerDayChart != null) {
-            recreateMedicinesPerDayChartView();
-        }
-        APIlib.getInstance().setActiveAnyChartView(medicinesPerDayChartView);
-        setupLicense(medicinesPerDayChartView);
-        medicinesPerDayChart = AnyChart.column();
-        medicinesPerDayChart.yScale().stackMode(ScaleStackMode.VALUE);
-        medicinesPerDayChart.yScale().ticks().allowFractional(false);
-        medicinesPerDayChart.legend().enabled(true);
-        medicinesPerDayChart.credits("Powered by AnyChart");
-        medicinesPerDayChartView.setChart(medicinesPerDayChart);
+        requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
     }
 
     @Override
