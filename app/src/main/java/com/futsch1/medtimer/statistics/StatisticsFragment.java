@@ -25,6 +25,7 @@ import java.util.List;
 public class StatisticsFragment extends Fragment {
     private final HandlerThread backgroundThread;
     private AnalysisDays analysisDays;
+    private MedicineRepository medicineRepository;
 
     private PieChart takenSkippedChartView;
     private PieChart takenSkippedTotalChartView;
@@ -50,11 +51,13 @@ public class StatisticsFragment extends Fragment {
         takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
         timeSpinner = statisticsView.findViewById(R.id.timeSpinner);
+        medicineRepository = new MedicineRepository(requireActivity().getApplication());
 
         setupReminderTableButton(statisticsView);
         setupTimeSpinner();
         setupTakenSkippedCharts();
-        setupMedicinesPerDayChart();
+        Handler handler = new Handler(backgroundThread.getLooper());
+        handler.post(this::setupMedicinesPerDayChart);
 
         return statisticsView;
     }
@@ -92,12 +95,12 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void setupMedicinesPerDayChart() {
-        this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView);
+        this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView, requireContext(), medicineRepository.getMedicines());
     }
 
     private void populateStatistics() {
         StatisticsProvider statisticsProvider;
-        statisticsProvider = new StatisticsProvider(new MedicineRepository(requireActivity().getApplication()));
+        statisticsProvider = new StatisticsProvider(medicineRepository);
         int days = analysisDays.getDays();
 
         List<XYSeries> series = statisticsProvider.getLastDaysReminders(days);
