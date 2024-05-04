@@ -59,7 +59,7 @@ public class TakenSkippedChart {
         }
         segmentSkipped.setValue(skipped);
         if (skipped > 0) {
-            segmentSkipped.setTitle(context.getString(R.string.taken) + ": " +
+            segmentSkipped.setTitle(context.getString(R.string.skipped) + ": " +
                     String.format(Locale.US, "%d%%", 100 * skipped / (taken + skipped)));
         }
         pieChart.redraw();
