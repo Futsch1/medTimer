@@ -79,7 +79,6 @@ public class MedicinePerDayChart {
         XYLegendWidget legend = medicinesPerDayChart.getLegend();
         legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
         legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
-        legend.setTableModel(new DynamicTableModel(2, 2, TableOrder.ROW_MAJOR));
         legend.setVisible(true);
     }
 
@@ -103,7 +102,7 @@ public class MedicinePerDayChart {
         medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil(numDomains / 7.0f));
         medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
 
-        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(Math.max(3, series.size() / 3), 3, TableOrder.ROW_MAJOR));
+        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(Math.max(3, (int) Math.ceil(series.size() / 3.0f)), 3, TableOrder.ROW_MAJOR));
 
         setupRenderer(numDomains);
         medicinesPerDayChart.redraw();
