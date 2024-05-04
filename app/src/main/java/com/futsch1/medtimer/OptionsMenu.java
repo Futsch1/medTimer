@@ -161,7 +161,7 @@ public class OptionsMenu implements MenuProvider {
     private void setupBackup() {
         Handler handler = new Handler(backgroundThread.getLooper());
 
-        MenuItem item = menu.findItem(R.id.perform_backup);
+        MenuItem item = menu.findItem(R.id.medicine_backup);
         item.setOnMenuItemClickListener(menuItem -> {
             JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
             handler.post(() -> {
@@ -171,7 +171,7 @@ public class OptionsMenu implements MenuProvider {
             return true;
         });
 
-        item = menu.findItem(R.id.restore_backup);
+        item = menu.findItem(R.id.restore_medicine_backup);
         item.setOnMenuItemClickListener(menuItem -> {
             new AlertDialog.Builder(context)
                     .setTitle(R.string.restore)

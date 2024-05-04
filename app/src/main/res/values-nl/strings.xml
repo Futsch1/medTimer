@@ -72,7 +72,7 @@
     <string name="time_after">x uur na medicijn y</string>
     <string name="instruction_templates">Referentiesjablonen</string>
     <string name="instructions_label">Aanvullende instructies (bijvoorbeeld vóór de maaltijd)</string>
-    <string name="backup_medicine">Back-up van de medicatie</string>
+    <string name="medicine_data">Medicatie gegevens</string>
     <string name="create">Creëren</string>
     <string name="restore">Herstellen</string>
     <string name="restore_failed">Herstel mislukt</string>
@@ -120,4 +120,5 @@
     <string name="total">Totaal</string>
     <string name="last_n_days">Laatste %1$d dagen</string>
     <string name="name">Naam</string>
+    <string name="event_data">Herinneringen gegevens</string>
 </resources>

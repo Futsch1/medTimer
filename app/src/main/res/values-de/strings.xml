@@ -71,7 +71,7 @@
     <string name="time_after">x Stunden nach Medikament y</string>
     <string name="instruction_templates">Hinweisvorlagen</string>
     <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
-    <string name="backup_medicine">Backup der Medikamente</string>
+    <string name="medicine_data">Medikamentendaten</string>
     <string name="create">Erstellen</string>
     <string name="restore">Wiederherstellen</string>
     <string name="restore_failed">Wiederherstellen fehlgeschlagen</string>
@@ -120,4 +120,6 @@
     <string name="total">Gesamt</string>
     <string name="last_n_days">Letzte %1$d Tage</string>
     <string name="name">Name</string>
+    <string name="restore_events">Ereignisse importieren</string>
+    <string name="event_data">Ereignisdaten</string>
 </resources>

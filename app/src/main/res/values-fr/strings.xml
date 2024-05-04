@@ -143,7 +143,7 @@
 
     <string name="instructions_label">Instructions supplémentaires (par exemple avant les repas)</string>
 
-    <string name="backup_medicine">Paramètres de sauvegarde des médicaments</string>
+    <string name="medicine_data">Données sur les médicaments</string>
 
     <string name="create">Créer</string>
 
@@ -221,5 +221,7 @@
     <string name="total">Total</string>
     <string name="last_n_days">Dernier %1$d jours</string>
     <string name="name">Nom</string>
+    <string name="restore_events">Importation d\'événements</string>
+    <string name="event_data">Données sur les événements</string>
 
 </resources>

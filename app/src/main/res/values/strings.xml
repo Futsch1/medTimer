@@ -73,7 +73,7 @@
     <string name="time_after">x hours after medicine y</string>
     <string name="instruction_templates">Instruction templates</string>
     <string name="instructions_label">Additional instructions (e.g. before meals)</string>
-    <string name="backup_medicine">Backup medicine settings</string>
+    <string name="medicine_data">Medicine data</string>
     <string name="csv" translatable="false">CSV</string>
     <string name="pdf" translatable="false">PDF</string>
     <string name="create">Create</string>
@@ -124,4 +124,9 @@
     <string name="total">Total</string>
     <string name="last_n_days">Last %1$d days</string>
     <string name="name">Name</string>
+    <string name="json" translatable="false">JSON</string>
+    <string name="restore_events">Import events</string>
+    <string name="event_data">Event data</string>
+    <string name="restore_events">Restore events</string>
+    <string name="backup_events">Backup events</string>
 </resources>
