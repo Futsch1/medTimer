@@ -9,13 +9,14 @@ import androidx.annotation.NonNull;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
-import com.androidplot.xy.XYLegendWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
+import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -39,18 +40,23 @@ public class MedicinePerDayChart {
         bottomLine.getPaint().setTextAlign(Paint.Align.CENTER);
         bottomLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
 
+        XYGraphWidget.LineLabelStyle leftLine =
+                medicinesPerDayChart.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT);
+        leftLine.setFormat(new DecimalFormat("#"));
+        leftLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
+        leftLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+
         medicinesPerDayChart.getBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
 
         medicinesPerDayChart.getGraph().getGridBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
-        medicinesPerDayChart.getGraph().setMarginBottom(chartHelper.dpToPx(10.0f));
-        medicinesPerDayChart.getGraph().setPadding(chartHelper.dpToPx(10.0f), chartHelper.dpToPx(10.0f), chartHelper.dpToPx(10.0f), chartHelper.dpToPx(10.0f));
+        medicinesPerDayChart.getGraph().setPadding(chartHelper.dpToPx(10.0f), chartHelper.dpToPx(5.0f), chartHelper.dpToPx(5.0f), chartHelper.dpToPx(20.0f));
+        medicinesPerDayChart.getGraph().getLineLabelInsets().setBottom(chartHelper.dpToPx(-13.0f));
 
         medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
 
-        XYLegendWidget legend = medicinesPerDayChart.getLegend();
-        legend.setMarginBottom(chartHelper.dpToPx(10.0f));
-        legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
-        legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
+        medicinesPerDayChart.getLegend().setVisible(false);
+
+        medicinesPerDayChart.getGraph().getBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
     }
 
     public void updateData(List<XYSeries> series) {
@@ -60,8 +66,13 @@ public class MedicinePerDayChart {
         for (XYSeries xySeries : series) {
             medicinesPerDayChart.addSeries(xySeries, getFormatter(xySeries.getTitle()));
         }
-        medicinesPerDayChart.setRangeUpperBoundary(calculateMaxRange(series), BoundaryMode.FIXED);
-        medicinesPerDayChart.setDomainBoundaries(calculateMinDomain(series), calculateMaxDomain(series), BoundaryMode.FIXED);
+        Number maxRange = calculateMaxRange(series);
+        medicinesPerDayChart.setRangeUpperBoundary(maxRange, BoundaryMode.FIXED);
+        medicinesPerDayChart.setRangeStep(StepMode.INCREMENT_BY_VAL, 1.0f);
+        long minDomain = calculateMinDomain(series);
+        long maxDomain = calculateMaxDomain(series);
+        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil((maxDomain - minDomain) / 7.0f));
+        medicinesPerDayChart.setDomainBoundaries(minDomain - 1, maxDomain + 1, BoundaryMode.FIXED);
         setupRenderer();
         medicinesPerDayChart.redraw();
     }
@@ -91,26 +102,26 @@ public class MedicinePerDayChart {
         return max;
     }
 
-    private Number calculateMinDomain(List<XYSeries> series) {
+    private long calculateMinDomain(List<XYSeries> series) {
         if (series.isEmpty()) {
             return LocalDate.now().toEpochDay() - 1;
         } else {
-            return series.get(0).getX(0).intValue() - 1;
+            return series.get(0).getX(0).longValue() - 1;
         }
     }
 
-    private Number calculateMaxDomain(List<XYSeries> series) {
+    private long calculateMaxDomain(List<XYSeries> series) {
         if (series.isEmpty()) {
             return LocalDate.now().toEpochDay();
         } else {
             XYSeries first = series.get(0);
-            return first.getX(first.size() - 1).intValue() + 1;
+            return first.getX(first.size() - 1).longValue() + 1;
         }
     }
 
     private void setupRenderer() {
         MedicinePerDayChartRenderer renderer = medicinesPerDayChart.getRenderer(MedicinePerDayChartRenderer.class);
-        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, chartHelper.dpToPx(20.0f));
+        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, chartHelper.dpToPx(5.0f));
         renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
     }
 
