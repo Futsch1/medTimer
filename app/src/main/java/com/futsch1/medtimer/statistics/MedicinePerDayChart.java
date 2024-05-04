@@ -3,7 +3,6 @@ package com.futsch1.medtimer.statistics;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
@@ -39,18 +38,32 @@ public class MedicinePerDayChart {
         this.chartHelper = new ChartHelper(context);
         this.medicines = medicines;
 
+
+        medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
+
+        setupBottomLine();
+        setupLeftLine();
+        setupNoBackgrounds();
+        setupLegend();
+    }
+
+    private void setupBottomLine() {
         XYGraphWidget.LineLabelStyle bottomLine = medicinesPerDayChart.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM);
         bottomLine.setFormat(new DaysSinceEpochFormat());
         bottomLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
         bottomLine.getPaint().setTextAlign(Paint.Align.CENTER);
         bottomLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+    }
 
+    private void setupLeftLine() {
         XYGraphWidget.LineLabelStyle leftLine =
                 medicinesPerDayChart.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT);
         leftLine.setFormat(new DecimalFormat("#"));
         leftLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
         leftLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+    }
 
+    private void setupNoBackgrounds() {
         medicinesPerDayChart.setBackgroundPaint(null);
         medicinesPerDayChart.getGraph().setRangeGridLinePaint(null);
         medicinesPerDayChart.getGraph().setDomainGridLinePaint(null);
@@ -60,15 +73,14 @@ public class MedicinePerDayChart {
         medicinesPerDayChart.getGraph().setRangeSubGridLinePaint(null);
         medicinesPerDayChart.getGraph().setDomainOriginLinePaint(null);
         medicinesPerDayChart.getGraph().setRangeOriginLinePaint(null);
+    }
 
-        medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
-
+    private void setupLegend() {
         XYLegendWidget legend = medicinesPerDayChart.getLegend();
         legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
         legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
         legend.setTableModel(new DynamicTableModel(2, 2, TableOrder.ROW_MAJOR));
         legend.setVisible(true);
-
     }
 
     public void updateData(List<XYSeries> series) {
@@ -140,10 +152,10 @@ public class MedicinePerDayChart {
     }
 
     private void setupRenderer(long numDomains) {
-        // We want to space the bars according to the number of bars and set according insets
-        RectF rect = medicinesPerDayChart.getGraph().getWidgetDimensions().paddedRect;
-        float numBars = numDomains + (numDomains + 1) / 2.0f;
-        float barWidth = rect.width() / numBars;
+        // The space between each bar and next to the outer bars is half bar width.
+        // o we have numDomainsBar bars, numDomains - 1 spaces + 2 outer bars
+        float numBars = numDomains + (numDomains - 1 + 2) / 2.0f;
+        float barWidth = medicinesPerDayChart.getGraph().getWidgetDimensions().paddedRect.width() / numBars;
 
         medicinesPerDayChart.getGraph().setGridInsets(new Insets(0, 0, barWidth, barWidth));
 
