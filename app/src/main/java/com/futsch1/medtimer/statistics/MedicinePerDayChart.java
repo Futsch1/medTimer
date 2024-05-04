@@ -7,12 +7,15 @@ import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
+import com.androidplot.ui.DynamicTableModel;
 import com.androidplot.ui.Insets;
+import com.androidplot.ui.TableOrder;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
+import com.androidplot.xy.XYLegendWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -60,6 +63,12 @@ public class MedicinePerDayChart {
 
         medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
 
+        XYLegendWidget legend = medicinesPerDayChart.getLegend();
+        legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+        legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
+        legend.setTableModel(new DynamicTableModel(2, 2, TableOrder.ROW_MAJOR));
+        legend.setVisible(true);
+
     }
 
     public void updateData(List<XYSeries> series) {
@@ -81,6 +90,8 @@ public class MedicinePerDayChart {
         long numDomains = (maxDomain - minDomain + 1);
         medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil(numDomains / 7.0f));
         medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
+
+        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(Math.max(3, series.size() / 3), 3, TableOrder.ROW_MAJOR));
 
         setupRenderer(numDomains);
         medicinesPerDayChart.redraw();
