@@ -3,9 +3,11 @@ package com.futsch1.medtimer.statistics;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
+import com.androidplot.ui.Insets;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
@@ -46,17 +48,18 @@ public class MedicinePerDayChart {
         leftLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
         leftLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
 
-        medicinesPerDayChart.getBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
-
-        medicinesPerDayChart.getGraph().getGridBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
-        medicinesPerDayChart.getGraph().setPadding(chartHelper.dpToPx(10.0f), chartHelper.dpToPx(5.0f), chartHelper.dpToPx(5.0f), chartHelper.dpToPx(20.0f));
-        medicinesPerDayChart.getGraph().getLineLabelInsets().setBottom(chartHelper.dpToPx(-13.0f));
+        medicinesPerDayChart.setBackgroundPaint(null);
+        medicinesPerDayChart.getGraph().setRangeGridLinePaint(null);
+        medicinesPerDayChart.getGraph().setDomainGridLinePaint(null);
+        medicinesPerDayChart.getGraph().setBackgroundPaint(null);
+        medicinesPerDayChart.getGraph().setGridBackgroundPaint(null);
+        medicinesPerDayChart.getGraph().setDomainSubGridLinePaint(null);
+        medicinesPerDayChart.getGraph().setRangeSubGridLinePaint(null);
+        medicinesPerDayChart.getGraph().setDomainOriginLinePaint(null);
+        medicinesPerDayChart.getGraph().setRangeOriginLinePaint(null);
 
         medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
 
-        medicinesPerDayChart.getLegend().setVisible(false);
-
-        medicinesPerDayChart.getGraph().getBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
     }
 
     public void updateData(List<XYSeries> series) {
@@ -69,11 +72,17 @@ public class MedicinePerDayChart {
         Number maxRange = calculateMaxRange(series);
         medicinesPerDayChart.setRangeUpperBoundary(maxRange, BoundaryMode.FIXED);
         medicinesPerDayChart.setRangeStep(StepMode.INCREMENT_BY_VAL, 1.0f);
+
         long minDomain = calculateMinDomain(series);
         long maxDomain = calculateMaxDomain(series);
-        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil((maxDomain - minDomain) / 7.0f));
-        medicinesPerDayChart.setDomainBoundaries(minDomain - 1, maxDomain + 1, BoundaryMode.FIXED);
-        setupRenderer();
+        if (maxDomain == minDomain) {
+            minDomain -= 1;
+        }
+        long numDomains = (maxDomain - minDomain + 1);
+        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil(numDomains / 7.0f));
+        medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
+
+        setupRenderer(numDomains);
         medicinesPerDayChart.redraw();
     }
 
@@ -106,7 +115,7 @@ public class MedicinePerDayChart {
         if (series.isEmpty()) {
             return LocalDate.now().toEpochDay() - 1;
         } else {
-            return series.get(0).getX(0).longValue() - 1;
+            return series.get(0).getX(0).longValue();
         }
     }
 
@@ -115,13 +124,20 @@ public class MedicinePerDayChart {
             return LocalDate.now().toEpochDay();
         } else {
             XYSeries first = series.get(0);
-            return first.getX(first.size() - 1).longValue() + 1;
+            return first.getX(first.size() - 1).longValue();
         }
     }
 
-    private void setupRenderer() {
+    private void setupRenderer(long numDomains) {
+        // We want to space the bars according to the number of bars and set according insets
+        RectF rect = medicinesPerDayChart.getGraph().getWidgetDimensions().paddedRect;
+        float numBars = numDomains + (numDomains + 1) / 2.0f;
+        float barWidth = rect.width() / numBars;
+
+        medicinesPerDayChart.getGraph().setGridInsets(new Insets(0, 0, barWidth, barWidth));
+
         MedicinePerDayChartRenderer renderer = medicinesPerDayChart.getRenderer(MedicinePerDayChartRenderer.class);
-        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP, chartHelper.dpToPx(5.0f));
+        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth);
         renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
     }
 
