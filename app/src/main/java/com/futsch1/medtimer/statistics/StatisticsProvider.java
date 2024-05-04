@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -30,13 +29,10 @@ public class StatisticsProvider {
         this.context = context;
     }
 
-    public List<DataEntry> getTakenSkippedData(int days) {
-        List<DataEntry> data = new ArrayList<>();
+    public TakenSkipped getTakenSkippedData(int days) {
         long taken = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.TAKEN)).count();
         long skipped = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.SKIPPED)).count();
-        data.add(new ValueDataEntry(context.getString(R.string.taken), taken));
-        data.add(new ValueDataEntry(context.getString(R.string.skipped), skipped));
-        return data;
+        return new TakenSkipped(taken, skipped);
     }
 
     private boolean eventStatusDaysFilter(ReminderEvent event, int days, ReminderEvent.ReminderStatus status) {
@@ -102,6 +98,9 @@ public class StatisticsProvider {
     private int getDaysInThePast(long secondsSinceEpoch) {
         Instant instant = Instant.ofEpochSecond(secondsSinceEpoch);
         return (int) (LocalDate.now().toEpochDay() - instant.atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay());
+    }
+
+    public record TakenSkipped(long taken, long skipped) {
     }
 
     public record ColumnChartData(List<DataEntry> seriesData, List<String> series) {

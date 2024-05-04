@@ -20,9 +20,6 @@ android {
         versionCode = 39
         versionName = "1.8.0"
         setProperty("archivesBaseName", "MedTimer")
-        buildConfigField(
-            "String", "ANYCHART_LICENSE_KEY", "\"" + findProperty("AnyChartLicenseKey") + "\""
-        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -86,7 +83,6 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
@@ -101,6 +97,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
 
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
+
+    implementation("com.androidplot:androidplot-core:1.5.10")
 }
 
 play {

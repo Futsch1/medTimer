@@ -13,33 +13,27 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.androidplot.pie.PieChart;
+import com.androidplot.xy.XYPlot;
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.charts.Cartesian;
-import com.anychart.charts.Pie;
 import com.anychart.data.Mapping;
 import com.anychart.data.Set;
 import com.anychart.enums.ScaleStackMode;
-import com.futsch1.medtimer.BuildConfig;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.List;
 
 public class StatisticsFragment extends Fragment {
     private final HandlerThread backgroundThread;
     private AnalysisDays analysisDays;
 
-    private Pie takenSkippedChart;
-    private Pie takenSkippedTotalChart;
-    private Cartesian medicinesPerDayChart;
-    private AnyChartView takenSkippedChartView;
-    private AnyChartView takenSkippedTotalChartView;
-    private AnyChartView medicinesPerDayChartView;
+    private PieChart takenSkippedChartView;
+    private PieChart takenSkippedTotalChartView;
+    private XYPlot medicinesPerDayChartView;
     private Spinner timeSpinner;
+    private TakenSkippedChart takenSkippedChart;
+    private TakenSkippedChart takenSkippedTotalChart;
 
 
     public StatisticsFragment() {
@@ -54,15 +48,13 @@ public class StatisticsFragment extends Fragment {
 
         analysisDays = new AnalysisDays(requireContext());
         medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart);
-        medicinesPerDayChartView.setProgressBar(statisticsView.findViewById(R.id.progressBar));
         takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
         timeSpinner = statisticsView.findViewById(R.id.timeSpinner);
 
         setupReminderTableButton(statisticsView);
         setupTimeSpinner();
-        setupTakenSkippedChart();
-        setupTakenSkippedTotalChart();
+        setupTakenSkippedCharts();
 
         return statisticsView;
     }
@@ -94,22 +86,9 @@ public class StatisticsFragment extends Fragment {
         });
     }
 
-    private void setupTakenSkippedChart() {
-        APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
-        setupLicense(takenSkippedChartView);
-        takenSkippedChart = AnyChart.pie();
-        takenSkippedChart.legend().enabled(false);
-        takenSkippedChart.credits().enabled(false);
-        takenSkippedChartView.setChart(takenSkippedChart);
-    }
-
-    private void setupTakenSkippedTotalChart() {
-        APIlib.getInstance().setActiveAnyChartView(takenSkippedTotalChartView);
-        setupLicense(takenSkippedTotalChartView);
-        takenSkippedTotalChart = AnyChart.pie();
-        takenSkippedTotalChart.credits().enabled(false);
-        takenSkippedTotalChart.title(requireContext().getString(R.string.total));
-        takenSkippedTotalChartView.setChart(takenSkippedTotalChart);
+    private void setupTakenSkippedCharts() {
+        this.takenSkippedChart = new TakenSkippedChart(takenSkippedChartView, requireContext());
+        this.takenSkippedTotalChart = new TakenSkippedChart(takenSkippedTotalChartView, requireContext());
     }
 
     private void populateStatistics() {
@@ -120,22 +99,11 @@ public class StatisticsFragment extends Fragment {
         StatisticsProvider.ColumnChartData columnChartData = statisticsProvider.getLastDaysReminders(days);
         requireActivity().runOnUiThread(() -> setMedicinesPerDayChartData(columnChartData));
 
-        List<DataEntry> data = statisticsProvider.getTakenSkippedData(days);
-        requireActivity().runOnUiThread(() -> {
-            APIlib.getInstance().setActiveAnyChartView(takenSkippedChartView);
-            takenSkippedChart.title(requireContext().getString(R.string.last_n_days, days));
-            takenSkippedChart.data(data);
-        });
+        StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
+        requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
 
-        List<DataEntry> dataTotal = statisticsProvider.getTakenSkippedData(0);
-        requireActivity().runOnUiThread(() -> {
-            APIlib.getInstance().setActiveAnyChartView(takenSkippedTotalChartView);
-            takenSkippedTotalChart.data(dataTotal);
-        });
-    }
-
-    private void setupLicense(AnyChartView anyChartView) {
-        anyChartView.setLicenceKey(BuildConfig.ANYCHART_LICENSE_KEY);
+        StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
+        requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), 0));
     }
 
     private void setMedicinesPerDayChartData(StatisticsProvider.ColumnChartData columnChartData) {
@@ -164,19 +132,6 @@ public class StatisticsFragment extends Fragment {
         medicinesPerDayChart.legend().enabled(true);
         medicinesPerDayChart.credits("Powered by AnyChart");
         medicinesPerDayChartView.setChart(medicinesPerDayChart);
-    }
-
-    private void recreateMedicinesPerDayChartView() {
-        // It is not possible to change the chart in the chart view to change
-        // a different number of columns and resetting the chart also does not work.
-        // So the whole view is recreated.
-        ViewGroup parent = (ViewGroup) medicinesPerDayChartView.getParent();
-        int index = parent.indexOfChild(medicinesPerDayChartView);
-        parent.removeView(medicinesPerDayChartView);
-        ViewGroup.LayoutParams layout = medicinesPerDayChartView.getLayoutParams();
-        medicinesPerDayChartView = new AnyChartView(requireContext());
-        medicinesPerDayChartView.setLayoutParams(layout);
-        parent.addView(medicinesPerDayChartView, index);
     }
 
     @Override
