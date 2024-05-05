@@ -50,7 +50,7 @@ public class ReminderTableFragment extends Fragment {
         tableView.getColumnHeaderRecyclerView().setItemAnimator(null);
         tableView.getRowHeaderRecyclerView().setItemAnimator(null);
 
-        tableView.setUnSelectedColor(MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorPrimarySurface, "TableView"));
+        tableView.setUnSelectedColor(MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, "TableView"));
 
         return fragmentView;
     }
