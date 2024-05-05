@@ -95,5 +95,6 @@ public class StatisticsProvider {
     }
 
     public record TakenSkipped(long taken, long skipped) {
+        // Standard record, no content required
     }
 }
