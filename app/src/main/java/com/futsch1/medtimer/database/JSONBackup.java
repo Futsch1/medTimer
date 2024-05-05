@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class JSONBackup<T> {
@@ -39,7 +40,7 @@ public abstract class JSONBackup<T> {
             DatabaseContentWithVersion<T> content = gson.fromJson(jsonFile, type);
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version).create();
             content = gson.fromJson(jsonFile, type);
-            return content.list;
+            return checkBackup(content.list);
         } catch (JsonParseException e) {
             Log.e("JSONBackup", e.getMessage());
             return null;
@@ -47,6 +48,17 @@ public abstract class JSONBackup<T> {
     }
 
     protected abstract GsonBuilder registerTypeAdapters(GsonBuilder builder);
+
+    private List<T> checkBackup(List<T> list) {
+        if (list != null) {
+            for (T item : list) {
+                if (isInvalid(item)) return Collections.emptyList();
+            }
+        }
+        return list;
+    }
+
+    protected abstract boolean isInvalid(T item);
 
     public abstract void applyBackup(List<T> list, MedicineRepository medicineRepository);
 

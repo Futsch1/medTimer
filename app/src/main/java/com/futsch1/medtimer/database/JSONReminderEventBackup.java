@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.database;
 
-import androidx.annotation.Nullable;
-
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
@@ -12,18 +10,7 @@ public class JSONReminderEventBackup extends JSONBackup<ReminderEvent> {
         super(ReminderEvent.class);
     }
 
-    @Override
-    public @Nullable List<ReminderEvent> parseBackup(String jsonFile) {
-        List<ReminderEvent> reminderEvents = super.parseBackup(jsonFile);
-        if (reminderEvents != null) {
-            for (ReminderEvent reminderEvent : reminderEvents) {
-                if (isInvalid(reminderEvent)) return null;
-            }
-        }
-        return reminderEvents;
-    }
-
-    private static boolean isInvalid(ReminderEvent reminderEvent) {
+    protected boolean isInvalid(ReminderEvent reminderEvent) {
         return reminderEvent == null || reminderEvent.medicineName == null;
     }
 

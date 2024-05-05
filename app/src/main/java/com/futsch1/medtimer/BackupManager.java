@@ -121,7 +121,7 @@ public class BackupManager {
 
     private <T> boolean restoreBackup(String json, JSONBackup<T> backup) {
         List<T> backupData = backup.parseBackup(json);
-        if (backupData != null) {
+        if (backupData != null && !backupData.isEmpty()) {
             backup.applyBackup(backupData, medicineViewModel.medicineRepository);
             return true;
         }
