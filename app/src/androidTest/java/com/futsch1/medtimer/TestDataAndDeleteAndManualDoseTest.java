@@ -115,7 +115,7 @@ public class TestDataAndDeleteAndManualDoseTest {
                         childAtPosition(
                                 childAtPosition(
                                         withId(androidx.appcompat.R.id.content),
-                                        0),
+                                        1),
                                 0),
                         isDisplayed()));
         materialTextView2.perform(click());
