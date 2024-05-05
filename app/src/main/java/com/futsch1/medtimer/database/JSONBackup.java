@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class JSONBackup<T> {
@@ -49,10 +48,10 @@ public abstract class JSONBackup<T> {
 
     protected abstract GsonBuilder registerTypeAdapters(GsonBuilder builder);
 
-    private List<T> checkBackup(List<T> list) {
+    private @Nullable List<T> checkBackup(List<T> list) {
         if (list != null) {
             for (T item : list) {
-                if (isInvalid(item)) return Collections.emptyList();
+                if (isInvalid(item)) return null;
             }
         }
         return list;
