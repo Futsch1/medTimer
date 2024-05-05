@@ -1,11 +1,13 @@
 package com.futsch1.medtimer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.content.FileProvider;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
@@ -28,6 +31,8 @@ import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.TimeZone;
@@ -48,6 +53,19 @@ public class OptionsMenu implements MenuProvider {
         this.navController = navController;
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+    }
+
+    @SuppressLint("RestrictedApi")
+    private static void enableOptionalIcons(@NonNull Menu menu) {
+        if (menu instanceof MenuBuilder) {
+            try {
+                Method m = menu.getClass().getDeclaredMethod(
+                        "setOptionalIconsVisible", Boolean.TYPE);
+                m.invoke(menu, true);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                Log.e("Menu", "onMenuOpened", e);
+            }
+        }
     }
 
     public void onDestroy() {
@@ -88,6 +106,7 @@ public class OptionsMenu implements MenuProvider {
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.main, menu);
         menu.setGroupDividerEnabled(true);
+        enableOptionalIcons(menu);
 
         this.menu = menu;
         setupSettings();
