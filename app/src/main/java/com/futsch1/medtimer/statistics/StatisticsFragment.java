@@ -66,7 +66,7 @@ public class StatisticsFragment extends Fragment {
         MaterialButton reminderTableButton = statisticsView.findViewById(R.id.reminderTableButton);
         reminderTableButton.setOnClickListener(view -> {
             NavController navController = Navigation.findNavController(statisticsView);
-            navController.navigate(com.futsch1.medtimer.MainFragmentDirections.actionMainFragmentToReminderTableFragment());
+            navController.navigate(com.futsch1.medtimer.statistics.StatisticsFragmentDirections.actionStatisticsFragmentToReminderTableFragment());
         });
     }
 

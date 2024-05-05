@@ -148,15 +148,17 @@ public class MedicinePerDayChart {
 
     private void setupRenderer(long numDomains) {
         // The space between each bar and next to the outer bars is half bar width.
-        // o we have numDomainsBar bars, numDomains - 1 spaces + 2 outer bars
+        // So we have numDomainsBar bars, numDomains - 1 spaces + 2 outer bars
         float numBars = numDomains + (numDomains - 1 + 2) / 2.0f;
         float barWidth = medicinesPerDayChart.getGraph().getWidgetDimensions().paddedRect.width() / numBars;
 
         medicinesPerDayChart.getGraph().setGridInsets(new Insets(0, 0, barWidth, barWidth));
 
         MedicinePerDayChartRenderer renderer = medicinesPerDayChart.getRenderer(MedicinePerDayChartRenderer.class);
-        renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth);
-        renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
+        if (renderer != null) {
+            renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth);
+            renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
+        }
     }
 
     private int getColor(String title) {

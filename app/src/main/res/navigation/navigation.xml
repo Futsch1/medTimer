@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     android:label="@string/tabular_view"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/overviewFragment">
 
     <fragment
         android:id="@+id/medicinesFragment"
         android:name="com.futsch1.medtimer.medicine.MedicinesFragment"
         android:label="@string/tab_medicine"
-        tools:layout="@layout/fragment_medicines" />
+        tools:layout="@layout/fragment_medicines">
+        <action
+            android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
+            app:destination="@id/editMedicineFragment" />
+    </fragment>
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.overview.OverviewFragment"
@@ -67,17 +71,6 @@
             android:name="medicineName"
             app:argType="string" />
     </fragment>
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.futsch1.medtimer.MainFragment"
-        android:label="@string/app_name">
-        <action
-            android:id="@+id/action_fragmentMain_to_editMedicine"
-            app:destination="@id/editMedicineFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_reminderTableFragment"
-            app:destination="@id/reminderTableFragment" />
-    </fragment>
     <action
         android:id="@+id/action_global_preferencesFragment"
         app:destination="@id/preferencesFragment" />
@@ -88,6 +81,10 @@
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
-        android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
+        android:label="@string/analysis"
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_statisticsFragment_to_reminderTableFragment"
+            app:destination="@id/reminderTableFragment" />
+    </fragment>
 </navigation>
