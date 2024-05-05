@@ -19,9 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set AnyChart license
-        run: |
-          sed -i 's/AnyChartLicenseKey=\(.*\)/AnyChartLicenseKey=${{ secrets.ANYCHART_LICENSE_KEY }}/' gradle.properties
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
