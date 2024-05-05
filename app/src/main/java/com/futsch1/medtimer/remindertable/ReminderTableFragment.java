@@ -16,6 +16,7 @@ import com.evrencoskun.tableview.filter.Filter;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.helpers.TableHelper;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -48,6 +49,8 @@ public class ReminderTableFragment extends Fragment {
         tableView.getCellRecyclerView().setItemAnimator(null);
         tableView.getColumnHeaderRecyclerView().setItemAnimator(null);
         tableView.getRowHeaderRecyclerView().setItemAnimator(null);
+
+        tableView.setUnSelectedColor(MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorPrimarySurface, "TableView"));
 
         return fragmentView;
     }
