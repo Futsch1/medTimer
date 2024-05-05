@@ -115,5 +115,7 @@
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Backup</string>
+    <string name="export_csv">Exportar en CSV</string>
     <string name="restore_events_start">Esto reemplazará todos los eventos de recordatorio.\n\n¿Continuar?</string>
+    <string name="export_pdf">Exportar en PDF</string>
 </resources>

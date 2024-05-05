@@ -13,20 +13,22 @@
         <menu>
             <item
                 android:id="@+id/export_pdf"
-                android:title="@string/pdf" />
+                android:title="@string/export_pdf" />
             <item
                 android:id="@+id/export_csv"
-                android:title="@string/csv" />
+                android:title="@string/export_csv" />
             <item
                 android:id="@+id/backup_events"
                 android:title="@string/backup" />
             <item
                 android:id="@+id/restore_events"
                 android:title="@string/restore" />
-            <item
-                android:id="@+id/clear_events"
-                android:icon="@drawable/x_circle"
-                android:title="@string/clear_events" />
+            <group android:id="@+id/clear">
+                <item
+                    android:id="@+id/clear_events"
+                    android:icon="@drawable/x_circle"
+                    android:title="@string/clear_events" />
+            </group>
         </menu>
     </item>
     <item

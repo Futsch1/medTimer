@@ -211,6 +211,8 @@
     <string name="name">Nom</string>
     <string name="event_data">Données sur les événements</string>
     <string name="backup">Sauvegarde</string>
+    <string name="export_csv">Exporter en CSV</string>
+    <string name="export_pdf">Exporter en PDF</string>
     <string name="restore_events_start">Cela remplacera tous les événements de rappel.\n\nPoursuivre ?</string>
 
 </resources>

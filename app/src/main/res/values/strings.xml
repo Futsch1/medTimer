@@ -69,8 +69,8 @@
     <string name="instruction_templates">Instruction templates</string>
     <string name="instructions_label">Additional instructions (e.g. before meals)</string>
     <string name="medicine_data">Medicine data</string>
-    <string name="csv" translatable="false">CSV</string>
-    <string name="pdf" translatable="false">PDF</string>
+    <string name="export_csv">Export as CSV</string>
+    <string name="export_pdf">Export as PDF</string>
     <string name="restore">Restore</string>
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>

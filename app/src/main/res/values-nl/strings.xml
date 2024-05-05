@@ -116,5 +116,7 @@
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
+    <string name="export_csv">Exporteren als CSV</string>
+    <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore_events_start">Dit vervangt alle herinneringsgebeurtenissen.\n\nDoorgaan?</string>
 </resources>

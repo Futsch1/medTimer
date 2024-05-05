@@ -116,5 +116,7 @@
     <string name="name">Name</string>
     <string name="event_data">Ereignisdaten</string>
     <string name="backup">Backup</string>
+    <string name="export_csv">Export als CSV</string>
+    <string name="export_pdf">Export als PDF</string>
     <string name="restore_events_start">Alle Ereignisse werden überschrieben.\n\nFortfahren?</string>
 </resources>
