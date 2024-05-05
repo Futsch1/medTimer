@@ -120,11 +120,8 @@ public class MedicinePerDayChart {
             return max;
         }
         for (int x = 0; x < series.get(0).size(); x++) {
-            long sum = 0;
-
-            for (XYSeries xySeries : series) {
-                sum += xySeries.getY(x).longValue();
-            }
+            int finalX = x;
+            long sum = series.stream().mapToLong(xySeries -> xySeries.getY(finalX).longValue()).sum();
             if (sum > max) {
                 max = sum;
             }

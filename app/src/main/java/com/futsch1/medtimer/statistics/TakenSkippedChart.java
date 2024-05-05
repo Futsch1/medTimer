@@ -23,8 +23,8 @@ public class TakenSkippedChart {
         this.context = context;
         this.segmentTaken = new Segment(context.getString(R.string.taken), 0);
         this.segmentSkipped = new Segment(context.getString(R.string.skipped), 0);
-        pieChart.addSegment(segmentTaken, getTakenFormatter());
-        pieChart.addSegment(segmentSkipped, getSkippedFormatter());
+        pieChart.addSegment(segmentTaken, getFormatter(com.google.android.material.R.attr.colorPrimary, com.google.android.material.R.attr.colorOnPrimary));
+        pieChart.addSegment(segmentSkipped, getFormatter(com.google.android.material.R.attr.colorSecondary, com.google.android.material.R.attr.colorOnSecondary));
         pieChart.setPlotPaddingTop(chartHelper.dpToPx(5.0f));
         PieRenderer renderer = pieChart.getRenderer(PieRenderer.class);
         renderer.setDonutSize(0.0f, PieRenderer.DonutMode.PERCENT);
@@ -32,36 +32,31 @@ public class TakenSkippedChart {
         pieChart.getTitle().getLabelPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
     }
 
-    SegmentFormatter getTakenFormatter() {
-        SegmentFormatter formatter = new SegmentFormatter(chartHelper.getColor(com.google.android.material.R.attr.colorPrimary));
-        formatter.getLabelPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnPrimary));
-        return formatter;
-    }
-
-    private SegmentFormatter getSkippedFormatter() {
-        SegmentFormatter formatter = new SegmentFormatter(chartHelper.getColor(com.google.android.material.R.attr.colorSecondary));
-        formatter.getLabelPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSecondary));
+    SegmentFormatter getFormatter(int colorSegment, int colorText) {
+        SegmentFormatter formatter = new SegmentFormatter(chartHelper.getColor(colorSegment));
+        formatter.getLabelPaint().setColor(chartHelper.getColor(colorText));
         return formatter;
     }
 
     public void updateData(long taken, long skipped, int days) {
+        String title;
         if (days != 0) {
-            String title = context.getString(R.string.last_n_days, days);
-            pieChart.setTitle(title);
+            title = context.getString(R.string.last_n_days, days);
         } else {
-            String title = context.getString(R.string.total);
-            pieChart.setTitle(title);
+            title = context.getString(R.string.total);
         }
-        segmentTaken.setValue(taken);
-        if (taken > 0) {
-            segmentTaken.setTitle(context.getString(R.string.taken) + ": " +
-                    String.format(Locale.US, "%d%%", 100 * taken / (taken + skipped)));
-        }
-        segmentSkipped.setValue(skipped);
-        if (skipped > 0) {
-            segmentSkipped.setTitle(context.getString(R.string.skipped) + ": " +
-                    String.format(Locale.US, "%d%%", 100 * skipped / (taken + skipped)));
-        }
+        pieChart.setTitle(title);
+
+        setupSegment(segmentTaken, taken, skipped, R.string.taken);
+        setupSegment(segmentSkipped, skipped, taken, R.string.skipped);
         pieChart.redraw();
+    }
+
+    private void setupSegment(Segment segment, long selfValue, long otherValue, int stringId) {
+        segment.setValue(selfValue);
+        if (selfValue > 0) {
+            segment.setTitle(context.getString(stringId) + ": " +
+                    String.format(Locale.US, "%d%%", 100 * selfValue / (selfValue + otherValue)));
+        }
     }
 }
