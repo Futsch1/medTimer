@@ -67,17 +67,11 @@
 
     <string name="are_you_sure_delete_events">Êtes-vous sûr de supprimer tous les événements ?</string>
 
-    <string name="export">Exporter des événements</string>
-
     <string name="swipe_left">Balayez vers la gauche</string>
 
     <string name="long_press">Appui long</string>
 
     <string name="delete_items">Supprimer des éléments</string>
-
-    <string name="actions">Actions</string>
-
-    <string name="information">Information</string>
 
     <string name="show_notifications">Afficher les notifications</string>
 
@@ -115,8 +109,6 @@
 
     <string name="notification_tone_title">Tonalité de notification</string>
 
-    <string name="select_format">Sélectionnez le format</string>
-
     <string name="cycle_consecutive_days">Jours actifs</string>
 
     <string name="days">jours</string>
@@ -126,8 +118,6 @@
     <string name="default_theme">Défaut</string>
 
     <string name="alternative">Alternative</string>
-
-    <string name="instructions">Instructions</string>
 
     <string name="no_instructions">aucune instruction</string>
 
@@ -144,8 +134,6 @@
     <string name="instructions_label">Instructions supplémentaires (par exemple avant les repas)</string>
 
     <string name="medicine_data">Données sur les médicaments</string>
-
-    <string name="create">Créer</string>
 
     <string name="restore">Restaurer</string>
 
@@ -221,7 +209,7 @@
     <string name="total">Total</string>
     <string name="last_n_days">Dernier %1$d jours</string>
     <string name="name">Nom</string>
-    <string name="restore_events">Importation d\'événements</string>
     <string name="event_data">Données sur les événements</string>
+    <string name="backup">Sauvegarde</string>
 
 </resources>
