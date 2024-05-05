@@ -18,12 +18,14 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
         List<MedicineWithReminders> medicinesWithReminders = super.parseBackup(jsonFile);
         if (medicinesWithReminders != null) {
             for (MedicineWithReminders medicineWithReminders : medicinesWithReminders) {
-                if (medicineWithReminders == null || medicineWithReminders.medicine == null || medicineWithReminders.reminders == null) {
-                    return null;
-                }
+                if (isInvalid(medicineWithReminders)) return null;
             }
         }
         return medicinesWithReminders;
+    }
+
+    private static boolean isInvalid(MedicineWithReminders medicineWithReminders) {
+        return medicineWithReminders == null || medicineWithReminders.medicine == null || medicineWithReminders.reminders == null;
     }
 
     @Override

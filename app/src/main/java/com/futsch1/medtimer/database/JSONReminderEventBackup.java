@@ -17,12 +17,14 @@ public class JSONReminderEventBackup extends JSONBackup<ReminderEvent> {
         List<ReminderEvent> reminderEvents = super.parseBackup(jsonFile);
         if (reminderEvents != null) {
             for (ReminderEvent reminderEvent : reminderEvents) {
-                if (reminderEvent == null || reminderEvent.medicineName == null) {
-                    return null;
-                }
+                if (isInvalid(reminderEvent)) return null;
             }
         }
         return reminderEvents;
+    }
+
+    private static boolean isInvalid(ReminderEvent reminderEvent) {
+        return reminderEvent == null || reminderEvent.medicineName == null;
     }
 
     @Override
