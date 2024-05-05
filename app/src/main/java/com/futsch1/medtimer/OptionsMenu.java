@@ -17,8 +17,9 @@ import androidx.core.content.FileProvider;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
 
+import com.futsch1.medtimer.database.JSONBackup;
 import com.futsch1.medtimer.database.JSONMedicineBackup;
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.JSONReminderEventBackup;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
@@ -37,6 +38,7 @@ public class OptionsMenu implements MenuProvider {
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final NavController navController;
+    private PendingFileOperation pendingFileOperation = PendingFileOperation.NONE;
     private Menu menu;
 
     public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher, NavController navController) {
@@ -56,12 +58,13 @@ public class OptionsMenu implements MenuProvider {
         String json = FileHelper.readFromUri(data, context.getContentResolver());
         boolean restoreSuccessful = false;
         if (json != null) {
-            JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
-            List<MedicineWithReminders> backupData = jsonMedicineBackup.parseBackup(json);
-            if (backupData != null) {
-                jsonMedicineBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
-                restoreSuccessful = true;
+            if (pendingFileOperation == PendingFileOperation.MEDICINE) {
+                restoreSuccessful = restoreBackup(json, new JSONMedicineBackup());
+            } else if (pendingFileOperation == PendingFileOperation.REMINDER_EVENTS) {
+                restoreSuccessful = restoreBackup(json, new JSONReminderEventBackup());
             }
+
+            pendingFileOperation = PendingFileOperation.NONE;
         }
 
         new AlertDialog.Builder(context)
@@ -70,6 +73,15 @@ public class OptionsMenu implements MenuProvider {
                     // Intentionally empty
                 })
                 .show();
+    }
+
+    private <T> boolean restoreBackup(String json, JSONBackup<T> backup) {
+        List<T> backupData = backup.parseBackup(json);
+        if (backupData != null) {
+            backup.applyBackup(backupData, medicineViewModel.medicineRepository);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -85,6 +97,43 @@ public class OptionsMenu implements MenuProvider {
         setupExport();
         setupGenerateTestData();
         setupBackup();
+        setupEventsBackup();
+    }
+
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
+    private void setupEventsBackup() {
+        Handler handler = new Handler(backgroundThread.getLooper());
+
+        MenuItem item = menu.findItem(R.id.backup_events);
+        item.setOnMenuItemClickListener(menuItem -> {
+            handler.post(() ->
+                    createBackup(new JSONReminderEventBackup(),
+                            medicineViewModel.medicineRepository.getAllReminderEvents(),
+                            "ReminderEvents"));
+            return true;
+        });
+
+        item = menu.findItem(R.id.restore_events);
+        item.setOnMenuItemClickListener(menuItem -> {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.restore)
+                    .setMessage(R.string.restore_events_start)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup(PendingFileOperation.REMINDER_EVENTS))
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> { // Intentionally left empty
+                    }).show();
+            return true;
+        });
+    }
+
+    private <T> void createBackup(JSONBackup<T> jsonBackup, List<T> backupData, String backupType) {
+        String jsonContent = jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(),
+                backupData);
+        createAndSave(jsonContent, backupType);
     }
 
     private void setupSettings() {
@@ -163,11 +212,10 @@ public class OptionsMenu implements MenuProvider {
 
         MenuItem item = menu.findItem(R.id.medicine_backup);
         item.setOnMenuItemClickListener(menuItem -> {
-            JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
-            handler.post(() -> {
-                String jsonContent = jsonMedicineBackup.createBackup(medicineViewModel.medicineRepository.getVersion(), medicineViewModel.medicineRepository.getMedicines());
-                createAndSave(jsonContent);
-            });
+            handler.post(() ->
+                    createBackup(new JSONMedicineBackup(),
+                            medicineViewModel.medicineRepository.getMedicines(),
+                            "Medicine"));
             return true;
         });
 
@@ -177,7 +225,7 @@ public class OptionsMenu implements MenuProvider {
                     .setTitle(R.string.restore)
                     .setMessage(R.string.restore_start)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup())
+                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup(PendingFileOperation.MEDICINE))
                     .setNegativeButton(R.string.cancel, (dialog, which) -> { // Intentionally left empty
                     }).show();
             return true;
@@ -194,8 +242,8 @@ public class OptionsMenu implements MenuProvider {
         }
     }
 
-    private void createAndSave(String fileContent) {
-        File file = new File(context.getCacheDir(), PathHelper.getBackupFilename());
+    private void createAndSave(String fileContent, String backupType) {
+        File file = new File(context.getCacheDir(), PathHelper.getBackupFilename(backupType));
         if (FileHelper.saveToFile(file, fileContent)) {
             shareFile(file);
         } else {
@@ -203,7 +251,8 @@ public class OptionsMenu implements MenuProvider {
         }
     }
 
-    private void openBackup() {
+    private void openBackup(PendingFileOperation pendingFileOperation) {
+        this.pendingFileOperation = pendingFileOperation;
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/json");
@@ -223,8 +272,5 @@ public class OptionsMenu implements MenuProvider {
         context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
     }
 
-    @Override
-    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        return false;
-    }
+    private enum PendingFileOperation {NONE, MEDICINE, REMINDER_EVENTS}
 }

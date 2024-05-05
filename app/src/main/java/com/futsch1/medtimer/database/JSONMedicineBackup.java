@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.database;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.GsonBuilder;
 
 import java.time.Instant;
@@ -9,6 +11,19 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
 
     public JSONMedicineBackup() {
         super(MedicineWithReminders.class);
+    }
+
+    @Override
+    public @Nullable List<MedicineWithReminders> parseBackup(String jsonFile) {
+        List<MedicineWithReminders> medicinesWithReminders = super.parseBackup(jsonFile);
+        if (medicinesWithReminders != null) {
+            for (MedicineWithReminders medicineWithReminders : medicinesWithReminders) {
+                if (medicineWithReminders == null || medicineWithReminders.medicine == null || medicineWithReminders.reminders == null) {
+                    return null;
+                }
+            }
+        }
+        return medicinesWithReminders;
     }
 
     @Override

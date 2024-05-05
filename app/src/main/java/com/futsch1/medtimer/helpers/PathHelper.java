@@ -18,8 +18,8 @@ public class PathHelper {
         return fileName.replaceAll(RESERVED_CHARS, "_");
     }
 
-    public static String getBackupFilename() {
-        String fileName = String.format("MedTimer Backup %s.json", ZonedDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
+    public static String getBackupFilename(String backupType) {
+        String fileName = String.format("MedTimer %s Backup %s.json", backupType, ZonedDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
         return fileName.replaceAll(RESERVED_CHARS, "_");
     }
 }

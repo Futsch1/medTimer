@@ -115,4 +115,5 @@
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Backup</string>
+    <string name="restore_events_start">Esto reemplazará todos los eventos de recordatorio.\n\n¿Continuar?</string>
 </resources>

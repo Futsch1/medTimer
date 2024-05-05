@@ -120,4 +120,5 @@
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>
+    <string name="restore_events_start">This will replace all reminder events.\n\nContinue?</string>
 </resources>
