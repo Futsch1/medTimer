@@ -77,7 +77,7 @@ public class StatisticsTest {
                         childAtPosition(
                                 childAtPosition(
                                         withId(androidx.appcompat.R.id.content),
-                                        0),
+                                        1),
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
