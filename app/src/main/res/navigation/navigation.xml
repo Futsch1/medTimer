@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/reminderTableFragment"
         android:name="com.futsch1.medtimer.remindertable.ReminderTableFragment"
-        android:label="@string/reminders" />
+        android:label="@string/tabular_view" />
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
