@@ -1,11 +1,14 @@
 package com.futsch1.medtimer.helpers;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 public class FileHelper {
@@ -58,5 +62,19 @@ public class FileHelper {
             }
         }
         return stringBuilder;
+    }
+
+
+    public static void shareFile(Context context, File file) {
+        Uri uri = FileProvider.getUriForFile(context, "com.futsch1.medtimer.fileprovider", file);
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()));
+        //Allow sharing apps to read the file Uri
+        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //Pass the file Uri instead of the path
+        intentShareFile.putExtra(Intent.EXTRA_STREAM,
+                uri);
+        context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
     }
 }
