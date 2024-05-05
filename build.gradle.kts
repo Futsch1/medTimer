@@ -8,6 +8,5 @@ plugins {
 buildscript {
     repositories {
         google()
-        maven("https://jitpack.io")
     }
 }

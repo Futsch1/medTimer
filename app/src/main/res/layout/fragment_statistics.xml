@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,13 +32,37 @@
             android:entries="@array/analysis_days" />
     </LinearLayout>
 
-    <com.anychart.AnyChartView
+    <com.androidplot.xy.XYPlot
         android:id="@+id/medicinesPerDayChart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
-
-    </com.anychart.AnyChartView>
+        android:layout_weight="2"
+        ap:graphAnchor="left_top"
+        ap:graphHeight="50dp"
+        ap:graphHeightMode="fill"
+        ap:graphHorizontalPosition="0"
+        ap:graphHorizontalPositioning="absolute_from_left"
+        ap:graphPaddingBottom="15dp"
+        ap:graphPaddingLeft="20dp"
+        ap:graphPaddingRight="5dp"
+        ap:graphPaddingTop="20dp"
+        ap:graphVerticalPosition="0"
+        ap:graphVerticalPositioning="absolute_from_top"
+        ap:gridClippingEnabled="false"
+        ap:legendAnchor="left_bottom"
+        ap:legendHeight="50dp"
+        ap:legendHeightMode="absolute"
+        ap:legendHorizontalPosition="0"
+        ap:legendHorizontalPositioning="absolute_from_left"
+        ap:legendVerticalPosition="0"
+        ap:legendVerticalPositioning="absolute_from_bottom"
+        ap:legendVisible="true"
+        ap:legendWidth="10dp"
+        ap:legendWidthMode="fill"
+        ap:lineLabelInsetBottom="-13dp"
+        ap:lineLabelInsetLeft="-13dp"
+        ap:lineLabels="left|bottom"
+        ap:marginTop="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,26 +70,19 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <com.anychart.AnyChartView
+        <com.androidplot.pie.PieChart
             android:id="@+id/takenSkippedChartTotal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:ignore="NestedWeights" />
 
-        <com.anychart.AnyChartView
+        <com.androidplot.pie.PieChart
             android:id="@+id/takenSkippedChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1" />
 
-        </com.anychart.AnyChartView>
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>
