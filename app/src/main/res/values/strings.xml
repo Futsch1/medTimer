@@ -35,12 +35,9 @@
     <string name="clear_events">Clear events</string>
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
-    <string name="export">Export events</string>
     <string name="swipe_left">Swipe left</string>
     <string name="long_press">Long press</string>
     <string name="delete_items">Delete items</string>
-    <string name="actions">Actions</string>
-    <string name="information">Information</string>
     <string name="show_notifications">Show notifications</string>
     <string name="overview_events">Overview display events</string>
     <string name="four_hours">4 hours</string>
@@ -59,13 +56,11 @@
     <string name="generate_test_data">Generate test data</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="notification_tone_title">Notification tone</string>
-    <string name="select_format">Select format</string>
     <string name="cycle_consecutive_days">Active days</string>
     <string name="days">days</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Default</string>
     <string name="alternative">Alternative</string>
-    <string name="instructions">Instructions</string>
     <string name="no_instructions">no instructions</string>
     <string name="before_meal">before the meal</string>
     <string name="after_meal">after the meal</string>
@@ -73,10 +68,9 @@
     <string name="time_after">x hours after medicine y</string>
     <string name="instruction_templates">Instruction templates</string>
     <string name="instructions_label">Additional instructions (e.g. before meals)</string>
-    <string name="backup_medicine">Backup medicine settings</string>
-    <string name="csv" translatable="false">CSV</string>
-    <string name="pdf" translatable="false">PDF</string>
-    <string name="create">Create</string>
+    <string name="medicine_data">Medicine data</string>
+    <string name="export_csv">Export as CSV</string>
+    <string name="export_pdf">Export as PDF</string>
     <string name="restore">Restore</string>
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>
@@ -124,4 +118,7 @@
     <string name="total">Total</string>
     <string name="last_n_days">Last %1$d days</string>
     <string name="name">Name</string>
+    <string name="event_data">Event data</string>
+    <string name="backup">Backup</string>
+    <string name="restore_events_start">This will replace all reminder events.\n\nContinue?</string>
 </resources>

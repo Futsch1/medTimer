@@ -1,11 +1,13 @@
 package com.futsch1.medtimer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,12 +15,10 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
 
-import com.futsch1.medtimer.database.JSONBackup;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
@@ -27,17 +27,18 @@ import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
-import java.net.URLConnection;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.TimeZone;
 
 public class OptionsMenu implements MenuProvider {
     private final Context context;
     private final MedicineViewModel medicineViewModel;
-    private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final NavController navController;
+    private final HandlerThread backgroundThread;
     private Menu menu;
+    private BackupManager backupManager;
 
     public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher, NavController navController) {
         this.context = context;
@@ -49,34 +50,17 @@ public class OptionsMenu implements MenuProvider {
     }
 
     public void onDestroy() {
+        backupManager.onDestroy();
         backgroundThread.quitSafely();
-    }
-
-    public void fileSelected(Uri data) {
-        String json = FileHelper.readFromUri(data, context.getContentResolver());
-        boolean restoreSuccessful = false;
-        if (json != null) {
-            JSONBackup jsonBackup = new JSONBackup();
-            List<MedicineWithReminders> backupData = jsonBackup.parseBackup(json);
-            if (backupData != null) {
-                jsonBackup.applyBackup(backupData, medicineViewModel.medicineRepository);
-                restoreSuccessful = true;
-            }
-        }
-
-        new AlertDialog.Builder(context)
-                .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    // Intentionally empty
-                })
-                .show();
     }
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.main, menu);
         menu.setGroupDividerEnabled(true);
+        enableOptionalIcons(menu);
 
+        this.backupManager = new BackupManager(context, menu, medicineViewModel, openFileLauncher);
         this.menu = menu;
         setupSettings();
         setupVersion();
@@ -84,7 +68,19 @@ public class OptionsMenu implements MenuProvider {
         setupClearEvents();
         setupExport();
         setupGenerateTestData();
-        setupBackup();
+    }
+
+    @SuppressLint("RestrictedApi")
+    private static void enableOptionalIcons(@NonNull Menu menu) {
+        if (menu instanceof MenuBuilder) {
+            try {
+                Method m = menu.getClass().getDeclaredMethod(
+                        "setOptionalIconsVisible", Boolean.TYPE);
+                m.invoke(menu, true);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                Log.e("Menu", "onMenuOpened", e);
+            }
+        }
     }
 
     private void setupSettings() {
@@ -158,73 +154,22 @@ public class OptionsMenu implements MenuProvider {
         }
     }
 
-    private void setupBackup() {
-        Handler handler = new Handler(backgroundThread.getLooper());
-
-        MenuItem item = menu.findItem(R.id.perform_backup);
-        item.setOnMenuItemClickListener(menuItem -> {
-            JSONBackup jsonBackup = new JSONBackup();
-            handler.post(() -> {
-                String jsonContent = jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(), medicineViewModel.medicineRepository.getMedicines());
-                createAndSave(jsonContent);
-            });
-            return true;
-        });
-
-        item = menu.findItem(R.id.restore_backup);
-        item.setOnMenuItemClickListener(menuItem -> {
-            new AlertDialog.Builder(context)
-                    .setTitle(R.string.restore)
-                    .setMessage(R.string.restore_start)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup())
-                    .setNegativeButton(R.string.cancel, (dialog, which) -> { // Intentionally left empty
-                    }).show();
-            return true;
-        });
-    }
-
     private void export(Exporter exporter) {
         File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
         try {
             exporter.export(csvFile);
-            shareFile(csvFile);
+            FileHelper.shareFile(context, csvFile);
         } catch (Exporter.ExporterException e) {
             Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void createAndSave(String fileContent) {
-        File file = new File(context.getCacheDir(), PathHelper.getBackupFilename());
-        if (FileHelper.saveToFile(file, fileContent)) {
-            shareFile(file);
-        } else {
-            Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void openBackup() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/json");
-        openFileLauncher.launch(intent);
-    }
-
-    private void shareFile(File file) {
-        Uri uri = FileProvider.getUriForFile(context, "com.futsch1.medtimer.fileprovider", file);
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-
-        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()));
-        //Allow sharing apps to read the file Uri
-        intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //Pass the file Uri instead of the path
-        intentShareFile.putExtra(Intent.EXTRA_STREAM,
-                uri);
-        context.startActivity(Intent.createChooser(intentShareFile, "Share File"));
-    }
-
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    public void fileSelected(Uri data) {
+        backupManager.fileSelected(data);
     }
 }
