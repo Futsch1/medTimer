@@ -18,10 +18,6 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -32,9 +28,6 @@ import androidx.test.rule.GrantPermissionRule;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.database.MedicineRepository;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,8 +57,8 @@ public class StatisticsTest {
 
         ViewInteraction overflowMenuButton = onView(
                 allOf(withContentDescription("More options"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(androidx.appcompat.R.id.action_bar),
                                         1),
                                 0),
@@ -74,8 +67,8 @@ public class StatisticsTest {
 
         ViewInteraction materialTextView = onView(
                 allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(androidx.appcompat.R.id.content),
                                         1),
                                 0),
@@ -99,20 +92,12 @@ public class StatisticsTest {
                 new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
         chip4.perform(click());
 
-        ViewInteraction tabView = onView(
-                allOf(withContentDescription("Analysis"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.tabs),
-                                        0),
-                                2),
-                        isDisplayed()));
-        tabView.perform(click());
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
         ViewInteraction appCompatSpinner = onView(
                 allOf(withId(R.id.timeSpinner),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("android.widget.LinearLayout")),
                                         0),
                                 2),
@@ -120,7 +105,7 @@ public class StatisticsTest {
         appCompatSpinner.perform(click());
 
         DataInteraction materialTextView2 = onData(anything())
-                .inAdapterView(childAtPosition(
+                .inAdapterView(AndroidTestHelper.childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
                 .atPosition(1);
@@ -128,8 +113,8 @@ public class StatisticsTest {
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.reminderTableButton), withText("Tabular view"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("android.widget.LinearLayout")),
                                         0),
                                 0),
@@ -138,9 +123,9 @@ public class StatisticsTest {
 
         ViewInteraction linearLayout = onView(
                 allOf(withId(R.id.tableColumnHeaderContainer),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 allOf(withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
-                                        childAtPosition(
+                                        AndroidTestHelper.childAtPosition(
                                                 withId(R.id.reminder_table),
                                                 0)),
                                 1),
@@ -157,8 +142,8 @@ public class StatisticsTest {
 
         ViewInteraction textInputEditText = onView(
                 allOf(withId(R.id.filter),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(R.id.filterLayout),
                                         0),
                                 0),
@@ -171,8 +156,8 @@ public class StatisticsTest {
 
         ViewInteraction checkableImageButton = onView(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.EndCompoundLayout")),
                                         1),
                                 0),
@@ -180,22 +165,4 @@ public class StatisticsTest {
         checkableImageButton.perform(click());
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 }

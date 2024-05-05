@@ -57,6 +57,8 @@ public class TakenSkippedChart {
         if (selfValue > 0) {
             segment.setTitle(context.getString(stringId) + ": " +
                     String.format(Locale.US, "%d%%", 100 * selfValue / (selfValue + otherValue)));
+        } else {
+            segment.setTitle("");
         }
     }
 }

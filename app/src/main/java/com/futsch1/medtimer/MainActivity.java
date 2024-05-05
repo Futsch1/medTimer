@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -28,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
             }
     );
     private AppBarConfiguration appBarConfiguration;
+    private OptionsMenu optionsMenu;
+    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            optionsMenu.fileSelected(result.getData().getData());
+        }
+    });
 
 
     @Override
@@ -51,9 +60,17 @@ public class MainActivity extends AppCompatActivity {
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(
-                navController.getGraph())
+                R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        optionsMenu = new OptionsMenu(this,
+                new MedicineViewModel(this.getApplication()),
+                requestFileLauncher,
+                navController);
+        addMenuProvider(optionsMenu);
     }
 
     @Override
