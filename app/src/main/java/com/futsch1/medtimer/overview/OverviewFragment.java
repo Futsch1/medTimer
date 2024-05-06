@@ -2,7 +2,6 @@ package com.futsch1.medtimer.overview;
 
 import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,10 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.time.Instant;
@@ -69,7 +64,7 @@ public class OverviewFragment extends Fragment {
                 latestReminders.scrollToPosition(0);
             }
         });
-        
+
         thread = new HandlerThread("LogManualDose");
         thread.start();
         setupLogManualDose();
@@ -82,57 +77,8 @@ public class OverviewFragment extends Fragment {
         logManualDose.setOnClickListener(v -> {
             Handler handler = new Handler(thread.getLooper());
             // Run the setup of the drop down in a separate thread to access the database
-            handler.post(() -> {
-                List<MedicineWithReminders> medicines = medicineViewModel.medicineRepository.getMedicines();
-                CharSequence[] names = getMedicineNames(medicines);
-
-                // But run the actual dialog on the UI thread again
-                this.requireActivity().runOnUiThread(() ->
-                    new AlertDialog.Builder(requireContext())
-                        .setItems(names, (dialog, which) -> logManualDose(which == 0 ? null : medicines.get(which - 1).medicine))
-                        .setTitle(R.string.tab_medicine)
-                        .show());
-            });
-        });
-    }
-
-    @NonNull
-    private CharSequence[] getMedicineNames(List<MedicineWithReminders> medicines) {
-        CharSequence[] names = new CharSequence[medicines.size() + 1];
-        names[0] = getString(R.string.custom);
-        for (int i = 1; i < names.length; i++) {
-            names[i] = medicines.get(i - 1).medicine.name;
-        }
-        return names;
-    }
-
-    private void logManualDose(@Nullable Medicine medicine) {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        // Manual dose is not assigned to an existing reminder
-        reminderEvent.reminderId = -1;
-        reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000;
-        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp;
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
-        if (medicine != null) {
-            reminderEvent.medicineName = medicine.name;
-            reminderEvent.color = medicine.color;
-            reminderEvent.useColor = medicine.useColor;
-            getAmountAndLog(reminderEvent);
-        } else {
-            reminderEvent.color = 0;
-            reminderEvent.useColor = false;
-            DialogHelper.showTextInputDialog(requireContext(), R.string.log_additional_dose, R.string.medicine_name, name -> {
-                reminderEvent.medicineName = name;
-                getAmountAndLog(reminderEvent);
-            });
-
-        }
-    }
-
-    private void getAmountAndLog(ReminderEvent reminderEvent) {
-        DialogHelper.showTextInputDialog(requireContext(), R.string.log_additional_dose, R.string.dosage, amount -> {
-            reminderEvent.amount = amount;
-            medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+            handler.post(() -> new ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity()).
+                    logManualDose());
         });
     }
 

@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -49,8 +50,8 @@ public class TestDataAndDeleteAndManualDoseTest {
     public void testDataAndDeleteAndManualDoseTest() {
         ViewInteraction overflowMenuButton = onView(
                 allOf(withContentDescription("More options"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(androidx.appcompat.R.id.action_bar),
                                         1),
                                 0),
@@ -59,8 +60,8 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction materialTextView = onView(
                 allOf(withId(androidx.recyclerview.R.id.title), withText("Settings"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(androidx.appcompat.R.id.content),
                                         1),
                                 0),
@@ -69,14 +70,14 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction recyclerView = onView(
                 allOf(withId(com.takisoft.preferencex.ringtone.R.id.recycler_view),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withId(android.R.id.list_container),
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(7, click()));
 
         DataInteraction appCompatCheckedTextView = onData(anything())
                 .inAdapterView(allOf(withId(androidx.appcompat.R.id.select_dialog_listview),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withId(androidx.appcompat.R.id.contentPanel),
                                 0)))
                 .atPosition(1);
@@ -84,9 +85,9 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Navigate up"),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        AndroidTestHelper.childAtPosition(
+                                        childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
@@ -95,8 +96,8 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction overflowMenuButton2 = onView(
                 allOf(withContentDescription("More options"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(androidx.appcompat.R.id.action_bar),
                                         1),
                                 0),
@@ -105,8 +106,8 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction materialTextView2 = onView(
                 allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(androidx.appcompat.R.id.content),
                                         1),
                                 0),
@@ -118,15 +119,15 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.medicineList),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
         recyclerView2.perform(actionOnItemAtPosition(0, longClick()));
 
         ViewInteraction materialTextView3 = onView(
                 allOf(withId(android.R.id.title), withText("Delete"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 0),
@@ -135,8 +136,8 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction materialButton = onView(
                 allOf(withId(android.R.id.button1), withText("Yes"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
@@ -144,22 +145,22 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction recyclerView3 = onView(
                 allOf(withId(R.id.medicineList),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
         recyclerView3.perform(actionOnItemAtPosition(2, click()));
 
         ViewInteraction recyclerView4 = onView(
                 allOf(withId(R.id.reminderList),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withClassName(is("android.widget.LinearLayout")),
                                 2)));
         recyclerView4.perform(actionOnItemAtPosition(1, longClick()));
 
         ViewInteraction materialTextView4 = onView(
                 allOf(withId(android.R.id.title), withText("Delete"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 0),
@@ -168,8 +169,8 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(android.R.id.button1), withText("Yes"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
@@ -177,9 +178,9 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Navigate up"),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        AndroidTestHelper.childAtPosition(
+                                        childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
@@ -195,15 +196,15 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         DataInteraction materialTextView5 = onData(anything())
                 .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)))
                 .atPosition(2);
         materialTextView5.perform(click());
 
         ViewInteraction textInputEditText = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                allOf(childAtPosition(
+                                childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.TextInputLayout")),
                                         0),
                                 0),
@@ -212,12 +213,22 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         ViewInteraction materialButton4 = onView(
                 allOf(withId(android.R.id.button1), withText("OK"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
+                        childAtPosition(
+                                childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
         materialButton4.perform(scrollTo(), click());
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        materialButton5.perform(click());
 
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText))
                 .check(matches(withText(startsWith("1 of Ginseng (200mg)"))));
