@@ -126,7 +126,7 @@ public class BasicUITest {
                                         0),
                                 1),
                         isDisplayed()));
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         materialButton4.perform(click());
 
         ViewInteraction checkableImageButton = onView(
