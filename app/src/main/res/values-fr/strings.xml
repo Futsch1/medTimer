@@ -7,7 +7,7 @@
 
     <string name="tab_overview">Aperçu</string>
 
-    <string name="tab_medicine">Médecine</string>
+    <string name="tab_medicine">Médicaments</string>
 
     <string name="add_medicine">Ajouter un médicament</string>
 
@@ -25,7 +25,7 @@
 
     <string name="yes">Oui</string>
 
-    <string name="ok">D\'ACCORD</string>
+    <string name="ok">VALIDER</string>
 
     <string name="cancel">Annuler</string>
 
@@ -145,7 +145,7 @@
 
     <string name="restore_successful">Restauration réussie</string>
 
-    <string name="restore_start">Cela remplacera tous les paramètres de médecine.\n\nContinuer?</string>
+    <string name="restore_start">Cela remplacera tous les paramètres de médicament.\n\nContinuer?</string>
 
     <string name="log_additional_dose">Enregistrer une dose supplémentaire</string>
 
@@ -153,9 +153,9 @@
 
     <string name="skip_reminder">Sauter une dose</string>
 
-    <string name="snooze">Somnoler</string>
+    <string name="snooze">Répéter</string>
 
-    <string name="snooze_duration">Durée de sommeil</string>
+    <string name="snooze_duration">Intervalle de répétition.</string>
 
     <string name="minutes_5">5 minutes</string>
 
@@ -169,7 +169,7 @@
 
     <string name="notification_skipped">SAUTÉ</string>
 
-    <string name="notification_snooze">SOMNOLER</string>
+    <string name="notification_snooze">RÉPÉTER</string>
 
     <string name="weekend_mode">Mode week-end</string>
 
@@ -191,7 +191,7 @@
 
     <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
 
-    <string name="custom">Coutume…</string>
+    <string name="custom">Personnaliser…</string>
     <string name="advanced_settings">Configuration avancée</string>
     <string name="remind_on">Rappel sur</string>
     <string name="every_day">Tous les jours</string>
