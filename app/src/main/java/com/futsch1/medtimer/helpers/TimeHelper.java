@@ -9,8 +9,9 @@ import com.google.android.material.timepicker.TimeFormat;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -48,6 +49,22 @@ public class TimeHelper {
         }
     }
 
+    public static Instant instantFromTodayMinutes(int minutes) {
+        LocalDate date = LocalDate.now();
+        LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of((minutes / 60), (minutes % 60)));
+        return dateTime.toInstant(ZoneId.systemDefault().getRules().getOffset(dateTime));
+
+    }
+
+    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
+        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
+        ZonedDateTime zonedDateTime = remindedTime.atZone(zoneId);
+
+        return String.format("%s %s",
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
+    }
+
     public interface TimePickerResult {
         void onTimeSelected(int minutes);
     }
@@ -71,14 +88,5 @@ public class TimeHelper {
 
             timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");
         }
-    }
-
-    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
-        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
-        ZonedDateTime zonedDateTime = remindedTime.atZone(zoneId);
-
-        return String.format("%s %s",
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
     }
 }
