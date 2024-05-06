@@ -23,10 +23,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.NextReminderListener;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.google.android.material.chip.Chip;
 
 import java.time.Instant;
 import java.util.List;
@@ -39,14 +39,20 @@ public class OverviewFragment extends Fragment {
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false);
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), medicineViewModel);
+        Chip takenNow = fragmentOverview.findViewById(R.id.takenNow);
+        Chip skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
+        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> requireActivity().runOnUiThread(() -> {
+            takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+            skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+        });
+
+        nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
         Intent nextReminder = requireContext().registerReceiver(nextReminderListener, new IntentFilter(NEXT_REMINDER_ACTION), Context.RECEIVER_EXPORTED);
         if (nextReminder != null) {
             nextReminderListener.onReceive(requireContext(), nextReminder);

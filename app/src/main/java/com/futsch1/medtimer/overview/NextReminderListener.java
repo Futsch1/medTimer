@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.overview;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
@@ -15,21 +15,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 public class NextReminderListener extends BroadcastReceiver {
     private final TextView nextReminder;
     private final MedicineViewModel medicineViewModel;
-    private final HandlerThread thread;
 
-    public NextReminderListener(TextView nextReminder, MedicineViewModel medicineViewModel) {
+    private final HandlerThread thread;
+    private final NextReminderIsTodayCallback nextReminderIsTodayCallback;
+
+    public NextReminderListener(TextView nextReminder, NextReminderIsTodayCallback nextReminderIsTodayCallback, MedicineViewModel medicineViewModel) {
         this.nextReminder = nextReminder;
+        this.nextReminderIsTodayCallback = nextReminderIsTodayCallback;
         this.medicineViewModel = medicineViewModel;
         this.thread = new HandlerThread("UpdateNextReminder");
         this.thread.start();
@@ -56,11 +62,18 @@ public class NextReminderListener extends BroadcastReceiver {
             Reminder reminder = medicineViewModel.getReminder(reminderId);
             if (reminder != null) {
                 Medicine medicine = medicineViewModel.getMedicine(reminder.medicineRelId);
-                String nextTime = timestamp.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
+                ZonedDateTime reminderTime = timestamp.atZone(ZoneId.systemDefault());
+                reportIfNextReminderIsToday(reminderTime);
+                String nextTime = reminderTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
                 final Handler mainHandler = new Handler(Looper.getMainLooper());
                 mainHandler.post(() -> setNextReminderText(context, reminder, medicine, nextTime));
             }
         }
+    }
+
+    private void reportIfNextReminderIsToday(ZonedDateTime reminderTime) {
+        nextReminderIsTodayCallback.nextReminderIsToday(reminderTime.getDayOfMonth() == ZonedDateTime.now().getDayOfMonth() &&
+                reminderTime.getMonth() == ZonedDateTime.now().getMonth());
     }
 
     private void setNextReminderText(Context context, Reminder reminder, Medicine medicine, String nextTime) {
@@ -72,5 +85,9 @@ public class NextReminderListener extends BroadcastReceiver {
 
     public void stop() {
         thread.quitSafely();
+    }
+
+    public interface NextReminderIsTodayCallback {
+        void nextReminderIsToday(boolean isToday);
     }
 }

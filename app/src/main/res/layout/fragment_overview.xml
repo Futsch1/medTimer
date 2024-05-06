@@ -32,6 +32,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:drawableStartCompat="@drawable/hourglass_split" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/takenNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/taken_now"
+                    app:chipIcon="@drawable/check2_circle"
+                    tools:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/skippedNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/skip_reminder"
+                    app:chipIcon="@drawable/x_circle"
+                    tools:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

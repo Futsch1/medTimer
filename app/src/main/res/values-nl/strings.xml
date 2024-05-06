@@ -119,4 +119,5 @@
     <string name="export_csv">Exporteren als CSV</string>
     <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore_events_start">Dit vervangt alle herinneringsgebeurtenissen.\n\nDoorgaan?</string>
+    <string name="taken_now">Nu ingenomen</string>
 </resources>
