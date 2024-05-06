@@ -21,10 +21,6 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -32,9 +28,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,29 +48,16 @@ public class BasicUITest {
 
     @Test
     public void basicUITest() {
-        ViewInteraction tabView = onView(
-                allOf(withContentDescription("Medicine"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.tabs),
-                                        0),
-                                1),
-                        isDisplayed()));
-        tabView.perform(click());
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         ViewInteraction extendedFloatingActionButton = onView(
                 allOf(withId(R.id.addMedicine), withText("Add medicine"), withContentDescription("Add medicine"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                1),
                         isDisplayed()));
         extendedFloatingActionButton.perform(click());
 
         ViewInteraction textInputEditText = onView(
-                allOf(childAtPosition(
-                                childAtPosition(
+                allOf(AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.TextInputLayout")),
                                         0),
                                 0),
@@ -86,8 +66,8 @@ public class BasicUITest {
 
         ViewInteraction materialButton = onView(
                 allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
@@ -95,15 +75,15 @@ public class BasicUITest {
 
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.medicineList),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction extendedFloatingActionButton2 = onView(
                 allOf(withId(R.id.addReminder), withText("Add reminder"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(R.id.navHost),
                                         0),
                                 1),
@@ -111,8 +91,8 @@ public class BasicUITest {
         extendedFloatingActionButton2.perform(click());
 
         ViewInteraction textInputEditText2 = onView(
-                allOf(childAtPosition(
-                                childAtPosition(
+                allOf(AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.TextInputLayout")),
                                         0),
                                 0),
@@ -121,8 +101,8 @@ public class BasicUITest {
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
@@ -130,8 +110,8 @@ public class BasicUITest {
 
         ViewInteraction materialButton3 = onView(
                 allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 5),
@@ -140,8 +120,8 @@ public class BasicUITest {
 
         ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.open_advanced_settings), withText("Advanced settings"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(R.id.advanced_settings),
                                         0),
                                 1),
@@ -151,8 +131,8 @@ public class BasicUITest {
 
         ViewInteraction checkableImageButton = onView(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.EndCompoundLayout")),
                                         1),
                                 0),
@@ -161,7 +141,7 @@ public class BasicUITest {
 
         DataInteraction materialTextView = onData(anything())
                 .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)))
                 .atPosition(1);
@@ -169,9 +149,9 @@ public class BasicUITest {
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
+                                        AndroidTestHelper.childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
@@ -180,8 +160,8 @@ public class BasicUITest {
 
         ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.open_advanced_settings), withText("Advanced settings"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withId(R.id.advanced_settings),
                                         0),
                                 1),
@@ -196,9 +176,9 @@ public class BasicUITest {
 
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
+                                        AndroidTestHelper.childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
@@ -207,8 +187,8 @@ public class BasicUITest {
 
         ViewInteraction textInputEditText3 = onView(
                 allOf(withId(R.id.editAmount), withText("1"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.TextInputLayout")),
                                         0),
                                 0),
@@ -217,8 +197,8 @@ public class BasicUITest {
 
         ViewInteraction textInputEditText4 = onView(
                 allOf(withId(R.id.editAmount), withText("2"),
-                        childAtPosition(
-                                childAtPosition(
+                        AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
                                         withClassName(is("com.google.android.material.textfield.TextInputLayout")),
                                         0),
                                 0),
@@ -227,9 +207,9 @@ public class BasicUITest {
 
         ViewInteraction appCompatImageButton3 = onView(
                 allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
+                                        AndroidTestHelper.childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
@@ -238,7 +218,7 @@ public class BasicUITest {
 
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.medicineList),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
         onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
@@ -252,24 +232,16 @@ public class BasicUITest {
 
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
+                        AndroidTestHelper.childAtPosition(
                                 allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
+                                        AndroidTestHelper.childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
                                 2),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
 
-        ViewInteraction tabView2 = onView(
-                allOf(withContentDescription("Overview"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.tabs),
-                                        0),
-                                0),
-                        isDisplayed()));
-        tabView2.perform(click());
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         ViewInteraction textView = onView(
@@ -279,22 +251,4 @@ public class BasicUITest {
         textView.check(matches(withText(startsWith("2 of Test"))));
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 }

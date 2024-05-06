@@ -33,12 +33,9 @@
     <string name="clear_events">Restablecer eventos</string>
     <string name="app_version">Versión de la aplicación</string>
     <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
-    <string name="export">Exportar eventos</string>
     <string name="swipe_left">Deslizar a la izquierda</string>
     <string name="long_press">Mantener pulsado</string>
     <string name="delete_items">Eliminar ítems</string>
-    <string name="actions">Acciones</string>
-    <string name="information">Información</string>
     <string name="show_notifications">Enviar notificaciones</string>
     <string name="overview_events">Mostrar eventos en el resumen</string>
     <string name="four_hours">4 horas</string>
@@ -57,13 +54,11 @@
     <string name="generate_test_data">Generar datos para test</string>
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
     <string name="notification_tone_title">Sonido de notificación</string>
-    <string name="select_format">Seleccionar formato</string>
     <string name="cycle_consecutive_days">Días activos</string>
     <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_theme">Estándar</string>
     <string name="alternative">Alternativo</string>
-    <string name="instructions">Instrucciones</string>
     <string name="no_instructions">no hay instrucciones</string>
     <string name="before_meal">antes de la comida</string>
     <string name="after_meal">después de la comida</string>
@@ -71,8 +66,7 @@
     <string name="time_after">x horas después del medicamento y</string>
     <string name="instruction_templates">Plantillas de instrucciones</string>
     <string name="instructions_label">Instrucciones adicionales (por ejemplo, antes de las comidas)</string>
-    <string name="backup_medicine">Backup de los medicamentos</string>
-    <string name="create">Crear</string>
+    <string name="medicine_data">Datos de medicamentos</string>
     <string name="restore">Restaurar</string>
     <string name="restore_failed">Error al restaurar</string>
     <string name="backup_failed">Error al crear</string>
@@ -111,5 +105,17 @@
     <string name="weekday_limited">Limitado a algunos días de la semana</string>
     <string name="reminders">Recordatorios</string>
     <string name="filter">Filtro</string>
-    <string name="one_week">7 días</string>
+    <string name="seven_days">7 días</string>
+    <string name="analysis">Análysis</string>
+    <string name="tabular_view">Vista tabular</string>
+    <string name="fourteen_days">14 días</string>
+    <string name="thirty_days">30 días</string>
+    <string name="total">Total</string>
+    <string name="last_n_days">Últimos %1$d días</string>
+    <string name="name">Nombre</string>
+    <string name="event_data">Datos del evento</string>
+    <string name="backup">Backup</string>
+    <string name="export_csv">Exportar en CSV</string>
+    <string name="restore_events_start">Esto reemplazará todos los eventos de recordatorio.\n\n¿Continuar?</string>
+    <string name="export_pdf">Exportar en PDF</string>
 </resources>

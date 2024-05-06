@@ -15,6 +15,7 @@ Flexible & Personalized Reminders:
 Simple & Secure Data Management:
 
 - Confirm or dismiss reminders to record medication adherence accurately.
+- Get an overview of past doses in a chart and a tabular view.
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare professionals.
 - Backup and restore your medication list as JSON file.
 

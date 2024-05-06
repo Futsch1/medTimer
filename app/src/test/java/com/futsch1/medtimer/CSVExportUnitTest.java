@@ -49,7 +49,7 @@ public class CSVExportUnitTest {
         // Create a mock Context
         Context context = mock(Context.class);
         when(context.getString(R.string.time)).thenReturn("Time");
-        when(context.getString(R.string.medicine_name)).thenReturn("Medicine Name");
+        when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
 
@@ -67,7 +67,7 @@ public class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Medicine Name;Amount;Taken\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken\n");
                 verify(fileWriter).write("5/3/21 12:00 AM;Medicine 1;10mg;x\n");
                 verify(fileWriter).write("5/3/21 12:30 AM;Medicine 2;20mg;\n");
             } catch (Exporter.ExporterException | IOException e) {
@@ -86,7 +86,7 @@ public class CSVExportUnitTest {
         // Create a mock Context
         Context context = mock(Context.class);
         when(context.getString(R.string.time)).thenReturn("Time");
-        when(context.getString(R.string.medicine_name)).thenReturn("Medicine Name");
+        when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
 
@@ -104,7 +104,7 @@ public class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Medicine Name;Amount;Taken\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }

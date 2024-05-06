@@ -14,7 +14,7 @@ public class TableHelper {
 
     public static List<String> getTableHeaders(Context context) {
         ArrayList<String> header = new ArrayList<>();
-        final int[] headerTexts = {R.string.time, R.string.medicine_name, R.string.dosage, R.string.taken};
+        final int[] headerTexts = {R.string.time, R.string.name, R.string.dosage, R.string.taken};
         for (int headerText : headerTexts) {
             header.add(context.getString(headerText));
         }

@@ -3,35 +3,52 @@
     <group android:id="@+id/settings_group">
         <item
             android:id="@+id/settings"
-            android:icon="@android:drawable/ic_menu_preferences"
+            android:icon="@drawable/gear"
             android:title="@string/tab_settings" />
     </group>
     <item
-        android:id="@+id/export"
-        android:icon="@drawable/floppy2"
-        android:title="@string/export">
+        android:id="@+id/event_data"
+        android:icon="@drawable/calendar2_event"
+        android:title="@string/event_data">
         <menu>
             <item
-                android:id="@+id/export_csv"
-                android:title="@string/csv" />
-            <item
                 android:id="@+id/export_pdf"
-                android:title="@string/pdf" />
+                android:icon="@drawable/filetype_pdf"
+                android:title="@string/export_pdf" />
+            <item
+                android:id="@+id/export_csv"
+                android:icon="@drawable/filetype_csv"
+                android:title="@string/export_csv" />
+            <group android:id="@+id/event_backup">
+                <item
+                    android:id="@+id/backup_events"
+                    android:icon="@drawable/box_arrow_down"
+                    android:title="@string/backup" />
+                <item
+                    android:id="@+id/restore_events"
+                    android:icon="@drawable/box_arrow_in_down"
+                    android:title="@string/restore" />
+            </group>
+            <group android:id="@+id/clear">
+                <item
+                    android:id="@+id/clear_events"
+                    android:icon="@drawable/trash"
+                    android:title="@string/clear_events" />
+            </group>
         </menu>
     </item>
     <item
-        android:id="@+id/clear_events"
-        android:icon="@drawable/x_circle"
-        android:title="@string/clear_events" />
-    <item
-        android:id="@+id/backup"
-        android:title="@string/backup_medicine">
+        android:id="@+id/medicine_data"
+        android:icon="@drawable/capsule"
+        android:title="@string/medicine_data">
         <menu>
             <item
-                android:id="@+id/perform_backup"
-                android:title="@string/create" />
+                android:id="@+id/medicine_backup"
+                android:icon="@drawable/box_arrow_down"
+                android:title="@string/backup" />
             <item
-                android:id="@+id/restore_backup"
+                android:id="@+id/restore_medicine_backup"
+                android:icon="@drawable/box_arrow_in_down"
                 android:title="@string/restore" />
         </menu>
     </item>

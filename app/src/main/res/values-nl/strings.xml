@@ -34,12 +34,9 @@
     <string name="clear_events">Herinneringen verwijderen</string>
     <string name="app_version">App versie</string>
     <string name="are_you_sure_delete_events">Weet je zeker dat je alle herinneringen wilt verwijderen?</string>
-    <string name="export">Herinneringen exporteren</string>
     <string name="swipe_left">Veeg naar links</string>
     <string name="long_press">Lang indrukken</string>
     <string name="delete_items">Verwijderen</string>
-    <string name="actions">Acties</string>
-    <string name="information">Informatie</string>
     <string name="show_notifications">Meldingen weergeven</string>
     <string name="overview_events">Overzicht herinneringen tonen</string>
     <string name="four_hours">4 uur</string>
@@ -58,13 +55,11 @@
     <string name="generate_test_data">Testgegevens genereren</string>
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
     <string name="notification_tone_title">Waarschuwingstoon</string>
-    <string name="select_format">Formaat selecteren</string>
     <string name="cycle_consecutive_days">Dagen</string>
     <string name="days">dagen</string>
     <string name="theme">Thema</string>
     <string name="default_theme">Standaard</string>
     <string name="alternative">Alternatief</string>
-    <string name="instructions">Instructies</string>
     <string name="no_instructions">geen instructies</string>
     <string name="before_meal">vóór de maaltijd</string>
     <string name="after_meal">na het eten</string>
@@ -72,8 +67,7 @@
     <string name="time_after">x uur na medicijn y</string>
     <string name="instruction_templates">Referentiesjablonen</string>
     <string name="instructions_label">Aanvullende instructies (bijvoorbeeld vóór de maaltijd)</string>
-    <string name="backup_medicine">Back-up van de medicatie</string>
-    <string name="create">Creëren</string>
+    <string name="medicine_data">Medicatie gegevens</string>
     <string name="restore">Herstellen</string>
     <string name="restore_failed">Herstel mislukt</string>
     <string name="backup_failed">Back-up mislukt</string>
@@ -112,5 +106,17 @@
     <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="reminders">Herinneringen</string>
     <string name="filter">Filter</string>
-    <string name="one_week">7 dagen</string>
+    <string name="seven_days">7 dagen</string>
+    <string name="analysis">Analyse</string>
+    <string name="tabular_view">Tabelwergave</string>
+    <string name="fourteen_days">14 dagen</string>
+    <string name="thirty_days">30 dagen</string>
+    <string name="total">Totaal</string>
+    <string name="last_n_days">Laatste %1$d dagen</string>
+    <string name="name">Naam</string>
+    <string name="event_data">Herinneringen gegevens</string>
+    <string name="backup">Backup</string>
+    <string name="export_csv">Exporteren als CSV</string>
+    <string name="export_pdf">Exporteren als PDF</string>
+    <string name="restore_events_start">Dit vervangt alle herinneringsgebeurtenissen.\n\nDoorgaan?</string>
 </resources>

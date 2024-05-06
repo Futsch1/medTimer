@@ -120,7 +120,14 @@ public class MedicineRepository {
     }
 
     public void deleteAll() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(database::clearAllTables);
+        try {
+            MedicineRoomDatabase.databaseWriteExecutor.submit(database::clearAllTables).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e1) {
+            //noinspection CallToPrintStackTrace
+            e1.printStackTrace();
+        }
     }
 
     interface Insert<T> {

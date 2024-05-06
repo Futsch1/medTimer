@@ -34,12 +34,9 @@
     <string name="clear_events">Ereignisse zurücksetzen</string>
     <string name="app_version">App-Version</string>
     <string name="are_you_sure_delete_events">Ereignisse wirklich zurücksetzen?</string>
-    <string name="export">Ereignisse exportieren</string>
     <string name="swipe_left">Wischen nach links</string>
     <string name="long_press">Lange drücken</string>
     <string name="delete_items">Einträge löschen</string>
-    <string name="actions">Aktionen</string>
-    <string name="information">Information</string>
     <string name="show_notifications">Benachrichtigungen anzeigen</string>
     <string name="overview_events">Übersicht Erinnerungen anzeigen</string>
     <string name="four_hours">4 Stunden</string>
@@ -58,12 +55,10 @@
     <string name="generate_test_data">Testdaten generieren</string>
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="notification_tone_title">Benachrichtigungston</string>
-    <string name="select_format">Format auswählen</string>
     <string name="days">Tage</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="instructions">Hinweis</string>
     <string name="no_instructions">kein Hinweis</string>
     <string name="before_meal">vor der Mahlzeit</string>
     <string name="after_meal">nach der Mahlzeit</string>
@@ -71,8 +66,7 @@
     <string name="time_after">x Stunden nach Medikament y</string>
     <string name="instruction_templates">Hinweisvorlagen</string>
     <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
-    <string name="backup_medicine">Backup der Medikamente</string>
-    <string name="create">Erstellen</string>
+    <string name="medicine_data">Medikamentendaten</string>
     <string name="restore">Wiederherstellen</string>
     <string name="restore_failed">Wiederherstellen fehlgeschlagen</string>
     <string name="backup_failed">Erstellen fehlgeschlagen</string>
@@ -104,7 +98,7 @@
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
-    <string name="every_day">Jedem Tag</string>
+    <string name="every_day">Jeden Tag</string>
     <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
@@ -112,5 +106,17 @@
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
-    <string name="one_week">7 Tage</string>
+    <string name="seven_days">7 Tage</string>
+    <string name="analysis">Analyse</string>
+    <string name="tabular_view">Tabellenansicht</string>
+    <string name="fourteen_days">14 Tage</string>
+    <string name="thirty_days">30 Tage</string>
+    <string name="total">Gesamt</string>
+    <string name="last_n_days">Letzte %1$d Tage</string>
+    <string name="name">Name</string>
+    <string name="event_data">Ereignisdaten</string>
+    <string name="backup">Backup</string>
+    <string name="export_csv">Export als CSV</string>
+    <string name="export_pdf">Export als PDF</string>
+    <string name="restore_events_start">Alle Ereignisse werden überschrieben.\n\nFortfahren?</string>
 </resources>

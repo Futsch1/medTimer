@@ -69,32 +69,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         advancedSettingsSummary.setText(getAdvancedSettingsSummary(reminder));
     }
 
-    private String getAdvancedSettingsSummary(Reminder reminder) {
-        List<String> strings = new LinkedList<>();
-
-        boolean weekdayLimited = !reminder.days.stream().allMatch(day -> day == Boolean.TRUE);
-        boolean cyclic = reminder.pauseDays > 0;
-        if (weekdayLimited) {
-            strings.add(holderItemView.getContext().getString(R.string.weekday_limited));
-        }
-        if (cyclic) {
-            String builder = holderItemView.getContext().getString(R.string.cycle_reminders) +
-                    " " +
-                    reminder.consecutiveDays +
-                    "/" +
-                    reminder.pauseDays;
-            strings.add(builder);
-        }
-        if (!weekdayLimited && !cyclic){
-            strings.add(holderItemView.getContext().getString(R.string.every_day));
-        }
-        if (reminder.instructions != null && !reminder.instructions.isEmpty()) {
-            strings.add(holderItemView.getContext().getString(R.string.instructions));
-        }
-
-        return String.join(", ", strings);
-    }
-
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
         if (hasFocus) {
             int startMinutes = timeStringToMinutes(editTime.getText().toString());
@@ -137,6 +111,39 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         return true;
     }
 
+    private String getAdvancedSettingsSummary(Reminder reminder) {
+        List<String> strings = new LinkedList<>();
+
+        boolean weekdayLimited = !reminder.days.stream().allMatch(day -> day == Boolean.TRUE);
+        boolean cyclic = reminder.pauseDays > 0;
+        if (weekdayLimited) {
+            strings.add(holderItemView.getContext().getString(R.string.weekday_limited));
+        }
+        if (cyclic) {
+            String builder = holderItemView.getContext().getString(R.string.cycle_reminders) +
+                    " " +
+                    reminder.consecutiveDays +
+                    "/" +
+                    reminder.pauseDays +
+                    ", " +
+                    firstToLower(holderItemView.getContext().getString(R.string.cycle_start_date)) +
+                    " " +
+                    TimeHelper.daysSinceEpochToDateString(reminder.cycleStartDay);
+            strings.add(builder);
+        }
+        if (!weekdayLimited && !cyclic) {
+            strings.add(holderItemView.getContext().getString(R.string.every_day));
+        }
+        if (reminder.instructions != null && !reminder.instructions.isEmpty()) {
+            strings.add(reminder.instructions);
+        }
+
+        return String.join(", ", strings);
+    }
+
+    private String firstToLower(String string) {
+        return string.substring(0, 1).toLowerCase() + string.substring(1);
+    }
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();

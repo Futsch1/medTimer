@@ -47,6 +47,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
         if (cellItemModel != null) {
             String modelContent = cellItemModel.getRepresentation();
             viewHolder.getTextView().setText(modelContent);
+            viewHolder.getTextView().setTag(cellItemModel.getViewTag());
         }
 
         viewHolder.getTextView().requestLayout();
@@ -64,7 +65,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, String columnHeaderItemModel, int
             position) {
         ReminderTableColumnHeaderViewHolder columnHeaderViewHolder = (ReminderTableColumnHeaderViewHolder) holder;
-        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel);
+        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel, position == 0);
     }
 
     @NonNull
@@ -90,14 +91,14 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId), reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderId));
-            cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderId));
+            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId), reminderEvent.reminderId, null));
+            cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderId, "medicineName"));
+            cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderId, null));
             cell.add(new ReminderTableCellModel(reminderEvent.status,
                     reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "✔" : " ",
-                    reminderEvent.reminderId));
+                    reminderEvent.reminderId, null));
             cells.add(cell);
-            rows.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, 0));
+            rows.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, 0, null));
         }
 
         setCellItems(cells);

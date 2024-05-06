@@ -32,6 +32,10 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
   <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/4.png" width="150" />
 
   <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/5.png" width="150" />
+
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/6.png" width="150" />
+  &nbsp;
+  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/7.png" width="150" /> 
 </p>
 
 Stay In Control of Your Medications with MedTimer

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/overviewFragment"
+        android:icon="@drawable/calendar2_event"
+        android:title="@string/tab_overview"
+        android:name="com.futsch1.medtimer.overview.OverviewFragment"/>
+    <item
+        android:id="@+id/medicinesFragment"
+        android:icon="@drawable/capsule"
+        android:title="@string/tab_medicine"
+        android:name="com.futsch1.medtimer.medicine.MedicinesFragment"/>
+    <item
+        android:id="@+id/statisticsFragment"
+        android:icon="@drawable/bar_chart"
+        android:title="@string/analysis"
+        android:name="com.futsch1.medtimer.statistics.StatisticsFragment"/>
+</menu>

@@ -16,6 +16,7 @@ import com.evrencoskun.tableview.filter.Filter;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.helpers.TableHelper;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -43,6 +44,13 @@ public class ReminderTableFragment extends Fragment {
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));
         medicineViewModel.getReminderEvents(0, 0).observe(getViewLifecycleOwner(), adapter::submitList);
+
+        // This is a workaround for a recycler view bug that causes random crashes
+        tableView.getCellRecyclerView().setItemAnimator(null);
+        tableView.getColumnHeaderRecyclerView().setItemAnimator(null);
+        tableView.getRowHeaderRecyclerView().setItemAnimator(null);
+
+        tableView.setUnSelectedColor(MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, "TableView"));
 
         return fragmentView;
     }

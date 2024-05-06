@@ -46,20 +46,28 @@ public class NextReminderListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d("ReminderListener", "Next reminder received");
         final Handler handler = new Handler(thread.getLooper());
-        handler.post(() -> {
-            int reminderId = intent.getIntExtra(EXTRA_REMINDER_ID, 0);
-            Instant timestamp = intent.getSerializableExtra(EXTRA_REMINDER_TIME, Instant.class);
-            if (reminderId > 0 && timestamp != null) {
-                Reminder reminder = medicineViewModel.getReminder(reminderId);
+        handler.post(() -> receiveNextReminderIntent(context, intent));
+    }
+
+    private void receiveNextReminderIntent(Context context, Intent intent) {
+        int reminderId = intent.getIntExtra(EXTRA_REMINDER_ID, 0);
+        Instant timestamp = intent.getSerializableExtra(EXTRA_REMINDER_TIME, Instant.class);
+        if (reminderId > 0 && timestamp != null) {
+            Reminder reminder = medicineViewModel.getReminder(reminderId);
+            if (reminder != null) {
                 Medicine medicine = medicineViewModel.getMedicine(reminder.medicineRelId);
                 String nextTime = timestamp.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
                 final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    nextReminder.setText(context.getString(R.string.reminder_event, reminder.amount, medicine.name, nextTime));
-                    nextReminder.setCompoundDrawables(null, null, null, null);
-                });
+                mainHandler.post(() -> setNextReminderText(context, reminder, medicine, nextTime));
             }
-        });
+        }
+    }
+
+    private void setNextReminderText(Context context, Reminder reminder, Medicine medicine, String nextTime) {
+        if (reminder != null && medicine != null) {
+            nextReminder.setText(context.getString(R.string.reminder_event, reminder.amount, medicine.name, nextTime));
+            nextReminder.setCompoundDrawables(null, null, null, null);
+        }
     }
 
     public void stop() {
