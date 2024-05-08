@@ -19,6 +19,9 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.futsch1.medtimer.reminders.ReminderWork;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -32,6 +35,8 @@ public class NextReminderListener extends BroadcastReceiver {
 
     private final HandlerThread thread;
     private final NextReminderIsTodayCallback nextReminderIsTodayCallback;
+    private Reminder reminder;
+    private Medicine medicine;
 
     public NextReminderListener(TextView nextReminder, NextReminderIsTodayCallback nextReminderIsTodayCallback, MedicineViewModel medicineViewModel) {
         this.nextReminder = nextReminder;
@@ -59,9 +64,9 @@ public class NextReminderListener extends BroadcastReceiver {
         int reminderId = intent.getIntExtra(EXTRA_REMINDER_ID, 0);
         Instant timestamp = intent.getSerializableExtra(EXTRA_REMINDER_TIME, Instant.class);
         if (reminderId > 0 && timestamp != null) {
-            Reminder reminder = medicineViewModel.getReminder(reminderId);
+            reminder = medicineViewModel.getReminder(reminderId);
             if (reminder != null) {
-                Medicine medicine = medicineViewModel.getMedicine(reminder.medicineRelId);
+                medicine = medicineViewModel.getMedicine(reminder.medicineRelId);
                 ZonedDateTime reminderTime = timestamp.atZone(ZoneId.systemDefault());
                 reportIfNextReminderIsToday(reminderTime);
                 String nextTime = reminderTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
@@ -81,6 +86,19 @@ public class NextReminderListener extends BroadcastReceiver {
             nextReminder.setText(context.getString(R.string.reminder_event, reminder.amount, medicine.name, nextTime));
             nextReminder.setCompoundDrawables(null, null, null, null);
         }
+    }
+
+    public void processFutureReminder(boolean taken) {
+        Handler handler = new Handler(thread.getLooper());
+        handler.post(() -> {
+            ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(medicine, reminder);
+            if (reminderEvent != null) {
+                reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
+                medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+                ReminderProcessor.requestReschedule(nextReminder.getContext());
+            }
+        });
+
     }
 
     public void stop() {

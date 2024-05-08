@@ -26,7 +26,6 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
-import com.google.android.material.chip.Chip;
 
 import java.time.Instant;
 import java.util.List;
@@ -45,12 +44,14 @@ public class OverviewFragment extends Fragment {
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false);
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        Chip takenNow = fragmentOverview.findViewById(R.id.takenNow);
-        Chip skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
+        Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
+        Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
         NextReminderListener.NextReminderIsTodayCallback callback = isToday -> requireActivity().runOnUiThread(() -> {
             takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
             skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
         });
+        takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
+        skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
 
         nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
         Intent nextReminder = requireContext().registerReceiver(nextReminderListener, new IntentFilter(NEXT_REMINDER_ACTION), Context.RECEIVER_EXPORTED);

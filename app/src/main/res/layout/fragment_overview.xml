@@ -34,27 +34,28 @@
                 app:drawableStartCompat="@drawable/hourglass_split" />
 
             <LinearLayout
+                style="?buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
+                <Button
                     android:id="@+id/takenNow"
+                    style="?buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/taken_now"
-                    app:chipIcon="@drawable/check2_circle"
-                    tools:visibility="gone" />
+                    android:visibility="gone" />
 
-                <com.google.android.material.chip.Chip
+                <Button
                     android:id="@+id/skippedNow"
+                    style="?buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/skip_reminder"
-                    app:chipIcon="@drawable/x_circle"
-                    tools:visibility="gone" />
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 

@@ -55,11 +55,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
                 int checkedId = checkedIds.get(0);
-                Intent i =
-                        checkedId == R.id.chipTaken ?
-                                ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
-                                ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
-                itemView.getContext().sendBroadcast(i);
+                processTakenOrSkipped(reminderEvent, R.id.chipTaken == checkedId);
             }
         });
 
@@ -68,5 +64,13 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
         }
+    }
+
+    private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {
+        Intent i =
+                taken ?
+                        ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
+                        ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
+        itemView.getContext().sendBroadcast(i);
     }
 }
