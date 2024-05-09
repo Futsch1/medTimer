@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -154,7 +155,7 @@ public class EditMedicineFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        swipeHelper = new SwipeHelper(requireContext()) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, Color.RED, android.R.drawable.ic_menu_delete) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {

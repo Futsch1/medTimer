@@ -5,6 +5,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -61,7 +62,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        swipeHelper = new SwipeHelper(requireContext()) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, Color.RED, android.R.drawable.ic_menu_delete) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {

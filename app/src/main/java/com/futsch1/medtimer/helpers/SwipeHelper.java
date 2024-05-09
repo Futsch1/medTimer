@@ -1,13 +1,11 @@
 package com.futsch1.medtimer.helpers;
 
 import static android.graphics.PorterDuff.Mode.CLEAR;
-import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.ColorDrawable;
@@ -26,35 +24,38 @@ public abstract class SwipeHelper extends SimpleCallback {
 
     private final int intrinsicWidth;
     private final int intrinsicHeight;
-    private final int swipeLeftColor;
+    private final int swipeColor;
+    private final int swipeDirection;
 
     private final Paint clearPaint;
-    private final Drawable swipeLeftIcon;
+    private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
 
 
-    protected SwipeHelper(Context context) {
-        super(0, LEFT);
+    protected SwipeHelper(Context context, int direction, int color, int icon) {
+        super(0, direction);
+
+        swipeDirection = direction;
 
         clearPaint = new Paint();
         clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
 
-        this.swipeLeftColor = Color.RED;
+        this.swipeColor = color;
 
-        this.swipeLeftIcon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_delete);
+        this.swipeIcon = ContextCompat.getDrawable(context, icon);
 
-        if (swipeLeftIcon == null)
+        if (swipeIcon == null)
             throw new Resources.NotFoundException("There was an error trying to load the drawables");
 
-        intrinsicHeight = swipeLeftIcon.getIntrinsicHeight();
-        intrinsicWidth = swipeLeftIcon.getIntrinsicWidth();
+        intrinsicHeight = swipeIcon.getIntrinsicHeight();
+        intrinsicWidth = swipeIcon.getIntrinsicWidth();
     }
 
     public void setup(@NonNull Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (sharedPref.getString("delete_items", "0").equals("0")) {
-            setDefaultSwipeDirs(ItemTouchHelper.LEFT);
+            setDefaultSwipeDirs(swipeDirection);
         } else {
             setDefaultSwipeDirs(0);
         }
@@ -80,24 +81,27 @@ public abstract class SwipeHelper extends SimpleCallback {
             return;
         }
 
-        if (dX < 0) {
-            background.setColor(swipeLeftColor);
-            background.setBounds((int) (itemView.getRight() + dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
+        if (swipeDirection == ItemTouchHelper.LEFT ? dX < 0 : dX > 0) {
+            background.setColor(swipeColor);
+            int left = (int) (swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() + dX : 0);
+            int right = (int) (swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() : dX);
+            background.setBounds(left, itemView.getTop(), right, itemView.getBottom());
 
             int itemTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
             int itemMargin = (itemHeight - intrinsicHeight) / 2;
-            int itemLeft = itemView.getRight() - itemMargin - intrinsicWidth;
-            int itemRight = itemView.getRight() - itemMargin;
+            int itemLeft = swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() - itemMargin - intrinsicWidth : itemView.getLeft() + itemMargin;
+            int itemRight = swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() - itemMargin : itemView.getLeft() + itemMargin + intrinsicWidth;
             int itemBottom = itemTop + intrinsicHeight;
 
-            int alpha = ((int) ((-itemView.getTranslationX() / itemView.getWidth()) * 300));
+            int alpha = ((int) (swipeDirection == ItemTouchHelper.LEFT ? ((-itemView.getTranslationX() / itemView.getWidth()) * 300) :
+                    ((itemView.getTranslationX() / itemView.getWidth()) * 300)));
             if (alpha > 255) alpha = 255;
 
-            swipeLeftIcon.setAlpha(alpha);
+            swipeIcon.setAlpha(alpha);
             background.setAlpha(alpha);
-            swipeLeftIcon.setBounds(itemLeft, itemTop, itemRight, itemBottom);
+            swipeIcon.setBounds(itemLeft, itemTop, itemRight, itemBottom);
             background.draw(c);
-            swipeLeftIcon.draw(c);
+            swipeIcon.draw(c);
 
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
