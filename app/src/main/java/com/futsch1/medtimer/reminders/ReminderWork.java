@@ -53,7 +53,7 @@ public class ReminderWork extends Worker {
         if (reminder != null) {
             int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-            ReminderEvent reminderEvent = reminderEventId == 0 ? buildReminderEvent(medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
+            ReminderEvent reminderEvent = reminderEventId == 0 ? buildAndInsertReminderEvent(medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
 
             if (reminderEvent != null && medicine != null) {
                 showNotification(medicine, reminderEvent, reminder);
@@ -78,7 +78,24 @@ public class ReminderWork extends Worker {
         return reminder;
     }
 
-    private ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
+    private ReminderEvent buildAndInsertReminderEvent(Medicine medicine, Reminder reminder) {
+        ReminderEvent reminderEvent = buildReminderEvent(medicine, reminder);
+        if (reminderEvent != null) {
+            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+        }
+        return reminderEvent;
+    }
+
+    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
+        if (canShowNotifications()) {
+            Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
+            Notifications notifications = new Notifications(context);
+            reminderEvent.notificationId = notifications.showNotification(minutesToTimeString(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
+            medicineRepository.updateReminderEvent(reminderEvent);
+        }
+    }
+
+    public static ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
         if (medicine != null && reminder != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
@@ -89,20 +106,10 @@ public class ReminderWork extends Worker {
             reminderEvent.color = medicine.color;
             reminderEvent.useColor = medicine.useColor;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
-            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
 
             return reminderEvent;
         } else {
             return null;
-        }
-    }
-
-    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
-        if (canShowNotifications()) {
-            Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
-            Notifications notifications = new Notifications(context);
-            reminderEvent.notificationId = notifications.showNotification(minutesToTimeString(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
-            medicineRepository.updateReminderEvent(reminderEvent);
         }
     }
 

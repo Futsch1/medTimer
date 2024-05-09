@@ -30,7 +30,7 @@ public class GenerateTestData {
                 }),
                 new TestMedicine("Selen (200 µg)", null, new TestReminder[]{
                         new TestReminder("2", 9 * 60, 1, 0, ""),
-                        new TestReminder("1", 18 * 60, 1, 1, "")
+                        new TestReminder("1", 22 * 60, 1, 1, "")
                 })
         };
 
