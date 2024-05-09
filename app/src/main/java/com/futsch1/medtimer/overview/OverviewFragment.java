@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,10 +70,15 @@ public class OverviewFragment extends Fragment {
     private void setupTakenSkippedButtonsAndNextReminderListener() {
         Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
         Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
-        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> requireActivity().runOnUiThread(() -> {
-            takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-            skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-        });
+        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> {
+            final Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> {
+                takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+                skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+            });
+        };
+
+
         nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
         takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
         skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
