@@ -44,20 +44,7 @@ public class OverviewFragment extends Fragment {
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false);
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
-        Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
-        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> requireActivity().runOnUiThread(() -> {
-            takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-            skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-        });
-        takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
-        skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
-
-        nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
-        Intent nextReminder = requireContext().registerReceiver(nextReminderListener, new IntentFilter(NEXT_REMINDER_ACTION), Context.RECEIVER_EXPORTED);
-        if (nextReminder != null) {
-            nextReminderListener.onReceive(requireContext(), nextReminder);
-        }
+        setupTakenSkippedButtonsAndNextReminderListener();
 
         RecyclerView latestReminders = fragmentOverview.findViewById(R.id.latestReminders);
 
@@ -77,6 +64,23 @@ public class OverviewFragment extends Fragment {
         setupLogManualDose();
 
         return fragmentOverview;
+    }
+
+    private void setupTakenSkippedButtonsAndNextReminderListener() {
+        Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
+        Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
+        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> requireActivity().runOnUiThread(() -> {
+            takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+            skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+        });
+        nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
+        takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
+        skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
+
+        Intent nextReminder = requireContext().registerReceiver(nextReminderListener, new IntentFilter(NEXT_REMINDER_ACTION), Context.RECEIVER_EXPORTED);
+        if (nextReminder != null) {
+            nextReminderListener.onReceive(requireContext(), nextReminder);
+        }
     }
 
     private void setupLogManualDose() {
