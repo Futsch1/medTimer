@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -30,12 +31,14 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final Paint clearPaint;
     private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
+    private final String prefKey;
 
 
-    protected SwipeHelper(Context context, int direction, int color, int icon) {
+    protected SwipeHelper(Context context, int direction, int color, int icon, String prefKey) {
         super(0, direction);
 
         swipeDirection = direction;
+        this.prefKey = prefKey;
 
         clearPaint = new Paint();
         clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
@@ -54,7 +57,7 @@ public abstract class SwipeHelper extends SimpleCallback {
     public void setup(@NonNull Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (sharedPref.getString("delete_items", "0").equals("0")) {
+        if (prefKey == null || sharedPref.getString(prefKey, "0").equals("0")) {
             setDefaultSwipeDirs(swipeDirection);
         } else {
             setDefaultSwipeDirs(0);
@@ -81,27 +84,8 @@ public abstract class SwipeHelper extends SimpleCallback {
             return;
         }
 
-        if (swipeDirection == ItemTouchHelper.LEFT ? dX < 0 : dX > 0) {
-            background.setColor(swipeColor);
-            int left = (int) (swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() + dX : 0);
-            int right = (int) (swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() : dX);
-            background.setBounds(left, itemView.getTop(), right, itemView.getBottom());
-
-            int itemTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-            int itemMargin = (itemHeight - intrinsicHeight) / 2;
-            int itemLeft = swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() - itemMargin - intrinsicWidth : itemView.getLeft() + itemMargin;
-            int itemRight = swipeDirection == ItemTouchHelper.LEFT ? itemView.getRight() - itemMargin : itemView.getLeft() + itemMargin + intrinsicWidth;
-            int itemBottom = itemTop + intrinsicHeight;
-
-            int alpha = ((int) (swipeDirection == ItemTouchHelper.LEFT ? ((-itemView.getTranslationX() / itemView.getWidth()) * 300) :
-                    ((itemView.getTranslationX() / itemView.getWidth()) * 300)));
-            if (alpha > 255) alpha = 255;
-
-            swipeIcon.setAlpha(alpha);
-            background.setAlpha(alpha);
-            swipeIcon.setBounds(itemLeft, itemTop, itemRight, itemBottom);
-            background.draw(c);
-            swipeIcon.draw(c);
+        if (isSwipeLeft() ? dX < 0 : dX > 0) {
+            drawSwipeBar(c, dX, itemView, itemHeight);
 
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -109,5 +93,53 @@ public abstract class SwipeHelper extends SimpleCallback {
 
     private void clearCanvas(Canvas c, float left, float top, float right, float bottom) {
         if (c != null) c.drawRect(left, top, right, bottom, clearPaint);
+    }
+
+    private boolean isSwipeLeft() {
+        return (swipeDirection & ItemTouchHelper.LEFT) == ItemTouchHelper.LEFT;
+    }
+
+    private void drawSwipeBar(@NonNull Canvas c, float dX, View itemView, int itemHeight) {
+        background.setColor(swipeColor);
+        Rect backgroundBounds = getBackgroundBounds(itemView, dX);
+        background.setBounds(backgroundBounds);
+
+        Rect itemBounds = getIconBounds(itemView, itemHeight);
+
+        int alpha = getAlpha(itemView);
+
+        swipeIcon.setAlpha(alpha);
+        background.setAlpha(alpha);
+        swipeIcon.setBounds(itemBounds);
+        background.draw(c);
+        swipeIcon.draw(c);
+    }
+
+    private Rect getBackgroundBounds(View itemView, float dX) {
+        Rect bounds = new Rect();
+        bounds.top = itemView.getTop();
+        bounds.bottom = itemView.getBottom();
+        bounds.left = (int) (isSwipeLeft() ? itemView.getRight() + dX : 0);
+        bounds.right = (int) (isSwipeLeft() ? itemView.getRight() : dX);
+
+        return bounds;
+    }
+
+    private Rect getIconBounds(View itemView, int itemHeight) {
+        Rect bounds = new Rect();
+        bounds.top = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+        int itemMargin = (itemHeight - intrinsicHeight) / 2;
+        bounds.left = isSwipeLeft() ? itemView.getRight() - itemMargin - intrinsicWidth : itemView.getLeft() + itemMargin;
+        bounds.right = bounds.left + intrinsicWidth;
+        bounds.bottom = bounds.top + intrinsicHeight;
+        return bounds;
+    }
+
+    private int getAlpha(View itemView) {
+        int alpha = ((int) (isSwipeLeft() ?
+                ((-itemView.getTranslationX() / itemView.getWidth()) * 200) :
+                ((itemView.getTranslationX() / itemView.getWidth()) * 200)));
+        if (alpha > 255) alpha = 255;
+        return alpha;
     }
 }

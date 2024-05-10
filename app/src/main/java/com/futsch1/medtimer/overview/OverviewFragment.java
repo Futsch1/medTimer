@@ -105,7 +105,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView latestReminders) {
-        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, Color.GREEN, android.R.drawable.ic_menu_edit) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, Color.GREEN, android.R.drawable.ic_menu_edit, null) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.RIGHT) {

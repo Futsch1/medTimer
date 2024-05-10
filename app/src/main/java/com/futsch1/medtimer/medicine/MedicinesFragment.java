@@ -62,7 +62,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, Color.RED, android.R.drawable.ic_menu_delete) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, Color.RED, android.R.drawable.ic_menu_delete, "delete_items") {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
