@@ -101,7 +101,7 @@ public class PDFExport implements Exporter {
     @NonNull
     private LinkedList<Cell> getCells(ReminderEvent reminderEvent, TextProperties textProperties, int[] columnWidths) {
         LinkedList<Cell> row = new LinkedList<>();
-        row.add(new TextCell(TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId), textProperties, columnWidths[0]));
+        row.add(new TextCell(TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId), textProperties, columnWidths[0]));
         row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
         row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
         row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));

@@ -122,4 +122,7 @@
     <string name="backup">Backup</string>
     <string name="restore_events_start">This will replace all reminder events.\n\nContinue?</string>
     <string name="taken_now">Taken now</string>
+    <string name="event_name">Event name</string>
+    <string name="edit_event">Edit event</string>
+    <string name="date">Date</string>
 </resources>

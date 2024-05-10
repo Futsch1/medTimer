@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -109,13 +111,28 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.RIGHT) {
-                    //OverviewFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    Handler handler = new Handler(thread.getLooper());
+                    handler.post(() -> navigateToEditEvent(viewHolder.getItemId()));
                 }
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(latestReminders);
 
+    }
+
+    private void navigateToEditEvent(long eventId) {
+        NavController navController = Navigation.findNavController(fragmentOverview);
+        ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
+        if (reminderEvent != null) {
+            OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
+                    reminderEvent.reminderEventId,
+                    reminderEvent.medicineName,
+                    reminderEvent.remindedTimestamp
+            );
+            requireActivity().runOnUiThread(() ->
+                    navController.navigate(action));
+        }
     }
 
     @Override
