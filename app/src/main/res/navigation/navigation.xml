@@ -100,6 +100,9 @@
             android:name="eventId"
             app:argType="integer" />
         <argument
+            android:name="eventAmount"
+            app:argType="string" />
+        <argument
             android:name="eventName"
             app:argType="string" />
         <argument

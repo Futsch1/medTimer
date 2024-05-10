@@ -110,7 +110,9 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.updateReminder(viewHolder.getReminder());
         }
 
-        thread.quitSafely();
+        if (thread != null) {
+            thread.quitSafely();
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {

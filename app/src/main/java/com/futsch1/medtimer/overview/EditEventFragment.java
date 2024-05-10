@@ -1,24 +1,36 @@
 package com.futsch1.medtimer.overview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.ZoneId;
 
 public class EditEventFragment extends Fragment {
 
+    private final HandlerThread backgroundThread;
     private int eventId;
-    private TextInputEditText editEventName;
-    private TextInputEditText editEventDate;
-    private TextInputEditText editEventTime;
+    private EditText editEventName;
+    private EditText editEventAmount;
+    private EditText editEventDate;
+    private EditText editEventTime;
+    private MedicineRepository medicineRepository;
+
+    public EditEventFragment() {
+        backgroundThread = new HandlerThread("EditEvent");
+        backgroundThread.start();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,14 +38,18 @@ public class EditEventFragment extends Fragment {
         // Inflate the layout for this fragment
         View editEventView = inflater.inflate(R.layout.fragment_edit_event, container, false);
 
+        medicineRepository = new MedicineRepository(requireActivity().getApplication());
+
         assert getArguments() != null;
         EditEventFragmentArgs editEventArgs = EditEventFragmentArgs.fromBundle(getArguments());
         eventId = editEventArgs.getEventId();
-        String eventName = editEventArgs.getEventName();
         long eventTimestamp = editEventArgs.getEventTime();
 
         editEventName = editEventView.findViewById(R.id.editEventName);
-        editEventName.setText(eventName);
+        editEventName.setText(editEventArgs.getEventName());
+
+        editEventAmount = editEventView.findViewById(R.id.editEventAmount);
+        editEventAmount.setText(editEventArgs.getEventAmount());
 
         editEventDate = editEventView.findViewById(R.id.editEventDate);
         editEventDate.setText(TimeHelper.toLocalizedDateString(eventTimestamp, ZoneId.systemDefault()));
@@ -42,5 +58,20 @@ public class EditEventFragment extends Fragment {
         editEventTime.setText(TimeHelper.toLocalizedTimeString(eventTimestamp, ZoneId.systemDefault()));
 
         return editEventView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Handler handler = new Handler(backgroundThread.getLooper());
+        handler.post(() -> {
+            ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
+            reminderEvent.medicineName = editEventName.getText().toString();
+            reminderEvent.amount = editEventAmount.getText().toString();
+            medicineRepository.updateReminderEvent(reminderEvent);
+        });
+
+        backgroundThread.quitSafely();
     }
 }
