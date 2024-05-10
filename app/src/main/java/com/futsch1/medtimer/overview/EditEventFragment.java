@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TimeHelper;
-
-import java.time.ZoneId;
 
 public class EditEventFragment extends Fragment {
 
@@ -23,8 +20,6 @@ public class EditEventFragment extends Fragment {
     private int eventId;
     private EditText editEventName;
     private EditText editEventAmount;
-    private EditText editEventDate;
-    private EditText editEventTime;
     private MedicineRepository medicineRepository;
 
     public EditEventFragment() {
@@ -43,19 +38,12 @@ public class EditEventFragment extends Fragment {
         assert getArguments() != null;
         EditEventFragmentArgs editEventArgs = EditEventFragmentArgs.fromBundle(getArguments());
         eventId = editEventArgs.getEventId();
-        long eventTimestamp = editEventArgs.getEventTime();
 
         editEventName = editEventView.findViewById(R.id.editEventName);
         editEventName.setText(editEventArgs.getEventName());
 
         editEventAmount = editEventView.findViewById(R.id.editEventAmount);
         editEventAmount.setText(editEventArgs.getEventAmount());
-
-        editEventDate = editEventView.findViewById(R.id.editEventDate);
-        editEventDate.setText(TimeHelper.toLocalizedDateString(eventTimestamp, ZoneId.systemDefault()));
-
-        editEventTime = editEventView.findViewById(R.id.editEventTime);
-        editEventTime.setText(TimeHelper.toLocalizedTimeString(eventTimestamp, ZoneId.systemDefault()));
 
         return editEventView;
     }
@@ -69,6 +57,7 @@ public class EditEventFragment extends Fragment {
             ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
             reminderEvent.medicineName = editEventName.getText().toString();
             reminderEvent.amount = editEventAmount.getText().toString();
+
             medicineRepository.updateReminderEvent(reminderEvent);
         });
 
