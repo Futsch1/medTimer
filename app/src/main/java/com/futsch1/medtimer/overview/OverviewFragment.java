@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -107,7 +106,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView latestReminders) {
-        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, Color.GREEN, android.R.drawable.ic_menu_edit, null) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, 0xFF006400, android.R.drawable.ic_menu_edit, null) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.RIGHT) {

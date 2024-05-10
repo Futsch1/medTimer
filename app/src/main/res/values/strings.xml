@@ -124,6 +124,4 @@
     <string name="taken_now">Taken now</string>
     <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>
-    <string name="date">Date</string>
-    <string name="amount">Amount</string>
 </resources>

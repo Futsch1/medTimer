@@ -120,4 +120,6 @@
     <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore_events_start">Dit vervangt alle herinneringsgebeurtenissen.\n\nDoorgaan?</string>
     <string name="taken_now">Nu ingenomen</string>
+    <string name="event_name">"Herinneringennaam   "</string>
+    <string name="edit_event">Herinnering bewerken</string>
 </resources>

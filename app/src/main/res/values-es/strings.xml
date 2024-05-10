@@ -119,4 +119,6 @@
     <string name="restore_events_start">Esto reemplazará todos los eventos de recordatorio.\n\n¿Continuar?</string>
     <string name="export_pdf">Exportar en PDF</string>
     <string name="taken_now">Tomado ahora</string>
+    <string name="event_name">Nombre del evento</string>
+    <string name="edit_event">Editar evento</string>
 </resources>
