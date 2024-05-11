@@ -120,4 +120,6 @@
     <string name="export_pdf">Export als PDF</string>
     <string name="restore_events_start">Alle Ereignisse werden überschrieben.\n\nFortfahren?</string>
     <string name="taken_now">Jetzt eingenommen</string>
+    <string name="event_name">Ereignisname</string>
+    <string name="edit_event">Ereignis bearbeiten</string>
 </resources>

@@ -30,7 +30,7 @@ public class CSVExport implements Exporter {
 
             for (ReminderEvent reminderEvent : reminderEvents) {
                 String line = String.format("%s;%s;%s;%s\n",
-                        TimeHelper.toLocalizedTimeString(reminderEvent.remindedTimestamp, defaultZoneId),
+                        TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
