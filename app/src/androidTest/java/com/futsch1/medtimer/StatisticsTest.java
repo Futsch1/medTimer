@@ -56,23 +56,11 @@ public class StatisticsTest {
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("More options"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withId(androidx.appcompat.R.id.action_bar),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withContentDescription("More options")));
         overflowMenuButton.perform(click());
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withId(androidx.appcompat.R.id.content),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
         materialTextView.perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(4000));
 
@@ -95,13 +83,7 @@ public class StatisticsTest {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
         ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.timeSpinner),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("android.widget.LinearLayout")),
-                                        0),
-                                2),
-                        isDisplayed()));
+                allOf(withId(R.id.timeSpinner)));
         appCompatSpinner.perform(click());
 
         DataInteraction materialTextView2 = onData(anything())
@@ -112,13 +94,7 @@ public class StatisticsTest {
         materialTextView2.perform(click());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.reminderTableButton), withText("Tabular view"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("android.widget.LinearLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
+                allOf(withId(R.id.reminderTableButton), withText("Tabular view")));
         materialButton.perform(click());
 
         ViewInteraction linearLayout = onView(
@@ -141,13 +117,7 @@ public class StatisticsTest {
         textView.check(matches(withText(startsWith("Selen (200 µg)"))));
 
         ViewInteraction textInputEditText = onView(
-                allOf(withId(R.id.filter),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withId(R.id.filterLayout),
-                                        0),
-                                0),
-                        isDisplayed()));
+                allOf(withId(R.id.filter)));
         textInputEditText.perform(replaceText("B"), closeSoftKeyboard());
 
         ViewInteraction textView3 = onView(
@@ -155,13 +125,7 @@ public class StatisticsTest {
         textView3.check(matches(withText("B12 (500µg)")));
 
         ViewInteraction checkableImageButton = onView(
-                allOf(withId(com.google.android.material.R.id.text_input_end_icon),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.EndCompoundLayout")),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withId(com.google.android.material.R.id.text_input_end_icon)));
         checkableImageButton.perform(click());
     }
 
