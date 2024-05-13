@@ -215,5 +215,7 @@
     <string name="export_pdf">Exporter en PDF</string>
     <string name="restore_events_start">Cela remplacera tous les événements de rappel.\n\nPoursuivre ?</string>
     <string name="taken_now">Pris maintenant</string>
+    <string name="event_name">Nom de l\'événement</string>
+    <string name="edit_event">Modifier l\'événement</string>
 
 </resources>

@@ -49,23 +49,11 @@ public class TestDataAndDeleteAndManualDoseTest {
     @Test
     public void testDataAndDeleteAndManualDoseTest() {
         ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("More options"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(androidx.appcompat.R.id.action_bar),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withContentDescription("More options")));
         overflowMenuButton.perform(click());
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Settings"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(androidx.appcompat.R.id.content),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withId(androidx.recyclerview.R.id.title), withText("Settings")));
         materialTextView.perform(click());
 
         ViewInteraction recyclerView = onView(
@@ -84,14 +72,7 @@ public class TestDataAndDeleteAndManualDoseTest {
         appCompatCheckedTextView.perform(click());
 
         ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.action_bar_container),
-                                                0)),
-                                2),
-                        isDisplayed()));
+                allOf(withContentDescription("Navigate up")));
         appCompatImageButton.perform(click());
 
         ViewInteraction overflowMenuButton2 = onView(
@@ -105,86 +86,42 @@ public class TestDataAndDeleteAndManualDoseTest {
         overflowMenuButton2.perform(click());
 
         ViewInteraction materialTextView2 = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(androidx.appcompat.R.id.content),
-                                        1),
-                                0),
-                        isDisplayed()));
+                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
         materialTextView2.perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         ViewInteraction recyclerView2 = onView(
-                allOf(withId(R.id.medicineList),
-                        childAtPosition(
-                                withClassName(is("android.widget.FrameLayout")),
-                                0)));
+                allOf(withId(R.id.medicineList)));
         recyclerView2.perform(actionOnItemAtPosition(0, longClick()));
 
         ViewInteraction materialTextView3 = onView(
-                allOf(withId(android.R.id.title), withText("Delete"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
+                allOf(withId(android.R.id.title), withText("Delete")));
         materialTextView3.perform(click());
 
         ViewInteraction materialButton = onView(
-                allOf(withId(android.R.id.button1), withText("Yes"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Yes")));
         materialButton.perform(scrollTo(), click());
 
         ViewInteraction recyclerView3 = onView(
-                allOf(withId(R.id.medicineList),
-                        childAtPosition(
-                                withClassName(is("android.widget.FrameLayout")),
-                                0)));
+                allOf(withId(R.id.medicineList)));
         recyclerView3.perform(actionOnItemAtPosition(2, click()));
 
         ViewInteraction recyclerView4 = onView(
-                allOf(withId(R.id.reminderList),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                2)));
+                allOf(withId(R.id.reminderList)));
         recyclerView4.perform(actionOnItemAtPosition(1, longClick()));
 
         ViewInteraction materialTextView4 = onView(
-                allOf(withId(android.R.id.title), withText("Delete"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
+                allOf(withId(android.R.id.title), withText("Delete")));
         materialTextView4.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(android.R.id.button1), withText("Yes"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Yes")));
         materialButton2.perform(scrollTo(), click());
 
         ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.action_bar_container),
-                                                0)),
-                                2),
-                        isDisplayed()));
+                allOf(withContentDescription("Navigate up")));
         appCompatImageButton2.perform(click());
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
@@ -212,12 +149,7 @@ public class TestDataAndDeleteAndManualDoseTest {
         textInputEditText.perform(replaceText("1"), closeSoftKeyboard());
 
         ViewInteraction materialButton4 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("OK")));
         materialButton4.perform(scrollTo(), click());
 
         ViewInteraction materialButton5 = onView(

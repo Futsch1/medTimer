@@ -19,13 +19,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.time.Instant;
@@ -38,6 +42,7 @@ public class OverviewFragment extends Fragment {
     private LatestRemindersViewAdapter adapter;
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
+    private SwipeHelper swipeHelper;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -64,6 +69,8 @@ public class OverviewFragment extends Fragment {
         thread.start();
         setupLogManualDose();
 
+        setupSwiping(latestReminders);
+
         return fragmentOverview;
     }
 
@@ -77,7 +84,6 @@ public class OverviewFragment extends Fragment {
                 skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
             });
         };
-
 
         nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
         takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
@@ -99,6 +105,36 @@ public class OverviewFragment extends Fragment {
         });
     }
 
+    private void setupSwiping(RecyclerView latestReminders) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, 0xFF006400, android.R.drawable.ic_menu_edit, null) {
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.RIGHT) {
+                    Handler handler = new Handler(thread.getLooper());
+                    handler.post(() -> navigateToEditEvent(viewHolder.getItemId()));
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
+        itemTouchHelper.attachToRecyclerView(latestReminders);
+
+    }
+
+    private void navigateToEditEvent(long eventId) {
+        NavController navController = Navigation.findNavController(fragmentOverview);
+        ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
+        if (reminderEvent != null) {
+            OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
+                    reminderEvent.reminderEventId,
+                    reminderEvent.amount,
+                    reminderEvent.medicineName,
+                    reminderEvent.remindedTimestamp
+            );
+            requireActivity().runOnUiThread(() ->
+                    navController.navigate(action));
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -111,6 +147,8 @@ public class OverviewFragment extends Fragment {
         liveData.observe(getViewLifecycleOwner(), adapter::submitList);
 
         ReminderProcessor.requestReschedule(requireContext());
+
+        swipeHelper.setup(requireContext());
     }
 
     @Override

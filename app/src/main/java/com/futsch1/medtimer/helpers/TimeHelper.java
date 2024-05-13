@@ -56,13 +56,27 @@ public class TimeHelper {
 
     }
 
-    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
-        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
-        ZonedDateTime zonedDateTime = remindedTime.atZone(zoneId);
+    public static String toLocalizedDatetimeString(long timeStamp, ZoneId zoneId) {
+        return toLocalizedDateString(timeStamp, zoneId) + " " + toLocalizedTimeString(timeStamp, zoneId);
+    }
 
-        return String.format("%s %s",
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)),
+    public static String toLocalizedDateString(long timeStamp, ZoneId zoneId) {
+        ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
+
+        return String.format("%s",
+                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+    }
+
+    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
+        ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
+
+        return String.format("%s",
                 zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
+    }
+
+    private static ZonedDateTime getZonedDateTime(long timeStamp, ZoneId zoneId) {
+        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
+        return remindedTime.atZone(zoneId);
     }
 
     public interface TimePickerResult {

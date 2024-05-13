@@ -109,7 +109,9 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.updateReminder(viewHolder.getReminder());
         }
 
-        thread.quitSafely();
+        if (thread != null) {
+            thread.quitSafely();
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
@@ -154,7 +156,7 @@ public class EditMedicineFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        swipeHelper = new SwipeHelper(requireContext()) {
+        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete, "delete_items") {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {

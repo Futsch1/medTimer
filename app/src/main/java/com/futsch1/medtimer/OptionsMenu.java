@@ -49,11 +49,6 @@ public class OptionsMenu implements MenuProvider {
         backgroundThread.start();
     }
 
-    public void onDestroy() {
-        backupManager.onDestroy();
-        backgroundThread.quitSafely();
-    }
-
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.main, menu);
