@@ -77,7 +77,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.tracing:tracing:1.2.0")
-    implementation("org.mockito:mockito-core:5.11.0")
+    implementation("org.mockito:mockito-core:5.12.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
