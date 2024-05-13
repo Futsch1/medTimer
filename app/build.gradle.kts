@@ -94,7 +94,7 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.0-alpha04")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")
 
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
 
