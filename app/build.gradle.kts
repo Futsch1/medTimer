@@ -77,7 +77,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.tracing:tracing:1.2.0")
-    implementation("org.mockito:mockito-core:5.11.0")
+    implementation("org.mockito:mockito-core:5.12.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
@@ -94,7 +94,7 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.0-alpha04")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")
 
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
 
