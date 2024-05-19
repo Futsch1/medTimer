@@ -5,8 +5,7 @@
 
 <img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
 
-The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13) making use of an Android Room
-database and Material 3 theming.
+The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13).
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"
@@ -55,6 +54,7 @@ Flexible & Personalized Reminders:
 Simple & Secure Data Management:
 
 - Confirm or dismiss reminders to record medication adherence accurately.
+- Get an overview of past doses in a chart and a tabular view.
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare
   professionals.
 - Backup and restore your medication list as JSON file.
@@ -67,3 +67,15 @@ Privacy & Offline Accessibility:
 MedTimer is a free app without adds.
 
 Keywords: Medication reminder, pill reminder, medication adherence, health app, privacy, offline
+
+## Dependencies
+
+MedTimer uses the following great open source libraries and dependencies:
+
+- [Bootstrap icon](https://icons.getbootstrap.com/)
+- [TableView](https://github.com/evrencoskun/TableView)
+- [androidplot](https://github.com/halfhp/androidplot)
+- [SimplyPDF](https://github.com/wwdablu/SimplyPDF)
+- [AndroidX Preference eXtended](https://github.com/takisoft/preferencex-android)
+- [Mockito](https://github.com/mockito/mockito)
+- [Robolectric](https://github.com/robolectric/robolectric)
