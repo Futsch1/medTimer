@@ -94,6 +94,7 @@ public class NextReminderListener extends BroadcastReceiver {
             ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(medicine, reminder);
             if (reminderEvent != null) {
                 reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
+                reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
                 medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
                 ReminderProcessor.requestReschedule(nextReminder.getContext());
             }
