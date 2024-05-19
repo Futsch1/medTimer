@@ -53,6 +53,12 @@
         <argument
             android:name="color"
             app:argType="integer" />
+        <argument
+            android:name="useInventory"
+            app:argType="boolean" />
+        <argument
+            android:name="inventory"
+            app:argType="integer" />
         <action
             android:id="@+id/action_editMedicine_to_advancedReminderSettings"
             app:destination="@id/advancedReminderSettingsFragment" />

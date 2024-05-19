@@ -17,13 +17,14 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 6,
+        version = 7,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
                 @AutoMigration(from = 3, to = 4),
                 @AutoMigration(from = 4, to = 5),
-                @AutoMigration(from = 5, to = 6, spec = MedicineRoomDatabase.AutoMigration5To6.class)
+                @AutoMigration(from = 5, to = 6, spec = MedicineRoomDatabase.AutoMigration5To6.class),
+                @AutoMigration(from = 6, to = 7, spec = MedicineRoomDatabase.AutoMigration6To7.class)
         }
 )
 @TypeConverters({Converters.class})
@@ -65,6 +66,15 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
         public void onPostMigrate(@NonNull SupportSQLiteDatabase db) {
             AutoMigrationSpec.super.onPostMigrate(db);
             db.execSQL("UPDATE Reminder SET pauseDays = pauseDays - 1");
+        }
+    }
+
+    static class AutoMigration6To7 implements AutoMigrationSpec {
+        @Override
+        public void onPostMigrate(@NonNull SupportSQLiteDatabase db) {
+            AutoMigrationSpec.super.onPostMigrate(db);
+            db.execSQL("ALTER TABLE Medicine ADD COLUMN useInventory BOOLEAN NOT NULL DEFAULT FALSE");
+            db.execSQL("ALTER TABLE Medicine ADD COLUMN inventory INTEGER NOT NULL DEFAULT 0");
         }
     }
 }
