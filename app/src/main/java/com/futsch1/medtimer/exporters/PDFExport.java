@@ -48,7 +48,7 @@ public class PDFExport implements Exporter {
         LinkedList<LinkedList<Cell>> rows = new LinkedList<>();
 
         final int pageWidth = simplyPdfDocument.getUsablePageWidth();
-        int[] columnWidths = {pageWidth / 4, pageWidth / 3, pageWidth / 4, pageWidth / 6};
+        int[] columnWidths = {pageWidth / 4, pageWidth / 3, pageWidth / 6, pageWidth / 4};
 
         LinkedList<Cell> header = getHeader(columnWidths);
         rows.add(header);
@@ -104,7 +104,8 @@ public class PDFExport implements Exporter {
         row.add(new TextCell(TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId), textProperties, columnWidths[0]));
         row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
         row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
-        row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "", textProperties, columnWidths[3]));
+        row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
+                TimeHelper.toLocalizedDatetimeString(reminderEvent.processedTimestamp, defaultZoneId) : "", textProperties, columnWidths[3]));
         return row;
     }
 
