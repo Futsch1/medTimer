@@ -34,6 +34,7 @@ public class CSVExportUnitTest {
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent1 = new ReminderEvent();
         reminderEvent1.remindedTimestamp = 1620000000; // Set remindedTimestamp to a specific value
+        reminderEvent1.processedTimestamp = 1620000120;
         reminderEvent1.medicineName = "Medicine 1";
         reminderEvent1.amount = "10mg";
         reminderEvent1.status = ReminderEvent.ReminderStatus.TAKEN;
@@ -41,6 +42,7 @@ public class CSVExportUnitTest {
 
         ReminderEvent reminderEvent2 = new ReminderEvent();
         reminderEvent2.remindedTimestamp = 1620001800; // Set remindedTimestamp to a specific value
+        reminderEvent2.processedTimestamp = 1620001980;
         reminderEvent2.medicineName = "Medicine 2";
         reminderEvent2.amount = "20mg";
         reminderEvent2.status = ReminderEvent.ReminderStatus.SKIPPED;
@@ -68,7 +70,7 @@ public class CSVExportUnitTest {
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Time;Name;Amount;Taken\n");
-                verify(fileWriter).write("5/3/21 12:00 AM;Medicine 1;10mg;x\n");
+                verify(fileWriter).write("5/3/21 12:00 AM;Medicine 1;10mg;5/3/21 12:02 AM\n");
                 verify(fileWriter).write("5/3/21 12:30 AM;Medicine 2;20mg;\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
