@@ -83,6 +83,8 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
+    implementation("com.androidplot:androidplot-core:1.5.10")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
@@ -94,11 +96,6 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.0-beta01")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")
-
-    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
-
-    implementation("com.androidplot:androidplot-core:1.5.10")
 }
 
 play {
