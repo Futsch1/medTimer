@@ -23,7 +23,7 @@
     <string name="channel_name" translatable="false">MedTimer</string>
     <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">İlaç hatırlatıcısı</string>
-    <string name="notification_content">Saat %1$s - %3$s%4$s'den %2$s alma zamanı</string>
+    <string name="notification_content">Saat %1$s - %3$s%4$s\'den %2$s alma zamanı</string>
     <string name="notification_taken">ALINDI</string>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
@@ -45,7 +45,7 @@
     <string name="twenty_four_hours">24 saat</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
-    <string name="app_url">GitHub'da MedTimer</string>
+    <string name="app_url">GitHub\'da MedTimer</string>
     <string name="color">Renk</string>
     <string name="select_color">Renk seç</string>
     <string name="exact_reminders">Tam hatırlatıcılar</string>
