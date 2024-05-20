@@ -95,8 +95,8 @@ public class ManualDose {
         LocalDateTime localDateTime = LocalDateTime.now();
         TimeHelper.TimePickerWrapper timePicker = new TimeHelper.TimePickerWrapper(activity);
         timePicker.show(localDateTime.getHour(), localDateTime.getMinute(), minutes -> {
-            reminderEvent.remindedTimestamp = TimeHelper.instantFromTodayMinutes(minutes).toEpochMilli() / 1000;
-            reminderEvent.processedTimestamp = Instant.now().toEpochMilli() / 1000;
+            reminderEvent.remindedTimestamp = TimeHelper.instantFromTodayMinutes(minutes).getEpochSecond();
+            reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
             medicineRepository.insertReminderEvent(reminderEvent);
         });

@@ -33,7 +33,8 @@ public class CSVExport implements Exporter {
                         TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
-                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ? "x" : "");
+                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
+                                TimeHelper.toLocalizedDatetimeString(reminderEvent.processedTimestamp, defaultZoneId) : "");
                 csvFile.write(line);
             }
         } catch (IOException e) {

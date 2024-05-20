@@ -17,8 +17,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 46
-        versionName = "1.8.2"
+        versionCode = 47
+        versionName = "1.8.3"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -74,7 +74,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.tracing:tracing:1.2.0")
     implementation("org.mockito:mockito-core:5.12.0")
@@ -82,23 +82,20 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
+    implementation("com.androidplot:androidplot-core:1.5.10")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.robolectric:robolectric:4.12.1")
+    testImplementation("org.robolectric:robolectric:4.12.2")
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha04")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha04")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha04")
-    androidTestImplementation("androidx.test:rules:1.6.0-alpha04")
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-beta01")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-beta01")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-beta01")
+    androidTestImplementation("androidx.test:rules:1.6.0-beta01")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")
-
-    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
-
-    implementation("com.androidplot:androidplot-core:1.5.10")
 }
 
 play {
