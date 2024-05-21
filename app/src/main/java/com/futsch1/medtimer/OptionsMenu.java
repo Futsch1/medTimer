@@ -137,11 +137,12 @@ public class OptionsMenu implements MenuProvider {
             item.setVisible(true);
             item.setOnMenuItemClickListener(menuItem -> {
                 final Handler handler = new Handler(backgroundThread.getLooper());
-                handler.post(() -> {
+                handler.post(medicineViewModel::deleteAll);
+                handler.postDelayed(() -> {
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
-                    generateTestData.deleteAll();
                     generateTestData.generateTestMedicine();
-                });
+                }, 1000);
+                handler.postDelayed(() -> ReminderProcessor.requestReschedule(context), 2000);
                 return true;
             });
         } else {
