@@ -15,11 +15,7 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
     public String createBackup(int databaseVersion, List<MedicineWithReminders> list) {
         // Fix the medicines where the instructions are null
         for (MedicineWithReminders medicineWithReminders : list) {
-            for (Reminder reminder : medicineWithReminders.reminders) {
-                if (reminder.instructions == null) {
-                    reminder.instructions = "";
-                }
-            }
+            medicineWithReminders.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
         }
         return super.createBackup(databaseVersion, list);
     }
