@@ -12,6 +12,15 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
     }
 
     @Override
+    public String createBackup(int databaseVersion, List<MedicineWithReminders> list) {
+        // Fix the medicines where the instructions are null
+        for (MedicineWithReminders medicineWithReminders : list) {
+            medicineWithReminders.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
+        }
+        return super.createBackup(databaseVersion, list);
+    }
+
+    @Override
     protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
         return builder
                 .registerTypeAdapter(Medicine.class, new FullDeserialize<Medicine>())

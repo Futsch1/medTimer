@@ -27,6 +27,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.futsch1.medtimer.database.MedicineRepository;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +48,12 @@ public class BasicUITest {
 
     @Test
     public void basicUITest() {
+        mActivityScenarioRule.getScenario().onActivity(activity -> {
+            MedicineRepository repository = new MedicineRepository(activity.getApplication());
+            repository.deleteAll();
+        });
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         ViewInteraction extendedFloatingActionButton = onView(
