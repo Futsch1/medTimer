@@ -178,6 +178,7 @@ public class EditMedicineFragment extends Fragment {
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
         reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
+        reminder.instructions = "";
 
         new TimeHelper.TimePickerWrapper(requireActivity()).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;
