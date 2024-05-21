@@ -26,7 +26,6 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.evrencoskun.tableview.TableView;
-import com.futsch1.medtimer.database.MedicineRepository;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,12 +48,6 @@ public class StatisticsTest {
 
     @Test
     public void statisticsTest() {
-        mActivityScenarioRule.getScenario().onActivity(activity -> {
-            MedicineRepository repository = new MedicineRepository(activity.getApplication());
-            repository.deleteAll();
-        });
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
         ViewInteraction overflowMenuButton = onView(
                 allOf(withContentDescription("More options")));
         overflowMenuButton.perform(click());
@@ -62,7 +55,7 @@ public class StatisticsTest {
         ViewInteraction materialTextView = onView(
                 allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
         materialTextView.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(4000));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 
         ViewInteraction chip = onView(
                 new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
