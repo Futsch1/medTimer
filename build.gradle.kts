@@ -8,5 +8,6 @@ plugins {
 buildscript {
     repositories {
         google()
+        maven { url = uri("https://jitpack.io") }
     }
 }

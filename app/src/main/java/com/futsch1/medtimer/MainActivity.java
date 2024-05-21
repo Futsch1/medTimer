@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.Theme_MedTimer2);
         }
 
+        startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+
         setContentView(R.layout.activity_main);
 
         checkPermissions();
