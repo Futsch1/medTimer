@@ -107,8 +107,10 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
 
-    public void deleteReminderEvents() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
+    public void deleteAll() {
+        deleteReminders();
+        deleteMedicines();
+        deleteReminderEvents();
     }
 
     public void deleteReminders() {
@@ -119,15 +121,8 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicines);
     }
 
-    public void deleteAll() {
-        try {
-            MedicineRoomDatabase.databaseWriteExecutor.submit(database::clearAllTables).get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
-        }
+    public void deleteReminderEvents() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
     interface Insert<T> {
