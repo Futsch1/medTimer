@@ -12,10 +12,6 @@ public class GenerateTestData {
         this.viewModel = viewModel;
     }
 
-    public void deleteAll() {
-        viewModel.deleteAll();
-    }
-
     public void generateTestMedicine() {
         TestMedicine[] testMedicines = new TestMedicine[]{
                 new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, new TestReminder[]{
