@@ -42,6 +42,9 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(MedicineWithReminders medicineWithReminders, DeleteCallback deleteCallback) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
+        if (medicineWithReminders.medicine.useInventory) {
+            medicineNameView.append(" (" + medicineWithReminders.medicine.inventory + ")");
+        }
         if (medicineWithReminders.reminders.isEmpty()) {
             remindersSummaryView.setText(R.string.no_reminders);
         } else {
@@ -94,7 +97,9 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 medicineWithReminders.medicine.medicineId,
                 medicineWithReminders.medicine.name,
                 medicineWithReminders.medicine.useColor,
-                medicineWithReminders.medicine.color
+                medicineWithReminders.medicine.color,
+                medicineWithReminders.medicine.useInventory,
+                medicineWithReminders.medicine.inventory
         );
         navController.navigate(action);
     }

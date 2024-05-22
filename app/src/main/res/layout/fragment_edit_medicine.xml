@@ -35,8 +35,10 @@
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/enableColor"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
                 android:text="@string/color" />
 
             <Space
@@ -46,10 +48,48 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/selectColor"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="2"
                 android:text="@string/select_color" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/enableInventory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="@string/inventory" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:hint="@string/number">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editInventory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number|numberSigned" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

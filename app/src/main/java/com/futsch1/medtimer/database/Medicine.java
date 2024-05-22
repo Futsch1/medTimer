@@ -24,10 +24,19 @@ public class Medicine {
     @Expose
     public boolean useColor;
 
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int inventory;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean useInventory;
+
     public Medicine(String name) {
         this.name = name;
         this.useColor = false;
         this.color = Color.DKGRAY;
+        this.useInventory = false;
+        this.inventory = 0;
     }
 
     public Medicine(String name, int id) {
@@ -35,5 +44,7 @@ public class Medicine {
         this.medicineId = id;
         this.useColor = false;
         this.color = Color.DKGRAY;
+        this.useInventory = false;
+        this.inventory = 0;
     }
 }

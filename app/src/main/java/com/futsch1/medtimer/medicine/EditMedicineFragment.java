@@ -30,6 +30,7 @@ import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.textfield.TextInputEditText;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
@@ -46,7 +47,10 @@ public class EditMedicineFragment extends Fragment {
     private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
+    private MaterialSwitch enableInventory;
+    private TextInputEditText editInventory;
     private int color;
+    private int inventory;
     private View fragmentEditMedicine;
     private EditMedicineFragmentArgs editMedicineArgs;
 
@@ -78,6 +82,10 @@ public class EditMedicineFragment extends Fragment {
         setupEnableColor(useColor);
         setupColorButton(useColor);
 
+        boolean useInventory = editMedicineArgs.getUseInventory();
+        setupEnableInventory(useInventory);
+        setupInventory(useInventory);
+
         setupSwiping(recyclerView);
         setupAddReminderButton();
 
@@ -100,6 +108,8 @@ public class EditMedicineFragment extends Fragment {
         Medicine medicine = new Medicine(word, medicineId);
         medicine.useColor = enableColor.isChecked();
         medicine.color = color;
+        medicine.useInventory = enableInventory.isChecked();
+        medicine.inventory = inventory;
         medicineViewModel.updateMedicine(medicine);
 
         RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
@@ -127,7 +137,7 @@ public class EditMedicineFragment extends Fragment {
     private void setupEnableColor(boolean useColor) {
         enableColor = fragmentEditMedicine.findViewById(R.id.enableColor);
         enableColor.setChecked(useColor);
-        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setEnabled(isChecked));
     }
 
     private void setupColorButton(boolean useColor) {
@@ -152,7 +162,30 @@ public class EditMedicineFragment extends Fragment {
             // Workaround to make the brightness slider be setup correctly
             new Handler(requireActivity().getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
         });
-        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+        colorButton.setEnabled(useColor);
+    }
+
+    private void setupEnableInventory(boolean useInventory) {
+        enableInventory = fragmentEditMedicine.findViewById(R.id.enableInventory);
+        enableInventory.setChecked(useInventory);
+        enableInventory.setOnCheckedChangeListener((buttonView, isChecked) -> editInventory.setEnabled(isChecked));
+    }
+
+    private void setupInventory(boolean useInventory) {
+        inventory = editMedicineArgs.getInventory();
+        editInventory = fragmentEditMedicine.findViewById(R.id.editInventory);
+        editInventory.setText(String.valueOf(inventory));
+        editInventory.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                try {
+                    inventory = Integer.parseInt(editInventory.getText().toString());
+                } catch (NumberFormatException e) {
+                    inventory = 0;
+                    editInventory.setText("0");
+                }
+            }
+        });
+        editInventory.setEnabled(useInventory);
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
