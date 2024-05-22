@@ -11,36 +11,43 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ReminderScheduler {
-    private final ScheduleListener listener;
+    private final NextReminderReceiver listener;
     private final TimeAccess timeAccess;
+    private AllNextRemindersReceiver allNextRemindersReceiver;
 
-    public ReminderScheduler(ScheduleListener listener, TimeAccess timeAccess) {
+    public ReminderScheduler(NextReminderReceiver listener, TimeAccess timeAccess) {
         this.listener = listener;
         this.timeAccess = timeAccess;
     }
 
     public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, List<ReminderEvent> reminderEvents) {
         ArrayList<Reminder> reminders = getReminders(medicineWithReminders);
-        Instant nextScheduledTime = null;
-        Reminder nextReminder = null;
+        ArrayList<AllNextRemindersReceiver.ScheduledReminder> scheduledReminders = new ArrayList<>();
 
         for (Reminder reminder : reminders) {
             List<ReminderEvent> filteredEvents = getFilteredEvents(reminderEvents, reminder.reminderId);
             ReminderForScheduling reminderForScheduling = new ReminderForScheduling(reminder, filteredEvents, this.timeAccess);
             Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
-            if (nextScheduledTime == null || (reminderScheduledTime != null && reminderScheduledTime.isBefore(nextScheduledTime))) {
-                nextScheduledTime = reminderScheduledTime;
-                nextReminder = reminder;
+
+            if (reminderScheduledTime != null) {
+                scheduledReminders.add(new AllNextRemindersReceiver.ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));
             }
         }
 
-        processFoundNextReminder(medicineWithReminders, nextReminder, nextScheduledTime);
+        scheduledReminders.sort(Comparator.comparing(o -> o.timestamp));
+
+        processFoundNextReminder(scheduledReminders);
+
+        if (allNextRemindersReceiver != null) {
+            allNextRemindersReceiver.onAllNextReminders(scheduledReminders);
+        }
     }
 
     private ArrayList<Reminder> getReminders(List<MedicineWithReminders> medicineWithReminders) {
@@ -57,12 +64,6 @@ public class ReminderScheduler {
         return reminderEvents.stream().filter(event -> event.reminderId == reminderId).collect(Collectors.toList());
     }
 
-    private void processFoundNextReminder(@NonNull List<MedicineWithReminders> medicineWithReminders, Reminder nextReminder, Instant nextScheduledTime) {
-        if (nextReminder != null) {
-            this.listener.schedule(nextScheduledTime, getMedicine(nextReminder, medicineWithReminders), nextReminder);
-        }
-    }
-
     private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
         int medicineId = reminder.medicineRelId;
 
@@ -74,8 +75,26 @@ public class ReminderScheduler {
         }
     }
 
-    public interface ScheduleListener {
-        void schedule(Instant timestamp, Medicine medicine, Reminder reminder);
+    private void processFoundNextReminder(List<AllNextRemindersReceiver.ScheduledReminder> scheduledReminders) {
+        if (!scheduledReminders.isEmpty()) {
+            AllNextRemindersReceiver.ScheduledReminder scheduledReminder = scheduledReminders.get(0);
+            this.listener.onNextReminder(scheduledReminder.timestamp, scheduledReminder.medicine, scheduledReminder.reminder);
+        }
+    }
+
+    public void setAllNextRemindersReceiver(AllNextRemindersReceiver allNextRemindersReceiver) {
+        this.allNextRemindersReceiver = allNextRemindersReceiver;
+    }
+
+    public interface NextReminderReceiver {
+        void onNextReminder(Instant timestamp, Medicine medicine, Reminder reminder);
+    }
+
+    public interface AllNextRemindersReceiver {
+        void onAllNextReminders(List<ScheduledReminder> reminders);
+
+        record ScheduledReminder(Medicine medicine, Reminder reminder, Instant timestamp) {
+        }
     }
 
     public interface TimeAccess {
