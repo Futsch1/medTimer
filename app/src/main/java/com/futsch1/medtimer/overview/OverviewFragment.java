@@ -1,10 +1,5 @@
 package com.futsch1.medtimer.overview;
 
-import static com.futsch1.medtimer.ActivityCodes.NEXT_REMINDER_ACTION;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.NextRemindersViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.SwipeHelper;
@@ -36,7 +32,7 @@ import java.time.Instant;
 import java.util.List;
 
 public class OverviewFragment extends Fragment {
-    private NextReminderListener nextReminderListener;
+
     private View fragmentOverview;
     private MedicineViewModel medicineViewModel;
     private LatestRemindersViewAdapter adapter;
@@ -75,6 +71,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupTakenSkippedButtonsAndNextReminderListener() {
+        NextReminderListener nextReminderListener;
         Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
         Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
         NextReminderListener.NextReminderIsTodayCallback callback = isToday -> {
@@ -85,14 +82,12 @@ public class OverviewFragment extends Fragment {
             });
         };
 
+        NextRemindersViewModel nextRemindersViewModel = new ViewModelProvider(this).get(NextRemindersViewModel.class);
         nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
+        nextRemindersViewModel.getScheduledReminders().observe(getViewLifecycleOwner(), nextReminderListener::setScheduledReminders);
+
         takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
         skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
-
-        Intent nextReminder = requireContext().registerReceiver(nextReminderListener, new IntentFilter(NEXT_REMINDER_ACTION), Context.RECEIVER_EXPORTED);
-        if (nextReminder != null) {
-            nextReminderListener.onReceive(requireContext(), nextReminder);
-        }
     }
 
     private void setupLogManualDose() {
@@ -156,10 +151,6 @@ public class OverviewFragment extends Fragment {
         super.onDestroy();
         if (thread != null) {
             thread.quitSafely();
-        }
-        if (nextReminderListener != null) {
-            requireContext().unregisterReceiver(nextReminderListener);
-            nextReminderListener.stop();
         }
     }
 }
