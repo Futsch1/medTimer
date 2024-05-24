@@ -45,9 +45,4 @@ public class SnoozeWork extends RescheduleWork {
 
         return Result.success();
     }
-
-    @Override
-    protected void notifyGUIListener(Instant timestamp, int reminderId) {
-        // Intentionally empty
-    }
 }

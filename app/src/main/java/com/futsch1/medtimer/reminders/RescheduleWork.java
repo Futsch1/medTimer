@@ -23,7 +23,6 @@ import com.futsch1.medtimer.PreferencesFragment;
 import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.overview.NextReminderListener;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
 import java.time.Instant;
@@ -49,7 +48,17 @@ public class RescheduleWork extends Worker {
         Log.i(LogTags.REMINDER, "Received scheduler request");
 
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
-        ReminderScheduler reminderScheduler = new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(timestamp, reminder.reminderId, medicine.name, -1, 0), new ReminderScheduler.TimeAccess() {
+        ReminderScheduler reminderScheduler = getReminderScheduler();
+        List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
+        reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
+
+        return Result.success();
+    }
+
+    @NonNull
+    private ReminderScheduler getReminderScheduler() {
+
+        return new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(timestamp, reminder.reminderId, medicine.name, -1, 0), new ReminderScheduler.TimeAccess() {
             @Override
             public ZoneId systemZone() {
                 return ZoneId.systemDefault();
@@ -60,11 +69,6 @@ public class RescheduleWork extends Worker {
                 return LocalDate.now();
             }
         });
-
-        List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
-        reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
-
-        return Result.success();
     }
 
     protected void schedule(Instant timestamp, int reminderId, String medicineName, int requestCode, int reminderEventId) {
@@ -82,8 +86,6 @@ public class RescheduleWork extends Worker {
             } else {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
             }
-
-            notifyGUIListener(timestamp, reminderId);
 
             Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s/%d to %s", medicineName, reminderId, timestamp));
         } else {
@@ -106,10 +108,5 @@ public class RescheduleWork extends Worker {
         boolean exactReminders = sharedPref.getBoolean(PreferencesFragment.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
-    }
-
-    protected void notifyGUIListener(Instant timestamp, int reminderId) {
-        // Notify GUI listener
-        NextReminderListener.sendNextReminder(context, reminderId, timestamp);
     }
 }
