@@ -24,11 +24,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.NextRemindersViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 public class OverviewFragment extends Fragment {
@@ -39,6 +43,9 @@ public class OverviewFragment extends Fragment {
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
     private SwipeHelper swipeHelper;
+    private NextRemindersViewModel nextRemindersViewModel;
+    private List<ReminderEvent> reminderEvents;
+    private List<MedicineWithReminders> medicineWithReminders;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -82,9 +89,11 @@ public class OverviewFragment extends Fragment {
             });
         };
 
-        NextRemindersViewModel nextRemindersViewModel = new ViewModelProvider(this).get(NextRemindersViewModel.class);
+        nextRemindersViewModel = new ViewModelProvider(this).get(NextRemindersViewModel.class);
         nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
         nextRemindersViewModel.getScheduledReminders().observe(getViewLifecycleOwner(), nextReminderListener::setScheduledReminders);
+
+        setupScheduleObservers();
 
         takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
         skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
@@ -115,6 +124,12 @@ public class OverviewFragment extends Fragment {
 
     }
 
+    private void setupScheduleObservers() {
+        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60)
+                .observe(getViewLifecycleOwner(), this::changedReminderEvents);
+        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), this::changedMedicines);
+    }
+
     private void navigateToEditEvent(long eventId) {
         NavController navController = Navigation.findNavController(fragmentOverview);
         ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
@@ -130,9 +145,42 @@ public class OverviewFragment extends Fragment {
         }
     }
 
+    private void changedReminderEvents(List<ReminderEvent> reminderEvents) {
+        this.reminderEvents = reminderEvents;
+        calculateSchedule();
+    }
+
+    private void changedMedicines(List<MedicineWithReminders> medicineWithReminders) {
+        this.medicineWithReminders = medicineWithReminders;
+        calculateSchedule();
+    }
+
+    private void calculateSchedule() {
+        ReminderScheduler scheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
+
+        }, new ReminderScheduler.TimeAccess() {
+            @Override
+            public ZoneId systemZone() {
+                return ZoneId.systemDefault();
+            }
+
+            @Override
+            public LocalDate localDate() {
+                return LocalDate.now();
+            }
+        });
+        
+        scheduler.setAllNextRemindersReceiver(reminders -> nextRemindersViewModel.setScheduledReminders(reminders));
+
+        if (medicineWithReminders != null && reminderEvents != null) {
+            scheduler.schedule(medicineWithReminders, reminderEvents);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
         long eventAgeHours = Long.parseLong(sharedPref.getString("overview_events", "24"));
         if (liveData != null) {

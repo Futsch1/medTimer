@@ -28,7 +28,7 @@ public class ReminderScheduler {
         this.timeAccess = timeAccess;
     }
 
-    public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, List<ReminderEvent> reminderEvents) {
+    public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, @NonNull List<ReminderEvent> reminderEvents) {
         ArrayList<Reminder> reminders = getReminders(medicineWithReminders);
         ArrayList<NextRemindersViewModel.ScheduledReminder> scheduledReminders = new ArrayList<>();
 
