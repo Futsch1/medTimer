@@ -20,28 +20,37 @@
             android:layout_gravity="start|center_vertical" />
 
         <LinearLayout
-            style="?buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/takenNow"
-                style="?buttonBarButtonStyle"
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/takenOrSkipped"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/taken_now"
-                android:visibility="gone" />
+                android:importantForAccessibility="no"
+                app:singleSelection="false">
 
-            <Button
-                android:id="@+id/skippedNow"
-                style="?buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/skip_reminder"
-                android:visibility="gone" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/takenNow"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/taken_now"
+                    android:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/skippedNow"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/skip_reminder"
+                    android:visibility="gone" />
+            </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
 
     </LinearLayout>
