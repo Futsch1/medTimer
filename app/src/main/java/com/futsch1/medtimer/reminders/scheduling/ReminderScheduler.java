@@ -2,7 +2,7 @@ package com.futsch1.medtimer.reminders.scheduling;
 
 import androidx.annotation.NonNull;
 
-import com.futsch1.medtimer.NextRemindersViewModel;
+import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
@@ -19,18 +19,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ReminderScheduler {
-    private final NextReminderReceiver listener;
     private final TimeAccess timeAccess;
-    private AllNextRemindersReceiver allNextRemindersReceiver;
 
-    public ReminderScheduler(NextReminderReceiver listener, TimeAccess timeAccess) {
-        this.listener = listener;
+    public ReminderScheduler(TimeAccess timeAccess) {
         this.timeAccess = timeAccess;
     }
 
-    public void schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, @NonNull List<ReminderEvent> reminderEvents) {
+    public List<ScheduledReminder> schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, @NonNull List<ReminderEvent> reminderEvents) {
         ArrayList<Reminder> reminders = getReminders(medicineWithReminders);
-        ArrayList<NextRemindersViewModel.ScheduledReminder> scheduledReminders = new ArrayList<>();
+        ArrayList<ScheduledReminder> scheduledReminders = new ArrayList<>();
 
         for (Reminder reminder : reminders) {
             List<ReminderEvent> filteredEvents = getFilteredEvents(reminderEvents, reminder.reminderId);
@@ -38,17 +35,13 @@ public class ReminderScheduler {
             Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
 
             if (reminderScheduledTime != null) {
-                scheduledReminders.add(new NextRemindersViewModel.ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));
+                scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));
             }
         }
 
-        scheduledReminders.sort(Comparator.comparing(NextRemindersViewModel.ScheduledReminder::timestamp));
+        scheduledReminders.sort(Comparator.comparing(ScheduledReminder::timestamp));
 
-        processFoundNextReminder(scheduledReminders);
-
-        if (allNextRemindersReceiver != null) {
-            allNextRemindersReceiver.onAllNextReminders(scheduledReminders);
-        }
+        return scheduledReminders;
     }
 
     private ArrayList<Reminder> getReminders(List<MedicineWithReminders> medicineWithReminders) {
@@ -74,26 +67,6 @@ public class ReminderScheduler {
         } else {
             throw new NoSuchElementException();
         }
-    }
-
-    private void processFoundNextReminder(List<NextRemindersViewModel.ScheduledReminder> scheduledReminders) {
-        if (!scheduledReminders.isEmpty()) {
-            NextRemindersViewModel.ScheduledReminder scheduledReminder = scheduledReminders.get(0);
-            this.listener.onNextReminder(scheduledReminder.timestamp(), scheduledReminder.medicine(), scheduledReminder.reminder());
-        }
-    }
-
-    public void setAllNextRemindersReceiver(AllNextRemindersReceiver allNextRemindersReceiver) {
-        this.allNextRemindersReceiver = allNextRemindersReceiver;
-    }
-
-    public interface NextReminderReceiver {
-        void onNextReminder(Instant timestamp, Medicine medicine, Reminder reminder);
-    }
-
-    public interface AllNextRemindersReceiver {
-        void onAllNextReminders(List<NextRemindersViewModel.ScheduledReminder> reminders);
-
     }
 
     public interface TimeAccess {

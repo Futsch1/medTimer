@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.NextRemindersViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.SwipeHelper;
@@ -156,9 +157,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void calculateSchedule() {
-        ReminderScheduler scheduler = new ReminderScheduler((timestamp, medicine, reminder) -> {
-
-        }, new ReminderScheduler.TimeAccess() {
+        ReminderScheduler scheduler = new ReminderScheduler(new ReminderScheduler.TimeAccess() {
             @Override
             public ZoneId systemZone() {
                 return ZoneId.systemDefault();
@@ -169,11 +168,10 @@ public class OverviewFragment extends Fragment {
                 return LocalDate.now();
             }
         });
-        
-        scheduler.setAllNextRemindersReceiver(reminders -> nextRemindersViewModel.setScheduledReminders(reminders));
 
         if (medicineWithReminders != null && reminderEvents != null) {
-            scheduler.schedule(medicineWithReminders, reminderEvents);
+            List<ScheduledReminder> reminders = scheduler.schedule(medicineWithReminders, reminderEvents);
+            nextRemindersViewModel.setScheduledReminders(reminders);
         }
     }
 

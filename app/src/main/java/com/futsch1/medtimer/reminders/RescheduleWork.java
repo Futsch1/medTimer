@@ -20,6 +20,7 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.PreferencesFragment;
+import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -50,7 +51,11 @@ public class RescheduleWork extends Worker {
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = getReminderScheduler();
         List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
-        reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
+        List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
+        if (!scheduledReminders.isEmpty()) {
+            ScheduledReminder scheduledReminder = scheduledReminders.get(0);
+            this.schedule(scheduledReminder.timestamp(), scheduledReminder.reminder().reminderId, scheduledReminder.medicine().name, -1, 0);
+        }
 
         return Result.success();
     }
@@ -58,7 +63,7 @@ public class RescheduleWork extends Worker {
     @NonNull
     private ReminderScheduler getReminderScheduler() {
 
-        return new ReminderScheduler((timestamp, medicine, reminder) -> this.schedule(timestamp, reminder.reminderId, medicine.name, -1, 0), new ReminderScheduler.TimeAccess() {
+        return new ReminderScheduler(new ReminderScheduler.TimeAccess() {
             @Override
             public ZoneId systemZone() {
                 return ZoneId.systemDefault();

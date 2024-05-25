@@ -7,8 +7,8 @@ import android.os.Looper;
 import android.widget.TextView;
 
 import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.NextRemindersViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -52,10 +52,10 @@ public class NextReminderListener {
         });
 
     }
-    
-    public void setScheduledReminders(List<NextRemindersViewModel.ScheduledReminder> nextReminders) {
+
+    public void setScheduledReminders(List<ScheduledReminder> nextReminders) {
         if (!nextReminders.isEmpty()) {
-            NextRemindersViewModel.ScheduledReminder scheduledReminder = nextReminders.get(0);
+            ScheduledReminder scheduledReminder = nextReminders.get(0);
             reminder = scheduledReminder.reminder();
             medicine = scheduledReminder.medicine();
             Instant timestamp = scheduledReminder.timestamp();

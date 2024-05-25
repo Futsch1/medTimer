@@ -4,10 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.Reminder;
-
-import java.time.Instant;
 import java.util.List;
 
 public class NextRemindersViewModel extends ViewModel {
@@ -22,7 +18,4 @@ public class NextRemindersViewModel extends ViewModel {
         this.scheduledReminders.setValue(scheduledReminders);
     }
 
-    public record ScheduledReminder(Medicine medicine, Reminder reminder, Instant timestamp) {
-
-    }
 }
