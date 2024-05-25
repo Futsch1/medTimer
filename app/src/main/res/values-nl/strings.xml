@@ -28,7 +28,7 @@
     <string name="skipped">Overgeslagen</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
-    <string name="next_reminder">Volgende herinnering</string>
+    <string name="next_reminders">Volgende herinneringen</string>
     <string name="version">Versie %s</string>
     <string name="are_you_sure_delete_reminder">Weet u zeker dat u de herinnering wilt verwijderen?</string>
     <string name="clear_events">Herinneringen verwijderen</string>
@@ -122,4 +122,5 @@
     <string name="taken_now">Nu ingenomen</string>
     <string name="event_name">"Herinneringennaam   "</string>
     <string name="edit_event">Herinnering bewerken</string>
+    <string name="show_all">Alles weergeven</string>
 </resources>

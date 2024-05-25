@@ -24,39 +24,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/next_reminder"
+                android:text="@string/next_reminders"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/nextReminderInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:drawableStartCompat="@drawable/hourglass_split" />
-
-            <LinearLayout
-                style="?buttonBarStyle"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nextReminders"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="match_parent" />
 
-                <Button
-                    android:id="@+id/takenNow"
-                    style="?buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/taken_now"
-                    android:visibility="gone" />
+            <ImageButton
+                android:id="@+id/expandNextReminders"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:contentDescription="@string/show_all"
+                android:src="@drawable/chevron_down"
+                tools:ignore="TouchTargetSizeCheck" />
 
-                <Button
-                    android:id="@+id/skippedNow"
-                    style="?buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/skip_reminder"
-                    android:visibility="gone" />
-            </LinearLayout>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -4,11 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -40,13 +40,15 @@ public class OverviewFragment extends Fragment {
 
     private View fragmentOverview;
     private MedicineViewModel medicineViewModel;
-    private LatestRemindersViewAdapter adapter;
+    private LatestRemindersViewAdapter latestRemindersViewAdapter;
+    private NextRemindersViewAdapter nextRemindersViewAdapter;
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
     private SwipeHelper swipeHelper;
     private NextRemindersViewModel nextRemindersViewModel;
     private List<ReminderEvent> reminderEvents;
     private List<MedicineWithReminders> medicineWithReminders;
+    private boolean nextRemindersExpanded = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -54,50 +56,44 @@ public class OverviewFragment extends Fragment {
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false);
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        setupTakenSkippedButtonsAndNextReminderListener();
+        thread = new HandlerThread("LogManualDose");
+        thread.start();
 
+        RecyclerView latestReminders = setupLatestReminders();
+        setupNextReminders();
+        setupLogManualDose();
+        setupSwiping(latestReminders);
+        setupExpandNextReminders();
+
+        return fragmentOverview;
+    }
+
+    @NonNull
+    private RecyclerView setupLatestReminders() {
         RecyclerView latestReminders = fragmentOverview.findViewById(R.id.latestReminders);
-
-        adapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
-        latestReminders.setAdapter(adapter);
+        latestRemindersViewAdapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
+        latestReminders.setAdapter(latestRemindersViewAdapter);
         latestReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
         // Scroll to top as soon as a new item was inserted
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        latestRemindersViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 latestReminders.scrollToPosition(0);
             }
         });
-
-        thread = new HandlerThread("LogManualDose");
-        thread.start();
-        setupLogManualDose();
-
-        setupSwiping(latestReminders);
-
-        return fragmentOverview;
+        return latestReminders;
     }
 
-    private void setupTakenSkippedButtonsAndNextReminderListener() {
-        NextReminderListener nextReminderListener;
-        Button takenNow = fragmentOverview.findViewById(R.id.takenNow);
-        Button skippedNow = fragmentOverview.findViewById(R.id.skippedNow);
-        NextReminderListener.NextReminderIsTodayCallback callback = isToday -> {
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> {
-                takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-                skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-            });
-        };
+    private void setupNextReminders() {
+        RecyclerView nextReminders = fragmentOverview.findViewById(R.id.nextReminders);
+        nextRemindersViewAdapter = new NextRemindersViewAdapter(new NextRemindersViewAdapter.ScheduledReminderDiff(), medicineViewModel);
+        nextReminders.setAdapter(nextRemindersViewAdapter);
+        nextReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
 
         nextRemindersViewModel = new ViewModelProvider(this).get(NextRemindersViewModel.class);
-        nextReminderListener = new NextReminderListener(fragmentOverview.findViewById(R.id.nextReminderInfo), callback, medicineViewModel);
-        nextRemindersViewModel.getScheduledReminders().observe(getViewLifecycleOwner(), nextReminderListener::setScheduledReminders);
+        nextRemindersViewModel.getScheduledReminders().observe(getViewLifecycleOwner(), this::updatedNextReminders);
 
         setupScheduleObservers();
-
-        takenNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(true));
-        skippedNow.setOnClickListener(buttonView -> nextReminderListener.processFutureReminder(false));
     }
 
     private void setupLogManualDose() {
@@ -122,7 +118,27 @@ public class OverviewFragment extends Fragment {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
         itemTouchHelper.attachToRecyclerView(latestReminders);
+    }
 
+    private void setupExpandNextReminders() {
+        ImageButton expandNextReminders = fragmentOverview.findViewById(R.id.expandNextReminders);
+        expandNextReminders.setOnClickListener(v -> {
+            if (!nextRemindersExpanded) {
+                expandNextReminders.setImageResource(R.drawable.chevron_up);
+            } else {
+                expandNextReminders.setImageResource(R.drawable.chevron_down);
+            }
+            nextRemindersExpanded = !nextRemindersExpanded;
+            updatedNextReminders(nextRemindersViewModel.getScheduledReminders().getValue());
+        });
+    }
+
+    private void updatedNextReminders(List<ScheduledReminder> scheduledReminders) {
+        if (!nextRemindersExpanded && !scheduledReminders.isEmpty()) {
+            nextRemindersViewAdapter.submitList(scheduledReminders.subList(0, 1));
+        } else {
+            nextRemindersViewAdapter.submitList(scheduledReminders);
+        }
     }
 
     private void setupScheduleObservers() {
@@ -185,7 +201,7 @@ public class OverviewFragment extends Fragment {
             liveData.removeObservers(getViewLifecycleOwner());
         }
         liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60));
-        liveData.observe(getViewLifecycleOwner(), adapter::submitList);
+        liveData.observe(getViewLifecycleOwner(), latestRemindersViewAdapter::submitList);
 
         ReminderProcessor.requestReschedule(requireContext());
 
