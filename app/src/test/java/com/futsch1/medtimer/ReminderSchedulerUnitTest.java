@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.TestHelper.on;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -53,10 +52,14 @@ public class ReminderSchedulerUnitTest {
     }
 
     private void assertReminded(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder) {
-        assertFalse(scheduledReminders.isEmpty());
-        assertEquals(timestamp, scheduledReminders.get(0).timestamp());
-        assertEquals(medicine, scheduledReminders.get(0).medicine());
-        assertEquals(reminder, scheduledReminders.get(0).reminder());
+        assertRemindedAtIndex(scheduledReminders, timestamp, medicine, reminder, 0);
+    }
+
+    private void assertRemindedAtIndex(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder, int index) {
+        assertTrue(scheduledReminders.size() > index);
+        assertEquals(timestamp, scheduledReminders.get(index).timestamp());
+        assertEquals(medicine, scheduledReminders.get(index).medicine());
+        assertEquals(reminder, scheduledReminders.get(index).reminder());
     }
 
     @Test
@@ -76,6 +79,7 @@ public class ReminderSchedulerUnitTest {
             add(medicineWithReminders1);
         }}, new ArrayList<>());
         assertReminded(scheduledReminders, on(2, 12), medicineWithReminders1.medicine, reminder2);
+        assertRemindedAtIndex(scheduledReminders, on(2, 16), medicineWithReminders1.medicine, reminder1, 1);
 
         // Now add a second medicine with an earlier reminder
         MedicineWithReminders medicineWithReminders2 = TestHelper.buildMedicineWithReminders(2, "Test2");
@@ -113,6 +117,8 @@ public class ReminderSchedulerUnitTest {
             add(TestHelper.buildReminderEvent(3, on(2, 3).getEpochSecond()));
         }});
         assertReminded(scheduledReminders, on(2, 12), medicineWithReminders1.medicine, reminder2);
+        assertRemindedAtIndex(scheduledReminders, on(2, 16), medicineWithReminders1.medicine, reminder1, 1);
+        assertRemindedAtIndex(scheduledReminders, on(3, 3), medicineWithReminders2.medicine, reminder3, 2);
 
         // Check two reminders at the same time
         Reminder reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1);
