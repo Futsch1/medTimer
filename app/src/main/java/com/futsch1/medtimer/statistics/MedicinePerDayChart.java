@@ -79,6 +79,7 @@ public class MedicinePerDayChart {
         XYLegendWidget legend = medicinesPerDayChart.getLegend();
         legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
         legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
+        legend.setPadding(chartHelper.dpToPx(4.0f), 0, chartHelper.dpToPx(4.0f), 0);
     }
 
     public void updateData(List<XYSeries> series) {
