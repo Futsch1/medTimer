@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.overview;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,6 +32,8 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -121,12 +125,21 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupExpandNextReminders() {
-        ImageButton expandNextReminders = fragmentOverview.findViewById(R.id.expandNextReminders);
+        MaterialButton expandNextReminders = fragmentOverview.findViewById(R.id.expandNextReminders);
+        MaterialCardView nextRemindersCard = fragmentOverview.findViewById(R.id.nextRemindersCard);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) nextRemindersCard.getLayoutParams();
         expandNextReminders.setOnClickListener(v -> {
             if (!nextRemindersExpanded) {
-                expandNextReminders.setImageResource(R.drawable.chevron_up);
+                expandNextReminders.setIconResource(R.drawable.chevron_up);
+                layoutParams.height = 0;
+                layoutParams.weight = 1;
+                nextRemindersCard.setLayoutParams(layoutParams);
+
             } else {
-                expandNextReminders.setImageResource(R.drawable.chevron_down);
+                expandNextReminders.setIconResource(R.drawable.chevron_down);
+                layoutParams.height = WRAP_CONTENT;
+                layoutParams.weight = 0;
+                nextRemindersCard.setLayoutParams(layoutParams);
             }
             nextRemindersExpanded = !nextRemindersExpanded;
             updatedNextReminders(nextRemindersViewModel.getScheduledReminders().getValue());

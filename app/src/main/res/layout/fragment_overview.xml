@@ -9,6 +9,7 @@
     tools:context=".overview.OverviewFragment">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/nextRemindersCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -16,32 +17,48 @@
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceContainerLow">
 
             <TextView
+                android:id="@+id/nextRemindersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/next_reminders"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/nextReminders"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nextReminders"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/expandNextReminders"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight="wrap_content_constrained"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nextRemindersText" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/expandNextReminders"
-                android:layout_width="match_parent"
+                style="?attr/materialIconButtonFilledTonalStyle"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:contentDescription="@string/show_all"
-                android:src="@drawable/chevron_down"
+                app:icon="@drawable/chevron_down"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nextReminders"
                 tools:ignore="TouchTargetSizeCheck" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -55,6 +72,7 @@
         app:icon="@drawable/capsule" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/latestRemindersCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
