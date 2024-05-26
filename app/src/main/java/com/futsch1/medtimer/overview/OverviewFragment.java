@@ -127,23 +127,13 @@ public class OverviewFragment extends Fragment {
     private void setupExpandNextReminders() {
         MaterialButton expandNextReminders = fragmentOverview.findViewById(R.id.expandNextReminders);
         MaterialCardView nextRemindersCard = fragmentOverview.findViewById(R.id.nextRemindersCard);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) nextRemindersCard.getLayoutParams();
         expandNextReminders.setOnClickListener(v -> {
-            if (!nextRemindersExpanded) {
-                expandNextReminders.setIconResource(R.drawable.chevron_up);
-                layoutParams.height = 0;
-                layoutParams.weight = 1;
-                nextRemindersCard.setLayoutParams(layoutParams);
-
-            } else {
-                expandNextReminders.setIconResource(R.drawable.chevron_down);
-                layoutParams.height = WRAP_CONTENT;
-                layoutParams.weight = 0;
-                nextRemindersCard.setLayoutParams(layoutParams);
-            }
             nextRemindersExpanded = !nextRemindersExpanded;
+            adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard);
             updatedNextReminders(nextRemindersViewModel.getScheduledReminders().getValue());
         });
+
+        adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard);
     }
 
     private void updatedNextReminders(List<ScheduledReminder> scheduledReminders) {
@@ -172,6 +162,21 @@ public class OverviewFragment extends Fragment {
             );
             requireActivity().runOnUiThread(() ->
                     navController.navigate(action));
+        }
+    }
+
+    private void adaptUIToNextRemindersExpandedState(MaterialButton expandNextReminders, MaterialCardView nextRemindersCard) {
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) nextRemindersCard.getLayoutParams();
+        if (nextRemindersExpanded) {
+            expandNextReminders.setIconResource(R.drawable.chevron_up);
+            layoutParams.height = 0;
+            layoutParams.weight = 1;
+            nextRemindersCard.setLayoutParams(layoutParams);
+        } else {
+            expandNextReminders.setIconResource(R.drawable.chevron_down);
+            layoutParams.height = WRAP_CONTENT;
+            layoutParams.weight = 0;
+            nextRemindersCard.setLayoutParams(layoutParams);
         }
     }
 
