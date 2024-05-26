@@ -43,6 +43,7 @@ public class ReminderSchedulerUnitTest {
 
         // No reminder events
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 12, 1);
+        reminder.createdTimestamp = on(1, 13).getEpochSecond();
         medicineWithReminders.reminders.add(reminder);
         scheduledReminders = scheduler.schedule(new ArrayList<>() {{
             add(medicineWithReminders);
@@ -78,8 +79,8 @@ public class ReminderSchedulerUnitTest {
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(new ArrayList<>() {{
             add(medicineWithReminders1);
         }}, new ArrayList<>());
-        assertReminded(scheduledReminders, on(2, 12), medicineWithReminders1.medicine, reminder2);
-        assertRemindedAtIndex(scheduledReminders, on(2, 16), medicineWithReminders1.medicine, reminder1, 1);
+        assertReminded(scheduledReminders, on(1, 12), medicineWithReminders1.medicine, reminder2);
+        assertRemindedAtIndex(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1, 1);
 
         // Now add a second medicine with an earlier reminder
         MedicineWithReminders medicineWithReminders2 = TestHelper.buildMedicineWithReminders(2, "Test2");
@@ -89,7 +90,7 @@ public class ReminderSchedulerUnitTest {
             add(medicineWithReminders1);
             add(medicineWithReminders2);
         }}, new ArrayList<>());
-        assertReminded(scheduledReminders, on(2, 3), medicineWithReminders2.medicine, reminder3);
+        assertReminded(scheduledReminders, on(1, 3), medicineWithReminders2.medicine, reminder3);
     }
 
     @Test
@@ -166,6 +167,7 @@ public class ReminderSchedulerUnitTest {
 
         MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
+        reminder.createdTimestamp = on(1, 500).getEpochSecond();
         medicineWithReminders.reminders.add(reminder);
 
         List<MedicineWithReminders> medicineList = new ArrayList<>();

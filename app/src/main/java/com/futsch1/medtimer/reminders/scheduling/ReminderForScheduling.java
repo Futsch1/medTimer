@@ -52,7 +52,7 @@ public class ReminderForScheduling {
     public @Nullable Instant getNextScheduledTime() {
         LocalDate nextScheduledDate = getNextScheduledDate();
         if (nextScheduledDate != null) {
-            return nextScheduledDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
+            return localDateToReminderInstant(nextScheduledDate);
         } else {
             return null;
         }
@@ -68,6 +68,10 @@ public class ReminderForScheduling {
         clearPossibleDaysByWeekday();
 
         return getEarliestPossibleDate();
+    }
+
+    private Instant localDateToReminderInstant(LocalDate localDate) {
+        return localDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
     }
 
     private boolean isCyclic() {
@@ -88,7 +92,7 @@ public class ReminderForScheduling {
 
     private void canScheduleEveryDay() {
         Arrays.fill(possibleDays, true);
-        possibleDays[0] = !createdToday() && !raisedToday;
+        possibleDays[0] = reminderBeforeCreation() && !raisedToday;
     }
 
     private void clearPossibleDaysByWeekday() {
@@ -111,7 +115,7 @@ public class ReminderForScheduling {
         return null;
     }
 
-    private boolean createdToday() {
-        return isToday(reminder.createdTimestamp);
+    private boolean reminderBeforeCreation() {
+        return reminder.createdTimestamp < localDateToReminderInstant(timeAccess.localDate()).getEpochSecond();
     }
 }
