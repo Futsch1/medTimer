@@ -14,8 +14,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.androidplot.pie.PieChart;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
@@ -103,7 +103,7 @@ public class StatisticsFragment extends Fragment {
         statisticsProvider = new StatisticsProvider(medicineRepository);
         int days = analysisDays.getDays();
 
-        List<XYSeries> series = statisticsProvider.getLastDaysReminders(days);
+        List<SimpleXYSeries> series = statisticsProvider.getLastDaysReminders(days);
         requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
 
         StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);

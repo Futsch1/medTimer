@@ -96,11 +96,13 @@ public class EditMedicineFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        String word = editMedicineName.getText().toString();
-        Medicine medicine = new Medicine(word, medicineId);
-        medicine.useColor = enableColor.isChecked();
-        medicine.color = color;
-        medicineViewModel.updateMedicine(medicine);
+        if (editMedicineName != null && enableColor != null) {
+            String word = editMedicineName.getText().toString();
+            Medicine medicine = new Medicine(word, medicineId);
+            medicine.useColor = enableColor.isChecked();
+            medicine.color = color;
+            medicineViewModel.updateMedicine(medicine);
+        }
 
         RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
         for (int i = 0; i < recyclerView.getChildCount(); i++) {

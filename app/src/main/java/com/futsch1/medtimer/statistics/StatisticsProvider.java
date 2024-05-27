@@ -3,7 +3,6 @@ package com.futsch1.medtimer.statistics;
 import androidx.annotation.NonNull;
 
 import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYSeries;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -39,7 +38,7 @@ public class StatisticsProvider {
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
     }
 
-    public List<XYSeries> getLastDaysReminders(int days) {
+    public List<SimpleXYSeries> getLastDaysReminders(int days) {
         Map<String, int[]> medicineToDayCount = calculateMedicineToDayMap(days);
         return calculateDataEntries(days, medicineToDayCount);
     }
@@ -65,8 +64,8 @@ public class StatisticsProvider {
      * @noinspection DataFlowIssue
      */
     @NonNull
-    private static List<XYSeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
-        List<XYSeries> data = new ArrayList<>();
+    private static List<SimpleXYSeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
+        List<SimpleXYSeries> data = new ArrayList<>();
         int seriesCount = medicineToDayCount.size();
         if (seriesCount == 0) {
             return data;

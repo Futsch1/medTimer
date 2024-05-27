@@ -27,7 +27,7 @@
     <string name="skipped">Omitido</string>
     <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_events">Eventos recientes</string>
-    <string name="next_reminder">Siguiente recordatorio</string>
+    <string name="next_reminders">Siguientes recordatorios</string>
     <string name="version">Versión %s</string>
     <string name="are_you_sure_delete_reminder">¿Quieres eliminar el recordatorio?</string>
     <string name="clear_events">Restablecer eventos</string>
@@ -121,4 +121,5 @@
     <string name="taken_now">Tomado ahora</string>
     <string name="event_name">Nombre del evento</string>
     <string name="edit_event">Editar evento</string>
+    <string name="show_all">Mostrar todo</string>
 </resources>
