@@ -172,7 +172,7 @@ public class BasicUITest {
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.nextReminderInfo)));
+                new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderText));
         textView.check(matches(withText(startsWith("2 of Test"))));
     }
 

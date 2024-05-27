@@ -17,21 +17,42 @@ import java.util.List;
 public class ReminderForScheduling {
     private final Reminder reminder;
     private final ReminderScheduler.TimeAccess timeAccess;
-    private final List<ReminderEvent> reminderEventList;
+    private final boolean raisedToday;
     private final boolean[] possibleDays;
 
     public ReminderForScheduling(Reminder reminder, List<ReminderEvent> reminderEventList, ReminderScheduler.TimeAccess timeAccess) {
-        this.reminder = reminder;
-        this.reminderEventList = reminderEventList;
         this.timeAccess = timeAccess;
+        this.reminder = reminder;
+        this.raisedToday = isRaisedToday(reminderEventList);
         // Bit map of possible days in the future on where the reminder may be raised
         this.possibleDays = new boolean[31];
+    }
+
+    private boolean isRaisedToday(List<ReminderEvent> reminderEventList) {
+        for (ReminderEvent reminderEvent : reminderEventList) {
+            if (isToday(reminderEvent.remindedTimestamp)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isToday(long epochSeconds) {
+        return localDateFromEpochSeconds(epochSeconds).toEpochDay() == today();
+    }
+
+    private LocalDate localDateFromEpochSeconds(long epochSeconds) {
+        return Instant.ofEpochSecond(epochSeconds).atZone(timeAccess.systemZone()).toLocalDate();
+    }
+
+    private long today() {
+        return timeAccess.localDate().toEpochDay();
     }
 
     public @Nullable Instant getNextScheduledTime() {
         LocalDate nextScheduledDate = getNextScheduledDate();
         if (nextScheduledDate != null) {
-            return nextScheduledDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
+            return localDateToReminderInstant(nextScheduledDate);
         } else {
             return null;
         }
@@ -49,9 +70,12 @@ public class ReminderForScheduling {
         return getEarliestPossibleDate();
     }
 
-    private void canScheduleEveryDay() {
-        Arrays.fill(possibleDays, true);
-        possibleDays[0] = !createdToday() && notRaisedToday();
+    private Instant localDateToReminderInstant(LocalDate localDate) {
+        return localDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(timeAccess.systemZone()).toInstant();
+    }
+
+    private boolean isCyclic() {
+        return reminder.pauseDays != 0;
     }
 
     private void setPossibleDaysByCycle() {
@@ -63,7 +87,12 @@ public class ReminderForScheduling {
             dayInCycle++;
         }
         // Only schedule today if it's not already raised
-        possibleDays[0] &= notRaisedToday();
+        possibleDays[0] &= !raisedToday;
+    }
+
+    private void canScheduleEveryDay() {
+        Arrays.fill(possibleDays, true);
+        possibleDays[0] = reminderBeforeCreation() && !raisedToday;
     }
 
     private void clearPossibleDaysByWeekday() {
@@ -86,35 +115,7 @@ public class ReminderForScheduling {
         return null;
     }
 
-    private boolean isCyclic() {
-        return reminder.pauseDays != 0;
-    }
-
-    private long today() {
-        return timeAccess.localDate().toEpochDay();
-    }
-
-    private boolean notRaisedToday() {
-        return neverRaised() || today() != localDateFromEpochSeconds(lastRemindedTimestamp()).toEpochDay();
-    }
-
-    private boolean createdToday() {
-        return isToday(reminder.createdTimestamp);
-    }
-
-    private boolean neverRaised() {
-        return reminderEventList.isEmpty();
-    }
-
-    private LocalDate localDateFromEpochSeconds(long epochSeconds) {
-        return Instant.ofEpochSecond(epochSeconds).atZone(timeAccess.systemZone()).toLocalDate();
-    }
-
-    private long lastRemindedTimestamp() {
-        return reminderEventList.get(reminderEventList.size() - 1).remindedTimestamp;
-    }
-
-    private boolean isToday(long epochSeconds) {
-        return localDateFromEpochSeconds(epochSeconds).toEpochDay() == today();
+    private boolean reminderBeforeCreation() {
+        return reminder.createdTimestamp < localDateToReminderInstant(timeAccess.localDate()).getEpochSecond();
     }
 }
