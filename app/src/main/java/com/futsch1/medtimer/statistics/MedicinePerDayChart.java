@@ -12,6 +12,7 @@ import com.androidplot.ui.TableOrder;
 import com.androidplot.xy.BarFormatter;
 import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYLegendWidget;
@@ -82,12 +83,16 @@ public class MedicinePerDayChart {
         legend.setPadding(chartHelper.dpToPx(4.0f), 0, chartHelper.dpToPx(4.0f), 0);
     }
 
-    public void updateData(List<XYSeries> series) {
+    public void updateData(List<SimpleXYSeries> series) {
         medicinesPerDayChart.clear();
         colorIndex = 0;
+        int numLegendColumns = Math.max(3, (int) Math.ceil(series.size() / 3.0f));
+        int columnSize = (int) medicinesPerDayChart.getLegend().getWidgetDimensions().paddedRect.width() / numLegendColumns;
+        columnSize -= (int) medicinesPerDayChart.getLegend().getIconSize().getWidth().getPixelValue(0.0f) + 2;
 
-        for (XYSeries xySeries : series) {
+        for (SimpleXYSeries xySeries : series) {
             medicinesPerDayChart.addSeries(xySeries, getFormatter(xySeries.getTitle()));
+            adjustTitleLength(xySeries, columnSize, medicinesPerDayChart.getLegend().getTextPaint());
         }
         Number maxRange = calculateMaxRange(series);
         medicinesPerDayChart.setRangeUpperBoundary(maxRange, BoundaryMode.FIXED);
@@ -102,7 +107,7 @@ public class MedicinePerDayChart {
         medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil(numDomains / 7.0f));
         medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
 
-        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(Math.max(3, (int) Math.ceil(series.size() / 3.0f)), 3, TableOrder.ROW_MAJOR));
+        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(numLegendColumns, 3, TableOrder.ROW_MAJOR));
 
         setupRenderer(numDomains);
         medicinesPerDayChart.redraw();
@@ -115,7 +120,17 @@ public class MedicinePerDayChart {
         return formatter;
     }
 
-    private Number calculateMaxRange(List<XYSeries> series) {
+    private void adjustTitleLength(SimpleXYSeries series, int columnPixels, Paint textPaint) {
+        int titleWidth = (int) textPaint.measureText(series.getTitle());
+        String title = series.getTitle();
+        while (titleWidth > columnPixels && title.length() > 5) {
+            title = title.substring(0, title.length() - 4) + "...";
+            titleWidth = (int) textPaint.measureText(title);
+        }
+        series.setTitle(title);
+    }
+
+    private Number calculateMaxRange(List<SimpleXYSeries> series) {
         long max = 0;
         if (series.isEmpty()) {
             return max;
@@ -130,7 +145,7 @@ public class MedicinePerDayChart {
         return max;
     }
 
-    private long calculateMinDomain(List<XYSeries> series) {
+    private long calculateMinDomain(List<SimpleXYSeries> series) {
         if (series.isEmpty()) {
             return LocalDate.now().toEpochDay() - 1;
         } else {
@@ -138,7 +153,7 @@ public class MedicinePerDayChart {
         }
     }
 
-    private long calculateMaxDomain(List<XYSeries> series) {
+    private long calculateMaxDomain(List<SimpleXYSeries> series) {
         if (series.isEmpty()) {
             return LocalDate.now().toEpochDay();
         } else {
