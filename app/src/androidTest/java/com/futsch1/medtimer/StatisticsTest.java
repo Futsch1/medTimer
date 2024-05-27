@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -53,14 +54,22 @@ public class StatisticsTest {
                 allOf(withContentDescription("More options")));
         overflowMenuButton.perform(click());
 
-        ViewInteraction materialTextView = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
-        materialTextView.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
+        int retries = 3;
+        while (retries > 0) {
+            ViewInteraction materialTextView = onView(
+                    allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
+            materialTextView.perform(click());
+            onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 
-        ViewInteraction chip = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
-        chip.perform(click());
+            ViewInteraction chip = onView(
+                    new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
+            try {
+                chip.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+                retries--;
+            }
+        }
 
         ViewInteraction chip2 = onView(
                 new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
