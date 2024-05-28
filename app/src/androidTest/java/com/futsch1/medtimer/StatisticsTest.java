@@ -61,27 +61,28 @@ public class StatisticsTest {
             materialTextView.perform(click());
             onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 
-            ViewInteraction chip = onView(
-                    new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
             try {
+                ViewInteraction chip = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
                 chip.perform(click());
+
+                ViewInteraction chip2 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
+                chip2.perform(click());
+
+                ViewInteraction chip3 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
+                chip3.perform(click());
+
+                ViewInteraction chip4 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
+                chip4.perform(scrollTo(), click());
+
                 break;
             } catch (NoMatchingViewException e) {
                 retries--;
             }
         }
-
-        ViewInteraction chip2 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
-        chip2.perform(click());
-
-        ViewInteraction chip3 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
-        chip3.perform(click());
-
-        ViewInteraction chip4 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
-        chip4.perform(scrollTo(), click());
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
