@@ -32,4 +32,6 @@ jobs:
       - name: Set current project
         run: gcloud config set project medtimer-60cc6
       - name: Run Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run tests.yml
+        run: gcloud firebase test android run tests.yml:medium-phone-arm
+      - name: Run Robo Tests in Firebase Test Lab
+        run: gcloud firebase test android run robo.yml:medium-phone-arm
