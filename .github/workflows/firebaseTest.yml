@@ -24,9 +24,14 @@ jobs:
         run: ./gradlew assembleDebug
       - name: Build tests with gradle
         run: ./gradlew assembleDebugAndroidTest
-      - name: Run tests on Firebase Test Lab
-        uses: asadmansr/Firebase-Test-Lab-Action@v1.0
+      - name: Login to Google Cloud
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v2
         with:
-          arg-spec: 'tests.yml:medium-phone-arm'
-        env:
-          SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEDTIMER_60CC6 }}
+          version: '>= 363.0.0'
+          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEDTIMER_60CC6 }}
+      - name: Set current project
+        run: gcloud config set project medtimer-60cc6
+      - name: Run Instrumentation Tests in Firebase Test Lab
+        run: gcloud firebase test android run tests.yml:medium-phone-arm
+      - name: Run Robo Tests in Firebase Test Lab
+        run: gcloud firebase test android run robo.yml:medium-phone-arm
