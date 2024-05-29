@@ -1,12 +1,13 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.TestHelper.assertReminded;
+import static com.futsch1.medtimer.TestHelper.assertRemindedAtIndex;
 import static com.futsch1.medtimer.TestHelper.on;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -14,7 +15,6 @@ import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -50,17 +50,6 @@ public class ReminderSchedulerUnitTest {
         }}, new ArrayList<>());
         assertEquals(1, scheduledReminders.size());
         assertReminded(scheduledReminders, on(2, 12), medicineWithReminders.medicine, reminder);
-    }
-
-    private void assertReminded(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder) {
-        assertRemindedAtIndex(scheduledReminders, timestamp, medicine, reminder, 0);
-    }
-
-    private void assertRemindedAtIndex(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder, int index) {
-        assertTrue(scheduledReminders.size() > index);
-        assertEquals(timestamp, scheduledReminders.get(index).timestamp());
-        assertEquals(medicine, scheduledReminders.get(index).medicine());
-        assertEquals(reminder, scheduledReminders.get(index).reminder());
     }
 
     @Test
