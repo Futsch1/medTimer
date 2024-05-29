@@ -74,9 +74,7 @@ public class ReminderWorkUnitTest {
     @Test
     public void testDoWork() {
         // Reminder is null
-        try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(11)).thenReturn(null);
-        });
+        try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminder(11)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(application)).thenReturn(mockWorkManager);
