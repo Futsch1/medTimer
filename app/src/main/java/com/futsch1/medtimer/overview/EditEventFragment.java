@@ -52,14 +52,16 @@ public class EditEventFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(() -> {
-            ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
-            reminderEvent.medicineName = editEventName.getText().toString();
-            reminderEvent.amount = editEventAmount.getText().toString();
+        if (medicineRepository != null) {
+            Handler handler = new Handler(backgroundThread.getLooper());
+            handler.post(() -> {
+                ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
+                reminderEvent.medicineName = editEventName.getText().toString();
+                reminderEvent.amount = editEventAmount.getText().toString();
 
-            medicineRepository.updateReminderEvent(reminderEvent);
-        });
+                medicineRepository.updateReminderEvent(reminderEvent);
+            });
+        }
 
         backgroundThread.quitSafely();
     }

@@ -77,10 +77,10 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void setupView() {
 
+        editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
         editPauseDays = advancedReminderView.findViewById(R.id.pauseDays);
         editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
         editCycleStartDate = advancedReminderView.findViewById(R.id.cycleStartDate);
-        editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
         instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
         remindOnDays = advancedReminderView.findViewById(R.id.remindOnDays);
 
@@ -144,7 +144,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 LocalDate startDate = getCycleStartDate();
-                if (startDate == null ) {
+                if (startDate == null) {
                     startDate = LocalDate.now();
                 }
                 MaterialDatePicker<Long> datePickerDialog = MaterialDatePicker.Builder.datePicker()
@@ -172,38 +172,25 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     }
 
-    private void setCycleStartDate(long daysSinceEpoch) {
-        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
-    }
-
     private @Nullable LocalDate getCycleStartDate() {
         return TimeHelper.dateStringToDate(editCycleStartDate.getText().toString());
+    }
+
+    private void setCycleStartDate(long daysSinceEpoch) {
+        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
-        putConsecutiveDaysIntoReminder();
-        putPauseDaysIntoReminder();
-        putStartDateIntoReminder();
+        if (editInstructions != null) {
+            reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+            putConsecutiveDaysIntoReminder();
+            putPauseDaysIntoReminder();
+            putStartDateIntoReminder();
 
-        medicineViewModel.updateReminder(reminder);
-    }
-
-    private void putStartDateIntoReminder() {
-        LocalDate startDate = getCycleStartDate();
-        if (startDate != null) {
-            reminder.cycleStartDay = startDate.toEpochDay();
-        }
-    }
-
-    private void putPauseDaysIntoReminder() {
-        try {
-            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
-        } catch (NumberFormatException e) {
-            reminder.pauseDays = 0;
+            medicineViewModel.updateReminder(reminder);
         }
     }
 
@@ -215,6 +202,21 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             }
         } catch (NumberFormatException e) {
             reminder.consecutiveDays = 1;
+        }
+    }
+
+    private void putPauseDaysIntoReminder() {
+        try {
+            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
+        } catch (NumberFormatException e) {
+            reminder.pauseDays = 0;
+        }
+    }
+
+    private void putStartDateIntoReminder() {
+        LocalDate startDate = getCycleStartDate();
+        if (startDate != null) {
+            reminder.cycleStartDay = startDate.toEpochDay();
         }
     }
 
