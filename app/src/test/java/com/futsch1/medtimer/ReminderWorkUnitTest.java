@@ -2,15 +2,18 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.app.Application;
@@ -33,6 +36,7 @@ import com.futsch1.medtimer.reminders.ReminderWork;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -61,18 +65,21 @@ public class ReminderWorkUnitTest {
         mockSharedPreferences = mock(SharedPreferences.class);
         when(mockSharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
         when(mockSharedPreferences.getString(anyString(), anyString())).thenReturn("1");
+        when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(13);
+        when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(14);
         SharedPreferences.Editor mockEditor = mock(SharedPreferences.Editor.class);
         when(mockSharedPreferences.edit()).thenReturn(mockEditor);
         when(mockEditor.putInt(anyString(), anyInt())).thenReturn(mockEditor);
 
         when(application.getSharedPreferences(anyString(), anyInt())).thenReturn(mockSharedPreferences);
-        when(application.getString(anyInt())).thenReturn("Test");
-        when(application.getString(anyInt(), any())).thenReturn("Test1");
+        when(application.getString(R.string.notification_title)).thenReturn("NotificationTitle");
+        when(application.getString(R.string.notification_taken)).thenReturn("NotificationTaken");
+        when(application.getString(eq(R.string.notification_content), any(Object[].class))).thenReturn("NotificationContent");
         when(application.getSystemService(NotificationManager.class)).thenReturn(mock(NotificationManager.class));
     }
 
     @Test
-    public void testDoWork() {
+    public void testDoWorkNullHandling() {
         // Reminder is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminder(11)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
@@ -104,19 +111,27 @@ public class ReminderWorkUnitTest {
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Failure);
         }
-        // All are not null
-        try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
+    }
+
+    @Test
+    public void testDoWorkNotifications() {
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
             when(mock.getReminder(11)).thenReturn(new Reminder(1));
-            when(mock.getMedicine(1)).thenReturn(new Medicine("Test"));
-            when(mock.getReminderEvent(12)).thenReturn(new ReminderEvent());
+            when(mock.getMedicine(1)).thenReturn(new Medicine("TestMedicine"));
+            ReminderEvent reminderEvent = new ReminderEvent();
+            reminderEvent.reminderId = 11;
+            reminderEvent.reminderEventId = 12;
+            when(mock.getReminderEvent(12)).thenReturn(reminderEvent);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
-                 when(mock.setSmallIcon(anyInt())).thenReturn(mock);
-                 when(mock.setContentTitle(anyString())).thenReturn(mock);
-                 when(mock.setContentText(isNull())).thenReturn(mock); // Should not be necessary?
-                 when(mock.setPriority(anyInt())).thenReturn(mock);
+                 // Implicitly verify arguments because invalid arguments will break the call chain of the builder
+                 assertEquals("com.futsch1.medTimer.NOTIFICATION13", context.arguments().get(1));
+                 when(mock.setSmallIcon(R.drawable.capsule)).thenReturn(mock);
+                 when(mock.setContentTitle("NotificationTitle")).thenReturn(mock);
+                 when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
+                 when(mock.setPriority(NotificationCompat.PRIORITY_DEFAULT)).thenReturn(mock);
                  when(mock.setContentIntent(any())).thenReturn(mock);
-                 when(mock.addAction(anyInt(), anyString(), any())).thenReturn(mock());
+                 when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
 
              });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
@@ -127,6 +142,14 @@ public class ReminderWorkUnitTest {
 
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Success);
+
+            // Check if reminder event was updated with the generated notification ID
+            MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
+            ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
+            verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
+            assertEquals(14, captor.getValue().notificationId);
+            assertEquals(11, captor.getValue().reminderId);
+            assertEquals(12, captor.getValue().reminderEventId);
         }
     }
 }
