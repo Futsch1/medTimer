@@ -145,9 +145,5 @@ public class BackupManager {
         openFileLauncher.launch(intent);
     }
 
-    public void onDestroy() {
-        backgroundThread.quitSafely();
-    }
-
     private enum PendingFileOperation {NONE, MEDICINE, REMINDER_EVENTS}
 }

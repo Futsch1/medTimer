@@ -104,11 +104,13 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.updateMedicine(medicine);
         }
 
-        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        for (int i = 0; i < recyclerView.getChildCount(); i++) {
-            ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+        if (fragmentEditMedicine != null) {
+            RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
-            medicineViewModel.updateReminder(viewHolder.getReminder());
+                medicineViewModel.updateReminder(viewHolder.getReminder());
+            }
         }
 
         if (thread != null) {
