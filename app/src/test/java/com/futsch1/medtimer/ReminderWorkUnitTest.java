@@ -45,37 +45,43 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class ReminderWorkUnitTest {
 
+    private final int REMINDER_ID = 11;
+    private final int REMINDER_EVENT_ID = 12;
+    private final int MEDICINE_ID = 1;
+    private final int NOTIFICATION_CHANNEL_ID = 13;
+    private final int NOTIFICATION_ID = 14;
     private ReminderWork reminderWork;
-
     @Mock
-    private Application application;
+    private Application mockApplication;
     private SharedPreferences mockSharedPreferences;
+    private NotificationManager mockNotificationManager;
 
     @Before
     public void setUp() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
 
-        Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, 11).putInt(EXTRA_REMINDER_EVENT_ID, 12).build();
+        Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID).build();
         when(workerParams.getInputData()).thenReturn(inputData);
 
-        application = mock(Application.class);
+        mockApplication = mock(Application.class);
 
-        reminderWork = new ReminderWork(application, workerParams);
+        reminderWork = new ReminderWork(mockApplication, workerParams);
 
         mockSharedPreferences = mock(SharedPreferences.class);
         when(mockSharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
         when(mockSharedPreferences.getString(anyString(), anyString())).thenReturn("1");
-        when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(13);
-        when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(14);
+        when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(NOTIFICATION_CHANNEL_ID);
+        when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(NOTIFICATION_ID);
         SharedPreferences.Editor mockEditor = mock(SharedPreferences.Editor.class);
         when(mockSharedPreferences.edit()).thenReturn(mockEditor);
         when(mockEditor.putInt(anyString(), anyInt())).thenReturn(mockEditor);
 
-        when(application.getSharedPreferences(anyString(), anyInt())).thenReturn(mockSharedPreferences);
-        when(application.getString(R.string.notification_title)).thenReturn("NotificationTitle");
-        when(application.getString(R.string.notification_taken)).thenReturn("NotificationTaken");
-        when(application.getString(eq(R.string.notification_content), any(Object[].class))).thenReturn("NotificationContent");
-        when(application.getSystemService(NotificationManager.class)).thenReturn(mock(NotificationManager.class));
+        when(mockApplication.getSharedPreferences(anyString(), anyInt())).thenReturn(mockSharedPreferences);
+        when(mockApplication.getString(R.string.notification_title)).thenReturn("NotificationTitle");
+        when(mockApplication.getString(R.string.notification_taken)).thenReturn("NotificationTaken");
+        when(mockApplication.getString(eq(R.string.notification_content), any(Object[].class))).thenReturn("NotificationContent");
+        mockNotificationManager = mock(NotificationManager.class);
+        when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
     }
 
     @Test
@@ -84,30 +90,30 @@ public class ReminderWorkUnitTest {
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminder(11)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
-            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(application)).thenReturn(mockWorkManager);
+            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Failure);
         }
         // Medicine is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(11)).thenReturn(new Reminder(1));
-            when(mock.getMedicine(1)).thenReturn(null);
+            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
+            when(mock.getMedicine(MEDICINE_ID)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
-            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(application)).thenReturn(mockWorkManager);
+            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Failure);
         }
         // Reminder event is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(11)).thenReturn(new Reminder(1));
-            when(mock.getMedicine(1)).thenReturn(new Medicine("Test"));
-            when(mock.getReminderEvent(12)).thenReturn(null);
+            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
+            when(mock.getMedicine(MEDICINE_ID)).thenReturn(new Medicine("Test"));
+            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
-            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(application)).thenReturn(mockWorkManager);
+            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Failure);
         }
@@ -116,16 +122,16 @@ public class ReminderWorkUnitTest {
     @Test
     public void testDoWorkNotifications() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(11)).thenReturn(new Reminder(1));
-            when(mock.getMedicine(1)).thenReturn(new Medicine("TestMedicine"));
+            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
+            when(mock.getMedicine(MEDICINE_ID)).thenReturn(new Medicine("TestMedicine"));
             ReminderEvent reminderEvent = new ReminderEvent();
-            reminderEvent.reminderId = 11;
-            reminderEvent.reminderEventId = 12;
-            when(mock.getReminderEvent(12)).thenReturn(reminderEvent);
+            reminderEvent.reminderId = REMINDER_ID;
+            reminderEvent.reminderEventId = REMINDER_EVENT_ID;
+            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
-                 assertEquals("com.futsch1.medTimer.NOTIFICATION13", context.arguments().get(1));
+                 assertEquals(String.format("com.futsch1.medTimer.NOTIFICATION%d", NOTIFICATION_CHANNEL_ID), context.arguments().get(1));
                  when(mock.setSmallIcon(R.drawable.capsule)).thenReturn(mock);
                  when(mock.setContentTitle("NotificationTitle")).thenReturn(mock);
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
@@ -137,9 +143,10 @@ public class ReminderWorkUnitTest {
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
-            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(application)).thenReturn(mockWorkManager);
-            mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(application)).thenReturn(mockSharedPreferences);
+            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
+            mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
 
+            // Expected to pass
             ListenableWorker.Result result = reminderWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Success);
 
@@ -147,9 +154,10 @@ public class ReminderWorkUnitTest {
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
             ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
-            assertEquals(14, captor.getValue().notificationId);
-            assertEquals(11, captor.getValue().reminderId);
-            assertEquals(12, captor.getValue().reminderEventId);
+            assertEquals(NOTIFICATION_ID, captor.getValue().notificationId);
+            assertEquals(REMINDER_ID, captor.getValue().reminderId);
+            assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
+            verify(mockNotificationManager, times(1)).notify(eq(NOTIFICATION_ID), any());
         }
     }
 }
