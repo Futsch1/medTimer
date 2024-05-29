@@ -2,9 +2,7 @@ name: Firebase test
 
 on:
   workflow_dispatch:
-  pull_request_target:
-    branches:
-      - main
+  push:
 
 jobs:
   build:
@@ -24,11 +22,14 @@ jobs:
         run: ./gradlew assembleDebug
       - name: Build tests with gradle
         run: ./gradlew assembleDebugAndroidTest
-      - name: Login to Google Cloud
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v2
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEDTIMER_60CC6 }}
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 363.0.0'
-          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MEDTIMER_60CC6 }}
       - name: Set current project
         run: gcloud config set project medtimer-60cc6
       - name: Run Instrumentation Tests in Firebase Test Lab
