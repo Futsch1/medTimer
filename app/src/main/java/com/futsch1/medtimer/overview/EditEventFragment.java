@@ -39,7 +39,6 @@ public class EditEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View editEventView = inflater.inflate(R.layout.fragment_edit_event, container, false);
 
         medicineRepository = new MedicineRepository(requireActivity().getApplication());
