@@ -14,30 +14,44 @@ class MedTimerAppIntro : AppIntro() {
         super.onCreate(savedInstanceState)
 
         addSlide(
-            AppIntroFragment.createInstance(
-                getString(R.string.app_name),
-                "This is a demo example in java of AppIntro library, with a custom background on each slide!",
-                R.drawable.capsule,
-                backgroundColorRes = getColorRes(com.google.android.material.R.attr.colorSurface),
-                descriptionColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface),
-                titleColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface)
-            )
+            getString(R.string.intro_welcome),
+            getString(R.string.intro_welcome_description),
+            R.mipmap.logo
         )
 
         addSlide(
-            AppIntroFragment.createInstance(
-                getString(R.string.custom),
-                "This is a demo example in java of AppIntro library, with a custom background on each slide!",
-                R.drawable.capsule,
-                backgroundColorRes = getColorRes(com.google.android.material.R.attr.colorSurface),
-                descriptionColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface),
-                titleColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface)
-            )
+            getString(R.string.tab_medicine),
+            getString(R.string.intro_medicine_description),
+            R.drawable.intro_medicine
+        )
+
+        addSlide(
+            getString(R.string.reminders),
+            getString(R.string.intro_reminder_description),
+            R.drawable.intro_reminder
+        )
+
+        addSlide(
+            getString(R.string.show_notifications),
+            getString(R.string.intro_notification_description),
+            R.drawable.intro_notification
+        )
+
+        addSlide(
+            getString(R.string.tab_overview),
+            getString(R.string.intro_overview_description),
+            R.drawable.intro_overview
+        )
+
+        addSlide(
+            getString(R.string.analysis),
+            getString(R.string.intro_analysis_description),
+            R.drawable.intro_analysis
         )
 
         askForPermissions(
             arrayOf(permission.POST_NOTIFICATIONS),
-            1,
+            2,
             true
         )
         this.isSystemBackButtonLocked = true
@@ -64,6 +78,19 @@ class MedTimerAppIntro : AppIntro() {
                 this,
                 com.google.android.material.R.attr.colorPrimary,
                 Color.WHITE
+            )
+        )
+    }
+
+    private fun addSlide(title: String, description: String, image: Int) {
+        addSlide(
+            AppIntroFragment.createInstance(
+                title,
+                description,
+                image,
+                backgroundColorRes = getColorRes(com.google.android.material.R.attr.colorSurface),
+                descriptionColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface),
+                titleColorRes = getColorRes(com.google.android.material.R.attr.colorOnSurface)
             )
         )
     }
