@@ -50,11 +50,15 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.Theme_MedTimer2);
         }
 
-        startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+        boolean introShown = sharedPref.getBoolean("intro_shown", false);
+        if (!introShown && !BuildConfig.DEBUG) {
+            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+            sharedPref.edit().putBoolean("intro_shown", true).apply();
+        } else {
+            checkPermissions();
+        }
 
         setContentView(R.layout.activity_main);
-
-        checkPermissions();
 
         NotificationChannelManager.createNotificationChannel(getApplicationContext());
 

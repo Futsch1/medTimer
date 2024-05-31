@@ -51,7 +51,7 @@ class MedTimerAppIntro : AppIntro() {
 
         askForPermissions(
             arrayOf(permission.POST_NOTIFICATIONS),
-            2,
+            1,
             true
         )
         this.isSystemBackButtonLocked = true
