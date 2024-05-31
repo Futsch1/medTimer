@@ -6,14 +6,12 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
-import static com.futsch1.medtimer.ActivityCodes.RESCHEDULE_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.SNOOZE_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.TAKEN_ACTION;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -23,16 +21,16 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.WorkManagerAccess;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
     public static void requestReschedule(@NonNull Context context) {
-        Log.i(LogTags.SCHEDULER, "Requesting reschedule");
-        Intent intent = new Intent(RESCHEDULE_ACTION);
-        intent.setClass(context, ReminderProcessor.class);
-        context.sendBroadcast(intent);
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
+        OneTimeWorkRequest rescheduleWork =
+                new OneTimeWorkRequest.Builder(RescheduleWork.class)
+                        .build();
+        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
     }
 
     public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
@@ -71,12 +69,7 @@ public class ReminderProcessor extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        if (RESCHEDULE_ACTION.equals(intent.getAction())) {
-            OneTimeWorkRequest rescheduleWork =
-                    new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                            .build();
-            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
-        } else if (DISMISSED_ACTION.equals(intent.getAction())) {
+        if (DISMISSED_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));

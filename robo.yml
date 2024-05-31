@@ -1,0 +1,9 @@
+medium-phone-arm:
+  type: robo
+  app: app/build/outputs/apk/debug/MedTimer-debug.apk
+  timeout: 180s
+  device:
+    - model: MediumPhone.arm
+      version: 34
+      locale: 'en'
+      orientation: portrait

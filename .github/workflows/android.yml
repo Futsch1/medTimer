@@ -3,9 +3,6 @@ name: Android CI
 on:
   workflow_dispatch:
   push:
-  pull_request:
-    branches:
-      - main
 
 env:
   APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
@@ -44,7 +41,7 @@ jobs:
             -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $AAB_RELEASE_DIRECTORY/MedTimer-release.aab ${{ secrets.SIGNING_ALIAS }}
         continue-on-error: true
       - name: Upload App Bundle
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: aab
           path: ${{env.AAB_RELEASE_DIRECTORY}}/MedTimer-release.aab
@@ -66,7 +63,7 @@ jobs:
         continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: ${{env.APK_RELEASE_DIRECTORY}}/MedTimer-release-signed.apk

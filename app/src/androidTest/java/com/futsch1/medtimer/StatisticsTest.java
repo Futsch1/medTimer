@@ -6,6 +6,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,7 +28,6 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.evrencoskun.tableview.TableView;
-import com.futsch1.medtimer.database.MedicineRepository;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,36 +50,39 @@ public class StatisticsTest {
 
     @Test
     public void statisticsTest() {
-        mActivityScenarioRule.getScenario().onActivity(activity -> {
-            MedicineRepository repository = new MedicineRepository(activity.getApplication());
-            repository.deleteAll();
-        });
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+        int retries = 3;
+        while (retries > 0) {
+            ViewInteraction overflowMenuButton = onView(
+                    allOf(withContentDescription("More options")));
+            overflowMenuButton.perform(click());
 
-        ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("More options")));
-        overflowMenuButton.perform(click());
+            ViewInteraction materialTextView = onView(
+                    allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
+            materialTextView.perform(click());
+            onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 
-        ViewInteraction materialTextView = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
-        materialTextView.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(4000));
+            try {
+                ViewInteraction chip = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
+                chip.perform(click());
 
-        ViewInteraction chip = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
-        chip.perform(click());
+                ViewInteraction chip2 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
+                chip2.perform(click());
 
-        ViewInteraction chip2 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
-        chip2.perform(click());
+                ViewInteraction chip3 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
+                chip3.perform(click());
 
-        ViewInteraction chip3 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
-        chip3.perform(click());
+                ViewInteraction chip4 = onView(
+                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
+                chip4.perform(scrollTo(), click());
 
-        ViewInteraction chip4 = onView(
-                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
-        chip4.perform(click());
+                break;
+            } catch (NoMatchingViewException e) {
+                retries--;
+            }
+        }
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 

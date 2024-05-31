@@ -55,7 +55,7 @@
 
     <string name="recent_events">Événements récents</string>
 
-    <string name="next_reminder">Prochain rappel</string>
+    <string name="next_reminders">Prochains rappels</string>
 
     <string name="version">Version %s</string>
 
@@ -217,5 +217,6 @@
     <string name="taken_now">Pris maintenant</string>
     <string name="event_name">Nom de l\'événement</string>
     <string name="edit_event">Modifier l\'événement</string>
+    <string name="show_all">Afficher tout</string>
 
 </resources>

@@ -89,7 +89,9 @@ public class MedicinesFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        thread.quitSafely();
+        if (thread != null) {
+            thread.quitSafely();
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {

@@ -18,8 +18,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 47
-        versionName = "1.8.3"
+        versionCode = 52
+        versionName = "1.8.7"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -87,7 +87,7 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
     implementation("com.androidplot:androidplot-core:1.5.10")
     implementation("com.github.AppIntro:AppIntro:6.3.1")

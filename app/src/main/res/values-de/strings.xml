@@ -24,7 +24,7 @@
     <string name="skipped">Übersprungen</string>
     <string name="reminder_event">%1$s von %2$s, %3$s</string>
     <string name="recent_events">Kürzliche Ereignisse</string>
-    <string name="next_reminder">Nächste Erinnerung</string>
+    <string name="next_reminders">Nächste Erinnerungen</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d Erinnerung\n%2$s</item>
         <item quantity="other">%1$d Erinnerungen\n%2$s</item>
@@ -122,4 +122,5 @@
     <string name="taken_now">Jetzt eingenommen</string>
     <string name="event_name">Ereignisname</string>
     <string name="edit_event">Ereignis bearbeiten</string>
+    <string name="show_all">Alle anzeigen</string>
 </resources>

@@ -38,10 +38,10 @@ import java.time.LocalDate;
 
 public class EditMedicineFragment extends Fragment {
 
+    final HandlerThread thread;
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
     int medicineId;
-    HandlerThread thread;
     ReminderViewAdapter adapter;
     private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
@@ -50,14 +50,16 @@ public class EditMedicineFragment extends Fragment {
     private View fragmentEditMedicine;
     private EditMedicineFragmentArgs editMedicineArgs;
 
+    public EditMedicineFragment() {
+        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread.start();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentEditMedicine = inflater.inflate(R.layout.fragment_edit_medicine, container, false);
-
-        this.thread = new HandlerThread("DeleteMedicine");
-        this.thread.start();
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
@@ -96,21 +98,27 @@ public class EditMedicineFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        String word = editMedicineName.getText().toString();
-        Medicine medicine = new Medicine(word, medicineId);
-        medicine.useColor = enableColor.isChecked();
-        medicine.color = color;
-        medicineViewModel.updateMedicine(medicine);
-
-        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        for (int i = 0; i < recyclerView.getChildCount(); i++) {
-            ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-
-            medicineViewModel.updateReminder(viewHolder.getReminder());
+        if (editMedicineName != null && enableColor != null) {
+            String word = editMedicineName.getText().toString();
+            Medicine medicine = new Medicine(word, medicineId);
+            medicine.useColor = enableColor.isChecked();
+            medicine.color = color;
+            medicineViewModel.updateMedicine(medicine);
         }
 
-        if (thread != null) {
-            thread.quitSafely();
+        updateReminders();
+
+        thread.quitSafely();
+    }
+
+    private void updateReminders() {
+        if (fragmentEditMedicine != null) {
+            RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+
+                medicineViewModel.updateReminder(viewHolder.getReminder());
+            }
         }
     }
 
@@ -178,6 +186,7 @@ public class EditMedicineFragment extends Fragment {
         reminder.amount = amount;
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
         reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
+        reminder.instructions = "";
 
         new TimeHelper.TimePickerWrapper(requireActivity()).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;

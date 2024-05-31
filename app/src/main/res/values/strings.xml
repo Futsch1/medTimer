@@ -29,7 +29,7 @@
     <string name="skipped">Skipped</string>
     <string name="reminder_event">%1$s of %2$s, %3$s</string>
     <string name="recent_events">Recent events</string>
-    <string name="next_reminder">Next reminder</string>
+    <string name="next_reminders">Next reminders</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Are you sure to delete the reminder?</string>
     <string name="clear_events">Clear events</string>
@@ -124,4 +124,5 @@
     <string name="taken_now">Taken now</string>
     <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>
+    <string name="show_all">Show all</string>
 </resources>
