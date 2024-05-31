@@ -3,6 +3,7 @@ plugins {
     id("androidx.room")
     id("com.github.triplet.play") version "3.9.1"
     id("androidx.navigation.safeargs")
+    id("org.jetbrains.kotlin.android")
 }
 
 room {
@@ -58,9 +59,13 @@ android {
             //java.srcDir("build/generated/source/navigation-args/debug")
         }
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     val roomVersion = "2.6.1"
     val androidXNavigationVersion = "2.7.7"
     val preferenceXVersion = "1.1.0"
