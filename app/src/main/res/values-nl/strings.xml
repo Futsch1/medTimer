@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MedTimer</string>
     <string name="tab_settings">Instellingen</string>
@@ -21,6 +20,8 @@
         <item quantity="one">%1$d herinnering\n%2$s</item>
         <item quantity="other">%1$d herinneringen\n%2$s</item>
     </plurals>
+    <string name="channel_name" translatable="false">MedTimer</string>
+    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Herinneringen van de medicatie</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="notification_taken">GENOMEN</string>
@@ -68,6 +69,8 @@
     <string name="instruction_templates">Referentiesjablonen</string>
     <string name="instructions_label">Aanvullende instructies (bijvoorbeeld vóór de maaltijd)</string>
     <string name="medicine_data">Medicatie gegevens</string>
+    <string name="export_csv">Exporteren als CSV</string>
+    <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore">Herstellen</string>
     <string name="restore_failed">Herstel mislukt</string>
     <string name="backup_failed">Back-up mislukt</string>
@@ -105,6 +108,7 @@
     <string name="cycle_reminders">Cyclische herinneringen</string>
     <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="reminders">Herinneringen</string>
+    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 dagen</string>
     <string name="analysis">Analyse</string>
@@ -116,11 +120,17 @@
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
-    <string name="export_csv">Exporteren als CSV</string>
-    <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore_events_start">Dit vervangt alle herinneringsgebeurtenissen.\n\nDoorgaan?</string>
     <string name="taken_now">Nu ingenomen</string>
     <string name="event_name">"Herinneringennaam   "</string>
     <string name="edit_event">Herinnering bewerken</string>
     <string name="show_all">Alles weergeven</string>
+    <string name="intro_welcome">Welkom bij MedTimer!</string>
+    <string name="intro_welcome_description">MedTimer is een gratis en open source medicatieherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor medicatieherinneringen te tonen.</string>
+    <string name="intro_medicine_description">Gebruik het tabblad \"Medicatie\" om het medicatie aan te maken dat je gebruikt en waaraan je herinnerd wilt worden. Veeg naar links om een medicatie te verwijderen.</string>
+    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen aan te maken voor de verschillende doses van het medicijn die je moet innemen. Herinneringen kunnen zo simpel zijn als één keer per dag op een bepaald tijdstip verschijnen of complexe schema\'s met meerdere dagen achter elkaar en meerdere dagen pauze.</string>
+    <string name="intro_notification_description">Zodra er een herinnering is, verschijnt er een melding die je de mogelijkheid geeft om een dosis te markeren als genomen (door op de knop \"GENOMEN\" te klikken), overgeslagen (door de melding te negeren) of na enige tijd opnieuw te worden herinnerd (\"SNOOZEN\").</string>
+    <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen. Verder kun je handmatig extra doses van een van de geconfigureerde medicijnen of een aangepast medicijn registreren.</string>
+    <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als medicijnen of herinneringen worden verwijderd of een andere naam krijgen.</string>
+    <string name="show_intro">Toon app intro</string>
 </resources>
