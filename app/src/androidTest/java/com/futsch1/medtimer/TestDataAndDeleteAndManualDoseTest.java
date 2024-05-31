@@ -88,7 +88,7 @@ public class TestDataAndDeleteAndManualDoseTest {
         ViewInteraction materialTextView2 = onView(
                 allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
         materialTextView2.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 

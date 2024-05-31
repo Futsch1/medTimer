@@ -38,10 +38,10 @@ import java.time.LocalDate;
 
 public class EditMedicineFragment extends Fragment {
 
+    final HandlerThread thread;
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
     int medicineId;
-    HandlerThread thread;
     ReminderViewAdapter adapter;
     private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
@@ -50,14 +50,16 @@ public class EditMedicineFragment extends Fragment {
     private View fragmentEditMedicine;
     private EditMedicineFragmentArgs editMedicineArgs;
 
+    public EditMedicineFragment() {
+        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread.start();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentEditMedicine = inflater.inflate(R.layout.fragment_edit_medicine, container, false);
-
-        this.thread = new HandlerThread("DeleteMedicine");
-        this.thread.start();
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
@@ -104,15 +106,19 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.updateMedicine(medicine);
         }
 
-        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        for (int i = 0; i < recyclerView.getChildCount(); i++) {
-            ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+        updateReminders();
 
-            medicineViewModel.updateReminder(viewHolder.getReminder());
-        }
+        thread.quitSafely();
+    }
 
-        if (thread != null) {
-            thread.quitSafely();
+    private void updateReminders() {
+        if (fragmentEditMedicine != null) {
+            RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+
+                medicineViewModel.updateReminder(viewHolder.getReminder());
+            }
         }
     }
 

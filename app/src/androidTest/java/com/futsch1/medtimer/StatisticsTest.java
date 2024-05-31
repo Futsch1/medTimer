@@ -50,12 +50,12 @@ public class StatisticsTest {
 
     @Test
     public void statisticsTest() {
-        ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("More options")));
-        overflowMenuButton.perform(click());
-
         int retries = 3;
         while (retries > 0) {
+            ViewInteraction overflowMenuButton = onView(
+                    allOf(withContentDescription("More options")));
+            overflowMenuButton.perform(click());
+
             ViewInteraction materialTextView = onView(
                     allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
             materialTextView.perform(click());

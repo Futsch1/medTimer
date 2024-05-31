@@ -44,13 +44,13 @@ public class NextRemindersViewAdapter extends ListAdapter<ScheduledReminder, Nex
 
         @Override
         public boolean areItemsTheSame(@NonNull ScheduledReminder oldItem, @NonNull ScheduledReminder newItem) {
-            return oldItem.reminder().reminderId == newItem.reminder().reminderId;
+            return oldItem.reminder().reminderId == newItem.reminder().reminderId && oldItem.timestamp().equals(newItem.timestamp());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ScheduledReminder oldItem, @NonNull ScheduledReminder newItem) {
             return oldItem.reminder().reminderId == newItem.reminder().reminderId && oldItem.timestamp().equals(newItem.timestamp()) &&
-                    oldItem.reminder().instructions.equals(newItem.reminder().instructions);
+                    oldItem.reminder().amount.equals(newItem.reminder().amount);
         }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -93,6 +94,12 @@ public class OverviewFragment extends Fragment {
         nextRemindersViewAdapter = new NextRemindersViewAdapter(new NextRemindersViewAdapter.ScheduledReminderDiff(), medicineViewModel);
         nextReminders.setAdapter(nextRemindersViewAdapter);
         nextReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
+        nextRemindersViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                nextReminders.scrollToPosition(0);
+            }
+        });
 
         nextRemindersViewModel = new ViewModelProvider(this).get(NextRemindersViewModel.class);
         nextRemindersViewModel.getScheduledReminders().observe(getViewLifecycleOwner(), this::updatedNextReminders);
@@ -136,11 +143,13 @@ public class OverviewFragment extends Fragment {
         adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard);
     }
 
-    private void updatedNextReminders(List<ScheduledReminder> scheduledReminders) {
-        if (!nextRemindersExpanded && !scheduledReminders.isEmpty()) {
-            nextRemindersViewAdapter.submitList(scheduledReminders.subList(0, 1));
+    private void updatedNextReminders(@Nullable List<ScheduledReminder> scheduledReminders) {
+        if (scheduledReminders == null || scheduledReminders.isEmpty()) {
+            fragmentOverview.findViewById(R.id.expandNextReminders).setVisibility(View.GONE);
         } else {
-            nextRemindersViewAdapter.submitList(scheduledReminders);
+            fragmentOverview.findViewById(R.id.expandNextReminders).setVisibility(View.VISIBLE);
+
+            nextRemindersViewAdapter.submitList(nextRemindersExpanded ? scheduledReminders : scheduledReminders.subList(0, 1));
         }
     }
 
