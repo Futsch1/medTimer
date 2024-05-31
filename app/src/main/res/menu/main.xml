@@ -52,10 +52,15 @@
                 android:title="@string/restore" />
         </menu>
     </item>
-    <item
-        android:id="@+id/generate_test_data"
-        android:icon="@drawable/x_circle"
-        android:title="@string/generate_test_data" />
+    <group android:id="@+id/debug">
+        <item
+            android:id="@+id/generate_test_data"
+            android:icon="@drawable/x_circle"
+            android:title="@string/generate_test_data" />
+        <item
+            android:id="@+id/show_app_intro"
+            android:title="@string/show_intro" />
+    </group>
     <group android:id="@+id/information">
         <item
             android:id="@+id/version"

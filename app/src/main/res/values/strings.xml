@@ -125,4 +125,12 @@
     <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>
     <string name="show_all">Show all</string>
+    <string name="intro_welcome">Welcome to MedTimer!</string>
+    <string name="intro_welcome_description">MedTimer is a free and open source medication reminder app with a focus on privacy.\n\nIt requires permission to show notifications for medication reminders.</string>
+    <string name="intro_medicine_description">Use the \"Medicine\" tab to create the medicine you are taking and want to be reminded of. Swipe left to delete a medicine.</string>
+    <string name="intro_reminder_description">Select a medicine to edit its details and create reminders for the different doses of the medicine you need to take.\n\nReminders can be as simple as appearing once per day at a certain time or complex schedules with several days in a row and several days of pause.</string>
+    <string name="intro_notification_description">Once a reminder is due, a notification will appear that provides you the option to mark a dose as taken (by clicking the \"TAKEN\" button), skipped (by dismissing the notification) or be reminded again after some time (\"SNOOZE\").</string>
+    <string name="intro_overview_description">On the overview screen, you can see upcoming reminders and the last reminder events. Reminder events can be edited by swiping them to the right.\n\nFurthermore, you can manually log additional doses of either one of the configured medicine or a custom one.</string>
+    <string name="intro_analysis_description">The app stores all reminder events. You can analyze your past doses in the analysis screen and export your history via the kebab (three dots) menu. The history will stay even if medicines or reminders are deleted or renamed.</string>
+    <string name="show_intro">Show app intro</string>
 </resources>

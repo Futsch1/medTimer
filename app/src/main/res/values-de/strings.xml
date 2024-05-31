@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MedTimer</string>
     <string name="tab_settings">Einstellungen</string>
@@ -17,6 +16,12 @@
     <string name="confirm">Bestätigen</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d Erinnerung\n%2$s</item>
+        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
+    </plurals>
+    <string name="channel_name" translatable="false">MedTimer</string>
+    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
     <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
     <string name="notification_taken">EINGENOMMEN</string>
@@ -25,10 +30,6 @@
     <string name="reminder_event">%1$s von %2$s, %3$s</string>
     <string name="recent_events">Kürzliche Ereignisse</string>
     <string name="next_reminders">Nächste Erinnerungen</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d Erinnerung\n%2$s</item>
-        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
-    </plurals>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
     <string name="clear_events">Ereignisse zurücksetzen</string>
@@ -55,6 +56,7 @@
     <string name="generate_test_data">Testdaten generieren</string>
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="notification_tone_title">Benachrichtigungston</string>
+    <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="days">Tage</string>
     <string name="theme">Theme</string>
     <string name="default_theme">Standard</string>
@@ -67,6 +69,8 @@
     <string name="instruction_templates">Hinweisvorlagen</string>
     <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
     <string name="medicine_data">Medikamentendaten</string>
+    <string name="export_csv">Export als CSV</string>
+    <string name="export_pdf">Export als PDF</string>
     <string name="restore">Wiederherstellen</string>
     <string name="restore_failed">Wiederherstellen fehlgeschlagen</string>
     <string name="backup_failed">Erstellen fehlgeschlagen</string>
@@ -99,12 +103,12 @@
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="remind_on">Erinnere an</string>
     <string name="every_day">Jeden Tag</string>
-    <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
     <string name="cycle_reminders">Zyklische Erinnerungen</string>
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
+    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 Tage</string>
     <string name="analysis">Analyse</string>
@@ -116,11 +120,17 @@
     <string name="name">Name</string>
     <string name="event_data">Ereignisdaten</string>
     <string name="backup">Backup</string>
-    <string name="export_csv">Export als CSV</string>
-    <string name="export_pdf">Export als PDF</string>
     <string name="restore_events_start">Alle Ereignisse werden überschrieben.\n\nFortfahren?</string>
     <string name="taken_now">Jetzt eingenommen</string>
     <string name="event_name">Ereignisname</string>
     <string name="edit_event">Ereignis bearbeiten</string>
     <string name="show_all">Alle anzeigen</string>
+    <string name="intro_welcome">Welcome to MedTimer!</string>
+    <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf dem Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen um an Medikamente zu erinnern.</string>
+    <string name="intro_medicine_description">Verwenden Sie die Registerkarte \"Medikamente\" um das Medikament zu erstellen, das Sie einnehmen und an das Sie erinnert werden möchten. Wischen Sie nach links um ein Medikament zu löschen.</string>
+    <string name="intro_reminder_description">Wählen Sie ein Medikament aus um seine Details zu bearbeiten und Erinnerungen für die verschiedenen Dosen des Medikaments zu erstellen, die Sie einnehmen müssen.\n\nErinnerungen können einfach einmal täglich zu einer bestimmten Zeit erinnern oder komplexe Zeitpläne mit mehreren Tagen hintereinander und mehreren Tagen Pause.</string>
+    <string name="intro_notification_description">Sobald eine Erinnerung fällig ist, erscheint eine Benachrichtigung, die Ihnen die Möglichkeit gibt, eine Dosis als eingenommen zu markieren (durch Klicken auf die Schaltfläche \"EINGENOMMEN\"), zu überspringen (durch Verwerfen der Benachrichtigung) oder nach einiger Zeit erneut erinnert zu werden (\"SNOOZE\").</string>
+    <string name="intro_overview_description">Auf dem Übersichtsbildschirm können Sie anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Wischen nach rechts bearbeitet werden.\n\n Darüber hinaus können Sie manuell zusätzliche Dosen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
+    <string name="intro_analysis_description">Die App speichert alle Erinnerungsereignisse. Sie können Ihre vergangenen Dosen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
+    <string name="show_intro">App-Intro anzeigen</string>
 </resources>

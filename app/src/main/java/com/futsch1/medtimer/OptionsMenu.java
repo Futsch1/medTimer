@@ -63,6 +63,7 @@ public class OptionsMenu implements MenuProvider {
         setupClearEvents();
         setupExport();
         setupGenerateTestData();
+        setupShowAppIntro();
     }
 
     @SuppressLint("RestrictedApi")
@@ -149,6 +150,16 @@ public class OptionsMenu implements MenuProvider {
             });
         } else {
             item.setVisible(false);
+        }
+    }
+
+    private void setupShowAppIntro() {
+        if (BuildConfig.DEBUG) {
+            MenuItem item = menu.findItem(R.id.show_app_intro);
+            item.setOnMenuItemClickListener(menuItem -> {
+                context.startActivity(new Intent(context, MedTimerAppIntro.class));
+                return true;
+            });
         }
     }
 
