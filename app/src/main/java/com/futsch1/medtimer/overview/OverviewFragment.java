@@ -39,6 +39,7 @@ import com.google.android.material.card.MaterialCardView;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OverviewFragment extends Fragment {
@@ -146,6 +147,8 @@ public class OverviewFragment extends Fragment {
     private void updatedNextReminders(@Nullable List<ScheduledReminder> scheduledReminders) {
         if (scheduledReminders == null || scheduledReminders.isEmpty()) {
             fragmentOverview.findViewById(R.id.expandNextReminders).setVisibility(View.GONE);
+
+            nextRemindersViewAdapter.submitList(new ArrayList<>());
         } else {
             fragmentOverview.findViewById(R.id.expandNextReminders).setVisibility(View.VISIBLE);
 
