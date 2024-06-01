@@ -14,14 +14,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertNotEquals;
 
 import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -51,40 +51,32 @@ public class StatisticsTest {
 
     @Test
     public void statisticsTest() {
-        int retries = 3;
-        while (retries > 0) {
-            ViewInteraction overflowMenuButton = onView(
-                    allOf(withContentDescription("More options")));
-            overflowMenuButton.perform(click());
+        ViewInteraction overflowMenuButton = onView(
+                allOf(withContentDescription("More options")));
+        overflowMenuButton.perform(click());
 
-            ViewInteraction materialTextView = onView(
-                    allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
-            materialTextView.perform(click());
-            onView(isRoot()).perform(AndroidTestHelper.waitFor(10000));
+        ViewInteraction materialTextView = onView(
+                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
+        materialTextView.perform(click());
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
-            try {
-                ViewInteraction chip = onView(
-                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
-                chip.perform(click());
+        setAllRemindersTo12AM();
 
-                ViewInteraction chip2 = onView(
-                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
-                chip2.perform(click());
+        ViewInteraction chip = onView(
+                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken));
+        chip.perform(click());
 
-                ViewInteraction chip3 = onView(
-                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
-                chip3.perform(click());
+        ViewInteraction chip2 = onView(
+                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken));
+        chip2.perform(click());
 
-                ViewInteraction chip4 = onView(
-                        new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
-                chip4.perform(scrollTo(), click());
+        ViewInteraction chip3 = onView(
+                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped));
+        chip3.perform(click());
 
-                break;
-            } catch (NoMatchingViewException e) {
-                retries--;
-            }
-        }
-        assertNotEquals(0, retries);
+        ViewInteraction chip4 = onView(
+                new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken));
+        chip4.perform(scrollTo(), click());
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
@@ -93,7 +85,7 @@ public class StatisticsTest {
         appCompatSpinner.perform(click());
 
         DataInteraction materialTextView2 = onData(anything())
-                .inAdapterView(AndroidTestHelper.childAtPosition(
+                .inAdapterView(childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
                 .atPosition(1);
@@ -105,9 +97,9 @@ public class StatisticsTest {
 
         ViewInteraction linearLayout = onView(
                 allOf(withId(R.id.tableColumnHeaderContainer),
-                        AndroidTestHelper.childAtPosition(
+                        childAtPosition(
                                 allOf(withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
-                                        AndroidTestHelper.childAtPosition(
+                                        childAtPosition(
                                                 withId(R.id.reminder_table),
                                                 0)),
                                 1),
@@ -133,6 +125,35 @@ public class StatisticsTest {
         ViewInteraction checkableImageButton = onView(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon)));
         checkableImageButton.perform(click());
+    }
+
+    private void setAllRemindersTo12AM() {
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.medicinesFragment), withContentDescription("Medicine")));
+        bottomNavigationItemView.perform(click());
+
+        setReminderTo12AM(0);
+        setReminderTo12AM(1);
+        setReminderTo12AM(2);
+        setReminderTo12AM(3);
+
+        ViewInteraction bottomNavigationItemView2 = onView(
+                allOf(withId(R.id.overviewFragment), withContentDescription("Overview")
+                ));
+        bottomNavigationItemView2.perform(click());
+    }
+
+    private void setReminderTo12AM(int position) {
+        ViewInteraction recyclerView = onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard));
+        recyclerView.perform(click());
+
+        recyclerView = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime));
+        recyclerView.perform(click());
+
+        setTime(0, 0);
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withContentDescription("Navigate up")));
+        appCompatImageButton.perform(click());
     }
 
 }
