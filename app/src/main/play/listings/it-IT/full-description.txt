@@ -1,0 +1,29 @@
+Cronologia e promemoria dei medicinali da assumere, con privacy completa offline
+
+Tieni Sotto Controllo I Tuoi Medicinali con MedTimer
+
+MedTimer è un'applicazione open-source per i promemoria dei medicinali, progettata per aiutarti a gestire i farmaci e le compresse in modo efficace e con il pieno controllo dei tuoi dati sensibili.
+
+Promemoria Flessibili e Personalizzati:
+
+- Gestisci un numero illimitato di medicinali con promemoria personalizzabili per ogni medicinale (compresi semplici valori predefiniti per i promemoria giornalieri).
+- Crea promemoria flessibili con interruzioni e giorni specifici (ad es. per la pillola anticoncezionale).
+- Modalità fine settimana: Ritarda i promemoria ad un orario definito, nei giorni prescelti.
+- Sospendi le notifiche (snooze) per posticipare i promemoria.
+- Aggiungi al momento dosi supplementari.
+
+Gestione dei Dati Semplice & Sicura:
+
+- Conferma o elimina i promemoria per registrare accuratamente l'aderenza alle prescrizioni dei medicinali.
+- Ottieni un riepilogo grafico e in visualizzazione tabella dei dosaggi assunti in passato.
+- Esporta la cronologia dei medicinali in un file CSV per facilitare la conservazione o la condivisione dei dati con gli operatori sanitari.
+- Backup e ripristino dell'elenco dei medicinali come file JSON.
+
+Privacy & Accessibilità Offline:
+
+- Tutti i dati sono memorizzati in modo sicuro nel tuo dispositivo, garantendo privacy completa e accessibilità offline.
+- Non è necessaria una connessione ad Internet – i promemoria dei tuoi medicinali sono sempre disponibili.
+
+MedTimer è un'applicazione gratuita senza pubblicità.
+
+Visita la pagina del progetto su GitHub: https://github.com/Futsch1/medTimer
