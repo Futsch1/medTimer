@@ -29,6 +29,7 @@
             android:name=".ReminderSchedulerService"
             android:enabled="true"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,6 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MedTimerAppIntro"
+            android:theme="@style/Theme.MedTimer" />
 
         <receiver
             android:name=".Autostart"

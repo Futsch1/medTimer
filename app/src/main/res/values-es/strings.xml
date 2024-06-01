@@ -17,9 +17,11 @@
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
     <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one">%1$d recordatorio\n%2$s</item>
+        <item quantity="one" tools:ignore="MissingQuantity">%1$d recordatorio\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
+    <string name="channel_name" translatable="false">MedTimer</string>
+    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Toma tu medicación</string>
     <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
     <string name="notification_taken">TOMADO</string>
@@ -67,6 +69,8 @@
     <string name="instruction_templates">Plantillas de instrucciones</string>
     <string name="instructions_label">Instrucciones adicionales (por ejemplo, antes de las comidas)</string>
     <string name="medicine_data">Datos de medicamentos</string>
+    <string name="export_csv">Exportar en CSV</string>
+    <string name="export_pdf">Exportar en PDF</string>
     <string name="restore">Restaurar</string>
     <string name="restore_failed">Error al restaurar</string>
     <string name="backup_failed">Error al crear</string>
@@ -104,6 +108,7 @@
     <string name="cycle_reminders">Recordatorios cíclicos</string>
     <string name="weekday_limited">Limitado a algunos días de la semana</string>
     <string name="reminders">Recordatorios</string>
+    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 días</string>
     <string name="analysis">Análysis</string>
@@ -115,11 +120,17 @@
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Backup</string>
-    <string name="export_csv">Exportar en CSV</string>
     <string name="restore_events_start">Esto reemplazará todos los eventos de recordatorio.\n\n¿Continuar?</string>
-    <string name="export_pdf">Exportar en PDF</string>
     <string name="taken_now">Tomado ahora</string>
     <string name="event_name">Nombre del evento</string>
     <string name="edit_event">Editar evento</string>
     <string name="show_all">Mostrar todo</string>
+    <string name="intro_welcome">¡Bienvenido a MedTimer!</string>
+    <string name="intro_welcome_description">MedTimer es una aplicación de recordatorio de medicación gratuita y de código abierto centrada en la privacidad.\n\nRequiere permiso para mostrar notificaciones de recordatorios de medicación.</string>
+    <string name="intro_medicine_description">Utilice la pestaña \"Medicación\" para crear el medicamento que está tomando y que desea que se le recuerde. Desliza el dedo hacia la izquierda para eliminar un medicamento.</string>
+    <string name="intro_reminder_description">Seleccione un medicamento para editar sus detalles y crear recordatorios para las distintas dosis del medicamento que debe tomar.\nLos recordatorios pueden ser tan sencillos como aparecer una vez al día a una hora determinada o complejos horarios con varios días seguidos y varios días de pausa.</string>
+    <string name="intro_notification_description">Cuando llegue la hora del recordatorio, aparecerá una notificación que le dará la opción de marcar la dosis como tomada (haciendo clic en el botón \"TOMADA\"), omitida (descartando la notificación) o de que se le recuerde de nuevo pasado un tiempo (\"POSPONER\").</string>
+    <string name="intro_overview_description">En la pantalla de resumen, puede ver los próximos recordatorios y los últimos eventos de recordatorio. Además, puede registrar manualmente dosis adicionales de uno de los medicamentos configurados o de uno personalizado.</string>
+    <string name="intro_analysis_description">La aplicación almacena todos los recordatorios. Puedes analizar tus dosis anteriores en la pantalla de análisis y exportar tu historial a través del menú kebab (tres puntos). El historial se conservará aunque se eliminen o cambien de nombre los medicamentos o los recordatorios.</string>
+    <string name="show_intro">Mostrar introducción de la aplicación</string>
 </resources>
