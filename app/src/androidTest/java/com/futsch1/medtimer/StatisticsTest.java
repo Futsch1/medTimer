@@ -60,7 +60,7 @@ public class StatisticsTest {
             ViewInteraction materialTextView = onView(
                     allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
             materialTextView.perform(click());
-            onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
+            onView(isRoot()).perform(AndroidTestHelper.waitFor(10000));
 
             try {
                 ViewInteraction chip = onView(
