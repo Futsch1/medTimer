@@ -9,7 +9,7 @@ Promemoria Flessibili e Personalizzati:
 - Gestisci un numero illimitato di medicinali con promemoria personalizzabili per ogni medicinale (compresi semplici valori predefiniti per i promemoria giornalieri).
 - Crea promemoria flessibili con interruzioni e giorni specifici (ad es. per la pillola anticoncezionale).
 - Modalità fine settimana: Ritarda i promemoria ad un orario definito, nei giorni prescelti.
-- Sospendi le notifiche (snooze) per posticipare i promemoria.
+- Sospendi le notifiche ("snooze") per posticipare i promemoria.
 - Aggiungi al momento dosi supplementari.
 
 Gestione dei Dati Semplice & Sicura:
