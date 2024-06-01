@@ -20,8 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorSurfaceContainerLow">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/nextRemindersText"

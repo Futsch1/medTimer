@@ -106,7 +106,7 @@
             android:name="eventName"
             app:argType="string" />
         <argument
-            android:name="eventTime"
+            android:name="eventRemindedTimestamp"
             app:argType="long" />
     </fragment>
 </navigation>

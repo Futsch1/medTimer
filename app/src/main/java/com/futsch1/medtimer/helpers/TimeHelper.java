@@ -53,7 +53,12 @@ public class TimeHelper {
         LocalDate date = LocalDate.now();
         LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of((minutes / 60), (minutes % 60)));
         return dateTime.toInstant(ZoneId.systemDefault().getRules().getOffset(dateTime));
+    }
 
+    public static long changeTimeStampMinutes(long timeStamp, int localMinutes) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.systemDefault());
+        localDateTime = localDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60);
+        return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
     }
 
     public static String toLocalizedDatetimeString(long timeStamp, ZoneId zoneId) {
