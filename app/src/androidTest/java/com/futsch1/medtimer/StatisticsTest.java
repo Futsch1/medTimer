@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertNotEquals;
 
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.NoMatchingViewException;
@@ -83,6 +84,7 @@ public class StatisticsTest {
                 retries--;
             }
         }
+        assertNotEquals(0, retries);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 

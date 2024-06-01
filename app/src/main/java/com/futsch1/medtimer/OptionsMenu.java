@@ -141,11 +141,13 @@ public class OptionsMenu implements MenuProvider {
                 handler.post(() -> {
                     Log.i("GenerateTestData", "Delete all data");
                     medicineViewModel.deleteAll();
+                });
+                handler.postDelayed(() -> {
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
-                });
-                handler.post(() -> ReminderProcessor.requestReschedule(context));
+                }, 1000);
+                handler.postDelayed(() -> ReminderProcessor.requestReschedule(context), 2000);
                 return true;
             });
         } else {
