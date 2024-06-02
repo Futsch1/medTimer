@@ -74,7 +74,7 @@ public class BackupManager {
         item.setOnMenuItemClickListener(menuItem -> {
             handler.post(() ->
                     createBackup(new JSONReminderEventBackup(),
-                            medicineViewModel.medicineRepository.getAllReminderEvents(),
+                            medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(),
                             "ReminderEvents"));
             return true;
         });

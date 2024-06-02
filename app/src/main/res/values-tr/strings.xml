@@ -133,4 +133,5 @@
     <string name="intro_overview_description">Genel bakış ekranında, yaklaşan hatırlatıcıları ve son hatırlatma olaylarını görebilirsiniz. Hatırlatma etkinlikleri sağa kaydırılarak düzenlenebilir.\n\nAyrıca, yapılandırılmış ilaçlardan birinin veya özel bir ilacın ek dozlarını manuel olarak kaydedebilirsiniz.</string>
     <string name="intro_analysis_description">Uygulama tüm hatırlatma etkinliklerini kaydeder. Analiz ekranında geçmiş dozlarınızı analiz edebilir ve kebap (üç nokta) menüsü aracılığıyla geçmişinizi dışa aktarabilirsiniz. İlaçlar veya hatırlatıcılar silinse veya yeniden adlandırılsa bile geçmiş kalır.</string>
     <string name="show_intro">Uygulama tanıtımını göster</string>
+    <string name="are_you_sure_delete_reminder_event">Hatırlatma etkinliğini sildiğinizden emin misiniz\?</string>
 </resources>

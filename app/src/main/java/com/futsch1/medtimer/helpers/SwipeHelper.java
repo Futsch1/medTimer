@@ -47,9 +47,10 @@ public abstract class SwipeHelper extends SimpleCallback {
 
         this.swipeIcon = ContextCompat.getDrawable(context, icon);
 
-        if (swipeIcon == null)
+        if (swipeIcon == null) {
             throw new Resources.NotFoundException("There was an error trying to load the drawables");
-
+        }
+        
         intrinsicHeight = swipeIcon.getIntrinsicHeight();
         intrinsicWidth = swipeIcon.getIntrinsicWidth();
     }
@@ -86,13 +87,14 @@ public abstract class SwipeHelper extends SimpleCallback {
 
         if (isSwipeLeft() ? dX < 0 : dX > 0) {
             drawSwipeBar(c, dX, itemView, itemHeight);
-
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
     private void clearCanvas(Canvas c, float left, float top, float right, float bottom) {
-        if (c != null) c.drawRect(left, top, right, bottom, clearPaint);
+        if (c != null) {
+            c.drawRect(left, top, right, bottom, clearPaint);
+        }
     }
 
     private boolean isSwipeLeft() {

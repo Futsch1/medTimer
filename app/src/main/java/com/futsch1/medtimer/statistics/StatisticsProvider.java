@@ -20,7 +20,7 @@ public class StatisticsProvider {
     private final List<ReminderEvent> reminderEvents;
 
     public StatisticsProvider(MedicineRepository medicineRepository) {
-        reminderEvents = medicineRepository.getAllReminderEvents();
+        reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted();
     }
 
     public TakenSkipped getTakenSkippedData(int days) {
