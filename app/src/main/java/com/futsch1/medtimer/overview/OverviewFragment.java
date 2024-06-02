@@ -175,7 +175,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupScheduleObservers() {
-        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60)
+        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60, true)
                 .observe(getViewLifecycleOwner(), this::changedReminderEvents);
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), this::changedMedicines);
     }
@@ -259,7 +259,7 @@ public class OverviewFragment extends Fragment {
         if (liveData != null) {
             liveData.removeObservers(getViewLifecycleOwner());
         }
-        liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60));
+        liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60), false);
         liveData.observe(getViewLifecycleOwner(), latestRemindersViewAdapter::submitList);
 
         ReminderProcessor.requestReschedule(requireContext());

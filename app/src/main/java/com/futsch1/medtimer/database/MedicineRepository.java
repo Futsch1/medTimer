@@ -5,13 +5,19 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class MedicineRepository {
 
     private final MedicineDao medicineDao;
     private final MedicineRoomDatabase database;
+    private final List<ReminderEvent.ReminderStatus> allStatusValues = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.DELETED, ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
+            collect(Collectors.toList());
+    private final List<ReminderEvent.ReminderStatus> statusValuesWithoutDelete = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
+            collect(Collectors.toList());
 
     public MedicineRepository(Application application) {
         database = MedicineRoomDatabase.getDatabase(application);
@@ -43,20 +49,20 @@ public class MedicineRepository {
         return medicineDao.getReminder(reminderId);
     }
 
-    public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, long timeStamp) {
+    public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, long timeStamp, boolean withDeleted) {
         if (limit == 0) {
-            return medicineDao.getLiveReminderEvents(timeStamp);
+            return medicineDao.getLiveReminderEvents(timeStamp, withDeleted ? allStatusValues : statusValuesWithoutDelete);
         } else {
-            return medicineDao.getReminderEvents(limit);
+            return medicineDao.getReminderEvents(limit, withDeleted ? allStatusValues : statusValuesWithoutDelete);
         }
     }
 
-    public List<ReminderEvent> getAllReminderEvents() {
-        return medicineDao.getReminderEvents(0L);
+    public List<ReminderEvent> getAllReminderEventsWithoutDeleted() {
+        return medicineDao.getReminderEvents(0L, statusValuesWithoutDelete);
     }
 
     public List<ReminderEvent> getLastDaysReminderEvents(int days) {
-        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60));
+        return medicineDao.getReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
     }
 
     public long insertMedicine(Medicine medicine) {
