@@ -122,12 +122,12 @@ public class OptionsMenu implements MenuProvider {
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId())));
+            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context, TimeZone.getDefault().toZoneId())));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEvents(), context, TimeZone.getDefault().toZoneId())));
+            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context, TimeZone.getDefault().toZoneId())));
             return true;
         });
     }

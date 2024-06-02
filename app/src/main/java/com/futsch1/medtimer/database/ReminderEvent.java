@@ -34,6 +34,7 @@ public class ReminderEvent {
     public enum ReminderStatus {
         RAISED,
         TAKEN,
-        SKIPPED
+        SKIPPED,
+        DELETED
     }
 }

@@ -29,14 +29,14 @@ public interface MedicineDao {
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
 
-    @Query("SELECT * FROM ReminderEvent ORDER BY remindedTimestamp DESC LIMIT :limit")
-    LiveData<List<ReminderEvent>> getReminderEvents(int limit);
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
+    LiveData<List<ReminderEvent>> getReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
 
-    @Query("SELECT * FROM ReminderEvent WHERE remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    LiveData<List<ReminderEvent>> getLiveReminderEvents(long fromTimestamp);
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
+    LiveData<List<ReminderEvent>> getLiveReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
-    @Query("SELECT * FROM ReminderEvent WHERE remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
-    List<ReminderEvent> getReminderEvents(long fromTimestamp);
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
+    List<ReminderEvent> getReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Insert
     long insertMedicine(Medicine medicine);

@@ -17,7 +17,7 @@
     <string name="are_you_sure_delete_medicine">Vuoi eliminare il medicinale\?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
     <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one">%1$d promemoria\n%2$s</item>
+        <item quantity="one" tools:ignore="MissingQuantity">%1$d promemoria\n%2$s</item>
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
     <string name="channel_name" translatable="false">MedTimer</string>
@@ -133,4 +133,5 @@
     <string name="intro_overview_description">Nella schermata di Riepilogo è possibile vedere i prossimi promemoria e gli ultimi eventi di promemoria. Gli eventi di promemoria possono essere modificati facendo scorrere il dito verso destra.\n\nInoltre è possibile registrare manualmente dosi aggiuntive di uno dei medicinali configurati o di un medicinale personalizzato.</string>
     <string name="intro_analysis_description">L\'applicazione memorizza tutti gli eventi di promemoria. Puoi analizzare le dosi passate nella schermata di Analisi ed esportare la cronologia tramite il menu kebab (tre punti). La cronologia si conserva anche se i medicinali o i promemoria vengono eliminati o rinominati.</string>
     <string name="show_intro">Mostra l\'introduzione dell\'app</string>
+    <string name="are_you_sure_delete_reminder_event">Siete sicuri di aver eliminato l\'evento di promemoria?</string>
 </resources>

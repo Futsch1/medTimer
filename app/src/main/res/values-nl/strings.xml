@@ -133,4 +133,5 @@
     <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen. Verder kun je handmatig extra doses van een van de geconfigureerde medicijnen of een aangepast medicijn registreren.</string>
     <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als medicijnen of herinneringen worden verwijderd of een andere naam krijgen.</string>
     <string name="show_intro">Toon app intro</string>
+    <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je het herinneringsgebeurtenis wilt verwijderen?</string>
 </resources>
