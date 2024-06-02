@@ -1,136 +1,150 @@
-package com.futsch1.medtimer.overview;
+package com.futsch1.medtimer.overview
 
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import android.annotation.SuppressLint
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.NextRemindersViewModel
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.MedicineWithReminders
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.overview.NextRemindersViewAdapter.ScheduledReminderDiff
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
-import android.annotation.SuppressLint;
-import android.view.View;
-import android.widget.LinearLayout;
+class NextReminders @SuppressLint("WrongViewCast") constructor(
+    fragmentView: View,
+    parentFragment: Fragment,
+    private val medicineViewModel: MedicineViewModel
+) {
+    private val nextRemindersViewModel: NextRemindersViewModel
+    private val nextRemindersViewAdapter =
+        NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
+    private val expandNextReminders: MaterialButton =
+        fragmentView.findViewById(R.id.expandNextReminders)
+    private var reminderEvents: List<ReminderEvent> = ArrayList()
+    private var nextRemindersExpanded = false
+    private var medicineWithReminders: List<MedicineWithReminders> = ArrayList()
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.NextRemindersViewModel;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ScheduledReminder;
-import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-
-public class NextReminders {
-    private final NextRemindersViewModel nextRemindersViewModel;
-    private final NextRemindersViewAdapter nextRemindersViewAdapter;
-    private final MedicineViewModel medicineViewModel;
-    private final MaterialButton expandNextReminders;
-    private List<ReminderEvent> reminderEvents;
-    private boolean nextRemindersExpanded = false;
-    private List<MedicineWithReminders> medicineWithReminders;
-
-    @SuppressLint("WrongViewCast")
-    public NextReminders(View fragmentView, Fragment parentFragment, MedicineViewModel medicineViewModel) {
-        this.medicineViewModel = medicineViewModel;
-        expandNextReminders = fragmentView.findViewById(R.id.expandNextReminders);
-
-        nextRemindersViewAdapter = new NextRemindersViewAdapter(new NextRemindersViewAdapter.ScheduledReminderDiff(), medicineViewModel);
-
-        RecyclerView recyclerView = fragmentView.findViewById(R.id.nextReminders);
-        recyclerView.setAdapter(nextRemindersViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        nextRemindersViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                recyclerView.scrollToPosition(0);
+    init {
+        val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.nextReminders)
+        recyclerView.adapter = nextRemindersViewAdapter
+        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
+        nextRemindersViewAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                recyclerView.scrollToPosition(0)
             }
-        });
+        })
 
-        nextRemindersViewModel = new ViewModelProvider(parentFragment).get(NextRemindersViewModel.class);
-        nextRemindersViewModel.getScheduledReminders().observe(parentFragment.getViewLifecycleOwner(), this::updatedNextReminders);
+        nextRemindersViewModel =
+            ViewModelProvider(parentFragment)[NextRemindersViewModel::class.java]
+        nextRemindersViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner) { scheduledReminders: List<ScheduledReminder>? ->
+            this.updatedNextReminders(
+                scheduledReminders
+            )
+        }
 
-        setupScheduleObservers(parentFragment);
-        setupExpandNextReminders(fragmentView);
+        setupScheduleObservers(parentFragment)
+        setupExpandNextReminders(fragmentView)
     }
 
-    private void updatedNextReminders(@Nullable List<ScheduledReminder> scheduledReminders) {
-        if (scheduledReminders == null || scheduledReminders.isEmpty()) {
-            expandNextReminders.setVisibility(View.GONE);
+    private fun updatedNextReminders(scheduledReminders: List<ScheduledReminder>?) {
+        if (scheduledReminders.isNullOrEmpty()) {
+            expandNextReminders.visibility = View.GONE
 
-            nextRemindersViewAdapter.submitList(new ArrayList<>());
+            nextRemindersViewAdapter.submitList(ArrayList())
         } else {
-            expandNextReminders.setVisibility(View.VISIBLE);
+            expandNextReminders.visibility = View.VISIBLE
 
-            nextRemindersViewAdapter.submitList(nextRemindersExpanded ? scheduledReminders : scheduledReminders.subList(0, 1));
+            nextRemindersViewAdapter.submitList(
+                if (nextRemindersExpanded) scheduledReminders else scheduledReminders.subList(0, 1)
+            )
         }
     }
 
-    private void setupScheduleObservers(Fragment parentFragment) {
-        medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60, true)
-                .observe(parentFragment.getViewLifecycleOwner(), this::changedReminderEvents);
-        medicineViewModel.getMedicines().observe(parentFragment.getViewLifecycleOwner(), this::changedMedicines);
+    private fun setupScheduleObservers(parentFragment: Fragment) {
+        medicineViewModel.getReminderEvents(
+            0,
+            Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60,
+            true
+        )
+            .observe(parentFragment.viewLifecycleOwner) { reminderEvents: List<ReminderEvent> ->
+                this.changedReminderEvents(
+                    reminderEvents
+                )
+            }
+        medicineViewModel.medicines.observe(parentFragment.viewLifecycleOwner) { medicineWithReminders: List<MedicineWithReminders> ->
+            this.changedMedicines(
+                medicineWithReminders
+            )
+        }
     }
 
-    private void setupExpandNextReminders(View fragmentView) {
-        MaterialCardView nextRemindersCard = fragmentView.findViewById(R.id.nextRemindersCard);
-        expandNextReminders.setOnClickListener(v -> {
-            nextRemindersExpanded = !nextRemindersExpanded;
-            adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard);
-            updatedNextReminders(nextRemindersViewModel.getScheduledReminders().getValue());
-        });
+    private fun setupExpandNextReminders(fragmentView: View) {
+        val nextRemindersCard = fragmentView.findViewById<MaterialCardView>(R.id.nextRemindersCard)
+        expandNextReminders.setOnClickListener {
+            nextRemindersExpanded = !nextRemindersExpanded
+            adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
+            updatedNextReminders(nextRemindersViewModel.scheduledReminders.value)
+        }
 
-        adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard);
+        adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
     }
 
-    private void changedReminderEvents(List<ReminderEvent> reminderEvents) {
-        this.reminderEvents = reminderEvents;
-        calculateSchedule();
+    private fun changedReminderEvents(reminderEvents: List<ReminderEvent>) {
+        this.reminderEvents = reminderEvents
+        calculateSchedule()
     }
 
-    private void changedMedicines(List<MedicineWithReminders> medicineWithReminders) {
-        this.medicineWithReminders = medicineWithReminders;
-        calculateSchedule();
+    private fun changedMedicines(medicineWithReminders: List<MedicineWithReminders>) {
+        this.medicineWithReminders = medicineWithReminders
+        calculateSchedule()
     }
 
-    private void adaptUIToNextRemindersExpandedState(MaterialButton expandNextReminders, MaterialCardView nextRemindersCard) {
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) nextRemindersCard.getLayoutParams();
+    private fun adaptUIToNextRemindersExpandedState(
+        expandNextReminders: MaterialButton,
+        nextRemindersCard: MaterialCardView
+    ) {
+        val layoutParams = nextRemindersCard.layoutParams as LinearLayout.LayoutParams
         if (nextRemindersExpanded) {
-            expandNextReminders.setIconResource(R.drawable.chevron_up);
-            layoutParams.height = 0;
-            layoutParams.weight = 1;
-            nextRemindersCard.setLayoutParams(layoutParams);
+            expandNextReminders.setIconResource(R.drawable.chevron_up)
+            layoutParams.height = 0
+            layoutParams.weight = 1f
+            nextRemindersCard.layoutParams = layoutParams
         } else {
-            expandNextReminders.setIconResource(R.drawable.chevron_down);
-            layoutParams.height = WRAP_CONTENT;
-            layoutParams.weight = 0;
-            nextRemindersCard.setLayoutParams(layoutParams);
+            expandNextReminders.setIconResource(R.drawable.chevron_down)
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            layoutParams.weight = 0f
+            nextRemindersCard.layoutParams = layoutParams
         }
     }
 
-    private void calculateSchedule() {
-        ReminderScheduler scheduler = new ReminderScheduler(new ReminderScheduler.TimeAccess() {
-            @Override
-            public ZoneId systemZone() {
-                return ZoneId.systemDefault();
+    private fun calculateSchedule() {
+        val scheduler = ReminderScheduler(object : TimeAccess {
+            override fun systemZone(): ZoneId {
+                return ZoneId.systemDefault()
             }
 
-            @Override
-            public LocalDate localDate() {
-                return LocalDate.now();
+            override fun localDate(): LocalDate {
+                return LocalDate.now()
             }
-        });
+        })
 
-        if (medicineWithReminders != null && reminderEvents != null) {
-            List<ScheduledReminder> reminders = scheduler.schedule(medicineWithReminders, reminderEvents);
-            nextRemindersViewModel.setScheduledReminders(reminders);
-        }
+        val reminders = scheduler.schedule(
+            medicineWithReminders, reminderEvents
+        )
+        nextRemindersViewModel.setScheduledReminders(reminders)
     }
 }
