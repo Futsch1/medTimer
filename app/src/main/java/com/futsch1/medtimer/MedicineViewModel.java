@@ -76,4 +76,12 @@ public class MedicineViewModel extends AndroidViewModel {
     public void deleteAll() {
         medicineRepository.deleteAll();
     }
+
+    public ReminderEvent getReminderEvent(int reminderEventId) {
+        return medicineRepository.getReminderEvent(reminderEventId);
+    }
+
+    public void updateReminderEvent(ReminderEvent reminderEvent) {
+        medicineRepository.updateReminderEvent(reminderEvent);
+    }
 }

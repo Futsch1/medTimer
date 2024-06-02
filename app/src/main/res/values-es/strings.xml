@@ -133,4 +133,5 @@
     <string name="intro_overview_description">En la pantalla de resumen, puede ver los próximos recordatorios y los últimos eventos de recordatorio. Además, puede registrar manualmente dosis adicionales de uno de los medicamentos configurados o de uno personalizado.</string>
     <string name="intro_analysis_description">La aplicación almacena todos los recordatorios. Puedes analizar tus dosis anteriores en la pantalla de análisis y exportar tu historial a través del menú kebab (tres puntos). El historial se conservará aunque se eliminen o cambien de nombre los medicamentos o los recordatorios.</string>
     <string name="show_intro">Mostrar introducción de la aplicación</string>
+    <string name="are_you_sure_delete_reminder_event">¿Está seguro de eliminar el recordatorio?</string>
 </resources>
