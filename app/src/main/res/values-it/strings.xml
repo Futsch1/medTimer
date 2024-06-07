@@ -20,8 +20,6 @@
         <item quantity="one" tools:ignore="MissingQuantity">%1$d promemoria\n%2$s</item>
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
-    <string name="channel_name" translatable="false">MedTimer</string>
-    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Promemoria per i Medicinali</string>
     <string name="notification_content">Sono le %1$s - è ora di prendere %2$s di %3$s%4$s</string>
     <string name="notification_taken">PRESO</string>
@@ -59,7 +57,7 @@
     <string name="cycle_consecutive_days">Giorni attivi</string>
     <string name="days">giorni</string>
     <string name="theme">Tema</string>
-    <string name="default_theme">Predefinito</string>
+    <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>
     <string name="no_instructions">nessuna istruzione</string>
     <string name="before_meal">prima del pasto</string>
@@ -108,7 +106,6 @@
     <string name="cycle_reminders">Promemoria ciclici</string>
     <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="reminders">Promemoria</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 giorni</string>
     <string name="analysis">Analisi</string>
@@ -134,4 +131,6 @@
     <string name="intro_analysis_description">L\'applicazione memorizza tutti gli eventi di promemoria. Puoi analizzare le dosi passate nella schermata di Analisi ed esportare la cronologia tramite il menu kebab (tre punti). La cronologia si conserva anche se i medicinali o i promemoria vengono eliminati o rinominati.</string>
     <string name="show_intro">Mostra l\'introduzione dell\'app</string>
     <string name="are_you_sure_delete_reminder_event">Siete sicuri di aver eliminato l\'evento di promemoria?</string>
+    <string name="high">Alto</string>
+    <string name="notification_importance">Priorità di notifica</string>
 </resources>

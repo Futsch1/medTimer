@@ -20,8 +20,9 @@ public class NotificationChannelManager {
     public static void createNotificationChannel(Context context) {
         NotificationChannel channel = getNotificationChannel(context);
         Uri sound = getNotificationSound(context);
-        if (channel == null || !channel.getSound().equals(sound)) {
-            createChannelInternal(context, sound);
+        int importance = getNotificationImportance(context);
+        if (channel == null || !channel.getSound().equals(sound) || channel.getImportance() != importance) {
+            createChannelInternal(context, sound, importance);
         }
     }
 
@@ -36,12 +37,17 @@ public class NotificationChannelManager {
         return Uri.parse(ringtoneUri);
     }
 
-    private static void createChannelInternal(Context context, Uri sound) {
+    private static int getNotificationImportance(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String notificationImportance = sharedPref.getString("notification_importance", "0");
+        return notificationImportance.equals("0") ? NotificationManager.IMPORTANCE_DEFAULT : NotificationManager.IMPORTANCE_HIGH;
+    }
+
+    private static void createChannelInternal(Context context, Uri sound, int importance) {
         NotificationChannel channel;
         CharSequence name = context.getString(R.string.channel_name);
         String description = context.getString(R.string.channel_description);
 
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
         channel = new NotificationChannel(getNextNotificationChannelId(context), name, importance);
         channel.setDescription(description);
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -74,7 +80,7 @@ public class NotificationChannelManager {
         return sharedPreferences.getInt("notificationChannelId", 1);
     }
 
-    public static void updateNotificationChannel(Context context, Uri newSound) {
-        createChannelInternal(context, newSound);
+    public static void updateNotificationChannel(Context context) {
+        createChannelInternal(context, getNotificationSound(context), getNotificationImportance(context));
     }
 }
