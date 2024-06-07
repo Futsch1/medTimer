@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 
@@ -16,6 +17,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
+import com.takisoft.preferencex.RingtonePreference;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
     public static final String EXACT_REMINDERS = "exact_reminders";
@@ -27,7 +29,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupShowNotifications();
         setupTheme();
         setupExactReminders();
-        setupNotificationsChannelManagerUpdate();
+        setupNotificationSettings();
         setupWeekendMode();
     }
 
@@ -81,15 +83,20 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void setupNotificationsChannelManagerUpdate() {
-        for (String preferenceName : new String[]{"notification_ringtone", "notification_importance"}) {
-            Preference preference = getPreferenceScreen().findPreference(preferenceName);
-            if (preference != null) {
-                preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                    NotificationChannelManager.updateNotificationChannel(requireContext());
-                    return true;
-                });
-            }
+    private void setupNotificationSettings() {
+        RingtonePreference preference = getPreferenceScreen().findPreference("notification_ringtone");
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
+                NotificationChannelManager.updateNotificationChannelRingtone(requireContext(), (Uri) newValue);
+                return true;
+            });
+        }
+        Preference preferenceImportance = getPreferenceScreen().findPreference("notification_importance");
+        if (preferenceImportance != null) {
+            preferenceImportance.setOnPreferenceChangeListener((preference1, newValue) -> {
+                NotificationChannelManager.updateNotificationChannelImportance(requireContext(), (String) newValue);
+                return true;
+            });
         }
     }
 
