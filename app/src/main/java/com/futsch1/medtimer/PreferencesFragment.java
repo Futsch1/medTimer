@@ -29,7 +29,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupShowNotifications();
         setupTheme();
         setupExactReminders();
-        setupNotificationTone();
+        setupNotificationSettings();
         setupWeekendMode();
     }
 
@@ -83,11 +83,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void setupNotificationTone() {
+    private void setupNotificationSettings() {
         RingtonePreference preference = getPreferenceScreen().findPreference("notification_ringtone");
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                NotificationChannelManager.updateNotificationChannel(requireContext(), (Uri) newValue);
+                NotificationChannelManager.updateNotificationChannelRingtone(requireContext(), (Uri) newValue);
+                return true;
+            });
+        }
+        Preference preferenceImportance = getPreferenceScreen().findPreference("notification_importance");
+        if (preferenceImportance != null) {
+            preferenceImportance.setOnPreferenceChangeListener((preference1, newValue) -> {
+                NotificationChannelManager.updateNotificationChannelImportance(requireContext(), (String) newValue);
                 return true;
             });
         }

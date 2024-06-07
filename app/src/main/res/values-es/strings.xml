@@ -20,8 +20,6 @@
         <item quantity="one" tools:ignore="MissingQuantity">%1$d recordatorio\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
-    <string name="channel_name" translatable="false">MedTimer</string>
-    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Toma tu medicación</string>
     <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
     <string name="notification_taken">TOMADO</string>
@@ -59,7 +57,7 @@
     <string name="cycle_consecutive_days">Días activos</string>
     <string name="days">días</string>
     <string name="theme">Tema</string>
-    <string name="default_theme">Estándar</string>
+    <string name="default_">Estándar</string>
     <string name="alternative">Alternativo</string>
     <string name="no_instructions">no hay instrucciones</string>
     <string name="before_meal">antes de la comida</string>
@@ -108,7 +106,6 @@
     <string name="cycle_reminders">Recordatorios cíclicos</string>
     <string name="weekday_limited">Limitado a algunos días de la semana</string>
     <string name="reminders">Recordatorios</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 días</string>
     <string name="analysis">Análysis</string>
@@ -134,4 +131,6 @@
     <string name="intro_analysis_description">La aplicación almacena todos los recordatorios. Puedes analizar tus dosis anteriores en la pantalla de análisis y exportar tu historial a través del menú kebab (tres puntos). El historial se conservará aunque se eliminen o cambien de nombre los medicamentos o los recordatorios.</string>
     <string name="show_intro">Mostrar introducción de la aplicación</string>
     <string name="are_you_sure_delete_reminder_event">¿Está seguro de eliminar el recordatorio?</string>
+    <string name="high">Alta</string>
+    <string name="notification_importance">Prioridad de notificación</string>
 </resources>
