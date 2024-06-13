@@ -61,7 +61,7 @@ public class TestDataAndDeleteAndManualDoseTest {
                         childAtPosition(
                                 withId(android.R.id.list_container),
                                 0)));
-        recyclerView.perform(actionOnItemAtPosition(7, click()));
+        recyclerView.perform(actionOnItemAtPosition(8, click()));
 
         DataInteraction appCompatCheckedTextView = onData(anything())
                 .inAdapterView(allOf(withId(androidx.appcompat.R.id.select_dialog_listview),
