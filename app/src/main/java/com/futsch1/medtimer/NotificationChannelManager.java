@@ -21,7 +21,7 @@ public class NotificationChannelManager {
         NotificationChannel channel = getNotificationChannel(context);
         Uri sound = getNotificationRingtone(context);
         int importance = getNotificationImportance(context);
-        if (channel == null || !channel.getSound().equals(sound) || channel.getImportance() != importance) {
+        if (channel == null || isSoundDifferent(channel, sound) || channel.getImportance() != importance) {
             createChannelInternal(context, sound, importance);
         }
     }
@@ -41,6 +41,11 @@ public class NotificationChannelManager {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String notificationImportance = sharedPref.getString("notification_importance", "0");
         return getNotificationImportanceValue(notificationImportance);
+    }
+
+    private static boolean isSoundDifferent(NotificationChannel channel, Uri sound) {
+        Uri channelSound = channel.getSound();
+        return channelSound != null && !channelSound.equals(sound);
     }
 
     private static void createChannelInternal(Context context, Uri sound, int importance) {
