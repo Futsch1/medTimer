@@ -7,7 +7,7 @@ import android.media.AudioAttributes
 import android.net.Uri
 
 class ReminderNotificationChannel(
-    private val context: Context,
+    context: Context,
     private val sound: Uri?,
     private val importance: Int
 ) {
@@ -30,11 +30,8 @@ class ReminderNotificationChannel(
             notificationManager.deleteNotificationChannel(notificationChannel!!.id)
         }
 
-        val name: CharSequence = context.getString(R.string.channel_name)
-        val description: String = context.getString(R.string.channel_description)
-
-        notificationChannel = NotificationChannel(importance.toString(), name, importance)
-        notificationChannel!!.description = description
+        notificationChannel = NotificationChannel(importance.toString(), "MedTimer", importance)
+        notificationChannel!!.description = "Notifications from MedTimer"
         val audioAttributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
