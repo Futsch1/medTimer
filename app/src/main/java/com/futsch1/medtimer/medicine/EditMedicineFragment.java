@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
@@ -187,6 +188,7 @@ public class EditMedicineFragment extends Fragment {
         reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
         reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
         reminder.instructions = "";
+        reminder.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
 
         new TimeHelper.TimePickerWrapper(requireActivity()).show(0, 0, minutes -> {
             reminder.timeInMinutes = minutes;

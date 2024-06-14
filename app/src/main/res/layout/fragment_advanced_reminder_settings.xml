@@ -119,6 +119,14 @@
             android:singleLine="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="4dp"
+        android:layout_weight="1"
+        android:background="?android:attr/listDivider" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/notificationImportanceLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"

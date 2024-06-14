@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @SuppressWarnings("java:S1104")
 public class Reminder {
+    public static final int DEFAULT_TIME = 480;
     public int medicineRelId;
     @PrimaryKey(autoGenerate = true)
     public int reminderId;
@@ -36,8 +37,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
     public List<Boolean> days;
-
-    public static final int DEFAULT_TIME = 480;
+    @ColumnInfo(defaultValue = "3")
+    @Expose
+    public int notificationImportance;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;

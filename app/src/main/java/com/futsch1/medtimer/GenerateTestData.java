@@ -45,6 +45,7 @@ public class GenerateTestData {
                 reminder.instructions = testReminder.instructions;
                 reminder.pauseDays = testReminder.pauseDays;
                 reminder.cycleStartDay = LocalDate.now().toEpochDay();
+                reminder.notificationImportance = testMedicine.name.equals("B12 (500µg)") ? ReminderNotificationChannelManager.Importance.HIGH.getValue() : ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
                 viewModel.insertReminder(reminder);
             }
         }

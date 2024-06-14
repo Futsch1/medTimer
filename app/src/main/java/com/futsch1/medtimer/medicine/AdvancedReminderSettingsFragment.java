@@ -140,7 +140,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             });
 
             builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-            // show dialog
             builder.show();
         });
     }
@@ -166,7 +165,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(ReminderNotificationChannelManager.Importance.DEFAULT.getValue()), false);
+        notificationImportance.setText(importanceValueToString(reminder.notificationImportance), false);
     }
 
     private void setDaysText() {
@@ -182,7 +181,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         } else {
             remindOnDays.setText(String.join(", ", checkedDays));
         }
-
     }
 
     private @Nullable LocalDate getCycleStartDate() {
@@ -214,6 +212,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();
+            reminder.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
 
             medicineViewModel.updateReminder(reminder);
         }
