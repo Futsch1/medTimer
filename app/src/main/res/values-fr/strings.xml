@@ -21,8 +21,6 @@
         <item quantity="many">%1$d rappels\n%2$s</item>
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
-    <string name="channel_name" translatable="false">MedTimer</string>
-    <string name="channel_description" translatable="false">Notifications from MedTimer</string>
     <string name="notification_title">Rappel de médicaments</string>
     <string name="notification_content">Il est %1$s: il est temps de prendre %2$s sur %3$s%4$s</string>
     <string name="notification_taken">PRIS</string>
@@ -60,7 +58,7 @@
     <string name="cycle_consecutive_days">Jours actifs</string>
     <string name="days">jours</string>
     <string name="theme">Thème</string>
-    <string name="default_theme">Défaut</string>
+    <string name="default_">Défaut</string>
     <string name="alternative">Alternative</string>
     <string name="no_instructions">aucune instruction</string>
     <string name="before_meal">avant le repas</string>
@@ -109,7 +107,6 @@
     <string name="cycle_reminders">Rappels cycliques</string>
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="reminders">Rappels</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtre</string>
     <string name="seven_days">7 jours</string>
     <string name="analysis">Analyse</string>
@@ -135,4 +132,6 @@
     <string name="intro_analysis_description">L\'application enregistre tous les événements. Vous pouvez analyser vos doses passées dans l\'écran d\'analyse et exporter votre historique via le menu kebab (trois points). L\'historique est conservé même si les médicaments ou les rappels sont supprimés ou renommés.</string>
     <string name="show_intro">Afficher l\'intro de l\'application</string>
     <string name="are_you_sure_delete_reminder_event">Êtes-vous sûr de vouloir supprimer l\'événement?</string>
+    <string name="high">Haut</string>
+    <string name="notification_importance">Priorité de notification</string>
 </resources>
