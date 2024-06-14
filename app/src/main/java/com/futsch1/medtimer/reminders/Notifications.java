@@ -14,8 +14,8 @@ import androidx.preference.PreferenceManager;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
-import com.futsch1.medtimer.NotificationChannelManager;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 
 public class Notifications {
     private final Context context;
@@ -34,8 +34,9 @@ public class Notifications {
         PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannelManager.getNotificationChannelId(context))
+        
+        String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, ReminderNotificationChannelManager.Importance.DEFAULT).getId();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))

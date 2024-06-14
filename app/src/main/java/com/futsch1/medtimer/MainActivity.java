@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        NotificationChannelManager.createNotificationChannel(getApplicationContext());
-
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();

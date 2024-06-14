@@ -15,13 +15,6 @@
         app:pref_summaryHasRingtone="%s" />
     <ListPreference
         android:defaultValue="0"
-        android:entries="@array/notification_importance"
-        android:entryValues="@array/values_0_and_1"
-        android:key="notification_importance"
-        android:title="@string/notification_importance"
-        app:useSimpleSummaryProvider="true" />
-    <ListPreference
-        android:defaultValue="0"
         android:entries="@array/dismiss_notification_action"
         android:entryValues="@array/values_0_and_1"
         android:key="dismiss_notification_action"
