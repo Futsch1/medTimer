@@ -14,8 +14,8 @@ import androidx.preference.PreferenceManager;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
-import com.futsch1.medtimer.NotificationChannelManager;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 
 public class Notifications {
     private final Context context;
@@ -26,7 +26,10 @@ public class Notifications {
         sharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE);
     }
 
-    public int showNotification(String remindTime, String medicineName, String amount, String instructions, int reminderId, int reminderEventId, Color color) {
+    @SuppressWarnings("java:S107")
+    public int showNotification(String remindTime, String medicineName, String amount,
+                                String instructions, int reminderId, int reminderEventId, Color color,
+                                ReminderNotificationChannelManager.Importance importance) {
         int notificationId = getNextNotificationId();
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
@@ -35,7 +38,8 @@ public class Notifications {
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannelManager.getNotificationChannelId(context))
+        String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))

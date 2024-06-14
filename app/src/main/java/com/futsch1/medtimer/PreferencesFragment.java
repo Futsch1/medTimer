@@ -87,14 +87,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         RingtonePreference preference = getPreferenceScreen().findPreference("notification_ringtone");
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                NotificationChannelManager.updateNotificationChannelRingtone(requireContext(), (Uri) newValue);
-                return true;
-            });
-        }
-        Preference preferenceImportance = getPreferenceScreen().findPreference("notification_importance");
-        if (preferenceImportance != null) {
-            preferenceImportance.setOnPreferenceChangeListener((preference1, newValue) -> {
-                NotificationChannelManager.updateNotificationChannelImportance(requireContext(), (String) newValue);
+                ReminderNotificationChannelManager.Companion.updateNotificationChannelRingtone(requireContext(), (Uri) newValue);
                 return true;
             });
         }

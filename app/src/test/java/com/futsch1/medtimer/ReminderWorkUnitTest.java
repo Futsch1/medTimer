@@ -48,7 +48,6 @@ public class ReminderWorkUnitTest {
     private final int REMINDER_ID = 11;
     private final int REMINDER_EVENT_ID = 12;
     private final int MEDICINE_ID = 1;
-    private final int NOTIFICATION_CHANNEL_ID = 13;
     private final int NOTIFICATION_ID = 14;
     private ReminderWork reminderWork;
     @Mock
@@ -70,6 +69,7 @@ public class ReminderWorkUnitTest {
         mockSharedPreferences = mock(SharedPreferences.class);
         when(mockSharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
         when(mockSharedPreferences.getString(anyString(), anyString())).thenReturn("1");
+        int NOTIFICATION_CHANNEL_ID = 13;
         when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(NOTIFICATION_CHANNEL_ID);
         when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(NOTIFICATION_ID);
         SharedPreferences.Editor mockEditor = mock(SharedPreferences.Editor.class);
@@ -131,7 +131,7 @@ public class ReminderWorkUnitTest {
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
-                 assertEquals(String.format("com.futsch1.medTimer.NOTIFICATION%d", NOTIFICATION_CHANNEL_ID), context.arguments().get(1));
+                 assertEquals(String.format("%d", 3), context.arguments().get(1));
                  when(mock.setSmallIcon(R.drawable.capsule)).thenReturn(mock);
                  when(mock.setContentTitle("NotificationTitle")).thenReturn(mock);
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
