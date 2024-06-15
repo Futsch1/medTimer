@@ -99,7 +99,7 @@ public class ReminderWork extends Worker {
                             reminder.reminderId,
                             reminderEvent.reminderEventId,
                             color,
-                            reminder.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
+                            medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }

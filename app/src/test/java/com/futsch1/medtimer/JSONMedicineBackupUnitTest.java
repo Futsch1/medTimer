@@ -38,7 +38,6 @@ public class JSONMedicineBackupUnitTest {
         reminder.cycleStartDay = 12;
         reminder.instructions = "Take with water";
         reminder.days.set(0, false);
-        reminder.notificationImportance = 3;
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -71,14 +70,14 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ],
-          "notificationImportance": 3
+          ]
         }
       ],
       "medicine": {
         "name": "Medicine A",
         "color": -65536,
-        "useColor": true
+        "useColor": true,
+        "notificationImportance": 3
       }
     }
   ]
@@ -127,11 +126,11 @@ public class JSONMedicineBackupUnitTest {
         reminder1.pauseDays = 0;
         reminder1.cycleStartDay = 1234;
         reminder1.instructions = "Take with water";
-        reminder1.notificationImportance = 4;
         medicineWithReminders1.reminders = Collections.singletonList(reminder1);
         medicineWithReminders1.medicine = new Medicine("Medicine A");
         medicineWithReminders1.medicine.useColor = true;
         medicineWithReminders1.medicine.color = Color.RED;
+        medicineWithReminders1.medicine.notificationImportance = 4;
         medicinesWithReminders.add(medicineWithReminders1);
 
         MedicineWithReminders medicineWithReminders2 = new MedicineWithReminders();
@@ -143,7 +142,6 @@ public class JSONMedicineBackupUnitTest {
         reminder2.cycleStartDay = 4567;
         reminder2.instructions = "Take after meal";
         reminder2.days.set(6, false);
-        reminder2.notificationImportance = 5;
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -151,6 +149,7 @@ public class JSONMedicineBackupUnitTest {
         medicineWithReminders2.medicine = new Medicine("Medicine B");
         medicineWithReminders2.medicine.useColor = false;
         medicineWithReminders2.medicine.color = Color.BLUE;
+        medicineWithReminders2.medicine.notificationImportance = 5;
         medicinesWithReminders.add(medicineWithReminders2);
 
         String result = jsonMedicineBackup.createBackup(4, medicinesWithReminders);
@@ -179,14 +178,14 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ],
-          "notificationImportance": 4
+          ]
         }
       ],
       "medicine": {
         "name": "Medicine A",
         "color": -65536,
-        "useColor": true
+        "useColor": true,
+        "notificationImportance": 4
       }
     },
     {
@@ -206,8 +205,7 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ],
-          "notificationImportance": 4
+          ]
         },
         {
           "timeInMinutes": 120,
@@ -224,14 +222,14 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             false
-          ],
-          "notificationImportance": 5
+          ]
         }
       ],
       "medicine": {
         "name": "Medicine B",
         "color": -16776961,
-        "useColor": false
+        "useColor": false,
+        "notificationImportance": 5
       }
     }
   ]

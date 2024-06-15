@@ -37,9 +37,6 @@ public class Reminder {
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
     public List<Boolean> days;
-    @ColumnInfo(defaultValue = "3")
-    @Expose
-    public int notificationImportance;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
