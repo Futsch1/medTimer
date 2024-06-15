@@ -9,8 +9,6 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -43,7 +40,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private MedicineViewModel medicineViewModel;
     private Reminder reminder;
     private TextView remindOnDays;
-    private AutoCompleteTextView notificationImportance;
     private View advancedReminderView;
     private AdvancedReminderSettingsFragmentArgs args;
 
@@ -87,7 +83,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         editCycleStartDate = advancedReminderView.findViewById(R.id.cycleStartDate);
         instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
         remindOnDays = advancedReminderView.findViewById(R.id.remindOnDays);
-        notificationImportance = advancedReminderView.findViewById(R.id.notificationImportance);
 
         editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
         editPauseDays.setText(Integer.toString(reminder.pauseDays));
@@ -96,7 +91,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         setupInstructionSuggestions();
         setupRemindOnDays();
         setupCycleStartDate();
-        setupNotificationImportance();
     }
 
     private void setupInstructionSuggestions() {
@@ -161,13 +155,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         });
     }
 
-    private void setupNotificationImportance() {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
-        notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(reminder.notificationImportance), false);
-    }
-
     private void setDaysText() {
         ArrayList<String> checkedDays = new ArrayList<>();
         for (int j = 0; j < daysArray.length; j++) {
@@ -191,18 +178,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
     }
 
-    private String importanceValueToString(int value) {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-
-        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
-            return importanceTexts[0];
-        }
-        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
-            return importanceTexts[1];
-        }
-        return importanceTexts[0];
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -212,7 +187,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();
-            reminder.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
 
             medicineViewModel.updateReminder(reminder);
         }
@@ -244,12 +218,4 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         }
     }
 
-    private int importanceStringToValue(String importance) {
-        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        if (importance.equals(importanceTexts[1])) {
-            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
-        }
-        return value;
-    }
 }

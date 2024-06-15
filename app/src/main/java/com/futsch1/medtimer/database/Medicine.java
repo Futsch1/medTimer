@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.google.gson.annotations.Expose;
 
 @Entity
@@ -23,11 +24,15 @@ public class Medicine {
     @ColumnInfo(defaultValue = "false")
     @Expose
     public boolean useColor;
+    @ColumnInfo(defaultValue = "3")
+    @Expose
+    public int notificationImportance;
 
     public Medicine(String name) {
         this.name = name;
         this.useColor = false;
         this.color = Color.DKGRAY;
+        this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
     }
 
     public Medicine(String name, int id) {
@@ -35,5 +40,6 @@ public class Medicine {
         this.medicineId = id;
         this.useColor = false;
         this.color = Color.DKGRAY;
+        this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
     }
 }

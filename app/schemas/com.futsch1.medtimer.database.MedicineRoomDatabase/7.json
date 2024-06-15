@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "41442430c076bf312021e5abf248da86",
+    "identityHash": "23a709f57d581d080199480ef8ecc082",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3)",
         "fields": [
           {
             "fieldPath": "name",
@@ -33,6 +33,13 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
+          },
+          {
+            "fieldPath": "notificationImportance",
+            "columnName": "notificationImportance",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "3"
           }
         ],
         "primaryKey": {
@@ -46,7 +53,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `notificationImportance` INTEGER NOT NULL DEFAULT 3)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]')",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -113,13 +120,6 @@
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "'[true, true, true, true, true, true, true]'"
-          },
-          {
-            "fieldPath": "notificationImportance",
-            "columnName": "notificationImportance",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "3"
           }
         ],
         "primaryKey": {
@@ -212,7 +212,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '41442430c076bf312021e5abf248da86')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '23a709f57d581d080199480ef8ecc082')"
     ]
   }
 }
