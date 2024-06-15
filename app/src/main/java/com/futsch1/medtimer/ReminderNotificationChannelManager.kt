@@ -15,7 +15,7 @@ class ReminderNotificationChannelManager {
                 val channel = notificationManager.getNotificationChannel(
                     "com.futsch1.medTimer.NOTIFICATION$channelId"
                 )
-                if (channel == null) {
+                if (channel == null && channelId > 3) {
                     break
                 }
                 notificationManager.deleteNotificationChannel(channel.id)
