@@ -18,7 +18,9 @@ class ReminderNotificationChannelManager {
                 if (channel == null && channelId > 3) {
                     break
                 }
-                notificationManager.deleteNotificationChannel(channel.id)
+                if (channel != null) {
+                    notificationManager.deleteNotificationChannel(channel.id)
+                }
                 channelId++
             }
 
