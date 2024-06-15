@@ -7,13 +7,11 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -123,10 +121,6 @@ public class ReminderWork extends Worker {
     }
 
     private boolean canShowNotifications() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean showNotificationSetInPreferences = sharedPref.getBoolean("show_notification", true);
-        boolean hasPermission = context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-
-        return showNotificationSetInPreferences && hasPermission;
+        return context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
     }
 }

@@ -133,4 +133,6 @@
     <string name="are_you_sure_delete_reminder_event">Sind Sie sicher, dass Sie das Ereignis löschen wollen?</string>
     <string name="high">Hoch</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
+    <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
+    <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
 </resources>
