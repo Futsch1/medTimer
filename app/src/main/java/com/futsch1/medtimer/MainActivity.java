@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             checkPermissions();
         }
 
+        ReminderNotificationChannelManager.Companion.initialize(this);
+
+
         setContentView(R.layout.activity_main);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);

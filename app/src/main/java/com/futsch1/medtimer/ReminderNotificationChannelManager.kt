@@ -2,54 +2,48 @@ package com.futsch1.medtimer
 
 import android.app.NotificationManager
 import android.content.Context
-import android.net.Uri
-import androidx.preference.PreferenceManager
 
 class ReminderNotificationChannelManager {
     companion object {
-        private val notificationChannels: MutableMap<Importance, ReminderNotificationChannel> =
-            mutableMapOf()
+        fun initialize(context: Context) {
+            // Clean up previous notification settings
+            val notificationManager: NotificationManager = context.getSystemService(
+                NotificationManager::class.java
+            )
+            var channelId = 1
+            while (true) {
+                val channel = notificationManager.getNotificationChannel(
+                    "com.futsch1.medTimer.NOTIFICATION$channelId"
+                )
+                if (channel == null && channelId > 3) {
+                    break
+                }
+                notificationManager.deleteNotificationChannel(channel.id)
+                channelId++
+            }
+
+            createChannel(context, Importance.DEFAULT)
+            createChannel(context, Importance.HIGH)
+        }
 
         fun getNotificationChannel(
             context: Context,
             importance: Importance
         ): ReminderNotificationChannel {
-            var channel = notificationChannels[importance]
-            if (channel == null) {
-                channel = createChannel(context, importance, getNotificationRingtone(context))
-            }
-            return channel
+            return createChannel(context, importance)
         }
 
         private fun createChannel(
             context: Context,
-            importance: Importance,
-            ringtone: Uri?
+            importance: Importance
         ): ReminderNotificationChannel {
             val channel = ReminderNotificationChannel(
                 context,
-                ringtone,
-                importance.value
+                importance.value,
+                if (importance == Importance.HIGH) R.string.high else R.string.default_
             )
-            notificationChannels[importance] = channel
             return channel
         }
-
-        private fun getNotificationRingtone(context: Context): Uri {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            val ringtoneUri = sharedPref.getString(
-                "notification_ringtone",
-                "content://settings/system/notification_sound"
-            )
-            return Uri.parse(ringtoneUri)
-        }
-
-        fun updateNotificationChannelRingtone(context: Context, ringtone: Uri?) {
-            for (importance in Importance.entries) {
-                createChannel(context, importance, ringtone)
-            }
-        }
-
     }
 
     enum class Importance(val value: Int) {

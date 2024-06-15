@@ -134,4 +134,6 @@
     <string name="are_you_sure_delete_reminder_event">Are you sure to delete the reminder event?</string>
     <string name="high">High</string>
     <string name="notification_importance">Notification priority</string>
+    <string name="notification_settings_default">Notification settings default priority</string>
+    <string name="notification_settings_high">Notification settings high priority</string>
 </resources>

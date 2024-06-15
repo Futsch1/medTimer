@@ -57,7 +57,7 @@ public class TestDataAndDeleteAndManualDoseTest {
         materialTextView.perform(click());
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(com.takisoft.preferencex.ringtone.R.id.recycler_view),
+                allOf(withId(com.takisoft.preferencex.R.id.recycler_view),
                         childAtPosition(
                                 withId(android.R.id.list_container),
                                 0)));

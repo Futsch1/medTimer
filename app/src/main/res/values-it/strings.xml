@@ -133,4 +133,6 @@
     <string name="are_you_sure_delete_reminder_event">Siete sicuri di aver eliminato l\'evento di promemoria?</string>
     <string name="high">Alto</string>
     <string name="notification_importance">Priorità di notifica</string>
+    <string name="notification_settings_default">Impostazioni di notifica priorità predefinita</string>
+    <string name="notification_settings_high">Impostazioni di notifica ad alta priorità</string>
 </resources>

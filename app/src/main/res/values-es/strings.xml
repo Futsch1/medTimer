@@ -133,4 +133,6 @@
     <string name="are_you_sure_delete_reminder_event">¿Está seguro de eliminar el recordatorio?</string>
     <string name="high">Alta</string>
     <string name="notification_importance">Prioridad de notificación</string>
+    <string name="notification_settings_default">Prioridad por defecto de los ajustes de notificación</string>
+    <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
 </resources>

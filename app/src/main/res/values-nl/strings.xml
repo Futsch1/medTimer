@@ -133,4 +133,6 @@
     <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je het herinneringsgebeurtenis wilt verwijderen?</string>
     <string name="high">Hoog</string>
     <string name="notification_importance">Prioriteit melding</string>
+    <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
+    <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
 </resources>
