@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 room {
@@ -114,5 +115,12 @@ play {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+sonar {
+    properties {
+        property("sonar.projectKey", "Futsch1_medTimer")
+        property("sonar.organization", "futsch1")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
