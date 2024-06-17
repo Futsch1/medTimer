@@ -4,6 +4,7 @@ plugins {
     id("com.github.triplet.play") version "3.9.1"
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
+    id("jacoco")
 }
 
 room {
@@ -31,6 +32,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {

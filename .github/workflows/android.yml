@@ -29,6 +29,8 @@ jobs:
         run: chmod +x gradlew
       - name: Run unit tests
         run: ./gradlew test
+      - name: Generate coverage
+        run: ./gradlew createDebugCoverageReport
       - name: Build with Gradle
         run: ./gradlew build
       - name: Release bundle
