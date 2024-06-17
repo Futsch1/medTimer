@@ -122,5 +122,11 @@ sonar {
         property("sonar.projectKey", "Futsch1_medTimer")
         property("sonar.organization", "futsch1")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.gradle.skipCompile", "true")
+        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "build/reports/coverage/test/debug/report.xml"
+        )
     }
 }
