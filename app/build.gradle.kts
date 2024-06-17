@@ -54,6 +54,10 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            configure<JacocoTaskExtension> {
+                isIncludeNoLocationClasses = true
+            }
+
         }
     }
     sourceSets {
