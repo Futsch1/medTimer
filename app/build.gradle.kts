@@ -54,10 +54,6 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-            configure<JacocoTaskExtension> {
-                isIncludeNoLocationClasses = true
-            }
-
         }
     }
     sourceSets {
@@ -132,5 +128,11 @@ sonar {
             "sonar.coverage.jacoco.xmlReportPaths",
             "build/reports/coverage/test/debug/report.xml"
         )
+    }
+}
+tasks.withType(Test::class) {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
     }
 }
