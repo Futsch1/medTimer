@@ -40,9 +40,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Run unit tests
-        run: ./gradlew test
-      - name: Generate coverage
-        run: ./gradlew createDebugCoverageReport
+        run: ./gradlew test createDebugCoverageReport
+      - name: Android lint
+        run: ./gradlew lint
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
