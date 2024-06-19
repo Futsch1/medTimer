@@ -4,6 +4,8 @@ plugins {
     id("com.github.triplet.play") version "3.10.0"
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
+    id("jacoco")
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 room {
@@ -31,6 +33,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {
@@ -110,5 +115,24 @@ play {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+sonar {
+    properties {
+        property("sonar.projectKey", "Futsch1_medTimer")
+        property("sonar.organization", "futsch1")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.gradle.skipCompile", "true")
+        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "build/reports/coverage/test/debug/report.xml"
+        )
+    }
+}
+tasks.withType(Test::class) {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
     }
 }
