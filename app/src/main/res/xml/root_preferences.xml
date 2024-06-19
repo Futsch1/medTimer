@@ -1,25 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SwitchPreferenceCompat
+    <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:defaultValue="true"
-        android:title="@string/show_notifications"
-        app:key="show_notification" />
-    <com.takisoft.preferencex.RingtonePreference
-        android:defaultValue="content://settings/system/notification_sound"
-        android:ringtoneType="notification"
-        android:showDefault="true"
-        android:title="@string/notification_tone_title"
-        app:key="notification_ringtone"
-        app:pref_summaryHasRingtone="%s" />
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/notification_importance"
-        android:entryValues="@array/values_0_and_1"
-        android:key="notification_importance"
-        android:title="@string/notification_importance"
-        app:useSimpleSummaryProvider="true" />
+        android:title="@string/notification_settings_default"
+        app:key="notification_settings_default" />
+    <Preference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/notification_settings_high"
+        app:key="notification_settings_high" />
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/dismiss_notification_action"

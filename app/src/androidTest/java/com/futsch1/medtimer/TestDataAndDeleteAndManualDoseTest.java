@@ -57,11 +57,11 @@ public class TestDataAndDeleteAndManualDoseTest {
         materialTextView.perform(click());
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(com.takisoft.preferencex.ringtone.R.id.recycler_view),
+                allOf(withId(com.takisoft.preferencex.R.id.recycler_view),
                         childAtPosition(
                                 withId(android.R.id.list_container),
                                 0)));
-        recyclerView.perform(actionOnItemAtPosition(8, click()));
+        recyclerView.perform(actionOnItemAtPosition(7, click()));
 
         DataInteraction appCompatCheckedTextView = onData(anything())
                 .inAdapterView(allOf(withId(androidx.appcompat.R.id.select_dialog_listview),

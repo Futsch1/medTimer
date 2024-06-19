@@ -1,23 +1,17 @@
 package com.futsch1.medtimer;
 
-import static android.Manifest.permission.POST_NOTIFICATIONS;
-
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 
-import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
-import com.takisoft.preferencex.RingtonePreference;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
     public static final String EXACT_REMINDERS = "exact_reminders";
@@ -26,21 +20,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-        setupShowNotifications();
         setupTheme();
         setupExactReminders();
         setupNotificationSettings();
         setupWeekendMode();
-    }
-
-    private void setupShowNotifications() {
-        if (ContextCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            Preference preference = getPreferenceScreen().findPreference("show_notification");
-            if (preference != null) {
-                preference.setEnabled(false);
-                preference.setSummary(R.string.permission_not_granted);
-            }
-        }
     }
 
     private void setupTheme() {
@@ -84,19 +67,13 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupNotificationSettings() {
-        RingtonePreference preference = getPreferenceScreen().findPreference("notification_ringtone");
+        Preference preference = getPreferenceScreen().findPreference("notification_settings_high");
         if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                NotificationChannelManager.updateNotificationChannelRingtone(requireContext(), (Uri) newValue);
-                return true;
-            });
+            setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.HIGH);
         }
-        Preference preferenceImportance = getPreferenceScreen().findPreference("notification_importance");
-        if (preferenceImportance != null) {
-            preferenceImportance.setOnPreferenceChangeListener((preference1, newValue) -> {
-                NotificationChannelManager.updateNotificationChannelImportance(requireContext(), (String) newValue);
-                return true;
-            });
+        preference = getPreferenceScreen().findPreference("notification_settings_default");
+        if (preference != null) {
+            setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.DEFAULT);
         }
     }
 
@@ -110,6 +87,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     }
             );
         }
+    }
+
+    private void setupNotificationSettingsPreference(Preference preference, ReminderNotificationChannelManager.Importance importance) {
+        preference.setOnPreferenceClickListener(preference1 ->
+                {
+                    Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, Integer.toString(importance.getValue()));
+                    startActivity(intent);
+                    return true;
+                }
+        );
     }
 
     @Override

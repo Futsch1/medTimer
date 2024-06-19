@@ -17,13 +17,14 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 6,
+        version = 7,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
                 @AutoMigration(from = 3, to = 4),
                 @AutoMigration(from = 4, to = 5),
-                @AutoMigration(from = 5, to = 6, spec = MedicineRoomDatabase.AutoMigration5To6.class)
+                @AutoMigration(from = 5, to = 6, spec = MedicineRoomDatabase.AutoMigration5To6.class),
+                @AutoMigration(from = 6, to = 7),
         }
 )
 @TypeConverters({Converters.class})

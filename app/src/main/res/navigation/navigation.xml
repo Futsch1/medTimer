@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_editMedicine_to_advancedReminderSettings"
             app:destination="@id/advancedReminderSettingsFragment" />
+        <argument
+            android:name="notificationImportance"
+            app:argType="integer" />
     </fragment>
     <argument
         android:name="reminderId"

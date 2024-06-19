@@ -7,18 +7,17 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -90,7 +89,15 @@ public class ReminderWork extends Worker {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
-            reminderEvent.notificationId = notifications.showNotification(minutesToTimeString(reminder.timeInMinutes), reminderEvent.medicineName, reminder.amount, reminder.instructions, reminder.reminderId, reminderEvent.reminderEventId, color);
+            reminderEvent.notificationId =
+                    notifications.showNotification(minutesToTimeString(reminder.timeInMinutes),
+                            reminderEvent.medicineName,
+                            reminder.amount,
+                            reminder.instructions,
+                            reminder.reminderId,
+                            reminderEvent.reminderEventId,
+                            color,
+                            medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }
@@ -114,10 +121,6 @@ public class ReminderWork extends Worker {
     }
 
     private boolean canShowNotifications() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean showNotificationSetInPreferences = sharedPref.getBoolean("show_notification", true);
-        boolean hasPermission = context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-
-        return showNotificationSetInPreferences && hasPermission;
+        return context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
     }
 }

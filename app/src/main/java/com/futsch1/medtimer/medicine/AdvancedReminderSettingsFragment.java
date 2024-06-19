@@ -134,7 +134,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             });
 
             builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-            // show dialog
             builder.show();
         });
     }
@@ -169,7 +168,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         } else {
             remindOnDays.setText(String.join(", ", checkedDays));
         }
-
     }
 
     private @Nullable LocalDate getCycleStartDate() {

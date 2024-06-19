@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
@@ -48,6 +51,7 @@ public class EditMedicineFragment extends Fragment {
     private MaterialButton colorButton;
     private int color;
     private View fragmentEditMedicine;
+    private AutoCompleteTextView notificationImportance;
     private EditMedicineFragmentArgs editMedicineArgs;
 
     public EditMedicineFragment() {
@@ -82,6 +86,7 @@ public class EditMedicineFragment extends Fragment {
 
         setupSwiping(recyclerView);
         setupAddReminderButton();
+        setupNotificationImportance();
 
         medicineViewModel.getReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
@@ -103,12 +108,22 @@ public class EditMedicineFragment extends Fragment {
             Medicine medicine = new Medicine(word, medicineId);
             medicine.useColor = enableColor.isChecked();
             medicine.color = color;
+            medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
             medicineViewModel.updateMedicine(medicine);
         }
 
         updateReminders();
 
         thread.quitSafely();
+    }
+
+    private int importanceStringToValue(String importance) {
+        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        if (importance.equals(importanceTexts[1])) {
+            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
+        }
+        return value;
     }
 
     private void updateReminders() {
@@ -181,6 +196,15 @@ public class EditMedicineFragment extends Fragment {
         fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
     }
 
+    private void setupNotificationImportance() {
+        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
+
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
+        notificationImportance.setAdapter(arrayAdapter);
+        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
+    }
+
     private void createReminder(String amount) {
         Reminder reminder = new Reminder(medicineId);
         reminder.amount = amount;
@@ -193,4 +217,17 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.insertReminder(reminder);
         });
     }
+
+    private String importanceValueToString(int value) {
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+
+        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
+            return importanceTexts[0];
+        }
+        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
+            return importanceTexts[1];
+        }
+        return importanceTexts[0];
+    }
+
 }
