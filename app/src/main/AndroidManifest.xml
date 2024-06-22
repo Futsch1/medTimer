@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <permission android:name="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -48,7 +50,8 @@
         <receiver
             android:name=".Autostart"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -57,7 +60,8 @@
         <receiver
             android:name=".reminders.ReminderProcessor"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
+            android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.futsch1.medTimer.REMINDER_ACTION" />

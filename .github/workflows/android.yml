@@ -27,10 +27,27 @@ jobs:
           dependency-graph: generate-and-submit
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Run unit tests
-        run: ./gradlew test
-      - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew test createDebugCoverageReport
+      - name: Android lint
+        run: ./gradlew lint
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
       - name: Release bundle
         run: ./gradlew bundleRelease
 

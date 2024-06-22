@@ -71,6 +71,6 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
                 taken ?
                         ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
                         ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
-        itemView.getContext().sendBroadcast(i);
+        itemView.getContext().sendBroadcast(i, "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
     }
 }
