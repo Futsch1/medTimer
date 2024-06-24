@@ -43,11 +43,14 @@ jobs:
         run: ./gradlew test createDebugCoverageReport
       - name: Android lint
         run: ./gradlew lint
-      - name: Build and analyze
+      - name: Build
+        run: ./gradlew build
+      - name: Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonar --info
+        if: ${{ env.SONAR_TOKEN != '' }}
+        run: ./gradlew sonar
       - name: Release bundle
         run: ./gradlew bundleRelease
 
