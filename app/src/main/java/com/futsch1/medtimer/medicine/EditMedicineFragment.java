@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,6 +81,8 @@ public class EditMedicineFragment extends Fragment {
 
         editMedicineName = fragmentEditMedicine.findViewById(R.id.editMedicineName);
         editMedicineName.setText(medicineName);
+
+        setupOpenCalendarButton();
 
         boolean useColor = editMedicineArgs.getUseColor();
         setupEnableColor(useColor);
@@ -147,6 +151,15 @@ public class EditMedicineFragment extends Fragment {
         });
     }
 
+    private void setupOpenCalendarButton() {
+        MaterialButton openCalendar = fragmentEditMedicine.findViewById(R.id.openCalendar);
+        openCalendar.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(openCalendar);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action = EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(medicineId);
+            navController.navigate(action);
+        });
+    }
+
     private void setupEnableColor(boolean useColor) {
         enableColor = fragmentEditMedicine.findViewById(R.id.enableColor);
         enableColor.setChecked(useColor);
@@ -183,7 +196,7 @@ public class EditMedicineFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAbsoluteAdapterPosition());
                 }
             }
         };
