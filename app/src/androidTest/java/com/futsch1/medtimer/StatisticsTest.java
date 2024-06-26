@@ -55,7 +55,7 @@ public class StatisticsTest {
     public void statisticsTest() {
         onView(allOf(withContentDescription("More options"))).perform(click());
 
-        onView(allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data"))).perform(click());
+        onView(withText("Generate test data")).perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
         setAllRemindersTo12AM();
