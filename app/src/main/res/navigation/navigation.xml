@@ -59,6 +59,9 @@
         <argument
             android:name="notificationImportance"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
+            app:destination="@id/medicineCalendarFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -111,5 +114,13 @@
         <argument
             android:name="eventRemindedTimestamp"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineCalendarFragment"
+        android:name="com.futsch1.medtimer.medicine.MedicineCalendarFragment"
+        android:label="MedicineCalendarFragment">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
     </fragment>
 </navigation>

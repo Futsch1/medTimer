@@ -94,6 +94,7 @@ dependencies {
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
     implementation("com.androidplot:androidplot-core:1.5.10")
     implementation("com.github.AppIntro:AppIntro:6.3.1")
+    implementation("com.kizitonwose.calendar:view:2.5.2")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
