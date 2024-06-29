@@ -78,7 +78,7 @@ class MedicineEventsViewModel(
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): String {
         return TimeHelper.minutesToTimeString(scheduledReminder.reminder.timeInMinutes.toLong()) +
-                ": " + scheduledReminder.medicine.name
+                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
     }
 
     private fun getPastEvents(day: LocalDate): List<String> {
@@ -91,9 +91,9 @@ class MedicineEventsViewModel(
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): String {
         var eventString = TimeHelper.toLocalizedTimeString(
-            reminderEvent.remindedTimestamp,
+            reminderEvent.processedTimestamp,
             ZoneId.systemDefault()
-        ) + ": " + reminderEvent.medicineName
+        ) + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
         if (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED) {
             eventString += " (" + getApplication<Application>().getString(R.string.skipped) + ")"
         }
