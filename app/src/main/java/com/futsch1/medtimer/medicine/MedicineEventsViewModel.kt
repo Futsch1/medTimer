@@ -28,8 +28,8 @@ class MedicineEventsViewModel(
 
     val medicineRepository = MedicineRepository(application)
     private var dispatcher = Dispatchers.IO
-    private var liveReminderEvents: MutableList<ReminderEvent> = mutableListOf()
-    private var medicineWithReminders: MutableList<MedicineWithReminders> = mutableListOf()
+    private var liveReminderEvents: List<ReminderEvent> = listOf()
+    private var medicineWithReminders: List<MedicineWithReminders> = listOf()
     private var medicine: Medicine? = null
     private val liveData: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
 

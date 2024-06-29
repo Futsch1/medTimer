@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.medicine
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.R
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import java.time.DayOfWeek
@@ -17,12 +22,16 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class MedicineCalendarFragment : Fragment() {
+    private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
     private var medicineEventsViewModel: MedicineEventsViewModel? = null
-    private var currentDay: LocalDate? = null
+    private var currentDay: CalendarDay? = null
     private var dayStrings: Map<LocalDate, String>? = null
     private fun daySelected(data: CalendarDay) {
-        currentDay = data.date
+        if (currentDay != null) {
+            calendarView?.notifyDayChanged(currentDay!!)
+        }
+        currentDay = data
         updateCurrentDay()
     }
 
@@ -44,31 +53,74 @@ class MedicineCalendarFragment : Fragment() {
                 updateCurrentDay()
             }
 
-        val calendarView =
-            fragmentView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.medicineCalendar)
-        calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
+        calendarView =
+            fragmentView.findViewById(R.id.medicineCalendar)
 
-            override fun bind(container: DayViewContainer, data: CalendarDay) {
-                container.bind(data.date.dayOfMonth.toString()) { daySelected(data) }
-            }
-        }
-        calendarView.setup(YearMonth.now(), YearMonth.now().plusMonths(6), DayOfWeek.SUNDAY)
-        calendarView.scrollToMonth(YearMonth.now())
+        setupCalendarView()
+
 
         return fragmentView
     }
 
-    private fun updateCurrentDay() {
-        dayStrings?.get(currentDay)?.let { currentDayEvents?.setText(it) }
+    private fun setupCalendarView() {
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val textView: TextView = view.findViewById(R.id.calendarDayText)
+            lateinit var day: CalendarDay
+
+            init {
+                textView.setOnClickListener {
+                    daySelected(day)
+                    calendarView?.notifyDayChanged(day)
+                }
+            }
+        }
+
+        calendarView?.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.textView.text = data.date.dayOfMonth.toString()
+                container.day = data
+                if (data == currentDay) {
+                    container.textView.setTextColor(
+                        MaterialColors.getColor(
+                            container.textView,
+                            com.google.android.material.R.attr.colorOnSecondary
+                        )
+                    )
+                    val shape = MaterialShapeDrawable()
+                    shape.shapeAppearanceModel = ShapeAppearanceModel.builder(
+                        context,
+                        com.google.android.material.R.style.ShapeAppearance_MaterialComponents_SmallComponent,
+                        com.google.android.material.R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Day
+                    ).build()
+                    shape.fillColor = MaterialColors.getColorStateList(
+                        requireContext(),
+                        com.google.android.material.R.attr.colorSecondary,
+                        ColorStateList.valueOf(com.google.android.material.R.attr.colorSecondary)
+                    )
+                    container.textView.background = shape
+                } else {
+                    container.textView.setTextColor(
+                        MaterialColors.getColor(
+                            container.textView,
+                            com.google.android.material.R.attr.colorOnSurface
+                        )
+                    )
+                    container.textView.setBackgroundColor(
+                        MaterialColors.getColor(
+                            container.textView,
+                            com.google.android.material.R.attr.colorSurface
+                        )
+                    )
+                }
+            }
+        }
+        calendarView?.setup(YearMonth.now(), YearMonth.now().plusMonths(6), DayOfWeek.SUNDAY)
+        calendarView?.scrollToMonth(YearMonth.now())
     }
-}
 
-class DayViewContainer(view: View) : ViewContainer(view) {
-    private val textView: TextView = view.findViewById(R.id.calendarDayText)
-
-    fun bind(dayText: String, clicked: () -> Unit) {
-        textView.text = dayText
-        textView.setOnClickListener { _: View -> clicked() }
+    private fun updateCurrentDay() {
+        dayStrings?.get(currentDay?.date)?.let { currentDayEvents?.setText(it) }
     }
 }
