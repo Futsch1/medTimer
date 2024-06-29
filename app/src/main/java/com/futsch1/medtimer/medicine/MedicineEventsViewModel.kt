@@ -4,43 +4,49 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
 class MedicineEventsViewModel(
-    application: Application,
-    val medicineId: Int,
-    private val deltaDays: Long
+    application: Application
 ) :
     AndroidViewModel(application) {
 
     val medicineRepository = MedicineRepository(application)
-    private val liveReminderEvents: MutableList<ReminderEvent> =
-        medicineRepository.getLastDaysReminderEvents(deltaDays.toInt())
-    private val medicineWithReminders: MutableList<MedicineWithReminders> =
-        medicineRepository.medicines
+    private var dispatcher = Dispatchers.IO
+    private var liveReminderEvents: MutableList<ReminderEvent> = mutableListOf()
+    private var medicineWithReminders: MutableList<MedicineWithReminders> = mutableListOf()
+    private val liveData: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
 
-    fun getEventForDays(): LiveData<Map<LocalDate, String>> {
-        val dayStrings: MutableMap<LocalDate, String> = mutableMapOf()
-        for (deltaDay in -deltaDays..deltaDays) {
-            val day = LocalDate.now().plusDays(deltaDays)
-            val eventStrings = getPastEvents(day) + getUpcomingEvents(day)
-            dayStrings[day] = eventStrings.joinToString(separator = "\n")
+    fun getEventForDays(medicineId: Int, deltaDays: Long): LiveData<Map<LocalDate, String>> {
+        viewModelScope.launch(dispatcher) {
+            liveReminderEvents = medicineRepository.getLastDaysReminderEvents(deltaDays.toInt())
+            medicineWithReminders = medicineRepository.medicines
+            val dayStrings: MutableMap<LocalDate, String> = mutableMapOf()
+            for (deltaDay in -deltaDays..deltaDays) {
+                val day = LocalDate.now().plusDays(deltaDay)
+                val eventStrings = getPastEvents(day) + getUpcomingEvents(day, medicineId)
+                dayStrings[day] = eventStrings.joinToString(separator = "\n")
+            }
+            viewModelScope.launch { liveData.setValue(dayStrings) }
         }
-        return MutableLiveData(dayStrings)
+        return liveData
     }
 
-    private fun getUpcomingEvents(day: LocalDate): List<String> {
+    private fun getUpcomingEvents(day: LocalDate, medicineId: Int): List<String> {
         val scheduler = ReminderScheduler(object : TimeAccess {
             override fun systemZone(): ZoneId {
-                return systemZone()
+                return ZoneId.systemDefault()
             }
 
             override fun localDate(): LocalDate {
