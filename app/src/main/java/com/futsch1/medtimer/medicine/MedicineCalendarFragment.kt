@@ -1,12 +1,14 @@
 package com.futsch1.medtimer.medicine
 
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.text.util.LocalePreferences
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.R
@@ -27,6 +29,7 @@ class MedicineCalendarFragment : Fragment() {
     private var medicineEventsViewModel: MedicineEventsViewModel? = null
     private var currentDay: CalendarDay? = null
     private var dayStrings: Map<LocalDate, String>? = null
+
     private fun daySelected(data: CalendarDay) {
         if (currentDay != null) {
             calendarView?.notifyDayChanged(currentDay!!)
@@ -45,16 +48,17 @@ class MedicineCalendarFragment : Fragment() {
 
         val medicineCalenderArgs = MedicineCalendarFragmentArgs.fromBundle(requireArguments())
 
+        calendarView =
+            fragmentView.findViewById(R.id.medicineCalendar)
+
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
         medicineEventsViewModel = ViewModelProvider(this)[MedicineEventsViewModel::class.java]
         medicineEventsViewModel!!.getEventForDays(medicineCalenderArgs.medicineId, 30)
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
                 this.dayStrings = dayStrings
+                calendarView?.notifyCalendarChanged()
                 updateCurrentDay()
             }
-
-        calendarView =
-            fragmentView.findViewById(R.id.medicineCalendar)
 
         setupCalendarView()
 
@@ -76,47 +80,57 @@ class MedicineCalendarFragment : Fragment() {
         }
 
         calendarView?.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            val selectedBackground = MaterialShapeDrawable()
+            val selectedTextColor = MaterialColors.getColor(
+                calendarView!!,
+                com.google.android.material.R.attr.colorOnSecondary
+            )
+            val unselectedTextColor = MaterialColors.getColor(
+                calendarView!!,
+                com.google.android.material.R.attr.colorOnSurface
+            )
+            val unselectedBackgroundColor = MaterialColors.getColor(
+                calendarView!!,
+                com.google.android.material.R.attr.colorSurface
+            )
+
+            init {
+                selectedBackground.shapeAppearanceModel = ShapeAppearanceModel.builder(
+                    context,
+                    com.google.android.material.R.style.ShapeAppearance_MaterialComponents_SmallComponent,
+                    com.google.android.material.R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Day
+                ).build()
+                selectedBackground.fillColor = MaterialColors.getColorStateList(
+                    requireContext(),
+                    com.google.android.material.R.attr.colorSecondary,
+                    ColorStateList.valueOf(com.google.android.material.R.attr.colorSecondary)
+                )
+            }
+
             override fun create(view: View) = DayViewContainer(view)
 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.textView.text = data.date.dayOfMonth.toString()
+                if (dayStrings?.get(data.date)?.isNotEmpty() == true) {
+                    container.textView.setTypeface(null, Typeface.BOLD)
+                }
                 container.day = data
                 if (data == currentDay) {
-                    container.textView.setTextColor(
-                        MaterialColors.getColor(
-                            container.textView,
-                            com.google.android.material.R.attr.colorOnSecondary
-                        )
-                    )
-                    val shape = MaterialShapeDrawable()
-                    shape.shapeAppearanceModel = ShapeAppearanceModel.builder(
-                        context,
-                        com.google.android.material.R.style.ShapeAppearance_MaterialComponents_SmallComponent,
-                        com.google.android.material.R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Day
-                    ).build()
-                    shape.fillColor = MaterialColors.getColorStateList(
-                        requireContext(),
-                        com.google.android.material.R.attr.colorSecondary,
-                        ColorStateList.valueOf(com.google.android.material.R.attr.colorSecondary)
-                    )
-                    container.textView.background = shape
+                    container.textView.setTextColor(selectedTextColor)
+                    container.textView.background = selectedBackground
                 } else {
-                    container.textView.setTextColor(
-                        MaterialColors.getColor(
-                            container.textView,
-                            com.google.android.material.R.attr.colorOnSurface
-                        )
-                    )
-                    container.textView.setBackgroundColor(
-                        MaterialColors.getColor(
-                            container.textView,
-                            com.google.android.material.R.attr.colorSurface
-                        )
-                    )
+                    container.textView.setTextColor(unselectedTextColor)
+                    container.textView.setBackgroundColor(unselectedBackgroundColor)
                 }
             }
         }
-        calendarView?.setup(YearMonth.now(), YearMonth.now().plusMonths(6), DayOfWeek.SUNDAY)
+
+        calendarView?.setup(
+            YearMonth.now().minusMonths(1),
+            YearMonth.now().plusMonths(1),
+            if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
+                DayOfWeek.SUNDAY else DayOfWeek.MONDAY
+        )
         calendarView?.scrollToMonth(YearMonth.now())
     }
 
