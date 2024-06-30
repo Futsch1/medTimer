@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class MedicineEventsViewModel(
     application: Application
@@ -48,12 +50,24 @@ class MedicineEventsViewModel(
                 if (deltaDay >= 0) {
                     eventStrings += getUpcomingEvents(day, medicineId)
                 }
-                dayStrings[day] = eventStrings.joinToString(separator = "\n")
+                dayStrings[day] = buildDayString(day, eventStrings)
             }
             viewModelScope.launch { liveData.setValue(dayStrings) }
         }
         return liveData
     }
+
+    private fun buildDayString(day: LocalDate, eventStrings: MutableList<String>): String {
+        if (eventStrings.isNotEmpty()) {
+            eventStrings.addAll(
+                0,
+                listOf(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)), "\n")
+            )
+        }
+
+        return eventStrings.joinToString(separator = "\n")
+    }
+
 
     private fun getUpcomingEvents(day: LocalDate, medicineId: Int): List<String> {
         val scheduler = ReminderScheduler(object : TimeAccess {
