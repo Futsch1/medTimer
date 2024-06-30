@@ -17,6 +17,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
@@ -31,13 +32,11 @@ class MedicineCalendarFragment : Fragment() {
     private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
     private var medicineEventsViewModel: MedicineEventsViewModel? = null
-    private var currentDay: CalendarDay? = null
+    private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, String>? = null
 
     private fun daySelected(data: CalendarDay) {
-        if (currentDay != null) {
-            calendarView?.notifyDayChanged(currentDay!!)
-        }
+        calendarView?.notifyDayChanged(currentDay)
         currentDay = data
         updateCurrentDay()
     }
@@ -56,6 +55,7 @@ class MedicineCalendarFragment : Fragment() {
             fragmentView.findViewById(R.id.medicineCalendar)
 
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
+        currentDayEvents?.focusable = View.NOT_FOCUSABLE
         medicineEventsViewModel = ViewModelProvider(this)[MedicineEventsViewModel::class.java]
         medicineEventsViewModel!!.getEventForDays(medicineCalenderArgs.medicineId, 30)
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
@@ -163,6 +163,6 @@ class MedicineCalendarFragment : Fragment() {
     }
 
     private fun updateCurrentDay() {
-        dayStrings?.get(currentDay?.date)?.let { currentDayEvents?.setText(it) }
+        dayStrings?.get(currentDay.date)?.let { currentDayEvents?.setText(it) }
     }
 }

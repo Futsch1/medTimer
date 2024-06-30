@@ -14,20 +14,24 @@
 
     </com.kizitonwose.calendar.view.CalendarView>
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="3dp"
-        android:background="?android:attr/listDivider" />
-
-    <EditText
-        android:id="@+id/currentDayEvents"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/currentDayEventsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/recent_events"
-        android:inputType="textMultiLine" />
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp"
+        app:contentPadding="10dp">
+
+        <EditText
+            android:id="@+id/currentDayEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:background="@null"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/no_reminders"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
