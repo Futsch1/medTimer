@@ -9,7 +9,16 @@
         android:id="@+id/medicineCalendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cv_dayViewResource="@layout/calendar_day_layout" />
+        app:cv_dayViewResource="@layout/calendar_day_layout">
+
+    </com.kizitonwose.calendar.view.CalendarView>
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="3dp"
+        android:background="?android:attr/listDivider" />
 
     <EditText
         android:id="@+id/currentDayEvents"
