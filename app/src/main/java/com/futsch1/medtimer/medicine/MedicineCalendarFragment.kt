@@ -16,12 +16,16 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class MedicineCalendarFragment : Fragment() {
     private var calendarView: CalendarView? = null
@@ -67,6 +71,38 @@ class MedicineCalendarFragment : Fragment() {
     }
 
     private fun setupCalendarView() {
+        setupDayBinder()
+        setupMonthBinder()
+
+        calendarView?.setup(
+            YearMonth.now().minusMonths(1),
+            YearMonth.now().plusMonths(1),
+            if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
+                DayOfWeek.SUNDAY else DayOfWeek.MONDAY
+        )
+        calendarView?.scrollToMonth(YearMonth.now())
+    }
+
+    private fun setupMonthBinder() {
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val textView: TextView = view.findViewById(R.id.monthHeaderText)
+        }
+
+        calendarView?.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun create(view: View): MonthViewContainer = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                container.textView.text = data.yearMonth.format(
+                    DateTimeFormatter.ofPattern(
+                        "LLLL",
+                        Locale.getDefault()
+                    )
+
+                )
+            }
+        }
+    }
+
+    private fun setupDayBinder() {
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView: TextView = view.findViewById(R.id.calendarDayText)
             lateinit var day: CalendarDay
@@ -124,14 +160,6 @@ class MedicineCalendarFragment : Fragment() {
                 }
             }
         }
-
-        calendarView?.setup(
-            YearMonth.now().minusMonths(1),
-            YearMonth.now().plusMonths(1),
-            if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
-                DayOfWeek.SUNDAY else DayOfWeek.MONDAY
-        )
-        calendarView?.scrollToMonth(YearMonth.now())
     }
 
     private fun updateCurrentDay() {

@@ -135,4 +135,5 @@
     <string name="notification_importance">Priorità di notifica</string>
     <string name="notification_settings_default">Impostazioni di notifica priorità predefinita</string>
     <string name="notification_settings_high">Impostazioni di notifica ad alta priorità</string>
+    <string name="calendar">Calendario</string>
 </resources>

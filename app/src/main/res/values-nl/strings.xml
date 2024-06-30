@@ -135,4 +135,5 @@
     <string name="notification_importance">Prioriteit melding</string>
     <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
+    <string name="calendar">Kalender</string>
 </resources>

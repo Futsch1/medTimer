@@ -118,7 +118,7 @@
     <fragment
         android:id="@+id/medicineCalendarFragment"
         android:name="com.futsch1.medtimer.medicine.MedicineCalendarFragment"
-        android:label="MedicineCalendarFragment">
+        android:label="@string/calendar">
         <argument
             android:name="medicineId"
             app:argType="integer" />

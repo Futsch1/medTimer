@@ -135,4 +135,5 @@
     <string name="notification_importance">Bildirim önceliği</string>
     <string name="notification_settings_default">Bildirim ayarları varsayılan önceliği</string>
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
+    <string name="calendar">Takvim</string>
 </resources>

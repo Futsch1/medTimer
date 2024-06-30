@@ -68,7 +68,6 @@ class MedicineEventsViewModel(
         return eventStrings.joinToString(separator = "\n")
     }
 
-
     private fun getUpcomingEvents(day: LocalDate, medicineId: Int): List<String> {
         val scheduler = ReminderScheduler(object : TimeAccess {
             override fun systemZone(): ZoneId {
