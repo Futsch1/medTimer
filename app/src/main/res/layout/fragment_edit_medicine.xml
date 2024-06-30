@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:icon="@drawable/bar_chart"
+                app:icon="@drawable/calendar2_event"
                 app:iconPadding="0dp" />
         </LinearLayout>
 
