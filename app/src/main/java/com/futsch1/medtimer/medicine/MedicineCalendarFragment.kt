@@ -116,19 +116,16 @@ class MedicineCalendarFragment : Fragment() {
         }
 
         calendarView?.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            private fun getColor(colorId: Int) = MaterialColors.getColor(
+                calendarView!!,
+                colorId
+            )
+
             val selectedBackground = MaterialShapeDrawable()
-            val selectedTextColor = MaterialColors.getColor(
-                calendarView!!,
-                com.google.android.material.R.attr.colorOnSecondary
-            )
-            val unselectedTextColor = MaterialColors.getColor(
-                calendarView!!,
-                com.google.android.material.R.attr.colorOnSurface
-            )
-            val unselectedBackgroundColor = MaterialColors.getColor(
-                calendarView!!,
-                com.google.android.material.R.attr.colorSurface
-            )
+            val selectedTextColor = getColor(com.google.android.material.R.attr.colorOnSecondary)
+            val unselectedTextColor = getColor(com.google.android.material.R.attr.colorOnSurface)
+            val unselectedBackgroundColor =
+                getColor(com.google.android.material.R.attr.colorSurface)
 
             init {
                 selectedBackground.shapeAppearanceModel = ShapeAppearanceModel.builder(
