@@ -52,8 +52,7 @@ public class TestDataAndDeleteAndManualDoseTest {
                 allOf(withContentDescription("More options")));
         overflowMenuButton.perform(click());
 
-        ViewInteraction materialTextView = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Settings")));
+        ViewInteraction materialTextView = onView(withText("Settings"));
         materialTextView.perform(click());
 
         ViewInteraction recyclerView = onView(
@@ -85,8 +84,7 @@ public class TestDataAndDeleteAndManualDoseTest {
                         isDisplayed()));
         overflowMenuButton2.perform(click());
 
-        ViewInteraction materialTextView2 = onView(
-                allOf(withId(androidx.recyclerview.R.id.title), withText("Generate test data")));
+        ViewInteraction materialTextView2 = onView(withText("Generate test data"));
         materialTextView2.perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(5000));
 

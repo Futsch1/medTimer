@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,13 +82,14 @@ public class EditMedicineFragment extends Fragment {
         editMedicineName = fragmentEditMedicine.findViewById(R.id.editMedicineName);
         editMedicineName.setText(medicineName);
 
+        setupOpenCalendarButton();
+
         boolean useColor = editMedicineArgs.getUseColor();
         setupEnableColor(useColor);
         setupColorButton(useColor);
 
         setupSwiping(recyclerView);
         setupAddReminderButton();
-        setupNotificationImportance();
 
         medicineViewModel.getReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
@@ -97,6 +100,7 @@ public class EditMedicineFragment extends Fragment {
     public void onResume() {
         super.onResume();
         swipeHelper.setup(requireContext());
+        setupNotificationImportance();
     }
 
     @Override
@@ -137,6 +141,27 @@ public class EditMedicineFragment extends Fragment {
         }
     }
 
+    private void setupNotificationImportance() {
+        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
+
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
+        notificationImportance.setAdapter(arrayAdapter);
+        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
+    }
+
+    private String importanceValueToString(int value) {
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+
+        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
+            return importanceTexts[0];
+        }
+        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
+            return importanceTexts[1];
+        }
+        return importanceTexts[0];
+    }
+
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper<ReminderViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
         deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_reminder, () -> {
@@ -144,6 +169,15 @@ public class EditMedicineFragment extends Fragment {
             medicineViewModel.deleteReminder(reminder);
             final Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        });
+    }
+
+    private void setupOpenCalendarButton() {
+        MaterialButton openCalendar = fragmentEditMedicine.findViewById(R.id.openCalendar);
+        openCalendar.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(openCalendar);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action = EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(medicineId);
+            navController.navigate(action);
         });
     }
 
@@ -183,7 +217,7 @@ public class EditMedicineFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAbsoluteAdapterPosition());
                 }
             }
         };
@@ -194,15 +228,6 @@ public class EditMedicineFragment extends Fragment {
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
-    }
-
-    private void setupNotificationImportance() {
-        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
-
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
-        notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
     }
 
     private void createReminder(String amount) {
@@ -216,18 +241,6 @@ public class EditMedicineFragment extends Fragment {
             reminder.timeInMinutes = minutes;
             medicineViewModel.insertReminder(reminder);
         });
-    }
-
-    private String importanceValueToString(int value) {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-
-        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
-            return importanceTexts[0];
-        }
-        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
-            return importanceTexts[1];
-        }
-        return importanceTexts[0];
     }
 
 }

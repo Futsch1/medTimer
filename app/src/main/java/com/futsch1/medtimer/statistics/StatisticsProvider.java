@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.androidplot.xy.SimpleXYSeries;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineHelper;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,10 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class StatisticsProvider {
-    private static final Pattern CYCLIC_COUNT = Pattern.compile(" (\\(\\d?/\\d?)\\)");
     private final List<ReminderEvent> reminderEvents;
 
     public StatisticsProvider(MedicineRepository medicineRepository) {
@@ -51,7 +50,7 @@ public class StatisticsProvider {
         LocalDate earliestDate = LocalDate.now().minusDays(days);
         for (ReminderEvent event : reminderEvents) {
             if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
-                String medicineName = normalizeMedicineName(event.medicineName);
+                String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
                 medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
                 medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
             }
@@ -82,10 +81,6 @@ public class StatisticsProvider {
             data.add(new SimpleXYSeries(xValues, yValues, medicineNames.get(j)));
         }
         return data;
-    }
-
-    private String normalizeMedicineName(String medicineName) {
-        return CYCLIC_COUNT.matcher(medicineName).replaceAll("");
     }
 
     private int getDaysInThePast(long secondsSinceEpoch) {

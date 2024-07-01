@@ -20,8 +20,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 55
-        versionName = "1.8.9"
+        versionCode = 56
+        versionName = "1.8.10"
         setProperty("archivesBaseName", "MedTimer")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -94,15 +94,16 @@ dependencies {
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
     implementation("com.androidplot:androidplot-core:1.5.10")
     implementation("com.github.AppIntro:AppIntro:6.3.1")
+    implementation("com.kizitonwose.calendar:view:2.5.2")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-rc01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-rc01")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-rc01")
-    androidTestImplementation("androidx.test:rules:1.6.0-rc01")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 }

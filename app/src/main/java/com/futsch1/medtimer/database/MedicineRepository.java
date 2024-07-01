@@ -40,7 +40,6 @@ public class MedicineRepository {
         return medicineDao.getMedicine(medicineId);
     }
 
-
     public LiveData<List<Reminder>> getLiveReminders(int medicineId) {
         return medicineDao.getReminders(medicineId);
     }

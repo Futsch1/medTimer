@@ -68,15 +68,13 @@ public class TimeHelper {
     public static String toLocalizedDateString(long timeStamp, ZoneId zoneId) {
         ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
 
-        return String.format("%s",
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+        return zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
     }
 
     public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
         ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
 
-        return String.format("%s",
-                zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
+        return zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     private static ZonedDateTime getZonedDateTime(long timeStamp, ZoneId zoneId) {

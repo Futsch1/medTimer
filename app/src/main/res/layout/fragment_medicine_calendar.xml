@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.kizitonwose.calendar.view.CalendarView
+        android:id="@+id/medicineCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cv_dayViewResource="@layout/calendar_day_layout"
+        app:cv_monthHeaderResource="@layout/month_header_layout">
+
+    </com.kizitonwose.calendar.view.CalendarView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/currentDayEventsCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp"
+        app:contentPadding="10dp">
+
+        <EditText
+            android:id="@+id/currentDayEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:background="@null"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/no_reminders"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
