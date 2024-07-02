@@ -122,5 +122,11 @@
         <argument
             android:name="medicineId"
             app:argType="integer" />
+        <argument
+            android:name="pastDays"
+            app:argType="long" />
+        <argument
+            android:name="futureDays"
+            app:argType="long" />
     </fragment>
 </navigation>

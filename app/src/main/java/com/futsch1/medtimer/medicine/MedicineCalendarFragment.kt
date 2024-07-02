@@ -57,26 +57,30 @@ class MedicineCalendarFragment : Fragment() {
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
         currentDayEvents?.focusable = View.NOT_FOCUSABLE
         medicineEventsViewModel = ViewModelProvider(this)[MedicineEventsViewModel::class.java]
-        medicineEventsViewModel!!.getEventForDays(medicineCalenderArgs.medicineId, 30)
+        medicineEventsViewModel!!.getEventForDays(
+            medicineCalenderArgs.medicineId,
+            medicineCalenderArgs.pastDays,
+            medicineCalenderArgs.futureDays
+        )
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
                 this.dayStrings = dayStrings
                 calendarView?.notifyCalendarChanged()
                 updateCurrentDay()
             }
 
-        setupCalendarView()
+        setupCalendarView(medicineCalenderArgs)
 
 
         return fragmentView
     }
 
-    private fun setupCalendarView() {
+    private fun setupCalendarView(medicineCalenderArgs: MedicineCalendarFragmentArgs) {
         setupDayBinder()
         setupMonthBinder()
 
         calendarView?.setup(
-            YearMonth.now().minusMonths(1),
-            YearMonth.now().plusMonths(1),
+            YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30),
+            YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30),
             if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
                 DayOfWeek.SUNDAY else DayOfWeek.MONDAY
         )
@@ -96,7 +100,6 @@ class MedicineCalendarFragment : Fragment() {
                         "LLLL",
                         Locale.getDefault()
                     )
-
                 )
             }
         }

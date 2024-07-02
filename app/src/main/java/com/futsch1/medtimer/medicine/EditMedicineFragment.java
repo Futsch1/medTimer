@@ -176,7 +176,12 @@ public class EditMedicineFragment extends Fragment {
         MaterialButton openCalendar = fragmentEditMedicine.findViewById(R.id.openCalendar);
         openCalendar.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(openCalendar);
-            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action = EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(medicineId);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action =
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
+                            medicineId,
+                            30,
+                            30
+                    );
             navController.navigate(action);
         });
     }
