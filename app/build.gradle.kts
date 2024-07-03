@@ -83,10 +83,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.tracing:tracing:1.2.0")
-    implementation("org.mockito:mockito-core:5.12.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:2.1.1")
@@ -97,6 +96,7 @@ dependencies {
     implementation("com.kizitonwose.calendar:view:2.5.2")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.12.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
