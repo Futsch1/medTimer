@@ -73,13 +73,11 @@ jobs:
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
         run: |
-          ${{ env.BUILD_TOOLS_PATH }}/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
-            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
           echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
           ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
             --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
-            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
+            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
         continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
