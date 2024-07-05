@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.statistics
 
 import android.content.res.ColorStateList
-import android.graphics.Typeface
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -147,7 +147,8 @@ class CalendarFragment : Fragment() {
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.textView.text = data.date.dayOfMonth.toString()
                 if (dayStrings?.get(data.date)?.isNotEmpty() == true) {
-                    container.textView.setTypeface(null, Typeface.BOLD)
+                    container.textView.paintFlags =
+                        container.textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 }
                 container.day = data
                 if (data == currentDay) {
