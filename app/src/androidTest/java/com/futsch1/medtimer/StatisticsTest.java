@@ -75,7 +75,7 @@ public class StatisticsTest {
                         0))
                 .atPosition(1).perform(click());
 
-        onView(allOf(withId(R.id.reminderTableButton), withText("Tabular view"))).perform(click());
+        onView(allOf(withId(R.id.reminderTableButton))).perform(click());
 
         onView(
                 allOf(withId(R.id.tableColumnHeaderContainer),
