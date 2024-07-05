@@ -54,6 +54,7 @@ public class StatisticsFragment extends Fragment {
         medicineRepository = new MedicineRepository(requireActivity().getApplication());
 
         setupReminderTableButton(statisticsView);
+        setupReminderCalendarButton(statisticsView);
         setupTimeSpinner();
         setupTakenSkippedCharts();
         Handler handler = new Handler(backgroundThread.getLooper());
@@ -67,6 +68,14 @@ public class StatisticsFragment extends Fragment {
         reminderTableButton.setOnClickListener(view -> {
             NavController navController = Navigation.findNavController(statisticsView);
             navController.navigate(com.futsch1.medtimer.statistics.StatisticsFragmentDirections.actionStatisticsFragmentToReminderTableFragment());
+        });
+    }
+
+    private void setupReminderCalendarButton(View statisticsView) {
+        MaterialButton reminderCalendarButton = statisticsView.findViewById(R.id.reminderCalendarButton);
+        reminderCalendarButton.setOnClickListener(view -> {
+            NavController navController = Navigation.findNavController(statisticsView);
+            navController.navigate(com.futsch1.medtimer.statistics.StatisticsFragmentDirections.actionStatisticsFragmentToMedicineCalendarFragment(-1, 90, 0));
         });
     }
 

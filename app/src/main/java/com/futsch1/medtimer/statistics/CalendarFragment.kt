@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine
+package com.futsch1.medtimer.statistics
 
 import android.content.res.ColorStateList
 import android.graphics.Typeface
@@ -28,10 +28,10 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class MedicineCalendarFragment : Fragment() {
+class CalendarFragment : Fragment() {
     private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
-    private var medicineEventsViewModel: MedicineEventsViewModel? = null
+    private var calendarEventsViewModel: CalendarEventsViewModel? = null
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, String>? = null
 
@@ -47,17 +47,17 @@ class MedicineCalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragmentView: View =
-            inflater.inflate(R.layout.fragment_medicine_calendar, container, false)
+            inflater.inflate(R.layout.fragment_calendar, container, false)
 
-        val medicineCalenderArgs = MedicineCalendarFragmentArgs.fromBundle(requireArguments())
+        val medicineCalenderArgs = CalendarFragmentArgs.fromBundle(requireArguments())
 
         calendarView =
             fragmentView.findViewById(R.id.medicineCalendar)
 
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
         currentDayEvents?.focusable = View.NOT_FOCUSABLE
-        medicineEventsViewModel = ViewModelProvider(this)[MedicineEventsViewModel::class.java]
-        medicineEventsViewModel!!.getEventForDays(
+        calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
+        calendarEventsViewModel!!.getEventForDays(
             medicineCalenderArgs.medicineId,
             medicineCalenderArgs.pastDays,
             medicineCalenderArgs.futureDays
@@ -70,11 +70,10 @@ class MedicineCalendarFragment : Fragment() {
 
         setupCalendarView(medicineCalenderArgs)
 
-
         return fragmentView
     }
 
-    private fun setupCalendarView(medicineCalenderArgs: MedicineCalendarFragmentArgs) {
+    private fun setupCalendarView(medicineCalenderArgs: CalendarFragmentArgs) {
         setupDayBinder()
         setupMonthBinder()
 
@@ -163,6 +162,11 @@ class MedicineCalendarFragment : Fragment() {
     }
 
     private fun updateCurrentDay() {
-        dayStrings?.get(currentDay.date)?.let { currentDayEvents?.setText(it) }
+        val dayText = dayStrings?.get(currentDay.date)
+        if (dayText != null) {
+            currentDayEvents?.setText(dayText)
+        } else {
+            currentDayEvents?.setText(null)
+        }
     }
 }

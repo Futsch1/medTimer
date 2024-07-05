@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine
+package com.futsch1.medtimer.statistics
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -23,7 +23,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class MedicineEventsViewModel(
+class CalendarEventsViewModel(
     application: Application
 ) :
     AndroidViewModel(application) {
