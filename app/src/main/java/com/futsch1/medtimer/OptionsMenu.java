@@ -154,12 +154,15 @@ public class OptionsMenu implements MenuProvider {
     }
 
     private void setupShowAppIntro() {
+        MenuItem item = menu.findItem(R.id.show_app_intro);
         if (BuildConfig.DEBUG) {
-            MenuItem item = menu.findItem(R.id.show_app_intro);
+            item.setVisible(true);
             item.setOnMenuItemClickListener(menuItem -> {
                 context.startActivity(new Intent(context, MedTimerAppIntro.class));
                 return true;
             });
+        } else {
+            item.setVisible(false);
         }
     }
 
