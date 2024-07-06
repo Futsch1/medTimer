@@ -1,7 +1,7 @@
-package com.futsch1.medtimer.medicine
+package com.futsch1.medtimer.statistics
 
 import android.content.res.ColorStateList
-import android.graphics.Typeface
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +28,10 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class MedicineCalendarFragment : Fragment() {
+class CalendarFragment : Fragment() {
     private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
-    private var medicineEventsViewModel: MedicineEventsViewModel? = null
+    private var calendarEventsViewModel: CalendarEventsViewModel? = null
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, String>? = null
 
@@ -47,36 +47,39 @@ class MedicineCalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fragmentView: View =
-            inflater.inflate(R.layout.fragment_medicine_calendar, container, false)
+            inflater.inflate(R.layout.fragment_calendar, container, false)
 
-        val medicineCalenderArgs = MedicineCalendarFragmentArgs.fromBundle(requireArguments())
+        val medicineCalenderArgs = CalendarFragmentArgs.fromBundle(requireArguments())
 
         calendarView =
             fragmentView.findViewById(R.id.medicineCalendar)
 
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
         currentDayEvents?.focusable = View.NOT_FOCUSABLE
-        medicineEventsViewModel = ViewModelProvider(this)[MedicineEventsViewModel::class.java]
-        medicineEventsViewModel!!.getEventForDays(medicineCalenderArgs.medicineId, 30)
+        calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
+        calendarEventsViewModel!!.getEventForDays(
+            medicineCalenderArgs.medicineId,
+            medicineCalenderArgs.pastDays,
+            medicineCalenderArgs.futureDays
+        )
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
                 this.dayStrings = dayStrings
                 calendarView?.notifyCalendarChanged()
                 updateCurrentDay()
             }
 
-        setupCalendarView()
-
+        setupCalendarView(medicineCalenderArgs)
 
         return fragmentView
     }
 
-    private fun setupCalendarView() {
+    private fun setupCalendarView(medicineCalenderArgs: CalendarFragmentArgs) {
         setupDayBinder()
         setupMonthBinder()
 
         calendarView?.setup(
-            YearMonth.now().minusMonths(1),
-            YearMonth.now().plusMonths(1),
+            YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30),
+            YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30),
             if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
                 DayOfWeek.SUNDAY else DayOfWeek.MONDAY
         )
@@ -96,7 +99,6 @@ class MedicineCalendarFragment : Fragment() {
                         "LLLL",
                         Locale.getDefault()
                     )
-
                 )
             }
         }
@@ -145,7 +147,8 @@ class MedicineCalendarFragment : Fragment() {
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.textView.text = data.date.dayOfMonth.toString()
                 if (dayStrings?.get(data.date)?.isNotEmpty() == true) {
-                    container.textView.setTypeface(null, Typeface.BOLD)
+                    container.textView.paintFlags =
+                        container.textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 }
                 container.day = data
                 if (data == currentDay) {
@@ -160,6 +163,11 @@ class MedicineCalendarFragment : Fragment() {
     }
 
     private fun updateCurrentDay() {
-        dayStrings?.get(currentDay.date)?.let { currentDayEvents?.setText(it) }
+        val dayText = dayStrings?.get(currentDay.date)
+        if (dayText != null) {
+            currentDayEvents?.setText(dayText)
+        } else {
+            currentDayEvents?.setText(null)
+        }
     }
 }

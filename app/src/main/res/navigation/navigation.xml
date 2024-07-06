@@ -61,7 +61,7 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
-            app:destination="@id/medicineCalendarFragment" />
+            app:destination="@id/calendarFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_statisticsFragment_to_reminderTableFragment"
             app:destination="@id/reminderTableFragment" />
+        <action
+            android:id="@+id/action_statisticsFragment_to_medicineCalendarFragment"
+            app:destination="@id/calendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/editEventFragment"
@@ -116,11 +119,17 @@
             app:argType="long" />
     </fragment>
     <fragment
-        android:id="@+id/medicineCalendarFragment"
-        android:name="com.futsch1.medtimer.medicine.MedicineCalendarFragment"
+        android:id="@+id/calendarFragment"
+        android:name="com.futsch1.medtimer.statistics.CalendarFragment"
         android:label="@string/calendar">
         <argument
             android:name="medicineId"
             app:argType="integer" />
+        <argument
+            android:name="pastDays"
+            app:argType="long" />
+        <argument
+            android:name="futureDays"
+            app:argType="long" />
     </fragment>
 </navigation>
