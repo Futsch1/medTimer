@@ -6,27 +6,17 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,16 +43,7 @@ public class CalendarTest {
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
-        ViewInteraction chip = onView(
-                allOf(withId(R.id.showOnlyOpen), withText("Show only open"),
-                        childAtPosition(
-                                allOf(withId(R.id.recentFilters),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                2)),
-                                0),
-                        isDisplayed()));
-        chip.perform(click());
+        onView(allOf(withId(R.id.showOnlyOpen), isDisplayed())).perform(click());
 
         int takenReminders = 0;
 
@@ -92,24 +73,5 @@ public class CalendarTest {
         onView(allOf(withId(R.id.reminderCalendarButton), isDisplayed())).perform(click());
 
         onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
     }
 }
