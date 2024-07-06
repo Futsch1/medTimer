@@ -105,7 +105,7 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    deleteItem(fragmentOverview.getContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    deleteItem(fragmentOverview.getContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition());
                 }
             }
         };
