@@ -42,8 +42,7 @@ public class OverviewFragment extends Fragment {
     private HandlerThread thread;
     private SwipeHelper swipeHelperEdit;
     private SwipeHelper swipeHelperDelete;
-    private Chip showTaken;
-    private Chip showSkipped;
+    private Chip showOnlyOpen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -59,7 +58,7 @@ public class OverviewFragment extends Fragment {
         setupLogManualDose();
         setupSwipeEdit(latestReminders);
         setupSwipeDelete(latestReminders);
-        setupFilterButtons();
+        setupFilterButton();
 
         return fragmentOverview;
     }
@@ -117,11 +116,9 @@ public class OverviewFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(latestReminders);
     }
 
-    private void setupFilterButtons() {
-        showTaken = fragmentOverview.findViewById(R.id.showTaken);
-        showSkipped = fragmentOverview.findViewById(R.id.showSkipped);
-        showTaken.setOnClickListener(v -> updateFilter());
-        showSkipped.setOnClickListener(v -> updateFilter());
+    private void setupFilterButton() {
+        showOnlyOpen = fragmentOverview.findViewById(R.id.showOnlyOpen);
+        showOnlyOpen.setOnClickListener(v -> updateFilter());
     }
 
     private void navigateToEditEvent(long eventId) {
@@ -151,13 +148,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void updateFilter() {
-        String filterString = "";
-        if (showTaken.isChecked()) {
-            filterString += "t";
-        }
-        if (showSkipped.isChecked()) {
-            filterString += "s";
-        }
+        String filterString = showOnlyOpen.isChecked() ? "o" : "";
         latestRemindersViewAdapter.getFilter().filter(filterString);
     }
 

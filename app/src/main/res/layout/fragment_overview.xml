@@ -101,41 +101,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="0.3"
-                    android:src="@drawable/funnel" />
-
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/recentFilters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/showTaken"
+                        android:id="@+id/showOnlyOpen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkable="true"
-                        android:checked="true"
-                        android:text="@string/taken"
-                        app:checkedIcon="@drawable/check2_circle"
+                        android:checked="false"
+                        android:text="@string/show_only_open"
+                        app:checkedIcon="@drawable/funnel"
                         app:checkedIconVisible="true"
                         app:chipMinTouchTargetSize="0dp" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/showSkipped"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:checked="true"
-                        android:text="@string/skipped"
-                        app:checkedIcon="@drawable/x_circle"
-                        app:checkedIconVisible="true"
-                        app:chipMinTouchTargetSize="0dp" />
                 </com.google.android.material.chip.ChipGroup>
             </LinearLayout>
 

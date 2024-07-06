@@ -71,12 +71,9 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
         protected FilterResults performFiltering(CharSequence constraint) {
             List<ReminderEvent> filteredList = new ArrayList<>();
             String filterPattern = constraint.toString().toLowerCase().trim();
-            boolean showTaken = filterPattern.contains("t");
-            boolean showSkipped = filterPattern.contains("s");
+            boolean showOnlyOpen = filterPattern.contains("o");
             for (ReminderEvent item : data) {
-                if ((showTaken && item.status == ReminderEvent.ReminderStatus.TAKEN) ||
-                        (showSkipped && item.status == ReminderEvent.ReminderStatus.SKIPPED) ||
-                        (item.status == ReminderEvent.ReminderStatus.RAISED)) {
+                if ((!showOnlyOpen || item.status == ReminderEvent.ReminderStatus.RAISED)) {
                     filteredList.add(item);
                 }
             }

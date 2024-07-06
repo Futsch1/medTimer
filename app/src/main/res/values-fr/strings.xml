@@ -137,4 +137,5 @@
     <string name="notification_settings_default">Priorité par défaut des paramètres de notification</string>
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
     <string name="calendar">Calendrier</string>
+    <string name="show_only_open">Afficher uniquement les ouvertes</string>
 </resources>
