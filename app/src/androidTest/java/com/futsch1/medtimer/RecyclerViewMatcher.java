@@ -4,10 +4,13 @@ import android.content.res.Resources;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.matcher.BoundedMatcher;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Objects;
 
 /**
  * Created by dannyroa on 5/10/15.
@@ -75,5 +78,19 @@ public class RecyclerViewMatcher {
 
     public Matcher<View> atPositionOnView(final int position, String targetViewTag) {
         return atPositionOnView(position, -1, targetViewTag);
+    }
+
+    public Matcher<View> sizeMatcher(int matcherSize) {
+        return new BoundedMatcher<>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with list size: " + matcherSize);
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                return matcherSize == Objects.requireNonNull(item.getAdapter()).getItemCount();
+            }
+        };
     }
 }

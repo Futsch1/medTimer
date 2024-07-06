@@ -17,7 +17,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
-import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -58,7 +57,7 @@ public class StatisticsTest {
         onView(withText("Generate test data")).perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
-        setAllRemindersTo12AM();
+        AndroidTestHelper.setAllRemindersTo12AM();
 
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
@@ -120,24 +119,5 @@ public class StatisticsTest {
                 .check(matches(withText(not(startsWith("Much of TestMedicine")))));
     }
 
-    private void setAllRemindersTo12AM() {
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-
-        setReminderTo12AM(0);
-        setReminderTo12AM(1);
-        setReminderTo12AM(2);
-        setReminderTo12AM(3);
-
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-    }
-
-    private void setReminderTo12AM(int position) {
-        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
-
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
-
-        setTime(0, 0);
-        onView(allOf(withContentDescription("Navigate up"))).perform(click());
-    }
 
 }
