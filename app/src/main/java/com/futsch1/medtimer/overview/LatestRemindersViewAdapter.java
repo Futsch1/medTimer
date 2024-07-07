@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.overview;
 
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -8,14 +10,17 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 
-public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
+public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
+    private final Filter filter = new ReminderEventFilter();
+    private List<ReminderEvent> data;
 
     public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback) {
         super(diffCallback);
         setHasStableIds(true);
     }
-
 
     // Create new views (invoked by the layout manager)
     @NonNull
@@ -36,6 +41,16 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
         return getItem(position).reminderEventId;
     }
 
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    public void setData(List<ReminderEvent> data) {
+        this.data = data;
+        submitList(data);
+    }
+
     public static class ReminderEventDiff extends DiffUtil.ItemCallback<ReminderEvent> {
 
         @Override
@@ -48,6 +63,33 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
             return oldItem.reminderEventId == newItem.reminderEventId && oldItem.status.equals(newItem.status)
                     && newItem.amount.equals(oldItem.amount) && oldItem.medicineName.equals(newItem.medicineName) &&
                     oldItem.remindedTimestamp == newItem.remindedTimestamp;
+        }
+    }
+
+    private class ReminderEventFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<ReminderEvent> filteredList = new ArrayList<>();
+            String filterPattern = constraint.toString().toLowerCase().trim();
+            boolean showOnlyOpen = filterPattern.contains("o");
+            for (ReminderEvent item : data) {
+                if ((!showOnlyOpen || item.status == ReminderEvent.ReminderStatus.RAISED)) {
+                    filteredList.add(item);
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            results.count = filteredList.size();
+            return results;
+        }
+
+        /**
+         * @noinspection unchecked
+         */
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            submitList((List<ReminderEvent>) results.values);
         }
     }
 }

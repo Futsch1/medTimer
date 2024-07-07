@@ -137,4 +137,5 @@
     <string name="notification_settings_default">Notification settings default priority</string>
     <string name="notification_settings_high">Notification settings high priority</string>
     <string name="calendar">Calendar</string>
+    <string name="show_only_open">Show only open</string>
 </resources>

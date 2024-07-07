@@ -137,4 +137,5 @@
     <string name="notification_settings_default">Bildirim ayarları varsayılan öncelik</string>
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
     <string name="calendar">Takvim</string>
+    <string name="show_only_open">" Sadece açıkları göster"</string>
 </resources>

@@ -69,12 +69,13 @@ jobs:
       - name: Setup build tool version variable
         shell: bash
         run: |
-          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | grep 34 | tail -1)
+          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -1)
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
         run: |
           echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
           ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+            --alignment-preserved \
             --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk

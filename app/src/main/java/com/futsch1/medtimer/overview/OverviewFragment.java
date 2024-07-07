@@ -28,6 +28,7 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.google.android.material.chip.Chip;
 
 import java.time.Instant;
 import java.util.List;
@@ -41,6 +42,7 @@ public class OverviewFragment extends Fragment {
     private HandlerThread thread;
     private SwipeHelper swipeHelperEdit;
     private SwipeHelper swipeHelperDelete;
+    private Chip showOnlyOpen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -56,6 +58,7 @@ public class OverviewFragment extends Fragment {
         setupLogManualDose();
         setupSwipeEdit(latestReminders);
         setupSwipeDelete(latestReminders);
+        setupFilterButton();
 
         return fragmentOverview;
     }
@@ -105,12 +108,17 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    deleteItem(fragmentOverview.getContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    deleteItem(fragmentOverview.getContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition());
                 }
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelperDelete);
         itemTouchHelper.attachToRecyclerView(latestReminders);
+    }
+
+    private void setupFilterButton() {
+        showOnlyOpen = fragmentOverview.findViewById(R.id.showOnlyOpen);
+        showOnlyOpen.setOnClickListener(v -> updateFilter());
     }
 
     private void navigateToEditEvent(long eventId) {
@@ -139,6 +147,11 @@ public class OverviewFragment extends Fragment {
         });
     }
 
+    private void updateFilter() {
+        String filterString = showOnlyOpen.isChecked() ? "o" : "";
+        latestRemindersViewAdapter.getFilter().filter(filterString);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -149,7 +162,10 @@ public class OverviewFragment extends Fragment {
             liveData.removeObservers(getViewLifecycleOwner());
         }
         liveData = medicineViewModel.getReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60), false);
-        liveData.observe(getViewLifecycleOwner(), latestRemindersViewAdapter::submitList);
+        liveData.observe(getViewLifecycleOwner(), reminders -> {
+            latestRemindersViewAdapter.setData(reminders);
+            updateFilter();
+        });
 
         ReminderProcessor.requestReschedule(requireContext());
 
