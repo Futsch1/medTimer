@@ -77,7 +77,7 @@
     <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
     <string name="log_additional_dose">Zusätzliche Einnahme eintragen</string>
     <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
-    <string name="skip_reminder">Einnahme überspringen</string>
+    <string name="skip_reminder">Überspringen</string>
     <string name="snooze">Snooze</string>
     <string name="snooze_duration">Snooze Dauer</string>
     <string name="minutes_5">5 Minuten</string>
