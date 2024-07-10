@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.helpers;
 
+import android.content.Context;
 import android.text.format.DateFormat;
 
 import androidx.fragment.app.FragmentActivity;
@@ -14,19 +15,28 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
+import java.util.Date;
 
 public class TimeHelper {
+
+    private static final ZoneOffset EPOCH_OFFSET = ZoneId.systemDefault().getRules().getOffset(Instant.ofEpochSecond(0));
 
     private TimeHelper() {
         // Intentionally empty
     }
 
-    public static String minutesToTimeString(long minutes) {
-        return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    public static String minutesToTimeString(Context context, long minutes) {
+        Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+        return DateFormat.getTimeFormat(context).format(date);
+    }
+
+    private static Date localTimeToDate(LocalTime localTime) {
+        return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
     }
 
     public static int timeStringToMinutes(String timeString) {

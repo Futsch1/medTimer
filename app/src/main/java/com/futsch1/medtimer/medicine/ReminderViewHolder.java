@@ -58,7 +58,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     public void bind(Reminder reminder, String medicineName, DeleteCallback deleteCallback) {
         this.reminder = reminder;
 
-        editTime.setText(minutesToTimeString(reminder.timeInMinutes));
+        editTime.setText(minutesToTimeString(editTime.getContext(), reminder.timeInMinutes));
         editTime.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(reminder, hasFocus));
 
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
@@ -76,7 +76,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(fragmentActivity).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = minutesToTimeString(minutes);
+                String selectedTime = minutesToTimeString(editTime.getContext(), minutes);
                 editTime.setText(selectedTime);
                 reminder.timeInMinutes = minutes;
             });

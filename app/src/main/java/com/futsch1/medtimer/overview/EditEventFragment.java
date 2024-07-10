@@ -67,7 +67,7 @@ public class EditEventFragment extends Fragment {
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(requireActivity()).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = minutesToTimeString(minutes);
+                String selectedTime = minutesToTimeString(requireContext(), minutes);
                 editEventRemindedTimestamp.setText(selectedTime);
             });
         }
