@@ -57,7 +57,7 @@ public class ReminderWork extends Worker {
             ReminderEvent reminderEvent = reminderEventId == 0 ? buildAndInsertReminderEvent(reminderDate, medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
 
             if (reminderEvent != null && medicine != null) {
-                showNotification(medicine, reminderEvent, reminder, reminderDate);
+                showNotification(medicine, reminderEvent, reminder);
 
                 Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
                 r = Result.success();
@@ -87,7 +87,7 @@ public class ReminderWork extends Worker {
         return reminderEvent;
     }
 
-    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDate reminderDate) {
+    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
@@ -98,7 +98,6 @@ public class ReminderWork extends Worker {
                             reminder.instructions,
                             reminder.reminderId,
                             reminderEvent.reminderEventId,
-                            reminderDate,
                             color,
                             medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
             medicineRepository.updateReminderEvent(reminderEvent);
