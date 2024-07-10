@@ -32,10 +32,12 @@ public class MedicinePerDayChart {
     private final XYPlot medicinesPerDayChart;
     private final List<MedicineWithReminders> medicines;
     private final ChartHelper chartHelper;
+    private final Context context;
     private int colorIndex;
 
     public MedicinePerDayChart(XYPlot medicinesPerDayChart, Context context, List<MedicineWithReminders> medicines) {
         this.medicinesPerDayChart = medicinesPerDayChart;
+        this.context = context;
         this.chartHelper = new ChartHelper(context);
         this.medicines = medicines;
 
@@ -190,12 +192,12 @@ public class MedicinePerDayChart {
         return Color.parseColor(colors[colorIndex++ % colors.length]);
     }
 
-    private static class DaysSinceEpochFormat extends NumberFormat {
+    private class DaysSinceEpochFormat extends NumberFormat {
         @NonNull
         @Override
         public StringBuffer format(double value, @NonNull StringBuffer buffer,
                                    @NonNull FieldPosition field) {
-            return buffer.append(TimeHelper.daysSinceEpochToDateString((long) value));
+            return buffer.append(TimeHelper.daysSinceEpochToDateString(context, (long) value));
         }
 
         @NonNull

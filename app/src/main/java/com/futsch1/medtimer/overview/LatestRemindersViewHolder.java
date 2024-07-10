@@ -18,7 +18,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.Collections;
-import java.util.TimeZone;
 
 public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private final TextView reminderEventText;
@@ -41,7 +40,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(ReminderEvent reminderEvent) {
-        String takenDateTime = TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, TimeZone.getDefault().toZoneId());
+        String takenDateTime = TimeHelper.toLocalizedDatetimeString(reminderEventText.getContext(),
+                reminderEvent.remindedTimestamp);
         reminderEventText.setText(reminderEventText.getContext().getString(R.string.reminder_event, reminderEvent.amount, reminderEvent.medicineName, takenDateTime));
 
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {

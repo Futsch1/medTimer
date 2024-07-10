@@ -13,18 +13,14 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderTableCellModel, ReminderTableCellModel> {
-    private final ZoneId defaultZoneId;
     private final TableView tableView;
 
     public ReminderTableAdapter(TableView tableView) {
         this.tableView = tableView;
-        defaultZoneId = TimeZone.getDefault().toZoneId();
     }
 
     @NonNull
@@ -91,12 +87,12 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId), reminderEvent.reminderEventId, null));
+            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, null));
             cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderEventId, "medicineName"));
             cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderEventId, null));
             cell.add(new ReminderTableCellModel(reminderEvent.status,
                     reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                            TimeHelper.toLocalizedDatetimeString(reminderEvent.processedTimestamp, defaultZoneId) : " ",
+                            TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.processedTimestamp) : " ",
                     reminderEvent.reminderEventId, null));
             cells.add(cell);
             rows.add(new ReminderTableCellModel(reminderEvent.reminderEventId, Integer.toString(reminderEvent.reminderEventId), reminderEvent.reminderEventId, null));

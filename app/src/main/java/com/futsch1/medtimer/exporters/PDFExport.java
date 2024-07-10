@@ -21,7 +21,6 @@ import com.wwdablu.soumya.simplypdf.document.Margin;
 import com.wwdablu.soumya.simplypdf.document.PageHeader;
 
 import java.io.File;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,12 +32,10 @@ public class PDFExport implements Exporter {
     public static final String BLACK = "#000000";
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
-    private final ZoneId defaultZoneId;
 
-    public PDFExport(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
+    public PDFExport(List<ReminderEvent> reminderEvents, Context context) {
         this.reminderEvents = reminderEvents;
         this.context = context;
-        this.defaultZoneId = zoneId;
     }
 
 
@@ -101,11 +98,11 @@ public class PDFExport implements Exporter {
     @NonNull
     private LinkedList<Cell> getCells(ReminderEvent reminderEvent, TextProperties textProperties, int[] columnWidths) {
         LinkedList<Cell> row = new LinkedList<>();
-        row.add(new TextCell(TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId), textProperties, columnWidths[0]));
+        row.add(new TextCell(TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp), textProperties, columnWidths[0]));
         row.add(new TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]));
         row.add(new TextCell(reminderEvent.amount, textProperties, columnWidths[2]));
         row.add(new TextCell(reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                TimeHelper.toLocalizedDatetimeString(reminderEvent.processedTimestamp, defaultZoneId) : "", textProperties, columnWidths[3]));
+                TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "", textProperties, columnWidths[3]));
         return row;
     }
 

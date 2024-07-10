@@ -20,7 +20,6 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class CSVExportUnitTest {
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
             // Create the CSVCreator object
-            CSVExport csvExport = new CSVExport(reminderEvents, context, ZoneId.of("Z"));
+            CSVExport csvExport = new CSVExport(reminderEvents, context);
 
             try {
                 // Call the create method
@@ -97,7 +96,7 @@ public class CSVExportUnitTest {
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
             // Create the CSVCreator object
-            CSVExport csvExport = new CSVExport(reminderEvents, context, ZoneId.of("Z"));
+            CSVExport csvExport = new CSVExport(reminderEvents, context);
 
             try {
                 // Call the create method
