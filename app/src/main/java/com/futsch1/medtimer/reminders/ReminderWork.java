@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
@@ -51,11 +52,12 @@ public class ReminderWork extends Worker {
 
         if (reminder != null) {
             int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
+            LocalDate reminderDate = LocalDate.ofEpochDay(inputData.getLong(EXTRA_REMINDER_DATE, LocalDate.now().toEpochDay()));
             Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-            ReminderEvent reminderEvent = reminderEventId == 0 ? buildAndInsertReminderEvent(medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
+            ReminderEvent reminderEvent = reminderEventId == 0 ? buildAndInsertReminderEvent(reminderDate, medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
 
             if (reminderEvent != null && medicine != null) {
-                showNotification(medicine, reminderEvent, reminder);
+                showNotification(medicine, reminderEvent, reminder, reminderDate);
 
                 Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
                 r = Result.success();
@@ -77,15 +79,15 @@ public class ReminderWork extends Worker {
         return reminder;
     }
 
-    private ReminderEvent buildAndInsertReminderEvent(Medicine medicine, Reminder reminder) {
-        ReminderEvent reminderEvent = buildReminderEvent(medicine, reminder);
+    private ReminderEvent buildAndInsertReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
+        ReminderEvent reminderEvent = buildReminderEvent(remindedDate, medicine, reminder);
         if (reminderEvent != null) {
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
         }
         return reminderEvent;
     }
 
-    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
+    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDate reminderDate) {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
@@ -96,17 +98,18 @@ public class ReminderWork extends Worker {
                             reminder.instructions,
                             reminder.reminderId,
                             reminderEvent.reminderEventId,
+                            reminderDate,
                             color,
                             medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }
 
-    public static ReminderEvent buildReminderEvent(Medicine medicine, Reminder reminder) {
+    public static ReminderEvent buildReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
         if (medicine != null && reminder != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.remindedTimestamp = LocalDateTime.of(LocalDate.now(), LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
+            reminderEvent.remindedTimestamp = LocalDateTime.of(remindedDate, LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
                     .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder);

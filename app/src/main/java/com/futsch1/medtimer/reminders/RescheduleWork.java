@@ -81,7 +81,7 @@ public class RescheduleWork extends Worker {
         timestamp = weekendMode.adjustInstant(timestamp);
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
-            PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId);
+            PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId, timestamp.atZone(ZoneId.systemDefault()).toLocalDate());
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
@@ -103,8 +103,8 @@ public class RescheduleWork extends Worker {
         }
     }
 
-    public static PendingIntent getPendingIntent(Context context, int reminderId, int requestCode, int reminderEventId) {
-        Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId);
+    public static PendingIntent getPendingIntent(Context context, int reminderId, int requestCode, int reminderEventId, LocalDate reminderDate) {
+        Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId, reminderDate);
         return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

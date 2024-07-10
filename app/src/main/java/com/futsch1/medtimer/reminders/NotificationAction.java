@@ -43,6 +43,6 @@ public class NotificationAction {
     }
 
     private static void cancelSnoozeAlarm(Context context, int reminderEventId, ReminderEvent reminderEvent) {
-        context.getSystemService(AlarmManager.class).cancel(RescheduleWork.getPendingIntent(context, reminderEvent.reminderId, reminderEvent.notificationId, reminderEventId));
+        context.getSystemService(AlarmManager.class).cancel(RescheduleWork.getPendingIntent(context, reminderEvent.reminderId, reminderEvent.notificationId, reminderEventId, null));
     }
 }

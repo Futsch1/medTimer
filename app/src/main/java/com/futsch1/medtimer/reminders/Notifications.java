@@ -17,6 +17,8 @@ import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
 
+import java.time.LocalDate;
+
 public class Notifications {
     private final Context context;
     private final SharedPreferences sharedPreferences;
@@ -28,8 +30,8 @@ public class Notifications {
 
     @SuppressWarnings("java:S107")
     public int showNotification(String remindTime, String medicineName, String amount,
-                                String instructions, int reminderId, int reminderEventId, Color color,
-                                ReminderNotificationChannelManager.Importance importance) {
+                                String instructions, int reminderId, int reminderEventId, LocalDate reminderDate,
+                                Color color, ReminderNotificationChannelManager.Importance importance) {
         int notificationId = getNextNotificationId();
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
@@ -50,7 +52,7 @@ public class Notifications {
             builder = builder.setColor(color.toArgb()).setColorized(true);
         }
 
-        buildActions(builder, notificationId, reminderEventId, reminderId);
+        buildActions(builder, notificationId, reminderEventId, reminderId, reminderDate);
 
         notificationManager.notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
@@ -83,7 +85,7 @@ public class Notifications {
         return context.getString(R.string.notification_content, remindTime, amount, medicineName, instructions);
     }
 
-    private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, int reminderId) {
+    private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, int reminderId, LocalDate reminderDate) {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String dismissNotificationAction = defaultSharedPreferences.getString("dismiss_notification_action", "0");
         int snoozeTime = Integer.parseInt(defaultSharedPreferences.getString("snooze_duration", "15"));
