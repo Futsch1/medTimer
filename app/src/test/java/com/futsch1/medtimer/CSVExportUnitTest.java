@@ -4,10 +4,12 @@ package com.futsch1.medtimer;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.exporters.CSVExport;
@@ -15,6 +17,7 @@ import com.futsch1.medtimer.exporters.Exporter;
 
 import org.junit.Test;
 import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.io.File;
@@ -22,9 +25,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class CSVExportUnitTest {
-
 
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
@@ -56,8 +60,17 @@ public class CSVExportUnitTest {
 
         // Create a mock File
         File file = mock(File.class);
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        java.text.DateFormat usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US);
+        java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
+        usTimeFormat.setTimeZone(utc);
+        usDateFormat.setTimeZone(utc);
 
-        try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
+        try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class);
+             MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
+            dateAccessMockedStatic.when(() -> DateFormat.getDateFormat(context)).thenReturn(usDateFormat);
+            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(context)).thenReturn(usTimeFormat);
+
             // Create the CSVCreator object
             CSVExport csvExport = new CSVExport(reminderEvents, context);
 
