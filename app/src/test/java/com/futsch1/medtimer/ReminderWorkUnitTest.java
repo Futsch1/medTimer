@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
+import android.text.format.DateFormat;
 
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
@@ -141,10 +142,12 @@ public class ReminderWorkUnitTest {
 
              });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
-             MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class)) {
+             MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
+             MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
+            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
 
             // Expected to pass
             ListenableWorker.Result result = reminderWork.doWork();
