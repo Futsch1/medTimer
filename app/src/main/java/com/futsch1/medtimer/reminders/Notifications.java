@@ -28,8 +28,8 @@ public class Notifications {
 
     @SuppressWarnings("java:S107")
     public int showNotification(String remindTime, String medicineName, String amount,
-                                String instructions, int reminderId, int reminderEventId, Color color,
-                                ReminderNotificationChannelManager.Importance importance) {
+                                String instructions, int reminderId, int reminderEventId,
+                                Color color, ReminderNotificationChannelManager.Importance importance) {
         int notificationId = getNextNotificationId();
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 

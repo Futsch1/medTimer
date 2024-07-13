@@ -66,7 +66,8 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
     private void processFutureReminder(ScheduledReminder scheduledReminder, boolean taken, Looper looper, MedicineViewModel medicineViewModel) {
         Handler handler = new Handler(looper);
         handler.post(() -> {
-            ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(scheduledReminder.medicine(), scheduledReminder.reminder());
+            ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(scheduledReminder.timestamp().atZone(ZoneId.systemDefault()).toLocalDate(),
+                    scheduledReminder.medicine(), scheduledReminder.reminder());
             if (reminderEvent != null) {
                 reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
                 reminderEvent.processedTimestamp = Instant.now().getEpochSecond();

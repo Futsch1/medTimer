@@ -332,4 +332,28 @@ public class ReminderSchedulerUnitTest {
         assertReminded(scheduledReminders, on(8, 480), medicineWithReminders.medicine, reminder);
     }
 
+
+    @Test
+    public void test_reminderOverMidnight() {
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
+
+        ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
+
+        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60 + 45, 1);
+        medicineWithReminders.reminders.add(reminder);
+
+        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        ReminderEvent reminderEvent = TestHelper.buildReminderEvent(1, on(1, 23 * 60 + 46).getEpochSecond());
+        reminderEvent.processedTimestamp = on(2, 1).getEpochSecond();
+        reminderEventList.add(reminderEvent);
+
+        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        assertReminded(scheduledReminders, on(2, 23 * 60 + 45), medicineWithReminders.medicine, reminder);
+    }
 }

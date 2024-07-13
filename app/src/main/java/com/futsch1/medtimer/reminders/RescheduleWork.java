@@ -81,7 +81,11 @@ public class RescheduleWork extends Worker {
         timestamp = weekendMode.adjustInstant(timestamp);
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
-            PendingIntent pendingIntent = getPendingIntent(context, reminderId, requestCode, reminderEventId);
+            PendingIntent pendingIntent = new PendingIntentBuilder(context).
+                    setReminderId(reminderId).
+                    setRequestCode(requestCode).
+                    setReminderEventId(reminderEventId).
+                    setReminderDate(timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).build();
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
@@ -103,15 +107,47 @@ public class RescheduleWork extends Worker {
         }
     }
 
-    public static PendingIntent getPendingIntent(Context context, int reminderId, int requestCode, int reminderEventId) {
-        Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId);
-        return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean exactReminders = sharedPref.getBoolean(PreferencesFragment.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
+    }
+
+    public static class PendingIntentBuilder {
+        private final Context context;
+        private int reminderId;
+        private int requestCode;
+        private int reminderEventId;
+        private LocalDate reminderDate = null;
+
+        public PendingIntentBuilder(Context context) {
+            this.context = context;
+        }
+
+        public PendingIntentBuilder setReminderId(int reminderId) {
+            this.reminderId = reminderId;
+            return this;
+        }
+
+        public PendingIntentBuilder setRequestCode(int requestCode) {
+            this.requestCode = requestCode;
+            return this;
+        }
+
+        public PendingIntentBuilder setReminderEventId(int reminderEventId) {
+            this.reminderEventId = reminderEventId;
+            return this;
+        }
+
+        public PendingIntentBuilder setReminderDate(LocalDate reminderDate) {
+            this.reminderDate = reminderDate;
+            return this;
+        }
+
+        public PendingIntent build() {
+            Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId, reminderDate);
+            return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        }
     }
 }
