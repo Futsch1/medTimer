@@ -194,10 +194,12 @@ public class ReminderWorkUnitTest {
 
              });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
-             MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class)) {
+             MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
+             MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
+            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
 
             Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, 0).
                     putLong(EXTRA_REMINDER_DATE, 1).build();
