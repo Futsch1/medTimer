@@ -33,9 +33,6 @@ public class Notifications {
         int notificationId = getNextNotificationId();
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
-        Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
-        PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
         String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
@@ -44,8 +41,7 @@ public class Notifications {
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(contentIntent)
-                .addAction(R.drawable.check2_circle, context.getString(R.string.notification_taken), pendingTaken);
+                .setContentIntent(contentIntent);
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
         }
@@ -94,12 +90,21 @@ public class Notifications {
         Intent notifyDismissed = ReminderProcessor.getDismissedActionIntent(context, reminderEventId);
         PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, notificationId, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
+        PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
         if (dismissNotificationAction.equals("0")) {
+            builder.addAction(R.drawable.check2_circle, context.getString(R.string.notification_taken), pendingTaken);
             builder.addAction(R.drawable.hourglass_split, context.getString(R.string.notification_snooze), pendingSnooze);
             builder.setDeleteIntent(pendingDismissed);
-        } else {
+        } else if (dismissNotificationAction.equals("1")) {
+            builder.addAction(R.drawable.check2_circle, context.getString(R.string.notification_taken), pendingTaken);
             builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skipped), pendingDismissed);
             builder.setDeleteIntent(pendingSnooze);
+        } else {
+            builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skipped), pendingDismissed);
+            builder.addAction(R.drawable.hourglass_split, context.getString(R.string.notification_snooze), pendingSnooze);
+            builder.setDeleteIntent(pendingTaken);
         }
     }
 
