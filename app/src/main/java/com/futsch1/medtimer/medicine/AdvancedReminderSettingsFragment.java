@@ -175,7 +175,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void setCycleStartDate(long daysSinceEpoch) {
-        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
+        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(editCycleStartDate.getContext(),
+                daysSinceEpoch));
     }
 
     @Override

@@ -29,7 +29,6 @@ import com.futsch1.medtimer.reminders.ReminderProcessor;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.TimeZone;
 
 public class OptionsMenu implements MenuProvider {
     private final Context context;
@@ -122,12 +121,12 @@ public class OptionsMenu implements MenuProvider {
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context, TimeZone.getDefault().toZoneId())));
+            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context)));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context, TimeZone.getDefault().toZoneId())));
+            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context)));
             return true;
         });
     }

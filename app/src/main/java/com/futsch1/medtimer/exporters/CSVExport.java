@@ -9,18 +9,15 @@ import com.futsch1.medtimer.helpers.TimeHelper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZoneId;
 import java.util.List;
 
 public class CSVExport implements Exporter {
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
-    private final ZoneId defaultZoneId;
 
-    public CSVExport(List<ReminderEvent> reminderEvents, Context context, ZoneId zoneId) {
+    public CSVExport(List<ReminderEvent> reminderEvents, Context context) {
         this.reminderEvents = reminderEvents;
         this.context = context;
-        this.defaultZoneId = zoneId;
     }
 
     public void export(File file) throws ExporterException {
@@ -30,11 +27,11 @@ public class CSVExport implements Exporter {
 
             for (ReminderEvent reminderEvent : reminderEvents) {
                 String line = String.format("%s;%s;%s;%s\n",
-                        TimeHelper.toLocalizedDatetimeString(reminderEvent.remindedTimestamp, defaultZoneId),
+                        TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.toLocalizedDatetimeString(reminderEvent.processedTimestamp, defaultZoneId) : "");
+                                TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "");
                 csvFile.write(line);
             }
         } catch (IOException e) {

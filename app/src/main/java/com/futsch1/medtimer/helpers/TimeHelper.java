@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.helpers;
 
+import android.content.Context;
 import android.text.format.DateFormat;
 
 import androidx.fragment.app.FragmentActivity;
@@ -9,36 +10,47 @@ import com.google.android.material.timepicker.TimeFormat;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
+import java.util.Date;
 
 public class TimeHelper {
+
+    private static final ZoneOffset EPOCH_OFFSET = ZoneId.systemDefault().getRules().getOffset(Instant.ofEpochSecond(0));
 
     private TimeHelper() {
         // Intentionally empty
     }
 
-    public static String minutesToTimeString(long minutes) {
-        return DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    public static String minutesToTimeString(Context context, long minutes) {
+        Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+        return DateFormat.getTimeFormat(context).format(date);
     }
 
-    public static int timeStringToMinutes(String timeString) {
+    private static Date localTimeToDate(LocalTime localTime) {
+        return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
+    }
+
+    public static int timeStringToMinutes(Context context, String timeString) {
         try {
-            return LocalTime.parse(timeString, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)).toSecondOfDay() / 60;
-        } catch (DateTimeParseException e) {
+            Date date = DateFormat.getTimeFormat(context).parse(timeString);
+            return date != null ? date.toInstant().atOffset(EPOCH_OFFSET).toLocalTime().toSecondOfDay() / 60 : -1;
+        } catch (ParseException e) {
             return -1;
         }
     }
 
-    public static String daysSinceEpochToDateString(long daysSinceEpoch) {
-        return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(LocalDate.ofEpochDay(daysSinceEpoch));
+    public static String daysSinceEpochToDateString(Context context, long daysSinceEpoch) {
+        Date date = new Date(daysSinceEpoch * 24 * 60 * 60 * 1000);
+        return DateFormat.getDateFormat(context).format(date);
     }
 
     public static @Nullable LocalDate dateStringToDate(String date) {
@@ -61,25 +73,16 @@ public class TimeHelper {
         return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
     }
 
-    public static String toLocalizedDatetimeString(long timeStamp, ZoneId zoneId) {
-        return toLocalizedDateString(timeStamp, zoneId) + " " + toLocalizedTimeString(timeStamp, zoneId);
+    public static String toLocalizedDatetimeString(Context context, long timeStamp) {
+        return toLocalizedDateString(context, timeStamp) + " " + toLocalizedTimeString(context, timeStamp);
     }
 
-    public static String toLocalizedDateString(long timeStamp, ZoneId zoneId) {
-        ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
-
-        return zonedDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+    public static String toLocalizedDateString(Context context, long timeStamp) {
+        return DateFormat.getDateFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
-    public static String toLocalizedTimeString(long timeStamp, ZoneId zoneId) {
-        ZonedDateTime zonedDateTime = getZonedDateTime(timeStamp, zoneId);
-
-        return zonedDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
-    }
-
-    private static ZonedDateTime getZonedDateTime(long timeStamp, ZoneId zoneId) {
-        Instant remindedTime = Instant.ofEpochSecond(timeStamp);
-        return remindedTime.atZone(zoneId);
+    public static String toLocalizedTimeString(Context context, long timeStamp) {
+        return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
     public interface TimePickerResult {

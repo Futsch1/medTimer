@@ -101,7 +101,10 @@ class CalendarEventsViewModel(
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): String {
-        return TimeHelper.minutesToTimeString(scheduledReminder.reminder.timeInMinutes.toLong()) +
+        return TimeHelper.minutesToTimeString(
+            getApplication<Application>().applicationContext,
+            scheduledReminder.reminder.timeInMinutes.toLong()
+        ) +
                 ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
     }
 
@@ -117,8 +120,8 @@ class CalendarEventsViewModel(
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): String {
         var eventString = TimeHelper.toLocalizedTimeString(
-            reminderEvent.processedTimestamp,
-            ZoneId.systemDefault()
+            getApplication<Application>().applicationContext,
+            reminderEvent.processedTimestamp
         ) + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
         if (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED) {
             eventString += " (" + getApplication<Application>().getString(R.string.skipped) + ")"

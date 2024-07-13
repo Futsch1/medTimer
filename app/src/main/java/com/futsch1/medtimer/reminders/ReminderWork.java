@@ -92,7 +92,7 @@ public class ReminderWork extends Worker {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
             reminderEvent.notificationId =
-                    notifications.showNotification(minutesToTimeString(reminder.timeInMinutes),
+                    notifications.showNotification(minutesToTimeString(context, reminder.timeInMinutes),
                             reminderEvent.medicineName,
                             reminder.amount,
                             reminder.instructions,

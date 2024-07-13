@@ -20,8 +20,6 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
-import java.time.ZoneId;
-
 public class EditEventFragment extends Fragment {
 
     private final HandlerThread backgroundThread;
@@ -54,7 +52,8 @@ public class EditEventFragment extends Fragment {
         editEventAmount.setText(editEventArgs.getEventAmount());
 
         editEventRemindedTimestamp = editEventView.findViewById(R.id.editEventRemindedTimestamp);
-        editEventRemindedTimestamp.setText(TimeHelper.toLocalizedTimeString(editEventArgs.getEventRemindedTimestamp(), ZoneId.systemDefault()));
+        editEventRemindedTimestamp.setText(TimeHelper.toLocalizedTimeString(editEventRemindedTimestamp.getContext(),
+                editEventArgs.getEventRemindedTimestamp()));
         editEventRemindedTimestamp.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(hasFocus));
 
         return editEventView;
@@ -62,12 +61,13 @@ public class EditEventFragment extends Fragment {
 
     private void onFocusEditTime(boolean hasFocus) {
         if (hasFocus) {
-            int startMinutes = timeStringToMinutes(editEventRemindedTimestamp.getText().toString());
+            int startMinutes = timeStringToMinutes(editEventRemindedTimestamp.getContext(),
+                    editEventRemindedTimestamp.getText().toString());
             if (startMinutes < 0) {
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(requireActivity()).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = minutesToTimeString(minutes);
+                String selectedTime = minutesToTimeString(requireContext(), minutes);
                 editEventRemindedTimestamp.setText(selectedTime);
             });
         }
@@ -84,7 +84,8 @@ public class EditEventFragment extends Fragment {
                 ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
                 reminderEvent.medicineName = editEventName.getText().toString();
                 reminderEvent.amount = editEventAmount.getText().toString();
-                reminderEvent.remindedTimestamp = changeTimeStampMinutes(reminderEvent.remindedTimestamp, timeStringToMinutes(editEventRemindedTimestamp.getText().toString()));
+                reminderEvent.remindedTimestamp = changeTimeStampMinutes(reminderEvent.remindedTimestamp,
+                        timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
 
                 medicineRepository.updateReminderEvent(reminderEvent);
             });

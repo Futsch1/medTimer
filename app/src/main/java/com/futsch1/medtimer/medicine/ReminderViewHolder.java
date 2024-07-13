@@ -58,7 +58,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     public void bind(Reminder reminder, String medicineName, DeleteCallback deleteCallback) {
         this.reminder = reminder;
 
-        editTime.setText(minutesToTimeString(reminder.timeInMinutes));
+        editTime.setText(minutesToTimeString(editTime.getContext(), reminder.timeInMinutes));
         editTime.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(reminder, hasFocus));
 
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
@@ -71,12 +71,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
         if (hasFocus) {
-            int startMinutes = timeStringToMinutes(editTime.getText().toString());
+            int startMinutes = timeStringToMinutes(editTime.getContext(), editTime.getText().toString());
             if (startMinutes < 0) {
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(fragmentActivity).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = minutesToTimeString(minutes);
+                String selectedTime = minutesToTimeString(editTime.getContext(), minutes);
                 editTime.setText(selectedTime);
                 reminder.timeInMinutes = minutes;
             });
@@ -128,7 +128,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                     ", " +
                     firstToLower(holderItemView.getContext().getString(R.string.cycle_start_date)) +
                     " " +
-                    TimeHelper.daysSinceEpochToDateString(reminder.cycleStartDay);
+                    TimeHelper.daysSinceEpochToDateString(editTime.getContext(), reminder.cycleStartDay);
             strings.add(builder);
         }
         if (!weekdayLimited && !cyclic) {
@@ -147,7 +147,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();
-        int minutes = timeStringToMinutes(editTime.getText().toString());
+        int minutes = timeStringToMinutes(editTime.getContext(), editTime.getText().toString());
         if (minutes >= 0) {
             reminder.timeInMinutes = minutes;
         }
