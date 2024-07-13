@@ -43,6 +43,7 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -51,6 +52,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = 34)
 public class ReminderWorkUnitTest {
 
     private final int REMINDER_ID = 11;
