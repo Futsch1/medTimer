@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.statistics
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -115,18 +116,42 @@ class CalendarEventsViewModel(
                 it.medicineName
             ))
         }
-            .map { reminderEventToString(it) }
+            .map { reminderEventToString(it, day) }
     }
 
-    private fun reminderEventToString(reminderEvent: ReminderEvent): String {
-        var eventString = TimeHelper.toLocalizedTimeString(
-            getApplication<Application>().applicationContext,
-            reminderEvent.processedTimestamp
-        ) + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
+    private fun reminderEventToString(reminderEvent: ReminderEvent, day: LocalDate): String {
+        val timeString = getTimeString(reminderEvent, day)
+        var eventString =
+            timeString + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
         if (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED) {
             eventString += " (" + getApplication<Application>().getString(R.string.skipped) + ")"
         }
+        if (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED) {
+            eventString += " (?)"
+        }
         return eventString
+    }
+
+    private fun getTimeString(
+        reminderEvent: ReminderEvent,
+        day: LocalDate
+    ): String {
+        val timeStamp =
+            if (reminderEvent.processedTimestamp != 0L) reminderEvent.processedTimestamp else reminderEvent.remindedTimestamp
+        val timeFunc: (Context, Long) -> String =
+            if (isSameDay(timeStamp, day)) {
+                TimeHelper::toLocalizedTimeString
+            } else {
+                TimeHelper::toLocalizedDatetimeString
+            }
+        return timeFunc(
+            getApplication<Application>().applicationContext,
+            timeStamp
+        )
+    }
+
+    private fun isSameDay(secondsSinceEpoch: Long, day: LocalDate): Boolean {
+        return secondsSinceEpochToLocalDate(secondsSinceEpoch) == day
     }
 
     private fun secondsSinceEpochToLocalDate(secondsSinceEpoch: Long): LocalDate {

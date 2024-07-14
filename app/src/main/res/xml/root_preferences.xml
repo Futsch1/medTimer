@@ -13,7 +13,7 @@
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/dismiss_notification_action"
-        android:entryValues="@array/values_0_and_1"
+        android:entryValues="@array/values_0_to_2"
         android:key="dismiss_notification_action"
         android:title="@string/dismiss_notification_action"
         app:useSimpleSummaryProvider="true" />
