@@ -70,40 +70,63 @@ android {
 }
 
 dependencies {
-    val roomVersion = "2.6.1"
+    val appcompatVersion = "1.7.0"
+    val materialVersion = "1.12.0"
+    val constraintLayoutVersion = "2.1.4"
     val androidXNavigationVersion = "2.7.7"
+    val preferenceKtxVersion = "1.2.1"
+    val lifecycleExtensionsVersion = "2.2.0"
+    val workRuntimeVersion = "2.9.0"
+    val coreKtxVersion = "1.13.1"
+    val lifecycleViewmodelKtxVersion = "2.8.3"
+    val roomVersion = "2.6.1"
+    val colorPickerViewVersion = "2.3.0"
     val preferenceXVersion = "1.1.0"
+    val simplyPDFVersion = "2.1.1"
+    val gsonVersion = "2.11.0"
+    val tableViewVersion = "0.8.9.4"
+    val androidPlotVersion = "1.5.10"
+    val appIntroVersion = "6.3.1"
+    val calendarVersion = "2.5.2"
 
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    val junitVersion = "4.13.2"
+    val mockitoCoreVersion = "5.12.0"
+    val mockitoInlineVersion = "5.2.0"
+    val robolectricVersion = "4.13"
+
+    val androidTestJunitVersion = "1.2.1"
+    val androidTestEspressoVersion = "3.6.1"
+    val androidTestRulesVersion = "1.6.1"
+
+    implementation("androidx.appcompat:appcompat:$appcompatVersion")
+    implementation("com.google.android.material:material:$materialVersion")
+    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$androidXNavigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$androidXNavigationVersion")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.work:work-runtime:2.9.0")
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.preference:preference-ktx:$preferenceKtxVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion")
+    implementation("androidx.work:work-runtime:$workRuntimeVersion")
+    implementation("androidx.core:core-ktx:$coreKtxVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleViewmodelKtxVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.tracing:tracing:1.2.0")
-    implementation("com.github.skydoves:colorpickerview:2.3.0")
+    implementation("com.github.skydoves:colorpickerview:$colorPickerViewVersion")
     implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
-    implementation("com.github.wwdablu:SimplyPDF:2.1.1")
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
-    implementation("com.androidplot:androidplot-core:1.5.10")
-    implementation("com.github.AppIntro:AppIntro:6.3.1")
-    implementation("com.kizitonwose.calendar:view:2.5.2")
+    implementation("com.github.wwdablu:SimplyPDF:$simplyPDFVersion")
+    implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation("com.github.evrencoskun:TableView:v$tableViewVersion")
+    implementation("com.androidplot:androidplot-core:$androidPlotVersion")
+    implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
+    implementation("com.kizitonwose.calendar:view:$calendarVersion")
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.12.0")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation("junit:junit:$junitVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
+    testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
+    testImplementation("org.robolectric:robolectric:$robolectricVersion")
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
-    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:$androidTestEspressoVersion")
+    androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 }
