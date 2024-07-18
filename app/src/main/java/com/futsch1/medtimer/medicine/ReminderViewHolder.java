@@ -104,7 +104,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
         popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
         popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
-            deleteCallback.deleteItem(editTime.getContext(), getItemId(), getAdapterPosition());
+            deleteCallback.deleteItem(editTime.getContext(), getItemId(), getBindingAdapterPosition());
             return true;
         });
         popupMenu.show();

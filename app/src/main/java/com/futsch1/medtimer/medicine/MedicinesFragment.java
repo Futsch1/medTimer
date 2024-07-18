@@ -65,7 +65,7 @@ public class MedicinesFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    deleteItem(fragmentView.getContext(), viewHolder.getItemId(), viewHolder.getAdapterPosition());
+                    deleteItem(fragmentView.getContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition());
                 }
             }
         };
