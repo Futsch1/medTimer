@@ -68,7 +68,6 @@ public class ReminderSchedulerDaysUnitTest {
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();
-        //reminderEventList.add(buildReminderEvent(1, on(2, 480).getEpochSecond()));
 
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         // Expect it to be on the 26.1.1970
