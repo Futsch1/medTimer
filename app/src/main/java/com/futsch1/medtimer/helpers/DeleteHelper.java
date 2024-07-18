@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 
-public class DeleteHelper<VH extends RecyclerView.ViewHolder> {
+public class DeleteHelper<V extends RecyclerView.ViewHolder> {
     private final Context context;
     private final HandlerThread thread;
-    private final RecyclerView.Adapter<VH> adapter;
+    private final RecyclerView.Adapter<V> adapter;
 
-    public DeleteHelper(Context context, HandlerThread thread, RecyclerView.Adapter<VH> adapter) {
+    public DeleteHelper(Context context, HandlerThread thread, RecyclerView.Adapter<V> adapter) {
         this.context = context;
         this.thread = thread;
         this.adapter = adapter;

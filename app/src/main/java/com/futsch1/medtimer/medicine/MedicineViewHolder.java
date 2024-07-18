@@ -61,7 +61,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 return true;
             });
             popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
-                deleteCallback.deleteItem(holderItemView.getContext(), getItemId(), getAdapterPosition());
+                deleteCallback.deleteItem(holderItemView.getContext(), getItemId(), getBindingAdapterPosition());
                 return true;
             });
             popupMenu.show();

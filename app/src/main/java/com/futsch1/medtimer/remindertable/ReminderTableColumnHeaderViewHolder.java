@@ -38,12 +38,12 @@ public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolde
         // Default one
         View.OnClickListener mSortButtonClickListener = view -> {
             if (getSortState() == SortState.ASCENDING) {
-                tableView.sortColumn(getAdapterPosition(), SortState.UNSORTED);
+                tableView.sortColumn(getBindingAdapterPosition(), SortState.UNSORTED);
             } else if (getSortState() == SortState.DESCENDING) {
-                tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
+                tableView.sortColumn(getBindingAdapterPosition(), SortState.ASCENDING);
             } else if (getSortState() == SortState.UNSORTED) {
                 // Default one
-                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
+                tableView.sortColumn(getBindingAdapterPosition(), SortState.DESCENDING);
             }
         };
         columnHeaderSortButton.setOnClickListener(mSortButtonClickListener);

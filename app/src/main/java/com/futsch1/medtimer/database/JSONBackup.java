@@ -41,7 +41,7 @@ public abstract class JSONBackup<T> {
             content = gson.fromJson(jsonFile, type);
             return checkBackup(content.list);
         } catch (JsonParseException e) {
-            Log.e("JSONBackup", e.getMessage());
+            Log.e("JSONBackup", e.getMessage() != null ? e.getMessage() : "");
             return null;
         }
     }

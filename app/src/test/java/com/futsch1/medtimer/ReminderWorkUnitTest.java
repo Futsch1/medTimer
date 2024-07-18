@@ -55,10 +55,10 @@ import java.time.ZoneId;
 @Config(sdk = 34)
 public class ReminderWorkUnitTest {
 
-    private final int REMINDER_ID = 11;
-    private final int REMINDER_EVENT_ID = 12;
-    private final int MEDICINE_ID = 1;
-    private final int NOTIFICATION_ID = 14;
+    private final int reminderId = 11;
+    private final int reminderEventId = 12;
+    private final int medicineId = 1;
+    private final int notificationId = 14;
     private ReminderWork reminderWork;
     @Mock
     private Application mockApplication;
@@ -70,7 +70,7 @@ public class ReminderWorkUnitTest {
     public void setUp() {
         workerParams = mock(WorkerParameters.class);
 
-        Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID).
+        Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId).
                 putLong(EXTRA_REMINDER_DATE, 1).build();
         when(workerParams.getInputData()).thenReturn(inputData);
 
@@ -83,7 +83,7 @@ public class ReminderWorkUnitTest {
         when(mockSharedPreferences.getString(anyString(), anyString())).thenReturn("1");
         int NOTIFICATION_CHANNEL_ID = 13;
         when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(NOTIFICATION_CHANNEL_ID);
-        when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(NOTIFICATION_ID);
+        when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(notificationId);
         SharedPreferences.Editor mockEditor = mock(SharedPreferences.Editor.class);
         when(mockSharedPreferences.edit()).thenReturn(mockEditor);
         when(mockEditor.putInt(anyString(), anyInt())).thenReturn(mockEditor);
@@ -108,8 +108,8 @@ public class ReminderWorkUnitTest {
         }
         // Medicine is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
-            when(mock.getMedicine(MEDICINE_ID)).thenReturn(null);
+            when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
+            when(mock.getMedicine(medicineId)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
@@ -119,9 +119,9 @@ public class ReminderWorkUnitTest {
         }
         // Reminder event is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
-            when(mock.getMedicine(MEDICINE_ID)).thenReturn(new Medicine("Test"));
-            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(null);
+            when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
+            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("Test"));
+            when(mock.getReminderEvent(reminderEventId)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
@@ -134,12 +134,12 @@ public class ReminderWorkUnitTest {
     @Test
     public void testDoWorkNotifications() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminder(REMINDER_ID)).thenReturn(new Reminder(MEDICINE_ID));
-            when(mock.getMedicine(MEDICINE_ID)).thenReturn(new Medicine("TestMedicine"));
+            when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
+            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("TestMedicine"));
             ReminderEvent reminderEvent = new ReminderEvent();
-            reminderEvent.reminderId = REMINDER_ID;
-            reminderEvent.reminderEventId = REMINDER_EVENT_ID;
-            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
+            reminderEvent.reminderId = reminderId;
+            reminderEvent.reminderEventId = reminderEventId;
+            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
@@ -168,21 +168,21 @@ public class ReminderWorkUnitTest {
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
             ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
-            assertEquals(NOTIFICATION_ID, captor.getValue().notificationId);
-            assertEquals(REMINDER_ID, captor.getValue().reminderId);
-            assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
-            verify(mockNotificationManager, times(1)).notify(eq(NOTIFICATION_ID), any());
+            assertEquals(notificationId, captor.getValue().notificationId);
+            assertEquals(reminderId, captor.getValue().reminderId);
+            assertEquals(reminderEventId, captor.getValue().reminderEventId);
+            verify(mockNotificationManager, times(1)).notify(eq(notificationId), any());
         }
     }
 
     @Test
     public void testDoWorkNewReminder() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            Reminder reminder = new Reminder(MEDICINE_ID);
-            reminder.reminderId = REMINDER_ID;
-            when(mock.getReminder(REMINDER_ID)).thenReturn(reminder);
-            when(mock.getMedicine(MEDICINE_ID)).thenReturn(new Medicine("TestMedicine"));
-            when(mock.insertReminderEvent(any())).thenReturn((long) REMINDER_EVENT_ID);
+            Reminder reminder = new Reminder(medicineId);
+            reminder.reminderId = reminderId;
+            when(mock.getReminder(reminderId)).thenReturn(reminder);
+            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("TestMedicine"));
+            when(mock.insertReminderEvent(any())).thenReturn((long) reminderEventId);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
@@ -203,7 +203,7 @@ public class ReminderWorkUnitTest {
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
 
-            Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, 0).
+            Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).putInt(EXTRA_REMINDER_EVENT_ID, 0).
                     putLong(EXTRA_REMINDER_DATE, 1).build();
             when(workerParams.getInputData()).thenReturn(inputData);
 
@@ -215,12 +215,12 @@ public class ReminderWorkUnitTest {
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
             ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
-            assertEquals(NOTIFICATION_ID, captor.getValue().notificationId);
-            assertEquals(REMINDER_ID, captor.getValue().reminderId);
-            assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
+            assertEquals(notificationId, captor.getValue().notificationId);
+            assertEquals(reminderId, captor.getValue().reminderId);
+            assertEquals(reminderEventId, captor.getValue().reminderEventId);
             assertEquals(LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60))
                     .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now())), captor.getValue().remindedTimestamp);
-            verify(mockNotificationManager, times(1)).notify(eq(NOTIFICATION_ID), any());
+            verify(mockNotificationManager, times(1)).notify(eq(notificationId), any());
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(any());
         }
     }
