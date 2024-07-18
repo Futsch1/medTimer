@@ -26,6 +26,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
@@ -142,7 +143,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String firstToLower(String string) {
-        return string.substring(0, 1).toLowerCase() + string.substring(1);
+        return string.substring(0, 1).toLowerCase(Locale.getDefault()) + string.substring(1);
     }
 
     public Reminder getReminder() {

@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
     private final Filter filter = new ReminderEventFilter();
@@ -70,7 +71,7 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<ReminderEvent> filteredList = new ArrayList<>();
-            String filterPattern = constraint.toString().toLowerCase().trim();
+            String filterPattern = constraint.toString().toLowerCase(Locale.getDefault()).trim();
             boolean showOnlyOpen = filterPattern.contains("o");
             for (ReminderEvent item : data) {
                 if ((!showOnlyOpen || item.status == ReminderEvent.ReminderStatus.RAISED)) {
