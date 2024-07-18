@@ -104,8 +104,8 @@ public class EditMedicineFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
 
         if (editMedicineName != null && enableColor != null) {
             String word = editMedicineName.getText().toString();
@@ -117,7 +117,11 @@ public class EditMedicineFragment extends Fragment {
         }
 
         updateReminders();
-
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         thread.quitSafely();
     }
 
