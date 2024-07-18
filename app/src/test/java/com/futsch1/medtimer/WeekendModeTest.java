@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = 34)
 public class WeekendModeTest {
     @Test
     public void test_adjustInstant_ReturnsSameInstant_WeekendModeDisabled() {

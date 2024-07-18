@@ -14,12 +14,12 @@ room {
 
 android {
     namespace = "com.futsch1.medtimer"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 60
         versionName = "1.8.13"
         setProperty("archivesBaseName", "MedTimer")

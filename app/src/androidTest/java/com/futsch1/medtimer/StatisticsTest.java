@@ -59,6 +59,8 @@ public class StatisticsTest {
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped)).perform(click());

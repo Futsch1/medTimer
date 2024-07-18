@@ -11,11 +11,13 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = 34)
 public class JSONReminderEventBackupUnitTest {
 
     // creates a backup object with a version number and a medicines array

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkPermissions();
         }
+
+        EdgeToEdge.enable(this);
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
