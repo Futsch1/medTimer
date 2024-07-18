@@ -4,6 +4,6 @@ medium-phone-arm:
   timeout: 180s
   device:
     - model: MediumPhone.arm
-      version: 35
+      version: 34
       locale: 'en'
       orientation: portrait
