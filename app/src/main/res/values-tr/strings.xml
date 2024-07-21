@@ -110,7 +110,10 @@
     <string name="fourteen_days">14 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="total">Toplam</string>
-    <string name="last_n_days">Son %1$d gün</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Son 24 saat</item>
+        <item quantity="other">Son %1$d gün</item>
+    </plurals>
     <string name="name">Ad</string>
     <string name="event_data">Etkinlik verisi</string>
     <string name="backup">Yedekle</string>

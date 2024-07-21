@@ -110,7 +110,10 @@
     <string name="fourteen_days">14 Tage</string>
     <string name="thirty_days">30 Tage</string>
     <string name="total">Gesamt</string>
-    <string name="last_n_days">Letzte %1$d Tage</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Letzte 24 Stunden</item>
+        <item quantity="other">Letzte %1$d Tage</item>
+    </plurals>
     <string name="name">Name</string>
     <string name="event_data">Ereignisdaten</string>
     <string name="backup">Backup</string>

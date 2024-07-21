@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">MedTimer</string>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -16,8 +16,9 @@
     <string name="confirm">Conferma</string>
     <string name="are_you_sure_delete_medicine">Vuoi eliminare il medicinale\?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
-    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one" tools:ignore="MissingQuantity">%1$d promemoria\n%2$s</item>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d promemoria\n%2$s</item>
+        <item quantity="many">%1$d promemoria\n%2$s</item>
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
     <string name="notification_title">Promemoria per i Medicinali</string>
@@ -110,7 +111,11 @@
     <string name="fourteen_days">14 giorni</string>
     <string name="thirty_days">30 giorni</string>
     <string name="total">Totale</string>
-    <string name="last_n_days">Ultimi %1$d giorni</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Ultime 24 ore</item>
+        <item quantity="many">Ultimi %1$d giorni</item>
+        <item quantity="other">Ultimi %1$d giorni</item>
+    </plurals>
     <string name="name">Nome</string>
     <string name="event_data">Dati Eventi</string>
     <string name="backup">Backup</string>

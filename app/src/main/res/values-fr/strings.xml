@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Minuterie médicale</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -111,7 +111,11 @@
     <string name="fourteen_days">14 jours</string>
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Dernier %1$d jours</string>
+    <plurals name="last_n_days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">Dernier 24 heures</item>
+        <item quantity="many">Dernier %1$d jours</item>
+        <item quantity="other">Dernier %1$d jours</item>
+    </plurals>
     <string name="name">Nom</string>
     <string name="event_data">Données sur les événements</string>
     <string name="backup">Sauvegarde</string>

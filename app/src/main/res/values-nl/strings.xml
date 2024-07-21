@@ -110,7 +110,10 @@
     <string name="fourteen_days">14 dagen</string>
     <string name="thirty_days">30 dagen</string>
     <string name="total">Totaal</string>
-    <string name="last_n_days">Laatste %1$d dagen</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Laatste 24 uur</item>
+        <item quantity="other">Laatste %1$d dagen</item>
+    </plurals>
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>

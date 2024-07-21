@@ -111,7 +111,10 @@
     <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 days</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Last %1$d days</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Last 24 hours</item>
+        <item quantity="other">Last %1$d days</item>
+    </plurals>
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>
