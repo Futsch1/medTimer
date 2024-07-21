@@ -48,14 +48,11 @@
     <string name="select_color">Seleccionar color</string>
     <string name="exact_reminders">Recordatorios exactos</string>
     <string name="change_color_toast">Notar que los cambios en el color sólo tienen efecto en futuros recordatorios</string>
-    <string name="permission_not_granted">Permiso no concedido</string>
     <string name="exact_reminders_summary">Los recordatorios se programan a la hora exacta (aumenta el uso de la batería)</string>
     <string name="enable_alarm_dialog">Para permitir programar recordatorios exactos, conceda el permiso a MedTimer en el siguiente menú</string>
     <string name="generate_test_data">Generar datos para test</string>
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
-    <string name="notification_tone_title">Sonido de notificación</string>
     <string name="cycle_consecutive_days">Días activos</string>
-    <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_">Estándar</string>
     <string name="alternative">Alternativo</string>

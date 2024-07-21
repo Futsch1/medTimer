@@ -48,14 +48,11 @@
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>
     <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo nei promemoria futuri.</string>
-    <string name="permission_not_granted">Autorizzazione non concessa</string>
     <string name="exact_reminders_summary">I promemoria sono programmati all\'ora esatta (aumenta il consumo della batteria)</string>
     <string name="enable_alarm_dialog">Per consentire la programmazione di allarmi precisi, abilita questo per MedTimer nel seguente menu</string>
     <string name="generate_test_data">Genera dati di prova</string>
     <string name="create_reminder_dosage_hint">Dosaggio per il nuovo promemoria</string>
-    <string name="notification_tone_title">Suono di notifica</string>
     <string name="cycle_consecutive_days">Giorni attivi</string>
-    <string name="days">giorni</string>
     <string name="theme">Tema</string>
     <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>

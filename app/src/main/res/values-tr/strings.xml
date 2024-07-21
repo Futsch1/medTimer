@@ -48,14 +48,11 @@
     <string name="select_color">Renk seç</string>
     <string name="exact_reminders">Kesin hatırlatıcılar</string>
     <string name="change_color_toast">Renk değişikliklerinin sadece gelecekteki hatırlatıcılarda geçerli olacağını unutmayın</string>
-    <string name="permission_not_granted">İzin verilmedi</string>
     <string name="exact_reminders_summary">Hatırlatıcılar tam olarak belirtilen saatte planlanır (pil kullanımını artırır)</string>
     <string name="enable_alarm_dialog">Kesin alarmları planlamaya izin vermek için, aşağıdaki menüde MedTimer için bu ayarı etkinleştirin</string>
     <string name="generate_test_data">Test verisi oluştur</string>
     <string name="create_reminder_dosage_hint">Yeni hatırlatıcı için dozaj</string>
-    <string name="notification_tone_title">Bildirim tonu</string>
     <string name="cycle_consecutive_days">Aktif günler</string>
-    <string name="days">günler</string>
     <string name="theme">Tema</string>
     <string name="default_">Varsayılan</string>
     <string name="alternative">Alternatif</string>
@@ -106,7 +103,6 @@
     <string name="cycle_reminders">Döngüsel hatırlatıcılar</string>
     <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
     <string name="reminders">Hatırlatıcılar</string>
-    <string name="sort" translatable="false">Sırala</string>
     <string name="filter">Filtre</string>
     <string name="seven_days">7 gün</string>
     <string name="analysis">Analiz</string>
