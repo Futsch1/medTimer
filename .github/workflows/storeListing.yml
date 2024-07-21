@@ -1,0 +1,24 @@
+name: Update store listing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update_listing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          dependency-graph: generate-and-submit
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Publish listing
+        run: ./gradlew publishListing
