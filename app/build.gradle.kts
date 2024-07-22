@@ -97,6 +97,8 @@ dependencies {
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
     val androidTestRulesVersion = "1.6.1"
+    val screengrabVersion = "2.1.1"
+    val uiautomatorVersion = "2.3.0"
 
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("com.google.android.material:material:$materialVersion")
@@ -127,6 +129,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$androidTestEspressoVersion")
     androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
+    androidTestImplementation("tools.fastlane:screengrab:$screengrabVersion")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:$uiautomatorVersion")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 }
