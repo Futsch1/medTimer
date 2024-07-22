@@ -1,1 +1,2 @@
-Notification sound configurable
+Bugfixes
+Setting to handle notification dismissal as "Dose taken"

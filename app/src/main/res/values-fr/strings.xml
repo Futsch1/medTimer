@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Minuterie médicale</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -49,14 +49,11 @@
     <string name="select_color">Choisissez la couleur</string>
     <string name="exact_reminders">Rappels précis</string>
     <string name="change_color_toast">Notez que les changements de couleur ne prendront effet que lors des prochains rappels.</string>
-    <string name="permission_not_granted">Autorisation non accordée</string>
     <string name="exact_reminders_summary">Les rappels sont programmés à l\'heure exacte (augmente l\'utilisation de la batterie)</string>
     <string name="enable_alarm_dialog">Afin de permettre la programmation d\'alarmes exactes, activez-la pour MedTimer dans le menu suivant</string>
     <string name="generate_test_data">Générer des données de test</string>
     <string name="create_reminder_dosage_hint">Dosage pour nouveau rappel</string>
-    <string name="notification_tone_title">Tonalité de notification</string>
     <string name="cycle_consecutive_days">Jours actifs</string>
-    <string name="days">jours</string>
     <string name="theme">Thème</string>
     <string name="default_">Défaut</string>
     <string name="alternative">Alternative</string>
@@ -114,7 +111,11 @@
     <string name="fourteen_days">14 jours</string>
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Dernier %1$d jours</string>
+    <plurals name="last_n_days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">Dernier 24 heures</item>
+        <item quantity="many">Dernier %1$d jours</item>
+        <item quantity="other">Dernier %1$d jours</item>
+    </plurals>
     <string name="name">Nom</string>
     <string name="event_data">Données sur les événements</string>
     <string name="backup">Sauvegarde</string>

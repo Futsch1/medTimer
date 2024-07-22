@@ -48,14 +48,11 @@
     <string name="select_color">Selecteer kleur</string>
     <string name="exact_reminders">Exacte herinneringen</string>
     <string name="change_color_toast">Houd er rekening mee dat kleurwijzigingen alleen van kracht worden bij toekomstige herinneringen</string>
-    <string name="permission_not_granted">Toestemming niet verleend</string>
     <string name="exact_reminders_summary">Herinneringen worden precies op het ingestelde tijdstip gegenereerd (verhoogd batterijverbruik)</string>
     <string name="enable_alarm_dialog">Om het aanmaken van exacte herinneringen in te schakelen, moet u dit toestaan in het volgende menu</string>
     <string name="generate_test_data">Testgegevens genereren</string>
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
-    <string name="notification_tone_title">Meldingstoon</string>
     <string name="cycle_consecutive_days">Dagen</string>
-    <string name="days">dagen</string>
     <string name="theme">Thema</string>
     <string name="default_">Standaard</string>
     <string name="alternative">Alternatief</string>
@@ -113,7 +110,10 @@
     <string name="fourteen_days">14 dagen</string>
     <string name="thirty_days">30 dagen</string>
     <string name="total">Totaal</string>
-    <string name="last_n_days">Laatste %1$d dagen</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Laatste 24 uur</item>
+        <item quantity="other">Laatste %1$d dagen</item>
+    </plurals>
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>

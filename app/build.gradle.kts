@@ -20,7 +20,7 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 61
+        versionCode = 62
         versionName = "1.8.14"
         setProperty("archivesBaseName", "MedTimer")
 

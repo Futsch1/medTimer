@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">MedTimer</string>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -16,8 +16,9 @@
     <string name="confirm">Confirmar</string>
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
-    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one" tools:ignore="MissingQuantity">%1$d recordatorio\n%2$s</item>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d recordatorio\n%2$s</item>
+        <item quantity="many">%1$d recordatorios\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
     <string name="notification_title">Toma tu medicación</string>
@@ -48,14 +49,11 @@
     <string name="select_color">Seleccionar color</string>
     <string name="exact_reminders">Recordatorios exactos</string>
     <string name="change_color_toast">Notar que los cambios en el color sólo tienen efecto en futuros recordatorios</string>
-    <string name="permission_not_granted">Permiso no concedido</string>
     <string name="exact_reminders_summary">Los recordatorios se programan a la hora exacta (aumenta el uso de la batería)</string>
     <string name="enable_alarm_dialog">Para permitir programar recordatorios exactos, conceda el permiso a MedTimer en el siguiente menú</string>
     <string name="generate_test_data">Generar datos para test</string>
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
-    <string name="notification_tone_title">Sonido de notificación</string>
     <string name="cycle_consecutive_days">Días activos</string>
-    <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_">Estándar</string>
     <string name="alternative">Alternativo</string>
@@ -113,7 +111,11 @@
     <string name="fourteen_days">14 días</string>
     <string name="thirty_days">30 días</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Últimos %1$d días</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Últimos 24 horas</item>
+        <item quantity="many">Últimos %1$d días</item>
+        <item quantity="other">Últimos %1$d días</item>
+    </plurals>
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Backup</string>

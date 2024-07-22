@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,6 +22,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
@@ -85,7 +88,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        // hack for https://issuetracker.google.com/issues/113122354
+        // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        if (runningAppProcesses != null) {
+            int importance = runningAppProcesses.get(0).importance;
+            if (importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+            }
+        }
+
     }
 
     private void checkPermissions() {

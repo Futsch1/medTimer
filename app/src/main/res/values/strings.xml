@@ -48,14 +48,11 @@
     <string name="select_color">Select color</string>
     <string name="exact_reminders">Exact reminders</string>
     <string name="change_color_toast">Note that changes in color only take effect in future reminders</string>
-    <string name="permission_not_granted">Permission not granted</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
-    <string name="notification_tone_title">Notification tone</string>
     <string name="cycle_consecutive_days">Active days</string>
-    <string name="days">days</string>
     <string name="theme">Theme</string>
     <string name="default_">Default</string>
     <string name="alternative">Alternative</string>
@@ -114,7 +111,10 @@
     <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 days</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Last %1$d days</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Last 24 hours</item>
+        <item quantity="other">Last %1$d days</item>
+    </plurals>
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>

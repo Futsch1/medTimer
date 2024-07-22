@@ -81,8 +81,8 @@ public class ReminderWorkUnitTest {
         mockSharedPreferences = mock(SharedPreferences.class);
         when(mockSharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
         when(mockSharedPreferences.getString(anyString(), anyString())).thenReturn("1");
-        int NOTIFICATION_CHANNEL_ID = 13;
-        when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(NOTIFICATION_CHANNEL_ID);
+        final int notificationChannelId = 13;
+        when(mockSharedPreferences.getInt(eq("notificationChannelId"), anyInt())).thenReturn(notificationChannelId);
         when(mockSharedPreferences.getInt(eq("notificationId"), anyInt())).thenReturn(notificationId);
         SharedPreferences.Editor mockEditor = mock(SharedPreferences.Editor.class);
         when(mockSharedPreferences.edit()).thenReturn(mockEditor);

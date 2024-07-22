@@ -41,7 +41,7 @@ public class TakenSkippedChart {
     public void updateData(long taken, long skipped, int days) {
         String title;
         if (days != 0) {
-            title = context.getString(R.string.last_n_days, days);
+            title = context.getResources().getQuantityString(R.plurals.last_n_days, days);
         } else {
             title = context.getString(R.string.total);
         }

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="Preference.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material"
-        tools:ignore="ResourceCycle">
-        <item name="widgetLayout">@layout/md3switch</item>
-    </style>
+<resources>
 
 </resources>
