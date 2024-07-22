@@ -9,6 +9,4 @@
         <item name="elevationOverlayColor">@android:color/background_dark</item>
     </style>
 
-    <style name="Theme.AppIntro" parent="Theme.AppCompat.DayNight.NoActionBar" />
-
 </resources>
