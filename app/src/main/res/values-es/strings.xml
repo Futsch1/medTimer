@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
     <string name="tab_medicine">Medicación</string>

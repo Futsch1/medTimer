@@ -28,6 +28,12 @@ app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest
 for i in "${locales[@]}"
 do
     start_clean_status_bar
+    if [ "$i" == "en-US" ]
+    then
+      adb shell settings put system time_12_24 12
+    else
+      adb shell settings put system time_12_24 24
+    fi
     fastlane screengrab \
         --locales="$i" \
         --tests_apk_path="$tests_apk_path" \

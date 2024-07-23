@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Minuterie médicale</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
     <string name="tab_medicine">Médicaments</string>

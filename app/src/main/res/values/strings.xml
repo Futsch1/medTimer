@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MedTimer</string>
+    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_overview">Overview</string>
     <string name="tab_medicine">Medicine</string>

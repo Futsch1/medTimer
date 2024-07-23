@@ -44,6 +44,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -93,6 +94,7 @@ public class StatisticsTest {
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped)).perform(click());
+        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(3, scrollTo()));
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken)).perform(scrollTo(), click());
         Screengrab.screenshot("1");
 
@@ -157,15 +159,16 @@ public class StatisticsTest {
         onView(withId(R.id.editEventAmount)).perform(replaceText("Much"));
         pressBack();
 
+        String expectedText = getInstrumentation().getContext().getString(R.string.reminder_event, "Much", "TestMedicine", LocalDate.now());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText, null))
-                .check(matches(withText(startsWith("Much of TestMedicine"))));
+                .check(matches(withText(startsWith(expectedText))));
 
         // And now delete it
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
         onView(allOf(withId(android.R.id.button1))).perform(click());
 
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText, null))
-                .check(matches(withText(not(startsWith("Much of TestMedicine")))));
+                .check(matches(withText(not(startsWith(expectedText)))));
     }
 
 
