@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MedTimer</string>
-    <string name="tab_settings">НастПоказать только открытые
+    <string name="tab_settings">НастПоказать только открытые</string>
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
     <string name="add_medicine">Добавить лекарство</string>
