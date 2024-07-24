@@ -78,7 +78,7 @@ dependencies {
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.9.0"
     val coreKtxVersion = "1.13.1"
-    val lifecycleViewmodelKtxVersion = "2.8.3"
+    val lifecycleViewmodelKtxVersion = "2.8.4"
     val roomVersion = "2.6.1"
     val colorPickerViewVersion = "2.3.0"
     val preferenceXVersion = "1.1.0"
