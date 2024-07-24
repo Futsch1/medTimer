@@ -52,7 +52,10 @@ public class StatisticsProvider {
             if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
                 String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
                 medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
-                medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
+                final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
+                if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
+                    medicineToDayCount.get(medicineName)[daysInThePast]++;
+                }
             }
         }
 
