@@ -94,6 +94,8 @@
             android:id="@+id/reminderList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="60dp"
             android:scrollbars="vertical" />
     </LinearLayout>
 
