@@ -42,21 +42,11 @@ public class StatisticsProvider {
         return calculateDataEntries(days, medicineToDayCount);
     }
 
-    /**
-     * @noinspection DataFlowIssue
-     */
     private Map<String, int[]> calculateMedicineToDayMap(int days) {
         Map<String, int[]> medicineToDayCount = new HashMap<>();
         LocalDate earliestDate = LocalDate.now().minusDays(days);
         for (ReminderEvent event : reminderEvents) {
-            if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
-                String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
-                medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
-                final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
-                if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
-                    medicineToDayCount.get(medicineName)[daysInThePast]++;
-                }
-            }
+            incrementMedicineToDayCountForEvent(days, event, earliestDate, medicineToDayCount);
         }
 
         return medicineToDayCount;
@@ -84,6 +74,20 @@ public class StatisticsProvider {
             data.add(new SimpleXYSeries(xValues, yValues, medicineNames.get(j)));
         }
         return data;
+    }
+
+    /**
+     * @noinspection DataFlowIssue
+     */
+    private void incrementMedicineToDayCountForEvent(int days, ReminderEvent event, LocalDate earliestDate, Map<String, int[]> medicineToDayCount) {
+        if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
+            String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
+            medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
+            final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
+            if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
+                medicineToDayCount.get(medicineName)[daysInThePast]++;
+            }
+        }
     }
 
     private int getDaysInThePast(long secondsSinceEpoch) {
