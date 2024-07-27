@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">НастПоказать только открытые</string>
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
@@ -105,7 +104,6 @@
     <string name="cycle_reminders">Цикличные напоминания</string>
     <string name="weekday_limited">Ограничено до некоторых дней недели</string>
     <string name="reminders">Напоминания</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Фильтр</string>
     <string name="seven_days">7 дней</string>
     <string name="analysis">Анализ</string>
@@ -142,4 +140,5 @@
     <string name="notification_settings_high">Настройки уведомлений высокого приоритета</string>
     <string name="calendar">Календарь</string>
     <string name="show_only_open">Показать только открытые</string>
+    <string name="date">Дата</string>
 </resources>

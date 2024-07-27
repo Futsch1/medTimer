@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
     <string name="tab_medicine">İlaç</string>
@@ -137,4 +136,5 @@
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
     <string name="calendar">Takvim</string>
     <string name="show_only_open">" Sadece açıkları göster"</string>
+    <string name="date">Tarih</string>
 </resources>

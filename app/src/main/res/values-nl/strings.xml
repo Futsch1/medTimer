@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
     <string name="tab_medicine">Medicatie</string>
@@ -137,4 +136,5 @@
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
     <string name="calendar">Kalender</string>
     <string name="show_only_open">" Toon alleen openstaande"</string>
+    <string name="date">Datum</string>
 </resources>
