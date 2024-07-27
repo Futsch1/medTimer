@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Einstellungen</string>
     <string name="tab_overview">Übersicht</string>
     <string name="tab_medicine">Medikamente</string>
@@ -137,4 +136,5 @@
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
     <string name="calendar">Kalender</string>
     <string name="show_only_open">Nur offene anzeigen</string>
+    <string name="date">Date</string>
 </resources>

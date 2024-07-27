@@ -1,12 +1,9 @@
 package com.futsch1.medtimer.overview;
 
-import static com.futsch1.medtimer.helpers.TimeHelper.changeTimeStampMinutes;
-import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
-import static com.futsch1.medtimer.helpers.TimeHelper.timeStringToMinutes;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,9 @@ import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
+import com.google.android.material.datepicker.MaterialDatePicker;
+
+import java.time.LocalDate;
 
 public class EditEventFragment extends Fragment {
 
@@ -27,6 +27,7 @@ public class EditEventFragment extends Fragment {
     private EditText editEventName;
     private EditText editEventAmount;
     private EditText editEventRemindedTimestamp;
+    private EditText editEventRemindedDate;
     private MedicineRepository medicineRepository;
 
     public EditEventFragment() {
@@ -56,23 +57,47 @@ public class EditEventFragment extends Fragment {
                 editEventArgs.getEventRemindedTimestamp()));
         editEventRemindedTimestamp.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(hasFocus));
 
+        editEventRemindedDate = editEventView.findViewById(R.id.editEventRemindedDate);
+        editEventRemindedDate.setText(TimeHelper.toLocalizedDateString(editEventRemindedTimestamp.getContext(),
+                editEventArgs.getEventRemindedTimestamp()));
+        editEventRemindedDate.setOnFocusChangeListener((v, hasFocus) -> onFocusEditDate(hasFocus));
+        editEventRemindedDate.setVisibility(editEventArgs.getEventCanEditDate() ? View.VISIBLE : View.GONE);
+
         return editEventView;
     }
 
     private void onFocusEditTime(boolean hasFocus) {
         if (hasFocus) {
-            int startMinutes = timeStringToMinutes(editEventRemindedTimestamp.getContext(),
+            int startMinutes = TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(),
                     editEventRemindedTimestamp.getText().toString());
             if (startMinutes < 0) {
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(requireActivity()).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = minutesToTimeString(requireContext(), minutes);
+                String selectedTime = TimeHelper.minutesToTimeString(requireContext(), minutes);
                 editEventRemindedTimestamp.setText(selectedTime);
             });
         }
     }
 
+    private void onFocusEditDate(boolean hasFocus) {
+        if (hasFocus) {
+            LocalDate startDate = TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString());
+            if (startDate == null) {
+                startDate = LocalDate.now();
+            }
+
+            MaterialDatePicker<Long> datePickerDialog = MaterialDatePicker.Builder.datePicker()
+                    .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS)
+                    .build();
+            datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> {
+                String selectedDateString = TimeHelper.toLocalizedDateString(editEventRemindedDate.getContext(),
+                        selectedDate / 1000);
+                editEventRemindedDate.setText(selectedDateString);
+            });
+            datePickerDialog.show(getParentFragmentManager(), "date_picker");
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -84,8 +109,10 @@ public class EditEventFragment extends Fragment {
                 ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
                 reminderEvent.medicineName = editEventName.getText().toString();
                 reminderEvent.amount = editEventAmount.getText().toString();
-                reminderEvent.remindedTimestamp = changeTimeStampMinutes(reminderEvent.remindedTimestamp,
-                        timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
+                reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp,
+                        TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
+                reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampDate(reminderEvent.remindedTimestamp,
+                        TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
 
                 medicineRepository.updateReminderEvent(reminderEvent);
             });

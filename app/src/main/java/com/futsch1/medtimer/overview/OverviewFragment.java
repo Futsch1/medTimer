@@ -129,7 +129,8 @@ public class OverviewFragment extends Fragment {
                     reminderEvent.reminderEventId,
                     reminderEvent.amount,
                     reminderEvent.medicineName,
-                    reminderEvent.remindedTimestamp
+                    reminderEvent.remindedTimestamp,
+                    reminderEvent.reminderId <= 0
             );
             requireActivity().runOnUiThread(() ->
                     navController.navigate(action));

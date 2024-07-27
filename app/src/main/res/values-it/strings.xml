@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
     <string name="tab_medicine">Medicinali</string>
@@ -139,4 +138,5 @@
     <string name="notification_settings_high">Impostazioni di notifica ad alta priorità</string>
     <string name="calendar">Calendario</string>
     <string name="show_only_open">Mostra solo aperte</string>
+    <string name="date">Data</string>
 </resources>

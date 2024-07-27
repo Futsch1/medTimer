@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Minuterie médicale</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
     <string name="tab_medicine">Médicaments</string>
@@ -139,4 +138,5 @@
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
     <string name="calendar">Calendrier</string>
     <string name="show_only_open">Afficher uniquement les ouvertes</string>
+    <string name="date">Date</string>
 </resources>
