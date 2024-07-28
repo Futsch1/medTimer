@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 
+import android.content.Context;
+
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -38,6 +40,7 @@ import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
 import com.evrencoskun.tableview.TableView;
+import com.futsch1.medtimer.helpers.TimeHelper;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -45,6 +48,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -77,6 +81,8 @@ public class StatisticsTest {
         onView(withText(R.string.generate_test_data)).perform(click());
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
+        AndroidTestHelper.setAllRemindersTo12AM();
+
         device.openNotification();
         device.wait(Until.findObject(By.text("MedTimer")), 2000);
         UiObject2 medTimerNotifications = device.findObject(By.text("MedTimer"));
@@ -88,8 +94,6 @@ public class StatisticsTest {
         device.pressBack();
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
-        AndroidTestHelper.setAllRemindersTo12AM();
 
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
@@ -159,7 +163,9 @@ public class StatisticsTest {
         onView(withId(R.id.editEventAmount)).perform(replaceText("Much"));
         pressBack();
 
-        String expectedText = getInstrumentation().getContext().getString(R.string.reminder_event, "Much", "TestMedicine", LocalDate.now());
+        Context targetContext = getInstrumentation().getTargetContext();
+        String dateString = TimeHelper.toLocalizedDateString(targetContext, LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000);
+        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "Much", "TestMedicine", dateString);
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText, null))
                 .check(matches(withText(startsWith(expectedText))));
 

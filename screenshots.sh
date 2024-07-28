@@ -19,7 +19,7 @@ function stop_clean_status_bar {
     adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-locales=('es-ES' 'en-US' 'de-DE' 'fr-FR')
+locales=('en-US' 'es-ES' 'de-DE' 'fr-FR' 'it-IT')
 tests_apk_path="app/build/outputs/apk/debug/MedTimer-debug.apk"
 app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk"
 
@@ -40,6 +40,7 @@ do
         --app_apk_path="$app_apk_path" \
         --exit_on_test_failure=false \
         --use_timestamp_suffix=false \
+        --use_adb_root=true \
         --use_tests_in_classes=com.futsch1.medtimer.StatisticsTest
     stop_clean_status_bar
 done
