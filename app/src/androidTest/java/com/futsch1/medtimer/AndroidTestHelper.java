@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -76,7 +77,7 @@ public class AndroidTestHelper {
     }
 
     public static void navigateTo(MainMenu mainMenu) {
-        String[] menuItems = {"Overview", "Medicine", "Analysis"};
+        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
         ViewInteraction bottomNavigationItemView = onView(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
@@ -90,7 +91,8 @@ public class AndroidTestHelper {
         onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
 
         setTime(0, 0);
-        onView(allOf(withContentDescription("Navigate up"))).perform(click());
+        pressBack();
+        pressBack();
     }
 
     public static void setTime(int hour, int minute) {

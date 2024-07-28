@@ -1,0 +1,31 @@
+Rappels médicaux et historique avec confidentialité totale hors ligne
+
+Gardez le contrôle de vos médicaments avec MedTimer
+
+MedTimer est une application open source de rappel de médicaments conçue pour vous aider à gérer vos
+médicaments efficacement et avec un contrôle total sur vos données sensibles.
+
+Flexible et flexible rappels personnalisés:
+
+- Gestion d'un nombre illimité de médicaments avec des rappels personnalisables par médicament (y compris des valeurs par défaut simples pour les rappels quotidiens).
+pour les rappels quotidiens).
+- Créez des rappels flexibles avec des pauses et des jours spécifiques (idéal pour les pilules contraceptives).
+- Mode week-end : Retardez les rappels à une heure définie les jours choisis.
+- Répétez les notifications pour les rappels ultérieurs.
+- Ajoutez des doses supplémentaires à la volée.
+
+Simple et efficace Gestion sécurisée des données:
+
+- Confirmez ou rejetez les rappels pour enregistrer avec précision l'observance du traitement.
+- Obtenez une vue d'ensemble des doses passées sous la forme d'un graphique et d'un tableau.
+- Exportez votre historique de médicaments sous forme de fichier CSV pour faciliter la tenue de dossiers ou le partage avec les soins de santé professionnels.
+- Sauvegardez et restaurez votre liste de médicaments sous forme de fichier JSON.
+
+Confidentialité et confidentialité Accessibilité hors ligne:
+
+- Toutes les données sont stockées en toute sécurité sur votre appareil, garantissant une confidentialité totale et une accessibilité hors ligne.
+- Aucune connexion Internet requise – vos rappels de médicaments sont toujours disponibles.
+
+MedTimer est une application gratuite sans ajout.
+
+Voir la page du projet sur GitHub: https://github.com/Futsch1/medTimer

@@ -1,0 +1,2 @@
+package_name("com.futsch1.medtimer")
+json_key_file("fastlane/google_cloud_keyfile.json")
