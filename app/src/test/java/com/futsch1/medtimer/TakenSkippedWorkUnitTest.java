@@ -16,6 +16,7 @@ import android.app.PendingIntent;
 
 import androidx.work.Data;
 import androidx.work.ListenableWorker;
+import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -37,10 +38,7 @@ import java.time.Instant;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 34)
 public class TakenSkippedWorkUnitTest {
-    private final int reminderId = 11;
-
     private final int reminderEventId = 12;
-    private final int notificationId = 14;
 
     @Mock
     private Application mockApplication;
@@ -61,13 +59,6 @@ public class TakenSkippedWorkUnitTest {
 
     @Test
     public void testDoWorkTaken() {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.notificationId = notificationId;
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.reminderEventId = reminderEventId;
-        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
-        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
                 .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
@@ -75,9 +66,22 @@ public class TakenSkippedWorkUnitTest {
         when(workerParams.getInputData()).thenReturn(inputData);
         TakenWork takenWork = new TakenWork(mockApplication, workerParams);
 
+        testWork(takenWork, ReminderEvent.ReminderStatus.TAKEN);
+    }
+
+    private void testWork(Worker worker, ReminderEvent.ReminderStatus status) {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        int notificationId = 14;
+        reminderEvent.notificationId = notificationId;
+        int reminderId = 11;
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.reminderEventId = reminderEventId;
+        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent))) {
             // Expected to pass
-            ListenableWorker.Result result = takenWork.doWork();
+            ListenableWorker.Result result = worker.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Success);
 
             // Check if reminder event was updated with the generated notification ID
@@ -87,23 +91,15 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(notificationId, captor.getValue().notificationId);
             assertEquals(reminderId, captor.getValue().reminderId);
             assertEquals(reminderEventId, captor.getValue().reminderEventId);
-            assertEquals(ReminderEvent.ReminderStatus.TAKEN, captor.getValue().status);
+            assertEquals(status, captor.getValue().status);
             verify(mockNotificationManager, times(1)).cancel(notificationId);
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
             verify(mockAlarmManager, times(1)).cancel(captor1.capture());
         }
     }
 
-
     @Test
     public void testDoWorkSkipped() {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.notificationId = notificationId;
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.reminderEventId = reminderEventId;
-        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
-        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
                 .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
@@ -111,22 +107,6 @@ public class TakenSkippedWorkUnitTest {
         when(workerParams.getInputData()).thenReturn(inputData);
         SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);
 
-        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent))) {
-            // Expected to pass
-            ListenableWorker.Result result = skippedWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
-
-            // Check if reminder event was updated with the generated notification ID
-            MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
-            ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
-            verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
-            assertEquals(notificationId, captor.getValue().notificationId);
-            assertEquals(reminderId, captor.getValue().reminderId);
-            assertEquals(reminderEventId, captor.getValue().reminderEventId);
-            assertEquals(ReminderEvent.ReminderStatus.SKIPPED, captor.getValue().status);
-            verify(mockNotificationManager, times(1)).cancel(notificationId);
-            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
-            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
-        }
+        testWork(skippedWork, ReminderEvent.ReminderStatus.SKIPPED);
     }
 }
