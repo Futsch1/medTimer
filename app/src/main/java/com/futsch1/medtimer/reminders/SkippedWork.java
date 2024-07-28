@@ -10,8 +10,8 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 
-public class DismissWork extends Worker {
-    public DismissWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+public class SkippedWork extends Worker {
+    public SkippedWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 

@@ -74,7 +74,7 @@ public class ReminderProcessor extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         if (DISMISSED_ACTION.equals(intent.getAction())) {
-            workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
+            workManager.enqueue(buildActionWorkRequest(intent, SkippedWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
         } else if (SNOOZE_ACTION.equals(intent.getAction())) {

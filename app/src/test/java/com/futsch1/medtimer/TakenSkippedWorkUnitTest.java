@@ -1,0 +1,137 @@
+package com.futsch1.medtimer;
+
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import android.app.AlarmManager;
+import android.app.Application;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+
+import androidx.work.Data;
+import androidx.work.ListenableWorker;
+import androidx.work.WorkerParameters;
+
+import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.SkippedWork;
+import com.futsch1.medtimer.reminders.TakenWork;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import java.time.Instant;
+
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = 34)
+public class TakenSkippedWorkUnitTest {
+    private final int reminderId = 11;
+
+    private final int reminderEventId = 12;
+    private final int notificationId = 14;
+
+    @Mock
+    private Application mockApplication;
+    private NotificationManager mockNotificationManager;
+    private AlarmManager mockAlarmManager;
+
+    @Before
+    public void setUp() {
+
+        mockApplication = mock(Application.class);
+
+        mockNotificationManager = mock(NotificationManager.class);
+        when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
+
+        mockAlarmManager = mock(AlarmManager.class);
+        when(mockApplication.getSystemService(AlarmManager.class)).thenReturn(mockAlarmManager);
+    }
+
+    @Test
+    public void testDoWorkTaken() {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.notificationId = notificationId;
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.reminderEventId = reminderEventId;
+        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+
+        WorkerParameters workerParams = mock(WorkerParameters.class);
+        Data inputData = new Data.Builder()
+                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                .build();
+        when(workerParams.getInputData()).thenReturn(inputData);
+        TakenWork takenWork = new TakenWork(mockApplication, workerParams);
+
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
+            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
+        })) {
+            // Expected to pass
+            ListenableWorker.Result result = takenWork.doWork();
+            assertTrue(result instanceof ListenableWorker.Result.Success);
+
+            // Check if reminder event was updated with the generated notification ID
+            MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
+            ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
+            verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
+            assertEquals(notificationId, captor.getValue().notificationId);
+            assertEquals(reminderId, captor.getValue().reminderId);
+            assertEquals(reminderEventId, captor.getValue().reminderEventId);
+            assertEquals(ReminderEvent.ReminderStatus.TAKEN, captor.getValue().status);
+            verify(mockNotificationManager, times(1)).cancel(eq(notificationId));
+            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
+            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
+        }
+    }
+
+
+    @Test
+    public void testDoWorkSkipped() {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.notificationId = notificationId;
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.reminderEventId = reminderEventId;
+        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
+        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+
+        WorkerParameters workerParams = mock(WorkerParameters.class);
+        Data inputData = new Data.Builder()
+                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                .build();
+        when(workerParams.getInputData()).thenReturn(inputData);
+        SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);
+
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
+            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
+        })) {
+            // Expected to pass
+            ListenableWorker.Result result = skippedWork.doWork();
+            assertTrue(result instanceof ListenableWorker.Result.Success);
+
+            // Check if reminder event was updated with the generated notification ID
+            MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
+            ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
+            verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
+            assertEquals(notificationId, captor.getValue().notificationId);
+            assertEquals(reminderId, captor.getValue().reminderId);
+            assertEquals(reminderEventId, captor.getValue().reminderEventId);
+            assertEquals(ReminderEvent.ReminderStatus.SKIPPED, captor.getValue().status);
+            verify(mockNotificationManager, times(1)).cancel(eq(notificationId));
+            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
+            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
+        }
+    }
+}
