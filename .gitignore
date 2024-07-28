@@ -34,3 +34,4 @@ google-services.json
 /fastlane/README.md
 /fastlane/report.xml
 /fastlane/metadata/android/screenshots.html
+/fastlane/*.json

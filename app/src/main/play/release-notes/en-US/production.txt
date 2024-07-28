@@ -1,2 +1,0 @@
-Bugfixes
-Setting to handle notification dismissal as "Dose taken"
