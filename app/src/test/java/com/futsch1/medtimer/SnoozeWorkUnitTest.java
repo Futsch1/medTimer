@@ -41,10 +41,6 @@ import java.time.Instant;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 34)
 public class SnoozeWorkUnitTest {
-    private final int reminderId = 11;
-
-    private final int reminderEventId = 12;
-    private final int notificationId = 14;
 
     @Mock
     private Application mockApplication;
@@ -70,8 +66,11 @@ public class SnoozeWorkUnitTest {
     @Test
     public void testDoWorkSnooze() {
         ReminderEvent reminderEvent = new ReminderEvent();
+        int notificationId = 14;
         reminderEvent.notificationId = notificationId;
+        int reminderId = 11;
         reminderEvent.reminderId = reminderId;
+        int reminderEventId = 12;
         reminderEvent.reminderEventId = reminderEventId;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
