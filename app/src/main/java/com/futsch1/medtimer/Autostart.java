@@ -48,7 +48,8 @@ public class Autostart extends BroadcastReceiver {
                 long raiseDays = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay();
                 WorkRequest reminderWork =
                         new OneTimeWorkRequest.Builder(ReminderWork.class)
-                                .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderEvent.reminderId)
+                                .setInputData(new Data.Builder()
+                                        .putInt(EXTRA_REMINDER_ID, reminderEvent.reminderId)
                                         .putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
                                         .putLong(EXTRA_REMINDER_DATE, raiseDays)
                                         .build())

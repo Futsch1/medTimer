@@ -138,4 +138,5 @@
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
     <string name="calendar">Calendrier</string>
     <string name="show_only_open">Afficher uniquement les ouvertes</string>
+    <string name="date">Date</string>
 </resources>

@@ -117,6 +117,9 @@
         <argument
             android:name="eventRemindedTimestamp"
             app:argType="long" />
+        <argument
+            android:name="eventCanEditDate"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"

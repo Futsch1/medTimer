@@ -136,4 +136,5 @@
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
     <string name="calendar">Kalender</string>
     <string name="show_only_open">Nur offene anzeigen</string>
+    <string name="date">Date</string>
 </resources>
