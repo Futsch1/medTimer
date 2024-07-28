@@ -3,7 +3,6 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.times;
@@ -76,9 +75,7 @@ public class TakenSkippedWorkUnitTest {
         when(workerParams.getInputData()).thenReturn(inputData);
         TakenWork takenWork = new TakenWork(mockApplication, workerParams);
 
-        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
-        })) {
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent))) {
             // Expected to pass
             ListenableWorker.Result result = takenWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Success);
@@ -91,7 +88,7 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(reminderId, captor.getValue().reminderId);
             assertEquals(reminderEventId, captor.getValue().reminderEventId);
             assertEquals(ReminderEvent.ReminderStatus.TAKEN, captor.getValue().status);
-            verify(mockNotificationManager, times(1)).cancel(eq(notificationId));
+            verify(mockNotificationManager, times(1)).cancel(notificationId);
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
             verify(mockAlarmManager, times(1)).cancel(captor1.capture());
         }
@@ -114,9 +111,7 @@ public class TakenSkippedWorkUnitTest {
         when(workerParams.getInputData()).thenReturn(inputData);
         SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);
 
-        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
-        })) {
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent))) {
             // Expected to pass
             ListenableWorker.Result result = skippedWork.doWork();
             assertTrue(result instanceof ListenableWorker.Result.Success);
@@ -129,7 +124,7 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(reminderId, captor.getValue().reminderId);
             assertEquals(reminderEventId, captor.getValue().reminderEventId);
             assertEquals(ReminderEvent.ReminderStatus.SKIPPED, captor.getValue().status);
-            verify(mockNotificationManager, times(1)).cancel(eq(notificationId));
+            verify(mockNotificationManager, times(1)).cancel(notificationId);
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
             verify(mockAlarmManager, times(1)).cancel(captor1.capture());
         }
