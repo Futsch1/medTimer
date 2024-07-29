@@ -5,7 +5,7 @@
 
 # MedTimer for Android
 
-<img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
+<img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="150" />
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"
@@ -25,21 +25,21 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
 **Med reminders and history with full offline privacy**
 
 <p float="left">
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/1.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/2.png" width="150" /> 
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" /> 
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/3.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/4.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="150" />
 
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/5.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width="150" />
 
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/6.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/7.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width="150" />
 
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/8.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width="150" />
 </p>
 
 Stay In Control of Your Medications with MedTimer
