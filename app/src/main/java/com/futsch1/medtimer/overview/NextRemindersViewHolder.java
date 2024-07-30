@@ -15,6 +15,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.futsch1.medtimer.reminders.ReminderWork;
@@ -23,9 +24,6 @@ import com.google.android.material.chip.Chip;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Collections;
 
 public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
@@ -48,8 +46,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         takenNow.setOnClickListener(v -> processFutureReminder(scheduledReminder, true, looper, medicineViewModel));
         skippedNow.setOnClickListener(v -> processFutureReminder(scheduledReminder, false, looper, medicineViewModel));
 
-        ZonedDateTime reminderTime = scheduledReminder.timestamp().atZone(ZoneId.systemDefault());
-        String nextTime = reminderTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
+        String nextTime = TimeHelper.toLocalizedDatetimeString(nextReminderText.getContext(), scheduledReminder.timestamp().toEpochMilli() / 1000);
         nextReminderText.setText(nextReminderText.getContext().getString(R.string.reminder_event, scheduledReminder.reminder().amount, scheduledReminder.medicine().name, nextTime));
 
         boolean isToday = isToday(scheduledReminder.timestamp().toEpochMilli());
