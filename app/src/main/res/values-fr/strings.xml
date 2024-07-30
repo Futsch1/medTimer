@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
     <string name="tab_medicine">Médicaments</string>
@@ -104,7 +103,6 @@
     <string name="cycle_reminders">Rappels cycliques</string>
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="reminders">Rappels</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtre</string>
     <string name="seven_days">7 jours</string>
     <string name="analysis">Analyse</string>

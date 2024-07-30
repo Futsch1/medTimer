@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
     <string name="tab_medicine">İlaç</string>
@@ -103,7 +102,6 @@
     <string name="cycle_reminders">Döngüsel hatırlatıcılar</string>
     <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
     <string name="reminders">Hatırlatıcılar</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtre</string>
     <string name="seven_days">7 gün</string>
     <string name="analysis">Analiz</string>

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -124,16 +125,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             strings.add(holderItemView.getContext().getString(R.string.weekday_limited));
         }
         if (cyclic) {
-            String builder = holderItemView.getContext().getString(R.string.cycle_reminders) +
-                    " " +
-                    reminder.consecutiveDays +
-                    "/" +
-                    reminder.pauseDays +
-                    ", " +
-                    firstToLower(holderItemView.getContext().getString(R.string.cycle_start_date)) +
-                    " " +
-                    TimeHelper.daysSinceEpochToDateString(editTime.getContext(), reminder.cycleStartDay);
-            strings.add(builder);
+            strings.add(getCyclicReminderString(reminder));
         }
         if (!weekdayLimited && !cyclic) {
             strings.add(holderItemView.getContext().getString(R.string.every_day));
@@ -143,6 +135,18 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         }
 
         return String.join(", ", strings);
+    }
+
+    private @NonNull String getCyclicReminderString(Reminder reminder) {
+        return holderItemView.getContext().getString(R.string.cycle_reminders) +
+                " " +
+                reminder.consecutiveDays +
+                "/" +
+                reminder.pauseDays +
+                ", " +
+                firstToLower(holderItemView.getContext().getString(R.string.cycle_start_date)) +
+                " " +
+                TimeHelper.daysSinceEpochToDateString(editTime.getContext(), reminder.cycleStartDay);
     }
 
     private String firstToLower(String string) {

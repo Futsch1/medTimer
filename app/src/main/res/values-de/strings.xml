@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Einstellungen</string>
     <string name="tab_overview">Übersicht</string>
     <string name="tab_medicine">Medikamente</string>
@@ -103,7 +102,6 @@
     <string name="cycle_reminders">Zyklische Erinnerungen</string>
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
-    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 Tage</string>
     <string name="analysis">Analyse</string>
