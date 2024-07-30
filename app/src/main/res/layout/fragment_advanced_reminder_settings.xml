@@ -10,6 +10,20 @@
     android:padding="4dp"
     tools:context=".medicine.AdvancedReminderSettingsFragment">
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/active"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/active" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="4dp"
+        android:layout_weight="1"
+        android:background="?android:attr/listDivider" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -62,7 +76,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="4dp"
@@ -92,7 +106,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="4dp"
@@ -116,7 +130,8 @@
             android:lineBreakStyle="normal"
             android:lineBreakWordStyle="phrase"
             android:lines="2"
-            android:singleLine="false" />
+            android:singleLine="false"
+            tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

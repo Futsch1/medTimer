@@ -139,4 +139,6 @@
     <string name="calendar">Calendrier</string>
     <string name="show_only_open">Afficher uniquement les ouvertes</string>
     <string name="date">Date</string>
+    <string name="active">Actif</string>
+    <string name="inactive">Inactif</string>
 </resources>

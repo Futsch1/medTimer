@@ -137,4 +137,6 @@
     <string name="calendar">Takvim</string>
     <string name="show_only_open">" Sadece açıkları göster"</string>
     <string name="date">Tarih</string>
+    <string name="active">Aktif</string>
+    <string name="inactive">Aktif değil</string>
 </resources>

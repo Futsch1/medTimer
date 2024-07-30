@@ -37,6 +37,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
     public List<Boolean> days;
+    @ColumnInfo(defaultValue = "true")
+    @Expose
+    public boolean active;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -44,6 +47,7 @@ public class Reminder {
         consecutiveDays = 1;
         pauseDays = 0;
         days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
+        active = true;
         this.medicineRelId = medicineRelId;
     }
 }

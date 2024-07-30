@@ -22,6 +22,7 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -41,6 +42,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private Reminder reminder;
     private TextView remindOnDays;
     private View advancedReminderView;
+    private MaterialSwitch active;
     private AdvancedReminderSettingsFragmentArgs args;
 
     public AdvancedReminderSettingsFragment() {
@@ -77,6 +79,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void setupView() {
 
+        active = advancedReminderView.findViewById(R.id.active);
         editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
         editPauseDays = advancedReminderView.findViewById(R.id.pauseDays);
         editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
@@ -84,6 +87,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
         remindOnDays = advancedReminderView.findViewById(R.id.remindOnDays);
 
+        active.setChecked(reminder.active);
         editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
         editPauseDays.setText(Integer.toString(reminder.pauseDays));
         editInstructions.setText(reminder.instructions);
@@ -185,6 +189,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         if (editInstructions != null) {
             reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+            reminder.active = active.isChecked();
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();

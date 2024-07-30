@@ -51,7 +51,7 @@
     <string name="enable_alarm_dialog">Om het aanmaken van exacte herinneringen in te schakelen, moet u dit toestaan in het volgende menu</string>
     <string name="generate_test_data">Testgegevens genereren</string>
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
-    <string name="cycle_consecutive_days">Dagen</string>
+    <string name="cycle_consecutive_days">Actieve dagen</string>
     <string name="theme">Thema</string>
     <string name="default_">Standaard</string>
     <string name="alternative">Alternatief</string>
@@ -137,4 +137,6 @@
     <string name="calendar">Kalender</string>
     <string name="show_only_open">" Toon alleen openstaande"</string>
     <string name="date">Datum</string>
+    <string name="active">Actief</string>
+    <string name="inactive">Inactief</string>
 </resources>

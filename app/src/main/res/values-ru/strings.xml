@@ -141,4 +141,6 @@
     <string name="calendar">Календарь</string>
     <string name="show_only_open">Показать только открытые</string>
     <string name="date">Дата</string>
+    <string name="active">Активный</string>
+    <string name="inactive">Неактивный</string>
 </resources>
