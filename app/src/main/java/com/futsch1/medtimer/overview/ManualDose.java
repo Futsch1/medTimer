@@ -11,6 +11,7 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -56,7 +57,12 @@ public class ManualDose {
             entries.add(new ManualDoseEntry(lastCustomDose));
         }
         for (MedicineWithReminders medicine : medicines) {
-            entries.add(new ManualDoseEntry(medicine.medicine));
+            entries.add(new ManualDoseEntry(medicine.medicine, null));
+            for (Reminder reminder : medicine.reminders) {
+                if (!reminder.active) {
+                    entries.add(new ManualDoseEntry(medicine.medicine, reminder.amount));
+                }
+            }
         }
         return entries;
     }
@@ -76,7 +82,12 @@ public class ManualDose {
                 getAmountAndContinue(reminderEvent);
             });
         } else {
-            getAmountAndContinue(reminderEvent);
+            if (entry.amount == null) {
+                getAmountAndContinue(reminderEvent);
+            } else {
+                reminderEvent.amount = entry.amount;
+                getTimeAndLog(reminderEvent);
+            }
         }
     }
 
@@ -110,17 +121,24 @@ public class ManualDose {
         public final String name;
         public final int color;
         public final boolean useColor;
+        public final String amount;
 
         public ManualDoseEntry(String name) {
             this.name = name;
             this.color = 0;
             this.useColor = false;
+            this.amount = null;
         }
 
-        public ManualDoseEntry(Medicine medicine) {
-            this.name = medicine.name;
+        public ManualDoseEntry(Medicine medicine, String amount) {
+            if (amount != null) {
+                this.name = medicine.name + " (" + amount + ")";
+            } else {
+                this.name = medicine.name;
+            }
             this.color = medicine.color;
             this.useColor = medicine.useColor;
+            this.amount = amount;
         }
     }
 }
