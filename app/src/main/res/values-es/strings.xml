@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
     <string name="tab_medicine">Medicación</string>
@@ -103,6 +104,7 @@
     <string name="cycle_reminders">Recordatorios cíclicos</string>
     <string name="weekday_limited">Limitado a algunos días de la semana</string>
     <string name="reminders">Recordatorios</string>
+    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 días</string>
     <string name="analysis">Análysis</string>
@@ -139,4 +141,6 @@
     <string name="calendar">Calendario</string>
     <string name="show_only_open">Mostrar solo abiertas</string>
     <string name="date">Fecha</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
 </resources>

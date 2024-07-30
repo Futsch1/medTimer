@@ -117,6 +117,9 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         boolean weekdayLimited = !reminder.days.stream().allMatch(day -> day == Boolean.TRUE);
         boolean cyclic = reminder.pauseDays > 0;
+        if (!reminder.active) {
+            strings.add(holderItemView.getContext().getString(R.string.inactive));
+        }
         if (weekdayLimited) {
             strings.add(holderItemView.getContext().getString(R.string.weekday_limited));
         }

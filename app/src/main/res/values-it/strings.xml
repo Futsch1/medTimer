@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
     <string name="tab_medicine">Medicinali</string>
@@ -103,6 +104,7 @@
     <string name="cycle_reminders">Promemoria ciclici</string>
     <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="reminders">Promemoria</string>
+    <string name="sort" translatable="false">Sort</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 giorni</string>
     <string name="analysis">Analisi</string>
@@ -139,4 +141,6 @@
     <string name="calendar">Calendario</string>
     <string name="show_only_open">Mostra solo aperte</string>
     <string name="date">Data</string>
+    <string name="active">Attivo</string>
+    <string name="inactive">Inattivo</string>
 </resources>
