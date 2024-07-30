@@ -58,11 +58,7 @@ public class ManualDose {
         }
         for (MedicineWithReminders medicine : medicines) {
             entries.add(new ManualDoseEntry(medicine.medicine, null));
-            for (Reminder reminder : medicine.reminders) {
-                if (!reminder.active) {
-                    entries.add(new ManualDoseEntry(medicine.medicine, reminder.amount));
-                }
-            }
+            addInactiveReminders(medicine, entries);
         }
         return entries;
     }
@@ -93,6 +89,14 @@ public class ManualDose {
 
     private String getLastCustomDose() {
         return sharedPreferences.getString("lastCustomDose", "");
+    }
+
+    private static void addInactiveReminders(MedicineWithReminders medicine, List<ManualDoseEntry> entries) {
+        for (Reminder reminder : medicine.reminders) {
+            if (!reminder.active) {
+                entries.add(new ManualDoseEntry(medicine.medicine, reminder.amount));
+            }
+        }
     }
 
     private void getAmountAndContinue(ReminderEvent reminderEvent) {
