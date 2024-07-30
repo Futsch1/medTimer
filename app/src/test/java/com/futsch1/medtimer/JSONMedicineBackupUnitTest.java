@@ -72,7 +72,8 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ]
+          ],
+          "active": true
         }
       ],
       "medicine": {
@@ -180,7 +181,8 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ]
+          ],
+          "active": true
         }
       ],
       "medicine": {
@@ -207,7 +209,8 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             true
-          ]
+          ],
+          "active": true
         },
         {
           "timeInMinutes": 120,
@@ -224,7 +227,8 @@ public class JSONMedicineBackupUnitTest {
             true,
             true,
             false
-          ]
+          ],
+          "active": true
         }
       ],
       "medicine": {
