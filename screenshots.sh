@@ -44,3 +44,5 @@ do
         --use_tests_in_classes=com.futsch1.medtimer.StatisticsTest
     stop_clean_status_bar
 done
+
+./copyIntroDrawables.sh
