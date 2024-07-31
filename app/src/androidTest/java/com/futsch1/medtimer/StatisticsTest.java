@@ -90,6 +90,7 @@ public class StatisticsTest {
         int startY = medTimerNotifications.getVisibleBounds().top;
         int endY = medTimerNotifications.getVisibleBounds().bottom;
         device.swipe(startX, startY, startX, endY, 100);
+        device.swipe(startX, startY + 100, startX, startY + 200, 100);
         Screengrab.screenshot("5");
         device.pressBack();
 
