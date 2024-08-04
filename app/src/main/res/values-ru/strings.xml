@@ -1,5 +1,5 @@
 <resources>
-    <string name="tab_settings">НастПоказать только открытые</string>
+    <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
     <string name="add_medicine">Добавить лекарство</string>
@@ -139,7 +139,7 @@
     <string name="notification_settings_default">Настройки уведомлений стандартного приоритета</string>
     <string name="notification_settings_high">Настройки уведомлений высокого приоритета</string>
     <string name="calendar">Календарь</string>
-    <string name="show_only_open">Показать только открытые</string>
+    <string name="show_only_open">Только открытые</string>
     <string name="date">Дата</string>
     <string name="active">Активный</string>
     <string name="inactive">Неактивный</string>
