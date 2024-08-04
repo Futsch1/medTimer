@@ -1,13 +1,21 @@
 #!/bin/bash
 
-cp -f -r ./app/src/main/play/listings/en-US/graphics/phone-screenshots/2.png ./app/src/main/res/drawable/intro_medicine.png
-cp -f -r ./app/src/main/play/listings/en-US/graphics/phone-screenshots/3.png ./app/src/main/res/drawable/intro_reminder.png
-cp -f -r ./app/src/main/play/listings/en-US/graphics/phone-screenshots/5.png ./app/src/main/res/drawable/intro_notification.png
-cp -f -r ./app/src/main/play/listings/en-US/graphics/phone-screenshots/1.png ./app/src/main/res/drawable/intro_overview.png
-cp -f -r ./app/src/main/play/listings/en-US/graphics/phone-screenshots/6.png ./app/src/main/res/drawable/intro_analysis.png
+screenshots=(2 3 5 1 6)
+names=(medicine reminder notification overview analysis)
 
-cp -f -r ./app/src/main/play/listings/de-DE/graphics/phone-screenshots/2.png ./app/src/main/res/drawable-de/intro_medicine.png
-cp -f -r ./app/src/main/play/listings/de-DE/graphics/phone-screenshots/3.png ./app/src/main/res/drawable-de/intro_reminder.png
-cp -f -r ./app/src/main/play/listings/de-DE/graphics/phone-screenshots/5.png ./app/src/main/res/drawable-de/intro_notification.png
-cp -f -r ./app/src/main/play/listings/de-DE/graphics/phone-screenshots/1.png ./app/src/main/res/drawable-de/intro_overview.png
-cp -f -r ./app/src/main/play/listings/de-DE/graphics/phone-screenshots/6.png ./app/src/main/res/drawable-de/intro_analysis.png
+
+for i in $(seq 0 4)
+do
+  cp -f -r ./fastlane/metadata/android/en-US/images/phoneScreenshots/${screenshots[$i]}.png ./app/src/main/res/drawable/intro_${names[$i]}.png
+done
+
+locales=('es-ES' 'de-DE' 'fr-FR' 'it-IT')
+
+for l in "${locales[@]}"
+do
+  mkdir ./app/src/main/res/drawable-"${l:0:2}" 2> /dev/null
+  for i in $(seq 0 4)
+  do
+    cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/${screenshots[$i]}.png ./app/src/main/res/drawable-${l:0:2}/intro_${names[$i]}.png
+  done
+done
