@@ -89,7 +89,7 @@ public class RecyclerViewMatcher {
 
             @Override
             protected boolean matchesSafely(RecyclerView item) {
-                return matcherSize == Objects.requireNonNull(item.getAdapter()).getItemCount();
+                return matcherSize == Objects.requireNonNull(item.getAdapter()).getItemCount() && item.getId() == recyclerViewId;
             }
         };
     }
