@@ -55,16 +55,17 @@ class PeriodSettings(
 
     private fun setPeriodFieldsVisibility(checkedId: Int) {
         if (checkedId == R.id.timePeriod) {
-            editPeriodStartDate.visibility = View.VISIBLE
-            editPeriodEndDate.visibility = View.VISIBLE
-            periodStartActive.visibility = View.VISIBLE
-            periodEndActive.visibility = View.VISIBLE
+            setViewVisibilities(View.VISIBLE)
         } else {
-            editPeriodStartDate.visibility = View.GONE
-            editPeriodEndDate.visibility = View.GONE
-            periodStartActive.visibility = View.GONE
-            periodEndActive.visibility = View.GONE
+            setViewVisibilities(View.GONE)
         }
+    }
+
+    private fun setViewVisibilities(visible: Int) {
+        editPeriodStartDate.visibility = visible
+        editPeriodEndDate.visibility = visible
+        periodStartActive.visibility = visible
+        periodEndActive.visibility = visible
     }
 
     private fun setupActiveSwitch(activeCheckBox: CheckBox, textField: EditText) {
@@ -115,18 +116,22 @@ class PeriodSettings(
     fun updateReminder() {
         reminder.active = activeState.checkedRadioButtonId != R.id.inactive
         reminder.periodStart =
-            if (activeState.checkedRadioButtonId == R.id.timePeriod && periodStartActive.isChecked) getDaysSinceEpoch(
-                editPeriodStartDate
-            ) else 0L
+            getPeriodDaysSinceEpoch(periodStartActive, editPeriodStartDate)
         reminder.periodEnd =
-            if (activeState.checkedRadioButtonId == R.id.timePeriod && periodEndActive.isChecked) getDaysSinceEpoch(
-                editPeriodEndDate
-            ) else 0L
+            getPeriodDaysSinceEpoch(periodEndActive, editPeriodEndDate)
         if (reminder.periodStart > reminder.periodEnd && reminder.periodEnd != 0L) {
             reminder.periodStart = 0
             reminder.periodEnd = 0
         }
     }
+
+    private fun getPeriodDaysSinceEpoch(
+        periodActive: CheckBox,
+        editPeriodDate: EditText
+    ) =
+        if (activeState.checkedRadioButtonId == R.id.timePeriod && periodActive.isChecked) getDaysSinceEpoch(
+            editPeriodDate
+        ) else 0L
 
     private fun getDaysSinceEpoch(textField: EditText): Long {
         val dateString = TimeHelper.dateStringToDate(textField.text.toString())
