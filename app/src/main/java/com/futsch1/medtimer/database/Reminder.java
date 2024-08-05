@@ -40,6 +40,12 @@ public class Reminder {
     @ColumnInfo(defaultValue = "true")
     @Expose
     public boolean active;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public long periodStart;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public long periodEnd;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;

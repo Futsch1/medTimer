@@ -43,7 +43,7 @@
         android:visibility="visible">
 
         <CheckBox
-            android:id="@+id/activeStart"
+            android:id="@+id/periodStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -54,7 +54,7 @@
             android:hint="@string/period_start">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activeStartDate"
+                android:id="@+id/periodStartDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="date"
@@ -69,7 +69,7 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/activeEnd"
+            android:id="@+id/periodEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -80,7 +80,7 @@
             android:hint="@string/period_end">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activeEndDate"
+                android:id="@+id/periodEndDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="date"
