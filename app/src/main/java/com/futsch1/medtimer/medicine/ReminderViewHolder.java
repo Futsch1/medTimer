@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.button.MaterialButton;
 
@@ -118,7 +119,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         boolean weekdayLimited = !reminder.days.stream().allMatch(day -> day == Boolean.TRUE);
         boolean cyclic = reminder.pauseDays > 0;
-        if (!reminder.active) {
+        if (!ReminderHelperKt.isReminderActive(reminder)) {
             strings.add(holderItemView.getContext().getString(R.string.inactive));
         }
         if (weekdayLimited) {

@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DialogHelper;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.time.Instant;
@@ -93,7 +94,7 @@ public class ManualDose {
 
     private static void addInactiveReminders(MedicineWithReminders medicine, List<ManualDoseEntry> entries) {
         for (Reminder reminder : medicine.reminders) {
-            if (!reminder.active) {
+            if (!ReminderHelperKt.isReminderActive(reminder)) {
                 entries.add(new ManualDoseEntry(medicine.medicine, reminder.amount));
             }
         }

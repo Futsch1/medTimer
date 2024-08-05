@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -49,7 +50,7 @@ public class ReminderScheduler {
         for (MedicineWithReminders medicineWithReminder : medicineWithReminders
         ) {
             //noinspection SimplifyStreamApiCallChains
-            reminders.addAll(medicineWithReminder.reminders.stream().filter(r -> r.active).collect(Collectors.toList()));
+            reminders.addAll(medicineWithReminder.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList()));
         }
         return reminders;
     }
