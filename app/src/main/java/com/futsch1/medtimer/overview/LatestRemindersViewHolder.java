@@ -42,7 +42,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     public void bind(ReminderEvent reminderEvent) {
         String takenDateTime = TimeHelper.toLocalizedDatetimeString(reminderEventText.getContext(),
                 reminderEvent.remindedTimestamp);
-        reminderEventText.setText(reminderEventText.getContext().getString(R.string.reminder_event, reminderEvent.amount, reminderEvent.medicineName, takenDateTime));
+        final int amountStringId = reminderEvent.amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
+        String reminderEventTextString = reminderEventText.getContext().getString(amountStringId, reminderEvent.amount, reminderEvent.medicineName, takenDateTime);
+        reminderEventText.setText(reminderEventTextString);
 
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             // Intentionally empty

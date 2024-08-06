@@ -41,7 +41,7 @@ do
         --exit_on_test_failure=false \
         --use_timestamp_suffix=false \
         --use_adb_root=true \
-        --use_tests_in_classes=com.futsch1.medtimer.StatisticsTest
+        --use_tests_in_classes=com.futsch1.medtimer.ScreenshotsTest
     stop_clean_status_bar
 done
 

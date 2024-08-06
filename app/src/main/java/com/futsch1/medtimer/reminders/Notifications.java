@@ -75,8 +75,8 @@ public class Notifications {
         if (!instructions.isEmpty()) {
             instructions = " " + instructions;
         }
-
-        return context.getString(R.string.notification_content, remindTime, amount, medicineName, instructions);
+        final int amountStringId = amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
+        return context.getString(amountStringId, remindTime, amount, medicineName, instructions);
     }
 
     private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, int reminderId) {
