@@ -10,11 +10,84 @@
     android:padding="4dp"
     tools:context=".medicine.AdvancedReminderSettingsFragment">
 
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/active"
+    <RadioGroup
+        android:id="@+id/activeState"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="@string/active" />
+        android:layout_height="match_parent"
+        android:checkedButton="@id/active">
+
+        <RadioButton
+            android:id="@+id/active"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/active" />
+
+        <RadioButton
+            android:id="@+id/inactive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/inactive" />
+
+        <RadioButton
+            android:id="@+id/timePeriod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/time_period" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <CheckBox
+            android:id="@+id/periodStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/period_start">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/periodStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/periodEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/period_end">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/periodEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
 
     <View
         android:id="@+id/divider"

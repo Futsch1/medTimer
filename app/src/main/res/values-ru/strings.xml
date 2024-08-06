@@ -143,4 +143,7 @@
     <string name="date">Дата</string>
     <string name="active">Активный</string>
     <string name="inactive">Неактивный</string>
+    <string name="time_period">Период времени</string>
+    <string name="period_start">Начало периода</string>
+    <string name="period_end">Конец периода</string>
 </resources>

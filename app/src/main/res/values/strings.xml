@@ -141,4 +141,7 @@
     <string name="date">Date</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
+    <string name="time_period">Time period</string>
+    <string name="period_start">Period start</string>
+    <string name="period_end">Period end</string>
 </resources>

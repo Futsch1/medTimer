@@ -139,4 +139,7 @@
     <string name="date">Datum</string>
     <string name="active">Actief</string>
     <string name="inactive">Inactief</string>
+    <string name="time_period">Tijdsperiode</string>
+    <string name="period_start">Begin van de periode</string>
+    <string name="period_end">Einde periode</string>
 </resources>

@@ -39,6 +39,7 @@ public class JSONMedicineBackupUnitTest {
         reminder.pauseDays = 0;
         reminder.cycleStartDay = 12;
         reminder.instructions = "Take with water";
+        reminder.periodStart = 13;
         reminder.days.set(0, false);
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
@@ -73,7 +74,9 @@ public class JSONMedicineBackupUnitTest {
             true,
             true
           ],
-          "active": true
+          "active": true,
+          "periodStart": 13,
+          "periodEnd": 0
         }
       ],
       "medicine": {
@@ -182,7 +185,9 @@ public class JSONMedicineBackupUnitTest {
             true,
             true
           ],
-          "active": true
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0
         }
       ],
       "medicine": {
@@ -210,7 +215,9 @@ public class JSONMedicineBackupUnitTest {
             true,
             true
           ],
-          "active": true
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0
         },
         {
           "timeInMinutes": 120,
@@ -228,7 +235,9 @@ public class JSONMedicineBackupUnitTest {
             true,
             false
           ],
-          "active": true
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0
         }
       ],
       "medicine": {
