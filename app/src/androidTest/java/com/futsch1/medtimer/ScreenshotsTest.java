@@ -57,7 +57,7 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class StatisticsTest {
+public class ScreenshotsTest {
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
@@ -71,7 +71,7 @@ public class StatisticsTest {
                     "android.permission.POST_NOTIFICATIONS");
 
     @Test
-    public void statisticsTest() {
+    public void screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.wait(Until.findObject(By.desc("More options")), 1000);
