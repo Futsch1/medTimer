@@ -66,6 +66,7 @@ public class ReminderForScheduling {
         }
 
         clearPossibleDaysByWeekday();
+        clearPossibleDaysByActivePeriod();
 
         return getEarliestPossibleDate();
     }
@@ -102,6 +103,18 @@ public class ReminderForScheduling {
                 possibleDays[i] = false;
             }
             dayOfWeek = dayOfWeek.plus(1);
+        }
+    }
+
+    private void clearPossibleDaysByActivePeriod() {
+        long today = timeAccess.localDate().toEpochDay();
+        for (int i = 0; i < possibleDays.length; i++) {
+            if (reminder.periodStart != 0 && today + i < reminder.periodStart) {
+                possibleDays[i] = false;
+            }
+            if (reminder.periodEnd != 0 && today + i > reminder.periodEnd) {
+                possibleDays[i] = false;
+            }
         }
     }
 
