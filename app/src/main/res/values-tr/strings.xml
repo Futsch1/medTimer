@@ -139,4 +139,7 @@
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
     <string name="inactive">Aktif değil</string>
+    <string name="time_period">Zaman aralığı</string>
+    <string name="period_start">Dönem başlangıcı</string>
+    <string name="period_end">Dönem sonu</string>
 </resources>
