@@ -20,12 +20,12 @@
         <item quantity="other">%1$d herinneringen\n%2$s</item>
     </plurals>
     <string name="notification_title">Herinneringen van de medicatie</string>
-    <string name="notification_content_blank">Het is %1$s - tijd om %3$s%4$s te nemen</string>
+    <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="notification_taken">GENOMEN</string>
     <string name="taken">Ingenomen</string>
     <string name="skipped">Overgeslagen</string>
-    <string name="reminder_event_blank">%2$s, %3$s</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
     <string name="next_reminders">Volgende herinneringen</string>
