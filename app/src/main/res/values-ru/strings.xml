@@ -22,10 +22,12 @@
         <item quantity="other">%1$d напоминаний\n%2$s</item>
     </plurals>
     <string name="notification_title">Напоминание о лекарстве</string>
+    <string name="notification_content_blank">Сейчас %1$s - время принять %3$s%4$s</string>
     <string name="notification_content">Сейчас %1$s - время принять %2$s %3$s%4$s</string>
     <string name="notification_taken">ПРИНЯТО</string>
     <string name="taken">Принято</string>
     <string name="skipped">Пропущено</string>
+    <string name="reminder_event_blank">%2$s, %3$s</string>
     <string name="reminder_event">%1$s %2$s, %3$s</string>
     <string name="recent_events">Последние события</string>
     <string name="next_reminders">Следующие напоминания</string>

@@ -21,11 +21,13 @@
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
     <string name="notification_title">Rappel de médicaments</string>
-    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s sur %3$s%4$s</string>
+    <string name="notification_content_blank">Il est %1$s: il est temps de prendre %3$s%4$s</string>
+    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
     <string name="notification_taken">PRIS</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
-    <string name="reminder_event">%1$s sur %2$s, %3$s</string>
+    <string name="reminder_event_blank">%2$s, %3$s</string>
+    <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_events">Événements récents</string>
     <string name="next_reminders">Prochains rappels</string>
     <string name="version">Version %s</string>

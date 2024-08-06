@@ -47,7 +47,8 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         skippedNow.setOnClickListener(v -> processFutureReminder(scheduledReminder, false, looper, medicineViewModel));
 
         String nextTime = TimeHelper.toLocalizedDatetimeString(nextReminderText.getContext(), scheduledReminder.timestamp().toEpochMilli() / 1000);
-        nextReminderText.setText(nextReminderText.getContext().getString(R.string.reminder_event, scheduledReminder.reminder().amount, scheduledReminder.medicine().name, nextTime));
+        final int amountStringId = scheduledReminder.reminder().amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
+        nextReminderText.setText(nextReminderText.getContext().getString(amountStringId, scheduledReminder.reminder().amount, scheduledReminder.medicine().name, nextTime));
 
         boolean isToday = isToday(scheduledReminder.timestamp().toEpochMilli());
         takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);

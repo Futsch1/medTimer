@@ -21,10 +21,12 @@
         <item quantity="other">%1$d reminders\n%2$s</item>
     </plurals>
     <string name="notification_title">Medicine reminder</string>
+    <string name="notification_content_blank">It is %1$s - time to take %3$s%4$s</string>
     <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
     <string name="notification_taken">TAKEN</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
+    <string name="reminder_event_blank">%2$s, %3$s</string>
     <string name="reminder_event">%1$s of %2$s, %3$s</string>
     <string name="recent_events">Recent events</string>
     <string name="next_reminders">Next reminders</string>
