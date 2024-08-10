@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DeleteHelper;
@@ -59,6 +60,12 @@ public class OverviewFragment extends Fragment {
         setupSwipeEdit(latestReminders);
         setupSwipeDelete(latestReminders);
         setupFilterButton();
+
+        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
+                medicineViewModel,
+                this,
+                fragmentOverview);
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentOverview;
     }

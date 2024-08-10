@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,13 +34,6 @@ public class MainActivity extends AppCompatActivity {
             }
     );
     private AppBarConfiguration appBarConfiguration;
-    private OptionsMenu optionsMenu;
-    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-            optionsMenu.fileSelected(result.getData().getData());
-        }
-    });
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +69,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        optionsMenu = new OptionsMenu(this,
-                new MedicineViewModel(this.getApplication()),
-                requestFileLauncher,
-                navController);
-        addMenuProvider(optionsMenu);
     }
 
     @Override

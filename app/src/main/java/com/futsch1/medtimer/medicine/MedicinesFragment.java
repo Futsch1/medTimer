@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.helpers.DeleteHelper;
@@ -76,6 +77,12 @@ public class MedicinesFragment extends Fragment {
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), adapter::submitList);
 
         setupAddMedicineButton(fragmentView);
+
+        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
+                new MedicineViewModel(requireActivity().getApplication()),
+                this,
+                fragmentView);
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentView;
     }
