@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
@@ -42,10 +46,11 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(MedicineWithReminders medicineWithReminders, DeleteCallback deleteCallback) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
-        if (medicineWithReminders.reminders.isEmpty()) {
+        List<Reminder> activeReminders = medicineWithReminders.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
+        if (activeReminders.isEmpty()) {
             remindersSummaryView.setText(R.string.no_reminders);
         } else {
-            remindersSummaryView.setText(getRemindersSummary(medicineWithReminders));
+            remindersSummaryView.setText(getRemindersSummary(activeReminders));
         }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
@@ -77,13 +82,13 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private String getRemindersSummary(MedicineWithReminders medicineWithReminders) {
+    private String getRemindersSummary(List<Reminder> reminders) {
         ArrayList<String> reminderTimes = new ArrayList<>();
-        int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
+        int[] timesInMinutes = reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
         for (int minute : timesInMinutes) {
             reminderTimes.add(TimeHelper.minutesToTimeString(holderItemView.getContext(), minute));
         }
-        int len = medicineWithReminders.reminders.size();
+        int len = reminders.size();
         return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
 
     }
