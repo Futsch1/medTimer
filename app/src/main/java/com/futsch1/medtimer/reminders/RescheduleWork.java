@@ -55,6 +55,8 @@ public class RescheduleWork extends Worker {
         if (!scheduledReminders.isEmpty()) {
             ScheduledReminder scheduledReminder = scheduledReminders.get(0);
             this.schedule(scheduledReminder.timestamp(), scheduledReminder.reminder().reminderId, scheduledReminder.medicine().name, -1, 0);
+        } else {
+            this.clearAlarms();
         }
 
         return Result.success();
@@ -105,6 +107,12 @@ public class RescheduleWork extends Worker {
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
+    }
+
+    private void clearAlarms() {
+        Intent intent = ReminderProcessor.getReminderAction(context, 0, 0, LocalDate.now());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -1, intent, PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.cancel(pendingIntent);
     }
 
     private boolean canScheduleExactAlarms(AlarmManager alarmManager) {
