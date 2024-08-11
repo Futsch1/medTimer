@@ -6,9 +6,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -17,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -44,9 +40,8 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
 
-public class EditMedicineFragment extends Fragment implements MenuProvider {
+public class EditMedicineFragment extends Fragment {
 
     final HandlerThread thread;
     MedicineViewModel medicineViewModel;
@@ -94,7 +89,7 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
 
         medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
-        requireActivity().addMenuProvider(this, getViewLifecycleOwner());
+        requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
 
         return fragmentEditMedicine;
     }
@@ -265,50 +260,4 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
         return importanceTexts[0];
     }
 
-    @Override
-    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.edit_medicine, menu);
-        menu.setGroupDividerEnabled(true);
-
-        menu.findItem(R.id.activate_all).setOnMenuItemClickListener(menuItem -> {
-            setRemindersActive(true);
-            return true;
-        });
-        menu.findItem(R.id.deactivate_all).setOnMenuItemClickListener(menuItem -> {
-            setRemindersActive(false);
-            return true;
-        });
-        menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener(menuItem -> {
-            DeleteHelper deleteHelper = new DeleteHelper(requireContext());
-            deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
-                final Handler threadHandler = new Handler(thread.getLooper());
-                threadHandler.post(() -> {
-                    medicineViewModel.deleteMedicine(medicineViewModel.getMedicine(medicineId));
-                    final Handler mainHandler = new Handler(Looper.getMainLooper());
-                    mainHandler.post(() -> {
-                        NavController navController = Navigation.findNavController(fragmentEditMedicine);
-                        navController.navigateUp();
-                    });
-                });
-            }, () -> {
-            });
-            return true;
-        });
-    }
-
-    private void setRemindersActive(boolean active) {
-        Handler handler = new Handler(thread.getLooper());
-        handler.post(() -> {
-            List<Reminder> reminders = medicineViewModel.getReminders(medicineId);
-            for (Reminder reminder : reminders) {
-                reminder.active = active;
-                medicineViewModel.updateReminder(reminder);
-            }
-        });
-    }
-
-    @Override
-    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        return false;
-    }
 }
