@@ -5,8 +5,12 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,12 +18,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,7 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class AdvancedReminderSettingsFragment extends Fragment {
+public class AdvancedReminderSettingsFragment extends Fragment implements MenuProvider {
 
     private final HandlerThread backgroundThread;
     private String[] daysArray;
@@ -62,6 +70,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::loadReminder);
+
+        requireActivity().addMenuProvider(this, getViewLifecycleOwner());
 
         return advancedReminderView;
     }
@@ -223,4 +233,31 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.advanced_reminder_settings, menu);
+        menu.setGroupDividerEnabled(true);
+
+        menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener(menuItem -> {
+            DeleteHelper deleteHelper = new DeleteHelper(requireContext());
+            deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, () -> {
+                final Handler threadHandler = new Handler(backgroundThread.getLooper());
+                threadHandler.post(() -> {
+                    medicineViewModel.deleteReminder(reminder);
+                    final Handler mainHandler = new Handler(Looper.getMainLooper());
+                    mainHandler.post(() -> {
+                        NavController navController = Navigation.findNavController(advancedReminderView);
+                        navController.navigateUp();
+                    });
+                });
+            }, () -> {
+            });
+            return true;
+        });
+    }
+
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
 }
