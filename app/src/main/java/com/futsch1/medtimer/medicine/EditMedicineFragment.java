@@ -280,6 +280,22 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
             setRemindersActive(false);
             return true;
         });
+        menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener(menuItem -> {
+            DeleteHelper deleteHelper = new DeleteHelper(requireContext());
+            deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
+                final Handler threadHandler = new Handler(thread.getLooper());
+                threadHandler.post(() -> {
+                    medicineViewModel.deleteMedicine(medicineViewModel.getMedicine(medicineId));
+                    final Handler mainHandler = new Handler(Looper.getMainLooper());
+                    mainHandler.post(() -> {
+                        NavController navController = Navigation.findNavController(fragmentEditMedicine);
+                        navController.navigateUp();
+                    });
+                });
+            }, () -> {
+            });
+            return true;
+        });
     }
 
     private void setRemindersActive(boolean active) {
