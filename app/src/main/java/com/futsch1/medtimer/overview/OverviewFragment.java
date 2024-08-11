@@ -41,8 +41,6 @@ public class OverviewFragment extends Fragment {
     private LatestRemindersViewAdapter adapter;
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
-    private SwipeHelper swipeHelperEdit;
-    private SwipeHelper swipeHelperDelete;
     private Chip showOnlyOpen;
 
     @Override
@@ -97,7 +95,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwipeEdit(RecyclerView latestReminders) {
-        swipeHelperEdit = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, 0xFF006400, android.R.drawable.ic_menu_edit, null) {
+        SwipeHelper swipeHelperEdit = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, 0xFF006400, android.R.drawable.ic_menu_edit) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.RIGHT) {
@@ -111,7 +109,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwipeDelete(RecyclerView latestReminders) {
-        swipeHelperDelete = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete, null) {
+        SwipeHelper swipeHelperDelete = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
@@ -180,9 +178,6 @@ public class OverviewFragment extends Fragment {
         });
 
         ReminderProcessor.requestReschedule(requireContext());
-
-        swipeHelperEdit.setup(requireContext());
-        swipeHelperDelete.setup(requireContext());
     }
 
     @Override

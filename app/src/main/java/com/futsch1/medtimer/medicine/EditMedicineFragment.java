@@ -53,7 +53,6 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
     EditText editMedicineName;
     int medicineId;
     ReminderViewAdapter adapter;
-    private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
     private int color;
@@ -154,7 +153,7 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete, "delete_items") {
+        SwipeHelper swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
@@ -200,7 +199,6 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
     @Override
     public void onResume() {
         super.onResume();
-        swipeHelper.setup(requireContext());
         setupNotificationImportance();
     }
 

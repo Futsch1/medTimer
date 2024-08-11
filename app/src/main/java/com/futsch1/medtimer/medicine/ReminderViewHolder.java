@@ -5,7 +5,6 @@ import static com.futsch1.medtimer.helpers.TimeHelper.timeStringToMinutes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
@@ -97,12 +95,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     private boolean onLongClick(DeleteCallback deleteCallback) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
-
-        if (sharedPref.getString("delete_items", "0").equals("0")) {
-            return false;
-        }
-
         PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.holderItemView);
         popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
         popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
