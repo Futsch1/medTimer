@@ -36,7 +36,7 @@ class EditMedicineMenuProvider(
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
-                val threadHandler: Handler = Handler(thread.getLooper())
+                val threadHandler = Handler(thread.getLooper())
                 threadHandler.post {
                     medicineViewModel.deleteMedicine(medicineViewModel.getMedicine(medicineId))
                     val mainHandler = Handler(Looper.getMainLooper())
@@ -45,14 +45,16 @@ class EditMedicineMenuProvider(
                         navController.navigateUp()
                     }
                 }
-            }, {})
+            }, {
+                // do nothing
+            })
             true
         }
     }
 
 
     private fun setRemindersActive(active: Boolean) {
-        val handler: Handler = Handler(thread.getLooper())
+        val handler = Handler(thread.getLooper())
         handler.post {
             val reminders: List<Reminder> =
                 medicineViewModel.getReminders(medicineId)
