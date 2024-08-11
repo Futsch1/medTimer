@@ -102,13 +102,16 @@ public class MedicinesFragment extends Fragment {
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper<MedicineViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
-        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_medicine, () -> {
-            Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-            medicineViewModel.deleteMedicine(medicine);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        });
+        DeleteHelper deleteHelper = new DeleteHelper(context);
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
+            final Handler threadHandler = new Handler(thread.getLooper());
+            threadHandler.post(() -> {
+                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
+                medicineViewModel.deleteMedicine(medicine);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void setupAddMedicineButton(View fragmentView) {

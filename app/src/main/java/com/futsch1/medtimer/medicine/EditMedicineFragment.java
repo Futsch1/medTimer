@@ -172,13 +172,16 @@ public class EditMedicineFragment extends Fragment implements MenuProvider {
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper<ReminderViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
-        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_reminder, () -> {
-            Reminder reminder = medicineViewModel.getReminder((int) itemId);
-            medicineViewModel.deleteReminder(reminder);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        });
+        DeleteHelper deleteHelper = new DeleteHelper(context);
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, () -> {
+            final Handler threadHandler = new Handler(thread.getLooper());
+            threadHandler.post(() -> {
+                Reminder reminder = medicineViewModel.getReminder((int) itemId);
+                medicineViewModel.deleteReminder(reminder);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void createReminder(String amount) {

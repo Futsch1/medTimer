@@ -38,7 +38,7 @@ public class OverviewFragment extends Fragment {
 
     private View fragmentOverview;
     private MedicineViewModel medicineViewModel;
-    private LatestRemindersViewAdapter latestRemindersViewAdapter;
+    private LatestRemindersViewAdapter adapter;
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
     private SwipeHelper swipeHelperEdit;
@@ -73,11 +73,11 @@ public class OverviewFragment extends Fragment {
     @NonNull
     private RecyclerView setupLatestReminders() {
         RecyclerView latestReminders = fragmentOverview.findViewById(R.id.latestReminders);
-        latestRemindersViewAdapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
-        latestReminders.setAdapter(latestRemindersViewAdapter);
+        adapter = new LatestRemindersViewAdapter(new LatestRemindersViewAdapter.ReminderEventDiff());
+        latestReminders.setAdapter(adapter);
         latestReminders.setLayoutManager(new LinearLayoutManager(fragmentOverview.getContext()));
         // Scroll to top as soon as a new item was inserted
-        latestRemindersViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 latestReminders.scrollToPosition(0);
@@ -145,19 +145,23 @@ public class OverviewFragment extends Fragment {
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper<LatestRemindersViewHolder> deleteHelper = new DeleteHelper<>(context, thread, latestRemindersViewAdapter);
-        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_reminder_event, () -> {
-            ReminderEvent reminderEvent = medicineViewModel.getReminderEvent((int) itemId);
-            reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
-            medicineViewModel.updateReminderEvent(reminderEvent);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> latestRemindersViewAdapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        });
+        DeleteHelper deleteHelper = new DeleteHelper(context);
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, () -> {
+            final Handler threadHandler = new Handler(thread.getLooper());
+            threadHandler.post(() -> {
+
+                ReminderEvent reminderEvent = medicineViewModel.getReminderEvent((int) itemId);
+                reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
+                medicineViewModel.updateReminderEvent(reminderEvent);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void updateFilter() {
         String filterString = showOnlyOpen.isChecked() ? "o" : "";
-        latestRemindersViewAdapter.getFilter().filter(filterString);
+        adapter.getFilter().filter(filterString);
     }
 
     @Override
@@ -171,7 +175,7 @@ public class OverviewFragment extends Fragment {
         }
         liveData = medicineViewModel.getLiveReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60), false);
         liveData.observe(getViewLifecycleOwner(), reminders -> {
-            latestRemindersViewAdapter.setData(reminders);
+            adapter.setData(reminders);
             updateFilter();
         });
 
