@@ -48,7 +48,11 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         medicineNameView.setText(medicineWithReminders.medicine.name);
         List<Reminder> activeReminders = medicineWithReminders.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
         if (activeReminders.isEmpty()) {
-            remindersSummaryView.setText(R.string.no_reminders);
+            if (medicineWithReminders.reminders.isEmpty()) {
+                remindersSummaryView.setText(R.string.no_reminders);
+            } else {
+                remindersSummaryView.setText(R.string.inactive);
+            }
         } else {
             remindersSummaryView.setText(getRemindersSummary(activeReminders));
         }
