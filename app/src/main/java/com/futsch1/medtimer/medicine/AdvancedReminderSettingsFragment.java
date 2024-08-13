@@ -63,9 +63,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::loadReminder);
 
-        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(reminder, backgroundThread, medicineViewModel, advancedReminderView),
-                getViewLifecycleOwner());
-
         return advancedReminderView;
     }
 
@@ -80,6 +77,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setupView() {
+        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(reminder, backgroundThread, medicineViewModel, advancedReminderView),
+                getViewLifecycleOwner());
 
         periodSettings = new PeriodSettings(advancedReminderView, getParentFragmentManager(), reminder);
         editInstructions = advancedReminderView.findViewById(R.id.editInstructions);

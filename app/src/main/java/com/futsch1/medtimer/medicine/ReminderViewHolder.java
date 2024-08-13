@@ -4,12 +4,10 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 import static com.futsch1.medtimer.helpers.TimeHelper.timeStringToMinutes;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,15 +54,13 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void bind(Reminder reminder, String medicineName, DeleteCallback deleteCallback) {
+    public void bind(Reminder reminder, String medicineName) {
         this.reminder = reminder;
 
         editTime.setText(minutesToTimeString(editTime.getContext(), reminder.timeInMinutes));
         editTime.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(reminder, hasFocus));
 
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
-
-        holderItemView.setOnLongClickListener(v -> onLongClick(deleteCallback));
 
         editAmount.setText(reminder.amount);
         advancedSettingsSummary.setText(getAdvancedSettingsSummary(reminder));
@@ -92,18 +88,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                         medicineName
                 );
         navController.navigate(action);
-    }
-
-    private boolean onLongClick(DeleteCallback deleteCallback) {
-        PopupMenu popupMenu = new PopupMenu(editTime.getContext(), this.holderItemView);
-        popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
-        popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
-        popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
-            deleteCallback.deleteItem(editTime.getContext(), getItemId(), getBindingAdapterPosition());
-            return true;
-        });
-        popupMenu.show();
-        return true;
     }
 
     private String getAdvancedSettingsSummary(Reminder reminder) {
@@ -153,9 +137,5 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             reminder.timeInMinutes = minutes;
         }
         return reminder;
-    }
-
-    public interface DeleteCallback {
-        void deleteItem(Context context, long itemId, int adapterPosition);
     }
 }

@@ -109,16 +109,8 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwipeDelete(RecyclerView latestReminders) {
-        SwipeHelper swipeHelperDelete = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    deleteItem(fragmentOverview.getContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition());
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelperDelete);
-        itemTouchHelper.attachToRecyclerView(latestReminders);
+        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+                .attachToRecyclerView(latestReminders);
     }
 
     private void setupFilterButton() {

@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -96,7 +95,7 @@ public class EditMedicineFragment extends Fragment {
 
     private @NonNull RecyclerView setupMedicineList(String medicineName) {
         RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicineFragment.this::deleteItem, medicineName, requireActivity());
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         return recyclerView;
@@ -148,16 +147,8 @@ public class EditMedicineFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        SwipeHelper swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAbsoluteAdapterPosition());
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+                .attachToRecyclerView(recyclerView);
     }
 
     private void setupAddReminderButton() {

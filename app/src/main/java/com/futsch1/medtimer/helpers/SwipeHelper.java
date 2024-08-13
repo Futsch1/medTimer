@@ -30,7 +30,6 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
 
-
     protected SwipeHelper(Context context, int direction, int color, int icon) {
         super(0, direction);
 
@@ -51,6 +50,18 @@ public abstract class SwipeHelper extends SimpleCallback {
         intrinsicWidth = swipeIcon.getIntrinsicWidth();
 
         setDefaultSwipeDirs(swipeDirection);
+    }
+
+    public static ItemTouchHelper createLeftSwipeTouchHelper(Context context, SwipedCallback callback) {
+        SwipeHelper swipeHelper = new SwipeHelper(context, ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    callback.onSwiped(viewHolder);
+                }
+            }
+        };
+        return new ItemTouchHelper(swipeHelper);
     }
 
     @Override
@@ -131,5 +142,9 @@ public abstract class SwipeHelper extends SimpleCallback {
                 ((itemView.getTranslationX() / itemView.getWidth()) * 200)));
         if (alpha > 255) alpha = 255;
         return alpha;
+    }
+
+    public interface SwipedCallback {
+        void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder);
     }
 }

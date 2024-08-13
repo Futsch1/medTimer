@@ -1,8 +1,4 @@
 <resources>
-    <string-array name="delete_entries_titles">
-        <item>@string/swipe_left</item>
-        <item>@string/long_press</item>
-    </string-array>
     <string-array name="values_0_and_1">
         <item>0</item>
         <item>1</item>

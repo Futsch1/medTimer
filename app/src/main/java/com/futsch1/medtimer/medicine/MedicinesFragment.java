@@ -62,7 +62,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        ItemTouchHelper itemTouchHelper = getItemTouchHelper(fragmentView);
+        ItemTouchHelper itemTouchHelper = SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         // Connect view model to recycler view adapter
@@ -87,16 +87,17 @@ public class MedicinesFragment extends Fragment {
         }
     }
 
-    private @NonNull ItemTouchHelper getItemTouchHelper(View fragmentView) {
-        SwipeHelper swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    deleteItem(fragmentView.getContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition());
-                }
-            }
-        };
-        return new ItemTouchHelper(swipeHelper);
+    private void deleteItem(Context context, long itemId, int adapterPosition) {
+        DeleteHelper deleteHelper = new DeleteHelper(context);
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
+            final Handler threadHandler = new Handler(thread.getLooper());
+            threadHandler.post(() -> {
+                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
+                medicineViewModel.deleteMedicine(medicine);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void setupAddMedicineButton(View fragmentView) {
@@ -113,19 +114,6 @@ public class MedicinesFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
-    }
-
-    private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
-            final Handler threadHandler = new Handler(thread.getLooper());
-            threadHandler.post(() -> {
-                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-                medicineViewModel.deleteMedicine(medicine);
-                final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-            });
-        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     @NonNull
