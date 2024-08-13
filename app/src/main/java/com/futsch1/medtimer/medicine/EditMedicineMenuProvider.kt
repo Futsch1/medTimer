@@ -33,6 +33,10 @@ class EditMedicineMenuProvider(
             setRemindersActive(false)
             true
         }
+        setupDeleteMenu(menu)
+    }
+
+    private fun setupDeleteMenu(menu: Menu) {
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
