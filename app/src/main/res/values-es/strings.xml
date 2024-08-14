@@ -5,7 +5,6 @@
     <string name="add_medicine">Añadir medicamento</string>
     <string name="medicine_name">Nombre del medicamento</string>
     <string name="add_reminder">Añadir recordatorio</string>
-    <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="time">Hora</string>
     <string name="dosage">Dosis</string>

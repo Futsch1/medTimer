@@ -5,7 +5,6 @@
     <string name="add_medicine">Medicatie toevoegen</string>
     <string name="medicine_name">Naam van de medicatie</string>
     <string name="add_reminder">Herinnering toevoegen</string>
-    <string name="edit">Bewerking</string>
     <string name="delete">Verwijderen</string>
     <string name="time">Tijd</string>
     <string name="dosage">Dosering</string>
