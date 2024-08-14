@@ -5,7 +5,6 @@
     <string name="add_medicine">Medikament hinzufügen</string>
     <string name="medicine_name">Name des Medikaments</string>
     <string name="add_reminder">Erinnerung hinzufügen</string>
-    <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <string name="time">Zeit</string>
     <string name="dosage">Dosierung</string>
@@ -34,9 +33,6 @@
     <string name="clear_events">Ereignisse zurücksetzen</string>
     <string name="app_version">App-Version</string>
     <string name="are_you_sure_delete_events">Ereignisse wirklich zurücksetzen?</string>
-    <string name="swipe_left">Wischen nach links</string>
-    <string name="long_press">Lange drücken</string>
-    <string name="delete_items">Einträge löschen</string>
     <string name="show_notifications">Benachrichtigungen anzeigen</string>
     <string name="overview_events">Übersicht Erinnerungen anzeigen</string>
     <string name="four_hours">4 Stunden</string>
@@ -144,4 +140,6 @@
     <string name="time_period">Zeitspanne</string>
     <string name="period_start">Beginn der Zeitspanne</string>
     <string name="period_end">Ende der Zeitspanne</string>
+    <string name="activate_all">Alle Mahnungen aktivieren</string>
+    <string name="deactivate_all">Deaktivieren Sie alle Erinnerungen</string>
 </resources>

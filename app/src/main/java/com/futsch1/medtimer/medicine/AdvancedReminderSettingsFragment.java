@@ -77,6 +77,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setupView() {
+        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(reminder, backgroundThread, medicineViewModel, advancedReminderView),
+                getViewLifecycleOwner());
 
         periodSettings = new PeriodSettings(advancedReminderView, getParentFragmentManager(), reminder);
         editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
@@ -222,5 +224,4 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             reminder.cycleStartDay = startDate.toEpochDay();
         }
     }
-
 }

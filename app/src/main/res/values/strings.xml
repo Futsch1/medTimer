@@ -6,7 +6,6 @@
     <string name="add_medicine">Add medicine</string>
     <string name="medicine_name">Medicine name</string>
     <string name="add_reminder">Add reminder</string>
-    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="dosage">Dosage</string>
@@ -35,9 +34,6 @@
     <string name="clear_events">Clear events</string>
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
-    <string name="swipe_left">Swipe left</string>
-    <string name="long_press">Long press</string>
-    <string name="delete_items">Delete items</string>
     <string name="show_notifications">Show notifications</string>
     <string name="overview_events">Overview display events</string>
     <string name="four_hours">4 hours</string>
@@ -146,4 +142,6 @@
     <string name="time_period">Time period</string>
     <string name="period_start">Period start</string>
     <string name="period_end">Period end</string>
+    <string name="activate_all">Activate all reminders</string>
+    <string name="deactivate_all">Deactivate all reminders</string>
 </resources>

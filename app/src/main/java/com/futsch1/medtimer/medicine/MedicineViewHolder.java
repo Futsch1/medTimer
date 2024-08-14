@@ -1,26 +1,26 @@
 package com.futsch1.medtimer.medicine;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
@@ -40,33 +40,18 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view);
     }
 
-    public void bind(MedicineWithReminders medicineWithReminders, DeleteCallback deleteCallback) {
+    public void bind(MedicineWithReminders medicineWithReminders) {
         medicineNameView.setText(medicineWithReminders.medicine.name);
-        if (medicineWithReminders.reminders.isEmpty()) {
-            remindersSummaryView.setText(R.string.no_reminders);
-        } else {
-            remindersSummaryView.setText(getRemindersSummary(medicineWithReminders));
-        }
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.holderItemView.getContext());
-
-        holderItemView.setOnLongClickListener(v -> {
-            if (sharedPref.getString("delete_items", "0").equals("0")) {
-                return false;
+        List<Reminder> activeReminders = medicineWithReminders.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
+        if (activeReminders.isEmpty()) {
+            if (medicineWithReminders.reminders.isEmpty()) {
+                remindersSummaryView.setText(R.string.no_reminders);
+            } else {
+                remindersSummaryView.setText(R.string.inactive);
             }
-            PopupMenu popupMenu = new PopupMenu(holderItemView.getContext(), this.holderItemView);
-            popupMenu.getMenuInflater().inflate(R.menu.edit_delete_popup, popupMenu.getMenu());
-            popupMenu.getMenu().findItem(R.id.edit).setOnMenuItemClickListener(item -> {
-                navigateToEditFragment(medicineWithReminders);
-                return true;
-            });
-            popupMenu.getMenu().findItem(R.id.delete).setOnMenuItemClickListener(item -> {
-                deleteCallback.deleteItem(holderItemView.getContext(), getItemId(), getBindingAdapterPosition());
-                return true;
-            });
-            popupMenu.show();
-            return true;
-        });
+        } else {
+            remindersSummaryView.setText(getRemindersSummary(activeReminders));
+        }
 
         holderItemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
 
@@ -77,13 +62,13 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private String getRemindersSummary(MedicineWithReminders medicineWithReminders) {
+    private String getRemindersSummary(List<Reminder> reminders) {
         ArrayList<String> reminderTimes = new ArrayList<>();
-        int[] timesInMinutes = medicineWithReminders.reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
+        int[] timesInMinutes = reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
         for (int minute : timesInMinutes) {
             reminderTimes.add(TimeHelper.minutesToTimeString(holderItemView.getContext(), minute));
         }
-        int len = medicineWithReminders.reminders.size();
+        int len = reminders.size();
         return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
 
     }
@@ -98,9 +83,5 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 medicineWithReminders.medicine.notificationImportance
         );
         navController.navigate(action);
-    }
-
-    public interface DeleteCallback {
-        void deleteItem(Context context, long itemId, int adapterPosition);
     }
 }

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +12,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuProvider;
-import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -33,19 +37,27 @@ import java.lang.reflect.Method;
 public class OptionsMenu implements MenuProvider {
     private final Context context;
     private final MedicineViewModel medicineViewModel;
-    private final ActivityResultLauncher<Intent> openFileLauncher;
-    private final NavController navController;
+    private final View view;
     private final HandlerThread backgroundThread;
+    private final ActivityResultLauncher<Intent> openFileLauncher;
     private Menu menu;
     private BackupManager backupManager;
 
-    public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher, NavController navController) {
+    public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultCaller caller, View view) {
         this.context = context;
         this.medicineViewModel = medicineViewModel;
-        this.openFileLauncher = openFileLauncher;
-        this.navController = navController;
+        this.view = view;
+        this.openFileLauncher = caller.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                this.fileSelected(result.getData().getData());
+            }
+        });
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+    }
+
+    public void fileSelected(Uri data) {
+        backupManager.fileSelected(data);
     }
 
     @Override
@@ -81,7 +93,7 @@ public class OptionsMenu implements MenuProvider {
     private void setupSettings() {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
-            navController.navigate(R.id.action_global_preferencesFragment);
+            Navigation.findNavController(view).navigate(R.id.action_global_preferencesFragment);
             return true;
         });
     }
@@ -178,9 +190,5 @@ public class OptionsMenu implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
-    }
-
-    public void fileSelected(Uri data) {
-        backupManager.fileSelected(data);
     }
 }

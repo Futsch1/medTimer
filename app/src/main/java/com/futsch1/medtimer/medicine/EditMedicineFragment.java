@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +47,6 @@ public class EditMedicineFragment extends Fragment {
     EditText editMedicineName;
     int medicineId;
     ReminderViewAdapter adapter;
-    private SwipeHelper swipeHelper;
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
     private int color;
@@ -74,10 +72,7 @@ public class EditMedicineFragment extends Fragment {
         medicineId = editMedicineArgs.getMedicineId();
         String medicineName = editMedicineArgs.getMedicineName();
 
-        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), EditMedicineFragment.this::deleteItem, medicineName, requireActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        RecyclerView recyclerView = setupMedicineList(medicineName);
 
         editMedicineName = fragmentEditMedicine.findViewById(R.id.editMedicineName);
         editMedicineName.setText(medicineName);
@@ -91,89 +86,19 @@ public class EditMedicineFragment extends Fragment {
         setupSwiping(recyclerView);
         setupAddReminderButton();
 
-        medicineViewModel.getReminders(medicineId).observe(requireActivity(), adapter::submitList);
+        medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
+
+        requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
 
         return fragmentEditMedicine;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        swipeHelper.setup(requireContext());
-        setupNotificationImportance();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        if (editMedicineName != null && enableColor != null) {
-            String word = editMedicineName.getText().toString();
-            Medicine medicine = new Medicine(word, medicineId);
-            medicine.useColor = enableColor.isChecked();
-            medicine.color = color;
-            medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
-            medicineViewModel.updateMedicine(medicine);
-        }
-
-        updateReminders();
-    }
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        thread.quitSafely();
-    }
-
-    private int importanceStringToValue(String importance) {
-        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        if (importance.equals(importanceTexts[1])) {
-            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
-        }
-        return value;
-    }
-
-    private void updateReminders() {
-        if (fragmentEditMedicine != null) {
-            RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-            for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-
-                medicineViewModel.updateReminder(viewHolder.getReminder());
-            }
-        }
-    }
-
-    private void setupNotificationImportance() {
-        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
-
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
-        notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
-    }
-
-    private String importanceValueToString(int value) {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-
-        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
-            return importanceTexts[0];
-        }
-        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
-            return importanceTexts[1];
-        }
-        return importanceTexts[0];
-    }
-
-    private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper<ReminderViewHolder> deleteHelper = new DeleteHelper<>(context, thread, adapter);
-        deleteHelper.deleteItem(adapterPosition, R.string.are_you_sure_delete_reminder, () -> {
-            Reminder reminder = medicineViewModel.getReminder((int) itemId);
-            medicineViewModel.deleteReminder(reminder);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        });
+    private @NonNull RecyclerView setupMedicineList(String medicineName) {
+        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        return recyclerView;
     }
 
     private void setupOpenCalendarButton() {
@@ -222,21 +147,26 @@ public class EditMedicineFragment extends Fragment {
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        swipeHelper = new SwipeHelper(requireContext(), ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete, "delete_items") {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    EditMedicineFragment.this.deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getAbsoluteAdapterPosition());
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelper);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+                .attachToRecyclerView(recyclerView);
     }
 
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
+    }
+
+    private void deleteItem(Context context, long itemId, int adapterPosition) {
+        DeleteHelper deleteHelper = new DeleteHelper(context);
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, () -> {
+            final Handler threadHandler = new Handler(thread.getLooper());
+            threadHandler.post(() -> {
+                Reminder reminder = medicineViewModel.getReminder((int) itemId);
+                medicineViewModel.deleteReminder(reminder);
+                final Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+            });
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void createReminder(String amount) {
@@ -250,6 +180,75 @@ public class EditMedicineFragment extends Fragment {
             reminder.timeInMinutes = minutes;
             medicineViewModel.insertReminder(reminder);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupNotificationImportance();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (editMedicineName != null && enableColor != null) {
+            String word = editMedicineName.getText().toString();
+            Medicine medicine = new Medicine(word, medicineId);
+            medicine.useColor = enableColor.isChecked();
+            medicine.color = color;
+            medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
+            medicineViewModel.updateMedicine(medicine);
+        }
+
+        updateReminders();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        thread.quitSafely();
+    }
+
+    private int importanceStringToValue(String importance) {
+        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        if (importance.equals(importanceTexts[1])) {
+            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
+        }
+        return value;
+    }
+
+    private void updateReminders() {
+        if (fragmentEditMedicine != null) {
+            RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+
+                medicineViewModel.updateReminder(viewHolder.getReminder());
+            }
+        }
+    }
+
+    private void setupNotificationImportance() {
+        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
+
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
+        notificationImportance.setAdapter(arrayAdapter);
+        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
+    }
+
+    private String importanceValueToString(int value) {
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+
+        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
+            return importanceTexts[0];
+        }
+        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
+            return importanceTexts[1];
+        }
+        return importanceTexts[0];
     }
 
 }

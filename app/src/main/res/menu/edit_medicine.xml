@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/activate_group" >
+        <item
+            android:id="@+id/activate_all"
+            android:title="@string/activate_all" />
+        <item
+            android:id="@+id/deactivate_all"
+            android:title="@string/deactivate_all" />
+    </group>
+    <item
+        android:id="@+id/delete_medicine"
+        android:title="@string/delete" />
+</menu>

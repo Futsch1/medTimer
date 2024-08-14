@@ -24,19 +24,22 @@ public interface MedicineDao {
     Medicine getMedicine(int medicineId);
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
-    LiveData<List<Reminder>> getReminders(int medicineId);
+    LiveData<List<Reminder>> getLiveReminders(int medicineId);
+
+    @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId")
+    List<Reminder> getReminders(int medicineId);
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
-    LiveData<List<ReminderEvent>> getReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
+    LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    LiveData<List<ReminderEvent>> getLiveReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
+    LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
-    List<ReminderEvent> getReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
+    List<ReminderEvent> getLiveReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Insert
     long insertMedicine(Medicine medicine);

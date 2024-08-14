@@ -16,6 +16,8 @@ import androidx.navigation.Navigation;
 import com.androidplot.pie.PieChart;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
+import com.futsch1.medtimer.MedicineViewModel;
+import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.google.android.material.button.MaterialButton;
@@ -59,6 +61,12 @@ public class StatisticsFragment extends Fragment {
         setupTakenSkippedCharts();
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::setupMedicinesPerDayChart);
+
+        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
+                new MedicineViewModel(requireActivity().getApplication()),
+                this,
+                statisticsView);
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;
     }

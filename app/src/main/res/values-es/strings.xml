@@ -5,7 +5,6 @@
     <string name="add_medicine">Añadir medicamento</string>
     <string name="medicine_name">Nombre del medicamento</string>
     <string name="add_reminder">Añadir recordatorio</string>
-    <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="time">Hora</string>
     <string name="dosage">Dosis</string>
@@ -35,9 +34,6 @@
     <string name="clear_events">Restablecer eventos</string>
     <string name="app_version">Versión de la aplicación</string>
     <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
-    <string name="swipe_left">Deslizar a la izquierda</string>
-    <string name="long_press">Mantener pulsado</string>
-    <string name="delete_items">Eliminar ítems</string>
     <string name="show_notifications">Enviar notificaciones</string>
     <string name="overview_events">Mostrar eventos en el resumen</string>
     <string name="four_hours">4 horas</string>
@@ -146,4 +142,6 @@
     <string name="time_period">Periodo de tiempo</string>
     <string name="period_start">Inicio del período</string>
     <string name="period_end">Fin de periodo</string>
+    <string name="activate_all">Activar todos los recordatorios</string>
+    <string name="deactivate_all">Desactivar todos los recordatorios</string>
 </resources>

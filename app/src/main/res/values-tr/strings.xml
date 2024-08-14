@@ -5,7 +5,6 @@
     <string name="add_medicine">İlaç ekle</string>
     <string name="medicine_name">İlaç adı</string>
     <string name="add_reminder">Hatırlatıcı ekle</string>
-    <string name="edit">Düzenle</string>
     <string name="delete">Sil</string>
     <string name="time">Zaman</string>
     <string name="dosage">Dozaj</string>
@@ -34,9 +33,6 @@
     <string name="clear_events">Etkinlikleri temizle</string>
     <string name="app_version">Uygulama versiyonu</string>
     <string name="are_you_sure_delete_events">Tüm etkinlikleri silmek istediğinizden emin misiniz?</string>
-    <string name="swipe_left">Sola kaydır</string>
-    <string name="long_press">Uzun bas</string>
-    <string name="delete_items">Öğeleri sil</string>
     <string name="show_notifications">Bildirimleri göster</string>
     <string name="overview_events">Genel Bakış etkinliklerini göster</string>
     <string name="four_hours">4 saat</string>
@@ -144,4 +140,6 @@
     <string name="time_period">Zaman aralığı</string>
     <string name="period_start">Dönem başlangıcı</string>
     <string name="period_end">Dönem sonu</string>
+    <string name="activate_all">Tüm hatırlatıcıları etkinleştirin</string>
+    <string name="deactivate_all">Tüm hatırlatıcıları devre dışı bırakın</string>
 </resources>

@@ -5,7 +5,6 @@
     <string name="add_medicine">Добавить лекарство</string>
     <string name="medicine_name">Название лекарства</string>
     <string name="add_reminder">Добавить напоминание</string>
-    <string name="edit">Изменить</string>
     <string name="delete">Удалить</string>
     <string name="time">Время</string>
     <string name="dosage">Доза</string>
@@ -36,9 +35,6 @@
     <string name="clear_events">Очистить события</string>
     <string name="app_version">Версия приложения</string>
     <string name="are_you_sure_delete_events">Вы точно хотите удалить все события?</string>
-    <string name="swipe_left">Смахнуть влево</string>
-    <string name="long_press">Долгое нажатие</string>
-    <string name="delete_items">Удалить предметы</string>
     <string name="show_notifications">Показать уведомления</string>
     <string name="overview_events">Обзор отображаемых событий</string>
     <string name="four_hours">4 часа</string>
@@ -148,4 +144,6 @@
     <string name="time_period">Период времени</string>
     <string name="period_start">Начало периода</string>
     <string name="period_end">Конец периода</string>
+    <string name="activate_all">Активируйте все напоминания</string>
+    <string name="deactivate_all">Деактивировать все напоминания</string>
 </resources>
