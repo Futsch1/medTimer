@@ -43,7 +43,7 @@ public class ReminderTableFragment extends Fragment {
 
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));
-        medicineViewModel.getReminderEvents(0, 0, false).observe(getViewLifecycleOwner(), adapter::submitList);
+        medicineViewModel.getLiveReminderEvents(0, 0, false).observe(getViewLifecycleOwner(), adapter::submitList);
 
         // This is a workaround for a recycler view bug that causes random crashes
         tableView.getCellRecyclerView().setItemAnimator(null);

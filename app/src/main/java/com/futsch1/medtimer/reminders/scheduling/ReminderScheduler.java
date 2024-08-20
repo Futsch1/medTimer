@@ -48,7 +48,8 @@ public class ReminderScheduler {
         ArrayList<Reminder> reminders = new ArrayList<>();
         for (MedicineWithReminders medicineWithReminder : medicineWithReminders
         ) {
-            reminders.addAll(medicineWithReminder.reminders);
+            //noinspection SimplifyStreamApiCallChains
+            reminders.addAll(medicineWithReminder.reminders.stream().filter(r -> r.active).collect(Collectors.toList()));
         }
         return reminders;
     }

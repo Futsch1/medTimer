@@ -2,12 +2,13 @@ package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
-import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -31,13 +34,6 @@ public class MainActivity extends AppCompatActivity {
             }
     );
     private AppBarConfiguration appBarConfiguration;
-    private OptionsMenu optionsMenu;
-    private final ActivityResultLauncher<Intent> requestFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-            optionsMenu.fileSelected(result.getData().getData());
-        }
-    });
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
             checkPermissions();
         }
 
-        ReminderNotificationChannelManager.Companion.initialize(this);
+        EdgeToEdge.enable(this);
 
+        ReminderNotificationChannelManager.Companion.initialize(this);
 
         setContentView(R.layout.activity_main);
 
@@ -72,18 +69,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        optionsMenu = new OptionsMenu(this,
-                new MedicineViewModel(this.getApplication()),
-                requestFileLauncher,
-                navController);
-        addMenuProvider(optionsMenu);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        // hack for https://issuetracker.google.com/issues/113122354
+        // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        if (runningAppProcesses != null) {
+            int importance = runningAppProcesses.get(0).importance;
+            if (importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+            }
+        }
+
     }
 
     private void checkPermissions() {

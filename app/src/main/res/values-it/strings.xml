@@ -1,12 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">MedTimer</string>
+<resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
     <string name="tab_medicine">Medicinali</string>
     <string name="add_medicine">Aggiungi un medicinale</string>
     <string name="medicine_name">Nome del medicinale</string>
     <string name="add_reminder">Aggiungi promemoria</string>
-    <string name="edit">Modifica</string>
     <string name="delete">Elimina</string>
     <string name="time">Tempo</string>
     <string name="dosage">Dosaggio</string>
@@ -16,15 +14,18 @@
     <string name="confirm">Conferma</string>
     <string name="are_you_sure_delete_medicine">Vuoi eliminare il medicinale\?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
-    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one" tools:ignore="MissingQuantity">%1$d promemoria\n%2$s</item>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d promemoria\n%2$s</item>
+        <item quantity="many">%1$d promemoria\n%2$s</item>
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
     <string name="notification_title">Promemoria per i Medicinali</string>
+    <string name="notification_content_blank">Sono le %1$s - è ora di prendere %2$s%3$s%4$s</string>
     <string name="notification_content">Sono le %1$s - è ora di prendere %2$s di %3$s%4$s</string>
     <string name="notification_taken">PRESO</string>
     <string name="taken">Preso</string>
     <string name="skipped">Saltato</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s di %2$s, %3$s</string>
     <string name="recent_events">Eventi recenti</string>
     <string name="next_reminders">Prossimi promemoria</string>
@@ -33,9 +34,6 @@
     <string name="clear_events">Elimina gli eventi</string>
     <string name="app_version">Versione dell\'app</string>
     <string name="are_you_sure_delete_events">Vuoi eliminare tutti gli eventi\?</string>
-    <string name="swipe_left">Scorri a sinistra</string>
-    <string name="long_press">Premi a lungo</string>
-    <string name="delete_items">Eliminare gli elementi</string>
     <string name="show_notifications">Mostra le notifiche</string>
     <string name="overview_events">Riepilogo visualizzazione eventi</string>
     <string name="four_hours">4 ore</string>
@@ -48,14 +46,11 @@
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>
     <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo nei promemoria futuri.</string>
-    <string name="permission_not_granted">Autorizzazione non concessa</string>
     <string name="exact_reminders_summary">I promemoria sono programmati all\'ora esatta (aumenta il consumo della batteria)</string>
     <string name="enable_alarm_dialog">Per consentire la programmazione di allarmi precisi, abilita questo per MedTimer nel seguente menu</string>
     <string name="generate_test_data">Genera dati di prova</string>
     <string name="create_reminder_dosage_hint">Dosaggio per il nuovo promemoria</string>
-    <string name="notification_tone_title">Suono di notifica</string>
     <string name="cycle_consecutive_days">Giorni attivi</string>
-    <string name="days">giorni</string>
     <string name="theme">Tema</string>
     <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>
@@ -113,7 +108,11 @@
     <string name="fourteen_days">14 giorni</string>
     <string name="thirty_days">30 giorni</string>
     <string name="total">Totale</string>
-    <string name="last_n_days">Ultimi %1$d giorni</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Ultime 24 ore</item>
+        <item quantity="many">Ultimi %1$d giorni</item>
+        <item quantity="other">Ultimi %1$d giorni</item>
+    </plurals>
     <string name="name">Nome</string>
     <string name="event_data">Dati Eventi</string>
     <string name="backup">Backup</string>
@@ -135,4 +134,14 @@
     <string name="notification_importance">Priorità di notifica</string>
     <string name="notification_settings_default">Impostazioni di notifica priorità predefinita</string>
     <string name="notification_settings_high">Impostazioni di notifica ad alta priorità</string>
+    <string name="calendar">Calendario</string>
+    <string name="show_only_open">Mostra solo aperte</string>
+    <string name="date">Data</string>
+    <string name="active">Attivo</string>
+    <string name="inactive">Inattivo</string>
+    <string name="time_period">Periodo di tempo</string>
+    <string name="period_start">Inizio periodo</string>
+    <string name="period_end">Fine periodo</string>
+    <string name="activate_all">Attivare tutti i promemoria</string>
+    <string name="deactivate_all">Disattivare tutti i promemoria</string>
 </resources>

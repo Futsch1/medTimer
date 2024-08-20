@@ -1,12 +1,10 @@
-<resources>
-    <string name="app_name">Minuterie médicale</string>
+<resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
     <string name="tab_medicine">Médicaments</string>
     <string name="add_medicine">Ajouter un médicament</string>
     <string name="medicine_name">Nom du médicament</string>
     <string name="add_reminder">Ajouter un rappel</string>
-    <string name="edit">Modifier</string>
     <string name="delete">Supprimer</string>
     <string name="time">Temps</string>
     <string name="dosage">Dosage</string>
@@ -22,11 +20,13 @@
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
     <string name="notification_title">Rappel de médicaments</string>
-    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s sur %3$s%4$s</string>
+    <string name="notification_content_blank">Il est %1$s: il est temps de prendre %2$s%3$s%4$s</string>
+    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
     <string name="notification_taken">PRIS</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
-    <string name="reminder_event">%1$s sur %2$s, %3$s</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
+    <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_events">Événements récents</string>
     <string name="next_reminders">Prochains rappels</string>
     <string name="version">Version %s</string>
@@ -34,9 +34,6 @@
     <string name="clear_events">Effacer les événements</string>
     <string name="app_version">Version de l\'application</string>
     <string name="are_you_sure_delete_events">Êtes-vous sûr de supprimer tous les événements?</string>
-    <string name="swipe_left">Balayez vers la gauche</string>
-    <string name="long_press">Appui long</string>
-    <string name="delete_items">Supprimer des éléments</string>
     <string name="show_notifications">Afficher les notifications</string>
     <string name="overview_events">Événements d’affichage d’aperçu</string>
     <string name="four_hours">4 heures</string>
@@ -49,14 +46,11 @@
     <string name="select_color">Choisissez la couleur</string>
     <string name="exact_reminders">Rappels précis</string>
     <string name="change_color_toast">Notez que les changements de couleur ne prendront effet que lors des prochains rappels.</string>
-    <string name="permission_not_granted">Autorisation non accordée</string>
     <string name="exact_reminders_summary">Les rappels sont programmés à l\'heure exacte (augmente l\'utilisation de la batterie)</string>
     <string name="enable_alarm_dialog">Afin de permettre la programmation d\'alarmes exactes, activez-la pour MedTimer dans le menu suivant</string>
     <string name="generate_test_data">Générer des données de test</string>
     <string name="create_reminder_dosage_hint">Dosage pour nouveau rappel</string>
-    <string name="notification_tone_title">Tonalité de notification</string>
     <string name="cycle_consecutive_days">Jours actifs</string>
-    <string name="days">jours</string>
     <string name="theme">Thème</string>
     <string name="default_">Défaut</string>
     <string name="alternative">Alternative</string>
@@ -114,7 +108,11 @@
     <string name="fourteen_days">14 jours</string>
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Dernier %1$d jours</string>
+    <plurals name="last_n_days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">Dernier 24 heures</item>
+        <item quantity="many">Dernier %1$d jours</item>
+        <item quantity="other">Dernier %1$d jours</item>
+    </plurals>
     <string name="name">Nom</string>
     <string name="event_data">Données sur les événements</string>
     <string name="backup">Sauvegarde</string>
@@ -136,4 +134,14 @@
     <string name="notification_importance">Priorité de notification</string>
     <string name="notification_settings_default">Priorité par défaut des paramètres de notification</string>
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
+    <string name="calendar">Calendrier</string>
+    <string name="show_only_open">Afficher uniquement les ouvertes</string>
+    <string name="date">Date</string>
+    <string name="active">Actif</string>
+    <string name="inactive">Inactif</string>
+    <string name="time_period">Période de temps</string>
+    <string name="period_start">Début de la période</string>
+    <string name="period_end">Fin de la période</string>
+    <string name="activate_all">Activer tous les rappels</string>
+    <string name="deactivate_all">Désactiver tous les rappels</string>
 </resources>

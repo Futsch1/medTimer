@@ -6,6 +6,4 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.AppIntro" parent="Theme.AppCompat.NoActionBar" />
 </resources>

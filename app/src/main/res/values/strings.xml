@@ -1,12 +1,11 @@
 <resources>
-    <string name="app_name">MedTimer</string>
+    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_overview">Overview</string>
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
     <string name="medicine_name">Medicine name</string>
     <string name="add_reminder">Add reminder</string>
-    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="dosage">Dosage</string>
@@ -21,10 +20,12 @@
         <item quantity="other">%1$d reminders\n%2$s</item>
     </plurals>
     <string name="notification_title">Medicine reminder</string>
+    <string name="notification_content_blank">It is %1$s - time to take %2$s%3$s%4$s</string>
     <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
     <string name="notification_taken">TAKEN</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s of %2$s, %3$s</string>
     <string name="recent_events">Recent events</string>
     <string name="next_reminders">Next reminders</string>
@@ -33,9 +34,6 @@
     <string name="clear_events">Clear events</string>
     <string name="app_version">App version</string>
     <string name="are_you_sure_delete_events">Are you sure to delete all events?</string>
-    <string name="swipe_left">Swipe left</string>
-    <string name="long_press">Long press</string>
-    <string name="delete_items">Delete items</string>
     <string name="show_notifications">Show notifications</string>
     <string name="overview_events">Overview display events</string>
     <string name="four_hours">4 hours</string>
@@ -48,14 +46,11 @@
     <string name="select_color">Select color</string>
     <string name="exact_reminders">Exact reminders</string>
     <string name="change_color_toast">Note that changes in color only take effect in future reminders</string>
-    <string name="permission_not_granted">Permission not granted</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
-    <string name="notification_tone_title">Notification tone</string>
     <string name="cycle_consecutive_days">Active days</string>
-    <string name="days">days</string>
     <string name="theme">Theme</string>
     <string name="default_">Default</string>
     <string name="alternative">Alternative</string>
@@ -114,7 +109,10 @@
     <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 days</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Last %1$d days</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Last 24 hours</item>
+        <item quantity="other">Last %1$d days</item>
+    </plurals>
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>
@@ -136,4 +134,14 @@
     <string name="notification_importance">Notification priority</string>
     <string name="notification_settings_default">Notification settings default priority</string>
     <string name="notification_settings_high">Notification settings high priority</string>
+    <string name="calendar">Calendar</string>
+    <string name="show_only_open">Show only open</string>
+    <string name="date">Date</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="time_period">Time period</string>
+    <string name="period_start">Period start</string>
+    <string name="period_end">Period end</string>
+    <string name="activate_all">Activate all reminders</string>
+    <string name="deactivate_all">Deactivate all reminders</string>
 </resources>

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders;
 
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
@@ -23,6 +24,8 @@ import androidx.work.WorkRequest;
 
 import com.futsch1.medtimer.WorkManagerAccess;
 
+import java.time.LocalDate;
+
 public class ReminderProcessor extends BroadcastReceiver {
 
     public static void requestReschedule(@NonNull Context context) {
@@ -38,20 +41,21 @@ public class ReminderProcessor extends BroadcastReceiver {
     }
 
     private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
-        Intent notifyDismissed = new Intent(context, ReminderProcessor.class);
-        notifyDismissed.setAction(actionName);
-        notifyDismissed.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        return notifyDismissed;
+        Intent actionIntent = new Intent(context, ReminderProcessor.class);
+        actionIntent.setAction(actionName);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        return actionIntent;
     }
 
     public static Intent getTakenActionIntent(@NonNull Context context, int reminderEventId) {
         return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
     }
 
-    public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId) {
+    public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId, LocalDate reminderDate) {
         Intent reminderIntent = new Intent(REMINDER_ACTION);
         reminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
         reminderIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        reminderIntent.putExtra(EXTRA_REMINDER_DATE, reminderDate != null ? reminderDate.toEpochDay() : 0);
         reminderIntent.setClass(context, ReminderProcessor.class);
         return reminderIntent;
     }
@@ -70,7 +74,7 @@ public class ReminderProcessor extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         if (DISMISSED_ACTION.equals(intent.getAction())) {
-            workManager.enqueue(buildActionWorkRequest(intent, DismissWork.class));
+            workManager.enqueue(buildActionWorkRequest(intent, SkippedWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
         } else if (SNOOZE_ACTION.equals(intent.getAction())) {
@@ -90,6 +94,7 @@ public class ReminderProcessor extends BroadcastReceiver {
                             .setInputData(new Data.Builder()
                                     .putInt(EXTRA_REMINDER_ID, intent.getIntExtra(EXTRA_REMINDER_ID, 0))
                                     .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                                    .putLong(EXTRA_REMINDER_DATE, intent.getLongExtra(EXTRA_REMINDER_DATE, 0))
                                     .build())
                             .build();
             workManager.enqueue(reminderWork);

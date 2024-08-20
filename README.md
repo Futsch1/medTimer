@@ -5,9 +5,7 @@
 
 # MedTimer for Android
 
-<img src="app/src/main/play/listings/en-US/graphics/feature-graphic/1.png" width="150" />
-
-The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13).
+<img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="150" />
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"
@@ -27,19 +25,21 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
 **Med reminders and history with full offline privacy**
 
 <p float="left">
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/1.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/2.png" width="150" /> 
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" /> 
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/3.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/4.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="150" />
 
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/5.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width="150" />
 
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/6.png" width="150" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width="150" />
   &nbsp;
-  <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/7.png" width="150" /> 
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width="150" />
+
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width="150" />
 </p>
 
 Stay In Control of Your Medications with MedTimer
@@ -59,7 +59,7 @@ Flexible & Personalized Reminders:
 Simple & Secure Data Management:
 
 - Confirm or dismiss reminders to record medication adherence accurately.
-- Get an overview of past doses in a chart and a tabular view.
+- Get an overview of past doses in a chart, tabular or calendar view.
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare
   professionals.
 - Backup and restore your medication list as JSON file.
@@ -73,6 +73,8 @@ MedTimer is a free app without adds.
 
 Keywords: Medication reminder, pill reminder, medication adherence, health app, privacy, offline
 
+The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13).
+
 ## Dependencies
 
 MedTimer uses the following great open source libraries and dependencies:
@@ -84,3 +86,4 @@ MedTimer uses the following great open source libraries and dependencies:
 - [AndroidX Preference eXtended](https://github.com/takisoft/preferencex-android)
 - [Mockito](https://github.com/mockito/mockito)
 - [Robolectric](https://github.com/robolectric/robolectric)
+- [Calendar](https://github.com/kizitonwose/Calendar)

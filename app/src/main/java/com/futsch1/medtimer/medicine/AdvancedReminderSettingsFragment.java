@@ -41,6 +41,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private Reminder reminder;
     private TextView remindOnDays;
     private View advancedReminderView;
+    private PeriodSettings periodSettings;
     private AdvancedReminderSettingsFragmentArgs args;
 
     public AdvancedReminderSettingsFragment() {
@@ -76,7 +77,10 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setupView() {
+        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(reminder, backgroundThread, medicineViewModel, advancedReminderView),
+                getViewLifecycleOwner());
 
+        periodSettings = new PeriodSettings(advancedReminderView, getParentFragmentManager(), reminder);
         editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
         editPauseDays = advancedReminderView.findViewById(R.id.pauseDays);
         editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
@@ -175,7 +179,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void setCycleStartDate(long daysSinceEpoch) {
-        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(daysSinceEpoch));
+        editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(editCycleStartDate.getContext(),
+                daysSinceEpoch));
     }
 
     @Override
@@ -184,6 +189,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         if (editInstructions != null) {
             reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+
+            periodSettings.updateReminder();
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();
@@ -217,5 +224,4 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             reminder.cycleStartDay = startDate.toEpochDay();
         }
     }
-
 }

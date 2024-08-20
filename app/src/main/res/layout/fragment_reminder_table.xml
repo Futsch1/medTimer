@@ -32,7 +32,7 @@
         android:layout_margin="8dp"
         android:scrollbarSize="4dp"
         android:scrollbars="horizontal|vertical"
-        app:column_header_height="25dp"
+        app:column_header_height="35dp"
         app:row_header_width="0dp" />
 
 </LinearLayout>

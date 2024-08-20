@@ -1,11 +1,8 @@
 <resources>
-    <string-array name="delete_entries_titles">
-        <item>@string/swipe_left</item>
-        <item>@string/long_press</item>
-    </string-array>
-    <string-array name="values_0_and_1">
+    <string-array name="values_0_to_2">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
     <string-array name="theme_entries_titles">
         <item>@string/default_</item>
@@ -57,6 +54,7 @@
     <string-array name="dismiss_notification_action">
         <item>@string/skip_reminder</item>
         <item>@string/snooze</item>
+        <item>@string/taken</item>
     </string-array>
     <string-array name="snooze_duration">
         <item>@string/minutes_5</item>

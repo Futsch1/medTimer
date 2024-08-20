@@ -11,12 +11,8 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 
 public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, MedicineViewHolder> {
 
-
-    private final MedicineViewHolder.DeleteCallback deleteCallback;
-
-    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, MedicineViewHolder.DeleteCallback deleteCallback) {
+    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback) {
         super(diffCallback);
-        this.deleteCallback = deleteCallback;
         setHasStableIds(true);
     }
 
@@ -32,7 +28,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         MedicineWithReminders current = getItem(position);
-        holder.bind(current, deleteCallback);
+        holder.bind(current);
     }
 
     @Override

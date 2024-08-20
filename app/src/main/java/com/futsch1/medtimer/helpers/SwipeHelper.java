@@ -3,7 +3,6 @@ package com.futsch1.medtimer.helpers;
 import static android.graphics.PorterDuff.Mode.CLEAR;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -15,7 +14,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,14 +29,11 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final Paint clearPaint;
     private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
-    private final String prefKey;
 
-
-    protected SwipeHelper(Context context, int direction, int color, int icon, String prefKey) {
+    protected SwipeHelper(Context context, int direction, int color, int icon) {
         super(0, direction);
 
         swipeDirection = direction;
-        this.prefKey = prefKey;
 
         clearPaint = new Paint();
         clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
@@ -50,19 +45,23 @@ public abstract class SwipeHelper extends SimpleCallback {
         if (swipeIcon == null) {
             throw new Resources.NotFoundException("There was an error trying to load the drawables");
         }
-        
+
         intrinsicHeight = swipeIcon.getIntrinsicHeight();
         intrinsicWidth = swipeIcon.getIntrinsicWidth();
+
+        setDefaultSwipeDirs(swipeDirection);
     }
 
-    public void setup(@NonNull Context context) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (prefKey == null || sharedPref.getString(prefKey, "0").equals("0")) {
-            setDefaultSwipeDirs(swipeDirection);
-        } else {
-            setDefaultSwipeDirs(0);
-        }
+    public static ItemTouchHelper createLeftSwipeTouchHelper(Context context, SwipedCallback callback) {
+        SwipeHelper swipeHelper = new SwipeHelper(context, ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    callback.onSwiped(viewHolder);
+                }
+            }
+        };
+        return new ItemTouchHelper(swipeHelper);
     }
 
     @Override
@@ -143,5 +142,9 @@ public abstract class SwipeHelper extends SimpleCallback {
                 ((itemView.getTranslationX() / itemView.getWidth()) * 200)));
         if (alpha > 255) alpha = 255;
         return alpha;
+    }
+
+    public interface SwipedCallback {
+        void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder);
     }
 }

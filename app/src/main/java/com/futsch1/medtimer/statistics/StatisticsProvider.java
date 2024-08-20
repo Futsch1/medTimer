@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.androidplot.xy.SimpleXYSeries;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineHelper;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,10 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class StatisticsProvider {
-    private static final Pattern CYCLIC_COUNT = Pattern.compile(" (\\(\\d?/\\d?)\\)");
     private final List<ReminderEvent> reminderEvents;
 
     public StatisticsProvider(MedicineRepository medicineRepository) {
@@ -43,18 +42,11 @@ public class StatisticsProvider {
         return calculateDataEntries(days, medicineToDayCount);
     }
 
-    /**
-     * @noinspection DataFlowIssue
-     */
     private Map<String, int[]> calculateMedicineToDayMap(int days) {
         Map<String, int[]> medicineToDayCount = new HashMap<>();
         LocalDate earliestDate = LocalDate.now().minusDays(days);
         for (ReminderEvent event : reminderEvents) {
-            if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
-                String medicineName = normalizeMedicineName(event.medicineName);
-                medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
-                medicineToDayCount.get(medicineName)[getDaysInThePast(event.remindedTimestamp)]++;
-            }
+            incrementMedicineToDayCountForEvent(days, event, earliestDate, medicineToDayCount);
         }
 
         return medicineToDayCount;
@@ -84,8 +76,18 @@ public class StatisticsProvider {
         return data;
     }
 
-    private String normalizeMedicineName(String medicineName) {
-        return CYCLIC_COUNT.matcher(medicineName).replaceAll("");
+    /**
+     * @noinspection DataFlowIssue
+     */
+    private void incrementMedicineToDayCountForEvent(int days, ReminderEvent event, LocalDate earliestDate, Map<String, int[]> medicineToDayCount) {
+        if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
+            String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
+            medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
+            final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
+            if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
+                medicineToDayCount.get(medicineName)[daysInThePast]++;
+            }
+        }
     }
 
     private int getDaysInThePast(long secondsSinceEpoch) {

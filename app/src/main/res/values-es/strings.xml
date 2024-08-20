@@ -1,12 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">MedTimer</string>
+<resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
     <string name="tab_medicine">Medicación</string>
     <string name="add_medicine">Añadir medicamento</string>
     <string name="medicine_name">Nombre del medicamento</string>
     <string name="add_reminder">Añadir recordatorio</string>
-    <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="time">Hora</string>
     <string name="dosage">Dosis</string>
@@ -16,15 +14,18 @@
     <string name="confirm">Confirmar</string>
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
-    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one" tools:ignore="MissingQuantity">%1$d recordatorio\n%2$s</item>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d recordatorio\n%2$s</item>
+        <item quantity="many">%1$d recordatorios\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
     <string name="notification_title">Toma tu medicación</string>
+    <string name="notification_content_blank">Son las %1$s - hora de tomar %2$s%3$s%4$s</string>
     <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
     <string name="notification_taken">TOMADO</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_events">Eventos recientes</string>
     <string name="next_reminders">Siguientes recordatorios</string>
@@ -33,9 +34,6 @@
     <string name="clear_events">Restablecer eventos</string>
     <string name="app_version">Versión de la aplicación</string>
     <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
-    <string name="swipe_left">Deslizar a la izquierda</string>
-    <string name="long_press">Mantener pulsado</string>
-    <string name="delete_items">Eliminar ítems</string>
     <string name="show_notifications">Enviar notificaciones</string>
     <string name="overview_events">Mostrar eventos en el resumen</string>
     <string name="four_hours">4 horas</string>
@@ -48,14 +46,11 @@
     <string name="select_color">Seleccionar color</string>
     <string name="exact_reminders">Recordatorios exactos</string>
     <string name="change_color_toast">Notar que los cambios en el color sólo tienen efecto en futuros recordatorios</string>
-    <string name="permission_not_granted">Permiso no concedido</string>
     <string name="exact_reminders_summary">Los recordatorios se programan a la hora exacta (aumenta el uso de la batería)</string>
     <string name="enable_alarm_dialog">Para permitir programar recordatorios exactos, conceda el permiso a MedTimer en el siguiente menú</string>
     <string name="generate_test_data">Generar datos para test</string>
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
-    <string name="notification_tone_title">Sonido de notificación</string>
     <string name="cycle_consecutive_days">Días activos</string>
-    <string name="days">días</string>
     <string name="theme">Tema</string>
     <string name="default_">Estándar</string>
     <string name="alternative">Alternativo</string>
@@ -113,7 +108,11 @@
     <string name="fourteen_days">14 días</string>
     <string name="thirty_days">30 días</string>
     <string name="total">Total</string>
-    <string name="last_n_days">Últimos %1$d días</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Últimos 24 horas</item>
+        <item quantity="many">Últimos %1$d días</item>
+        <item quantity="other">Últimos %1$d días</item>
+    </plurals>
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Backup</string>
@@ -135,4 +134,14 @@
     <string name="notification_importance">Prioridad de notificación</string>
     <string name="notification_settings_default">Prioridad por defecto de los ajustes de notificación</string>
     <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
+    <string name="calendar">Calendario</string>
+    <string name="show_only_open">Mostrar solo abiertas</string>
+    <string name="date">Fecha</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
+    <string name="time_period">Periodo de tiempo</string>
+    <string name="period_start">Inicio del período</string>
+    <string name="period_end">Fin de periodo</string>
+    <string name="activate_all">Activar todos los recordatorios</string>
+    <string name="deactivate_all">Desactivar todos los recordatorios</string>
 </resources>

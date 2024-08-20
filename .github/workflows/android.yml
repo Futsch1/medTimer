@@ -43,11 +43,14 @@ jobs:
         run: ./gradlew test createDebugCoverageReport
       - name: Android lint
         run: ./gradlew lint
-      - name: Build and analyze
+      - name: Build
+        run: ./gradlew build
+      - name: Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonar --info
+        if: ${{ env.SONAR_TOKEN != '' }}
+        run: ./gradlew sonar
       - name: Release bundle
         run: ./gradlew bundleRelease
 
@@ -66,17 +69,16 @@ jobs:
       - name: Setup build tool version variable
         shell: bash
         run: |
-          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -n 1)
+          BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -1)
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
       - name: Sign APK
         run: |
-          ${{ env.BUILD_TOOLS_PATH }}/zipalign -v 4 $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk \
-            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
           echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
           ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+            --alignment-preserved \
             --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
-            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned-aligned.apk
+            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
         continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')

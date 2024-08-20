@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.util.Log;
 
@@ -43,6 +44,10 @@ public class NotificationAction {
     }
 
     private static void cancelSnoozeAlarm(Context context, int reminderEventId, ReminderEvent reminderEvent) {
-        context.getSystemService(AlarmManager.class).cancel(RescheduleWork.getPendingIntent(context, reminderEvent.reminderId, reminderEvent.notificationId, reminderEventId));
+        PendingIntent snoozePendingIntent = new RescheduleWork.PendingIntentBuilder(context).
+                setReminderId(reminderEvent.reminderId).
+                setRequestCode(reminderEvent.notificationId).
+                setReminderEventId(reminderEventId).build();
+        context.getSystemService(AlarmManager.class).cancel(snoozePendingIntent);
     }
 }

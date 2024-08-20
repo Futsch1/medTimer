@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">MedTimer</string>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
     <string name="tab_medicine">Medicatie</string>
     <string name="add_medicine">Medicatie toevoegen</string>
     <string name="medicine_name">Naam van de medicatie</string>
     <string name="add_reminder">Herinnering toevoegen</string>
-    <string name="edit">Bewerking</string>
     <string name="delete">Verwijderen</string>
     <string name="time">Tijd</string>
     <string name="dosage">Dosering</string>
@@ -21,10 +19,12 @@
         <item quantity="other">%1$d herinneringen\n%2$s</item>
     </plurals>
     <string name="notification_title">Herinneringen van de medicatie</string>
+    <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="notification_taken">GENOMEN</string>
     <string name="taken">Ingenomen</string>
     <string name="skipped">Overgeslagen</string>
+    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
     <string name="next_reminders">Volgende herinneringen</string>
@@ -33,9 +33,6 @@
     <string name="clear_events">Herinneringen verwijderen</string>
     <string name="app_version">App versie</string>
     <string name="are_you_sure_delete_events">Weet je zeker dat je alle herinneringen wilt verwijderen?</string>
-    <string name="swipe_left">Veeg naar links</string>
-    <string name="long_press">Lang indrukken</string>
-    <string name="delete_items">Verwijderen</string>
     <string name="show_notifications">Meldingen weergeven</string>
     <string name="overview_events">Overzicht herinneringen tonen</string>
     <string name="four_hours">4 uur</string>
@@ -48,14 +45,11 @@
     <string name="select_color">Selecteer kleur</string>
     <string name="exact_reminders">Exacte herinneringen</string>
     <string name="change_color_toast">Houd er rekening mee dat kleurwijzigingen alleen van kracht worden bij toekomstige herinneringen</string>
-    <string name="permission_not_granted">Toestemming niet verleend</string>
     <string name="exact_reminders_summary">Herinneringen worden precies op het ingestelde tijdstip gegenereerd (verhoogd batterijverbruik)</string>
     <string name="enable_alarm_dialog">Om het aanmaken van exacte herinneringen in te schakelen, moet u dit toestaan in het volgende menu</string>
     <string name="generate_test_data">Testgegevens genereren</string>
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
-    <string name="notification_tone_title">Meldingstoon</string>
-    <string name="cycle_consecutive_days">Dagen</string>
-    <string name="days">dagen</string>
+    <string name="cycle_consecutive_days">Actieve dagen</string>
     <string name="theme">Thema</string>
     <string name="default_">Standaard</string>
     <string name="alternative">Alternatief</string>
@@ -113,7 +107,10 @@
     <string name="fourteen_days">14 dagen</string>
     <string name="thirty_days">30 dagen</string>
     <string name="total">Totaal</string>
-    <string name="last_n_days">Laatste %1$d dagen</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Laatste 24 uur</item>
+        <item quantity="other">Laatste %1$d dagen</item>
+    </plurals>
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
@@ -135,4 +132,14 @@
     <string name="notification_importance">Prioriteit melding</string>
     <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
+    <string name="calendar">Kalender</string>
+    <string name="show_only_open">" Toon alleen openstaande"</string>
+    <string name="date">Datum</string>
+    <string name="active">Actief</string>
+    <string name="inactive">Inactief</string>
+    <string name="time_period">Tijdsperiode</string>
+    <string name="period_start">Begin van de periode</string>
+    <string name="period_end">Einde periode</string>
+    <string name="activate_all">Alle herinneringen activeren</string>
+    <string name="deactivate_all">Alle herinneringen deactiveren</string>
 </resources>

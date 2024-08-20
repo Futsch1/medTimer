@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -45,24 +46,6 @@ public class AndroidTestHelper {
         };
     }
 
-    public static void setTime(int hour, int minute) {
-        onView(withId(com.google.android.material.R.id.material_timepicker_mode_button)).perform(click());
-        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
-        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
-        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
-        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
-        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
-    }
-
-    public static void navigateTo(MainMenu mainMenu) {
-        String[] menuItems = {"Overview", "Medicine", "Analysis"};
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
-                        isDisplayed()));
-        bottomNavigationItemView.perform(click());
-    }
-
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -80,6 +63,45 @@ public class AndroidTestHelper {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
+    }
+
+    static void setAllRemindersTo12AM() {
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+
+        setReminderTo12AM(0);
+        setReminderTo12AM(1);
+        setReminderTo12AM(2);
+        setReminderTo12AM(3);
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+    }
+
+    public static void navigateTo(MainMenu mainMenu) {
+        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+    }
+
+    private static void setReminderTo12AM(int position) {
+        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
+
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
+
+        setTime(0, 0);
+        pressBack();
+        pressBack();
+    }
+
+    public static void setTime(int hour, int minute) {
+        onView(withId(com.google.android.material.R.id.material_timepicker_mode_button)).perform(click());
+        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
+        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
+        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
+        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
+        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
