@@ -71,9 +71,11 @@ Privacy & Offline Accessibility:
 
 MedTimer is a free app without adds.
 
-Keywords: Medication reminder, pill reminder, medication adherence, health app, privacy, offline
+## Documentation
 
-The app is built targeting SDK 34 and requiring SDK 33 (>= Android 13).
+See the [use cases documentation](app/doc/UseCases.md) for more details on how to use the app and
+the specific use cases
+it can satisfy.
 
 ## Dependencies
 
