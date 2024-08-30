@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("androidx.room")
-    id("com.github.triplet.play") version "3.10.1"
+    id("com.github.triplet.play") version "3.11.0"
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
@@ -85,7 +85,7 @@ dependencies {
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.11.0"
     val tableViewVersion = "0.8.9.4"
-    val androidPlotVersion = "1.5.10"
+    val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
     val calendarVersion = "2.5.4"
 
