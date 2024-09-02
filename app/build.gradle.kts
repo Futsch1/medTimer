@@ -90,7 +90,7 @@ dependencies {
     val calendarVersion = "2.5.4"
 
     val junitVersion = "4.13.2"
-    val mockitoCoreVersion = "5.12.0"
+    val mockitoCoreVersion = "5.13.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.13"
 
