@@ -12,12 +12,15 @@ import androidx.core.text.util.LocalePreferences
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
@@ -34,6 +37,8 @@ class CalendarFragment : Fragment() {
     private var calendarEventsViewModel: CalendarEventsViewModel? = null
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, String>? = null
+    private var startMonth: YearMonth? = null
+    private var endMonth: YearMonth? = null
 
     private fun daySelected(data: CalendarDay) {
         calendarView?.notifyDayChanged(currentDay)
@@ -77,9 +82,12 @@ class CalendarFragment : Fragment() {
         setupDayBinder()
         setupMonthBinder()
 
+        startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30)
+        endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30)
+
         calendarView?.setup(
-            YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30),
-            YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30),
+            startMonth!!,
+            endMonth!!,
             if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
                 DayOfWeek.SUNDAY else DayOfWeek.MONDAY
         )
@@ -89,6 +97,17 @@ class CalendarFragment : Fragment() {
     private fun setupMonthBinder() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView: TextView = view.findViewById(R.id.monthHeaderText)
+            val prevButton: MaterialButton = view.findViewById(R.id.prevMonth)
+            val nextButton: MaterialButton = view.findViewById(R.id.nextMonth)
+
+            init {
+                prevButton.setOnClickListener {
+                    calendarView?.scrollToMonth(calendarView?.findFirstVisibleMonth()?.yearMonth!!.previousMonth)
+                }
+                nextButton.setOnClickListener {
+                    calendarView?.scrollToMonth(calendarView?.findFirstVisibleMonth()?.yearMonth!!.nextMonth)
+                }
+            }
         }
 
         calendarView?.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
@@ -100,6 +119,12 @@ class CalendarFragment : Fragment() {
                         Locale.getDefault()
                     )
                 )
+                if (startMonth == data.yearMonth) {
+                    container.prevButton.visibility = View.GONE
+                }
+                if (endMonth == data.yearMonth) {
+                    container.nextButton.visibility = View.GONE
+                }
             }
         }
     }
