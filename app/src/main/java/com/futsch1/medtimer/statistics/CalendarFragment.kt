@@ -170,7 +170,8 @@ class CalendarFragment : Fragment() {
             override fun create(view: View) = DayViewContainer(view)
 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
-                container.textView.text = data.date.dayOfMonth.toString()
+                container.textView.text =
+                    String.format(Locale.getDefault(), "%d", data.date.dayOfMonth)
                 if (dayStrings?.get(data.date)?.isNotEmpty() == true) {
                     container.textView.paintFlags =
                         container.textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
