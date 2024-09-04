@@ -22,7 +22,7 @@ android {
         targetSdk = 35
         versionCode = 69
         versionName = "1.9.3"
-        setProperty("archivesBaseName", "MedTimer")
+        base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -144,6 +144,9 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
 }
 sonar {
     properties {
