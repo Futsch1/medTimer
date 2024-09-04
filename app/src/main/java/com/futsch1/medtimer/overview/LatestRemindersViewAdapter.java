@@ -89,6 +89,7 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
          * @noinspection unchecked
          */
         @Override
+        @SuppressWarnings("unchecked")
         protected void publishResults(CharSequence constraint, FilterResults results) {
             submitList((List<ReminderEvent>) results.values);
         }
