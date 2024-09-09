@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -46,13 +47,12 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.Theme_MedTimer2);
         }
 
-        boolean introShown = sharedPref.getBoolean("intro_shown", false);
-        if (!introShown && !BuildConfig.DEBUG) {
-            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
-            sharedPref.edit().putBoolean("intro_shown", true).apply();
-        } else {
-            checkPermissions();
+        // Screen capture
+        if (sharedPref.getBoolean("window_flag_secure", false)) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
+
+        showIntro(sharedPref);
 
         EdgeToEdge.enable(this);
 
@@ -63,25 +63,13 @@ public class MainActivity extends AppCompatActivity {
         setupNavigation();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        // hack for https://issuetracker.google.com/issues/113122354
-        // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
-        if (runningAppProcesses != null) {
-            int importance = runningAppProcesses.get(0).importance;
-            if (importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
-            }
-        }
-
-    }
-
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(POST_NOTIFICATIONS);
+    private void showIntro(SharedPreferences sharedPref) {
+        boolean introShown = sharedPref.getBoolean("intro_shown", false);
+        if (!introShown && !BuildConfig.DEBUG) {
+            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+            sharedPref.edit().putBoolean("intro_shown", true).apply();
+        } else {
+            checkPermissions();
         }
     }
 
@@ -100,6 +88,28 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.onNavDestinationSelected(item, navController);
             return true;
         });
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(POST_NOTIFICATIONS);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        // hack for https://issuetracker.google.com/issues/113122354
+        // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        if (runningAppProcesses != null) {
+            int importance = runningAppProcesses.get(0).importance;
+            if (importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+            }
+        }
+
     }
 
     @Override

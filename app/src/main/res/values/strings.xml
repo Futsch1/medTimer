@@ -144,4 +144,5 @@
     <string name="period_end">Period end</string>
     <string name="activate_all">Activate all reminders</string>
     <string name="deactivate_all">Deactivate all reminders</string>
+    <string name="block_screen_capture">Block screen capture</string>
 </resources>

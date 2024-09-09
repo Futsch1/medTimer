@@ -144,4 +144,5 @@
     <string name="period_end">Fin de la période</string>
     <string name="activate_all">Activer tous les rappels</string>
     <string name="deactivate_all">Désactiver tous les rappels</string>
+    <string name="block_screen_capture">Bloquer la capture d\'écran</string>
 </resources>
