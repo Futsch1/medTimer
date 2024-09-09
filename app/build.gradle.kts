@@ -20,9 +20,9 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 69
-        versionName = "1.9.3"
-        setProperty("archivesBaseName", "MedTimer")
+        versionCode = 70
+        versionName = "1.9.4"
+        base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -73,12 +73,12 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.1.4"
-    val androidXNavigationVersion = "2.7.7"
+    val androidXNavigationVersion = "2.8.0"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.9.1"
     val coreKtxVersion = "1.13.1"
-    val lifecycleViewmodelKtxVersion = "2.8.4"
+    val lifecycleViewmodelKtxVersion = "2.8.5"
     val roomVersion = "2.6.1"
     val colorPickerViewVersion = "2.3.0"
     val preferenceXVersion = "1.1.0"
@@ -144,6 +144,9 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
 }
 sonar {
     properties {

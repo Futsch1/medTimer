@@ -60,15 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
-        assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
-                .build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        setupNavigation();
     }
 
     @Override
@@ -91,6 +83,23 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(POST_NOTIFICATIONS);
         }
+    }
+
+    private void setupNavigation() {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        bottomNavigationView.setOnItemReselectedListener(item -> navController.popBackStack(item.getItemId(), false));
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            NavigationUI.onNavDestinationSelected(item, navController);
+            return true;
+        });
     }
 
     @Override
