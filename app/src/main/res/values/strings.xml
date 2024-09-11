@@ -69,7 +69,7 @@
     <string name="backup_failed">Backup failed</string>
     <string name="export_failed">Export failed</string>
     <string name="restore_successful">Restore successful</string>
-    <string name="restore_start">This will replace all medicine settings.\n\nContinue?</string>
+    <string name="restore_start">This will replace all medicine settings and/or reminder events.\n\nContinue?</string>
     <string name="log_additional_dose">Log additional dose</string>
     <string name="dismiss_notification_action">Action when dismissing notification</string>
     <string name="skip_reminder">Skip dose</string>
@@ -116,7 +116,6 @@
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>
-    <string name="restore_events_start">This will replace all reminder events.\n\nContinue?</string>
     <string name="taken_now">Taken now</string>
     <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>

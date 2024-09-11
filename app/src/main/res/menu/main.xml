@@ -19,16 +19,6 @@
                 android:id="@+id/export_csv"
                 android:icon="@drawable/filetype_csv"
                 android:title="@string/export_csv" />
-            <group android:id="@+id/event_backup">
-                <item
-                    android:id="@+id/backup_events"
-                    android:icon="@drawable/box_arrow_down"
-                    android:title="@string/backup" />
-                <item
-                    android:id="@+id/restore_events"
-                    android:icon="@drawable/box_arrow_in_down"
-                    android:title="@string/restore" />
-            </group>
             <group android:id="@+id/clear">
                 <item
                     android:id="@+id/clear_events"
@@ -38,16 +28,16 @@
         </menu>
     </item>
     <item
-        android:id="@+id/medicine_data"
-        android:icon="@drawable/capsule"
-        android:title="@string/medicine_data">
+        android:id="@+id/backup"
+        android:icon="@drawable/box_arrow_down"
+        android:title="@string/backup">
         <menu>
             <item
-                android:id="@+id/medicine_backup"
+                android:id="@+id/create_backup"
                 android:icon="@drawable/box_arrow_down"
                 android:title="@string/backup" />
             <item
-                android:id="@+id/restore_medicine_backup"
+                android:id="@+id/restore_backup"
                 android:icon="@drawable/box_arrow_in_down"
                 android:title="@string/restore" />
         </menu>

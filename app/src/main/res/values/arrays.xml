@@ -96,4 +96,8 @@
         <item>@string/default_</item>
         <item>@string/high</item>
     </string-array>
+    <string-array name="backup_types">
+        <item>@string/medicine_data</item>
+        <item>@string/event_data</item>
+    </string-array>
 </resources>

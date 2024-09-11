@@ -68,7 +68,7 @@
     <string name="backup_failed">Erstellen fehlgeschlagen</string>
     <string name="export_failed">Exportieren fehlgeschlagen</string>
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
-    <string name="restore_start">Alle Medikamenteneinstellungen werden überschrieben.\n\nFortfahren?</string>
+    <string name="restore_start">Alle Medikamenteneinstellungen und/oder Ereignisse werden überschrieben.\n\nFortfahren?</string>
     <string name="log_additional_dose">Zusätzliche Einnahme eintragen</string>
     <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
     <string name="skip_reminder">Überspringen</string>
@@ -114,7 +114,6 @@
     <string name="name">Name</string>
     <string name="event_data">Ereignisdaten</string>
     <string name="backup">Backup</string>
-    <string name="restore_events_start">Alle Ereignisse werden überschrieben.\n\nFortfahren?</string>
     <string name="taken_now">Jetzt eingenommen</string>
     <string name="event_name">Ereignisname</string>
     <string name="edit_event">Ereignis bearbeiten</string>
