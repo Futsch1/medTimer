@@ -28,14 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 public class BackupManager {
+    private static final String MEDICINE_KEY = "medicines";
+    private static final String EVENT_KEY = "events";
     private final Context context;
     private final HandlerThread backgroundThread;
     private final Menu menu;
     private final MedicineViewModel medicineViewModel;
     private final ActivityResultLauncher<Intent> openFileLauncher;
-
-    private final String medicineKey = "medicines";
-    private final String eventKey = "events";
 
 
     public BackupManager(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
@@ -80,11 +79,11 @@ public class BackupManager {
                 Gson gson = new Gson();
                 Map<String, String> backupMap = new LinkedHashMap<>();
                 if (checkedItems[0]) {
-                    backupMap.put(medicineKey, createBackup(new JSONMedicineBackup(),
+                    backupMap.put(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
                             medicineViewModel.medicineRepository.getMedicines()));
                 }
                 if (checkedItems[1]) {
-                    backupMap.put(eventKey, createBackup(new JSONReminderEventBackup(),
+                    backupMap.put(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
                             medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
                 }
                 createAndSave(gson.toJson(backupMap));
@@ -122,11 +121,11 @@ public class BackupManager {
             };
             try {
                 Map<String, String> backupMap = new Gson().fromJson(json, mapType.getType());
-                if (backupMap.containsKey(medicineKey)) {
-                    restoreSuccessful = restoreBackup(backupMap.get(medicineKey), new JSONMedicineBackup());
+                if (backupMap.containsKey(MEDICINE_KEY)) {
+                    restoreSuccessful = restoreBackup(backupMap.get(MEDICINE_KEY), new JSONMedicineBackup());
                 }
-                if (backupMap.containsKey(eventKey)) {
-                    restoreSuccessful = restoreSuccessful && restoreBackup(backupMap.get(eventKey), new JSONReminderEventBackup());
+                if (backupMap.containsKey(EVENT_KEY)) {
+                    restoreSuccessful = restoreSuccessful && restoreBackup(backupMap.get(EVENT_KEY), new JSONReminderEventBackup());
                 }
             } catch (JsonSyntaxException e) {
                 restoreSuccessful = false;
@@ -154,6 +153,4 @@ public class BackupManager {
         }
         return false;
     }
-
-    private enum PendingFileOperation {NONE, MEDICINE, REMINDER_EVENTS}
 }
