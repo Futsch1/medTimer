@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.WindowManager;
 
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
@@ -24,6 +26,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupExactReminders();
         setupNotificationSettings();
         setupWeekendMode();
+        setupBlockScreenCapture();
     }
 
     private void setupTheme() {
@@ -86,6 +89,16 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         return true;
                     }
             );
+        }
+    }
+
+    private void setupBlockScreenCapture() {
+        SwitchPreference preference = getPreferenceScreen().findPreference("window_flag_secure");
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference12, newValue) -> {
+                requireActivity().getWindow().setFlags(Boolean.TRUE.equals(newValue) ? WindowManager.LayoutParams.FLAG_SECURE : 0, WindowManager.LayoutParams.FLAG_SECURE);
+                return true;
+            });
         }
     }
 

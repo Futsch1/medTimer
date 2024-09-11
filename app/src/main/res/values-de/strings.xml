@@ -142,4 +142,5 @@
     <string name="period_end">Ende der Zeitspanne</string>
     <string name="activate_all">Alle Mahnungen aktivieren</string>
     <string name="deactivate_all">Deaktivieren Sie alle Erinnerungen</string>
+    <string name="block_screen_capture">Screenshots blockieren</string>
 </resources>
