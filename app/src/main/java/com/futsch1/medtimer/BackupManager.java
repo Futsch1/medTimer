@@ -19,13 +19,14 @@ import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BackupManager {
     private static final String MEDICINE_KEY = "medicines";
@@ -76,17 +77,17 @@ public class BackupManager {
         alertDialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Handler handler = new Handler(backgroundThread.getLooper());
             handler.post(() -> {
-                Gson gson = new Gson();
-                Map<String, String> backupMap = new LinkedHashMap<>();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                JsonObject jsonObject = new JsonObject();
                 if (checkedItems[0]) {
-                    backupMap.put(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
+                    jsonObject.add(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
                             medicineViewModel.medicineRepository.getMedicines()));
                 }
                 if (checkedItems[1]) {
-                    backupMap.put(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
+                    jsonObject.add(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
                             medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
                 }
-                createAndSave(gson.toJson(backupMap));
+                createAndSave(gson.toJson(jsonObject));
             });
         });
         alertDialogBuilder.show();
@@ -99,7 +100,7 @@ public class BackupManager {
         openFileLauncher.launch(intent);
     }
 
-    private <T> String createBackup(JSONBackup<T> jsonBackup, List<T> backupData) {
+    private <T> JsonElement createBackup(JSONBackup<T> jsonBackup, List<T> backupData) {
         return jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(),
                 backupData);
     }
@@ -117,15 +118,15 @@ public class BackupManager {
         String json = FileHelper.readFromUri(data, context.getContentResolver());
         boolean restoreSuccessful = false;
         if (json != null) {
-            TypeToken<Map<String, String>> mapType = new TypeToken<>() {
-            };
             try {
-                Map<String, String> backupMap = new Gson().fromJson(json, mapType.getType());
-                if (backupMap.containsKey(MEDICINE_KEY)) {
-                    restoreSuccessful = restoreBackup(backupMap.get(MEDICINE_KEY), new JSONMedicineBackup());
+                JsonObject rootElement = JsonParser.parseString(json).getAsJsonObject();
+                if (rootElement.has(MEDICINE_KEY)) {
+                    restoreSuccessful = restoreBackup(rootElement.get(MEDICINE_KEY).toString(),
+                            new JSONMedicineBackup());
                 }
-                if (backupMap.containsKey(EVENT_KEY)) {
-                    restoreSuccessful = restoreSuccessful && restoreBackup(backupMap.get(EVENT_KEY), new JSONReminderEventBackup());
+                if (rootElement.has(EVENT_KEY)) {
+                    restoreSuccessful = restoreSuccessful && restoreBackup(rootElement.get(EVENT_KEY).toString(),
+                            new JSONReminderEventBackup());
                 }
             } catch (JsonSyntaxException e) {
                 restoreSuccessful = false;

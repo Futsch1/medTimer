@@ -47,7 +47,7 @@ public class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine.color = Color.RED;
         medicinesWithReminders.add(medicineWithReminders);
 
-        String result = jsonMedicineBackup.createBackup(5, medicinesWithReminders);
+        String result = jsonMedicineBackup.createBackupAsString(5, medicinesWithReminders);
 
         assertNotNull(result);
 
@@ -158,7 +158,7 @@ public class JSONMedicineBackupUnitTest {
         medicineWithReminders2.medicine.notificationImportance = 5;
         medicinesWithReminders.add(medicineWithReminders2);
 
-        String result = jsonMedicineBackup.createBackup(4, medicinesWithReminders);
+        String result = jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders);
 
         assertNotNull(result);
 
