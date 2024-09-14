@@ -23,16 +23,18 @@ public class NotificationAction {
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
-        cancelNotification(reminderEvent, notificationManager);
-        cancelSnoozeAlarm(context, reminderEventId, reminderEvent);
+        if (reminderEvent != null) {
+            cancelNotification(reminderEvent, notificationManager);
+            cancelSnoozeAlarm(context, reminderEventId, reminderEvent);
 
-        reminderEvent.status = status;
-        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-        medicineRepository.updateReminderEvent(reminderEvent);
-        Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
-                status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
-                reminderEvent.reminderEventId,
-                reminderEvent.medicineName));
+            reminderEvent.status = status;
+            reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+            medicineRepository.updateReminderEvent(reminderEvent);
+            Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
+                    status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
+                    reminderEvent.reminderEventId,
+                    reminderEvent.medicineName));
+        }
 
     }
 

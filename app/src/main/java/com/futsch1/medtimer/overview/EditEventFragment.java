@@ -107,14 +107,16 @@ public class EditEventFragment extends Fragment {
             Handler handler = new Handler(backgroundThread.getLooper());
             handler.post(() -> {
                 ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
-                reminderEvent.medicineName = editEventName.getText().toString();
-                reminderEvent.amount = editEventAmount.getText().toString();
-                reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp,
-                        TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
-                reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampDate(reminderEvent.remindedTimestamp,
-                        TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
+                if (reminderEvent != null) {
+                    reminderEvent.medicineName = editEventName.getText().toString();
+                    reminderEvent.amount = editEventAmount.getText().toString();
+                    reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp,
+                            TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
+                    reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampDate(reminderEvent.remindedTimestamp,
+                            TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
 
-                medicineRepository.updateReminderEvent(reminderEvent);
+                    medicineRepository.updateReminderEvent(reminderEvent);
+                }
             });
         }
 
