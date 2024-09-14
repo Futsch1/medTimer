@@ -120,19 +120,7 @@ public class BackupManager {
         boolean restoreSuccessful = false;
         if (json != null) {
             Log.d("BackupManager", "Starting backup restore: " + data);
-            try {
-                JsonObject rootElement = JsonParser.parseString(json).getAsJsonObject();
-                if (rootElement.has(MEDICINE_KEY)) {
-                    restoreSuccessful = restoreBackup(rootElement.get(MEDICINE_KEY).toString(),
-                            new JSONMedicineBackup());
-                }
-                if (rootElement.has(EVENT_KEY)) {
-                    restoreSuccessful = restoreSuccessful && restoreBackup(rootElement.get(EVENT_KEY).toString(),
-                            new JSONReminderEventBackup());
-                }
-            } catch (JsonSyntaxException e) {
-                restoreSuccessful = false;
-            }
+            restoreSuccessful = restoreCombinedBackup(json);
         }
 
         if (!restoreSuccessful) {
@@ -146,6 +134,24 @@ public class BackupManager {
                     // Intentionally empty
                 })
                 .show();
+    }
+
+    private boolean restoreCombinedBackup(String json) {
+        boolean restoreSuccessful = false;
+        try {
+            JsonObject rootElement = JsonParser.parseString(json).getAsJsonObject();
+            if (rootElement.has(MEDICINE_KEY)) {
+                restoreSuccessful = restoreBackup(rootElement.get(MEDICINE_KEY).toString(),
+                        new JSONMedicineBackup());
+            }
+            if (rootElement.has(EVENT_KEY)) {
+                restoreSuccessful = restoreSuccessful && restoreBackup(rootElement.get(EVENT_KEY).toString(),
+                        new JSONReminderEventBackup());
+            }
+        } catch (JsonSyntaxException e) {
+            restoreSuccessful = false;
+        }
+        return restoreSuccessful;
     }
 
     private <T> boolean restoreBackup(String json, JSONBackup<T> backup) {
