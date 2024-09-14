@@ -88,7 +88,9 @@ public class BackupManager {
                     jsonObject.add(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
                             medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
                 }
-                createAndSave(gson.toJson(jsonObject));
+                if (checkedItems[0] || checkedItems[1]) {
+                    createAndSave(gson.toJson(jsonObject));
+                }
             });
         });
         alertDialogBuilder.show();
