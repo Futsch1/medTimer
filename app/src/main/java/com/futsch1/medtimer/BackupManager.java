@@ -72,8 +72,8 @@ public class BackupManager {
     private void selectBackupType() {
         MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(context);
         alertDialogBuilder.setTitle(R.string.backup);
-        boolean[] checkedItems = new boolean[2];
-        alertDialogBuilder.setMultiChoiceItems(R.array.backup_types, null, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
+        boolean[] checkedItems = {true, true};
+        alertDialogBuilder.setMultiChoiceItems(R.array.backup_types, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
         alertDialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Handler handler = new Handler(backgroundThread.getLooper());
             handler.post(() -> {
