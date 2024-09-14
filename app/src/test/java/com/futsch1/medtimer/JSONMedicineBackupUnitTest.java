@@ -33,6 +33,7 @@ public class JSONMedicineBackupUnitTest {
         List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
         MedicineWithReminders medicineWithReminders = new MedicineWithReminders();
         Reminder reminder = new Reminder(0);
+        reminder.reminderId = 14;
         reminder.timeInMinutes = 60;
         reminder.amount = "1";
         reminder.consecutiveDays = 1;
@@ -59,6 +60,7 @@ public class JSONMedicineBackupUnitTest {
     {
       "reminders": [
         {
+          "reminderId": 14,
           "timeInMinutes": 60,
           "consecutiveDays": 1,
           "pauseDays": 0,
@@ -126,6 +128,7 @@ public class JSONMedicineBackupUnitTest {
         List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
         MedicineWithReminders medicineWithReminders1 = new MedicineWithReminders();
         Reminder reminder1 = new Reminder(0);
+        reminder1.reminderId = 1;
         reminder1.timeInMinutes = 60;
         reminder1.amount = "1";
         reminder1.consecutiveDays = 1;
@@ -141,6 +144,7 @@ public class JSONMedicineBackupUnitTest {
 
         MedicineWithReminders medicineWithReminders2 = new MedicineWithReminders();
         Reminder reminder2 = new Reminder(0);
+        reminder2.reminderId = 2;
         reminder2.timeInMinutes = 120;
         reminder2.amount = "2";
         reminder2.consecutiveDays = 2;
@@ -170,6 +174,7 @@ public class JSONMedicineBackupUnitTest {
     {
       "reminders": [
         {
+          "reminderId": 1,
           "timeInMinutes": 60,
           "consecutiveDays": 1,
           "pauseDays": 0,
@@ -200,6 +205,7 @@ public class JSONMedicineBackupUnitTest {
     {
       "reminders": [
         {
+          "reminderId": 1,
           "timeInMinutes": 60,
           "consecutiveDays": 1,
           "pauseDays": 0,
@@ -220,6 +226,7 @@ public class JSONMedicineBackupUnitTest {
           "periodEnd": 0
         },
         {
+          "reminderId": 2,
           "timeInMinutes": 120,
           "consecutiveDays": 2,
           "pauseDays": 1,
