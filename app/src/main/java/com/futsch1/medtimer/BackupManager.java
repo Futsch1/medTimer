@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -118,6 +119,7 @@ public class BackupManager {
         String json = FileHelper.readFromUri(data, context.getContentResolver());
         boolean restoreSuccessful = false;
         if (json != null) {
+            Log.d("BackupManager", "Starting backup restore: " + data);
             try {
                 JsonObject rootElement = JsonParser.parseString(json).getAsJsonObject();
                 if (rootElement.has(MEDICINE_KEY)) {
@@ -137,7 +139,7 @@ public class BackupManager {
             // Try legacy backup formats
             restoreSuccessful = restoreBackup(json, new JSONMedicineBackup()) || restoreBackup(json, new JSONReminderEventBackup());
         }
-
+        Log.d("BackupManager", "Backup restore finished");
         new AlertDialog.Builder(context)
                 .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {

@@ -15,6 +15,7 @@ public class Reminder {
     public static final int DEFAULT_TIME = 480;
     public int medicineRelId;
     @PrimaryKey(autoGenerate = true)
+    @Expose
     public int reminderId;
     @Expose
     public int timeInMinutes;
