@@ -11,6 +11,8 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class MedicineViewModel extends AndroidViewModel {
@@ -81,7 +83,7 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository.deleteAll();
     }
 
-    public ReminderEvent getReminderEvent(int reminderEventId) {
+    public @Nullable ReminderEvent getReminderEvent(int reminderEventId) {
         return medicineRepository.getReminderEvent(reminderEventId);
     }
 

@@ -69,7 +69,7 @@
     <string name="backup_failed">La sauvegarde a échoué</string>
     <string name="export_failed">Échec de l\'exportation</string>
     <string name="restore_successful">Restauration réussie</string>
-    <string name="restore_start">Cela remplacera tous les paramètres de médicament.\n\nContinuer?</string>
+    <string name="restore_start">Cela remplacera tous les réglages de médicaments et/ou les événements de rappel.\n\nContinuer ?</string>
     <string name="log_additional_dose">Enregistrer une dose supplémentaire</string>
     <string name="dismiss_notification_action">Action en cas de rejet d\'une notification</string>
     <string name="skip_reminder">Sauter une dose</string>
@@ -116,7 +116,6 @@
     <string name="name">Nom</string>
     <string name="event_data">Données sur les événements</string>
     <string name="backup">Sauvegarde</string>
-    <string name="restore_events_start">Cela remplacera tous les événements de rappel.\n\nPoursuivre ?</string>
     <string name="taken_now">Pris maintenant</string>
     <string name="event_name">Nom de l\'événement</string>
     <string name="edit_event">Modifier l\'événement</string>

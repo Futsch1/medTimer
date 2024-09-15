@@ -36,7 +36,7 @@ public class JSONReminderEventBackupUnitTest {
         reminderEvent.reminderId = 3;
         reminderEvents.add(reminderEvent);
 
-        String result = jsonReminderEventBackup.createBackup(1, reminderEvents);
+        String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
 
         assertNotNull(result);
 

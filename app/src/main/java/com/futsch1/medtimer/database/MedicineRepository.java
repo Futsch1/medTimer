@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -108,7 +110,7 @@ public class MedicineRepository {
         return internalInsert(reminderEvent, medicineDao::insertReminderEvent);
     }
 
-    public ReminderEvent getReminderEvent(int reminderEventId) {
+    public @Nullable ReminderEvent getReminderEvent(int reminderEventId) {
         return medicineDao.getReminderEvent(reminderEventId);
     }
 

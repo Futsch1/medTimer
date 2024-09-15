@@ -25,10 +25,15 @@ public abstract class JSONBackup<T> {
         this.contentClass = contentClass;
     }
 
-    public String createBackup(int databaseVersion, List<T> list) {
+    public String createBackupAsString(int databaseVersion, List<T> list) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(createBackup(databaseVersion, list));
+    }
+
+    public JsonElement createBackup(int databaseVersion, List<T> list) {
         JSONBackup.DatabaseContentWithVersion<T> content = new JSONBackup.DatabaseContentWithVersion<>(databaseVersion, list);
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-        return gson.toJson(content);
+        return gson.toJsonTree(content);
     }
 
     public @Nullable List<T> parseBackup(String jsonFile) {

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.database;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 import java.time.Instant;
 import java.util.List;
@@ -12,7 +13,7 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
     }
 
     @Override
-    public String createBackup(int databaseVersion, List<MedicineWithReminders> list) {
+    public JsonElement createBackup(int databaseVersion, List<MedicineWithReminders> list) {
         // Fix the medicines where the instructions are null
         for (MedicineWithReminders medicineWithReminders : list) {
             medicineWithReminders.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
