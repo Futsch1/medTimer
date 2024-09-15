@@ -60,7 +60,7 @@
     <string name="time_after">x uur na medicijn y</string>
     <string name="instruction_templates">Referentiesjablonen</string>
     <string name="instructions_label">Aanvullende instructies (bijvoorbeeld vóór de maaltijd)</string>
-    <string name="medicine_data">Medicatie gegevens</string>
+    <string name="medicine_data">Behandeling gegevens</string>
     <string name="export_csv">Exporteren als CSV</string>
     <string name="export_pdf">Exporteren als PDF</string>
     <string name="restore">Herstellen</string>
@@ -115,7 +115,7 @@
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
     <string name="taken_now">Nu ingenomen</string>
-    <string name="event_name">"Herinneringennaam   "</string>
+    <string name="event_name">Herinneringennaam</string>
     <string name="edit_event">Herinnering bewerken</string>
     <string name="show_all">Alles weergeven</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
