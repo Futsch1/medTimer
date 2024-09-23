@@ -87,7 +87,7 @@ dependencies {
     val tableViewVersion = "0.8.9.4"
     val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
-    val calendarVersion = "2.5.4"
+    val calendarVersion = "2.6.0"
 
     val junitVersion = "4.13.2"
     val mockitoCoreVersion = "5.13.0"
