@@ -21,9 +21,9 @@
     <string name="notification_title">Herinneringen van de behandeling</string>
     <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
-    <string name="notification_taken">INGENOMEN</string>
-    <string name="taken">Ingenomen</string>
-    <string name="skipped">Overgeslagen</string>
+    <string name="notification_taken">BEVESTIGEN</string>
+    <string name="taken">Bevestigen</string>
+    <string name="skipped">Overslaan</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
@@ -79,7 +79,7 @@
     <string name="minutes_15">15 minuten</string>
     <string name="minutes_30">30 minuten</string>
     <string name="minutes_60">60 minuten</string>
-    <string name="notification_skipped">OVERGESLAGEN</string>
+    <string name="notification_skipped">OVERSLAAN</string>
     <string name="notification_snooze">SNOOZEN</string>
     <string name="weekend_mode">Weekendmodus</string>
     <string name="weekend_mode_days">Dagen</string>
