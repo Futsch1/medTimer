@@ -14,7 +14,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,25 +31,27 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.DialogHelper;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.maltaisn.icondialog.IconDialog;
+import com.maltaisn.icondialog.IconDialogSettings;
 import com.maltaisn.icondialog.data.Icon;
-import com.maltaisn.icondialog.pack.IconDrawableLoader;
 import com.maltaisn.icondialog.pack.IconPack;
-import com.maltaisn.icondialog.pack.IconPackLoader;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.List;
 
-public class EditMedicineFragment extends Fragment {
+public class EditMedicineFragment extends Fragment implements IconDialog.Callback {
 
+    private static final String ICON_DIALOG_TAG = "icon-dialog";
     final HandlerThread thread;
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
@@ -58,6 +63,7 @@ public class EditMedicineFragment extends Fragment {
     private View fragmentEditMedicine;
     private AutoCompleteTextView notificationImportance;
     private EditMedicineFragmentArgs editMedicineArgs;
+    private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
         this.thread = new HandlerThread("DeleteMedicine");
@@ -90,16 +96,11 @@ public class EditMedicineFragment extends Fragment {
 
         setupSwiping(recyclerView);
         setupAddReminderButton();
+        setupSelectIcon();
 
         medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
-
-        IconPack pack = new IconPackLoader(requireContext()).load(R.xml.icon_pack, 0, Collections.emptyList(), null);
-        MaterialButton button = fragmentEditMedicine.findViewById(R.id.selectIcon);
-        Icon i = pack.getIcon(1);
-        new IconDrawableLoader((requireContext())).loadDrawable(i);
-        button.setIcon(i.getDrawable());
 
         return fragmentEditMedicine;
     }
@@ -165,6 +166,20 @@ public class EditMedicineFragment extends Fragment {
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
         fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
+    }
+
+    private void setupSelectIcon() {
+        selectIconButton = fragmentEditMedicine.findViewById(R.id.selectIcon);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        IconDialog dialog = (IconDialog) fragmentManager.findFragmentByTag(ICON_DIALOG_TAG);
+        IconDialogSettings.Builder builder = new IconDialogSettings.Builder();
+        builder.setShowClearBtn(true);
+        IconDialog iconDialog = dialog != null ? dialog
+                : IconDialog.newInstance(builder.build());
+
+        selectIconButton.setOnClickListener(v ->
+                iconDialog.show(fragmentManager, ICON_DIALOG_TAG)
+        );
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
@@ -262,4 +277,23 @@ public class EditMedicineFragment extends Fragment {
         return importanceTexts[0];
     }
 
+    @Nullable
+    @Override
+    public IconPack getIconDialogIconPack() {
+        return MedicineIcons.getIconPack();
+    }
+
+    @Override
+    public void onIconDialogCancelled() {
+        // Intentionally empty
+    }
+
+    @Override
+    public void onIconDialogIconsSelected(@NonNull IconDialog iconDialog, @NonNull List<Icon> list) {
+        if (list.isEmpty()) {
+            selectIconButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.plus_circle_dotted, null));
+        } else {
+            selectIconButton.setIcon(MedicineIcons.getIconDrawable(list.get(0).getId()));
+        }
+    }
 }
