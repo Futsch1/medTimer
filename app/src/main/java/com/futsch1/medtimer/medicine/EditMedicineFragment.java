@@ -34,11 +34,16 @@ import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.maltaisn.icondialog.data.Icon;
+import com.maltaisn.icondialog.pack.IconDrawableLoader;
+import com.maltaisn.icondialog.pack.IconPack;
+import com.maltaisn.icondialog.pack.IconPackLoader;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Collections;
 
 public class EditMedicineFragment extends Fragment {
 
@@ -89,6 +94,12 @@ public class EditMedicineFragment extends Fragment {
         medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
+
+        IconPack pack = new IconPackLoader(requireContext()).load(R.xml.icon_pack, 0, Collections.emptyList(), null);
+        MaterialButton button = fragmentEditMedicine.findViewById(R.id.selectIcon);
+        Icon i = pack.getIcon(1);
+        new IconDrawableLoader((requireContext())).loadDrawable(i);
+        button.setIcon(i.getDrawable());
 
         return fragmentEditMedicine;
     }

@@ -88,6 +88,7 @@ dependencies {
     val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
     val calendarVersion = "2.6.0"
+    val iconDialogVersion = "3.3.0"
 
     val junitVersion = "4.13.2"
     val mockitoCoreVersion = "5.13.0"
@@ -119,6 +120,7 @@ dependencies {
     implementation("com.androidplot:androidplot-core:$androidPlotVersion")
     implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
+    implementation("com.maltaisn:icondialog:$iconDialogVersion")
 
     testImplementation("junit:junit:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
