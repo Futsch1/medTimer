@@ -24,7 +24,7 @@ public class GenerateTestData {
                 new TestMedicine("Ginseng (200mg)", 0xFF90EE90, 3, new TestReminder[]{
                         new TestReminder("1", 9 * 60, 1, 0, "before breakfast")
                 }),
-                new TestMedicine("Selen (200 µg)", null, 4, new TestReminder[]{
+                new TestMedicine("Selen (200 µg)", null, 0, new TestReminder[]{
                         new TestReminder("2", 9 * 60, 1, 0, ""),
                         new TestReminder("1", 22 * 60, 1, 1, "")
                 })
