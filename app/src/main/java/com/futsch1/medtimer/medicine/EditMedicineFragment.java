@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
@@ -34,6 +33,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
+import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -230,7 +230,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
             Medicine medicine = new Medicine(word, medicineId);
             medicine.useColor = enableColor.isChecked();
             medicine.color = color;
-            medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
+            medicine.notificationImportance = NotificationImportanceKt.importanceStringToValue(notificationImportance.getText().toString(), this.getResources());
             medicine.iconId = iconId;
             medicineViewModel.updateMedicine(medicine);
         }
@@ -242,15 +242,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     public void onDestroy() {
         super.onDestroy();
         thread.quitSafely();
-    }
-
-    private int importanceStringToValue(String importance) {
-        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        if (importance.equals(importanceTexts[1])) {
-            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
-        }
-        return value;
     }
 
     private void updateReminders() {
@@ -270,20 +261,9 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
+        notificationImportance.setText(NotificationImportanceKt.importanceValueToString(editMedicineArgs.getNotificationImportance(), this.getResources()), false);
     }
 
-    private String importanceValueToString(int value) {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-
-        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
-            return importanceTexts[0];
-        }
-        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
-            return importanceTexts[1];
-        }
-        return importanceTexts[0];
-    }
 
     @Nullable
     @Override
