@@ -25,7 +25,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:icon="@drawable/plus_circle_dotted"
                 app:iconPadding="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -173,19 +172,20 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void setupSelectIcon() {
         selectIconButton = fragmentEditMedicine.findViewById(R.id.selectIcon);
-        if (iconId != 0) {
-            selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
-        }
+        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
 
         FragmentManager fragmentManager = getChildFragmentManager();
         IconDialog dialog = (IconDialog) fragmentManager.findFragmentByTag(ICON_DIALOG_TAG);
         IconDialogSettings.Builder builder = new IconDialogSettings.Builder();
         builder.setShowClearBtn(true);
+        builder.setShowSelectBtn(false);
         IconDialog iconDialog = dialog != null ? dialog
                 : IconDialog.newInstance(builder.build());
 
-        selectIconButton.setOnClickListener(v ->
-                iconDialog.show(fragmentManager, ICON_DIALOG_TAG)
+        selectIconButton.setOnClickListener(v -> {
+                    iconDialog.setSelectedIconIds(List.of(iconId));
+                    iconDialog.show(fragmentManager, ICON_DIALOG_TAG);
+                }
         );
     }
 
@@ -298,12 +298,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     @Override
     public void onIconDialogIconsSelected(@NonNull IconDialog iconDialog, @NonNull List<Icon> list) {
-        iconId = 0;
-        if (list.isEmpty()) {
-            selectIconButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.plus_circle_dotted, null));
-        } else {
-            iconId = list.get(0).getId();
-            selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
-        }
+        iconId = list.get(0).getId();
+        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
     }
 }
