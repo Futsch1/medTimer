@@ -27,12 +27,16 @@ public class Medicine {
     @ColumnInfo(defaultValue = "3")
     @Expose
     public int notificationImportance;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int iconId;
 
     public Medicine(String name) {
         this.name = name;
         this.useColor = false;
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
+        this.iconId = 0;
     }
 
     public Medicine(String name, int id) {
@@ -41,5 +45,6 @@ public class Medicine {
         this.useColor = false;
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
+        this.iconId = 0;
     }
 }

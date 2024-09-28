@@ -14,17 +14,17 @@ public class GenerateTestData {
 
     public void generateTestMedicine() {
         TestMedicine[] testMedicines = new TestMedicine[]{
-                new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, new TestReminder[]{
+                new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, 1, new TestReminder[]{
                         new TestReminder("1", 9 * 60, 1, 0, ""),
                         new TestReminder("1", 18 * 60, 2, 2, "after meals")
                 }),
-                new TestMedicine("B12 (500µg)", 0xFF8b0000, new TestReminder[]{
+                new TestMedicine("B12 (500µg)", 0xFF8b0000, 2, new TestReminder[]{
                         new TestReminder("2", 7 * 60, 1, 0, "")
                 }),
-                new TestMedicine("Ginseng (200mg)", 0xFF90EE90, new TestReminder[]{
+                new TestMedicine("Ginseng (200mg)", 0xFF90EE90, 3, new TestReminder[]{
                         new TestReminder("1", 9 * 60, 1, 0, "before breakfast")
                 }),
-                new TestMedicine("Selen (200 µg)", null, new TestReminder[]{
+                new TestMedicine("Selen (200 µg)", null, 4, new TestReminder[]{
                         new TestReminder("2", 9 * 60, 1, 0, ""),
                         new TestReminder("1", 22 * 60, 1, 1, "")
                 })
@@ -36,6 +36,7 @@ public class GenerateTestData {
                 medicine.useColor = true;
                 medicine.color = testMedicine.color;
             }
+            medicine.iconId = testMedicine.iconId;
             int medicineId = viewModel.insertMedicine(medicine);
             for (TestReminder testReminder : testMedicine.reminders) {
                 Reminder reminder = new Reminder(medicineId);
@@ -51,7 +52,7 @@ public class GenerateTestData {
     }
 
     @SuppressWarnings("java:S6218")
-    private record TestMedicine(String name, Integer color, TestReminder[] reminders) {
+    private record TestMedicine(String name, Integer color, int iconId, TestReminder[] reminders) {
         // Record, intentionally empty
     }
 

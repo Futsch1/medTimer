@@ -80,7 +80,8 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 medicineWithReminders.medicine.name,
                 medicineWithReminders.medicine.useColor,
                 medicineWithReminders.medicine.color,
-                medicineWithReminders.medicine.notificationImportance
+                medicineWithReminders.medicine.notificationImportance,
+                medicineWithReminders.medicine.iconId
         );
         navController.navigate(action);
     }

@@ -56,6 +56,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
     int medicineId;
+    int iconId;
     ReminderViewAdapter adapter;
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
@@ -96,6 +97,8 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
         setupSwiping(recyclerView);
         setupAddReminderButton();
+
+        iconId = editMedicineArgs.getIconId();
         setupSelectIcon();
 
         medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
@@ -170,6 +173,10 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void setupSelectIcon() {
         selectIconButton = fragmentEditMedicine.findViewById(R.id.selectIcon);
+        if (iconId != 0) {
+            selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
+        }
+
         FragmentManager fragmentManager = getChildFragmentManager();
         IconDialog dialog = (IconDialog) fragmentManager.findFragmentByTag(ICON_DIALOG_TAG);
         IconDialogSettings.Builder builder = new IconDialogSettings.Builder();
@@ -224,6 +231,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
             medicine.useColor = enableColor.isChecked();
             medicine.color = color;
             medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
+            medicine.iconId = iconId;
             medicineViewModel.updateMedicine(medicine);
         }
 
@@ -290,10 +298,12 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     @Override
     public void onIconDialogIconsSelected(@NonNull IconDialog iconDialog, @NonNull List<Icon> list) {
+        iconId = 0;
         if (list.isEmpty()) {
             selectIconButton.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.plus_circle_dotted, null));
         } else {
-            selectIconButton.setIcon(MedicineIcons.getIconDrawable(list.get(0).getId()));
+            iconId = list.get(0).getId();
+            selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
         }
     }
 }

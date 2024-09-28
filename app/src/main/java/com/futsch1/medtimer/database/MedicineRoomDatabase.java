@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
-        version = 9,
+        version = 10,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
                 @AutoMigration(from = 6, to = 7),
                 @AutoMigration(from = 7, to = 8),
                 @AutoMigration(from = 8, to = 9),
+                @AutoMigration(from = 9, to = 10),
         }
 )
 @TypeConverters({Converters.class})
