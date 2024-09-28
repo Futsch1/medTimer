@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import androidx.appcompat.content.res.AppCompatResources
 import com.futsch1.medtimer.R
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
@@ -11,6 +12,7 @@ import com.maltaisn.icondialog.pack.IconPackLoader
 
 class MedicineIcons private constructor(context: Context) {
     private val pack: IconPack = IconPackLoader(context).load(R.xml.icon_pack)
+    private val defaultDrawable = AppCompatResources.getDrawable(context, R.drawable.capsule)!!
 
     init {
         pack.loadDrawables(IconDrawableLoader(context))
@@ -30,16 +32,16 @@ class MedicineIcons private constructor(context: Context) {
         }
 
         @JvmStatic
-        fun getIconDrawable(id: Int): Drawable? {
-            return instance!!.pack.getIcon(id)?.drawable
+        fun getIconDrawable(id: Int): Drawable {
+            return instance!!.pack.getIcon(id)?.drawable ?: instance!!.defaultDrawable
         }
 
         @JvmStatic
         fun getIconBitmap(id: Int): Bitmap {
-            val drawable = instance!!.pack.getIcon(id)?.drawable
+            val drawable = getIconDrawable(id)
 
             val bit = Bitmap.createBitmap(
-                drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+                drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
             )
 
             val canvas = Canvas(bit)
