@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.helpers
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
@@ -32,6 +34,21 @@ class MedicineIcons private constructor(context: Context) {
         @JvmStatic
         fun getIconDrawable(id: Int): Drawable? {
             return instance!!.pack.getIcon(id)?.drawable
+        }
+
+        @JvmStatic
+        fun getIconBitmap(id: Int): Bitmap {
+            val drawable = instance!!.pack.getIcon(id)?.drawable
+
+            val bit = Bitmap.createBitmap(
+                drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(bit)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+
+            return bit
         }
 
         @JvmStatic
