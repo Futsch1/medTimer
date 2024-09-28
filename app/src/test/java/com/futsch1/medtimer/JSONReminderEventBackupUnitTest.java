@@ -34,6 +34,7 @@ public class JSONReminderEventBackupUnitTest {
         reminderEvent.remindedTimestamp = 1;
         reminderEvent.processedTimestamp = 2;
         reminderEvent.reminderId = 3;
+        reminderEvent.iconId = 4;
         reminderEvents.add(reminderEvent);
 
         String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
@@ -53,7 +54,8 @@ public class JSONReminderEventBackupUnitTest {
       "status": "TAKEN",
       "remindedTimestamp": 1,
       "processedTimestamp": 2,
-      "reminderId": 3
+      "reminderId": 3,
+      "iconId": 4
     }
   ]
 }""", result);
@@ -80,6 +82,7 @@ public class JSONReminderEventBackupUnitTest {
         assertEquals(reminderEvent1.remindedTimestamp, reminderEvent2.remindedTimestamp);
         assertEquals(reminderEvent1.processedTimestamp, reminderEvent2.processedTimestamp);
         assertEquals(reminderEvent1.reminderId, reminderEvent2.reminderId);
+        assertEquals(reminderEvent1.iconId, reminderEvent2.iconId);
     }
 }
 
