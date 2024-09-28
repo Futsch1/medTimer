@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
 public class ReminderForScheduling {
@@ -67,6 +68,7 @@ public class ReminderForScheduling {
 
         clearPossibleDaysByWeekday();
         clearPossibleDaysByActivePeriod();
+        clearPossibleDaysByActiveDayOfMonth();
 
         return getEarliestPossibleDate();
     }
@@ -115,6 +117,15 @@ public class ReminderForScheduling {
             if (reminder.periodEnd != 0 && today + i > reminder.periodEnd) {
                 possibleDays[i] = false;
             }
+        }
+    }
+
+    private void clearPossibleDaysByActiveDayOfMonth() {
+        LocalDate startDate = timeAccess.localDate();
+        BitSet bitSet = BitSet.valueOf(new long[]{reminder.activeDaysOfMonth});
+        for (int i = 0; i < possibleDays.length; i++) {
+            possibleDays[i] = bitSet.get(startDate.getDayOfMonth() - 1);
+            startDate = startDate.plusDays(1);
         }
     }
 
