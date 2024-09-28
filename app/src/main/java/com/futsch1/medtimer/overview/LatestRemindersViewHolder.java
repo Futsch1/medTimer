@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
@@ -66,6 +67,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
         }
+
+        MedicineIcons.toImageView(itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {

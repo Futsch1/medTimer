@@ -15,6 +15,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
@@ -59,6 +60,8 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(nextReminderText));
         }
+
+        MedicineIcons.toImageView(itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().iconId);
     }
 
     private void processFutureReminder(ScheduledReminder scheduledReminder, boolean taken, Looper looper, MedicineViewModel medicineViewModel) {

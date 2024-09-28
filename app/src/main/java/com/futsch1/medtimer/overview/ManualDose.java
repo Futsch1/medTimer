@@ -72,6 +72,7 @@ public class ManualDose {
         reminderEvent.medicineName = entry.name;
         reminderEvent.color = entry.color;
         reminderEvent.useColor = entry.useColor;
+        reminderEvent.iconId = entry.iconId;
         if (reminderEvent.medicineName.equals(context.getString(R.string.custom))) {
             DialogHelper.showTextInputDialog(context, R.string.log_additional_dose, R.string.medicine_name, name -> {
                 setLastCustomDose(name);
@@ -127,12 +128,14 @@ public class ManualDose {
         public final int color;
         public final boolean useColor;
         public final String amount;
+        public final int iconId;
 
         public ManualDoseEntry(String name) {
             this.name = name;
             this.color = 0;
             this.useColor = false;
             this.amount = null;
+            this.iconId = 0;
         }
 
         public ManualDoseEntry(Medicine medicine, String amount) {
@@ -144,6 +147,7 @@ public class ManualDose {
             this.color = medicine.color;
             this.useColor = medicine.useColor;
             this.amount = amount;
+            this.iconId = medicine.iconId;
         }
     }
 }
