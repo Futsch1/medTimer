@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
@@ -60,6 +61,8 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
+
+        MedicineIcons.toImageView(holderItemView.findViewById(R.id.medicineIcon), medicineWithReminders.medicine.iconId);
     }
 
     private String getRemindersSummary(List<Reminder> reminders) {
