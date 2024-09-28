@@ -66,6 +66,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
         }
+
+        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {

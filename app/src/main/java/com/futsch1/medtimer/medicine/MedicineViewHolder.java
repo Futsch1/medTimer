@@ -25,11 +25,9 @@ import java.util.stream.Collectors;
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
     private final TextView remindersSummaryView;
-    private final View holderItemView;
 
     private MedicineViewHolder(View holderItemView) {
         super(holderItemView);
-        this.holderItemView = holderItemView;
         medicineNameView = holderItemView.findViewById(R.id.medicineName);
         remindersSummaryView = holderItemView.findViewById(R.id.remindersSummary);
     }
@@ -53,20 +51,22 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             remindersSummaryView.setText(getRemindersSummary(activeReminders));
         }
 
-        holderItemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
+        itemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
 
         if (medicineWithReminders.medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) holderItemView, Arrays.asList(medicineNameView, remindersSummaryView));
+            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
+
+        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicineWithReminders.medicine.iconId);
     }
 
     private String getRemindersSummary(List<Reminder> reminders) {
         ArrayList<String> reminderTimes = new ArrayList<>();
         int[] timesInMinutes = reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
         for (int minute : timesInMinutes) {
-            reminderTimes.add(TimeHelper.minutesToTimeString(holderItemView.getContext(), minute));
+            reminderTimes.add(TimeHelper.minutesToTimeString(itemView.getContext(), minute));
         }
         int len = reminders.size();
         return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
@@ -74,13 +74,14 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
-        NavController navController = Navigation.findNavController(holderItemView);
+        NavController navController = Navigation.findNavController(itemView);
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
                 medicineWithReminders.medicine.medicineId,
                 medicineWithReminders.medicine.name,
                 medicineWithReminders.medicine.useColor,
                 medicineWithReminders.medicine.color,
-                medicineWithReminders.medicine.notificationImportance
+                medicineWithReminders.medicine.notificationImportance,
+                medicineWithReminders.medicine.iconId
         );
         navController.navigate(action);
     }

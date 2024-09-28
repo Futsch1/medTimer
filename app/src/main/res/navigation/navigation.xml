@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
             app:destination="@id/calendarFragment" />
+        <argument
+            android:name="iconId"
+            app:argType="integer" />
     </fragment>
     <argument
         android:name="reminderId"
