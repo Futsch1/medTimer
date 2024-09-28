@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.view.View
-import android.widget.ImageView
 import com.futsch1.medtimer.R
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
@@ -49,16 +47,6 @@ class MedicineIcons private constructor(context: Context) {
             drawable.draw(canvas)
 
             return bit
-        }
-
-        @JvmStatic
-        fun toImageView(imageView: ImageView, id: Int) {
-            if (id != 0) {
-                imageView.setImageDrawable(getIconDrawable(id))
-                imageView.visibility = View.VISIBLE
-            } else {
-                imageView.visibility = View.GONE
-            }
         }
     }
 }
