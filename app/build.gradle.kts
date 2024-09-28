@@ -20,8 +20,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 71
-        versionName = "1.9.5"
+        versionCode = 72
+        versionName = "1.10.0"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -73,12 +73,12 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.1.4"
-    val androidXNavigationVersion = "2.8.0"
+    val androidXNavigationVersion = "2.8.1"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.9.1"
     val coreKtxVersion = "1.13.1"
-    val lifecycleViewmodelKtxVersion = "2.8.5"
+    val lifecycleViewmodelKtxVersion = "2.8.6"
     val roomVersion = "2.6.1"
     val colorPickerViewVersion = "2.3.0"
     val preferenceXVersion = "1.1.0"
@@ -88,6 +88,7 @@ dependencies {
     val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
     val calendarVersion = "2.6.0"
+    val iconDialogVersion = "3.3.0"
 
     val junitVersion = "4.13.2"
     val mockitoCoreVersion = "5.13.0"
@@ -119,6 +120,7 @@ dependencies {
     implementation("com.androidplot:androidplot-core:$androidPlotVersion")
     implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
+    implementation("com.maltaisn:icondialog:$iconDialogVersion")
 
     testImplementation("junit:junit:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

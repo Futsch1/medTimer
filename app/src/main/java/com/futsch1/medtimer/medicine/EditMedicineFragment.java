@@ -14,7 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,29 +25,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.DialogHelper;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
+import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.maltaisn.icondialog.IconDialog;
+import com.maltaisn.icondialog.IconDialogSettings;
+import com.maltaisn.icondialog.data.Icon;
+import com.maltaisn.icondialog.pack.IconPack;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
-public class EditMedicineFragment extends Fragment {
+public class EditMedicineFragment extends Fragment implements IconDialog.Callback {
 
+    private static final String ICON_DIALOG_TAG = "icon-dialog";
     final HandlerThread thread;
     MedicineViewModel medicineViewModel;
     EditText editMedicineName;
     int medicineId;
+    int iconId;
     ReminderViewAdapter adapter;
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
@@ -53,6 +63,7 @@ public class EditMedicineFragment extends Fragment {
     private View fragmentEditMedicine;
     private AutoCompleteTextView notificationImportance;
     private EditMedicineFragmentArgs editMedicineArgs;
+    private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
         this.thread = new HandlerThread("DeleteMedicine");
@@ -85,6 +96,9 @@ public class EditMedicineFragment extends Fragment {
 
         setupSwiping(recyclerView);
         setupAddReminderButton();
+
+        iconId = editMedicineArgs.getIconId();
+        setupSelectIcon();
 
         medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
 
@@ -156,6 +170,25 @@ public class EditMedicineFragment extends Fragment {
         fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
     }
 
+    private void setupSelectIcon() {
+        selectIconButton = fragmentEditMedicine.findViewById(R.id.selectIcon);
+        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        IconDialog dialog = (IconDialog) fragmentManager.findFragmentByTag(ICON_DIALOG_TAG);
+        IconDialogSettings.Builder builder = new IconDialogSettings.Builder();
+        builder.setShowClearBtn(true);
+        builder.setShowSelectBtn(false);
+        IconDialog iconDialog = dialog != null ? dialog
+                : IconDialog.newInstance(builder.build());
+
+        selectIconButton.setOnClickListener(v -> {
+                    iconDialog.setSelectedIconIds(List.of(iconId));
+                    iconDialog.show(fragmentManager, ICON_DIALOG_TAG);
+                }
+        );
+    }
+
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, () -> {
@@ -197,7 +230,8 @@ public class EditMedicineFragment extends Fragment {
             Medicine medicine = new Medicine(word, medicineId);
             medicine.useColor = enableColor.isChecked();
             medicine.color = color;
-            medicine.notificationImportance = importanceStringToValue(notificationImportance.getText().toString());
+            medicine.notificationImportance = NotificationImportanceKt.importanceStringToValue(notificationImportance.getText().toString(), this.getResources());
+            medicine.iconId = iconId;
             medicineViewModel.updateMedicine(medicine);
         }
 
@@ -208,15 +242,6 @@ public class EditMedicineFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         thread.quitSafely();
-    }
-
-    private int importanceStringToValue(String importance) {
-        int value = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        if (importance.equals(importanceTexts[1])) {
-            value = ReminderNotificationChannelManager.Importance.HIGH.getValue();
-        }
-        return value;
     }
 
     private void updateReminders() {
@@ -236,19 +261,24 @@ public class EditMedicineFragment extends Fragment {
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(importanceValueToString(editMedicineArgs.getNotificationImportance()), false);
+        notificationImportance.setText(NotificationImportanceKt.importanceValueToString(editMedicineArgs.getNotificationImportance(), this.getResources()), false);
     }
 
-    private String importanceValueToString(int value) {
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
 
-        if (value == ReminderNotificationChannelManager.Importance.DEFAULT.getValue()) {
-            return importanceTexts[0];
-        }
-        if (value == ReminderNotificationChannelManager.Importance.HIGH.getValue()) {
-            return importanceTexts[1];
-        }
-        return importanceTexts[0];
+    @Nullable
+    @Override
+    public IconPack getIconDialogIconPack() {
+        return MedicineIcons.getIconPack();
     }
 
+    @Override
+    public void onIconDialogCancelled() {
+        // Intentionally empty
+    }
+
+    @Override
+    public void onIconDialogIconsSelected(@NonNull IconDialog iconDialog, @NonNull List<Icon> list) {
+        iconId = list.get(0).getId();
+        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
+    }
 }

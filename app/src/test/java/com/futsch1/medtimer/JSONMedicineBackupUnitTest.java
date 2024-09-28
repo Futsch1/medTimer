@@ -46,6 +46,7 @@ public class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
         medicineWithReminders.medicine.color = Color.RED;
+        medicineWithReminders.medicine.iconId = 5;
         medicinesWithReminders.add(medicineWithReminders);
 
         String result = jsonMedicineBackup.createBackupAsString(5, medicinesWithReminders);
@@ -85,7 +86,8 @@ public class JSONMedicineBackupUnitTest {
         "name": "Medicine A",
         "color": -65536,
         "useColor": true,
-        "notificationImportance": 3
+        "notificationImportance": 3,
+        "iconId": 5
       }
     }
   ]
@@ -160,6 +162,7 @@ public class JSONMedicineBackupUnitTest {
         medicineWithReminders2.medicine.useColor = false;
         medicineWithReminders2.medicine.color = Color.BLUE;
         medicineWithReminders2.medicine.notificationImportance = 5;
+        medicineWithReminders2.medicine.iconId = 7;
         medicinesWithReminders.add(medicineWithReminders2);
 
         String result = jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders);
@@ -199,7 +202,8 @@ public class JSONMedicineBackupUnitTest {
         "name": "Medicine A",
         "color": -65536,
         "useColor": true,
-        "notificationImportance": 4
+        "notificationImportance": 4,
+        "iconId": 0
       }
     },
     {
@@ -251,7 +255,8 @@ public class JSONMedicineBackupUnitTest {
         "name": "Medicine B",
         "color": -16776961,
         "useColor": false,
-        "notificationImportance": 5
+        "notificationImportance": 5,
+        "iconId": 7
       }
     }
   ]

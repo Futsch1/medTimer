@@ -59,6 +59,8 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(nextReminderText));
         }
+
+        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().iconId);
     }
 
     private void processFutureReminder(ScheduledReminder scheduledReminder, boolean taken, Looper looper, MedicineViewModel medicineViewModel) {
