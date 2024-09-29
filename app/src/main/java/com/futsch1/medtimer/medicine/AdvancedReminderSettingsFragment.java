@@ -93,27 +93,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         setupInstructionSuggestions();
 
-        String[] daysOfMonth = new String[31];
-        for (int i = 0; i < 31; i++) {
-            daysOfMonth[i] = i + 1 + "";
-        }
-        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
-                i -> reminder.days.get(i),
-                (i, b) -> {
-                    reminder.days.set(i, b);
-                    return Unit.INSTANCE;
-                });
-        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
-                i -> (reminder.activeDaysOfMonth & (1 << i)) != 0,
-                (i, b) -> {
-                    if (Boolean.TRUE.equals(b)) {
-                        reminder.activeDaysOfMonth |= (1 << i);
-                    } else {
-                        reminder.activeDaysOfMonth &= ~(1 << i);
-                    }
-
-                    return Unit.INSTANCE;
-                });
+        setupRemindOnDays();
         setupCycleStartDate();
     }
 
@@ -132,6 +112,30 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             builder.show();
 
         });
+    }
+
+    private void setupRemindOnDays() {
+        String[] daysOfMonth = new String[31];
+        for (int i = 0; i < 31; i++) {
+            daysOfMonth[i] = Integer.toString(i + 1);
+        }
+        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
+                i -> reminder.days.get(i),
+                (i, b) -> {
+                    reminder.days.set(i, b);
+                    return Unit.INSTANCE;
+                });
+        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
+                i -> (reminder.activeDaysOfMonth & (1 << i)) != 0,
+                (i, b) -> {
+                    if (Boolean.TRUE.equals(b)) {
+                        reminder.activeDaysOfMonth |= (1 << i);
+                    } else {
+                        reminder.activeDaysOfMonth &= ~(1 << i);
+                    }
+
+                    return Unit.INSTANCE;
+                });
     }
 
     private void setupCycleStartDate() {

@@ -21,24 +21,35 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     if (never) {
         strings.add(context.getString(R.string.never))
     } else {
-        if (weekdayLimited) {
-            strings.add(context.getString(R.string.weekday_limited))
-        }
-        if (dayOfMonthLimited) {
-            strings.add(context.getString(R.string.day_of_month_limited))
-        }
-        if (cyclic) {
-            strings.add(getCyclicReminderString(context, reminder))
-        }
-        if (!weekdayLimited && !cyclic) {
-            strings.add(context.getString(R.string.every_day))
-        }
+        buildReminderStrings(strings, weekdayLimited, context, dayOfMonthLimited, cyclic, reminder)
     }
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
     }
 
     return java.lang.String.join(", ", strings)
+}
+
+private fun buildReminderStrings(
+    strings: MutableList<String>,
+    weekdayLimited: Boolean,
+    context: Context,
+    dayOfMonthLimited: Boolean,
+    cyclic: Boolean,
+    reminder: Reminder
+) {
+    if (weekdayLimited) {
+        strings.add(context.getString(R.string.weekday_limited))
+    }
+    if (dayOfMonthLimited) {
+        strings.add(context.getString(R.string.day_of_month_limited))
+    }
+    if (cyclic) {
+        strings.add(getCyclicReminderString(context, reminder))
+    }
+    if (!weekdayLimited && !cyclic) {
+        strings.add(context.getString(R.string.every_day))
+    }
 }
 
 fun remindersSummary(context: Context, reminders: List<Reminder>): String {
