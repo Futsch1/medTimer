@@ -94,7 +94,7 @@
   <string name="weekend_mode_summary">Retrasar las notificaciones de ciertos días de la semana hasta una hora determinada</string>
   <string name="custom">Personalizado…</string>
   <string name="advanced_settings">Opciones avanzadas</string>
-  <string name="remind_on">Recordar en</string>
+  <string name="remind_on">Recordar</string>
   <string name="every_day">Todos los días</string>
   <string name="cycle_pause_days">Días de pausa</string>
   <string name="cycle_start_date">Inicio del primer ciclo</string>
@@ -145,4 +145,10 @@
   <string name="deactivate_all">Desactivar todos los recordatorios</string>
   <string name="block_screen_capture">Captura de pantalla en bloque</string>
   <string name="icon">Icono</string>
+  <string name="every_day_of_month">Todos los días del mes</string>
+  <string name="on_day_of_month">El %s del mes</string>
+  <string name="clear_all">Borrar todo</string>
+  <string name="select_all">Seleccionar todo</string>
+  <string name="never">Nunca</string>
+  <string name="day_of_month_limited">Limitado a algunos días del mes</string>
 </resources>

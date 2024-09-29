@@ -47,6 +47,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public long periodEnd;
+    @ColumnInfo(defaultValue = "0xFFFFFFFF")
+    @Expose
+    public int activeDaysOfMonth;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -56,5 +59,6 @@ public class Reminder {
         days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
         active = true;
         this.medicineRelId = medicineRelId;
+        activeDaysOfMonth = 0xFFFFFFFF;
     }
 }

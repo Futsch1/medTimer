@@ -93,7 +93,7 @@
   <string name="weekend_mode_summary">Meldingen op bepaalde dagen van de week uitstellen tot een bepaald tijdstip</string>
   <string name="custom">Aangepast…</string>
   <string name="advanced_settings">Geavanceerde instellingen</string>
-  <string name="remind_on">Herinner aan</string>
+  <string name="remind_on">Herinner</string>
   <string name="every_day">Elke dag</string>
   <string name="cycle_pause_days">Pauzedagen</string>
   <string name="cycle_start_date">Start eerste cyclus</string>
@@ -143,4 +143,10 @@
   <string name="deactivate_all">Alle herinneringen deactiveren</string>
   <string name="block_screen_capture">Schermopname blokkeren</string>
   <string name="icon">Pictogram</string>
+  <string name="every_day_of_month">Elke dag van de maand</string>
+  <string name="on_day_of_month">Op de %s van de maand</string>
+  <string name="clear_all">Alles wissen</string>
+  <string name="select_all">Alles selecteren</string>
+  <string name="never">Nooit</string>
+  <string name="day_of_month_limited">Beperkt tot sommige dagen van de maand</string>
 </resources>

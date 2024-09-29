@@ -93,7 +93,7 @@
   <string name="weekend_mode_summary">Haftanın belirli günlerinde bildirimleri belirli bir zamana kadar ertele</string>
   <string name="custom">Özel…</string>
   <string name="advanced_settings">Gelişmiş ayarlar</string>
-  <string name="remind_on">Hatırlatıcıyı aç</string>
+  <string name="remind_on">Hatırlatıcıyı</string>
   <string name="every_day">Her gün</string>
   <string name="cycle_pause_days">Ara günleri</string>
   <string name="cycle_start_date">İlk döngü başlangıcı</string>
@@ -143,4 +143,10 @@
   <string name="deactivate_all">Tüm hatırlatıcıları devre dışı bırakın</string>
   <string name="block_screen_capture">Ekran yakalamayı engelle</string>
   <string name="icon">Simge</string>
+  <string name="every_day_of_month">Ayın her günü</string>
+  <string name="on_day_of_month">Ayın %s inde</string>
+  <string name="clear_all">Tümünü temizle</string>
+  <string name="select_all">Tümünü seçin</string>
+  <string name="never">Asla</string>
+  <string name="day_of_month_limited">Ayın bazı günleri ile sınırlıdır</string>
 </resources>

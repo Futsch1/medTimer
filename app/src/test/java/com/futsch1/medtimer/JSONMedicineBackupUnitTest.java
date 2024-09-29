@@ -42,6 +42,7 @@ public class JSONMedicineBackupUnitTest {
         reminder.instructions = "Take with water";
         reminder.periodStart = 13;
         reminder.days.set(0, false);
+        reminder.activeDaysOfMonth = 7;
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -79,7 +80,8 @@ public class JSONMedicineBackupUnitTest {
           ],
           "active": true,
           "periodStart": 13,
-          "periodEnd": 0
+          "periodEnd": 0,
+          "activeDaysOfMonth": 7
         }
       ],
       "medicine": {
@@ -137,6 +139,7 @@ public class JSONMedicineBackupUnitTest {
         reminder1.pauseDays = 0;
         reminder1.cycleStartDay = 1234;
         reminder1.instructions = "Take with water";
+        reminder1.activeDaysOfMonth = 0xFFFF_FFFF;
         medicineWithReminders1.reminders = Collections.singletonList(reminder1);
         medicineWithReminders1.medicine = new Medicine("Medicine A");
         medicineWithReminders1.medicine.useColor = true;
@@ -154,6 +157,7 @@ public class JSONMedicineBackupUnitTest {
         reminder2.cycleStartDay = 4567;
         reminder2.instructions = "Take after meal";
         reminder2.days.set(6, false);
+        reminder2.activeDaysOfMonth = 255;
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -195,7 +199,8 @@ public class JSONMedicineBackupUnitTest {
           ],
           "active": true,
           "periodStart": 0,
-          "periodEnd": 0
+          "periodEnd": 0,
+          "activeDaysOfMonth": -1
         }
       ],
       "medicine": {
@@ -227,7 +232,8 @@ public class JSONMedicineBackupUnitTest {
           ],
           "active": true,
           "periodStart": 0,
-          "periodEnd": 0
+          "periodEnd": 0,
+          "activeDaysOfMonth": -1
         },
         {
           "reminderId": 2,
@@ -248,7 +254,8 @@ public class JSONMedicineBackupUnitTest {
           ],
           "active": true,
           "periodStart": 0,
-          "periodEnd": 0
+          "periodEnd": 0,
+          "activeDaysOfMonth": 255
         }
       ],
       "medicine": {

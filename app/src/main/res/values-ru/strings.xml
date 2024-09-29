@@ -147,4 +147,10 @@
   <string name="deactivate_all">Деактивировать все напоминания</string>
   <string name="block_screen_capture">Захват экрана блока</string>
   <string name="icon">Икона</string>
+  <string name="every_day_of_month">Каждый день месяца</string>
+  <string name="on_day_of_month">В %s числа месяца</string>
+  <string name="clear_all">Очистить все</string>
+  <string name="select_all">Выбрать все</string>
+  <string name="never">Никогда</string>
+  <string name="day_of_month_limited">Ограничено некоторыми днями месяца</string>
 </resources>
