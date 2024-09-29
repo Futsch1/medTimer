@@ -148,5 +148,5 @@
     <string name="clear_all">Alle löschen</string>
     <string name="select_all">Alle auswählen</string>
     <string name="never">Niemals</string>
-    <string name="day_of_month_limited">Auf manche Tage im Monat begrenzt</string>
+    <string name="day_of_month_limited">Auf manche Tage im Monat beschränkt</string>
 </resources>
