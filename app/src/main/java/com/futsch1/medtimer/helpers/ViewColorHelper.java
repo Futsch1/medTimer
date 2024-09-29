@@ -45,7 +45,6 @@ public class ViewColorHelper {
     public static void setIconToImageView(MaterialCardView cardView, ImageView imageView, int iconId) {
         if (iconId != 0) {
             Drawable iconDrawable = MedicineIcons.getIconDrawable(iconId);
-            assert iconDrawable != null;
             int backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
             DrawableCompat.setTint(iconDrawable, getColorOnView(cardView, backgroundColor));
             imageView.setImageDrawable(iconDrawable);
