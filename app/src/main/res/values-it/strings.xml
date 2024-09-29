@@ -145,4 +145,10 @@
   <string name="deactivate_all">Disattivare tutti i promemoria</string>
   <string name="block_screen_capture">Cattura dello schermo del blocco</string>
   <string name="icon">Icona</string>
+  <string name="every_day_of_month">Ogni giorno del mese</string>
+  <string name="on_day_of_month">Il % del mese</string>
+  <string name="clear_all">Cancella tutto</string>
+  <string name="select_all">Seleziona tutti</string>
+  <string name="never">Mai</string>
+  <string name="day_of_month_limited">Limitato ad alcuni giorni del mese</string>
 </resources>

@@ -94,7 +94,7 @@
   <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
   <string name="custom">Personnaliser…</string>
   <string name="advanced_settings">Configuration avancée</string>
-  <string name="remind_on">Rappel sur</string>
+  <string name="remind_on">Rappel</string>
   <string name="every_day">Tous les jours</string>
   <string name="cycle_pause_days">Jours de pause</string>
   <string name="cycle_start_date">Début du premier cycle</string>
@@ -145,4 +145,10 @@
   <string name="deactivate_all">Désactiver tous les rappels</string>
   <string name="block_screen_capture">Bloquer la capture d\'écran</string>
   <string name="icon">Icône</string>
+  <string name="every_day_of_month">Tous les jours du mois</string>
+  <string name="on_day_of_month">Le %s du mois</string>
+  <string name="clear_all">Tout effacer</string>
+  <string name="select_all">Tout sélectionner</string>
+  <string name="never">Jamais</string>
+  <string name="day_of_month_limited">Limité à certains jours du mois</string>
 </resources>

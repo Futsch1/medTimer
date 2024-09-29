@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,12 +20,14 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
+import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+
+import kotlin.Unit;
 
 public class AdvancedReminderSettingsFragment extends Fragment {
 
@@ -39,7 +40,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private TextInputLayout instructionSuggestions;
     private MedicineViewModel medicineViewModel;
     private Reminder reminder;
-    private TextView remindOnDays;
     private View advancedReminderView;
     private PeriodSettings periodSettings;
     private AdvancedReminderSettingsFragmentArgs args;
@@ -86,14 +86,34 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
         editCycleStartDate = advancedReminderView.findViewById(R.id.cycleStartDate);
         instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
-        remindOnDays = advancedReminderView.findViewById(R.id.remindOnDays);
 
         editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
         editPauseDays.setText(Integer.toString(reminder.pauseDays));
         editInstructions.setText(reminder.instructions);
 
         setupInstructionSuggestions();
-        setupRemindOnDays();
+
+        String[] daysOfMonth = new String[31];
+        for (int i = 0; i < 31; i++) {
+            daysOfMonth[i] = i + 1 + "";
+        }
+        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
+                i -> reminder.days.get(i),
+                (i, b) -> {
+                    reminder.days.set(i, b);
+                    return Unit.INSTANCE;
+                });
+        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
+                i -> (reminder.activeDaysOfMonth & (1 << i)) != 0,
+                (i, b) -> {
+                    if (b) {
+                        reminder.activeDaysOfMonth |= (1 << i);
+                    } else {
+                        reminder.activeDaysOfMonth &= ~(1 << i);
+                    }
+
+                    return Unit.INSTANCE;
+                });
         setupCycleStartDate();
     }
 
@@ -114,34 +134,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         });
     }
 
-    private void setupRemindOnDays() {
-        setDaysText();
-
-        remindOnDays.setOnClickListener(v -> {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.remind_on)
-                    .setCancelable(false);
-
-            boolean[] checkedItems = new boolean[daysArray.length];
-            for (int i = 0; i < daysArray.length; i++) {
-                checkedItems[i] = reminder.days.get(i);
-            }
-            builder.setMultiChoiceItems(daysArray, checkedItems, (dialogInterface, i, b) -> checkedItems[i] = b);
-
-            builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                for (int j = 0; j < daysArray.length; j++) {
-                    reminder.days.set(j, checkedItems[j]);
-                }
-
-                setDaysText();
-            });
-
-            builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-            builder.show();
-        });
-    }
-
     private void setupCycleStartDate() {
         setCycleStartDate(reminder.cycleStartDay);
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
@@ -157,21 +149,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
                 datePickerDialog.show(getParentFragmentManager(), "date_picker");
             }
         });
-    }
-
-    private void setDaysText() {
-        ArrayList<String> checkedDays = new ArrayList<>();
-        for (int j = 0; j < daysArray.length; j++) {
-            if (Boolean.TRUE.equals(reminder.days.get(j))) {
-                checkedDays.add(daysArray[j]);
-            }
-        }
-
-        if (checkedDays.size() == daysArray.length) {
-            remindOnDays.setText(R.string.every_day);
-        } else {
-            remindOnDays.setText(String.join(", ", checkedDays));
-        }
     }
 
     private @Nullable LocalDate getCycleStartDate() {
