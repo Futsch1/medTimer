@@ -13,11 +13,10 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
-import com.futsch1.medtimer.helpers.TimeHelper;
+import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +47,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 remindersSummaryView.setText(R.string.inactive);
             }
         } else {
-            remindersSummaryView.setText(getRemindersSummary(activeReminders));
+            remindersSummaryView.setText(SummaryHelperKt.remindersSummary(itemView.getContext(), activeReminders));
         }
 
         itemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
@@ -60,17 +59,6 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicineWithReminders.medicine.iconId);
-    }
-
-    private String getRemindersSummary(List<Reminder> reminders) {
-        ArrayList<String> reminderTimes = new ArrayList<>();
-        int[] timesInMinutes = reminders.stream().mapToInt(r -> r.timeInMinutes).sorted().toArray();
-        for (int minute : timesInMinutes) {
-            reminderTimes.add(TimeHelper.minutesToTimeString(itemView.getContext(), minute));
-        }
-        int len = reminders.size();
-        return remindersSummaryView.getResources().getQuantityString(R.plurals.sum_reminders, len, len, String.join(", ", reminderTimes));
-
     }
 
     private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
