@@ -124,7 +124,7 @@ public class ReminderForScheduling {
         LocalDate startDate = timeAccess.localDate();
         BitSet bitSet = BitSet.valueOf(new long[]{reminder.activeDaysOfMonth});
         for (int i = 0; i < possibleDays.length; i++) {
-            possibleDays[i] = bitSet.get(startDate.getDayOfMonth() - 1);
+            possibleDays[i] &= bitSet.get(startDate.getDayOfMonth() - 1);
             startDate = startDate.plusDays(1);
         }
     }
