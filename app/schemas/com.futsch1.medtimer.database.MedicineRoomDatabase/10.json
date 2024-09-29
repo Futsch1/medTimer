@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 10,
-    "identityHash": "ba4809a996141fa42bb215352a56b07b",
+    "identityHash": "9067ef07dfcca107b7c9c94059fc41b4",
     "entities": [
       {
         "tableName": "Medicine",
@@ -60,7 +60,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF)",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -148,6 +148,13 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
+          },
+          {
+            "fieldPath": "activeDaysOfMonth",
+            "columnName": "activeDaysOfMonth",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0xFFFFFFFF"
           }
         ],
         "primaryKey": {
@@ -247,7 +254,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba4809a996141fa42bb215352a56b07b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9067ef07dfcca107b7c9c94059fc41b4')"
     ]
   }
 }

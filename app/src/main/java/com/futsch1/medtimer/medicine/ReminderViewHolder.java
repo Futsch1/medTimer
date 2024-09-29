@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,18 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.helpers.ReminderHelperKt;
+import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final EditText editTime;
     private final EditText editAmount;
-    private final View holderItemView;
     private final MaterialButton advancedSettings;
     private final FragmentActivity fragmentActivity;
     private final TextView advancedSettingsSummary;
@@ -43,7 +37,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         advancedSettings = itemView.findViewById(R.id.open_advanced_settings);
         advancedSettingsSummary = itemView.findViewById(R.id.advancedSettingsSummary);
 
-        this.holderItemView = itemView;
         this.fragmentActivity = fragmentActivity;
     }
 
@@ -63,7 +56,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
 
         editAmount.setText(reminder.amount);
-        advancedSettingsSummary.setText(getAdvancedSettingsSummary(reminder));
+        advancedSettingsSummary.setText(SummaryHelperKt.reminderSummary(itemView.getContext(), reminder));
     }
 
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
@@ -81,53 +74,13 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void onClickAdvancedSettings(Reminder reminder, String medicineName) {
-        NavController navController = Navigation.findNavController(this.holderItemView);
+        NavController navController = Navigation.findNavController(itemView);
         EditMedicineFragmentDirections.ActionEditMedicineToAdvancedReminderSettings action =
                 EditMedicineFragmentDirections.actionEditMedicineToAdvancedReminderSettings(
                         reminder.reminderId,
                         medicineName
                 );
         navController.navigate(action);
-    }
-
-    private String getAdvancedSettingsSummary(Reminder reminder) {
-        List<String> strings = new LinkedList<>();
-
-        boolean weekdayLimited = !reminder.days.stream().allMatch(day -> day == Boolean.TRUE);
-        boolean cyclic = reminder.pauseDays > 0;
-        if (!ReminderHelperKt.isReminderActive(reminder)) {
-            strings.add(holderItemView.getContext().getString(R.string.inactive));
-        }
-        if (weekdayLimited) {
-            strings.add(holderItemView.getContext().getString(R.string.weekday_limited));
-        }
-        if (cyclic) {
-            strings.add(getCyclicReminderString(reminder));
-        }
-        if (!weekdayLimited && !cyclic) {
-            strings.add(holderItemView.getContext().getString(R.string.every_day));
-        }
-        if (reminder.instructions != null && !reminder.instructions.isEmpty()) {
-            strings.add(reminder.instructions);
-        }
-
-        return String.join(", ", strings);
-    }
-
-    private @NonNull String getCyclicReminderString(Reminder reminder) {
-        return holderItemView.getContext().getString(R.string.cycle_reminders) +
-                " " +
-                reminder.consecutiveDays +
-                "/" +
-                reminder.pauseDays +
-                ", " +
-                firstToLower(holderItemView.getContext().getString(R.string.cycle_start_date)) +
-                " " +
-                TimeHelper.daysSinceEpochToDateString(editTime.getContext(), reminder.cycleStartDay);
-    }
-
-    private String firstToLower(String string) {
-        return string.substring(0, 1).toLowerCase(Locale.getDefault()) + string.substring(1);
     }
 
     public Reminder getReminder() {

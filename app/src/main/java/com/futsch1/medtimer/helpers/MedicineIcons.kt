@@ -5,14 +5,19 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.DrawableCompat
 import com.futsch1.medtimer.R
+import com.google.android.material.color.MaterialColors
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
 
+
 class MedicineIcons private constructor(context: Context) {
     private val pack: IconPack = IconPackLoader(context).load(R.xml.icon_pack)
     private val defaultDrawable = AppCompatResources.getDrawable(context, R.drawable.capsule)!!
+    private val iconColor =
+        MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, 0)
 
     init {
         pack.loadDrawables(IconDrawableLoader(context))
@@ -46,6 +51,10 @@ class MedicineIcons private constructor(context: Context) {
 
             val canvas = Canvas(bit)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
+            DrawableCompat.setTint(
+                drawable,
+                instance!!.iconColor
+            )
             drawable.draw(canvas)
 
             return bit

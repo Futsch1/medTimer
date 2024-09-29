@@ -94,7 +94,7 @@
     <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
     <string name="custom">Custom…</string>
     <string name="advanced_settings">Advanced settings</string>
-    <string name="remind_on">Remind on</string>
+    <string name="remind_on">Remind</string>
     <string name="every_day">Every day</string>
     <string name="cycle_pause_days">Pause days</string>
     <string name="cycle_start_date">First cycle start</string>
@@ -145,4 +145,10 @@
     <string name="deactivate_all">Deactivate all reminders</string>
     <string name="block_screen_capture">Block screen capture</string>
     <string name="icon">Icon</string>
+    <string name="every_day_of_month">Every day of the month</string>
+    <string name="on_day_of_month">On the %s of the month</string>
+    <string name="clear_all">Clear all</string>
+    <string name="select_all">Select all</string>
+    <string name="never">Never</string>
+    <string name="day_of_month_limited">Limited to some days of the month</string>
 </resources>
