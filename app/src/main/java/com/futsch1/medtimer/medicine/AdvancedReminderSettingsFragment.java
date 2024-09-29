@@ -106,7 +106,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
                 i -> (reminder.activeDaysOfMonth & (1 << i)) != 0,
                 (i, b) -> {
-                    if (b) {
+                    if (Boolean.TRUE.equals(b)) {
                         reminder.activeDaysOfMonth |= (1 << i);
                     } else {
                         reminder.activeDaysOfMonth &= ~(1 << i);
