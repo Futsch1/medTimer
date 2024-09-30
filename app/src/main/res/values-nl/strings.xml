@@ -71,7 +71,7 @@
   <string name="restore_start">Alle behandelingen-instellingen en/of herinneringsgebeurtenissen worden overschreven.</string>
   <string name="log_additional_dose">Extra inname toevoegen</string>
   <string name="dismiss_notification_action">Actie bij het negeren van een melding</string>
-  <string name="skip_reminder">Inname overslaan</string>
+  <string name="skip_reminder">Overslaan</string>
   <string name="snooze">Snoozen</string>
   <string name="snooze_duration">Sluimertijd</string>
   <string name="minutes_5">5 minuten</string>
@@ -114,7 +114,7 @@
   <string name="name">Naam</string>
   <string name="event_data">Herinneringen gegevens</string>
   <string name="backup">Backup</string>
-  <string name="taken_now">Nu ingenomen</string>
+  <string name="taken_now">Bevestigen</string>
   <string name="event_name">Herinneringennaam</string>
   <string name="edit_event">Herinnering bewerken</string>
   <string name="show_all">Alles weergeven</string>
