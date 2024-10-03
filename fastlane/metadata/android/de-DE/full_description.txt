@@ -25,3 +25,5 @@ Datenschutz und Offline-Zugriff:
 MedTimer ist eine kostenlose, werbefreie App.
 
 Weitere Informationen auf GitHub: https://github.com/Futsch1/medTimer
+
+Feature-Grafik wurde mit https://hotpot.ai erstellt
