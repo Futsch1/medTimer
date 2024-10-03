@@ -19,7 +19,7 @@ function stop_clean_status_bar {
     adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-locales=('en-US' 'es-ES' 'de-DE' 'fr-FR' 'it-IT')
+locales=('en-US' 'es-ES' 'de-DE' 'fr-FR' 'it-IT' 'zh-rCN' 'nl-NL' 'ru-RU' 'tr-TR')
 tests_apk_path="app/build/outputs/apk/debug/MedTimer-debug.apk"
 app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk"
 
