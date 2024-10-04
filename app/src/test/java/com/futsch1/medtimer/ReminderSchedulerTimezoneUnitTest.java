@@ -11,7 +11,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

@@ -1,8 +1,8 @@
 package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.times;
@@ -24,18 +24,19 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.SkippedWork;
 import com.futsch1.medtimer.reminders.TakenWork;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
 public class TakenSkippedWorkUnitTest {
     private final int reminderEventId = 12;
@@ -45,7 +46,7 @@ public class TakenSkippedWorkUnitTest {
     private NotificationManager mockNotificationManager;
     private AlarmManager mockAlarmManager;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         mockApplication = mock(Application.class);

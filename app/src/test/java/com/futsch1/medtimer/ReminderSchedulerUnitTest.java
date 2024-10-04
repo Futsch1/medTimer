@@ -3,8 +3,8 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.TestHelper.assertReminded;
 import static com.futsch1.medtimer.TestHelper.assertRemindedAtIndex;
 import static com.futsch1.medtimer.TestHelper.on;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,7 +13,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

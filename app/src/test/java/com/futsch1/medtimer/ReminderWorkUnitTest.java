@@ -3,8 +3,8 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -35,14 +35,13 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.ReminderWork;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.time.Instant;
@@ -51,7 +50,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
 public class ReminderWorkUnitTest {
 
@@ -66,7 +67,7 @@ public class ReminderWorkUnitTest {
     private NotificationManager mockNotificationManager;
     private WorkerParameters workerParams;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         workerParams = mock(WorkerParameters.class);
 

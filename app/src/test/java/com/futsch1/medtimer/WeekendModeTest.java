@@ -1,6 +1,6 @@
 package com.futsch1.medtimer;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -14,10 +14,9 @@ import android.util.ArraySet;
 
 import com.futsch1.medtimer.reminders.WeekendMode;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.time.DayOfWeek;
@@ -27,7 +26,9 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
 public class WeekendModeTest {
     @Test

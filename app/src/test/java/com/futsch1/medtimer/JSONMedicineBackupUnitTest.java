@@ -1,8 +1,9 @@
 package com.futsch1.medtimer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import android.graphics.Color;
 
@@ -11,16 +12,17 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
 public class JSONMedicineBackupUnitTest {
 
