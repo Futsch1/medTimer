@@ -4,7 +4,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -41,6 +41,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
 @ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class SnoozeWorkUnitTest {
 
     @Mock
@@ -97,7 +98,7 @@ public class SnoozeWorkUnitTest {
 
             // Expected to pass
             ListenableWorker.Result result = snoozeWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
+            assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
             verify(mockNotificationManager, times(1)).cancel(notificationId);

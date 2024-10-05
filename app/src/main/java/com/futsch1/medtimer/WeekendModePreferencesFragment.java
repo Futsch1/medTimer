@@ -16,10 +16,6 @@ import java.util.stream.Collectors;
 
 public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
 
-    public static final String WEEKEND_TIME = "weekend_time";
-    public static final String WEEKEND_MODE = "weekend_mode";
-    public static final String WEEKEND_DAYS = "weekend_days";
-
     @Override
     public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.weekend_mode_preferences, rootKey);
@@ -30,7 +26,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupWeekendMode() {
-        Preference preference = getPreferenceScreen().findPreference(WEEKEND_MODE);
+        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_MODE);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {
                 requestReschedule();
@@ -40,14 +36,14 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupTimePicker() {
-        Preference preference = getPreferenceScreen().findPreference(WEEKEND_TIME);
+        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_TIME);
         if (preference != null) {
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            preference.setSummary(TimeHelper.minutesToTimeString(requireContext(), defaultSharedPreferences.getInt(WEEKEND_TIME, 540)));
+            preference.setSummary(TimeHelper.minutesToTimeString(requireContext(), defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540)));
             preference.setOnPreferenceClickListener(preference1 -> {
-                int weekendTime = defaultSharedPreferences.getInt(WEEKEND_TIME, 540);
+                int weekendTime = defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540);
                 new TimeHelper.TimePickerWrapper(getActivity()).show(weekendTime / 60, weekendTime % 60, minutes -> {
-                    defaultSharedPreferences.edit().putInt(WEEKEND_TIME, minutes).apply();
+                    defaultSharedPreferences.edit().putInt(PreferencesNames.WEEKEND_TIME, minutes).apply();
                     preference1.setSummary(TimeHelper.minutesToTimeString(requireContext(), minutes));
                     requestReschedule();
                 });
@@ -57,7 +53,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupDays() {
-        Preference preference = getPreferenceScreen().findPreference(WEEKEND_DAYS);
+        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_DAYS);
         if (preference != null) {
             preference.setSummaryProvider((Preference.SummaryProvider<MultiSelectListPreference>) preference1 -> {
                 @SuppressWarnings("java:S6204") // Using SDK 33

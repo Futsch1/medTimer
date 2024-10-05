@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders;
 import android.content.SharedPreferences;
 import android.util.ArraySet;
 
-import com.futsch1.medtimer.WeekendModePreferencesFragment;
+import com.futsch1.medtimer.PreferencesNames;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -21,8 +21,8 @@ public class WeekendMode {
 
     public Instant adjustInstant(Instant instant) {
         if (isWeekendModeEnabled()) {
-            int weekendTime = preferences.getInt(WeekendModePreferencesFragment.WEEKEND_TIME, 540);
-            Set<String> weekendDays = preferences.getStringSet(WeekendModePreferencesFragment.WEEKEND_DAYS, new ArraySet<>());
+            int weekendTime = preferences.getInt(PreferencesNames.WEEKEND_TIME, 540);
+            Set<String> weekendDays = preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, new ArraySet<>());
             ZonedDateTime localDateTime = instant.atZone(ZoneId.systemDefault());
             DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
             int minutes = localDateTime.getMinute() + localDateTime.getHour() * 60;
@@ -35,6 +35,6 @@ public class WeekendMode {
     }
 
     private boolean isWeekendModeEnabled() {
-        return preferences.getBoolean(WeekendModePreferencesFragment.WEEKEND_MODE, false);
+        return preferences.getBoolean(PreferencesNames.WEEKEND_MODE, false);
     }
 }

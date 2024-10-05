@@ -9,21 +9,15 @@ import com.futsch1.medtimer.database.JSONReminderEventBackup;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
-
-@ExtendWith(RobolectricExtension.class)
-@Config(sdk = 34)
-public class JSONReminderEventBackupUnitTest {
+class JSONReminderEventBackupUnitTest {
 
     // creates a backup object with a version number and a medicines array
     @Test
-    public void test_backup() {
+    void test_backup() {
         JSONReminderEventBackup jsonReminderEventBackup = new JSONReminderEventBackup();
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent = new ReminderEvent();

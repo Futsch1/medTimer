@@ -4,7 +4,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -54,6 +54,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
 @ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class ReminderWorkUnitTest {
 
     private final int reminderId = 11;
@@ -105,7 +106,7 @@ public class ReminderWorkUnitTest {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Failure);
+            assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
         // Medicine is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
@@ -116,7 +117,7 @@ public class ReminderWorkUnitTest {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Failure);
+            assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
         // Reminder event is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
@@ -128,7 +129,7 @@ public class ReminderWorkUnitTest {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             ListenableWorker.Result result = reminderWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Failure);
+            assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
     }
 
@@ -163,7 +164,7 @@ public class ReminderWorkUnitTest {
 
             // Expected to pass
             ListenableWorker.Result result = reminderWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
+            assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
@@ -210,7 +211,7 @@ public class ReminderWorkUnitTest {
 
             // Expected to pass
             ListenableWorker.Result result = reminderWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
+            assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);

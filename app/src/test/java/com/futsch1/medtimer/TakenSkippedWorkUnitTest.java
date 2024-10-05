@@ -2,7 +2,7 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.times;
@@ -38,6 +38,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
 @ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class TakenSkippedWorkUnitTest {
     private final int reminderEventId = 12;
 
@@ -83,7 +84,7 @@ public class TakenSkippedWorkUnitTest {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent))) {
             // Expected to pass
             ListenableWorker.Result result = worker.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
+            assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
