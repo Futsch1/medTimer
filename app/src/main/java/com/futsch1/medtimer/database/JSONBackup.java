@@ -49,7 +49,7 @@ public abstract class JSONBackup<T> {
             }
             return null;
         } catch (JsonParseException e) {
-            //Log.e("JSONBackup", e.getMessage() != null ? e.getMessage() : "");
+            Log.e("JSONBackup", e.getMessage() != null ? e.getMessage() : "");
             return null;
         }
     }

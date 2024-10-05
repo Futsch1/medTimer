@@ -30,6 +30,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
 @ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class WeekendModeTest {
     @Test
     public void test_adjustInstant_ReturnsSameInstant_WeekendModeDisabled() {
