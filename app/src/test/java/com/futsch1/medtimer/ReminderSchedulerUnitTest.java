@@ -20,10 +20,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderSchedulerUnitTest {
+class ReminderSchedulerUnitTest {
 
     @Test
-    public void test_scheduleEmptyLists() {
+    void test_scheduleEmptyLists() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -53,7 +53,7 @@ public class ReminderSchedulerUnitTest {
     }
 
     @Test
-    public void test_scheduleReminders() {
+    void test_scheduleReminders() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -83,7 +83,7 @@ public class ReminderSchedulerUnitTest {
     }
 
     @Test
-    public void test_scheduleWithEvents() {
+    void test_scheduleWithEvents() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
@@ -147,7 +147,7 @@ public class ReminderSchedulerUnitTest {
 
     // schedules a reminder for the same day
     @Test
-    public void test_scheduleSameDayReminder() {
+    void test_scheduleSameDayReminder() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -171,7 +171,7 @@ public class ReminderSchedulerUnitTest {
 
     // schedules a reminder for a different medicine
     @Test
-    public void test_scheduleDifferentMedicineReminder() {
+    void test_scheduleDifferentMedicineReminder() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
@@ -199,7 +199,7 @@ public class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    public void test_scheduleReminderWithOneDayPause() {
+    void test_scheduleReminderWithOneDayPause() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -227,7 +227,7 @@ public class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    public void test_scheduleTwoDayReminderVsOneDay() {
+    void test_scheduleTwoDayReminderVsOneDay() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -253,7 +253,7 @@ public class ReminderSchedulerUnitTest {
     }
 
     @Test
-    public void test_scheduleReminderWithOneDayPauseVsThreeDaysPause() {
+    void test_scheduleReminderWithOneDayPauseVsThreeDaysPause() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -301,7 +301,7 @@ public class ReminderSchedulerUnitTest {
     }
 
     @Test
-    public void test_scheduleCycleInFuture() {
+    void test_scheduleCycleInFuture() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -334,7 +334,7 @@ public class ReminderSchedulerUnitTest {
 
 
     @Test
-    public void test_reminderOverMidnight() {
+    void test_reminderOverMidnight() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));

@@ -17,9 +17,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderSchedulerActivePeriodUnitTest {
+class ReminderSchedulerActivePeriodUnitTest {
     @Test
-    public void test_scheduleInactive() {
+    void test_scheduleInactive() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
@@ -41,7 +41,7 @@ public class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    public void test_scheduleActive() {
+    void test_scheduleActive() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);

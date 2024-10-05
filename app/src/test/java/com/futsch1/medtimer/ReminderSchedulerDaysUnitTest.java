@@ -17,9 +17,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderSchedulerDaysUnitTest {
+class ReminderSchedulerDaysUnitTest {
     @Test
-    public void test_scheduleSkipWeekdays() {
+    void test_scheduleSkipWeekdays() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
@@ -46,7 +46,7 @@ public class ReminderSchedulerDaysUnitTest {
     }
 
     @Test
-    public void test_scheduleWeekdaysWithDaysBetweenReminders() {
+    void test_scheduleWeekdaysWithDaysBetweenReminders() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);

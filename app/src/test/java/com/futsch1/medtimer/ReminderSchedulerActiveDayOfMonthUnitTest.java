@@ -17,9 +17,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderSchedulerActiveDayOfMonthUnitTest {
+class ReminderSchedulerActiveDayOfMonthUnitTest {
     @Test
-    public void test_scheduleDayOfMonth() {
+    void test_scheduleDayOfMonth() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));

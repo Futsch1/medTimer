@@ -128,7 +128,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
-    testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
+    //testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
