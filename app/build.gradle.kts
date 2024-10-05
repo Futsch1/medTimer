@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     id("org.sonarqube") version "5.1.0.4882"
+    //noinspection GradleDependency - 0.8.0 does not work
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.7.0"
 }
 
@@ -95,7 +96,7 @@ dependencies {
     val mockitoCoreVersion = "5.14.1"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.13"
-    val jazzerVersion = "0.22.1"
+    //val jazzerVersion = "0.22.1"
 
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
