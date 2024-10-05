@@ -29,3 +29,5 @@ Confidentialité et confidentialité Accessibilité hors ligne:
 MedTimer est une application gratuite sans ajout.
 
 Voir la page du projet sur GitHub: https://github.com/Futsch1/medTimer
+
+Feature graphic was created with https://hotpot.ai

@@ -3,6 +3,9 @@ name: Update store listing
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   update_listing:
     runs-on: ubuntu-latest

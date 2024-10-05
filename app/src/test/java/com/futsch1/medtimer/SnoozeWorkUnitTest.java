@@ -4,7 +4,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -27,19 +27,21 @@ import androidx.work.WorkerParameters;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.SnoozeWork;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class SnoozeWorkUnitTest {
 
     @Mock
@@ -48,7 +50,7 @@ public class SnoozeWorkUnitTest {
     private AlarmManager mockAlarmManager;
     private SharedPreferences mockSharedPreferences;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         mockApplication = mock(Application.class);
@@ -96,7 +98,7 @@ public class SnoozeWorkUnitTest {
 
             // Expected to pass
             ListenableWorker.Result result = snoozeWork.doWork();
-            assertTrue(result instanceof ListenableWorker.Result.Success);
+            assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
             verify(mockNotificationManager, times(1)).cancel(notificationId);

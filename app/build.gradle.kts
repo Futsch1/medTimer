@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     id("org.sonarqube") version "5.1.0.4882"
+    //noinspection GradleDependency - 0.8.0 does not work
+    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.7.0"
 }
 
 room {
@@ -73,7 +75,7 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.1.4"
-    val androidXNavigationVersion = "2.8.1"
+    val androidXNavigationVersion = "2.8.2"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.9.1"
@@ -90,10 +92,11 @@ dependencies {
     val calendarVersion = "2.6.0"
     val iconDialogVersion = "3.3.0"
 
-    val junitVersion = "4.13.2"
-    val mockitoCoreVersion = "5.14.0"
+    val junitVersion = "5.11.2"
+    val mockitoCoreVersion = "5.14.1"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.13"
+    //val jazzerVersion = "0.22.1"
 
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
@@ -122,10 +125,12 @@ dependencies {
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
     implementation("com.maltaisn:icondialog:$iconDialogVersion")
 
-    testImplementation("junit:junit:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
+    //testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
@@ -166,6 +171,6 @@ sonar {
 tasks.withType(Test::class) {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
-        excludes = listOf("jdk.internal.*")
+        excludes = listOf("jdk.internal.*", "com.code_intelligence.*")
     }
 }

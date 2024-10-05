@@ -42,9 +42,12 @@ public abstract class JSONBackup<T> {
         try {
             Type type = TypeToken.getParameterized(DatabaseContentWithVersion.class, contentClass).getType();
             DatabaseContentWithVersion<T> content = gson.fromJson(jsonFile, type);
-            gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version).create();
-            content = gson.fromJson(jsonFile, type);
-            return checkBackup(content.list);
+            if (content != null) {
+                gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version).create();
+                content = gson.fromJson(jsonFile, type);
+                return checkBackup(content.list);
+            }
+            return null;
         } catch (JsonParseException e) {
             Log.e("JSONBackup", e.getMessage() != null ? e.getMessage() : "");
             return null;

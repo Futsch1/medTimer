@@ -27,3 +27,5 @@ Privacidad y accesibilidad sin conexión:
 MedTimer es una aplicación gratuita sin anuncios.
 
 Consulte la página del proyecto en GitHub: https://github.com/Futsch1/medTimer
+
+Feature graphic was created with https://hotpot.ai

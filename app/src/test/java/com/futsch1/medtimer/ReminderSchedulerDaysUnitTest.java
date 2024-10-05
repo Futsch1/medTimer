@@ -1,7 +1,7 @@
 package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.TestHelper.on;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,16 +10,16 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderSchedulerDaysUnitTest {
+class ReminderSchedulerDaysUnitTest {
     @Test
-    public void test_scheduleSkipWeekdays() {
+    void test_scheduleSkipWeekdays() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
@@ -46,7 +46,7 @@ public class ReminderSchedulerDaysUnitTest {
     }
 
     @Test
-    public void test_scheduleWeekdaysWithDaysBetweenReminders() {
+    void test_scheduleWeekdaysWithDaysBetweenReminders() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);

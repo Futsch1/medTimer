@@ -9,7 +9,7 @@ do
   cp -f -r ./fastlane/metadata/android/en-US/images/phoneScreenshots/${screenshots[$i]}.png ./app/src/main/res/drawable/intro_${names[$i]}.png
 done
 
-locales=('es-ES' 'de-DE' 'fr-FR' 'it-IT')
+locales=('es-ES' 'de-DE' 'fr-FR' 'it-IT' 'zh-rCN' 'nl-NL' 'ru-RU' 'tr-TR')
 
 for l in "${locales[@]}"
 do

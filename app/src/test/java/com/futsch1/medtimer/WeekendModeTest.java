@@ -1,6 +1,6 @@
 package com.futsch1.medtimer;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -14,10 +14,9 @@ import android.util.ArraySet;
 
 import com.futsch1.medtimer.reminders.WeekendMode;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.time.DayOfWeek;
@@ -27,8 +26,11 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@RunWith(RobolectricTestRunner.class)
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
 @Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class WeekendModeTest {
     @Test
     public void test_adjustInstant_ReturnsSameInstant_WeekendModeDisabled() {
@@ -36,7 +38,7 @@ public class WeekendModeTest {
         WeekendMode weekendMode = new WeekendMode(preferences);
         Instant instant = Instant.now();
 
-        Mockito.when(preferences.getBoolean(eq(WeekendModePreferencesFragment.WEEKEND_MODE), anyBoolean())).thenReturn(false);
+        Mockito.when(preferences.getBoolean(eq(PreferencesNames.WEEKEND_MODE), anyBoolean())).thenReturn(false);
 
         Instant adjustedInstant = weekendMode.adjustInstant(instant);
 
@@ -49,8 +51,8 @@ public class WeekendModeTest {
         WeekendMode weekendMode = new WeekendMode(preferences);
         Instant instant = Instant.now();
 
-        Mockito.when(preferences.getBoolean(WeekendModePreferencesFragment.WEEKEND_MODE, false)).thenReturn(true);
-        Mockito.when(preferences.getStringSet(WeekendModePreferencesFragment.WEEKEND_DAYS, new ArraySet<>())).thenReturn(new HashSet<>());
+        Mockito.when(preferences.getBoolean(PreferencesNames.WEEKEND_MODE, false)).thenReturn(true);
+        Mockito.when(preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, new ArraySet<>())).thenReturn(new HashSet<>());
 
         Instant adjustedInstant = weekendMode.adjustInstant(instant);
 
@@ -64,13 +66,13 @@ public class WeekendModeTest {
         WeekendMode weekendMode = new WeekendMode(preferences);
         ZonedDateTime testZonedDateTime = ZonedDateTime.of(2024, 4, 6, 8, 0, 0, 0, ZoneId.of("Z"));
 
-        Mockito.when(preferences.getBoolean(eq(WeekendModePreferencesFragment.WEEKEND_MODE), anyBoolean())).thenReturn(true);
-        Mockito.when(preferences.getInt(eq(WeekendModePreferencesFragment.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
+        Mockito.when(preferences.getBoolean(eq(PreferencesNames.WEEKEND_MODE), anyBoolean())).thenReturn(true);
+        Mockito.when(preferences.getInt(eq(PreferencesNames.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
         Mockito.when(instant.atZone(any())).thenReturn(testZonedDateTime);
         Set<String> weekendDays = new HashSet<>();
         weekendDays.add(String.valueOf(DayOfWeek.TUESDAY.getValue()));
         weekendDays.add(String.valueOf(DayOfWeek.WEDNESDAY.getValue()));
-        Mockito.when(preferences.getStringSet(WeekendModePreferencesFragment.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
+        Mockito.when(preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
 
         Instant adjustedInstant = weekendMode.adjustInstant(instant);
 
@@ -84,13 +86,13 @@ public class WeekendModeTest {
         WeekendMode weekendMode = new WeekendMode(preferences);
         ZonedDateTime testZonedDateTime = ZonedDateTime.of(2024, 4, 6, 8, 0, 0, 0, ZoneId.of("Z"));
 
-        Mockito.when(preferences.getBoolean(eq(WeekendModePreferencesFragment.WEEKEND_MODE), anyBoolean())).thenReturn(true);
-        Mockito.when(preferences.getInt(eq(WeekendModePreferencesFragment.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
+        Mockito.when(preferences.getBoolean(eq(PreferencesNames.WEEKEND_MODE), anyBoolean())).thenReturn(true);
+        Mockito.when(preferences.getInt(eq(PreferencesNames.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
         Mockito.when(instant.atZone(any())).thenReturn(testZonedDateTime);
         Set<String> weekendDays = new HashSet<>();
         weekendDays.add(String.valueOf(DayOfWeek.SATURDAY.getValue()));
         weekendDays.add(String.valueOf(DayOfWeek.SUNDAY.getValue()));
-        Mockito.when(preferences.getStringSet(WeekendModePreferencesFragment.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
+        Mockito.when(preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
 
         weekendMode.adjustInstant(instant);
 
@@ -104,13 +106,13 @@ public class WeekendModeTest {
         WeekendMode weekendMode = new WeekendMode(preferences);
         ZonedDateTime testZonedDateTime = ZonedDateTime.of(2024, 4, 6, 11, 0, 0, 0, ZoneId.of("Z"));
 
-        Mockito.when(preferences.getBoolean(eq(WeekendModePreferencesFragment.WEEKEND_MODE), anyBoolean())).thenReturn(true);
-        Mockito.when(preferences.getInt(eq(WeekendModePreferencesFragment.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
+        Mockito.when(preferences.getBoolean(eq(PreferencesNames.WEEKEND_MODE), anyBoolean())).thenReturn(true);
+        Mockito.when(preferences.getInt(eq(PreferencesNames.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
         Mockito.when(instant.atZone(any())).thenReturn(testZonedDateTime);
         Set<String> weekendDays = new HashSet<>();
         weekendDays.add(String.valueOf(DayOfWeek.SATURDAY.getValue()));
         weekendDays.add(String.valueOf(DayOfWeek.SUNDAY.getValue()));
-        Mockito.when(preferences.getStringSet(WeekendModePreferencesFragment.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
+        Mockito.when(preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, new ArraySet<>())).thenReturn(weekendDays);
 
         weekendMode.adjustInstant(instant);
 
