@@ -1,0 +1,244 @@
+{
+  "medicines": {
+    "list": [
+      {
+        "medicine": {
+          "color": -12303292,
+          "name": "Omega 3 (EPA/DHA 500mg)",
+          "notificationImportance": 3,
+          "useColor": false
+        },
+        "reminders": [
+          {
+            "active": true,
+            "amount": "1",
+            "consecutiveDays": 1,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "",
+            "pauseDays": 0,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 92,
+            "timeInMinutes": 540
+          },
+          {
+            "active": true,
+            "amount": "1",
+            "consecutiveDays": 2,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "after meals",
+            "pauseDays": 2,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 93,
+            "timeInMinutes": 1080
+          }
+        ]
+      },
+      {
+        "medicine": {
+          "color": -7667712,
+          "name": "B12 (500µg)",
+          "notificationImportance": 3,
+          "useColor": true
+        },
+        "reminders": [
+          {
+            "active": true,
+            "amount": "2",
+            "consecutiveDays": 1,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "",
+            "pauseDays": 0,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 94,
+            "timeInMinutes": 420
+          }
+        ]
+      },
+      {
+        "medicine": {
+          "color": -7278960,
+          "name": "Ginseng (200mg)",
+          "notificationImportance": 3,
+          "useColor": true
+        },
+        "reminders": [
+          {
+            "active": true,
+            "amount": "1",
+            "consecutiveDays": 1,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "before breakfast",
+            "pauseDays": 0,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 95,
+            "timeInMinutes": 540
+          }
+        ]
+      },
+      {
+        "medicine": {
+          "color": -12303292,
+          "name": "Selen (200 µg)",
+          "notificationImportance": 3,
+          "useColor": false
+        },
+        "reminders": [
+          {
+            "active": true,
+            "amount": "2",
+            "consecutiveDays": 1,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "",
+            "pauseDays": 0,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 96,
+            "timeInMinutes": 540
+          },
+          {
+            "active": true,
+            "amount": "1",
+            "consecutiveDays": 1,
+            "createdTimestamp": 0,
+            "cycleStartDay": 19980,
+            "days": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "instructions": "",
+            "pauseDays": 1,
+            "periodEnd": 0,
+            "periodStart": 0,
+            "reminderId": 97,
+            "timeInMinutes": 1320
+          }
+        ]
+      }
+    ],
+    "version": 9
+  },
+  "events": {
+    "list": [
+      {
+        "amount": "2",
+        "color": -7667712,
+        "medicineName": "B12 (500µg)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726290000,
+        "reminderId": 94,
+        "status": "SKIPPED",
+        "useColor": true
+      },
+      {
+        "amount": "1",
+        "color": -12303292,
+        "medicineName": "Omega 3 (EPA/DHA 500mg)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726297200,
+        "reminderId": 92,
+        "status": "SKIPPED",
+        "useColor": false
+      },
+      {
+        "amount": "1",
+        "color": -7278960,
+        "medicineName": "Ginseng (200mg)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726297200,
+        "reminderId": 95,
+        "status": "SKIPPED",
+        "useColor": true
+      },
+      {
+        "amount": "2",
+        "color": -12303292,
+        "medicineName": "Selen (200 µg)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726297200,
+        "reminderId": 96,
+        "status": "SKIPPED",
+        "useColor": false
+      },
+      {
+        "amount": "1",
+        "color": -12303292,
+        "medicineName": "Omega 3 (EPA/DHA 500mg) (1/2)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726329600,
+        "reminderId": 93,
+        "status": "SKIPPED",
+        "useColor": false
+      },
+      {
+        "amount": "1",
+        "color": -12303292,
+        "medicineName": "Selen (200 µg) (1/1)",
+        "processedTimestamp": 1726346800,
+        "remindedTimestamp": 1726344000,
+        "reminderId": 97,
+        "status": "SKIPPED",
+        "useColor": false
+      }
+    ],
+    "version": 9
+  }
+}

@@ -44,6 +44,8 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Run unit tests
         run: ./gradlew test createDebugCoverageReport
+      - name: Run fuzzing tests
+        run: ./gradlew test -Dfuzzing=true
       - name: Android lint
         run: ./gradlew lint
       - name: Build
