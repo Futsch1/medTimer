@@ -3,6 +3,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Futsch1/medTimer/badge)](https://scorecard.dev/viewer/?uri=github.com/Futsch1/medTimer)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9439/badge)](https://www.bestpractices.dev/projects/9439)
 
 # MedTimer for Android
 
@@ -75,8 +76,18 @@ MedTimer is a free app without adds.
 ## Documentation
 
 See the [use cases documentation](app/doc/UseCases.md) for more details on how to use the app and
-the specific use cases
-it can satisfy.
+the specific use cases it can satisfy.
+
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) for details on how to contribute.
+
+## Sponsor or support
+
+If you like my work, you can [buy me a coffee](https://www.buymeacoffee.com/futsch1). Note
+however that I will donate all the money I receive from your support to organizations supporting
+open-source or open knowledge, like the Mozilla Foundation, or the Apache Software Foundation or
+Wikimedia.
 
 ## Dependencies
 
@@ -90,3 +101,4 @@ MedTimer uses the following great open source libraries and dependencies:
 - [Mockito](https://github.com/mockito/mockito)
 - [Robolectric](https://github.com/robolectric/robolectric)
 - [Calendar](https://github.com/kizitonwose/Calendar)
+- [IconDialog](https://github.com/maltaisn/icondialoglib)
