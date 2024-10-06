@@ -84,6 +84,7 @@ jobs:
             --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
             --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
             $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
+          rm $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
         continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
