@@ -16,7 +16,6 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
-    public static final String EXACT_REMINDERS = "exact_reminders";
 
     @Override
     public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
@@ -43,7 +42,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupExactReminders() {
-        Preference preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
+        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                 if (Boolean.TRUE.equals(newValue)) {
@@ -56,7 +55,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                                     requireContext().startActivity(intent);
                                 }).
                                 setNegativeButton(R.string.cancel, (dialog, id) -> {
-                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(EXACT_REMINDERS, false).apply();
+                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
                                     setPreferenceScreen(null);
                                     addPreferencesFromResource(R.xml.root_preferences);
                                 });
@@ -117,7 +116,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(EXACT_REMINDERS);
+        SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
         if (preference != null) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {
