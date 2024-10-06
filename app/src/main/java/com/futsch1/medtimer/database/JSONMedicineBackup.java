@@ -38,8 +38,14 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
 
         for (MedicineWithReminders medicineWithReminders : listOfMedicineWithReminders) {
             long medicineId = medicineRepository.insertMedicine(medicineWithReminders.medicine);
-            for (Reminder reminder : medicineWithReminders.reminders) {
-                reminder.medicineRelId = (int) medicineId;
+            processReminders(medicineRepository, medicineWithReminders, (int) medicineId);
+        }
+    }
+
+    private static void processReminders(MedicineRepository medicineRepository, MedicineWithReminders medicineWithReminders, int medicineId) {
+        for (Reminder reminder : medicineWithReminders.reminders) {
+            if (reminder != null) {
+                reminder.medicineRelId = medicineId;
                 reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
                 medicineRepository.insertReminder(reminder);
             }

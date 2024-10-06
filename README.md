@@ -7,7 +7,7 @@
 
 # MedTimer for Android
 
-<img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="150" />
+![Feature Graphic](fastlane/metadata/android/en-US/images/featureGraphic.png)
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"

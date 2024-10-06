@@ -42,7 +42,7 @@ public abstract class JSONBackup<T> {
         try {
             Type type = TypeToken.getParameterized(DatabaseContentWithVersion.class, contentClass).getType();
             DatabaseContentWithVersion<T> content = gson.fromJson(jsonFile, type);
-            if (content != null) {
+            if (content != null && content.version >= 0) {
                 gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version).create();
                 content = gson.fromJson(jsonFile, type);
                 return checkBackup(content.list);

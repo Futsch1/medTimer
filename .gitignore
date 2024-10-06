@@ -35,3 +35,6 @@ google-services.json
 /fastlane/report.xml
 /fastlane/metadata/android/screenshots.html
 /fastlane/*.json
+
+# Fuzzing
+app/.cifuzz-corpus/

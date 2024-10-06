@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     id("org.sonarqube") version "5.1.0.4882"
-    //noinspection GradleDependency - 0.8.0 does not work
+    //noinspection GradleDependency - 0.8.0 does not work, see https://github.com/apter-tech/junit5-robolectric-extension/issues/94
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.7.0"
 }
 
@@ -96,7 +96,7 @@ dependencies {
     val mockitoCoreVersion = "5.14.1"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.13"
-    //val jazzerVersion = "0.22.1"
+    val jazzerVersion = "0.22.1"
 
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
@@ -129,7 +129,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
-    //testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
+    testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
@@ -171,6 +171,10 @@ sonar {
 tasks.withType(Test::class) {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
-        excludes = listOf("jdk.internal.*", "com.code_intelligence.*")
+        excludes = listOf("jdk.internal.*")
     }
+    if (System.getProperty("fuzzing") != "true")
+        exclude("**/*FuzzTest.class")
+    else
+        include("**/*FuzzTest.class")
 }

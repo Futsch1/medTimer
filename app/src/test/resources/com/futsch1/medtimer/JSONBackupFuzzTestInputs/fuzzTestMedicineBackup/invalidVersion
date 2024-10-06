@@ -1,0 +1,93 @@
+{
+  "version": -4,
+  "list": [
+    {
+      "reminders": [
+        {
+          "reminderId": 1,
+          "timeInMinutes": 60,
+          "consecutiveDays": 1,
+          "pauseDays": 0,
+          "instructions": "Take with water",
+          "cycleStartDay": 1234,
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0,
+          "activeDaysOfMonth": -1
+        }
+      ],
+      "medicine": {
+        "name": "Medicine A",
+        "color": -65536,
+        "useColor": true,
+        "notificationImportance": 4,
+        "iconId": 0
+      }
+    },
+    {
+      "reminders": [
+        {
+          "reminderId": 1,
+          "timeInMinutes": 60,
+          "consecutiveDays": 1,
+          "pauseDays": 0,
+          "instructions": "Take with water",
+          "cycleStartDay": 1234,
+          "amount": "1",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0,
+          "activeDaysOfMonth": -1
+        },
+        {
+          "reminderId": 2,
+          "timeInMinutes": 120,
+          "consecutiveDays": 2,
+          "pauseDays": 1,
+          "instructions": "Take after meal",
+          "cycleStartDay": 4567,
+          "amount": "2",
+          "days": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "active": true,
+          "periodStart": 0,
+          "periodEnd": 0,
+          "activeDaysOfMonth": 255
+        }
+      ],
+      "medicine": {
+        "name": "Medicine B",
+        "color": -16776961,
+        "useColor": false,
+        "notificationImportance": 5,
+        "iconId": 7
+      }
+    }
+  ]
+}
