@@ -1,14 +1,20 @@
 package com.futsch1.medtimer.remindertable;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -18,9 +24,16 @@ import java.util.List;
 
 public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderTableCellModel, ReminderTableCellModel> {
     private final TableView tableView;
+    private final MedicineViewModel medicineViewModel;
+    private final FragmentActivity activity;
+    private final HandlerThread thread;
 
-    public ReminderTableAdapter(TableView tableView) {
+    public ReminderTableAdapter(TableView tableView, MedicineViewModel medicineViewModel, FragmentActivity fragmentActivity) {
         this.tableView = tableView;
+        this.medicineViewModel = medicineViewModel;
+        this.activity = fragmentActivity;
+        this.thread = new HandlerThread("EditReminderFromTable");
+        this.thread.start();
     }
 
     @NonNull
@@ -44,6 +57,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
             String modelContent = cellItemModel.getRepresentation();
             viewHolder.getTextView().setText(modelContent);
             viewHolder.getTextView().setTag(cellItemModel.getViewTag());
+            if (columnPosition == 0) {
+                viewHolder.setupEditButton(() -> new Handler(thread.getLooper()).post(() -> navigateToEditEvent(cellItemModel.getIdAsInt())));
+            }
         }
 
         viewHolder.getTextView().requestLayout();
@@ -73,6 +89,22 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     @Override
     public void onBindRowHeaderViewHolder(@NonNull AbstractViewHolder abstractViewHolder, ReminderTableCellModel s, int i) {
         onBindCellViewHolder(abstractViewHolder, s, i, i);
+    }
+
+    private void navigateToEditEvent(long eventId) {
+        NavController navController = Navigation.findNavController(tableView);
+        ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
+        if (reminderEvent != null) {
+            ReminderTableFragmentDirections.ActionReminderTableFragmentToEditEventFragment action = ReminderTableFragmentDirections.actionReminderTableFragmentToEditEventFragment(
+                    reminderEvent.reminderEventId,
+                    reminderEvent.amount,
+                    reminderEvent.medicineName,
+                    reminderEvent.remindedTimestamp,
+                    reminderEvent.reminderId <= 0
+            );
+            activity.runOnUiThread(() ->
+                    navController.navigate(action));
+        }
     }
 
     @NonNull

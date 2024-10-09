@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.remindertable;
 
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public class ReminderTableFragment extends Fragment {
 
     private TextInputLayout filterLayout;
     private TextInputEditText filter;
+    private HandlerThread thread;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -36,10 +38,12 @@ public class ReminderTableFragment extends Fragment {
         filter = fragmentView.findViewById(R.id.filter);
         filterLayout = fragmentView.findViewById(R.id.filterLayout);
         Filter tableFilter = new Filter(tableView);
-
         setupFilter(tableFilter);
 
-        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView);
+        thread = new HandlerThread("EditReminderFromTable");
+        thread.start();
+
+        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView, medicineViewModel, requireActivity());
 
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));

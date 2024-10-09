@@ -20,4 +20,13 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
     public TextView getTextView() {
         return textView;
     }
+
+    public void setupEditButton(OnEditClickListener clickListener) {
+        this.textView.setOnClickListener(v -> clickListener.onEditClick());
+        this.itemView.findViewById(R.id.editButton).setVisibility(View.VISIBLE);
+    }
+
+    public interface OnEditClickListener {
+        void onEditClick();
+    }
 }

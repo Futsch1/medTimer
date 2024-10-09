@@ -31,6 +31,10 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
         return content;
     }
 
+    public int getIdAsInt() {
+        return id;
+    }
+
     @NonNull
     @Override
     @SuppressWarnings("java:S4144")
