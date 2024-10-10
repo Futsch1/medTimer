@@ -13,51 +13,46 @@ import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
 
 
-class MedicineIcons private constructor(context: Context) {
-    private val pack: IconPack = IconPackLoader(context).load(R.xml.icon_pack)
+class MedicineIcons(context: Context) {
     private val defaultDrawable = AppCompatResources.getDrawable(context, R.drawable.capsule)!!
     private val iconColor =
         MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, 0)
 
     init {
-        pack.loadDrawables(IconDrawableLoader(context))
+        IconPackLoader(context).load(R.xml.icon_pack)
+        if (pack == null) {
+            pack = IconPackLoader(context).load(R.xml.icon_pack)
+            pack!!.loadDrawables(IconDrawableLoader(context))
+        }
     }
 
     companion object {
-        private var instance: MedicineIcons? = null
+        private var pack: IconPack? = null
+    }
 
-        @JvmStatic
-        fun init(context: Context) {
-            instance = MedicineIcons(context)
-        }
+    fun getIconDrawable(id: Int): Drawable {
+        return pack!!.getIcon(id)?.drawable ?: defaultDrawable
+    }
 
-        @JvmStatic
-        fun getIconPack(): IconPack {
-            return instance!!.pack
-        }
+    fun getIconBitmap(id: Int): Bitmap {
+        val drawable = getIconDrawable(id)
 
-        @JvmStatic
-        fun getIconDrawable(id: Int): Drawable {
-            return instance!!.pack.getIcon(id)?.drawable ?: instance!!.defaultDrawable
-        }
+        val bit = Bitmap.createBitmap(
+            drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
 
-        @JvmStatic
-        fun getIconBitmap(id: Int): Bitmap {
-            val drawable = getIconDrawable(id)
+        val canvas = Canvas(bit)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        DrawableCompat.setTint(
+            drawable,
+            iconColor
+        )
+        drawable.draw(canvas)
 
-            val bit = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
-            )
+        return bit
+    }
 
-            val canvas = Canvas(bit)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            DrawableCompat.setTint(
-                drawable,
-                instance!!.iconColor
-            )
-            drawable.draw(canvas)
-
-            return bit
-        }
+    fun getIconPack(): IconPack {
+        return pack!!
     }
 }
