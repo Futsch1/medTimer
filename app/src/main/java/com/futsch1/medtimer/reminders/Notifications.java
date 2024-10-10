@@ -45,7 +45,7 @@ public class Notifications {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
         if (iconId != 0) {
-            builder.setLargeIcon(MedicineIcons.getIconBitmap(iconId));
+            builder = builder.setLargeIcon(new MedicineIcons(context).getIconBitmap(iconId));
         }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);

@@ -172,7 +172,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void setupSelectIcon() {
         selectIconButton = fragmentEditMedicine.findViewById(R.id.selectIcon);
-        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
+        selectIconButton.setIcon(new MedicineIcons(requireContext()).getIconDrawable(iconId));
 
         FragmentManager fragmentManager = getChildFragmentManager();
         IconDialog dialog = (IconDialog) fragmentManager.findFragmentByTag(ICON_DIALOG_TAG);
@@ -268,7 +268,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     @Nullable
     @Override
     public IconPack getIconDialogIconPack() {
-        return MedicineIcons.getIconPack();
+        return new MedicineIcons(requireContext()).getIconPack();
     }
 
     @Override
@@ -279,6 +279,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     @Override
     public void onIconDialogIconsSelected(@NonNull IconDialog iconDialog, @NonNull List<Icon> list) {
         iconId = list.get(0).getId();
-        selectIconButton.setIcon(MedicineIcons.getIconDrawable(iconId));
+        selectIconButton.setIcon(new MedicineIcons(requireContext()).getIconDrawable(iconId));
     }
 }
