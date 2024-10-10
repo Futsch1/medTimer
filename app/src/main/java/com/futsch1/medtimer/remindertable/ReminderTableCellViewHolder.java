@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.remindertable;
 
+import android.graphics.Paint;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
 
     public void setupEditButton(OnEditClickListener clickListener) {
         this.textView.setOnClickListener(v -> clickListener.onEditClick());
-        this.itemView.findViewById(R.id.editButton).setVisibility(View.VISIBLE);
+        this.textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public interface OnEditClickListener {
