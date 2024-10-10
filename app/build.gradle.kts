@@ -22,7 +22,7 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 75
+        versionCode = 76
         versionName = "1.10.2"
         base.archivesName = "MedTimer"
 
