@@ -22,8 +22,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 73
-        versionName = "1.10.0"
+        versionCode = 74
+        versionName = "1.10.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -56,14 +56,6 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-        }
-    }
-    sourceSets {
-        getByName("main") {
-            // There seems to be an issue with safeargs and Android Studio. Generated classes are not detected by the IDE and marked
-            // as an error. This statement fixes it, but causes tests to fail (since they use the generated release classes). So
-            // I will leave this commented here to be enabled during coding, but it may not be committed.
-            //java.srcDir("build/generated/source/navigation-args/debug")
         }
     }
     kotlinOptions {

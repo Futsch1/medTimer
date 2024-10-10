@@ -36,10 +36,9 @@ public class ReminderTableFragment extends Fragment {
         filter = fragmentView.findViewById(R.id.filter);
         filterLayout = fragmentView.findViewById(R.id.filterLayout);
         Filter tableFilter = new Filter(tableView);
-
         setupFilter(tableFilter);
 
-        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView);
+        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView, medicineViewModel, requireActivity());
 
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeaders(getContext()));

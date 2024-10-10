@@ -90,7 +90,11 @@
     <fragment
         android:id="@+id/reminderTableFragment"
         android:name="com.futsch1.medtimer.remindertable.ReminderTableFragment"
-        android:label="@string/tabular_view" />
+        android:label="@string/tabular_view">
+        <action
+            android:id="@+id/action_reminderTableFragment_to_editEventFragment"
+            app:destination="@id/editEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
