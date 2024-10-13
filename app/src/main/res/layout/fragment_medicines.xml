@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clipToPadding="false"
+        android:contentDescription="@string/tab_medicine"
         android:paddingBottom="60dp"
         android:scrollbars="vertical">
 

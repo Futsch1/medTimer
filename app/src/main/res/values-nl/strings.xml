@@ -149,4 +149,9 @@
   <string name="select_all">Alles selecteren</string>
   <string name="never">Nooit</string>
   <string name="day_of_month_limited">Beperkt tot sommige dagen van de maand</string>
+  <string name="medicines_tab_description">Tabblad Geneesmiddelen</string>
+  <string name="overview_tab_description">Tabblad Overzicht</string>
+  <string name="statistics_tab_description">Tabblad Statistieken</string>
+  <string name="previous_month">Vorige maand</string>
+  <string name="next_month">Volgende maand</string>
 </resources>

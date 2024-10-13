@@ -153,4 +153,9 @@
   <string name="select_all">Выбрать все</string>
   <string name="never">Никогда</string>
   <string name="day_of_month_limited">Ограничено некоторыми днями месяца</string>
+  <string name="medicines_tab_description">Вкладка "Лекарства</string>
+  <string name="overview_tab_description">Вкладка "Обзор</string>
+  <string name="statistics_tab_description">Вкладка Статистика</string>
+  <string name="previous_month">Предыдущий месяц</string>
+  <string name="next_month">Следующий месяц</string>
 </resources>
