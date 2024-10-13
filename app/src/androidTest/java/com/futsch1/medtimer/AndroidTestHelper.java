@@ -26,6 +26,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.time.LocalDateTime;
+
 public class AndroidTestHelper {
     public static ViewAction waitFor(long delay) {
         return new ViewAction() {
@@ -102,6 +104,16 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static String getNextNotificationTime() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        if (dateTime.getSecond() < 55) {
+            dateTime = dateTime.plusMinutes(1);
+        } else {
+            dateTime = dateTime.plusMinutes(2);
+        }
+        return dateTime.getHour() + ":" + dateTime.getMinute();
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
