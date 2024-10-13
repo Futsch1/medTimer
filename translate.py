@@ -14,6 +14,15 @@ def map_language(l: str) -> str:
     return l if l != 'zh-rCN' else 'zh-hans'
 
 
+def escape(str_xml: str):
+    str_xml = str_xml.replace("&", "&amp;")
+    str_xml = str_xml.replace("<", "&lt;")
+    str_xml = str_xml.replace(">", "&gt;")
+    str_xml = str_xml.replace("\"", "&quot;")
+    str_xml = str_xml.replace("'", "&apos;")
+    return str_xml
+
+
 # Open English strings.xml file
 tree = ET.parse('app/src/main/res/values/strings.xml')
 resources = tree.getroot()
@@ -59,7 +68,7 @@ for string_name, language in translate_list:
     new_elements[language] = language_tree[language].find('string[@name="' + string_name + '"]')
     if new_elements[language] is None:
         new_elements[language] = ET.SubElement(language_tree[language].getroot(), 'string', name=string_name)
-    new_elements[language].text = translated_string.text
+    new_elements[language].text = escape(translated_string.text)
 
 # Collect all languages where a translation string was found
 languages = set([tl[1] for tl in translate_list])
