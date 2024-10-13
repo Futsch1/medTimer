@@ -5,15 +5,18 @@
         android:id="@+id/overviewFragment"
         android:icon="@drawable/calendar2_event"
         android:title="@string/tab_overview"
-        android:name="com.futsch1.medtimer.overview.OverviewFragment"/>
+        android:name="com.futsch1.medtimer.overview.OverviewFragment"
+        android:contentDescription="@string/overview_tab_description"/>
     <item
         android:id="@+id/medicinesFragment"
         android:icon="@drawable/capsule"
         android:title="@string/tab_medicine"
-        android:name="com.futsch1.medtimer.medicine.MedicinesFragment"/>
+        android:name="com.futsch1.medtimer.medicine.MedicinesFragment"
+        android:contentDescription="@string/medicines_tab_description"/>
     <item
         android:id="@+id/statisticsFragment"
         android:icon="@drawable/bar_chart"
         android:title="@string/analysis"
-        android:name="com.futsch1.medtimer.statistics.StatisticsFragment"/>
+        android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
+        android:contentDescription="@string/statistics_tab_description"/>
 </menu>

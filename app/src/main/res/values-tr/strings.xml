@@ -149,4 +149,9 @@
   <string name="select_all">Tümünü seçin</string>
   <string name="never">Asla</string>
   <string name="day_of_month_limited">Ayın bazı günleri ile sınırlıdır</string>
+  <string name="medicines_tab_description">İlaçlar sekmesi</string>
+  <string name="overview_tab_description">Genel Bakış sekmesi</string>
+  <string name="statistics_tab_description">İstatistik sekmesi</string>
+  <string name="previous_month">Önceki ay</string>
+  <string name="next_month">Gelecek ay</string>
 </resources>

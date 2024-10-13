@@ -5,6 +5,15 @@ import xml.etree.ElementTree as ET
 
 import deepl
 
+
+def get_language_from_directory(directory_name: str) -> str:
+    return os.path.split(directory_name)[-1].replace('values-', '')
+
+
+def map_language(l: str) -> str:
+    return l if l != 'zh-rCN' else 'zh-hans'
+
+
 # Open English strings.xml file
 tree = ET.parse('app/src/main/res/values/strings.xml')
 resources = tree.getroot()
@@ -28,23 +37,25 @@ else:
 for directory in glob.glob('app/src/main/res/*'):
     if directory == 'app/src/main/res/values' or not os.path.exists(directory + '/strings.xml'):
         continue
-    language = directory[-2:]
+    language = get_language_from_directory(directory)
     language_tree[language] = ET.parse(directory + '/strings.xml')
     resources = language_tree[language].getroot()
     language_strings = []
     for string_name in resources.findall('string'):
         language_strings.append(string_name.attrib['name'])
     for english_string_name in english_strings.keys():
-        if english_string_name not in language_strings or not language_strings[language_strings.index(english_string_name)] or english_string_name in translate_args:
+        if english_string_name not in language_strings or not language_strings[
+            language_strings.index(english_string_name)] or english_string_name in translate_args:
             translate_list.append((english_string_name, language))
 auth_key = sys.argv[1]
 
 # Translate
 new_elements = {}
 translator = deepl.Translator(auth_key)
+
 for string_name, language in translate_list:
     print('Translating ' + string_name + ' to ' + language)
-    translated_string = translator.translate_text(english_strings[string_name], target_lang=language, preserve_formatting=True)
+    translated_string = translator.translate_text(english_strings[string_name], target_lang=map_language(language), preserve_formatting=True)
     new_elements[language] = language_tree[language].find('string[@name="' + string_name + '"]')
     if new_elements[language] is None:
         new_elements[language] = ET.SubElement(language_tree[language].getroot(), 'string', name=string_name)

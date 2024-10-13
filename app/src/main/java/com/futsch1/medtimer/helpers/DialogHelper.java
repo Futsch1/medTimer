@@ -5,7 +5,9 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Editable;
+import android.util.TypedValue;
 import android.widget.LinearLayout;
 
 import com.futsch1.medtimer.R;
@@ -23,11 +25,11 @@ public class DialogHelper {
         editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         editText.setHint(hint);
         editText.setSingleLine();
+        editText.setMinimumHeight(dpToPx(context.getResources(), 48));
         textInputLayout.addView(editText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(textInputLayout);
-        builder.setTitle(title);
+        builder.setView(textInputLayout).setTitle(title);
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
@@ -37,6 +39,13 @@ public class DialogHelper {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * @noinspection SameParameterValue
+     */
+    private static int dpToPx(Resources r, int dp) {
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
     public interface TextSink {

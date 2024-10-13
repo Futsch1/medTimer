@@ -151,4 +151,9 @@
   <string name="select_all">Tout sélectionner</string>
   <string name="never">Jamais</string>
   <string name="day_of_month_limited">Limité à certains jours du mois</string>
+  <string name="medicines_tab_description">Onglet Médicaments</string>
+  <string name="overview_tab_description">Onglet Vue d'ensemble</string>
+  <string name="statistics_tab_description">Onglet Statistiques</string>
+  <string name="previous_month">Mois précédent</string>
+  <string name="next_month">Le mois prochain</string>
 </resources>
