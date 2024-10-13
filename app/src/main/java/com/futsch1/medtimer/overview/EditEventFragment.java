@@ -110,8 +110,10 @@ public class EditEventFragment extends Fragment {
                 if (reminderEvent != null) {
                     reminderEvent.medicineName = editEventName.getText().toString();
                     reminderEvent.amount = editEventAmount.getText().toString();
-                    reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp,
-                            TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString()));
+                    int minutes = TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString());
+                    if (minutes >= 0) {
+                        reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes);
+                    }
                     reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampDate(reminderEvent.remindedTimestamp,
                             TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
 
