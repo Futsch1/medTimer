@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -22,6 +23,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -42,7 +44,7 @@ public class NotificationTest {
                     "android.permission.POST_NOTIFICATIONS");
 
     @Test
-    public void basicUITest() {
+    public void notificationTest() {
         mActivityScenarioRule.getScenario().onActivity(activity -> {
             MedicineRepository repository = new MedicineRepository(activity.getApplication());
             repository.deleteAll();
@@ -62,7 +64,7 @@ public class NotificationTest {
                                         0),
                                 0),
                         isDisplayed()));
-        textInputEditText.perform(replaceText("Test"), closeSoftKeyboard());
+        textInputEditText.perform(replaceText("Test med"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(android.R.id.button1), withText("OK")));
@@ -94,14 +96,16 @@ public class NotificationTest {
         materialButton3.perform(click());
 
         String notificationTime = AndroidTestHelper.getNextNotificationTime();
-
         onView(withId(R.id.editReminderTime)).perform(replaceText(notificationTime), closeSoftKeyboard());
+        pressBack();
 
         mActivityScenarioRule.getScenario().close();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.openNotification();
-        device.wait(Until.findObject(By.text("MedTimer")), 70_000);
+        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 130_000);
+        assert (null != object);
+        device.pressBack();
     }
 
 }

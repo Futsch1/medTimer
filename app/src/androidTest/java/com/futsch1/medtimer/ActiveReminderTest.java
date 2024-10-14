@@ -41,7 +41,7 @@ public class ActiveReminderTest {
                     "android.permission.POST_NOTIFICATIONS");
 
     @Test
-    public void basicUITest() {
+    public void activeReminderTest() {
         mActivityScenarioRule.getScenario().onActivity(activity -> {
             MedicineRepository repository = new MedicineRepository(activity.getApplication());
             repository.deleteAll();
