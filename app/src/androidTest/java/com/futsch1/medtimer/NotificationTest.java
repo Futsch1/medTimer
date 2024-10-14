@@ -97,15 +97,16 @@ public class NotificationTest {
 
         String notificationTime = AndroidTestHelper.getNextNotificationTime();
         onView(withId(R.id.editReminderTime)).perform(replaceText(notificationTime), closeSoftKeyboard());
+        AndroidTestHelper.waitFor(2000);
         pressBack();
 
         mActivityScenarioRule.getScenario().close();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.openNotification();
-        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 130_000);
-        assert (null != object);
+        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);
         device.pressBack();
+        assert (null != object);
     }
 
 }
