@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -106,7 +107,7 @@ public class NotificationTest {
         device.openNotification();
         UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);
         device.pressBack();
-        assert (null != object);
+        assertNotNull(object);
     }
 
 }
