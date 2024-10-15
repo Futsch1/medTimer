@@ -98,9 +98,8 @@ public class NotificationTest {
 
         String notificationTime = AndroidTestHelper.getNextNotificationTime();
         onView(withId(R.id.editReminderTime)).perform(replaceText(notificationTime), closeSoftKeyboard());
-        AndroidTestHelper.waitFor(2000);
         pressBack();
-        AndroidTestHelper.waitFor(2000);
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
         mActivityScenarioRule.getScenario().close();
 

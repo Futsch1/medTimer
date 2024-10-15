@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import android.icu.util.Calendar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -107,7 +108,8 @@ public class AndroidTestHelper {
     }
 
     public static String getNextNotificationTime() {
-        LocalDateTime dateTime = LocalDateTime.now();
+        Calendar rightNow = Calendar.getInstance();
+        LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
         if (dateTime.getSecond() < 55) {
             dateTime = dateTime.plusMinutes(1);
         } else {
