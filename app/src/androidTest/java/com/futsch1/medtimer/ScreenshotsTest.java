@@ -31,7 +31,6 @@ import android.content.Context;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
@@ -45,7 +44,6 @@ import com.futsch1.medtimer.helpers.TimeHelper;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -56,7 +54,6 @@ import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
 public class ScreenshotsTest {
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();

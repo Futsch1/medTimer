@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import android.icu.util.Calendar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -25,6 +26,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.time.LocalDateTime;
 
 public class AndroidTestHelper {
     public static ViewAction waitFor(long delay) {
@@ -42,6 +45,25 @@ public class AndroidTestHelper {
             @Override
             public void perform(UiController uiController, View view) {
                 uiController.loopMainThreadForAtLeast(delay);
+            }
+        };
+    }
+
+
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
             }
         };
     }
@@ -102,6 +124,17 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static LocalDateTime getNextNotificationTime() {
+        Calendar rightNow = Calendar.getInstance();
+        LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
+        if (dateTime.getSecond() < 55) {
+            dateTime = dateTime.plusMinutes(1);
+        } else {
+            dateTime = dateTime.plusMinutes(2);
+        }
+        return dateTime;
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
