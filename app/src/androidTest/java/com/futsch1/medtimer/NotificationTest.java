@@ -8,10 +8,12 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
@@ -92,12 +94,20 @@ public class NotificationTest {
                 allOf(withId(android.R.id.button1), withText("OK")));
         materialButton2.perform(scrollTo(), click());
 
+        String[] notificationTimes = AndroidTestHelper.getNextNotificationTime();
+        ViewInteraction mode = onView(withId(com.google.android.material.R.id.material_timepicker_mode_button));
+        mode.perform(click());
+        ViewInteraction hours = onView(allOf(withInputType(2),
+                isDescendantOfA(withId(com.google.android.material.R.id.material_hour_text_input))));
+        hours.perform(replaceText(notificationTimes[0]), closeSoftKeyboard());
+        onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
+        ViewInteraction minutes = onView(allOf(withInputType(2),
+                isDescendantOfA(withId(com.google.android.material.R.id.material_minute_text_input))));
+        minutes.perform(replaceText(notificationTimes[1]), closeSoftKeyboard());
         ViewInteraction materialButton3 = onView(
                 allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK")));
         materialButton3.perform(click());
 
-        String notificationTime = AndroidTestHelper.getNextNotificationTime();
-        onView(withId(R.id.editReminderTime)).perform(replaceText(notificationTime), closeSoftKeyboard());
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
