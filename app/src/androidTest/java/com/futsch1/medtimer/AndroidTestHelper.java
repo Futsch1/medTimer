@@ -49,6 +49,25 @@ public class AndroidTestHelper {
         };
     }
 
+
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
+    }
+
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -107,7 +126,7 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
-    public static String[] getNextNotificationTime() {
+    public static LocalDateTime getNextNotificationTime() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
         if (dateTime.getSecond() < 55) {
@@ -115,7 +134,7 @@ public class AndroidTestHelper {
         } else {
             dateTime = dateTime.plusMinutes(2);
         }
-        return new String[]{String.valueOf(dateTime.getHour()), String.valueOf(dateTime.getMinute())};
+        return dateTime;
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
