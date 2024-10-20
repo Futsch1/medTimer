@@ -27,6 +27,7 @@ android {
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments.putAll(mapOf("clearPackageData" to "true"))
     }
     buildTypes {
         release {
@@ -57,6 +58,7 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -67,7 +69,7 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.1.4"
-    val androidXNavigationVersion = "2.8.2"
+    val androidXNavigationVersion = "2.8.3"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.9.1"
@@ -95,6 +97,8 @@ dependencies {
     val androidTestRulesVersion = "1.6.1"
     val screengrabVersion = "2.1.1"
     val uiautomatorVersion = "2.3.0"
+    val androidTestRunnerVersion = "1.6.2"
+    val androidTestOrchestratorVersion = "1.5.1"
 
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("com.google.android.material:material:$materialVersion")
@@ -130,6 +134,9 @@ dependencies {
     androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
     androidTestImplementation("tools.fastlane:screengrab:$screengrabVersion")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:$uiautomatorVersion")
+    androidTestImplementation("androidx.test:runner:$androidTestRunnerVersion")
+    androidTestUtil("androidx.test:orchestrator:$androidTestOrchestratorVersion")
+
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 }

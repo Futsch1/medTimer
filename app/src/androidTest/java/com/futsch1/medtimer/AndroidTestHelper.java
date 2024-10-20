@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
@@ -48,26 +49,7 @@ public class AndroidTestHelper {
             }
         };
     }
-
-
-    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-        return new TypeSafeMatcher<>() {
-            int currentIndex = 0;
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
-                matcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
-            }
-        };
-    }
-
+    
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -118,10 +100,26 @@ public class AndroidTestHelper {
     }
 
     public static void setTime(int hour, int minute) {
+        try {
+            onView(withId(com.google.android.material.R.id.material_clock_period_am_button)).perform(click());
+            if (hour == 12) {
+                onView(withId(com.google.android.material.R.id.material_clock_period_pm_button)).perform(click());
+            }
+            if (hour > 12) {
+                hour -= 12;
+                onView(withId(com.google.android.material.R.id.material_clock_period_pm_button)).perform(click());
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+        } catch (PerformException e) {
+            // Happens when am/pm button is not visible - in this case, we are in 24h format
+        }
+
         onView(withId(com.google.android.material.R.id.material_timepicker_mode_button)).perform(click());
         onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
-        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
+        onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }

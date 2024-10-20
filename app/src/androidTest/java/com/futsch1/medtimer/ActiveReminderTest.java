@@ -23,8 +23,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.futsch1.medtimer.database.MedicineRepository;
-
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -42,12 +40,6 @@ public class ActiveReminderTest {
 
     @Test
     public void activeReminderTest() {
-        mActivityScenarioRule.getScenario().onActivity(activity -> {
-            MedicineRepository repository = new MedicineRepository(activity.getApplication());
-            repository.deleteAll();
-        });
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         onView(withId(R.id.addMedicine)).perform(click());

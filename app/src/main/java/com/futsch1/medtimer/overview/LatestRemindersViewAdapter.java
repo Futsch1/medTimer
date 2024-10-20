@@ -73,9 +73,11 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
             List<ReminderEvent> filteredList = new ArrayList<>();
             String filterPattern = constraint.toString().toLowerCase(Locale.getDefault()).trim();
             boolean showOnlyOpen = filterPattern.contains("o");
-            for (ReminderEvent item : data) {
-                if ((!showOnlyOpen || item.status == ReminderEvent.ReminderStatus.RAISED)) {
-                    filteredList.add(item);
+            if (data != null) {
+                for (ReminderEvent item : data) {
+                    if (isVisible(item, showOnlyOpen)) {
+                        filteredList.add(item);
+                    }
                 }
             }
 
@@ -83,6 +85,10 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
             results.values = filteredList;
             results.count = filteredList.size();
             return results;
+        }
+
+        private static boolean isVisible(ReminderEvent item, boolean showOnlyOpen) {
+            return !showOnlyOpen || item.status == ReminderEvent.ReminderStatus.RAISED;
         }
 
         /**

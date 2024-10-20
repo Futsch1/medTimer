@@ -115,7 +115,10 @@ public class OverviewFragment extends Fragment {
 
     private void setupFilterButton() {
         showOnlyOpen = fragmentOverview.findViewById(R.id.showOnlyOpen);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
+        showOnlyOpen.setChecked(sharedPref.getBoolean("show_only_open", false));
         showOnlyOpen.setOnClickListener(v -> updateFilter());
+        updateFilter();
     }
 
     private void navigateToEditEvent(long eventId) {
@@ -153,6 +156,8 @@ public class OverviewFragment extends Fragment {
 
     private void updateFilter() {
         String filterString = showOnlyOpen.isChecked() ? "o" : "";
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
+        sharedPref.edit().putBoolean("show_only_open", showOnlyOpen.isChecked()).apply();
         adapter.getFilter().filter(filterString);
     }
 
