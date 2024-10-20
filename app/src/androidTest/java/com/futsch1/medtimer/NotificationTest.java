@@ -10,7 +10,6 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
@@ -28,8 +27,6 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
-
-import com.futsch1.medtimer.database.MedicineRepository;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,12 +47,6 @@ public class NotificationTest {
 
     @Test
     public void notificationTest() {
-        mActivityScenarioRule.getScenario().onActivity(activity -> {
-            MedicineRepository repository = new MedicineRepository(activity.getApplication());
-            repository.deleteAll();
-        });
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         ViewInteraction extendedFloatingActionButton = onView(
