@@ -8,11 +8,9 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
@@ -88,25 +86,7 @@ public class NotificationTest {
         materialButton2.perform(scrollTo(), click());
 
         LocalDateTime notificationTime = AndroidTestHelper.getNextNotificationTime();
-        ViewInteraction mode = onView(withId(com.google.android.material.R.id.material_timepicker_mode_button));
-        mode.perform(click());
-        ViewInteraction hours = onView(allOf(withInputType(2),
-                isDescendantOfA(withId(com.google.android.material.R.id.material_hour_text_input))));
-        if (notificationTime.getHour() > 12) {
-            onView(AndroidTestHelper.withIndex(withId(com.google.android.material.R.id.material_clock_period_pm_button), 1)).perform(click());
-            notificationTime = notificationTime.minusHours(12);
-        }
-        if (notificationTime.getHour() == 0) {
-            notificationTime = notificationTime.plusHours(12);
-        }
-        hours.perform(replaceText(String.valueOf(notificationTime.getHour())), closeSoftKeyboard());
-        onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
-        ViewInteraction minutes = onView(allOf(withInputType(2),
-                isDescendantOfA(withId(com.google.android.material.R.id.material_minute_text_input))));
-        minutes.perform(replaceText(String.valueOf(notificationTime.getMinute())), closeSoftKeyboard());
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK")));
-        materialButton3.perform(click());
+        AndroidTestHelper.setTime(notificationTime.getHour(), notificationTime.getMinute());
 
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
