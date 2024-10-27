@@ -118,7 +118,7 @@ screen. Select `Event data` and choose the export format desired.
 ## Further customization to snooze
 
 If you need a more flexible approach to snoozing reminders like setting the snooze time individually
-per reminder, you can use the Android settings for snooze notifications (Settings > Notifications >
-Allow notification snoozing)
+per reminder, you can use the Android settings for snooze notifications (`Settings > Notifications >
+Allow notification snoozing`).
 
 <img src='notification_snoozing.png' width=200 />
