@@ -114,3 +114,11 @@ To export the history, open the options menu from the `Overview`, `Medicine` or 
 screen. Select `Event data` and choose the export format desired.
 
 <img src='export.png' width=200 />
+
+## Further customization to snooze
+
+If you need a more flexible approach to snoozing reminders like setting the snooze time individually
+per reminder, you can use the Android settings for snooze notifications (Settings > Notifications >
+Allow notification snoozing)
+
+<img src='notification_snoozing.png' width=200 />
