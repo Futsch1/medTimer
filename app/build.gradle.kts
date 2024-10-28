@@ -22,7 +22,7 @@ android {
         minSdk = 33
         targetSdk = 35
         versionCode = 78
-        versionName = "1.10.4"
+        versionName = "1.10.4-rc.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
