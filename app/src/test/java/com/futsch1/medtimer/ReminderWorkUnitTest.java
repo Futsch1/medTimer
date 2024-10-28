@@ -156,9 +156,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> {
-                 when(mock.getIconBitmap(0)).thenReturn(null);
-             });
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
@@ -204,9 +202,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> {
-                 when(mock.getIconBitmap(16)).thenReturn(null);
-             });
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
