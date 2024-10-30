@@ -7,3 +7,7 @@ medium-phone-arm:
       version: 34
       locale: 'en'
       orientation: portrait
+    - model: MediumTablet.arm
+      version: 34
+      locale: 'de'
+      orientation: landscape
