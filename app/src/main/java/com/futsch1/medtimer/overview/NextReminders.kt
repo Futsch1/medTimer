@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -35,7 +36,8 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private val expandNextReminders: MaterialButton =
         fragmentView.findViewById(R.id.expandNextReminders)
     private var reminderEvents: List<ReminderEvent> = ArrayList()
-    private var nextRemindersExpanded = false
+    private var nextRemindersExpanded =
+        fragmentView.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE
     private var medicineWithReminders: List<MedicineWithReminders> = ArrayList()
 
     init {
@@ -66,7 +68,11 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
 
             nextRemindersViewAdapter.submitList(ArrayList())
         } else {
-            expandNextReminders.visibility = View.VISIBLE
+            if (expandNextReminders.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
+                expandNextReminders.visibility = View.GONE
+            } else {
+                expandNextReminders.visibility = View.VISIBLE
+            }
 
             nextRemindersViewAdapter.submitList(
                 if (nextRemindersExpanded) scheduledReminders else scheduledReminders.subList(0, 1)

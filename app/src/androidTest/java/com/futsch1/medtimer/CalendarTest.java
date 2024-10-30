@@ -2,19 +2,23 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.Until;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,10 +37,10 @@ public class CalendarTest {
 
     @Test
     public void calendarTest() {
-        onView(allOf(withContentDescription("More options"))).perform(click());
-
-        onView(withText("Generate test data")).perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        device.wait(Until.findObject(By.desc("More options")), 1000);
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText(R.string.generate_test_data)).perform(click());
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
@@ -63,7 +67,7 @@ public class CalendarTest {
 
         onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
 
-        onView(allOf(withContentDescription("Navigate up"))).perform(click());
+        pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 

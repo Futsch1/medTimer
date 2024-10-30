@@ -28,7 +28,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class AndroidTestHelper {
     public static ViewAction waitFor(long delay) {
@@ -49,7 +51,7 @@ public class AndroidTestHelper {
             }
         };
     }
-    
+
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -122,6 +124,10 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static String dateToString(Date date) {
+        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 
     public static LocalDateTime getNextNotificationTime() {
