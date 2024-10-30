@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.text.format.DateFormat;
 
 import androidx.core.app.NotificationCompat;
@@ -33,6 +34,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.reminders.ReminderWork;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -151,9 +153,10 @@ public class ReminderWorkUnitTest {
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
                  when(mock.setPriority(NotificationCompat.PRIORITY_DEFAULT)).thenReturn(mock);
                  when(mock.setContentIntent(any())).thenReturn(mock);
+                 when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
-
              });
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
@@ -183,7 +186,9 @@ public class ReminderWorkUnitTest {
             Reminder reminder = new Reminder(medicineId);
             reminder.reminderId = reminderId;
             when(mock.getReminder(reminderId)).thenReturn(reminder);
-            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("TestMedicine"));
+            Medicine medicine = new Medicine("TestMedicine");
+            medicine.iconId = 16;
+            when(mock.getMedicine(medicineId)).thenReturn(medicine);
             when(mock.insertReminderEvent(any())).thenReturn((long) reminderEventId);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
@@ -194,9 +199,10 @@ public class ReminderWorkUnitTest {
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
                  when(mock.setPriority(NotificationCompat.PRIORITY_DEFAULT)).thenReturn(mock);
                  when(mock.setContentIntent(any())).thenReturn(mock);
+                 when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
-
              });
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {

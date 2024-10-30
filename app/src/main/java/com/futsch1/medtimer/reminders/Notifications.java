@@ -16,6 +16,7 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
+import com.futsch1.medtimer.helpers.MedicineIcons;
 
 public class Notifications {
     private final Context context;
@@ -29,18 +30,20 @@ public class Notifications {
     @SuppressWarnings("java:S107")
     public int showNotification(String remindTime, String medicineName, String amount,
                                 String instructions, int reminderId, int reminderEventId,
-                                Color color, ReminderNotificationChannelManager.Importance importance) {
+                                Color color, int iconId, ReminderNotificationChannelManager.Importance importance) {
         int notificationId = getNextNotificationId();
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
         String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
+        MedicineIcons icons = new MedicineIcons(context);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(icons.getIconBitmap(iconId))
                 .setContentIntent(contentIntent);
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
