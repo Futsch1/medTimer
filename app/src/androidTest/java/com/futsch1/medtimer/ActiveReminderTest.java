@@ -26,6 +26,8 @@ import androidx.test.rule.GrantPermissionRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Calendar;
+
 @LargeTest
 public class ActiveReminderTest {
 
@@ -40,6 +42,12 @@ public class ActiveReminderTest {
 
     @Test
     public void activeReminderTest() {
+        Calendar futureTime = Calendar.getInstance();
+        int year = futureTime.get(Calendar.YEAR);
+        futureTime.set(year + 1, 1, 1);
+        Calendar pastTime = Calendar.getInstance();
+        pastTime.set(year - 1, 1, 1);
+
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         onView(withId(R.id.addMedicine)).perform(click());
@@ -98,7 +106,7 @@ public class ActiveReminderTest {
         onView(withId(R.id.open_advanced_settings)).perform(click());
         onView(withId(R.id.timePeriod)).perform(click());
         onView(withId(R.id.periodStart)).perform(click());
-        onView(withId(R.id.periodStartDate)).perform(replaceText("1/1/30"));
+        onView(withId(R.id.periodStartDate)).perform(replaceText(AndroidTestHelper.dateToString(futureTime.getTime())));
 
         pressBack();
         pressBack();
@@ -111,7 +119,7 @@ public class ActiveReminderTest {
         onView(withId(R.id.open_advanced_settings)).perform(click());
         onView(withId(R.id.periodStart)).perform(click());
         onView(withId(R.id.periodEnd)).perform(click());
-        onView(withId(R.id.periodEndDate)).perform(replaceText("1/1/23"));
+        onView(withId(R.id.periodEndDate)).perform(replaceText(AndroidTestHelper.dateToString(pastTime.getTime())));
 
         pressBack();
         pressBack();
@@ -123,8 +131,8 @@ public class ActiveReminderTest {
         onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.open_advanced_settings)).perform(click());
         onView(withId(R.id.periodStart)).perform(click());
-        onView(withId(R.id.periodStartDate)).perform(replaceText("1/1/23"));
-        onView(withId(R.id.periodEndDate)).perform(replaceText("1/1/30"));
+        onView(withId(R.id.periodStartDate)).perform(replaceText(AndroidTestHelper.dateToString(pastTime.getTime())));
+        onView(withId(R.id.periodEndDate)).perform(replaceText(AndroidTestHelper.dateToString(futureTime.getTime())));
 
         pressBack();
         pressBack();

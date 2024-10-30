@@ -12,7 +12,6 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -28,6 +27,9 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.Until;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,31 +48,31 @@ public class TestDataAndDeleteAndManualDoseTest {
 
     @Test
     public void testDataAndDeleteAndManualDoseTest() {
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        device.wait(Until.findObject(By.desc("More options")), 1000);
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        ViewInteraction materialTextView2 = onView(withText("Generate test data"));
-        materialTextView2.perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+        onView(withText(R.string.generate_test_data)).perform(click());
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Delete")).perform(click());
-        onView(withText("Yes")).perform(scrollTo(), click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(withText(R.string.yes)).perform(scrollTo(), click());
 
         onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
         onView(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText("Delete")).perform(click());
-        onView(allOf(withId(android.R.id.button1), withText("Yes"))).perform(scrollTo(), click());
+        onView(withText(R.string.delete)).perform(click());
+        onView(allOf(withId(android.R.id.button1), withText(R.string.yes))).perform(scrollTo(), click());
 
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
-        onView(allOf(withId(R.id.logManualDose), withText("Log additional dose"), isDisplayed()))
+        onView(allOf(withId(R.id.logManualDose), withText(R.string.log_additional_dose), isDisplayed()))
                 .perform(click());
 
         DataInteraction materialTextView5 = onData(anything())
@@ -102,8 +104,9 @@ public class TestDataAndDeleteAndManualDoseTest {
                         isDisplayed()));
         materialButton5.perform(click());
 
+        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "1", "Ginseng (200mg)", "");
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText))
-                .check(matches(withText(startsWith("1 of Ginseng (200mg)"))));
+                .check(matches(withText(startsWith(expectedText))));
     }
 
 }

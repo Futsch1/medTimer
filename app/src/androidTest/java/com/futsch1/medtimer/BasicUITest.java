@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -13,9 +14,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -89,14 +90,7 @@ public class BasicUITest {
         materialButton3.perform(click());
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.open_advanced_settings), withText("Advanced settings"),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withId(R.id.advanced_settings),
-                                        0),
-                                1),
-                        isDisplayed()));
+        ViewInteraction materialButton4 = onView(withId(R.id.open_advanced_settings));
         materialButton4.perform(click());
 
         ViewInteraction checkableImageButton = onView(
@@ -118,21 +112,17 @@ public class BasicUITest {
                 .atPosition(1);
         materialTextView.perform(click());
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Navigate up")));
-        appCompatImageButton.perform(click());
+        pressBack();
 
         ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.open_advanced_settings)));
         materialButton5.perform(click());
 
         ViewInteraction editText = onView(
-                allOf(withId(R.id.editInstructions), withText("before the meal")));
-        editText.check(matches(withText("before the meal")));
+                allOf(withId(R.id.editInstructions), withText(R.string.before_meal)));
+        editText.check(matches(withText(R.string.before_meal)));
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Navigate up")));
-        appCompatImageButton2.perform(click());
+        pressBack();
 
         ViewInteraction textInputEditText3 = onView(
                 allOf(withId(R.id.editAmount), withText("1")));
@@ -142,9 +132,7 @@ public class BasicUITest {
                 allOf(withId(R.id.editAmount), withText("2")));
         textInputEditText4.perform(closeSoftKeyboard());
 
-        ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Navigate up")));
-        appCompatImageButton3.perform(click());
+        pressBack();
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
         ViewInteraction recyclerView2 = onView(
@@ -155,16 +143,15 @@ public class BasicUITest {
                 allOf(withId(R.id.editAmount), withText("2")));
         editText2.check(matches(withText("2")));
 
-        ViewInteraction appCompatImageButton4 = onView(
-                allOf(withContentDescription("Navigate up")));
-        appCompatImageButton4.perform(click());
+        pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         ViewInteraction textView = onView(
                 new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderText));
-        textView.check(matches(withText(startsWith("2 of Test"))));
+        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "2", "Test", "");
+        textView.check(matches(withText(startsWith(expectedText))));
     }
 
 }
