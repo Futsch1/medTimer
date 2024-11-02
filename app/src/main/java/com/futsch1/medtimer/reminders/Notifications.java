@@ -37,14 +37,16 @@ public class Notifications {
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
         String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
-        MedicineIcons icons = new MedicineIcons(context);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(icons.getIconBitmap(iconId))
                 .setContentIntent(contentIntent);
+        if (iconId != 0) {
+            MedicineIcons icons = new MedicineIcons(context);
+            builder.setLargeIcon(icons.getIconBitmap(iconId));
+        }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
         }
