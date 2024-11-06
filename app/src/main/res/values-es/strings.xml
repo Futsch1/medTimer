@@ -22,7 +22,6 @@
     <string name="notification_title">Toma tu medicación</string>
     <string name="notification_content_blank">Son las %1$s - hora de tomar %2$s%3$s%4$s</string>
     <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
-    <string name="notification_taken">TOMADO</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -80,8 +79,6 @@
     <string name="minutes_15">15 minutos</string>
     <string name="minutes_30">30 minutos</string>
     <string name="minutes_60">60 minutos</string>
-    <string name="notification_skipped">OMITIDO</string>
-    <string name="notification_snooze">POSPONER</string>
     <string name="weekend_mode">Modo fin de semana</string>
     <string name="weekend_mode_days">Días</string>
     <string name="monday">Lunes</string>

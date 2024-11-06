@@ -22,7 +22,6 @@
     <string name="notification_title">Promemoria per i Medicinali</string>
     <string name="notification_content_blank">Sono le %1$s - è ora di prendere %2$s%3$s%4$s</string>
     <string name="notification_content">Sono le %1$s - è ora di prendere %2$s di %3$s%4$s</string>
-    <string name="notification_taken">PRESO</string>
     <string name="taken">Preso</string>
     <string name="skipped">Saltato</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -80,8 +79,6 @@
     <string name="minutes_15">15 minuti</string>
     <string name="minutes_30">30 minuti</string>
     <string name="minutes_60">60 minuti</string>
-    <string name="notification_skipped">SALTATO</string>
-    <string name="notification_snooze">SOSPENDI</string>
     <string name="weekend_mode">Modalità fine settimana</string>
     <string name="weekend_mode_days">Giorni</string>
     <string name="monday">Lunedì</string>

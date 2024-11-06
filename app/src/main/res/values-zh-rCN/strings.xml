@@ -20,7 +20,6 @@
     <string name="notification_title">服药提醒</string>
     <string name="notification_content_blank">现在是 %1$s - 是时候服用 %2$s%3$s%4$s 了</string>
     <string name="notification_content">现在是 %1$s - 是时候服用 %2$s 剂量的 %3$s%4$s 了</string>
-    <string name="notification_taken">已服用</string>
     <string name="taken">已服用</string>
     <string name="skipped">已跳过</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -78,8 +77,6 @@
     <string name="minutes_15">15 分钟</string>
     <string name="minutes_30">30 分钟</string>
     <string name="minutes_60">60 分钟</string>
-    <string name="notification_skipped">已跳过</string>
-    <string name="notification_snooze">推迟</string>
     <string name="weekend_mode">周末模式</string>
     <string name="weekend_mode_days">在星期几使用周末模式</string>
     <string name="monday">星期一</string>

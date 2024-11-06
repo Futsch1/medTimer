@@ -23,7 +23,6 @@
     <string name="notification_title">Напоминание о лекарстве</string>
     <string name="notification_content_blank">Сейчас %1$s - время принять %2$s%3$s%4$s</string>
     <string name="notification_content">Сейчас %1$s - время принять %2$s %3$s%4$s</string>
-    <string name="notification_taken">ПРИНЯТО</string>
     <string name="taken">Принято</string>
     <string name="skipped">Пропущено</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -81,8 +80,6 @@
     <string name="minutes_15">15 минут</string>
     <string name="minutes_30">30 минут</string>
     <string name="minutes_60">60 минут</string>
-    <string name="notification_skipped">ПРОПУЩЕНО</string>
-    <string name="notification_snooze">ОТЛОЖИТЬ</string>
     <string name="weekend_mode">Режим выходных</string>
     <string name="weekend_mode_days">Дни</string>
     <string name="monday">Понедельник</string>

@@ -21,7 +21,6 @@
     <string name="notification_title">İlaç hatırlatıcısı</string>
     <string name="notification_content_blank">Şu anda %1$s - %2$s%3$s ilacından almanın zamanı geldi%4$s</string>
     <string name="notification_content">Şu anda %1$s - %3$s ilacından %2$s almanın zamanı geldi%4$s</string>
-    <string name="notification_taken">ALINDI</string>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -79,8 +78,6 @@
     <string name="minutes_15">15 dakika</string>
     <string name="minutes_30">30 dakika</string>
     <string name="minutes_60">60 dakika</string>
-    <string name="notification_skipped">ATLADI</string>
-    <string name="notification_snooze">ERTELE</string>
     <string name="weekend_mode">Hafta sonu modu</string>
     <string name="weekend_mode_days">Günler</string>
     <string name="monday">Pazartesi</string>

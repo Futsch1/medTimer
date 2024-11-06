@@ -21,7 +21,6 @@
     <string name="notification_title">Erinnerung an ein Medikament</string>
     <string name="notification_content_blank">Es ist %1$s Uhr - Zeit, %2$s%3$s%4$s einzunehmen</string>
     <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
-    <string name="notification_taken">EINGENOMMEN</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -79,8 +78,6 @@
     <string name="minutes_15">15 Minuten</string>
     <string name="minutes_30">30 Minuten</string>
     <string name="minutes_60">60 Minuten</string>
-    <string name="notification_skipped">ÜBERSPRUNGEN</string>
-    <string name="notification_snooze">SNOOZE</string>
     <string name="weekend_mode">Wochenend-Modus</string>
     <string name="weekend_mode_days">Tage</string>
     <string name="monday">Montag</string>

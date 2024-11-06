@@ -22,7 +22,6 @@
     <string name="notification_title">Rappel de médicaments</string>
     <string name="notification_content_blank">Il est %1$s: il est temps de prendre %2$s%3$s%4$s</string>
     <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
-    <string name="notification_taken">PRIS</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -80,8 +79,6 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_30">30 minutes</string>
     <string name="minutes_60">60 minutes</string>
-    <string name="notification_skipped">SAUTÉ</string>
-    <string name="notification_snooze">RÉPÉTER</string>
     <string name="weekend_mode">Mode week-end</string>
     <string name="weekend_mode_days">Jours</string>
     <string name="monday">Lundi</string>
