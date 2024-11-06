@@ -22,7 +22,6 @@
     <string name="notification_title">Medicine reminder</string>
     <string name="notification_content_blank">It is %1$s - time to take %2$s%3$s%4$s</string>
     <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
-    <string name="notification_taken">TAKEN</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
@@ -80,8 +79,6 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_30">30 minutes</string>
     <string name="minutes_60">60 minutes</string>
-    <string name="notification_skipped">SKIPPED</string>
-    <string name="notification_snooze">SNOOZE</string>
     <string name="weekend_mode">Weekend mode</string>
     <string name="weekend_mode_days">Days</string>
     <string name="monday">Monday</string>
@@ -138,7 +135,7 @@
     <string name="date">Date</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
-    <string name="time_period">Time period</string>
+    <string name="active_in_time_period">Active in time period</string>
     <string name="period_start">Period start</string>
     <string name="period_end">Period end</string>
     <string name="activate_all">Activate all reminders</string>

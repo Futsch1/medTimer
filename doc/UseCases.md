@@ -68,13 +68,8 @@ that date at the bottom. Swipe to change the month.
 It is possible to set different sounds to the reminders of two classes of medicines: Default
 priority and high priority medicines. The priority can be changed in the `Medicine` screen.
 
-Each priority has separate notification settings that can be accessed either via Android's app
-settings and selection `Notifications` there.
-
-<img src='android_notifications.png' width=200 />
-
-As an alternative, access the notifications screen via the MedTimer settings screens using the
-`Notification settings ...` menu items.
+Each priority has separate notification settings that can be accessed via the MedTimer
+settings screens using the `Notification settings ...` menu items in the `Settings` menu.
 
 On the corresponding screen, you can configure the behavior of notifications in detail, turning
 notifications on and off, assigning different sounds and controlling notification behavior. Note

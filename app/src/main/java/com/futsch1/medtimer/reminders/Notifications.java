@@ -99,16 +99,16 @@ public class Notifications {
         PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (dismissNotificationAction.equals("0")) {
-            builder.addAction(R.drawable.check2_circle, context.getString(R.string.notification_taken), pendingTaken);
-            builder.addAction(R.drawable.hourglass_split, context.getString(R.string.notification_snooze), pendingSnooze);
+            builder.addAction(R.drawable.check2_circle, context.getString(R.string.taken), pendingTaken);
+            builder.addAction(R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze);
             builder.setDeleteIntent(pendingDismissed);
         } else if (dismissNotificationAction.equals("1")) {
-            builder.addAction(R.drawable.check2_circle, context.getString(R.string.notification_taken), pendingTaken);
-            builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skipped), pendingDismissed);
+            builder.addAction(R.drawable.check2_circle, context.getString(R.string.taken), pendingTaken);
+            builder.addAction(R.drawable.x_circle, context.getString(R.string.skipped), pendingDismissed);
             builder.setDeleteIntent(pendingSnooze);
         } else {
-            builder.addAction(R.drawable.x_circle, context.getString(R.string.notification_skipped), pendingDismissed);
-            builder.addAction(R.drawable.hourglass_split, context.getString(R.string.notification_snooze), pendingSnooze);
+            builder.addAction(R.drawable.x_circle, context.getString(R.string.skipped), pendingDismissed);
+            builder.addAction(R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze);
             builder.setDeleteIntent(pendingTaken);
         }
     }

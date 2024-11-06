@@ -94,7 +94,7 @@ public class ReminderWorkUnitTest {
 
         when(mockApplication.getSharedPreferences(anyString(), anyInt())).thenReturn(mockSharedPreferences);
         when(mockApplication.getString(R.string.notification_title)).thenReturn("NotificationTitle");
-        when(mockApplication.getString(R.string.notification_taken)).thenReturn("NotificationTaken");
+        when(mockApplication.getString(R.string.taken)).thenReturn("NotificationTaken");
         when(mockApplication.getString(eq(R.string.notification_content), any(Object[].class))).thenReturn("NotificationContent");
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
