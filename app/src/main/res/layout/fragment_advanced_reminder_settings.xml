@@ -37,7 +37,7 @@
                 android:id="@+id/timePeriod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/time_period" />
+                android:text="@string/active_in_time_period" />
         </RadioGroup>
 
         <LinearLayout
@@ -151,7 +151,7 @@
                 tools:ignore="TextContrastCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
-        
+
         <View
             android:id="@+id/divider3"
             android:layout_width="match_parent"

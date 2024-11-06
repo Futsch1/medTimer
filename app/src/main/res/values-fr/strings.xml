@@ -138,7 +138,7 @@
     <string name="date">Date</string>
     <string name="active">Actif</string>
     <string name="inactive">Inactif</string>
-    <string name="time_period">Période de temps</string>
+    <string name="active_in_time_period">Actif dans la période</string>
     <string name="period_start">Début de la période</string>
     <string name="period_end">Fin de la période</string>
     <string name="activate_all">Activer tous les rappels</string>
