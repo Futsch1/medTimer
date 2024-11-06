@@ -136,8 +136,8 @@
     <string name="active_in_time_period">Aktiv in Zeitspanne</string>
     <string name="period_start">Beginn der Zeitspanne</string>
     <string name="period_end">Ende der Zeitspanne</string>
-    <string name="activate_all">Alle Mahnungen aktivieren</string>
-    <string name="deactivate_all">Deaktivieren Sie alle Erinnerungen</string>
+    <string name="activate_all">Alle Erinnerungen aktivieren</string>
+    <string name="deactivate_all">Alle Erinnerungen deaktivieren</string>
     <string name="block_screen_capture">Screenshots blockieren</string>
     <string name="icon">Icon</string>
     <string name="every_day_of_month">Jeden Tag im Monat</string>
