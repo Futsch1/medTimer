@@ -2,9 +2,11 @@ package com.futsch1.medtimer.reminders;
 
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.SNOOZE_ACTION;
@@ -34,6 +36,20 @@ public class ReminderProcessor extends BroadcastReceiver {
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
                         .build();
         workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
+    }
+
+    public static void requestRepeat(@NonNull Context context, int reminderId, int reminderEventId, int repeatTimeSeconds, int remainingRepeats) {
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
+        OneTimeWorkRequest repeatWork =
+                new OneTimeWorkRequest.Builder(RepeatReminderWork.class)
+                        .setInputData(new Data.Builder()
+                                .putInt(EXTRA_REMINDER_ID, reminderId)
+                                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                                .putInt(EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
+                                .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats)
+                                .build())
+                        .build();
+        workManager.enqueue(repeatWork);
     }
 
     public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {

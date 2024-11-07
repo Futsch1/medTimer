@@ -19,13 +19,12 @@ public class NotificationAction {
     }
 
     static void processNotification(Context context, int reminderEventId, ReminderEvent.ReminderStatus status) {
-        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
         if (reminderEvent != null) {
-            cancelNotification(reminderEvent, notificationManager);
-            cancelSnoozeAlarm(context, reminderEventId, reminderEvent);
+            cancelNotification(context, reminderEvent.notificationId);
+            cancelPendingAlarms(context, reminderEventId);
 
             reminderEvent.status = status;
             reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
@@ -38,18 +37,19 @@ public class NotificationAction {
 
     }
 
-    private static void cancelNotification(ReminderEvent reminderEvent, NotificationManager notificationManager) {
-        if (reminderEvent.notificationId != 0) {
-            Log.d(LogTags.REMINDER, String.format("Canceling notification %d", reminderEvent.notificationId));
-            notificationManager.cancel(reminderEvent.notificationId);
+    public static void cancelNotification(Context context, int notificationId) {
+        if (notificationId != 0) {
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            Log.d(LogTags.REMINDER, String.format("Cancel notification %d", notificationId));
+            notificationManager.cancel(notificationId);
         }
     }
 
-    private static void cancelSnoozeAlarm(Context context, int reminderEventId, ReminderEvent reminderEvent) {
-        PendingIntent snoozePendingIntent = new RescheduleWork.PendingIntentBuilder(context).
-                setReminderId(reminderEvent.reminderId).
-                setRequestCode(reminderEvent.notificationId).
-                setReminderEventId(reminderEventId).build();
+    public static void cancelPendingAlarms(Context context, int reminderEventId) {
+        PendingIntent snoozePendingIntent = new PendingIntentBuilder(context).
+                setReminderEventId(reminderEventId).
+                build();
+        Log.d(LogTags.REMINDER, String.format("Cancel all pending alarms for %d", reminderEventId));
         context.getSystemService(AlarmManager.class).cancel(snoozePendingIntent);
     }
 }

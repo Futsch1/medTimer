@@ -31,6 +31,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+/**
+ * Worker that schedules the next reminder.
+ */
 public class RescheduleWork extends Worker {
     protected final Context context;
     private final AlarmManager alarmManager;
@@ -54,9 +57,13 @@ public class RescheduleWork extends Worker {
         List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
         if (!scheduledReminders.isEmpty()) {
             ScheduledReminder scheduledReminder = scheduledReminders.get(0);
-            this.schedule(scheduledReminder.timestamp(), scheduledReminder.reminder().reminderId, scheduledReminder.medicine().name, -1, 0);
+            this.enqueueNotification(
+                    new ReminderNotificationData(
+                            scheduledReminder.timestamp(),
+                            scheduledReminder.reminder().reminderId,
+                            scheduledReminder.medicine().name));
         } else {
-            this.clearAlarms();
+            this.cancelNextReminder();
         }
 
         return Result.success();
@@ -78,15 +85,14 @@ public class RescheduleWork extends Worker {
         });
     }
 
-    protected void schedule(Instant timestamp, int reminderId, String medicineName, int requestCode, int reminderEventId) {
+    protected void enqueueNotification(ReminderNotificationData reminderNotificationData) {
         // Apply weekend mode shift
-        timestamp = weekendMode.adjustInstant(timestamp);
+        Instant timestamp = weekendMode.adjustInstant(reminderNotificationData.timestamp());
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
             PendingIntent pendingIntent = new PendingIntentBuilder(context).
-                    setReminderId(reminderId).
-                    setRequestCode(requestCode).
-                    setReminderEventId(reminderEventId).
+                    setReminderId(reminderNotificationData.reminderId).
+                    setReminderEventId(reminderNotificationData.reminderEventId).
                     setReminderDate(timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).build();
 
             // Cancel potentially already running alarm and set new
@@ -98,20 +104,26 @@ public class RescheduleWork extends Worker {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
             }
 
-            Log.i(LogTags.SCHEDULER, String.format("Scheduled reminder for %s/%d to %s", medicineName, reminderId, timestamp));
+            Log.i(LogTags.SCHEDULER,
+                    String.format("Scheduled reminder for %s/%d to %s",
+                            reminderNotificationData.medicineName,
+                            reminderNotificationData.reminderId,
+                            timestamp));
         } else {
-            // Immediately schedule
+            // Immediately remind
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
-                            .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).build())
+                            .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderNotificationData.reminderId).build())
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
     }
 
-    private void clearAlarms() {
+    private void cancelNextReminder() {
+        // Pending reminders are distinguished by their request code, which is the reminder event id.
+        // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
         Intent intent = ReminderProcessor.getReminderAction(context, 0, 0, LocalDate.now());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -1, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }
 
@@ -122,40 +134,13 @@ public class RescheduleWork extends Worker {
         return exactReminders && alarmManager.canScheduleExactAlarms();
     }
 
-    public static class PendingIntentBuilder {
-        private final Context context;
-        private int reminderId;
-        private int requestCode;
-        private int reminderEventId;
-        private LocalDate reminderDate = null;
+    public record ReminderNotificationData(Instant timestamp,
+                                           int reminderId,
+                                           String medicineName,
+                                           int reminderEventId) {
 
-        public PendingIntentBuilder(Context context) {
-            this.context = context;
-        }
-
-        public PendingIntentBuilder setReminderId(int reminderId) {
-            this.reminderId = reminderId;
-            return this;
-        }
-
-        public PendingIntentBuilder setRequestCode(int requestCode) {
-            this.requestCode = requestCode;
-            return this;
-        }
-
-        public PendingIntentBuilder setReminderEventId(int reminderEventId) {
-            this.reminderEventId = reminderEventId;
-            return this;
-        }
-
-        public PendingIntentBuilder setReminderDate(LocalDate reminderDate) {
-            this.reminderDate = reminderDate;
-            return this;
-        }
-
-        public PendingIntent build() {
-            Intent reminderIntent = ReminderProcessor.getReminderAction(context, reminderId, reminderEventId, reminderDate);
-            return PendingIntent.getBroadcast(context, requestCode, reminderIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        public ReminderNotificationData(Instant timestamp, int reminderId, String medicineName) {
+            this(timestamp, reminderId, medicineName, 0);
         }
     }
 }

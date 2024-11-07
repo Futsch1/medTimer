@@ -33,6 +33,8 @@ public class ReminderEvent {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int iconId;
+    @ColumnInfo(defaultValue = "0")
+    public int remainingRepeats;
 
     public enum ReminderStatus {
         RAISED,
