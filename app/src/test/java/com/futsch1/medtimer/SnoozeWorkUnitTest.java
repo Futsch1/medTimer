@@ -54,6 +54,7 @@ public class SnoozeWorkUnitTest {
     public void setUp() {
 
         mockApplication = mock(Application.class);
+        when(mockApplication.getPackageName()).thenReturn("test");
 
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
@@ -103,7 +104,7 @@ public class SnoozeWorkUnitTest {
             // Check if reminder event was updated with the generated notification ID
             verify(mockNotificationManager, times(1)).cancel(notificationId);
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
-            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
+            verify(mockAlarmManager, times(2)).cancel(captor1.capture());
             verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, snooze.toEpochMilli(), captor1.getValue());
         }
     }
