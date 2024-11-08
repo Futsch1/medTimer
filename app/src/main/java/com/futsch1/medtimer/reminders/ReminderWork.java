@@ -8,16 +8,19 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
+import com.futsch1.medtimer.PreferencesNames;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
@@ -80,8 +83,8 @@ public class ReminderWork extends Worker {
 
             showNotification(medicine, reminderEvent, reminder);
 
-            if (reminderEvent.remainingRepeats > 0) {
-                ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, 60, reminderEvent.remainingRepeats);
+            if (reminderEvent.remainingRepeats > 0 && isRepeatReminders()) {
+                ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
             }
 
             Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
@@ -93,6 +96,7 @@ public class ReminderWork extends Worker {
     private ReminderEvent buildAndInsertReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
         ReminderEvent reminderEvent = buildReminderEvent(remindedDate, medicine, reminder);
         if (reminderEvent != null) {
+            reminderEvent.remainingRepeats = getNumberOfRepeats();
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
         }
         return reminderEvent;
@@ -116,6 +120,16 @@ public class ReminderWork extends Worker {
         }
     }
 
+    private boolean isRepeatReminders() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPref.getBoolean(PreferencesNames.REPEAT_REMINDERS, false);
+    }
+
+    private int getRepeatTimeSeconds() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
+    }
+
     public static ReminderEvent buildReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
         if (medicine != null && reminder != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
@@ -128,12 +142,16 @@ public class ReminderWork extends Worker {
             reminderEvent.useColor = medicine.useColor;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
             reminderEvent.iconId = medicine.iconId;
-            reminderEvent.remainingRepeats = 3;
 
             return reminderEvent;
         } else {
             return null;
         }
+    }
+
+    private int getNumberOfRepeats() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return Integer.parseInt(sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3"));
     }
 
     private boolean canShowNotifications() {
