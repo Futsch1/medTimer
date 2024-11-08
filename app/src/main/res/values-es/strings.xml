@@ -153,4 +153,9 @@
     <string name="statistics_tab_description">Ficha Estadísticas</string>
     <string name="previous_month">Mes anterior</string>
     <string name="next_month">Próximo mes</string>
+  <string name="repeat_reminders">Repetir recordatorios</string>
+  <string name="minutes_1">1 minuto</string>
+  <string name="number_of_repetitions">Número de repeticiones</string>
+  <string name="time_between_repetitions">Tiempo entre repeticiones</string>
+  <string name="repeat_reminders_summary">Repite automáticamente un recordatorio hasta que se marca como tomado o se omite</string>
 </resources>

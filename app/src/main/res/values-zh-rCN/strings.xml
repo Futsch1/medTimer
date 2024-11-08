@@ -149,4 +149,9 @@
     <string name="statistics_tab_description">统计选项卡</string>
     <string name="previous_month">上个月</string>
     <string name="next_month">下个月</string>
+  <string name="repeat_reminders">重复提醒</string>
+  <string name="minutes_1">1 分钟</string>
+  <string name="number_of_repetitions">重复次数</string>
+  <string name="time_between_repetitions">重复次数之间的间隔时间</string>
+  <string name="repeat_reminders_summary">自动重复提醒，直到标记为已采取或跳过为止</string>
 </resources>

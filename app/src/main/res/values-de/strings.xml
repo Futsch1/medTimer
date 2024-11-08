@@ -151,4 +151,9 @@
     <string name="statistics_tab_description">Registerkarte Statistik</string>
     <string name="previous_month">Vorheriger Monat</string>
     <string name="next_month">Nächster Monat</string>
+    <string name="repeat_reminders">Erinnerungen wiederholen</string>
+    <string name="minutes_1">1 Minute</string>
+    <string name="number_of_repetitions">Anzahl der Wiederholungen</string>
+    <string name="time_between_repetitions">Zeit zwischen den Wiederholungen</string>
+    <string name="repeat_reminders_summary">Wiederholt automatisch eine Erinnerung, bis sie als erledigt oder übersprungen markiert wird</string>
 </resources>

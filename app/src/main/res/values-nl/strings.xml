@@ -151,4 +151,9 @@
     <string name="statistics_tab_description">Tabblad Statistieken</string>
     <string name="previous_month">Vorige maand</string>
     <string name="next_month">Volgende maand</string>
+  <string name="repeat_reminders">Herhaal herinneringen</string>
+  <string name="minutes_1">1 minute</string>
+  <string name="number_of_repetitions">Aantal herhalingen</string>
+  <string name="time_between_repetitions">Tijd tussen herhalingen</string>
+  <string name="repeat_reminders_summary">Herhaalt automatisch een herinnering totdat deze gemarkeerd is als ingenomen of overgeslagen</string>
 </resources>

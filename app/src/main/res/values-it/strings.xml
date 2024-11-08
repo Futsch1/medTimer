@@ -153,4 +153,9 @@
     <string name="statistics_tab_description">Scheda Statistiche</string>
     <string name="previous_month">Mese precedente</string>
     <string name="next_month">Il prossimo mese</string>
+  <string name="repeat_reminders">Ripetere i promemoria</string>
+  <string name="minutes_1">1 minuto</string>
+  <string name="number_of_repetitions">Numero di ripetizioni</string>
+  <string name="time_between_repetitions">Tempo tra le ripetizioni</string>
+  <string name="repeat_reminders_summary">Ripete automaticamente un promemoria finché non viene contrassegnato come preso o saltato</string>
 </resources>

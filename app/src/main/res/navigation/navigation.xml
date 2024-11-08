@@ -31,11 +31,18 @@
         <action
             android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
             app:destination="@id/weekendModePreferencesFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_repeatRemindersPreferencesFragment"
+            app:destination="@id/repeatRemindersPreferencesFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
         android:name="com.futsch1.medtimer.WeekendModePreferencesFragment"
         android:label="@string/weekend_mode" />
+    <fragment
+        android:id="@+id/repeatRemindersPreferencesFragment"
+        android:name="com.futsch1.medtimer.RepeatRemindersPreferencesFragment"
+        android:label="@string/repeat_reminders" />
     <fragment
         android:id="@+id/editMedicineFragment"
         android:name="com.futsch1.medtimer.medicine.EditMedicineFragment"

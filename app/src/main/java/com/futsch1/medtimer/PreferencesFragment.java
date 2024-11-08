@@ -24,6 +24,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupTheme();
         setupExactReminders();
         setupNotificationSettings();
+        setupRepeatReminders();
         setupWeekendMode();
         setupBlockScreenCapture();
     }
@@ -76,6 +77,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         preference = getPreferenceScreen().findPreference("notification_settings_default");
         if (preference != null) {
             setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.DEFAULT);
+        }
+    }
+
+    private void setupRepeatReminders() {
+        Preference preference = getPreferenceScreen().findPreference("repeat_reminders_preferences");
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(preference1 ->
+                    {
+                        Navigation.findNavController(requireView()).navigate(R.id.action_preferencesFragment_to_repeatRemindersPreferencesFragment);
+                        return true;
+                    }
+            );
         }
     }
 
