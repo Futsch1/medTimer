@@ -68,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
         if (!introShown && !BuildConfig.DEBUG) {
             startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
             sharedPref.edit().putBoolean("intro_shown", true).apply();
-        } else {
-            checkPermissions();
         }
+        checkPermissions();
     }
 
     private void setupNavigation() {
