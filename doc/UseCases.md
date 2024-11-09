@@ -117,3 +117,8 @@ per reminder, you can use the Android settings for snooze notifications (`Settin
 Allow notification snoozing`).
 
 <img src='notification_snoozing.png' width=200 />
+
+## More nagging, repeating reminders
+
+Reminders can be automatically repeated after a certain delay for a specific number of times. This
+feature can be enabled via the settings menu via `Repeat reminders`.
