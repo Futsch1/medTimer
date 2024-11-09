@@ -17,6 +17,12 @@
         android:key="dismiss_notification_action"
         android:title="@string/dismiss_notification_action"
         app:useSimpleSummaryProvider="true" />
+    <Preference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/repeat_reminders"
+        android:summary="@string/repeat_reminders_summary"
+        app:key="repeat_reminders_preferences" />
     <ListPreference
         android:defaultValue="15"
         android:entries="@array/snooze_duration"

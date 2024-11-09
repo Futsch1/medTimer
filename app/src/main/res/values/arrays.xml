@@ -100,4 +100,27 @@
         <item>@string/medicine_data</item>
         <item>@string/event_data</item>
     </string-array>
+    <string-array name="repeat_reminders_repetitions_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="time_between_repetitions_entries">
+        <item>@string/minutes_1</item>
+        <item>@string/minutes_5</item>
+        <item>@string/minutes_10</item>
+        <item>@string/minutes_15</item>
+        <item>@string/minutes_30</item>
+        <item>@string/minutes_60</item>
+    </string-array>
+    <string-array name="time_between_repetitions_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
 </resources>

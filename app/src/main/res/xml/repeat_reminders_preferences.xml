@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:key="repeat_reminders"
+        app:summary="@string/repeat_reminders_summary"
+        app:title="@string/repeat_reminders" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="3"
+        android:entries="@array/repeat_reminders_repetitions_values"
+        android:entryValues="@array/repeat_reminders_repetitions_values"
+        app:dependency="repeat_reminders"
+        app:key="repeat_reminders_repetitions"
+        app:title="@string/number_of_repetitions"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="10"
+        android:entries="@array/time_between_repetitions_entries"
+        android:entryValues="@array/time_between_repetitions_values"
+        app:dependency="repeat_reminders"
+        app:key="repeat_reminders_delay"
+        app:title="@string/time_between_repetitions"
+        app:useSimpleSummaryProvider="true" />
+</androidx.preference.PreferenceScreen>

@@ -12,10 +12,12 @@
         app:entries="@array/days"
         app:entryValues="@array/one_to_seven"
         app:key="weekend_days"
-        app:title="@string/weekend_mode_days" />
+        app:title="@string/weekend_mode_days"
+        app:dependency="weekend_mode"/>
     <Preference
         android:defaultValue="540"
         app:key="weekend_time"
-        app:title="@string/time" />
+        app:title="@string/time"
+        app:dependency="weekend_mode"/>
 
 </androidx.preference.PreferenceScreen>

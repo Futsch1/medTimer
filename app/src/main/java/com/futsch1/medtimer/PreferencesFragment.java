@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.WindowManager;
 
+import androidx.annotation.IdRes;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
@@ -24,7 +25,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupTheme();
         setupExactReminders();
         setupNotificationSettings();
-        setupWeekendMode();
+        setupPreferencesLink("repeat_reminders_preferences", R.id.action_preferencesFragment_to_repeatRemindersPreferencesFragment);
+        setupPreferencesLink("weekend_mode", R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
         setupBlockScreenCapture();
     }
 
@@ -79,12 +81,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void setupWeekendMode() {
-        Preference preference = getPreferenceScreen().findPreference("weekend_mode");
+    private void setupPreferencesLink(String preferenceKey, @IdRes int actionId) {
+        Preference preference = getPreferenceScreen().findPreference(preferenceKey);
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 ->
                     {
-                        Navigation.findNavController(requireView()).navigate(R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
+                        Navigation.findNavController(requireView()).navigate(actionId);
                         return true;
                     }
             );

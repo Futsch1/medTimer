@@ -155,4 +155,9 @@
     <string name="statistics_tab_description">Вкладка Статистика</string>
     <string name="previous_month">Предыдущий месяц</string>
     <string name="next_month">Следующий месяц</string>
+  <string name="repeat_reminders">Повторные напоминания</string>
+  <string name="minutes_1">1 минута</string>
+  <string name="number_of_repetitions">Количество повторений</string>
+  <string name="time_between_repetitions">Время между повторениями</string>
+  <string name="repeat_reminders_summary">Автоматически повторяйте напоминание, пока оно не будет отмечено как принятое или пропущенное</string>
 </resources>
