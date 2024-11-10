@@ -8,6 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Arrays
 import java.util.BitSet
+import java.util.stream.Collectors
 import kotlin.math.abs
 
 class StandardScheduling(
@@ -19,7 +20,7 @@ class StandardScheduling(
     private val possibleDays: BooleanArray
 
     init {
-        this.raisedToday = isRaisedToday(reminderEventList)
+        this.raisedToday = isRaisedToday(filterEvents(reminderEventList))
         // Bit map of possible days in the future on where the reminder may be raised
         this.possibleDays = BooleanArray(31)
     }
@@ -131,6 +132,16 @@ class StandardScheduling(
     private fun reminderBeforeCreation(): Boolean {
         return reminder.createdTimestamp < localDateToReminderInstant(timeAccess.localDate()).epochSecond
     }
+
+    private fun filterEvents(
+        reminderEvents: List<ReminderEvent>
+    ): List<ReminderEvent> {
+        return reminderEvents.stream()
+            .filter { event: ReminderEvent -> event.reminderId == reminder.reminderId }.collect(
+                Collectors.toList()
+            )
+    }
+
 
     override fun getNextScheduledTime(): Instant? {
         val nextScheduledDate = nextScheduledDate
