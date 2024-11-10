@@ -12,7 +12,7 @@ class SchedulingFactory {
         return if (reminder.linkedReminderId == 0) {
             StandardScheduling(reminder, filteredEvents, timeAccess)
         } else {
-            LinkedScheduling(reminder, filteredEvents, timeAccess)
+            LinkedScheduling(reminder, filteredEvents)
         }
     }
 }
