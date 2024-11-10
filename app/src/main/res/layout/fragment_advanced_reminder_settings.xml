@@ -221,5 +221,15 @@
 
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addLinkedReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:text="@string/add_linked_reminder"
+            app:icon="@android:drawable/ic_menu_add" />
+
     </LinearLayout>
 </ScrollView>

@@ -22,6 +22,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -95,6 +96,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         setupRemindOnDays();
         setupCycleStartDate();
+
+        setupAddLinkedReminder();
     }
 
     private void setupInstructionSuggestions() {
@@ -152,6 +155,13 @@ public class AdvancedReminderSettingsFragment extends Fragment {
                 datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> setCycleStartDate(selectedDate / DateUtils.DAY_IN_MILLIS));
                 datePickerDialog.show(getParentFragmentManager(), "date_picker");
             }
+        });
+    }
+
+    private void setupAddLinkedReminder() {
+        FloatingActionButton addLinkedReminder = advancedReminderView.findViewById(R.id.addLinkedReminder);
+        addLinkedReminder.setOnClickListener(v -> {
+            new LinkedReminderHandling(requireActivity(), reminder, medicineViewModel).addLinkedReminder();
         });
     }
 

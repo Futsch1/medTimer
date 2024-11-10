@@ -3,6 +3,7 @@ package com.futsch1.medtimer.helpers;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -145,19 +146,33 @@ public class TimeHelper {
 
     public static class TimePickerWrapper {
         final FragmentActivity activity;
+        private final Integer titleText;
+        private final Integer timeFormat;
 
         public TimePickerWrapper(FragmentActivity activity) {
             this.activity = activity;
+            this.titleText = null;
+            this.timeFormat = DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H;
+        }
+
+        public TimePickerWrapper(FragmentActivity activity, @StringRes int titleText, int timeFormat) {
+            this.activity = activity;
+            this.titleText = titleText;
+            this.timeFormat = timeFormat;
         }
 
         public void show(int hourOfDay, int minute, TimePickerResult timePickerResult) {
-            MaterialTimePicker timePickerDialog = new MaterialTimePicker.Builder()
-                    .setTimeFormat(DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+            MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder()
+                    .setTimeFormat(timeFormat)
                     .setHour(hourOfDay)
                     .setMinute(minute)
-                    .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                    .build();
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK);
 
+            if (titleText != null) {
+                builder.setTitleText(titleText);
+            }
+
+            MaterialTimePicker timePickerDialog = builder.build();
             timePickerDialog.addOnPositiveButtonClickListener(view -> timePickerResult.onTimeSelected(timePickerDialog.getHour() * 60 + timePickerDialog.getMinute()));
 
             timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");
