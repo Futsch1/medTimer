@@ -31,8 +31,8 @@ public class ReminderScheduler {
 
         for (Reminder reminder : reminders) {
             List<ReminderEvent> filteredEvents = getFilteredEvents(reminderEvents, reminder.reminderId);
-            ReminderForScheduling reminderForScheduling = new ReminderForScheduling(reminder, filteredEvents, this.timeAccess);
-            Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
+            Scheduling scheduling = new SchedulingFactory().create(reminder, filteredEvents, this.timeAccess);
+            Instant reminderScheduledTime = scheduling.getNextScheduledTime();
 
             if (reminderScheduledTime != null) {
                 scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));

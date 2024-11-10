@@ -50,6 +50,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "0xFFFFFFFF")
     @Expose
     public int activeDaysOfMonth;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int linkedReminderId;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -60,5 +63,8 @@ public class Reminder {
         active = true;
         this.medicineRelId = medicineRelId;
         activeDaysOfMonth = 0xFFFFFFFF;
+        periodStart = 0;
+        periodEnd = 0;
+        linkedReminderId = 0;
     }
 }
