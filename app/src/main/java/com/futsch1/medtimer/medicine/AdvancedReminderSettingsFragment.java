@@ -22,7 +22,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -98,6 +98,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         setupCycleStartDate();
 
         setupAddLinkedReminder();
+
+        setupVisibilities();
     }
 
     private void setupInstructionSuggestions() {
@@ -159,10 +161,14 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void setupAddLinkedReminder() {
-        FloatingActionButton addLinkedReminder = advancedReminderView.findViewById(R.id.addLinkedReminder);
-        addLinkedReminder.setOnClickListener(v -> {
-            new LinkedReminderHandling(requireActivity(), reminder, medicineViewModel).addLinkedReminder();
-        });
+        ExtendedFloatingActionButton addLinkedReminder = advancedReminderView.findViewById(R.id.addLinkedReminder);
+        addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(requireActivity(), reminder, medicineViewModel).addLinkedReminder());
+    }
+
+    private void setupVisibilities() {
+        int visibility = reminder.linkedReminderId == 0 ? View.GONE : View.VISIBLE;
+        advancedReminderView.findViewById(R.id.cyclicRemindersGroup).setVisibility(visibility);
+        advancedReminderView.findViewById(R.id.remindGroup).setVisibility(visibility);
     }
 
     private @Nullable LocalDate getCycleStartDate() {

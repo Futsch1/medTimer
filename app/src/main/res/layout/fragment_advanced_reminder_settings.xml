@@ -101,56 +101,63 @@
             android:layout_weight="1"
             android:background="?android:attr/listDivider" />
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
+            android:id="@+id/cyclicRemindersGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cycle_reminders" />
+            android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:hint="@string/cycle_start_date">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cycleStartDate"
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="date"
-                tools:ignore="TextContrastCheck" />
+                android:layout_height="wrap_content"
+                android:text="@string/cycle_reminders" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:hint="@string/cycle_consecutive_days">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/consecutiveDays"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="numberSigned"
-                tools:ignore="TextContrastCheck" />
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/cycle_start_date">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cycleStartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="date"
+                    tools:ignore="TextContrastCheck" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:hint="@string/cycle_pause_days">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pauseDays"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                tools:ignore="TextContrastCheck" />
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/cycle_consecutive_days">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/consecutiveDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberSigned"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/cycle_pause_days">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pauseDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <View
             android:id="@+id/divider3"
@@ -189,17 +196,18 @@
             android:layout_weight="1"
             android:background="?android:attr/listDivider" />
 
-        <TextView
-            android:id="@+id/remindText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/remind_on" />
-
         <LinearLayout
+            android:id="@+id/remindGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/remindText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/remind_on" />
 
             <Button
                 android:id="@+id/remindOnWeekdays"
@@ -218,7 +226,6 @@
                 android:hint="@string/every_day_of_month"
                 android:padding="0dp"
                 android:text="@string/every_day_of_month" />
-
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
