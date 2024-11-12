@@ -6,6 +6,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
@@ -26,7 +27,7 @@ import androidx.work.WorkRequest;
 
 import com.futsch1.medtimer.WorkManagerAccess;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
@@ -67,11 +68,12 @@ public class ReminderProcessor extends BroadcastReceiver {
         return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
     }
 
-    public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId, LocalDate reminderDate) {
+    public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId, LocalDateTime reminderDateTime) {
         Intent reminderIntent = new Intent(REMINDER_ACTION);
         reminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
         reminderIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        reminderIntent.putExtra(EXTRA_REMINDER_DATE, reminderDate != null ? reminderDate.toEpochDay() : 0);
+        reminderIntent.putExtra(EXTRA_REMINDER_DATE, reminderDateTime != null ? reminderDateTime.toLocalDate().toEpochDay() : 0);
+        reminderIntent.putExtra(EXTRA_REMINDER_TIME, reminderDateTime != null ? reminderDateTime.toLocalTime().toSecondOfDay() : 0);
         reminderIntent.setClass(context, ReminderProcessor.class);
         return reminderIntent;
     }
