@@ -166,7 +166,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void setupVisibilities() {
-        int visibility = reminder.linkedReminderId == 0 ? View.GONE : View.VISIBLE;
+        int visibility = reminder.linkedReminderId != 0 ? View.GONE : View.VISIBLE;
         advancedReminderView.findViewById(R.id.cyclicRemindersGroup).setVisibility(visibility);
         advancedReminderView.findViewById(R.id.remindGroup).setVisibility(visibility);
     }
