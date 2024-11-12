@@ -22,20 +22,20 @@ class LinkedReminderHandling(
     }
 
     private fun createReminder(amount: String?) {
-        val reminder = Reminder(reminder.medicineRelId)
-        reminder.amount = amount
-        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-        reminder.instructions = ""
-        reminder.linkedReminderId = reminder.reminderId
+        val linkedReminder = Reminder(reminder.medicineRelId)
+        linkedReminder.amount = amount
+        linkedReminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+        linkedReminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
+        linkedReminder.instructions = ""
+        linkedReminder.linkedReminderId = reminder.reminderId
 
         TimePickerWrapper(
             fragmentActivity,
             R.string.add_linked_reminder,
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
-            reminder.timeInMinutes = minutes
-            medicineViewModel.insertReminder(reminder)
+            linkedReminder.timeInMinutes = minutes
+            medicineViewModel.insertReminder(linkedReminder)
         }
     }
 }
