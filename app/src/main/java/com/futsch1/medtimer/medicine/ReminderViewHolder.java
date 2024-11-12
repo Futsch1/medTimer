@@ -4,12 +4,15 @@ import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 import static com.futsch1.medtimer.helpers.TimeHelper.timeStringToMinutes;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,36 +30,41 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final MaterialButton advancedSettings;
     private final FragmentActivity fragmentActivity;
     private final TextView advancedSettingsSummary;
+    private final HandlerThread thread;
 
     private Reminder reminder;
 
-    private ReminderViewHolder(View itemView, FragmentActivity fragmentActivity) {
+    private ReminderViewHolder(View itemView, FragmentActivity fragmentActivity, HandlerThread thread) {
         super(itemView);
         editTime = itemView.findViewById(R.id.editReminderTime);
         editAmount = itemView.findViewById(R.id.editAmount);
         advancedSettings = itemView.findViewById(R.id.open_advanced_settings);
         advancedSettingsSummary = itemView.findViewById(R.id.advancedSettingsSummary);
+        this.thread = thread;
 
         this.fragmentActivity = fragmentActivity;
     }
 
-    static ReminderViewHolder create(ViewGroup parent, FragmentActivity fragmentActivity) {
+    static ReminderViewHolder create(ViewGroup parent, FragmentActivity fragmentActivity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_reminder, parent, false);
-        return new ReminderViewHolder(view, fragmentActivity);
+        return new ReminderViewHolder(view, fragmentActivity, thread);
     }
 
     @SuppressLint("SetTextI18n")
     public void bind(Reminder reminder, String medicineName) {
         this.reminder = reminder;
 
+        @StringRes int textId = reminder.linkedReminderId != 0 ? R.string.time : R.string.delay;
+        editTime.setHint(textId);
         editTime.setText(minutesToTimeString(editTime.getContext(), reminder.timeInMinutes));
         editTime.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(reminder, hasFocus));
 
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
 
         editAmount.setText(reminder.amount);
-        advancedSettingsSummary.setText(SummaryHelperKt.reminderSummary(itemView.getContext(), reminder));
+        new Handler(thread.getLooper()).post(() ->
+                advancedSettingsSummary.setText(SummaryHelperKt.reminderSummary(itemView.getContext(), reminder)));
     }
 
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {

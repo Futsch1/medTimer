@@ -109,7 +109,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private @NonNull RecyclerView setupMedicineList(String medicineName) {
         RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity());
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity(), thread);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         return recyclerView;

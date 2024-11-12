@@ -1,7 +1,9 @@
 package com.futsch1.medtimer.helpers
 
+import android.app.Application
 import android.content.Context
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import java.util.LinkedList
 import java.util.Locale
@@ -9,15 +11,46 @@ import java.util.Locale
 fun reminderSummary(context: Context, reminder: Reminder): String {
     val strings: MutableList<String> = LinkedList()
 
+    if (!isReminderActive(reminder)) {
+        strings.add(context.getString(R.string.inactive))
+    }
+    if (reminder.linkedReminderId != 0) {
+        linkedReminderStrings(reminder, strings, context)
+    } else {
+        standardReminderStrings(reminder, strings, context)
+    }
+    if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
+        strings.add(reminder.instructions)
+    }
+
+    return java.lang.String.join(", ", strings)
+}
+
+fun linkedReminderStrings(reminder: Reminder, strings: MutableList<String>, context: Context) {
+    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+    val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
+
+    if (sourceReminder != null) {
+        strings.add(
+            context.getString(
+                R.string.linked_reminder_summary,
+                TimeHelper.minutesToTimeString(context, sourceReminder.timeInMinutes.toLong())
+            )
+        )
+    }
+}
+
+private fun standardReminderStrings(
+    reminder: Reminder,
+    strings: MutableList<String>,
+    context: Context
+) {
     val weekdayLimited =
         !reminder.days.stream().allMatch { day: Boolean -> day }
     val dayOfMonthLimited = (reminder.activeDaysOfMonth and 0x7FFFFFFF) != 0x7FFFFFFF
     val never = reminder.days.stream()
         .noneMatch { day: Boolean -> day } || (reminder.activeDaysOfMonth and 0x7FFFFFFF) == 0
     val cyclic = reminder.pauseDays > 0
-    if (!isReminderActive(reminder)) {
-        strings.add(context.getString(R.string.inactive))
-    }
     if (never) {
         strings.add(context.getString(R.string.never))
     } else {
@@ -28,11 +61,6 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
             ReminderProperties(weekdayLimited, dayOfMonthLimited, cyclic)
         )
     }
-    if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
-        strings.add(reminder.instructions)
-    }
-
-    return java.lang.String.join(", ", strings)
 }
 
 data class ReminderProperties(
