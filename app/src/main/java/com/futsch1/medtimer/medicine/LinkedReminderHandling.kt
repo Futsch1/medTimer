@@ -1,9 +1,14 @@
 package com.futsch1.medtimer.medicine
 
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.timepicker.TimeFormat
@@ -11,17 +16,16 @@ import java.time.Instant
 import java.time.LocalDate
 
 class LinkedReminderHandling(
-    private val fragmentActivity: FragmentActivity,
     val reminder: Reminder,
     val medicineViewModel: MedicineViewModel
 ) {
-    fun addLinkedReminder() {
+    fun addLinkedReminder(fragmentActivity: FragmentActivity) {
         DialogHelper.showTextInputDialog(
             fragmentActivity, R.string.add_linked_reminder, R.string.create_reminder_dosage_hint
-        ) { amount: String? -> this.createReminder(amount) }
+        ) { amount: String? -> this.createReminder(fragmentActivity, amount) }
     }
 
-    private fun createReminder(amount: String?) {
+    private fun createReminder(fragmentActivity: FragmentActivity, amount: String?) {
         val linkedReminder = Reminder(reminder.medicineRelId)
         linkedReminder.amount = amount
         linkedReminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
@@ -37,6 +41,20 @@ class LinkedReminderHandling(
             linkedReminder.timeInMinutes = minutes
             medicineViewModel.insertReminder(linkedReminder)
         }
+    }
+
+    fun deleteReminder(view: View, thread: HandlerThread, postMainAction: () -> Unit) {
+        val deleteHelper = DeleteHelper(view.context)
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
+            val threadHandler = Handler(thread.getLooper())
+            threadHandler.post {
+                medicineViewModel.deleteReminder(reminder)
+                val mainHandler = Handler(Looper.getMainLooper())
+                mainHandler.post(postMainAction)
+            }
+        }, {})
+
+
     }
 }
 

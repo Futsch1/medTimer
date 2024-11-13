@@ -162,7 +162,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     private void setupAddLinkedReminder() {
         ExtendedFloatingActionButton addLinkedReminder = advancedReminderView.findViewById(R.id.addLinkedReminder);
-        addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(requireActivity(), reminder, medicineViewModel).addLinkedReminder());
+        addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(reminder, medicineViewModel).addLinkedReminder(requireActivity()));
     }
 
     private void setupVisibilities() {

@@ -1,10 +1,8 @@
 package com.futsch1.medtimer.medicine;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,6 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
@@ -47,6 +44,8 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+
+import kotlin.Unit;
 
 public class EditMedicineFragment extends Fragment implements IconDialog.Callback {
 
@@ -161,7 +160,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
                 .attachToRecyclerView(recyclerView);
     }
 
@@ -193,17 +192,15 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         adapter.submitList(new LinkedReminderAlgorithms().sortRemindersList(reminders));
     }
 
-    private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, () -> {
-            final Handler threadHandler = new Handler(thread.getLooper());
-            threadHandler.post(() -> {
-                Reminder reminder = medicineViewModel.getReminder((int) itemId);
-                medicineViewModel.deleteReminder(reminder);
-                final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+    private void deleteItem(long itemId, int adapterPosition) {
+        final Handler threadHandler = new Handler(thread.getLooper());
+        threadHandler.post(() -> {
+            Reminder reminder = medicineViewModel.getReminder((int) itemId);
+            new LinkedReminderHandling(reminder, medicineViewModel).deleteReminder(fragmentEditMedicine, thread, () -> {
+                adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+                return Unit.INSTANCE;
             });
-        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        });
     }
 
     private void createReminder(String amount) {
