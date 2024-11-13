@@ -31,7 +31,7 @@ class LinkedReminderHandling(
 
         TimePickerWrapper(
             fragmentActivity,
-            R.string.add_linked_reminder,
+            R.string.linked_reminder_delay,
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
             linkedReminder.timeInMinutes = minutes
