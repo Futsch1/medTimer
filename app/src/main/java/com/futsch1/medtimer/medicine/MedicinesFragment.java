@@ -57,7 +57,7 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff());
+        adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), thread, requireActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 

@@ -45,6 +45,11 @@ public class TimeHelper {
         return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
     }
 
+    public static String minutesToDurationString(long minutes) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+        return formatter.format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    }
+
     /**
      * @param context    Context to extract time format
      * @param timeString Time string in local format

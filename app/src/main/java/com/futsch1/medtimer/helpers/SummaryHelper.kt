@@ -7,6 +7,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import java.util.LinkedList
 import java.util.Locale
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 fun reminderSummary(context: Context, reminder: Reminder): String {
     val strings: MutableList<String> = LinkedList()
@@ -15,9 +17,9 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
         strings.add(context.getString(R.string.inactive))
     }
     if (reminder.linkedReminderId != 0) {
-        linkedReminderStrings(reminder, strings, context)
+        strings.add(linkedReminderString(reminder, context))
     } else {
-        standardReminderStrings(reminder, strings, context)
+        standardReminderString(reminder, strings, context)
     }
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
@@ -26,21 +28,28 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     return java.lang.String.join(", ", strings)
 }
 
-fun linkedReminderStrings(reminder: Reminder, strings: MutableList<String>, context: Context) {
+fun linkedReminderString(reminder: Reminder, context: Context): String {
     val medicineRepository = MedicineRepository(context.applicationContext as Application?)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
-        strings.add(
+        return if (sourceReminder.linkedReminderId != 0) {
+            // Recursion
+            context.getString(
+                R.string.linked_reminder_summary,
+                linkedReminderString(sourceReminder, context)
+            )
+        } else {
             context.getString(
                 R.string.linked_reminder_summary,
                 TimeHelper.minutesToTimeString(context, sourceReminder.timeInMinutes.toLong())
             )
-        )
+        }
     }
+    return "?"
 }
 
-private fun standardReminderStrings(
+private fun standardReminderString(
     reminder: Reminder,
     strings: MutableList<String>,
     context: Context
@@ -90,19 +99,55 @@ private fun buildReminderStrings(
 }
 
 fun remindersSummary(context: Context, reminders: List<Reminder>): String {
-    val reminderTimes = ArrayList<String>()
-    val timesInMinutes =
-        reminders.stream().mapToInt { r: Reminder -> r.timeInMinutes }.sorted().toArray()
-    for (minute in timesInMinutes) {
-        reminderTimes.add(TimeHelper.minutesToTimeString(context, minute.toLong()))
-    }
-    val len = reminders.size
+    val reminderTimes = standardRemindersSummary(
+        reminders.stream().filter { r: Reminder -> r.linkedReminderId == 0 }, context
+    ) + linkedRemindersSummary(
+        reminders.stream().filter { r: Reminder -> r.linkedReminderId != 0 }, context
+    )
+
+    val len = reminderTimes.size
     return context.resources.getQuantityString(
         R.plurals.sum_reminders,
         len,
         len,
         java.lang.String.join(", ", reminderTimes)
     )
+
+}
+
+fun linkedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
+    return reminders.map { r: Reminder -> linkedReminderSummaryString(r, context) }
+        .collect(Collectors.toList())
+}
+
+fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
+    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+    val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
+
+    if (sourceReminder != null) {
+        return if (sourceReminder.linkedReminderId != 0) {
+            // Recursion
+            " + " + TimeHelper.minutesToDurationString(reminder.timeInMinutes.toLong())
+        } else {
+            TimeHelper.minutesToTimeString(context, sourceReminder.timeInMinutes.toLong()) + " + " +
+                    TimeHelper.minutesToDurationString(reminder.timeInMinutes.toLong())
+
+        }
+    }
+    return "?"
+}
+
+private fun standardRemindersSummary(
+    reminders: Stream<Reminder>,
+    context: Context
+): ArrayList<String> {
+    val reminderTimes = ArrayList<String>()
+    val timesInMinutes =
+        reminders.mapToInt { r: Reminder -> r.timeInMinutes }.sorted().toArray()
+    for (minute in timesInMinutes) {
+        reminderTimes.add(TimeHelper.minutesToTimeString(context, minute.toLong()))
+    }
+    return reminderTimes
 }
 
 
