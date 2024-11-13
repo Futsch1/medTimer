@@ -47,16 +47,13 @@ public class ReminderWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = Result.failure();
         Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
         medicineRepository = new MedicineRepository((Application) getApplicationContext());
         Reminder reminder = getReminder(medicineRepository, inputData);
 
-        if (reminder != null) {
-            r = processReminder(inputData, reminder, r);
-        }
+        Result r = (reminder != null) ? processReminder(inputData, reminder) : Result.failure();
 
         // Reminder shown, now schedule next reminder
         ReminderProcessor.requestReschedule(context);
@@ -73,7 +70,8 @@ public class ReminderWork extends Worker {
         return reminder;
     }
 
-    private Result processReminder(Data inputData, Reminder reminder, Result r) {
+    private Result processReminder(Data inputData, Reminder reminder) {
+        Result r = Result.failure();
         int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
         LocalDate reminderDate = LocalDate.ofEpochDay(inputData.getLong(EXTRA_REMINDER_DATE, LocalDate.now().toEpochDay()));
         LocalTime reminderTime = LocalTime.ofSecondOfDay(inputData.getInt(EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()));
