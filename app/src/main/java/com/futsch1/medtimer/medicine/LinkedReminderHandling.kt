@@ -39,3 +39,24 @@ class LinkedReminderHandling(
         }
     }
 }
+
+class LinkedReminderAlgorithms {
+    fun sortRemindersList(reminders: List<Reminder>): List<Reminder> {
+        return reminders.sortedBy { r -> getTotalTimeInMinutes(r, reminders) }
+    }
+
+    private fun getTotalTimeInMinutes(reminder: Reminder, reminders: List<Reminder>): Int {
+        var total = reminder.timeInMinutes
+        for (r in reminders) {
+            if (r.reminderId == reminder.linkedReminderId) {
+                total += if (r.linkedReminderId != 0) {
+                    getTotalTimeInMinutes(r, reminders)
+                } else {
+                    r.timeInMinutes
+                }
+            }
+        }
+        return total
+    }
+
+}

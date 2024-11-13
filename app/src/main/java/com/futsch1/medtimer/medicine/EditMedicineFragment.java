@@ -100,7 +100,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         iconId = editMedicineArgs.getIconId();
         setupSelectIcon();
 
-        medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), adapter::submitList);
+        medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), this::sortAndSubmitList);
 
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
 
@@ -187,6 +187,10 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
                     iconDialog.show(fragmentManager, ICON_DIALOG_TAG);
                 }
         );
+    }
+
+    private void sortAndSubmitList(List<Reminder> reminders) {
+        adapter.submitList(new LinkedReminderAlgorithms().sortRemindersList(reminders));
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
