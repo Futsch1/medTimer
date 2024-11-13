@@ -21,6 +21,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 public class TimeHelper {
@@ -46,9 +48,19 @@ public class TimeHelper {
     }
 
     public static String minutesToDurationString(long minutes) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return formatter.format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
     }
+
+    public static int durationStringToMinutes(String timeString) {
+        try {
+            TemporalAccessor accessor = DateTimeFormatter.ofPattern("HH:mm").parse(timeString);
+            return accessor.get(ChronoField.HOUR_OF_DAY) * 60 + accessor.get(ChronoField.MINUTE_OF_HOUR);
+        } catch (DateTimeParseException e) {
+            return -1;
+        }
+    }
+
 
     /**
      * @param context    Context to extract time format
