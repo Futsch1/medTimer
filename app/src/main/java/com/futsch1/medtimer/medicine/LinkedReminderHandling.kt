@@ -48,6 +48,11 @@ class LinkedReminderHandling(
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
             val threadHandler = Handler(thread.getLooper())
             threadHandler.post {
+                val reminders = medicineViewModel.getLinkedReminders(reminder.reminderId)
+                for (r in reminders) {
+                    medicineViewModel.deleteReminder(r)
+                }
+
                 medicineViewModel.deleteReminder(reminder)
                 val mainHandler = Handler(Looper.getMainLooper())
                 mainHandler.post(postMainAction)

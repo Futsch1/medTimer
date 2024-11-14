@@ -76,4 +76,7 @@ public interface MedicineDao {
 
     @Query("DELETE FROM Medicine")
     void deleteMedicines();
+
+    @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
+    List<Reminder> getLinkedReminders(int reminderId);
 }
