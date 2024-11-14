@@ -35,10 +35,8 @@ fun linkedReminderString(reminder: Reminder, context: Context): String {
     if (sourceReminder != null) {
         return if (sourceReminder.linkedReminderId != 0) {
             // Recursion
-            context.getString(
-                R.string.linked_reminder_summary,
-                linkedReminderString(sourceReminder, context)
-            )
+            linkedReminderString(sourceReminder, context) + " + " +
+                    TimeHelper.minutesToDurationString(sourceReminder.timeInMinutes.toLong())
         } else {
             context.getString(
                 R.string.linked_reminder_summary,
@@ -127,7 +125,10 @@ fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     if (sourceReminder != null) {
         return if (sourceReminder.linkedReminderId != 0) {
             // Recursion
-            " + " + TimeHelper.minutesToDurationString(reminder.timeInMinutes.toLong())
+            linkedReminderSummaryString(
+                sourceReminder,
+                context
+            ) + " + " + TimeHelper.minutesToDurationString(reminder.timeInMinutes.toLong())
         } else {
             TimeHelper.minutesToTimeString(context, sourceReminder.timeInMinutes.toLong()) + " + " +
                     TimeHelper.minutesToDurationString(reminder.timeInMinutes.toLong())
