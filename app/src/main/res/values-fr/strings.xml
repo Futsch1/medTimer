@@ -135,7 +135,7 @@
   <string name="date">Date</string>
   <string name="active">Actif</string>
   <string name="inactive">Inactif</string>
-    <string name="active_in_time_period">Actif dans la période</string>
+  <string name="active_in_time_period">Actif dans la période</string>
   <string name="period_start">Début de la période</string>
   <string name="period_end">Fin de la période</string>
   <string name="activate_all">Activer tous les rappels</string>
@@ -158,4 +158,8 @@
   <string name="number_of_repetitions">Nombre de répétitions</string>
   <string name="time_between_repetitions">Temps entre les répétitions</string>
   <string name="repeat_reminders_summary">Répétition automatique d&amp;apos;un rappel jusqu&amp;apos;à ce qu&amp;apos;il soit marqué comme pris ou ignoré</string>
+  <string name="add_linked_reminder">Ajouter un rappel pour la dose suivante</string>
+  <string name="linked_reminder_delay">Délai pour la dose suivante</string>
+  <string name="delay">Délai</string>
+  <string name="linked_reminder_summary">Après le rappel à %1$s</string>
 </resources>

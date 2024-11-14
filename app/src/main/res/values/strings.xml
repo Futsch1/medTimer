@@ -159,7 +159,7 @@
     <string name="time_between_repetitions">Time between repetitions</string>
     <string name="repeat_reminders_summary">Automatically repeats a reminder until it is marked taken or skipped</string>
     <string name="add_linked_reminder">Add reminder for following dose</string>
-    <string name="linked_reminder_delay">Interval time for following dose</string>
+    <string name="linked_reminder_delay">Delay for following dose</string>
     <string name="delay">Delay</string>
     <string name="linked_reminder_summary">After reminder at %1$s</string>
 </resources>
