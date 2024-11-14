@@ -23,7 +23,9 @@ class LinkedScheduling(
     private fun findLastReminderEvent(reminderId: Int): ReminderEvent? {
         var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEventList) {
-            if (reminderEvent.reminderId == reminderId && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)) {
+            if (reminderEvent.reminderId == reminderId && reminderEvent.processedTimestamp != 0L &&
+                (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
+            ) {
                 foundReminderEvent = reminderEvent
             }
         }

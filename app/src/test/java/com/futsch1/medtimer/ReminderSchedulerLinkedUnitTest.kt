@@ -58,9 +58,18 @@ class ReminderSchedulerLinkedUnitTest {
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
-        reminderEventList[0].processedTimestamp = TestHelper.on(1, 481).epochSecond
-
+        // Reminder 1 only raised, but not processed
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(2, 480),
+            medicineWithReminders.medicine,
+            reminderSource
+        )
+
+        // Now it was also processed
+        reminderEventList[0].processedTimestamp = TestHelper.on(1, 481).epochSecond
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(1, 541),
@@ -76,7 +85,9 @@ class ReminderSchedulerLinkedUnitTest {
             1
         )
 
-        reminderEventList.add(TestHelper.buildReminderEvent(2, TestHelper.on(1, 541).epochSecond))
+        val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541).epochSecond)
+        reminderEvent.processedTimestamp = TestHelper.on(1, 542).epochSecond
+        reminderEventList.add(reminderEvent)
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
             scheduledReminders,
@@ -94,6 +105,77 @@ class ReminderSchedulerLinkedUnitTest {
             medicineWithReminders.medicine,
             reminderLinked,
             0
+        )
+    }
+
+    @Test
+    fun test_scheduleTwoLinkedReminders() {
+        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+
+        val scheduler = ReminderScheduler(mockTimeAccess)
+
+        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
+        medicineWithReminders.reminders.add(reminderSource)
+        val reminderLinked1 = TestHelper.buildReminder(1, 2, "2", 60, 1)
+        reminderLinked1.linkedReminderId = 1
+        medicineWithReminders.reminders.add(reminderLinked1)
+        val reminderLinked2 = TestHelper.buildReminder(1, 3, "2", 60, 1)
+        reminderLinked2.linkedReminderId = 2
+        medicineWithReminders.reminders.add(reminderLinked2)
+
+        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
+        medicineList.add(medicineWithReminders)
+
+        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(2, 480),
+            medicineWithReminders.medicine,
+            reminderSource
+        )
+        assertEquals(1, scheduledReminders.size)
+
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
+        reminderEventList[0].processedTimestamp = TestHelper.on(1, 481).epochSecond
+
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertRemindedAtIndex(
+            scheduledReminders,
+            TestHelper.on(1, 541),
+            medicineWithReminders.medicine,
+            reminderLinked1,
+            0
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            TestHelper.on(2, 480),
+            medicineWithReminders.medicine,
+            reminderSource,
+            1
+        )
+        assertEquals(2, scheduledReminders.size)
+
+        val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541).epochSecond)
+        reminderEvent.processedTimestamp = TestHelper.on(1, 542).epochSecond
+        reminderEventList.add(reminderEvent)
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertRemindedAtIndex(
+            scheduledReminders,
+            TestHelper.on(1, 602),
+            medicineWithReminders.medicine,
+            reminderLinked2,
+            0
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            TestHelper.on(2, 480),
+            medicineWithReminders.medicine,
+            reminderSource,
+            1
         )
     }
 }
