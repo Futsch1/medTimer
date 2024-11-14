@@ -6,7 +6,6 @@ import android.text.format.DateFormat
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.reminderSummary
-import com.google.android.material.timepicker.TimeFormat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.eq
@@ -22,6 +21,7 @@ import java.time.LocalDate
 import java.util.Date
 
 class SummaryHelperTest {
+
     @Test
     fun test_reminderSummary_inactive() {
         val context = mock(Context::class.java)
@@ -82,6 +82,8 @@ class SummaryHelperTest {
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
         assertEquals("1 4/5, 2 19823", reminderSummary(context, reminder))
+
+        mockedDateFormat.close()
     }
 
     @Test
@@ -102,9 +104,9 @@ class SummaryHelperTest {
             .thenReturn("1")
         val application = mock(Application::class.java)
         Mockito.`when`(context.applicationContext).thenReturn(application)
-        val mockedTimeFormat: MockedStatic<TimeFormat> = mockStatic(TimeFormat::class.java)
+        val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
-        mockedTimeFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(any(Date::class.java))).thenReturn("0:02")
 
@@ -135,5 +137,6 @@ class SummaryHelperTest {
         assertEquals("1 + 00:03", reminderSummary(context, reminder))
 
         mockedMedicineRepositoryConstruction.close()
+        mockedDateFormat.close()
     }
 }
