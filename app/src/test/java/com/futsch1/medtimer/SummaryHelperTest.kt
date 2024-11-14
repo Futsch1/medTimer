@@ -1,15 +1,22 @@
 package com.futsch1.medtimer
 
+import android.app.Application
 import android.content.Context
 import android.text.format.DateFormat
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.reminderSummary
+import com.google.android.material.timepicker.TimeFormat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.eq
+import org.mockito.MockedConstruction
 import org.mockito.MockedStatic
 import org.mockito.Mockito
 import org.mockito.Mockito.any
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.mockConstruction
 import org.mockito.Mockito.mockStatic
 import java.time.LocalDate
 import java.util.Date
@@ -86,5 +93,47 @@ class SummaryHelperTest {
         reminder.active = false
         reminder.instructions = "3"
         assertEquals("1, 2, 3", reminderSummary(context, reminder))
+    }
+
+    @Test
+    fun test_reminderSummary_linked() {
+        val context = mock(Context::class.java)
+        Mockito.`when`(context.getString(eq(R.string.linked_reminder_summary), anyString()))
+            .thenReturn("1")
+        val application = mock(Application::class.java)
+        Mockito.`when`(context.applicationContext).thenReturn(application)
+        val mockedTimeFormat: MockedStatic<TimeFormat> = mockStatic(TimeFormat::class.java)
+        val dateFormat = mock(java.text.DateFormat::class.java)
+        mockedTimeFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+            .thenReturn(dateFormat)
+        Mockito.`when`(dateFormat.format(any(Date::class.java))).thenReturn("0:02")
+
+        val sourceReminder = Reminder(1)
+        val sourceSourceReminder = Reminder(1)
+        val mockedMedicineRepositoryConstruction: MockedConstruction<MedicineRepository> =
+            mockConstruction(MedicineRepository::class.java) { mock, _ ->
+                Mockito.`when`(
+                    mock.getReminder(
+                        2
+                    )
+                ).thenReturn(sourceReminder)
+                Mockito.`when`(
+                    mock.getReminder(
+                        3
+                    )
+                ).thenReturn(sourceSourceReminder)
+
+            }
+
+        val reminder = Reminder(1)
+        reminder.linkedReminderId = 2
+
+        assertEquals("1", reminderSummary(context, reminder))
+
+        sourceReminder.linkedReminderId = 3
+        sourceReminder.timeInMinutes = 3
+        assertEquals("1 + 00:03", reminderSummary(context, reminder))
+
+        mockedMedicineRepositoryConstruction.close()
     }
 }
