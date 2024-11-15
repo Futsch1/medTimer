@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,15 +91,12 @@ public class MedicinesFragment extends Fragment {
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
-            final Handler threadHandler = new Handler(thread.getLooper());
-            threadHandler.post(() -> {
-                Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-                medicineViewModel.deleteMedicine(medicine);
-                final Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-            });
-        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> new Handler(thread.getLooper()).post(() -> {
+            Medicine medicine = medicineViewModel.getMedicine((int) itemId);
+            medicineViewModel.deleteMedicine(medicine);
+            final Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        }), () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void setupAddMedicineButton(View fragmentView) {
@@ -124,10 +123,24 @@ public class MedicinesFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
-                medicineViewModel.insertMedicine(new Medicine(e.toString()));
+                int medicineId = medicineViewModel.insertMedicine(new Medicine(e.toString()));
+                new Handler(thread.getLooper()).post(() -> navigateToMedicineId(medicineViewModel.getMedicine(medicineId)));
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         return builder;
+    }
+
+    private void navigateToMedicineId(Medicine medicine) {
+        NavController navController = Navigation.findNavController(this.requireView());
+        MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
+                medicine.medicineId,
+                medicine.name,
+                medicine.useColor,
+                medicine.color,
+                medicine.notificationImportance,
+                medicine.iconId
+        );
+        new Handler(Looper.getMainLooper()).post(() -> navController.navigate(action));
     }
 }
