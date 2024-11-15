@@ -160,5 +160,7 @@ class SummaryHelperTest {
         val reminder2 = Reminder(2)
         reminder2.timeInMinutes = 63
         assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
+
+        mockedDateFormat.close()
     }
 }
