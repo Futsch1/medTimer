@@ -43,15 +43,27 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(date);
     }
 
+    /**
+     * @param localTime Local time
+     * @return Date of local time on epoch day 0
+     */
     public static Date localTimeToDate(LocalTime localTime) {
         return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
     }
 
+    /**
+     * @param minutes Minutes since midnight
+     * @return Time string in local format
+     */
     public static String minutesToDurationString(long minutes) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
         return formatter.format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
     }
 
+    /**
+     * @param timeString Time string in local format
+     * @return Minutes since midnight
+     */
     public static int durationStringToMinutes(String timeString) {
         try {
             TemporalAccessor accessor = DateTimeFormatter.ofPattern("HH:mm").parse(timeString);
@@ -61,6 +73,11 @@ public class TimeHelper {
         }
     }
 
+    /**
+     * @param secondsSinceEpoch Seconds since epoch
+     * @param zoneId            Zone id
+     * @return Local date
+     */
     public static LocalDate secondsSinceEpochToLocalDate(long secondsSinceEpoch, ZoneId zoneId) {
         return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalDate();
     }

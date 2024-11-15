@@ -133,7 +133,7 @@ class SummaryHelperTest {
 
         sourceReminder.linkedReminderId = 3
         sourceReminder.timeInMinutes = 3
-        assertEquals("1 + 00:03", reminderSummary(context, reminder))
+        assertEquals("1 + 0:03", reminderSummary(context, reminder))
 
         mockedMedicineRepositoryConstruction.close()
         mockedDateFormat.close()
@@ -162,5 +162,58 @@ class SummaryHelperTest {
         assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
 
         mockedDateFormat.close()
+    }
+
+
+    @Test
+    fun test_remindersSummary_linked() {
+        val context = mock(Context::class.java)
+        val resources = mock(android.content.res.Resources::class.java)
+        Mockito.`when`(context.resources).thenReturn(resources)
+        Mockito.`when`(
+            resources.getQuantityString(
+                R.plurals.sum_reminders,
+                3,
+                3,
+                "0:02, 0:02 + 1:03, 0:02 + 1:03 + 2:24"
+            )
+        )
+            .thenReturn("ok")
+        val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
+        val dateFormat = mock(java.text.DateFormat::class.java)
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+            .thenReturn(dateFormat)
+        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
+            .thenReturn("0:02")
+        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(1, 3))))
+            .thenReturn("1:03")
+        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(2, 24))))
+            .thenReturn("2:24")
+
+        val reminder = Reminder(1)
+        reminder.reminderId = 1
+        reminder.timeInMinutes = 2
+        val reminder2 = Reminder(1)
+        reminder2.linkedReminderId = 1
+        reminder2.timeInMinutes = 63
+        reminder2.reminderId = 2
+        val reminder3 = Reminder(1)
+        reminder3.linkedReminderId = 2
+        reminder3.timeInMinutes = 144
+
+        val mockedMedicineRepositoryConstruction: MockedConstruction<MedicineRepository> =
+            mockConstruction(MedicineRepository::class.java) { mock, _ ->
+                Mockito.`when`(
+                    mock.getReminder(2)
+                ).thenReturn(reminder2)
+                Mockito.`when`(
+                    mock.getReminder(1)
+                ).thenReturn(reminder)
+            }
+
+        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder, reminder3)))
+
+        mockedDateFormat.close()
+        mockedMedicineRepositoryConstruction.close()
     }
 }
