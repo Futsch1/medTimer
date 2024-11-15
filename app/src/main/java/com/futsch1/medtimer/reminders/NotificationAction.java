@@ -33,6 +33,9 @@ public class NotificationAction {
                     status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
                     reminderEvent.reminderEventId,
                     reminderEvent.medicineName));
+
+            // Reschedule since the trigger condition for a linked reminder might have changed
+            ReminderProcessor.requestReschedule(context);
         }
 
     }
