@@ -28,7 +28,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     @NonNull
     @Override
     public MedicineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return MedicineViewHolder.create(parent, thread, activity);
+        return MedicineViewHolder.create(parent, activity, thread);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

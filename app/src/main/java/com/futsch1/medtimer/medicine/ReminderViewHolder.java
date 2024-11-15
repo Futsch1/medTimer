@@ -76,29 +76,10 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
         if (hasFocus) {
             if (reminder.linkedReminderId == 0) {
-                int startMinutes = timeStringToMinutes(editTime.getContext(), editTime.getText().toString());
-                if (startMinutes < 0) {
-                    startMinutes = Reminder.DEFAULT_TIME;
-                }
-                new TimeHelper.TimePickerWrapper(fragmentActivity).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                    String selectedTime = minutesToTimeString(editTime.getContext(), minutes);
-                    editTime.setText(selectedTime);
-                    reminder.timeInMinutes = minutes;
-                });
+                editDuration(reminder);
             } else {
-                int startMinutes = durationStringToMinutes(editTime.getText().toString());
-                if (startMinutes < 0) {
-                    startMinutes = Reminder.DEFAULT_TIME;
-                }
-                new TimeHelper.TimePickerWrapper(fragmentActivity, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H)
-                        .show(startMinutes / 60, startMinutes % 60, minutes -> {
-                            String selectedTime = minutesToDurationString(minutes);
-                            editTime.setText(selectedTime);
-                            reminder.timeInMinutes = minutes;
-                        });
-
+                editTime(reminder);
             }
-
         }
     }
 
@@ -110,6 +91,31 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                         medicineName
                 );
         navController.navigate(action);
+    }
+
+    private void editDuration(Reminder reminder) {
+        int startMinutes = timeStringToMinutes(editTime.getContext(), editTime.getText().toString());
+        if (startMinutes < 0) {
+            startMinutes = Reminder.DEFAULT_TIME;
+        }
+        new TimeHelper.TimePickerWrapper(fragmentActivity).show(startMinutes / 60, startMinutes % 60, minutes -> {
+            String selectedTime = minutesToTimeString(editTime.getContext(), minutes);
+            editTime.setText(selectedTime);
+            reminder.timeInMinutes = minutes;
+        });
+    }
+
+    private void editTime(Reminder reminder) {
+        int startMinutes = durationStringToMinutes(editTime.getText().toString());
+        if (startMinutes < 0) {
+            startMinutes = Reminder.DEFAULT_TIME;
+        }
+        new TimeHelper.TimePickerWrapper(fragmentActivity, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H)
+                .show(startMinutes / 60, startMinutes % 60, minutes -> {
+                    String selectedTime = minutesToDurationString(minutes);
+                    editTime.setText(selectedTime);
+                    reminder.timeInMinutes = minutes;
+                });
     }
 
     public Reminder getReminder() {

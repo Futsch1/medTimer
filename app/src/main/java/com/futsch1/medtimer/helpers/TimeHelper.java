@@ -61,6 +61,9 @@ public class TimeHelper {
         }
     }
 
+    public static LocalDate secondsSinceEpochToLocalDate(long secondsSinceEpoch, ZoneId zoneId) {
+        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalDate();
+    }
 
     /**
      * @param context    Context to extract time format

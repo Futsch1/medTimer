@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -35,11 +36,8 @@ class StandardScheduling(
     }
 
     private fun isToday(epochSeconds: Long): Boolean {
-        return localDateFromEpochSeconds(epochSeconds).toEpochDay() == today()
-    }
-
-    private fun localDateFromEpochSeconds(epochSeconds: Long): LocalDate {
-        return Instant.ofEpochSecond(epochSeconds).atZone(timeAccess.systemZone()).toLocalDate()
+        return TimeHelper.secondsSinceEpochToLocalDate(epochSeconds, timeAccess.systemZone())
+            .toEpochDay() == today()
     }
 
     private fun today(): Long {

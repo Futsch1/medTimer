@@ -30,7 +30,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final HandlerThread thread;
     private final Activity activity;
 
-    private MedicineViewHolder(View holderItemView, HandlerThread thread, Activity activity) {
+    private MedicineViewHolder(View holderItemView, Activity activity, HandlerThread thread) {
         super(holderItemView);
         medicineNameView = holderItemView.findViewById(R.id.medicineName);
         remindersSummaryView = holderItemView.findViewById(R.id.remindersSummary);
@@ -38,10 +38,10 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         this.activity = activity;
     }
 
-    static MedicineViewHolder create(ViewGroup parent, HandlerThread thread, Activity activity) {
+    static MedicineViewHolder create(ViewGroup parent, Activity activity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_medicine, parent, false);
-        return new MedicineViewHolder(view, thread, activity);
+        return new MedicineViewHolder(view, activity, thread);
     }
 
     public void bind(MedicineWithReminders medicineWithReminders) {
