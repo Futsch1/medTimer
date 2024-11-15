@@ -12,7 +12,11 @@ class LinkedScheduling(
         val lastSourceReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.linkedReminderId)
         val lastReminderEvent: ReminderEvent? = findLastReminderEvent(reminder.reminderId)
-        if (lastSourceReminderEvent != null && (lastReminderEvent == null || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)) {
+        if (lastSourceReminderEvent != null &&
+            lastSourceReminderEvent.processedTimestamp != 0L &&
+            (lastReminderEvent == null
+                    || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)
+        ) {
             return Instant.ofEpochSecond(lastSourceReminderEvent.processedTimestamp).plusSeconds(
                 reminder.timeInMinutes * 60L
             )
@@ -23,7 +27,7 @@ class LinkedScheduling(
     private fun findLastReminderEvent(reminderId: Int): ReminderEvent? {
         var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEventList) {
-            if (reminderEvent.reminderId == reminderId && reminderEvent.processedTimestamp != 0L &&
+            if (reminderEvent.reminderId == reminderId &&
                 (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
             ) {
                 foundReminderEvent = reminderEvent
