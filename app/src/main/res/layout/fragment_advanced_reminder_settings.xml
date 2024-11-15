@@ -1,242 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/main"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="vertical"
-        android:padding="4dp"
-        tools:context=".medicine.AdvancedReminderSettingsFragment">
-
-        <RadioGroup
-            android:id="@+id/activeState"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:checkedButton="@id/active">
-
-            <RadioButton
-                android:id="@+id/active"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/active" />
-
-            <RadioButton
-                android:id="@+id/inactive"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/inactive" />
-
-            <RadioButton
-                android:id="@+id/timePeriod"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/active_in_time_period" />
-        </RadioGroup>
+        android:layout_height="match_parent"
+        android:paddingBottom="60dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <CheckBox
-                android:id="@+id/periodStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/period_start">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/periodStartDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="date"
-                    tools:ignore="TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/periodEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/period_end">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/periodEndDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="date"
-                    tools:ignore="TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:id="@+id/cyclicRemindersGroup"
+            android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cycle_reminders" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/cycle_start_date">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cycleStartDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="date"
-                    tools:ignore="TextContrastCheck" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/cycle_consecutive_days">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/consecutiveDays"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="numberSigned"
-                    tools:ignore="TextContrastCheck" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/cycle_pause_days">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pauseDays"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"
-                    tools:ignore="TextContrastCheck" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
             android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="?android:attr/listDivider" />
+            android:orientation="vertical"
+            android:padding="4dp"
+            tools:context=".medicine.AdvancedReminderSettingsFragment">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editInstructionsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/instructions_label"
-            android:orientation="horizontal"
-            app:endIconDrawable="@drawable/clipboard_plus"
-            app:endIconMode="custom">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editInstructions"
+            <RadioGroup
+                android:id="@+id/activeState"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textMultiLine"
-                android:lineBreakStyle="normal"
-                android:lineBreakWordStyle="phrase"
-                android:lines="2"
-                android:singleLine="false"
-                tools:ignore="TextContrastCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:checkedButton="@id/active">
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="?android:attr/listDivider" />
+                <RadioButton
+                    android:id="@+id/active"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/active" />
 
-        <LinearLayout
-            android:id="@+id/remindGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <RadioButton
+                    android:id="@+id/inactive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inactive" />
 
-            <TextView
-                android:id="@+id/remindText"
-                android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/timePeriod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/active_in_time_period" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <CheckBox
+                    android:id="@+id/periodStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/period_start">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/periodStartDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="date"
+                        tools:ignore="TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/periodEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/period_end">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/periodEndDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="date"
+                        tools:ignore="TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/cyclicRemindersGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/remind_on" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/remindOnWeekdays"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="@string/every_day"
-                android:padding="0dp"
-                android:text="@string/every_day" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cycle_reminders" />
 
-            <Button
-                android:id="@+id/remindOnDaysOfMonth"
-                android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/cycle_start_date">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cycleStartDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="date"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/cycle_consecutive_days">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/consecutiveDays"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberSigned"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/cycle_pause_days">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pauseDays"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editInstructionsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/instructions_label"
+                android:orientation="horizontal"
+                app:endIconDrawable="@drawable/clipboard_plus"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editInstructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:lineBreakStyle="normal"
+                    android:lineBreakWordStyle="phrase"
+                    android:lines="2"
+                    android:singleLine="false"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/remindGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="@string/every_day_of_month"
-                android:padding="0dp"
-                android:text="@string/every_day_of_month" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/remindText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/remind_on" />
+
+                <Button
+                    android:id="@+id/remindOnWeekdays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:hint="@string/every_day"
+                    android:padding="0dp"
+                    android:text="@string/every_day" />
+
+                <Button
+                    android:id="@+id/remindOnDaysOfMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:hint="@string/every_day_of_month"
+                    android:padding="0dp"
+                    android:text="@string/every_day_of_month" />
+            </LinearLayout>
+
         </LinearLayout>
+    </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/addLinkedReminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="8dp"
-            android:clickable="true"
-            android:text="@string/add_linked_reminder"
-            app:icon="@android:drawable/ic_menu_add" />
-
-    </LinearLayout>
-</ScrollView>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/addLinkedReminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:text="@string/add_linked_reminder"
+        app:icon="@android:drawable/ic_menu_add" />
+</FrameLayout>
