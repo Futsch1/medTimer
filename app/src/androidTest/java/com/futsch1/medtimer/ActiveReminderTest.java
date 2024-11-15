@@ -63,7 +63,6 @@ public class ActiveReminderTest {
 
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
 
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.addReminder)).perform(click());
 
         ViewInteraction textInputEditText2 = onView(

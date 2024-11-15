@@ -64,10 +64,6 @@ public class BasicUITest {
                 allOf(withId(android.R.id.button1), withText("OK")));
         materialButton.perform(scrollTo(), click());
 
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.medicineList)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
         ViewInteraction extendedFloatingActionButton2 = onView(
                 allOf(withId(R.id.addReminder)));
         extendedFloatingActionButton2.perform(click());
