@@ -40,6 +40,7 @@ class LinkedReminderHandling(
         ).show(0, 0) { minutes: Int ->
             linkedReminder.timeInMinutes = minutes
             medicineViewModel.insertReminder(linkedReminder)
+            fragmentActivity.supportFragmentManager.popBackStack()
         }
     }
 
@@ -54,8 +55,7 @@ class LinkedReminderHandling(
                 }
 
                 medicineViewModel.deleteReminder(reminder)
-                val mainHandler = Handler(Looper.getMainLooper())
-                mainHandler.post(postMainAction)
+                Handler(Looper.getMainLooper()).post(postMainAction)
             }
         }, {})
 
