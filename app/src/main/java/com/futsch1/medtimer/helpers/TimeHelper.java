@@ -43,7 +43,7 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(date);
     }
 
-    private static Date localTimeToDate(LocalTime localTime) {
+    public static Date localTimeToDate(LocalTime localTime) {
         return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
     }
 

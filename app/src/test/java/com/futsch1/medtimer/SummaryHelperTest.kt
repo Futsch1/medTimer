@@ -5,7 +5,9 @@ import android.content.Context
 import android.text.format.DateFormat
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.reminderSummary
+import com.futsch1.medtimer.helpers.remindersSummary
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.eq
@@ -18,6 +20,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockConstruction
 import org.mockito.Mockito.mockStatic
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Date
 
 class SummaryHelperTest {
@@ -115,14 +118,10 @@ class SummaryHelperTest {
         val mockedMedicineRepositoryConstruction: MockedConstruction<MedicineRepository> =
             mockConstruction(MedicineRepository::class.java) { mock, _ ->
                 Mockito.`when`(
-                    mock.getReminder(
-                        2
-                    )
+                    mock.getReminder(2)
                 ).thenReturn(sourceReminder)
                 Mockito.`when`(
-                    mock.getReminder(
-                        3
-                    )
+                    mock.getReminder(3)
                 ).thenReturn(sourceSourceReminder)
 
             }
@@ -138,5 +137,28 @@ class SummaryHelperTest {
 
         mockedMedicineRepositoryConstruction.close()
         mockedDateFormat.close()
+    }
+
+    @Test
+    fun test_remindersSummary_simple() {
+        val context = mock(Context::class.java)
+        val resources = mock(android.content.res.Resources::class.java)
+        Mockito.`when`(context.resources).thenReturn(resources)
+        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "0:02, 1:03"))
+            .thenReturn("ok")
+        val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
+        val dateFormat = mock(java.text.DateFormat::class.java)
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+            .thenReturn(dateFormat)
+        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
+            .thenReturn("0:02")
+        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(1, 3))))
+            .thenReturn("1:03")
+
+        val reminder = Reminder(1)
+        reminder.timeInMinutes = 2
+        val reminder2 = Reminder(2)
+        reminder2.timeInMinutes = 63
+        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
     }
 }

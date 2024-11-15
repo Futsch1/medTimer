@@ -151,7 +151,6 @@ private fun standardRemindersSummary(
     return reminderTimes
 }
 
-
 private fun getCyclicReminderString(context: Context, reminder: Reminder): String {
     return context.getString(R.string.cycle_reminders) +
             " " +
