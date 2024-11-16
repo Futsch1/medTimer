@@ -14,7 +14,7 @@ public class Medicine {
 
     @ColumnInfo(name = "medicineName")
     @Expose
-    public final String name;
+    public String name;
     @PrimaryKey(autoGenerate = true)
     public int medicineId;
 

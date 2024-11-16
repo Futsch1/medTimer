@@ -34,6 +34,10 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getMedicine(medicineId);
     }
 
+    public LiveData<Medicine> getLiveMedicine(int medicineId) {
+        return medicineRepository.getLiveMedicine(medicineId);
+    }
+
     public int insertMedicine(Medicine medicine) {
         return (int) medicineRepository.insertMedicine(medicine);
     }

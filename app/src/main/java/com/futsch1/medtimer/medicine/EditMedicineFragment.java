@@ -61,7 +61,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     private int color;
     private View fragmentEditMedicine;
     private AutoCompleteTextView notificationImportance;
-    private EditMedicineFragmentArgs editMedicineArgs;
     private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
@@ -76,56 +75,36 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         fragmentEditMedicine = inflater.inflate(R.layout.fragment_edit_medicine, container, false);
 
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        editMedicineName = fragmentEditMedicine.findViewById(R.id.editMedicineName);
+
+        postponeEnterTransition();
 
         assert getArguments() != null;
-        editMedicineArgs = EditMedicineFragmentArgs.fromBundle(getArguments());
-        medicineId = editMedicineArgs.getMedicineId();
-        String medicineName = editMedicineArgs.getMedicineName();
+        medicineId = EditMedicineFragmentArgs.fromBundle(getArguments()).getMedicineId();
+        medicineViewModel.getLiveMedicine(medicineId).observe(getViewLifecycleOwner(), medicine -> {
+            color = medicine.color;
+            iconId = medicine.iconId;
 
-        RecyclerView recyclerView = setupMedicineList(medicineName);
+            setupEnableColor(medicine.useColor);
+            setupColorButton(medicine.useColor);
+            editMedicineName.setText(medicine.name);
+            RecyclerView recyclerView = setupMedicineList(medicine.name);
+            setupSwiping(recyclerView);
+            setupSelectIcon();
+            setupNotificationImportance(medicine.notificationImportance);
 
-        editMedicineName = fragmentEditMedicine.findViewById(R.id.editMedicineName);
-        editMedicineName.setText(medicineName);
+            startPostponedEnterTransition();
+        });
 
         setupOpenCalendarButton();
-
-        boolean useColor = editMedicineArgs.getUseColor();
-        setupEnableColor(useColor);
-        setupColorButton(useColor);
-
-        setupSwiping(recyclerView);
         setupAddReminderButton();
 
-        iconId = editMedicineArgs.getIconId();
-        setupSelectIcon();
-
-        medicineViewModel.getLiveReminders(medicineId).observe(requireActivity(), this::sortAndSubmitList);
+        medicineViewModel.getLiveReminders(medicineId).observe(getViewLifecycleOwner(),
+                this::sortAndSubmitList);
 
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(medicineId, thread, medicineViewModel, fragmentEditMedicine), getViewLifecycleOwner());
 
         return fragmentEditMedicine;
-    }
-
-    private @NonNull RecyclerView setupMedicineList(String medicineName) {
-        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity(), thread);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        return recyclerView;
-    }
-
-    private void setupOpenCalendarButton() {
-        MaterialButton openCalendar = fragmentEditMedicine.findViewById(R.id.openCalendar);
-        openCalendar.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(openCalendar);
-            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action =
-                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
-                            medicineId,
-                            30,
-                            30
-                    );
-            navController.navigate(action);
-        });
     }
 
     private void setupEnableColor(boolean useColor) {
@@ -135,7 +114,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     }
 
     private void setupColorButton(boolean useColor) {
-        color = editMedicineArgs.getColor();
         colorButton = fragmentEditMedicine.findViewById(R.id.selectColor);
         ViewColorHelper.setButtonBackground(colorButton, color);
         colorButton.setOnClickListener(v -> {
@@ -159,14 +137,17 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
     }
 
+    private @NonNull RecyclerView setupMedicineList(String medicineName) {
+        RecyclerView recyclerView = fragmentEditMedicine.findViewById(R.id.reminderList);
+        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), medicineName, requireActivity(), thread);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        return recyclerView;
+    }
+
     private void setupSwiping(RecyclerView recyclerView) {
         SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
                 .attachToRecyclerView(recyclerView);
-    }
-
-    private void setupAddReminderButton() {
-        ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
     }
 
     private void setupSelectIcon() {
@@ -186,6 +167,34 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
                     iconDialog.show(fragmentManager, ICON_DIALOG_TAG);
                 }
         );
+    }
+
+    private void setupNotificationImportance(int notificationImportanceValue) {
+        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
+
+        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
+        notificationImportance.setAdapter(arrayAdapter);
+        notificationImportance.setText(NotificationImportanceKt.importanceValueToString(notificationImportanceValue, this.getResources()), false);
+    }
+
+    private void setupOpenCalendarButton() {
+        MaterialButton openCalendar = fragmentEditMedicine.findViewById(R.id.openCalendar);
+        openCalendar.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(openCalendar);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action =
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
+                            medicineId,
+                            30,
+                            30
+                    );
+            navController.navigate(action);
+        });
+    }
+
+    private void setupAddReminderButton() {
+        ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
+        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
     }
 
     private void sortAndSubmitList(List<Reminder> reminders) {
@@ -214,12 +223,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
             reminder.timeInMinutes = minutes;
             medicineViewModel.insertReminder(reminder);
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupNotificationImportance();
     }
 
     @Override
@@ -255,16 +258,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
             }
         }
     }
-
-    private void setupNotificationImportance() {
-        notificationImportance = fragmentEditMedicine.findViewById(R.id.notificationImportance);
-
-        String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
-        notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(NotificationImportanceKt.importanceValueToString(editMedicineArgs.getNotificationImportance(), this.getResources()), false);
-    }
-
 
     @Nullable
     @Override

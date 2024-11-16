@@ -140,6 +140,10 @@ public class MedicineRepository {
         return medicineDao.getLinkedReminders(reminderId);
     }
 
+    public LiveData<Medicine> getLiveMedicine(int medicineId) {
+        return medicineDao.getLiveMedicine(medicineId);
+    }
+
     interface Insert<T> {
         long insert(T item);
     }

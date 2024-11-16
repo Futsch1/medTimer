@@ -75,12 +75,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
         NavController navController = Navigation.findNavController(itemView);
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicineWithReminders.medicine.medicineId,
-                medicineWithReminders.medicine.name,
-                medicineWithReminders.medicine.useColor,
-                medicineWithReminders.medicine.color,
-                medicineWithReminders.medicine.notificationImportance,
-                medicineWithReminders.medicine.iconId
+                medicineWithReminders.medicine.medicineId
         );
         navController.navigate(action);
     }

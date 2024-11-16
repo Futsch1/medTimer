@@ -134,12 +134,7 @@ public class MedicinesFragment extends Fragment {
     private void navigateToMedicineId(Medicine medicine) {
         NavController navController = Navigation.findNavController(this.requireView());
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicine.medicineId,
-                medicine.name,
-                medicine.useColor,
-                medicine.color,
-                medicine.notificationImportance,
-                medicine.iconId
+                medicine.medicineId
         );
         new Handler(Looper.getMainLooper()).post(() -> navController.navigate(action));
     }

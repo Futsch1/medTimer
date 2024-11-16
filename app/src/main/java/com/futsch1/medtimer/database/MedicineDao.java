@@ -23,6 +23,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
     Medicine getMedicine(int medicineId);
 
+    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
+    LiveData<Medicine> getLiveMedicine(int medicineId);
+
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
     LiveData<List<Reminder>> getLiveReminders(int medicineId);
 
