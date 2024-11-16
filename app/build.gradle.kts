@@ -21,8 +21,8 @@ android {
         applicationId = "com.futsch1.medtimer"
         minSdk = 33
         targetSdk = 35
-        versionCode = 83
-        versionName = "1.12.0-beta.1"
+        versionCode = 84
+        versionName = "1.12.0-rc.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -68,7 +68,7 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.2.0"
-    val androidXNavigationVersion = "2.8.3"
+    val androidXNavigationVersion = "2.8.4"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.0"
