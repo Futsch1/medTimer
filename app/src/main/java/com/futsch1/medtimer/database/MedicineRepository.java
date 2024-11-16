@@ -144,6 +144,10 @@ public class MedicineRepository {
         return medicineDao.getLiveMedicine(medicineId);
     }
 
+    public LiveData<Reminder> getLiveReminder(int reminderId) {
+        return medicineDao.getLiveReminder(reminderId);
+    }
+
     interface Insert<T> {
         long insert(T item);
     }

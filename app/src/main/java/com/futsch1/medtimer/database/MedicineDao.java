@@ -35,6 +35,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
 
+    @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
+    LiveData<Reminder> getLiveReminder(int reminderId);
+
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
     LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
 
@@ -82,4 +85,5 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
     List<Reminder> getLinkedReminders(int reminderId);
+
 }

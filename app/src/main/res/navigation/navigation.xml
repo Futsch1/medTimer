@@ -72,9 +72,6 @@
         <argument
             android:name="reminderId"
             app:argType="integer" />
-        <argument
-            android:name="medicineName"
-            app:argType="string" />
     </fragment>
     <action
         android:id="@+id/action_global_preferencesFragment"

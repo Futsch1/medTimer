@@ -63,6 +63,10 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getReminder(reminderId);
     }
 
+    public LiveData<Reminder> getLiveReminder(int reminderId) {
+        return medicineRepository.getLiveReminder(reminderId);
+    }
+
     public void insertReminder(Reminder reminder) {
         medicineRepository.insertReminder(reminder);
     }

@@ -3,7 +3,6 @@ package com.futsch1.medtimer.medicine;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -43,17 +42,18 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private Reminder reminder;
     private View advancedReminderView;
     private PeriodSettings periodSettings;
-    private AdvancedReminderSettingsFragmentArgs args;
 
     public AdvancedReminderSettingsFragment() {
         backgroundThread = new HandlerThread("AdvancedReminderSettings");
         backgroundThread.start();
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        AdvancedReminderSettingsFragmentArgs args;
+        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+
         assert getArguments() != null;
         args = AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
 
@@ -61,19 +61,14 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         advancedReminderView = inflater.inflate(R.layout.fragment_advanced_reminder_settings, container, false);
 
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(this::loadReminder);
+        postponeEnterTransition();
+        medicineViewModel.getLiveReminder(args.getReminderId()).observe(getViewLifecycleOwner(), reminderArg -> {
+            this.reminder = reminderArg;
+            setupView();
+            startPostponedEnterTransition();
+        });
 
         return advancedReminderView;
-    }
-
-    private void loadReminder() {
-        int reminderId = args.getReminderId();
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-
-        reminder = medicineViewModel.getReminder(reminderId);
-
-        requireActivity().runOnUiThread(this::setupView);
     }
 
     @SuppressLint("SetTextI18n")

@@ -13,15 +13,12 @@ import com.futsch1.medtimer.database.Reminder;
 
 public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolder> {
 
-    private final String medicineName;
     private final FragmentActivity fragmentActivity;
     private final HandlerThread thread;
 
     public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback,
-                               String medicineName,
                                FragmentActivity fragmentActivity, HandlerThread thread) {
         super(diffCallback);
-        this.medicineName = medicineName;
         this.fragmentActivity = fragmentActivity;
         this.thread = thread;
         setHasStableIds(true);
@@ -39,7 +36,7 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder current = getItem(position);
-        holder.bind(current, medicineName);
+        holder.bind(current);
     }
 
     @Override

@@ -67,8 +67,12 @@ public class MedicinesFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        postponeEnterTransition();
         // Connect view model to recycler view adapter
-        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), adapter::submitList);
+        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
+            adapter.submitList(l);
+            startPostponedEnterTransition();
+        });
 
         setupAddMedicineButton(fragmentView);
 

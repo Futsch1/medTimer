@@ -58,7 +58,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void bind(Reminder reminder, String medicineName) {
+    public void bind(Reminder reminder) {
         this.reminder = reminder;
 
         @StringRes int textId = reminder.linkedReminderId == 0 ? R.string.time : R.string.delay;
@@ -66,7 +66,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editTime.setText(reminder.linkedReminderId != 0 ? minutesToDurationString(reminder.timeInMinutes) : minutesToTimeString(editTime.getContext(), reminder.timeInMinutes));
         editTime.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(reminder, hasFocus));
 
-        advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder, medicineName));
+        advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder));
 
         editAmount.setText(reminder.amount);
         new Handler(thread.getLooper()).post(() ->
@@ -83,12 +83,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void onClickAdvancedSettings(Reminder reminder, String medicineName) {
+    private void onClickAdvancedSettings(Reminder reminder) {
         NavController navController = Navigation.findNavController(itemView);
         EditMedicineFragmentDirections.ActionEditMedicineToAdvancedReminderSettings action =
                 EditMedicineFragmentDirections.actionEditMedicineToAdvancedReminderSettings(
-                        reminder.reminderId,
-                        medicineName
+                        reminder.reminderId
                 );
         navController.navigate(action);
     }
