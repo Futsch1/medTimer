@@ -49,7 +49,6 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
 
     public void setData(List<ReminderEvent> data) {
         this.data = data;
-        submitList(data);
     }
 
     public static class ReminderEventDiff extends DiffUtil.ItemCallback<ReminderEvent> {
