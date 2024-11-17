@@ -25,8 +25,13 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
     }
 
     public void setupEditButton(OnEditClickListener clickListener) {
-        textView.setOnClickListener(v -> clickListener.onEditClick());
-        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        if (clickListener != null) {
+            textView.setOnClickListener(v -> clickListener.onEditClick());
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        } else {
+            textView.setClickable(false);
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+        }
     }
 
     public interface OnEditClickListener {
