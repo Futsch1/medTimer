@@ -55,8 +55,9 @@ Flexible & Personalized Reminders:
   for daily reminders).
 - Create flexible reminders with breaks and specific days (e.g. for birth control pills).
 - Weekend mode: Delay reminders to a defined time on chosen days.
-- Snooze notifications for later reminders.
+- Snooze notifications for later reminders or be reminded repeatedly.
 - Add extra doses on the fly.
+- Create reminders to take doses following each other in intervals.
 
 Simple & Secure Data Management:
 

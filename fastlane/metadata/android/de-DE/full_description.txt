@@ -7,8 +7,9 @@ Flexible und personalisierte Erinnerungen:
 - Verwalte eine unbegrenzte Anzahl Medikamente mit individuellen Erinnerungen pro Medikament (mit einfacher Standardeinstellung für tägliche Erinnerungen).
 - Erstelle flexible Erinnerungen mit Pausen und nur für bestimmten Tage (z.B. für die Antibabypille).
 - Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
-- Verschiebe ("snooze") Benachrichtigungen um später erneut erinnert zu werden.
+- Verschiebe ("snooze") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
 - Protokolliere zusätzliche, ungeplante Einnahmen.
+- Erstelle Erinnerungen, die auf vorherige Einnahmen in einem definierten Intervall folgen.
 
 Einfache und sichere Datenverwaltung:
 
