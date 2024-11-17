@@ -44,7 +44,7 @@
     <string name="color">Color</string>
     <string name="select_color">Select color</string>
     <string name="exact_reminders">Exact reminders</string>
-    <string name="change_color_toast">Note that changes in color only take effect in future reminders</string>
+    <string name="change_color_toast">Note that changes in color only take effect in future events</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
     <string name="generate_test_data">Generate test data</string>
