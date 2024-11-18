@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     id("org.sonarqube") version "5.1.0.4882"
-    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.8.0"
+    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
 room {
