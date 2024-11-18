@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("androidx.room")
-    id("com.github.triplet.play") version "3.11.0"
+    id("com.github.triplet.play") version "3.12.1"
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
