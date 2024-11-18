@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import kotlinx.coroutines.Dispatchers
@@ -97,7 +98,10 @@ class CalendarEventsViewModel(
     }
 
     private fun isOnDay(day: LocalDate, timestamp: Instant): Boolean {
-        return day == secondsSinceEpochToLocalDate(timestamp.toEpochMilli() / 1000)
+        return day == secondsSinceEpochToLocalDate(
+            timestamp.toEpochMilli() / 1000,
+            ZoneId.systemDefault()
+        )
 
     }
 
@@ -111,7 +115,7 @@ class CalendarEventsViewModel(
 
     private fun getPastEvents(day: LocalDate): List<String> {
         return liveReminderEvents.filter {
-            secondsSinceEpochToLocalDate(it.remindedTimestamp) == day
+            secondsSinceEpochToLocalDate(it.remindedTimestamp, ZoneId.systemDefault()) == day
                     && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(
                 it.medicineName
             ))
@@ -151,10 +155,6 @@ class CalendarEventsViewModel(
     }
 
     private fun isSameDay(secondsSinceEpoch: Long, day: LocalDate): Boolean {
-        return secondsSinceEpochToLocalDate(secondsSinceEpoch) == day
-    }
-
-    private fun secondsSinceEpochToLocalDate(secondsSinceEpoch: Long): LocalDate {
-        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(ZoneId.systemDefault()).toLocalDate()
+        return secondsSinceEpochToLocalDate(secondsSinceEpoch, ZoneId.systemDefault()) == day
     }
 }

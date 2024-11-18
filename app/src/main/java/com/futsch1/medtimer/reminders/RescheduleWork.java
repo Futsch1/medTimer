@@ -93,7 +93,7 @@ public class RescheduleWork extends Worker {
             PendingIntent pendingIntent = new PendingIntentBuilder(context).
                     setReminderId(reminderNotificationData.reminderId).
                     setReminderEventId(reminderNotificationData.reminderEventId).
-                    setReminderDate(timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).build();
+                    setReminderDateTime(timestamp.atZone(ZoneId.systemDefault()).toLocalDateTime()).build();
 
             // Cancel potentially already running alarm and set new
             alarmManager.cancel(pendingIntent);
@@ -122,7 +122,7 @@ public class RescheduleWork extends Worker {
     private void cancelNextReminder() {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
-        Intent intent = ReminderProcessor.getReminderAction(context, 0, 0, LocalDate.now());
+        Intent intent = ReminderProcessor.getReminderAction(context, 0, 0, null);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }

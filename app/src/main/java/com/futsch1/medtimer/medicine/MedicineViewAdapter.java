@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.medicine;
 
 
+import android.app.Activity;
+import android.os.HandlerThread;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,9 +13,14 @@ import com.futsch1.medtimer.database.MedicineWithReminders;
 
 public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, MedicineViewHolder> {
 
-    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback) {
+    private final HandlerThread thread;
+    private final Activity activity;
+
+    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, HandlerThread thread, Activity activity) {
         super(diffCallback);
         setHasStableIds(true);
+        this.thread = thread;
+        this.activity = activity;
     }
 
 
@@ -21,7 +28,7 @@ public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, Medi
     @NonNull
     @Override
     public MedicineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return MedicineViewHolder.create(parent);
+        return MedicineViewHolder.create(parent, activity, thread);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

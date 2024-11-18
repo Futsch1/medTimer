@@ -39,6 +39,7 @@ class JSONMedicineBackupUnitTest {
         reminder.periodStart = 13;
         reminder.days.set(0, false);
         reminder.activeDaysOfMonth = 7;
+        reminder.linkedReminderId = 15;
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -77,7 +78,8 @@ class JSONMedicineBackupUnitTest {
           "active": true,
           "periodStart": 13,
           "periodEnd": 0,
-          "activeDaysOfMonth": 7
+          "activeDaysOfMonth": 7,
+          "linkedReminderId": 15
         }
       ],
       "medicine": {
@@ -154,6 +156,7 @@ class JSONMedicineBackupUnitTest {
         reminder2.instructions = "Take after meal";
         reminder2.days.set(6, false);
         reminder2.activeDaysOfMonth = 255;
+        reminder2.linkedReminderId = 234;
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -196,7 +199,8 @@ class JSONMedicineBackupUnitTest {
           "active": true,
           "periodStart": 0,
           "periodEnd": 0,
-          "activeDaysOfMonth": -1
+          "activeDaysOfMonth": -1,
+          "linkedReminderId": 0
         }
       ],
       "medicine": {
@@ -229,7 +233,8 @@ class JSONMedicineBackupUnitTest {
           "active": true,
           "periodStart": 0,
           "periodEnd": 0,
-          "activeDaysOfMonth": -1
+          "activeDaysOfMonth": -1,
+          "linkedReminderId": 0
         },
         {
           "reminderId": 2,
@@ -251,7 +256,8 @@ class JSONMedicineBackupUnitTest {
           "active": true,
           "periodStart": 0,
           "periodEnd": 0,
-          "activeDaysOfMonth": 255
+          "activeDaysOfMonth": 255,
+          "linkedReminderId": 234
         }
       ],
       "medicine": {

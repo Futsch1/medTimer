@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -212,7 +213,7 @@ public class ReminderWorkUnitTest {
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
 
             Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).putInt(EXTRA_REMINDER_EVENT_ID, 0).
-                    putLong(EXTRA_REMINDER_DATE, 1).build();
+                    putLong(EXTRA_REMINDER_DATE, 1).putInt(EXTRA_REMINDER_TIME, Reminder.DEFAULT_TIME * 60).build();
             when(workerParams.getInputData()).thenReturn(inputData);
 
             // Expected to pass

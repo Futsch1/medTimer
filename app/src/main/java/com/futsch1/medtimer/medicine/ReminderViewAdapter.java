@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine;
 
 
+import android.os.HandlerThread;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,15 +13,14 @@ import com.futsch1.medtimer.database.Reminder;
 
 public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolder> {
 
-    private final String medicineName;
     private final FragmentActivity fragmentActivity;
+    private final HandlerThread thread;
 
     public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback,
-                               String medicineName,
-                               FragmentActivity fragmentActivity) {
+                               FragmentActivity fragmentActivity, HandlerThread thread) {
         super(diffCallback);
-        this.medicineName = medicineName;
         this.fragmentActivity = fragmentActivity;
+        this.thread = thread;
         setHasStableIds(true);
     }
 
@@ -29,14 +29,14 @@ public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolde
     @NonNull
     @Override
     public ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ReminderViewHolder.create(parent, fragmentActivity);
+        return ReminderViewHolder.create(parent, fragmentActivity, thread);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder current = getItem(position);
-        holder.bind(current, medicineName);
+        holder.bind(current);
     }
 
     @Override

@@ -34,6 +34,10 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getMedicine(medicineId);
     }
 
+    public LiveData<Medicine> getLiveMedicine(int medicineId) {
+        return medicineRepository.getLiveMedicine(medicineId);
+    }
+
     public int insertMedicine(Medicine medicine) {
         return (int) medicineRepository.insertMedicine(medicine);
     }
@@ -59,6 +63,10 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getReminder(reminderId);
     }
 
+    public LiveData<Reminder> getLiveReminder(int reminderId) {
+        return medicineRepository.getLiveReminder(reminderId);
+    }
+
     public void insertReminder(Reminder reminder) {
         medicineRepository.insertReminder(reminder);
     }
@@ -69,6 +77,10 @@ public class MedicineViewModel extends AndroidViewModel {
 
     public void deleteReminder(Reminder reminder) {
         medicineRepository.deleteReminder(reminder);
+    }
+
+    public List<Reminder> getLinkedReminders(int reminderId) {
+        return medicineRepository.getLinkedReminders(reminderId);
     }
 
     public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, long timeStamp, boolean withDeleted) {

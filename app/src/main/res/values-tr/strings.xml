@@ -151,9 +151,13 @@
     <string name="statistics_tab_description">İstatistik sekmesi</string>
     <string name="previous_month">Önceki ay</string>
     <string name="next_month">Gelecek ay</string>
-  <string name="repeat_reminders">Hatırlatmaları tekrarlayın</string>
-  <string name="minutes_1">1 dakika</string>
-  <string name="number_of_repetitions">Tekrar sayısı</string>
-  <string name="time_between_repetitions">Tekrarlar arasındaki süre</string>
-  <string name="repeat_reminders_summary">Bir hatırlatmayı alındı veya atlandı olarak işaretlenene kadar otomatik olarak tekrarlar</string>
+    <string name="repeat_reminders">Hatırlatmaları tekrarlayın</string>
+    <string name="minutes_1">1 dakika</string>
+    <string name="number_of_repetitions">Tekrar sayısı</string>
+    <string name="time_between_repetitions">Tekrarlar arasındaki süre</string>
+    <string name="repeat_reminders_summary">Bir hatırlatmayı alındı veya atlandı olarak işaretlenene kadar otomatik olarak tekrarlar</string>
+    <string name="add_linked_reminder">Takip eden doz için hatırlatma ekleyin</string>
+    <string name="linked_reminder_delay">Takip eden doz için gecikme</string>
+    <string name="delay">Gecikme</string>
+    <string name="linked_reminder_summary">%1$s adresindeki hatırlatmadan sonra</string>
 </resources>

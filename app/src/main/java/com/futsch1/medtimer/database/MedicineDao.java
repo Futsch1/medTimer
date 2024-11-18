@@ -23,6 +23,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
     Medicine getMedicine(int medicineId);
 
+    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
+    LiveData<Medicine> getLiveMedicine(int medicineId);
+
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
     LiveData<List<Reminder>> getLiveReminders(int medicineId);
 
@@ -31,6 +34,9 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
+
+    @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
+    LiveData<Reminder> getLiveReminder(int reminderId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
     LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
@@ -76,4 +82,8 @@ public interface MedicineDao {
 
     @Query("DELETE FROM Medicine")
     void deleteMedicines();
+
+    @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
+    List<Reminder> getLinkedReminders(int reminderId);
+
 }

@@ -122,3 +122,31 @@ Allow notification snoozing`).
 
 Reminders can be automatically repeated after a certain delay for a specific number of times. This
 feature can be enabled via the settings menu via `Repeat reminders`.
+
+## Doses that shall be taken at a specific time after the previous dose (following doses)
+
+If you have a medicine that requires a dose to be taken at a specific time after the previous
+dose, you can create a reminder to notify at a specific time after the previous dose was marked
+taken or skipped. This can be done in the `Advanced settings` of the medicine. Use the button `Add 
+reminder for following dose` to add a reminder for the following dose. Set the dosage and the delay.
+
+Following doses can overlap into the next day, but are constrained to a maximum delay of 24 hours.
+It is also possible to chain following doses by entering the `Advanced settings` of a following dose
+and adding another following dose from there.
+
+However, these chained following doses need one dose at a specific time to start the chain. It is
+still possible to implement a continuous interval scheme by using one dummy timed reminder that
+starts the dosing scheme for the day. This reminder can then be marked taken when the last dose of
+the past day's chain was taken.
+
+So consider the following setup:
+
+1. Dummy reminder at like 08:00, dose 0
+2. Reminder following 1. 8:00 later
+3. Reminder following 2. 8:00 later
+4. Reminder following 3. 8:00 later
+
+So imagine you would mark the dummy reminder as taken at 08:30, the first following reminder will
+be active at 16:30, the second following reminder will be active at 00:30 and the third following
+reminder will be active at 08:30 on the next day. As soon as you took this last dose, mark the dummy
+reminder as taken, which will restart the chain.

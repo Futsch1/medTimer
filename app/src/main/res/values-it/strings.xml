@@ -44,7 +44,7 @@
     <string name="color">Colore</string>
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>
-    <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo nei promemoria futuri.</string>
+    <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo nei eventi futuri.</string>
     <string name="exact_reminders_summary">I promemoria sono programmati all\'ora esatta (aumenta il consumo della batteria)</string>
     <string name="enable_alarm_dialog">Per consentire la programmazione di allarmi precisi, abilita questo per MedTimer nel seguente menu</string>
     <string name="generate_test_data">Genera dati di prova</string>
@@ -153,9 +153,13 @@
     <string name="statistics_tab_description">Scheda Statistiche</string>
     <string name="previous_month">Mese precedente</string>
     <string name="next_month">Il prossimo mese</string>
-  <string name="repeat_reminders">Ripetere i promemoria</string>
-  <string name="minutes_1">1 minuto</string>
-  <string name="number_of_repetitions">Numero di ripetizioni</string>
-  <string name="time_between_repetitions">Tempo tra le ripetizioni</string>
-  <string name="repeat_reminders_summary">Ripete automaticamente un promemoria finché non viene contrassegnato come preso o saltato</string>
+    <string name="repeat_reminders">Ripetere i promemoria</string>
+    <string name="minutes_1">1 minuto</string>
+    <string name="number_of_repetitions">Numero di ripetizioni</string>
+    <string name="time_between_repetitions">Tempo tra le ripetizioni</string>
+    <string name="repeat_reminders_summary">Ripete automaticamente un promemoria finché non viene contrassegnato come preso o saltato</string>
+    <string name="add_linked_reminder">Aggiungere un promemoria per la dose successiva</string>
+    <string name="linked_reminder_delay">Ritardo per la dose successiva</string>
+    <string name="delay">Ritardo</string>
+    <string name="linked_reminder_summary">Dopo il promemoria a %1$s</string>
 </resources>

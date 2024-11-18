@@ -4,6 +4,7 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
 
 import android.app.Application;
@@ -46,16 +47,13 @@ public class ReminderWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = Result.failure();
         Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
         medicineRepository = new MedicineRepository((Application) getApplicationContext());
         Reminder reminder = getReminder(medicineRepository, inputData);
 
-        if (reminder != null) {
-            r = processReminder(inputData, reminder, r);
-        }
+        Result r = (reminder != null) ? processReminder(inputData, reminder) : Result.failure();
 
         // Reminder shown, now schedule next reminder
         ReminderProcessor.requestReschedule(context);
@@ -72,21 +70,27 @@ public class ReminderWork extends Worker {
         return reminder;
     }
 
-    private Result processReminder(Data inputData, Reminder reminder, Result r) {
+    private Result processReminder(Data inputData, Reminder reminder) {
+        Result r = Result.failure();
         int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
         LocalDate reminderDate = LocalDate.ofEpochDay(inputData.getLong(EXTRA_REMINDER_DATE, LocalDate.now().toEpochDay()));
+        LocalTime reminderTime = reminder.linkedReminderId == 0 ? LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60) : LocalTime.ofSecondOfDay(inputData.getInt(EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()));
+        LocalDateTime reminderDateTime = LocalDateTime.of(reminderDate, reminderTime);
         Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-        ReminderEvent reminderEvent = reminderEventId == 0 ? buildAndInsertReminderEvent(reminderDate, medicine, reminder) : medicineRepository.getReminderEvent(reminderEventId);
+        ReminderEvent reminderEvent =
+                reminderEventId == 0 ?
+                        buildAndInsertReminderEvent(reminderDateTime, medicine, reminder) :
+                        medicineRepository.getReminderEvent(reminderEventId);
 
         if (reminderEvent != null && medicine != null) {
-            performActionsOfReminder(reminder, reminderEvent, medicine);
+            performActionsOfReminder(reminder, reminderEvent, medicine, reminderDateTime);
             r = Result.success();
         }
         return r;
     }
 
-    private ReminderEvent buildAndInsertReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
-        ReminderEvent reminderEvent = buildReminderEvent(remindedDate, medicine, reminder);
+    private ReminderEvent buildAndInsertReminderEvent(LocalDateTime remindedDateTime, Medicine medicine, Reminder reminder) {
+        ReminderEvent reminderEvent = buildReminderEvent(remindedDateTime, medicine, reminder);
         if (reminderEvent != null) {
             reminderEvent.remainingRepeats = getNumberOfRepeats();
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
@@ -94,10 +98,10 @@ public class ReminderWork extends Worker {
         return reminderEvent;
     }
 
-    private void performActionsOfReminder(Reminder reminder, ReminderEvent reminderEvent, Medicine medicine) {
+    private void performActionsOfReminder(Reminder reminder, ReminderEvent reminderEvent, Medicine medicine, LocalDateTime reminderDateTime) {
         NotificationAction.cancelNotification(context, reminderEvent.notificationId);
 
-        showNotification(medicine, reminderEvent, reminder);
+        showNotification(medicine, reminderEvent, reminder, reminderDateTime);
 
         if (reminderEvent.remainingRepeats > 0 && isRepeatReminders()) {
             ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
@@ -106,12 +110,11 @@ public class ReminderWork extends Worker {
         Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
     }
 
-    public static ReminderEvent buildReminderEvent(LocalDate remindedDate, Medicine medicine, Reminder reminder) {
+    public static ReminderEvent buildReminderEvent(LocalDateTime remindedDateTime, Medicine medicine, Reminder reminder) {
         if (medicine != null && reminder != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.remindedTimestamp = LocalDateTime.of(remindedDate, LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60))
-                    .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+            reminderEvent.remindedTimestamp = remindedDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder);
             reminderEvent.color = medicine.color;
@@ -130,12 +133,12 @@ public class ReminderWork extends Worker {
         return Integer.parseInt(sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3"));
     }
 
-    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder) {
+    private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
         if (canShowNotifications()) {
             Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
             reminderEvent.notificationId =
-                    notifications.showNotification(minutesToTimeString(context, reminder.timeInMinutes),
+                    notifications.showNotification(minutesToTimeString(context, reminderDateTime.getHour() * 60L + reminderDateTime.getMinute()),
                             reminderEvent.medicineName,
                             reminder.amount,
                             reminder.instructions,

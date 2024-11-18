@@ -42,6 +42,8 @@ public class CalendarTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
+        AndroidTestHelper.waitFor(1000);
+
         AndroidTestHelper.setAllRemindersTo12AM();
 
         onView(allOf(withId(R.id.showOnlyOpen), isDisplayed())).perform(click());

@@ -44,7 +44,7 @@
     <string name="color">Color</string>
     <string name="select_color">Seleccionar color</string>
     <string name="exact_reminders">Recordatorios exactos</string>
-    <string name="change_color_toast">Notar que los cambios en el color sólo tienen efecto en futuros recordatorios</string>
+    <string name="change_color_toast">Notar que los cambios en el color sólo tienen efecto en futuros eventos</string>
     <string name="exact_reminders_summary">Los recordatorios se programan a la hora exacta (aumenta el uso de la batería)</string>
     <string name="enable_alarm_dialog">Para permitir programar recordatorios exactos, conceda el permiso a MedTimer en el siguiente menú</string>
     <string name="generate_test_data">Generar datos para test</string>
@@ -153,9 +153,13 @@
     <string name="statistics_tab_description">Ficha Estadísticas</string>
     <string name="previous_month">Mes anterior</string>
     <string name="next_month">Próximo mes</string>
-  <string name="repeat_reminders">Repetir recordatorios</string>
-  <string name="minutes_1">1 minuto</string>
-  <string name="number_of_repetitions">Número de repeticiones</string>
-  <string name="time_between_repetitions">Tiempo entre repeticiones</string>
-  <string name="repeat_reminders_summary">Repite automáticamente un recordatorio hasta que se marca como tomado o se omite</string>
+    <string name="repeat_reminders">Repetir recordatorios</string>
+    <string name="minutes_1">1 minuto</string>
+    <string name="number_of_repetitions">Número de repeticiones</string>
+    <string name="time_between_repetitions">Tiempo entre repeticiones</string>
+    <string name="repeat_reminders_summary">Repite automáticamente un recordatorio hasta que se marca como tomado o se omite</string>
+    <string name="add_linked_reminder">Añadir recordatorio para la siguiente dosis</string>
+    <string name="linked_reminder_delay">Retraso para la siguiente dosis</string>
+    <string name="delay">Retraso</string>
+    <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
 </resources>

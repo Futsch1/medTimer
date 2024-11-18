@@ -136,6 +136,18 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
+    public List<Reminder> getLinkedReminders(int reminderId) {
+        return medicineDao.getLinkedReminders(reminderId);
+    }
+
+    public LiveData<Medicine> getLiveMedicine(int medicineId) {
+        return medicineDao.getLiveMedicine(medicineId);
+    }
+
+    public LiveData<Reminder> getLiveReminder(int reminderId) {
+        return medicineDao.getLiveReminder(reminderId);
+    }
+
     interface Insert<T> {
         long insert(T item);
     }

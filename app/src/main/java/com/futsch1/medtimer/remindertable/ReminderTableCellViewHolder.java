@@ -14,8 +14,10 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
 
     public ReminderTableCellViewHolder(View view) {
         super(view);
-        this.textView = view.findViewById(R.id.tableCellTextView);
-        this.textView.setTextColor(MaterialColors.getColor(view.getContext(), com.google.android.material.R.attr.colorOnSecondaryContainer, "TableView"));
+        textView = view.findViewById(R.id.tableCellTextView);
+        textView.setTextColor(MaterialColors.getColor(view.getContext(), com.google.android.material.R.attr.colorOnSecondaryContainer, "TableView"));
+        textView.setClickable(false);
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public TextView getTextView() {
@@ -23,8 +25,13 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
     }
 
     public void setupEditButton(OnEditClickListener clickListener) {
-        this.textView.setOnClickListener(v -> clickListener.onEditClick());
-        this.textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        if (clickListener != null) {
+            textView.setOnClickListener(v -> clickListener.onEditClick());
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        } else {
+            textView.setClickable(false);
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+        }
     }
 
     public interface OnEditClickListener {

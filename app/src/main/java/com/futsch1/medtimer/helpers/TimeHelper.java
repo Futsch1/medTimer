@@ -3,6 +3,7 @@ package com.futsch1.medtimer.helpers;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -20,6 +21,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 public class TimeHelper {
@@ -40,8 +43,43 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(date);
     }
 
-    private static Date localTimeToDate(LocalTime localTime) {
+    /**
+     * @param localTime Local time
+     * @return Date of local time on epoch day 0
+     */
+    public static Date localTimeToDate(LocalTime localTime) {
         return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
+    }
+
+    /**
+     * @param minutes Minutes since midnight
+     * @return Time string in local format
+     */
+    public static String minutesToDurationString(long minutes) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+        return formatter.format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+    }
+
+    /**
+     * @param timeString Time string in local format
+     * @return Minutes since midnight
+     */
+    public static int durationStringToMinutes(String timeString) {
+        try {
+            TemporalAccessor accessor = DateTimeFormatter.ofPattern("HH:mm").parse(timeString);
+            return accessor.get(ChronoField.HOUR_OF_DAY) * 60 + accessor.get(ChronoField.MINUTE_OF_HOUR);
+        } catch (DateTimeParseException e) {
+            return -1;
+        }
+    }
+
+    /**
+     * @param secondsSinceEpoch Seconds since epoch
+     * @param zoneId            Zone id
+     * @return Local date
+     */
+    public static LocalDate secondsSinceEpochToLocalDate(long secondsSinceEpoch, ZoneId zoneId) {
+        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalDate();
     }
 
     /**
@@ -145,19 +183,33 @@ public class TimeHelper {
 
     public static class TimePickerWrapper {
         final FragmentActivity activity;
+        private final Integer titleText;
+        private final Integer timeFormat;
 
         public TimePickerWrapper(FragmentActivity activity) {
             this.activity = activity;
+            this.titleText = null;
+            this.timeFormat = DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H;
+        }
+
+        public TimePickerWrapper(FragmentActivity activity, @StringRes int titleText, int timeFormat) {
+            this.activity = activity;
+            this.titleText = titleText;
+            this.timeFormat = timeFormat;
         }
 
         public void show(int hourOfDay, int minute, TimePickerResult timePickerResult) {
-            MaterialTimePicker timePickerDialog = new MaterialTimePicker.Builder()
-                    .setTimeFormat(DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+            MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder()
+                    .setTimeFormat(timeFormat)
                     .setHour(hourOfDay)
                     .setMinute(minute)
-                    .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                    .build();
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK);
 
+            if (titleText != null) {
+                builder.setTitleText(titleText);
+            }
+
+            MaterialTimePicker timePickerDialog = builder.build();
             timePickerDialog.addOnPositiveButtonClickListener(view -> timePickerResult.onTimeSelected(timePickerDialog.getHour() * 60 + timePickerDialog.getMinute()));
 
             timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");

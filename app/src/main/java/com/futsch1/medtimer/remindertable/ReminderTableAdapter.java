@@ -57,9 +57,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
             String modelContent = cellItemModel.getRepresentation();
             viewHolder.getTextView().setText(modelContent);
             viewHolder.getTextView().setTag(cellItemModel.getViewTag());
-            if (columnPosition == 1) {
-                viewHolder.setupEditButton(() -> new Handler(thread.getLooper()).post(() -> navigateToEditEvent(cellItemModel.getIdAsInt())));
-            }
+            viewHolder.setupEditButton(columnPosition == 1 ? () -> new Handler(thread.getLooper()).post(() -> navigateToEditEvent(cellItemModel.getIdAsInt())) : null);
         }
     }
 

@@ -1,5 +1,8 @@
 package com.futsch1.medtimer.medicine;
 
+import android.app.Activity;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +27,21 @@ import java.util.stream.Collectors;
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
     private final TextView remindersSummaryView;
+    private final HandlerThread thread;
+    private final Activity activity;
 
-    private MedicineViewHolder(View holderItemView) {
+    private MedicineViewHolder(View holderItemView, Activity activity, HandlerThread thread) {
         super(holderItemView);
         medicineNameView = holderItemView.findViewById(R.id.medicineName);
         remindersSummaryView = holderItemView.findViewById(R.id.remindersSummary);
+        this.thread = thread;
+        this.activity = activity;
     }
 
-    static MedicineViewHolder create(ViewGroup parent) {
+    static MedicineViewHolder create(ViewGroup parent, Activity activity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_medicine, parent, false);
-        return new MedicineViewHolder(view);
+        return new MedicineViewHolder(view, activity, thread);
     }
 
     public void bind(MedicineWithReminders medicineWithReminders) {
@@ -47,7 +54,11 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
                 remindersSummaryView.setText(R.string.inactive);
             }
         } else {
-            remindersSummaryView.setText(SummaryHelperKt.remindersSummary(itemView.getContext(), activeReminders));
+            new Handler(thread.getLooper()).post(() -> {
+                String summary = SummaryHelperKt.remindersSummary(itemView.getContext(), activeReminders);
+                this.activity.runOnUiThread(() ->
+                        remindersSummaryView.setText(summary));
+            });
         }
 
         itemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
@@ -64,12 +75,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
         NavController navController = Navigation.findNavController(itemView);
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicineWithReminders.medicine.medicineId,
-                medicineWithReminders.medicine.name,
-                medicineWithReminders.medicine.useColor,
-                medicineWithReminders.medicine.color,
-                medicineWithReminders.medicine.notificationImportance,
-                medicineWithReminders.medicine.iconId
+                medicineWithReminders.medicine.medicineId
         );
         navController.navigate(action);
     }

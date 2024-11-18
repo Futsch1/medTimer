@@ -30,9 +30,8 @@ public class ReminderScheduler {
         ArrayList<ScheduledReminder> scheduledReminders = new ArrayList<>();
 
         for (Reminder reminder : reminders) {
-            List<ReminderEvent> filteredEvents = getFilteredEvents(reminderEvents, reminder.reminderId);
-            ReminderForScheduling reminderForScheduling = new ReminderForScheduling(reminder, filteredEvents, this.timeAccess);
-            Instant reminderScheduledTime = reminderForScheduling.getNextScheduledTime();
+            Scheduling scheduling = new SchedulingFactory().create(reminder, reminderEvents, this.timeAccess);
+            Instant reminderScheduledTime = scheduling.getNextScheduledTime();
 
             if (reminderScheduledTime != null) {
                 scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));
@@ -52,11 +51,6 @@ public class ReminderScheduler {
             reminders.addAll(medicineWithReminder.reminders.stream().filter(r -> r.active).collect(Collectors.toList()));
         }
         return reminders;
-    }
-
-    @SuppressWarnings("java:S6204")
-    private List<ReminderEvent> getFilteredEvents(List<ReminderEvent> reminderEvents, int reminderId) {
-        return reminderEvents.stream().filter(event -> event.reminderId == reminderId).collect(Collectors.toList());
     }
 
     private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {

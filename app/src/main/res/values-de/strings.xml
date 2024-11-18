@@ -43,7 +43,7 @@
     <string name="color">Farbe</string>
     <string name="select_color">Farbe auswählen</string>
     <string name="exact_reminders">Exakte Erinnerungen</string>
-    <string name="change_color_toast">Änderungen an den Farben wirken sich nur auf neue Erinnerungen aus</string>
+    <string name="change_color_toast">Änderungen an den Farben wirken sich nur auf neue Ereignisse aus</string>
     <string name="exact_reminders_summary">Erinnerungen werden genau zur eingestellten Zeit erzeugt (erhöhter Batterieverbrauch)</string>
     <string name="enable_alarm_dialog">Um die Erstellung von exakten Erinnerungen zu ermöglichen, erlaube dies im folgenden Menü</string>
     <string name="generate_test_data">Testdaten generieren</string>
@@ -156,4 +156,8 @@
     <string name="number_of_repetitions">Anzahl der Wiederholungen</string>
     <string name="time_between_repetitions">Zeit zwischen den Wiederholungen</string>
     <string name="repeat_reminders_summary">Wiederholt automatisch eine Erinnerung, bis sie als erledigt oder übersprungen markiert wird</string>
+    <string name="add_linked_reminder">Erinnerung für die folgende Dosis hinzufügen</string>
+    <string name="linked_reminder_delay">Verzögerung der folgende Dosis</string>
+    <string name="delay">Verzögerung</string>
+    <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
 </resources>
