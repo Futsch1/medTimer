@@ -1,0 +1,32 @@
+Medicijnherinneringen en geschiedenis met volledige offline privacy
+
+Houd controle over uw medicijnen met MedTimer
+
+MedTimer is een open-source app voor medicatieherinneringen, ontworpen om u te helpen uw medicijnen en pillen effectief te beheren met volledige controle over uw gevoelige gegevens.
+
+Flexibele en persoonlijke herinneringen:
+
+- Beheer een onbeperkt aantal medicijnen met aanpasbare herinneringen per medicijn (inclusief eenvoudige standaardinstellingen voor dagelijkse herinneringen).
+- Maak flexibele herinneringen met pauzes en specifieke dagen (bijv. voor anticonceptiepillen).
+- Weekendmodus: Stel herinneringen uit tot een bepaalde tijd op gekozen dagen.
+- Snooze meldingen voor latere herinneringen of herhaaldelijk herinnerd worden.
+- Voeg on the fly extra doses toe.
+- Maak reminders om doses na elkaar in te nemen in intervallen.
+
+Eenvoudig en veilig gegevensbeheer:
+
+- Bevestig of annuleer herinneringen om medicatietrouw nauwkeurig te registreren.
+- Krijg een overzicht van eerdere doses in een grafiek en een tabelweergave.
+- Exporteer je medicatiegeschiedenis als CSV-bestand om ze gemakkelijk bij te houden of te delen met zorgverleners.
+- Maak een back-up van je medicatielijst en zet deze terug als JSON-bestand.
+
+Privacy en offline toegankelijkheid:
+
+- Alle gegevens worden veilig opgeslagen op je apparaat, zodat je verzekerd bent van volledige privacy en offline toegankelijkheid.
+- Geen internetverbinding nodig - uw medicatieherinneringen zijn altijd beschikbaar.
+
+MedTimer is een gratis app zonder toevoegingen.
+
+Zie de projectpagina op GitHub: https://github.com/Futsch1/medTimer
+
+Feature graphic is gemaakt met https://hotpot.ai

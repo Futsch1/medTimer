@@ -1,0 +1,32 @@
+Tam çevrimdışı gizlilik ile ilaç hatırlatıcıları ve geçmişi
+
+MedTimer ile İlaçlarınızı Kontrol Altında Tutun
+
+MedTimer, ilaçlarınızı ve haplarınızı etkili bir şekilde ve hassas verilerinizin tam kontrolü ile yönetmenize yardımcı olmak için tasarlanmış açık kaynaklı bir ilaç hatırlatma uygulamasıdır.
+
+Esnek ve Kişiselleştirilmiş Hatırlatıcılar:
+
+- İlaç başına özelleştirilebilir hatırlatıcılarla sınırsız sayıda ilacı yönetin (günlük hatırlatıcılar için basit varsayılanlar dahil).
+- Molalar ve belirli günler için esnek hatırlatıcılar oluşturun (örn. doğum kontrol hapları için).
+- Hafta sonu modu: Hatırlatıcıları seçilen günlerde tanımlanmış bir zamana erteleyin.
+- Daha sonraki hatırlatmalar için bildirimleri erteleyin veya tekrar tekrar hatırlatın.
+- Anında ekstra dozlar ekleyin.
+- Aralıklarla birbirini takip eden dozları almak için hatırlatıcılar oluşturun.
+
+Basit ve Güvenli Veri Yönetimi:
+
+- İlaçlara uyumu doğru bir şekilde kaydetmek için hatırlatıcıları onaylayın veya reddedin.
+- Geçmiş dozlara bir grafik ve tablo görünümünde genel bir bakış elde edin.
+- Kolay kayıt tutmak veya sağlık uzmanlarıyla paylaşmak için ilaç geçmişinizi CSV dosyası olarak dışa aktarın.
+- İlaç listenizi JSON dosyası olarak yedekleyin ve geri yükleyin.
+
+Gizlilik ve Çevrimdışı Erişilebilirlik:
+
+- Tüm veriler cihazınızda güvenli bir şekilde saklanarak tam gizlilik ve çevrimdışı erişilebilirlik sağlanır.
+- İnternet bağlantısı gerekmez - ilaç hatırlatmalarınız her zaman kullanılabilir.
+
+MedTimer eklentisiz ücretsiz bir uygulamadır.
+
+GitHub'daki proje sayfasına bakın: https://github.com/Futsch1/medTimer
+
+Özellik grafiği https://hotpot.ai ile oluşturulmuştur.
