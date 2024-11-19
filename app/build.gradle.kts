@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     id("org.sonarqube") version "5.1.0.4882"
-    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.8.0"
+    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
 room {
@@ -88,7 +88,7 @@ dependencies {
     val junitVersion = "5.11.3"
     val mockitoCoreVersion = "5.14.2"
     val mockitoInlineVersion = "5.2.0"
-    val robolectricVersion = "4.13"
+    val robolectricVersion = "4.14"
     val jazzerVersion = "0.22.1"
 
     val androidTestJunitVersion = "1.2.1"
