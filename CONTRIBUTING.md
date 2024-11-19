@@ -14,10 +14,8 @@ Please use the bug and feature templates provided by the GitHub issue tracker.
 
 ## Contributing translations
 
-Translations are welcome. If you have any questions about a translation, please
-[open an issue](https://github.com/futsch1/MedTimer/issues) or contact the project author. New
-translation or updates to existing ones should be provided via pull request. However, these changes
-would also be accepted as attachment to issues.
+Translations are welcome. You can use [Weblate](https://hosted.weblate.org/projects/medtimer/) to
+provide your translation or provide a merge request.
 
 ### App text translations
 
