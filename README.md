@@ -83,6 +83,9 @@ the specific use cases it can satisfy.
 
 See the [contributing guide](CONTRIBUTING.md) for details on how to contribute.
 
+If you want to contribute a translation, be welcomed to use
+[Weblate](https://hosted.weblate.org/projects/medtimer/).
+
 ## Sponsor or support
 
 If you like my work, you can [buy me a coffee](https://www.buymeacoffee.com/futsch1). Note
