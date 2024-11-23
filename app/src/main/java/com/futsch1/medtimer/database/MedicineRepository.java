@@ -136,6 +136,10 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
+    public void deleteReminderEvent(ReminderEvent reminderEvent) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvent(reminderEvent));
+    }
+
     public List<Reminder> getLinkedReminders(int reminderId) {
         return medicineDao.getLinkedReminders(reminderId);
     }

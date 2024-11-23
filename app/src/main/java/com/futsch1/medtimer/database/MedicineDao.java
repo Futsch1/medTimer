@@ -77,6 +77,9 @@ public interface MedicineDao {
     @Query("DELETE FROM ReminderEvent")
     void deleteReminderEvents();
 
+    @Delete
+    void deleteReminderEvent(ReminderEvent reminderEvent);
+
     @Query("DELETE FROM Reminder")
     void deleteReminders();
 
@@ -85,5 +88,4 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
     List<Reminder> getLinkedReminders(int reminderId);
-
 }

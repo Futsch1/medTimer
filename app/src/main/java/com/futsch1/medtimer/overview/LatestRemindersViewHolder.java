@@ -1,6 +1,9 @@
 package com.futsch1.medtimer.overview;
 
+import android.app.Application;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +12,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
@@ -24,6 +29,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private final Chip chipTaken;
     private final Chip chipSkipped;
     private final ChipGroup chipGroup;
+    private final HandlerThread thread;
+    private boolean checkedChanged = false;
 
     private LatestRemindersViewHolder(View itemView) {
         super(itemView);
@@ -31,6 +38,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         chipTaken = itemView.findViewById(R.id.chipTaken);
         chipSkipped = itemView.findViewById(R.id.chipSkipped);
         chipGroup = itemView.findViewById(R.id.takenOrSkipped);
+        thread = new HandlerThread("DeleteReminderEvent");
+        thread.start();
     }
 
     static LatestRemindersViewHolder create(ViewGroup parent) {
@@ -58,8 +67,11 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
             if (!checkedIds.isEmpty()) {
                 int checkedId = checkedIds.get(0);
                 processTakenOrSkipped(reminderEvent, R.id.chipTaken == checkedId);
+                checkedChanged = true;
             }
         });
+        chipTaken.setOnClickListener(v -> processDeleteReRaiseReminderEvent(reminderEvent, chipTaken.isChecked()));
+        chipSkipped.setOnClickListener(v -> processDeleteReRaiseReminderEvent(reminderEvent, chipSkipped.isChecked()));
 
         if (reminderEvent.useColor) {
             ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
@@ -68,6 +80,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
+        checkedChanged = false;
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {
@@ -76,5 +89,20 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
                         ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
                         ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
         itemView.getContext().sendBroadcast(i, "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
+    }
+
+    private void processDeleteReRaiseReminderEvent(ReminderEvent reminderEvent, boolean checked) {
+        if (checked && !checkedChanged) {
+            new DeleteHelper(itemView.getContext()).deleteItem(R.string.delete_re_raise_event, () -> {
+                Handler handler = new Handler(thread.getLooper());
+                handler.post(() -> {
+                    MedicineRepository medicineRepository = new MedicineRepository((Application) itemView.getContext().getApplicationContext());
+                    medicineRepository.deleteReminderEvent(reminderEvent);
+                    ReminderProcessor.requestReschedule(itemView.getContext());
+                });
+            }, () -> {
+            });
+        }
+        checkedChanged = false;
     }
 }

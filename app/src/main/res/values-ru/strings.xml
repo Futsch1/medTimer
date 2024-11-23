@@ -164,4 +164,5 @@
   <string name="linked_reminder_delay">Задержка для следующей дозы</string>
   <string name="delay">Задержка</string>
   <string name="linked_reminder_summary">После напоминания на %1$s</string>
+  <string name="delete_re_raise_event">Хотите ли вы удалить это событие и снова поднять уведомление?</string>
 </resources>
