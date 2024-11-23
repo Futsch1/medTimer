@@ -160,4 +160,5 @@
     <string name="linked_reminder_delay">Verzögerung der folgende Dosis</string>
     <string name="delay">Verzögerung</string>
     <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
+    <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
 </resources>

@@ -158,4 +158,5 @@
   <string name="linked_reminder_delay">延迟后续剂量</string>
   <string name="delay">延迟</string>
   <string name="linked_reminder_summary">在 %1$s 处提醒后</string>
+  <string name="delete_re_raise_event">您想删除此事件并重新发出通知吗？</string>
 </resources>

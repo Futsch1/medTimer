@@ -162,4 +162,5 @@
     <string name="linked_reminder_delay">Retraso para la siguiente dosis</string>
     <string name="delay">Retraso</string>
     <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
+    <string name="delete_re_raise_event">¿Desea eliminar este evento y volver a subir la notificación?</string>
 </resources>

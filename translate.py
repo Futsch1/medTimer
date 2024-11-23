@@ -75,6 +75,10 @@ languages = set([tl[1] for tl in translate_list])
 
 # Update the existing strings.xml files
 for language in languages:
+    with open(f'app/src/main/res/values-{language}/strings.xml', 'r') as f:
+        line = f.readlines()[3]
+        indentation = ' ' * (len(line) - len(line.lstrip()))
+
     with open(f'app/src/main/res/values-{language}/strings.xml', 'wb') as f:
-        ET.indent(language_tree[language])
+        ET.indent(language_tree[language], indentation)
         language_tree[language].write(f, encoding='utf-8')

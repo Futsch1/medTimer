@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -161,4 +160,5 @@
     <string name="linked_reminder_delay">Vertraging voor volgende dosis</string>
     <string name="delay">Vertraging</string>
     <string name="linked_reminder_summary">Na herinnering op %1$s</string>
+    <string name="delete_re_raise_event">Wil je deze gebeurtenis verwijderen en de melding opnieuw verhogen?</string>
 </resources>

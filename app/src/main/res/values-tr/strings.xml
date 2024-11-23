@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -161,4 +160,5 @@
     <string name="linked_reminder_delay">Takip eden doz için gecikme</string>
     <string name="delay">Gecikme</string>
     <string name="linked_reminder_summary">%1$s adresindeki hatırlatmadan sonra</string>
+    <string name="delete_re_raise_event">Bu olayı silmek ve bildirimi yeniden yükseltmek istiyor musunuz?</string>
 </resources>
