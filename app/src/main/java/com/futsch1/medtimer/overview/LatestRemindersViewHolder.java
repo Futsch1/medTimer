@@ -55,6 +55,13 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         String reminderEventTextString = reminderEventText.getContext().getString(amountStringId, reminderEvent.amount, reminderEvent.medicineName, takenDateTime);
         reminderEventText.setText(reminderEventTextString);
 
+        setupChips(reminderEvent);
+        setupColorAndIcon(reminderEvent);
+        
+        checkedChanged = false;
+    }
+
+    private void setupChips(ReminderEvent reminderEvent) {
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             // Intentionally empty
         });
@@ -72,7 +79,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         });
         chipTaken.setOnClickListener(v -> processDeleteReRaiseReminderEvent(reminderEvent, chipTaken.isChecked()));
         chipSkipped.setOnClickListener(v -> processDeleteReRaiseReminderEvent(reminderEvent, chipSkipped.isChecked()));
+    }
 
+    private void setupColorAndIcon(ReminderEvent reminderEvent) {
         if (reminderEvent.useColor) {
             ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
         } else {
@@ -80,7 +89,6 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
-        checkedChanged = false;
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {
@@ -101,6 +109,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
                     ReminderProcessor.requestReschedule(itemView.getContext());
                 });
             }, () -> {
+                // Intentionally empty
             });
         }
         checkedChanged = false;
