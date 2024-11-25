@@ -5,7 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "6.0.0.5145"
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
