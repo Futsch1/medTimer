@@ -29,6 +29,17 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer">
+        <receiver
+            android:name=".widgets.NextRemindersWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_reminders_widget_info" />
+        </receiver>
 
         <service
             android:name=".ReminderSchedulerService"

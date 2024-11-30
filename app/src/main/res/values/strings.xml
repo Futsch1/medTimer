@@ -163,4 +163,7 @@
     <string name="delay">Delay</string>
     <string name="linked_reminder_summary">After reminder at %1$s</string>
     <string name="delete_re_raise_event">Do you want to delete this event and re-raise the notification?</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>
