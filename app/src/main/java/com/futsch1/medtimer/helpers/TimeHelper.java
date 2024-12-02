@@ -102,8 +102,12 @@ public class TimeHelper {
      * @return Date string in local format
      */
     public static String daysSinceEpochToDateString(Context context, long daysSinceEpoch) {
-        Date date = new Date(daysSinceEpoch * 24 * 60 * 60 * 1000);
-        return DateFormat.getDateFormat(context).format(date);
+        LocalDate date = Instant.ofEpochSecond(daysSinceEpoch * 24 * 60 * 60)
+                .atZone(ZoneOffset.UTC)
+                .toLocalDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+                .withLocale(context.getResources().getConfiguration().getLocales().get(0));
+        return date.format(formatter);
     }
 
     /**
