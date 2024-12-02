@@ -38,7 +38,7 @@ class NextRemindersWidget : AppWidgetProvider() {
     }
 }
 
-internal fun getNextReminderEvents(context: Context): String {
+internal fun getNextReminderEvents(context: Context, line: Int): String {
     val medicineRepository = MedicineRepository(context.applicationContext as Application?)
     val medicinesWithReminders = medicineRepository.medicines
     val reminderEvents = medicineRepository.allReminderEventsWithoutDeleted
@@ -54,7 +54,12 @@ internal fun getNextReminderEvents(context: Context): String {
 
     val scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
 
-    return scheduledReminderToString(context, scheduledReminders[0])
+    val scheduledReminder = scheduledReminders.getOrNull(line)
+
+    return if (scheduledReminder != null) scheduledReminderToString(
+        context,
+        scheduledReminder
+    ) else ""
 }
 
 private fun scheduledReminderToString(
@@ -82,18 +87,23 @@ internal fun updateAppWidget(
     handler.post {
         val containerViews = RemoteViews(context.packageName, R.layout.next_reminders_widget)
 
-        val views = RemoteViews(context.packageName, R.layout.next_reminders_widget_line)
-        views.setTextViewText(
-            R.id.nextReminderWidgetLineText,
-            getNextReminderEvents(context)
-        )
-        containerViews.addView(R.id.nextRemindersWidgetLine1, views)
-
-        val views2 = RemoteViews(context.packageName, R.layout.next_reminders_widget_line)
-        views2.setTextViewText(R.id.nextReminderWidgetLineText, "Test2")
-        containerViews.addView(R.id.nextRemindersWidgetLine2, views2)
+        createNextReminderWidgetLines(context, containerViews)
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, containerViews)
+    }
+}
+
+fun createNextReminderWidgetLines(context: Context, containerViews: RemoteViews) {
+    val viewIds = intArrayOf(
+        R.id.nextRemindersWidgetLine1,
+        R.id.nextRemindersWidgetLine2,
+        R.id.nextRemindersWidgetLine3,
+        R.id.nextRemindersWidgetLine4
+    )
+    for (i in 0..3) {
+        val views = RemoteViews(context.packageName, R.layout.next_reminders_widget_line)
+        views.setTextViewText(R.id.nextReminderWidgetLineText, getNextReminderEvents(context, i))
+        containerViews.addView(viewIds[i], views)
     }
 }
