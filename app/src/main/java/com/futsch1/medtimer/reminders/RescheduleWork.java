@@ -25,6 +25,7 @@ import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
+import com.futsch1.medtimer.widgets.NextRemindersWidgetUpdateReceiver;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -109,6 +110,9 @@ public class RescheduleWork extends Worker {
                             reminderNotificationData.medicineName,
                             reminderNotificationData.reminderId,
                             timestamp));
+
+            updateNextReminderWidget();
+
         } else {
             // Immediately remind
             WorkRequest reminderWork =
@@ -132,6 +136,12 @@ public class RescheduleWork extends Worker {
         boolean exactReminders = sharedPref.getBoolean(PreferencesNames.EXACT_REMINDERS, true);
 
         return exactReminders && alarmManager.canScheduleExactAlarms();
+    }
+
+    private void updateNextReminderWidget() {
+        Intent intent = new Intent(context, NextRemindersWidgetUpdateReceiver.class);
+        intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE");
+        context.sendBroadcast(intent);
     }
 
     public record ReminderNotificationData(Instant timestamp,

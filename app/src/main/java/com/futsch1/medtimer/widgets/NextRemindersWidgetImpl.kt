@@ -2,7 +2,6 @@ package com.futsch1.medtimer.widgets
 
 import android.app.Application
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
@@ -12,37 +11,14 @@ import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.LocalDate
 import java.time.ZoneId
-
-class NextRemindersWidget : AppWidgetProvider() {
-
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        // There may be multiple widgets active, so update all of them
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
-    }
-
-    override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
-}
 
 internal fun getNextReminderEvents(context: Context, line: Int): String {
     val medicineRepository = MedicineRepository(context.applicationContext as Application?)
     val medicinesWithReminders = medicineRepository.medicines
     val reminderEvents = medicineRepository.allReminderEventsWithoutDeleted
-    val reminderScheduler = ReminderScheduler(object : TimeAccess {
+    val reminderScheduler = ReminderScheduler(object : ReminderScheduler.TimeAccess {
         override fun systemZone(): ZoneId {
             return ZoneId.systemDefault()
         }
@@ -72,7 +48,6 @@ private fun scheduledReminderToString(
     ) +
             ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
 }
-
 
 internal fun updateAppWidget(
     context: Context,
