@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.app.Application
 import android.content.Context
+import android.os.LocaleList
 import android.text.format.DateFormat
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
@@ -22,6 +23,7 @@ import org.mockito.Mockito.mockStatic
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Date
+import java.util.Locale
 
 class SummaryHelperTest {
 
@@ -71,22 +73,22 @@ class SummaryHelperTest {
 
     @Test
     fun test_reminderSummary_cyclic() {
+        val localeList = mock(LocaleList::class.java)
+        Mockito.`when`(localeList.get(0)).thenReturn(Locale.US)
+        val configuration = mock(android.content.res.Configuration::class.java)
+        Mockito.`when`(configuration.locales).thenReturn(localeList)
+        val resources = mock(android.content.res.Resources::class.java)
+        Mockito.`when`(resources.configuration).thenReturn(configuration)
         val context = mock(Context::class.java)
+        Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.getString(R.string.cycle_reminders)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.cycle_start_date)).thenReturn("2")
-        val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
-        val dateFormat = mock(java.text.DateFormat::class.java)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getDateFormat(context) }
-            .thenReturn(dateFormat)
-        Mockito.`when`(dateFormat.format(any(Date::class.java))).thenReturn("19823")
 
         val reminder = Reminder(1)
         reminder.consecutiveDays = 4
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
-        assertEquals("1 4/5, 2 19823", reminderSummary(context, reminder))
-
-        mockedDateFormat.close()
+        assertEquals("1 4/5, 2 4/10/24", reminderSummary(context, reminder))
     }
 
     @Test
