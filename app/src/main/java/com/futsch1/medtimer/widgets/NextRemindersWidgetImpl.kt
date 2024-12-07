@@ -1,11 +1,14 @@
 package com.futsch1.medtimer.widgets
 
 import android.app.Application
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
+import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
@@ -83,6 +86,10 @@ class NextRemindersWidgetImpl(val context: Context) {
 
         val containerView = RemoteViews(context.packageName, R.layout.next_reminders_widget)
         createNextReminderWidgetLines(containerView, 4)
+        containerView.setOnClickPendingIntent(
+            R.id.nextReminderWidget,
+            getOpenAppPendingIntent()
+        )
 
         val containerViewSmall =
             RemoteViews(context.packageName, R.layout.next_reminders_widget_small)
@@ -94,6 +101,16 @@ class NextRemindersWidgetImpl(val context: Context) {
         )
         val remoteViews = RemoteViews(viewMapping)
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+    }
+
+    private fun getOpenAppPendingIntent(): PendingIntent? {
+        return PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
     }
 
     private fun createNextReminderWidgetLines(

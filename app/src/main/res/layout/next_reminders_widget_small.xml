@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nextReminderWidgetLine"
+    android:id="@+id/nextReminderWidget"
     style="@style/Widget.MedTimer.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
