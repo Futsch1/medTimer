@@ -1,8 +1,8 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nextReminderWidgetLineText"
+    style="@style/Widget.MedTimer.AppWidget.InnerText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:theme="@style/Theme.MedTimer.AppWidgetContainer">
+    android:orientation="horizontal">
 
 </TextView>

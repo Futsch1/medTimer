@@ -54,18 +54,16 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-
-
     val thread = HandlerThread("UpdateWidget")
     thread.start()
     val handler = Handler(thread.looper)
     handler.post {
-        val containerViews = RemoteViews(context.packageName, R.layout.next_reminders_widget)
+        val containerView = RemoteViews(context.packageName, R.layout.next_reminders_widget)
 
-        createNextReminderWidgetLines(context, containerViews)
+        createNextReminderWidgetLines(context, containerView)
 
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, containerViews)
+        appWidgetManager.updateAppWidget(appWidgetId, containerView)
     }
 }
 

@@ -1,36 +1,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nextReminderWidgetLine"
+    style="@style/Widget.MedTimer.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/Widget.MedTimer.AppWidget.Container">
+    android:theme="@style/Theme.MedTimer.AppWidgetContainer">
 
     <LinearLayout
-        android:id="@+id/nextRemindersWidgetLine1"
-        style="Widget.MedTimer.AppWidget.InnerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/app_url"
+            android:src="@mipmap/logo_round" />
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/next_reminders" />
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/nextRemindersWidgetLine2"
-        style="Widget.MedTimer.AppWidget.InnerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/nextRemindersWidgetLine3"
-        style="Widget.MedTimer.AppWidget.InnerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        <LinearLayout
+            android:id="@+id/nextRemindersWidgetLine1"
+            style="@style/Widget.MedTimer.AppWidget.InnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-    <LinearLayout
-        android:id="@+id/nextRemindersWidgetLine4"
-        style="Widget.MedTimer.AppWidget.InnerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            tools:ignore="UselessLeaf" />
+
+        <LinearLayout
+            android:id="@+id/nextRemindersWidgetLine2"
+            style="@style/Widget.MedTimer.AppWidget.InnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            tools:ignore="UselessLeaf" />
+
+        <LinearLayout
+            android:id="@+id/nextRemindersWidgetLine3"
+            style="@style/Widget.MedTimer.AppWidget.InnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            tools:ignore="UselessLeaf" />
+
+        <LinearLayout
+            android:id="@+id/nextRemindersWidgetLine4"
+            style="@style/Widget.MedTimer.AppWidget.InnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </LinearLayout>
 
 </LinearLayout>
