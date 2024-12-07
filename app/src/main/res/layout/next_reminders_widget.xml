@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nextReminderWidget"
     style="@style/Widget.MedTimer.Container"
     android:layout_width="match_parent"
@@ -9,57 +8,6 @@
 
     <include layout="@layout/next_reminder_widget_caption" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/nextRemindersWidgetLine1"
-            style="@style/Widget.MedTimer.InnerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            tools:ignore="UselessLeaf" />
-
-        <LinearLayout
-            android:id="@+id/nextRemindersWidgetLine2"
-            style="@style/Widget.MedTimer.InnerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            tools:ignore="UselessLeaf" />
-
-        <LinearLayout
-            android:id="@+id/nextRemindersWidgetLine3"
-            style="@style/Widget.MedTimer.InnerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            tools:ignore="UselessLeaf" />
-
-        <LinearLayout
-            android:id="@+id/nextRemindersWidgetLine4"
-            style="@style/Widget.MedTimer.InnerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
-    </LinearLayout>
+    <include layout="@layout/widget_four_lines" />
 
 </LinearLayout>

@@ -118,15 +118,15 @@ class NextRemindersWidgetImpl(val context: Context) {
         numLines: Int
     ) {
         val viewIds = intArrayOf(
-            R.id.nextRemindersWidgetLine1,
-            R.id.nextRemindersWidgetLine2,
-            R.id.nextRemindersWidgetLine3,
-            R.id.nextRemindersWidgetLine4
+            R.id.widgetLine1,
+            R.id.widgetLine2,
+            R.id.widgetLine3,
+            R.id.widgetLine4
         )
         for (i in 0..<numLines) {
-            val views = RemoteViews(context.packageName, R.layout.next_reminders_widget_line)
+            val views = RemoteViews(context.packageName, R.layout.widget_line)
             val text = getNextReminderEvents(i)
-            views.setTextViewText(R.id.nextReminderWidgetLineText, text)
+            views.setTextViewText(R.id.widgetLineText, text)
             containerViews.addView(viewIds[i], views)
             containerViews.setViewVisibility(
                 viewIds[i],
