@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nextReminderWidget"
+    style="@style/Widget.MedTimer.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MedTimer.WidgetContainer">
+
+    <include layout="@layout/next_reminder_widget_caption" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/widgetLine1"
+            style="@style/Widget.MedTimer.InnerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/widgetLineText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:orientation="horizontal"
+                android:text="@string/preview_next_reminders_widget_line"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

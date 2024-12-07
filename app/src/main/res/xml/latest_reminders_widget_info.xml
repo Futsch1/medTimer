@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/recent_events"
+    android:initialKeyguardLayout="@layout/latest_reminders_widget"
+    android:initialLayout="@layout/latest_reminders_widget"
+    android:maxResizeWidth="600dp"
+    android:maxResizeHeight="200dp"
+    android:minWidth="200dp"
+    android:minHeight="45dp"
+    android:minResizeWidth="200dp"
+    android:minResizeHeight="45dp"
+    android:previewLayout="@layout/latest_reminders_widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="3"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="3600000"
+    android:widgetCategory="home_screen" />

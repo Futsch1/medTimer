@@ -60,7 +60,7 @@ class LinkedReminderHandling(
     private fun internalDelete(
         reminder: Reminder
     ) {
-        val reminders = medicineViewModel.getLinkedReminders(reminder.reminderId)
+        val reminders: List<Reminder> = medicineViewModel.getLinkedReminders(reminder.reminderId)
         for (r in reminders) {
             internalDelete(r)
         }

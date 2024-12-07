@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Widget.MedTimer.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:padding">?attr/medtimerWidgetPadding</item>
+        <item name="android:background">@drawable/app_widget_background</item>
+    </style>
+
+    <style name="Widget.MedTimer.InnerView" parent="android:Widget">
+        <item name="android:padding">?attr/medtimerWidgetPadding</item>
+        <item name="android:background">@drawable/app_widget_inner_view_background</item>
+    </style>
 </resources>
