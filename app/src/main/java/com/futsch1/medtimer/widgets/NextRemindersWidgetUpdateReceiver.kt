@@ -15,8 +15,7 @@ class NextRemindersWidgetUpdateReceiver : BroadcastReceiver() {
                 NextRemindersWidgetProvider::class.java
             )
         )
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
+
+        performWidgetUpdate(context, appWidgetIds, appWidgetManager)
     }
 }

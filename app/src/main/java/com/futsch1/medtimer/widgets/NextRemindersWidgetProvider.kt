@@ -11,10 +11,7 @@ class NextRemindersWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
+        performWidgetUpdate(context, appWidgetIds, appWidgetManager)
     }
 
     override fun onEnabled(context: Context) {
@@ -26,4 +23,14 @@ class NextRemindersWidgetProvider : AppWidgetProvider() {
     }
 }
 
+fun performWidgetUpdate(
+    context: Context,
+    appWidgetIds: IntArray,
+    appWidgetManager: AppWidgetManager
+) {
+    val widgetImpl = NextRemindersWidgetImpl(context)
+    for (appWidgetId in appWidgetIds) {
+        widgetImpl.updateAppWidget(appWidgetManager, appWidgetId)
+    }
+}
 
