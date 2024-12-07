@@ -17,12 +17,11 @@
         It needs to be 8dp or less than the value of appWidgetRadius
         -->
         <item name="medtimerWidgetInnerRadius">8dp</item>
-        <item name="background">@android:color/black</item>
     </style>
 
     <style name="Theme.MedTimer.WidgetContainer" parent="Theme.MedTimer.WidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="medtimerWidgetPadding">16dp</item>
+        <item name="medtimerWidgetPadding">8dp</item>
     </style>
 
 </resources>
