@@ -21,7 +21,7 @@
 
     <style name="Theme.MedTimer.WidgetContainer" parent="Theme.MedTimer.WidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="medtimerWidgetPadding">8dp</item>
+        <item name="medtimerWidgetPadding">6dp</item>
     </style>
 
 </resources>
