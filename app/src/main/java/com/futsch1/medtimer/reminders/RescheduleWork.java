@@ -141,7 +141,7 @@ public class RescheduleWork extends Worker {
     private void updateNextReminderWidget() {
         Intent intent = new Intent(context, WidgetUpdateReceiver.class);
         intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE");
-        context.sendBroadcast(intent);
+        context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
     }
 
     public record ReminderNotificationData(Instant timestamp,
