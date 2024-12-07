@@ -2,7 +2,9 @@
     android:id="@+id/nextReminderWidgetLineText"
     style="@style/Widget.MedTimer.AppWidget.InnerText"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:maxLines="1"
     android:orientation="horizontal">
 
 </TextView>
