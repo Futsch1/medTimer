@@ -3,6 +3,7 @@ package com.futsch1.medtimer.widgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import com.futsch1.medtimer.R
 
 class LatestRemindersWidgetProvider : AppWidgetProvider() {
 
@@ -11,7 +12,9 @@ class LatestRemindersWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        performWidgetUpdate(context, appWidgetIds, appWidgetManager)
+        performWidgetUpdate(
+            getLatestReminderWidgetImpl(context), appWidgetIds, appWidgetManager
+        )
     }
 
     override fun onEnabled(context: Context) {
@@ -23,3 +26,16 @@ class LatestRemindersWidgetProvider : AppWidgetProvider() {
     }
 }
 
+
+fun getLatestReminderWidgetImpl(context: Context): WidgetImpl {
+    val lineProvider = LatestRemindersLineProvider(context)
+    return WidgetImpl(
+        context,
+        lineProvider,
+        WidgetIds(
+            R.id.latestReminderWidget,
+            R.layout.latest_reminders_widget,
+            R.layout.latest_reminders_widget_small
+        )
+    )
+}

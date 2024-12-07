@@ -9,13 +9,25 @@ import android.content.Intent
 class WidgetUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(
+
+        val appWidgetIdsNextReminders = appWidgetManager.getAppWidgetIds(
             ComponentName(
                 context!!,
                 NextRemindersWidgetProvider::class.java
             )
         )
+        performWidgetUpdate(
+            getNextReminderWidgetImpl(context), appWidgetIdsNextReminders, appWidgetManager
+        )
 
-        performWidgetUpdate(context, appWidgetIds, appWidgetManager)
+        val appWidgetIdsLatestReminders = appWidgetManager.getAppWidgetIds(
+            ComponentName(
+                context,
+                LatestRemindersWidgetProvider::class.java
+            )
+        )
+        performWidgetUpdate(
+            getLatestReminderWidgetImpl(context), appWidgetIdsLatestReminders, appWidgetManager
+        )
     }
 }
