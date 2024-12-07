@@ -25,7 +25,7 @@ import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
-import com.futsch1.medtimer.widgets.NextRemindersWidgetUpdateReceiver;
+import com.futsch1.medtimer.widgets.WidgetUpdateReceiver;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -139,7 +139,7 @@ public class RescheduleWork extends Worker {
     }
 
     private void updateNextReminderWidget() {
-        Intent intent = new Intent(context, NextRemindersWidgetUpdateReceiver.class);
+        Intent intent = new Intent(context, WidgetUpdateReceiver.class);
         intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE");
         context.sendBroadcast(intent);
     }

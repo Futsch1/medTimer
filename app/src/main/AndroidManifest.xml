@@ -100,10 +100,21 @@
                 android:resource="@xml/next_reminders_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.NextRemindersWidgetUpdateReceiver"
+            android:name=".widgets.LatestRemindersWidgetProvider"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/latest_reminders_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widgets.WidgetUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.futsch1.medtimer.WIDGET_UPDATE" />
             </intent-filter>
 
         </receiver>
