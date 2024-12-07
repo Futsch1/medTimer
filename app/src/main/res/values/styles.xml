@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.MedTimer.AppWidget.Container" parent="android:Widget">
+    <style name="Widget.MedTimer.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
-        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:padding">?attr/medtimerWidgetPadding</item>
         <item name="android:background">@drawable/app_widget_background</item>
     </style>
 
-    <style name="Widget.MedTimer.AppWidget.InnerView" parent="android:Widget">
-        <item name="android:padding">?attr/appWidgetPadding</item>
+    <style name="Widget.MedTimer.InnerView" parent="android:Widget">
+        <item name="android:padding">?attr/medtimerWidgetPadding</item>
         <item name="android:background">@drawable/app_widget_inner_view_background</item>
     </style>
 
-    <style name="Widget.MedTimer.AppWidget.InnerText" parent="android:Widget.TextView">
+    <style name="Widget.MedTimer.InnerText" parent="android:Widget.TextView">
         <item name="android:textColor">@color/material_on_primary_emphasis_medium</item>
     </style>
 </resources>

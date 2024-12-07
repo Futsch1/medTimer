@@ -1,6 +1,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nextReminderWidgetLineText"
-    style="@style/Widget.MedTimer.AppWidget.InnerText"
+    style="@style/Widget.MedTimer.InnerText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"

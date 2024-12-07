@@ -7,18 +7,18 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.MedTimer.AppWidgetContainerParent" parent="Theme.Material3.DynamicColors.Light">
+    <style name="Theme.MedTimer.WidgetContainerParent" parent="Theme.Material3.DynamicColors.Light">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
-        <item name="appWidgetRadius">16dp</item>
+        <item name="medtimerWidgetRadius">16dp</item>
         <!--
         Radius of the inner view's bound of widgets to make the rounded corners.
         It needs to be 8dp or less than the value of appWidgetRadius
         -->
-        <item name="appWidgetInnerRadius">8dp</item>
+        <item name="medtimerWidgetInnerRadius">8dp</item>
     </style>
 
-    <style name="Theme.MedTimer.AppWidgetContainer" parent="Theme.MedTimer.AppWidgetContainerParent">
+    <style name="Theme.MedTimer.WidgetContainer" parent="Theme.MedTimer.WidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">8dp</item>
+        <item name="medtimerWidgetPadding">8dp</item>
     </style>
 </resources>

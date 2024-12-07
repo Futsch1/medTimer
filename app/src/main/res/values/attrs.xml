@@ -1,7 +1,7 @@
 <resources>
-    <declare-styleable name="AppWidgetAttrs">
-        <attr name="appWidgetPadding" format="dimension" />
-        <attr name="appWidgetInnerRadius" format="dimension" />
-        <attr name="appWidgetRadius" format="dimension" />
+    <declare-styleable name="WidgetAttrs">
+        <attr name="medtimerWidgetPadding" format="dimension" />
+        <attr name="medtimerWidgetInnerRadius" format="dimension" />
+        <attr name="medtimerWidgetRadius" format="dimension" />
     </declare-styleable>
 </resources>
