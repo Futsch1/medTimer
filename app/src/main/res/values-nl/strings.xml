@@ -21,7 +21,7 @@
     <string name="notification_title">Herinneringen van de behandeling</string>
     <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
-    <string name="taken">Bevestigen</string>
+    <string name="taken">Ingenomen</string>
     <string name="skipped">Overslaan</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
@@ -111,7 +111,7 @@
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
-    <string name="taken_now">Bevestigen</string>
+    <string name="taken_now">Ingenomen</string>
     <string name="event_name">Herinneringennaam</string>
     <string name="edit_event">Herinnering bewerken</string>
     <string name="show_all">Alles weergeven</string>
