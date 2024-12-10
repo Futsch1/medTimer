@@ -53,6 +53,13 @@ public class Reminder {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int linkedReminderId;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean isIntervalReminder;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean intervalStartsFromTaken;
+
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -66,5 +73,7 @@ public class Reminder {
         periodStart = 0;
         periodEnd = 0;
         linkedReminderId = 0;
+        isIntervalReminder = false;
+        intervalStartsFromTaken = false;
     }
 }
