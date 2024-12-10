@@ -69,8 +69,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder));
 
         editAmount.setText(reminder.amount);
-        new Handler(thread.getLooper()).post(() ->
-                advancedSettingsSummary.setText(SummaryHelperKt.reminderSummary(itemView.getContext(), reminder)));
+        new Handler(thread.getLooper()).post(() -> {
+            String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
+            this.fragmentActivity.runOnUiThread(() ->
+                    advancedSettingsSummary.setText(summary));
+
+        });
     }
 
     private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
