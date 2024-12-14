@@ -14,6 +14,18 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/reminderChartsButton"
+            style="?attr/materialIconButtonFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/tabular_view"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            ap:icon="@drawable/bar_chart"
+            ap:iconPadding="0dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/reminderTableButton"
             style="?attr/materialIconButtonFilledStyle"
             android:layout_width="wrap_content"
@@ -50,57 +62,11 @@
             android:entries="@array/analysis_days" />
     </LinearLayout>
 
-    <com.androidplot.xy.XYPlot
-        android:id="@+id/medicinesPerDayChart"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        ap:graphAnchor="left_top"
-        ap:graphHeight="50dp"
-        ap:graphHeightMode="fill"
-        ap:graphHorizontalPosition="0"
-        ap:graphHorizontalPositioning="absolute_from_left"
-        ap:graphPaddingBottom="15dp"
-        ap:graphPaddingLeft="20dp"
-        ap:graphPaddingRight="5dp"
-        ap:graphPaddingTop="20dp"
-        ap:graphVerticalPosition="0"
-        ap:graphVerticalPositioning="absolute_from_top"
-        ap:gridClippingEnabled="false"
-        ap:legendAnchor="left_bottom"
-        ap:legendHeight="50dp"
-        ap:legendHeightMode="absolute"
-        ap:legendHorizontalPosition="0"
-        ap:legendHorizontalPositioning="absolute_from_left"
-        ap:legendVerticalPosition="0"
-        ap:legendVerticalPositioning="absolute_from_bottom"
-        ap:legendVisible="true"
-        ap:legendWidth="10dp"
-        ap:legendWidthMode="fill"
-        ap:lineLabelInsetBottom="-13dp"
-        ap:lineLabelInsetLeft="-13dp"
-        ap:lineLabels="left|bottom"
-        ap:marginTop="10dp" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <com.androidplot.pie.PieChart
-            android:id="@+id/takenSkippedChartTotal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:ignore="NestedWeights" />
-
-        <com.androidplot.pie.PieChart
-            android:id="@+id/takenSkippedChart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
