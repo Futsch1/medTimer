@@ -16,7 +16,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.remindertable.ReminderTableFragment;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.ChipGroup;
 
 public class StatisticsFragment extends Fragment {
     private Spinner timeSpinner;
@@ -37,9 +37,8 @@ public class StatisticsFragment extends Fragment {
         chartsFragment.setDays(analysisDays.getDays());
 
         setupTimeSpinner();
-        setupReminderChartButton(statisticsView);
-        setupReminderTableButton(statisticsView);
-        setupReminderCalendarButton(statisticsView);
+
+        setupFragmentButtons(statisticsView);
 
         loadActiveFragment(activeStatisticsFragment.getActiveFragment());
 
@@ -50,6 +49,27 @@ public class StatisticsFragment extends Fragment {
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;
+    }
+
+    private void setupFragmentButtons(View statisticsView) {
+        ChipGroup chipGroup = statisticsView.findViewById(R.id.analysisView);
+        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (!checkedIds.isEmpty()) {
+                int checkedId = checkedIds.get(0);
+                if (R.id.chartChip == checkedId) {
+                    loadActiveFragment(StatisticFragmentType.CHARTS);
+                } else if (R.id.tableChip == checkedId) {
+                    loadActiveFragment(StatisticFragmentType.TABLE);
+                } else {
+                    loadActiveFragment(StatisticFragmentType.CALENDAR);
+                }
+            }
+        });
+        chipGroup.check(switch (activeStatisticsFragment.getActiveFragment()) {
+            case TABLE -> R.id.tableChip;
+            case CALENDAR -> R.id.calendarChip;
+            default -> R.id.chartChip;
+        });
     }
 
     private void loadActiveFragment(StatisticFragmentType fragmentType) {
@@ -92,20 +112,5 @@ public class StatisticsFragment extends Fragment {
                 // Intentionally empty
             }
         });
-    }
-
-    private void setupReminderChartButton(View statisticsView) {
-        MaterialButton reminderTableButton = statisticsView.findViewById(R.id.reminderChartsButton);
-        reminderTableButton.setOnClickListener(view -> loadActiveFragment(StatisticFragmentType.CHARTS));
-    }
-
-    private void setupReminderTableButton(View statisticsView) {
-        MaterialButton reminderTableButton = statisticsView.findViewById(R.id.reminderTableButton);
-        reminderTableButton.setOnClickListener(view -> loadActiveFragment(StatisticFragmentType.TABLE));
-    }
-
-    private void setupReminderCalendarButton(View statisticsView) {
-        MaterialButton reminderCalendarButton = statisticsView.findViewById(R.id.reminderCalendarButton);
-        reminderCalendarButton.setOnClickListener(view -> loadActiveFragment(StatisticFragmentType.CALENDAR));
     }
 }

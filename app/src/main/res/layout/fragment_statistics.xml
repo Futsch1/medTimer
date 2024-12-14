@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ap="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,41 +12,45 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reminderChartsButton"
-            style="?attr/materialIconButtonFilledStyle"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/analysisView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/tabular_view"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            ap:icon="@drawable/bar_chart"
-            ap:iconPadding="0dp" />
+            android:layout_marginStart="10dp"
+            ap:checkedChip="@id/chartChip"
+            ap:selectionRequired="true"
+            ap:singleSelection="true">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reminderTableButton"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/tabular_view"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            app:icon="@drawable/table"
-            app:iconPadding="0dp" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chartChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:contentDescription="@string/analysis"
+                ap:chipEndPadding="0dp"
+                ap:chipIcon="@drawable/bar_chart"
+                ap:chipStartPadding="16dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reminderCalendarButton"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/calendar"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            app:icon="@drawable/calendar_week"
-            app:iconPadding="0dp" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tableChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:contentDescription="@string/tabular_view"
+                ap:chipEndPadding="0dp"
+                ap:chipIcon="@drawable/table"
+                ap:chipStartPadding="16dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/calendarChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:contentDescription="@string/calendar"
+                ap:chipEndPadding="0dp"
+                ap:chipIcon="@drawable/calendar_week"
+                ap:chipStartPadding="16dp" />
+        </com.google.android.material.chip.ChipGroup>
 
         <Space
             android:layout_width="0dp"
