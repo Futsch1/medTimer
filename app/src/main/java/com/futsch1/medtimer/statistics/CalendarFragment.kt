@@ -54,7 +54,7 @@ class CalendarFragment : Fragment() {
         val fragmentView: View =
             inflater.inflate(R.layout.fragment_calendar, container, false)
 
-        val medicineCalenderArgs = CalendarFragmentArgs.fromBundle(requireArguments())
+        val medicineCalenderArgs = calendarFragmentArgs()
 
         calendarView =
             fragmentView.findViewById(R.id.medicineCalendar)
@@ -76,6 +76,15 @@ class CalendarFragment : Fragment() {
         setupCalendarView(medicineCalenderArgs)
 
         return fragmentView
+    }
+
+    private fun calendarFragmentArgs(): CalendarFragmentArgs {
+        val medicineCalenderArgs = if (arguments != null) {
+            CalendarFragmentArgs.fromBundle(requireArguments())
+        } else {
+            CalendarFragmentArgs.Builder(-1, 90, 0).build()
+        }
+        return medicineCalenderArgs
     }
 
     private fun setupCalendarView(medicineCalenderArgs: CalendarFragmentArgs) {

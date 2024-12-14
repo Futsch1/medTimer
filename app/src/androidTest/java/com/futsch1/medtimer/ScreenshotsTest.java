@@ -122,7 +122,7 @@ public class ScreenshotsTest {
                         0))
                 .atPosition(1).perform(click());
 
-        onView(allOf(withId(R.id.reminderTableButton))).perform(click());
+        onView(allOf(withId(R.id.tableChip))).perform(click());
         Screengrab.screenshot("7");
 
         onView(
@@ -149,8 +149,7 @@ public class ScreenshotsTest {
 
         onView(withId(com.google.android.material.R.id.text_input_end_icon)).perform(click());
 
-        pressBack();
-        onView(allOf(withId(R.id.reminderCalendarButton))).perform(click());
+        onView(allOf(withId(R.id.calendarChip))).perform(click());
         Screengrab.screenshot("8");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);

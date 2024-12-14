@@ -73,7 +73,7 @@ public class CalendarTest {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
-        onView(allOf(withId(R.id.reminderCalendarButton), isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.calendarChip), isDisplayed())).perform(click());
 
         onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
     }
