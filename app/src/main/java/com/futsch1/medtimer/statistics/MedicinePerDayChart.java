@@ -41,7 +41,6 @@ public class MedicinePerDayChart {
         this.chartHelper = new ChartHelper(context);
         this.medicines = medicines;
 
-
         medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
 
         setupBottomLine();
@@ -106,7 +105,7 @@ public class MedicinePerDayChart {
             minDomain -= 1;
         }
         long numDomains = (maxDomain - minDomain + 1);
-        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, Math.ceil(numDomains / 7.0f));
+        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, getDomainStepVal(numDomains));
         medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
 
         medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(numLegendColumns, 3, TableOrder.ROW_MAJOR));
@@ -118,7 +117,7 @@ public class MedicinePerDayChart {
     private MedicinePerDayChartFormatter getFormatter(String title) {
         MedicinePerDayChartFormatter formatter = new MedicinePerDayChartFormatter();
         formatter.getFillPaint().setColor(getColor(title));
-        formatter.getBorderPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnPrimary));
+        formatter.getBorderPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorPrimary));
         return formatter;
     }
 
@@ -161,6 +160,14 @@ public class MedicinePerDayChart {
         } else {
             XYSeries first = series.get(0);
             return first.getX(first.size() - 1).longValue();
+        }
+    }
+
+    private double getDomainStepVal(long numDomains) {
+        if (TimeHelper.daysSinceEpochToDateString(context, LocalDate.of(2024, 12, 31).toEpochDay()).length() > 8) {
+            return Math.ceil(numDomains / 5.0f);
+        } else {
+            return Math.ceil(numDomains / 7.0f);
         }
     }
 
