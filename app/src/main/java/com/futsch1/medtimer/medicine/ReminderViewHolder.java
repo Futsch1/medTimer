@@ -59,12 +59,16 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     public void bind(Reminder reminder) {
         this.reminder = reminder;
 
-        @StringRes int textId = reminder.linkedReminderId == 0 ? R.string.time : R.string.delay;
-        editTimeLayout.setHint(textId);
-        timeEditor = new TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, minutes -> {
-            reminder.timeInMinutes = minutes;
-            return Unit.INSTANCE;
-        }, reminder.linkedReminderId != 0 ? R.string.linked_reminder_delay : null);
+        if (reminder.getReminderType() != Reminder.ReminderType.INTERVAL_BASED) {
+            @StringRes int textId = reminder.getReminderType() == Reminder.ReminderType.LINKED ? R.string.time : R.string.delay;
+            editTimeLayout.setHint(textId);
+            timeEditor = new TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, minutes -> {
+                reminder.timeInMinutes = minutes;
+                return Unit.INSTANCE;
+            }, reminder.getReminderType() == Reminder.ReminderType.LINKED ? R.string.linked_reminder_delay : null);
+        } else {
+            editTimeLayout.setVisibility(View.GONE);
+        }
 
         advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder));
 
@@ -84,9 +88,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     public Reminder getReminder() {
         reminder.amount = editAmount.getText().toString();
-        int minutes = timeEditor.getMinutes();
-        if (minutes >= 0) {
-            reminder.timeInMinutes = minutes;
+        if (timeEditor != null) {
+            int minutes = timeEditor.getMinutes();
+            if (minutes >= 0) {
+                reminder.timeInMinutes = minutes;
+            }
         }
         return reminder;
     }

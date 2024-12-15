@@ -16,16 +16,32 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     if (!isReminderActive(reminder)) {
         strings.add(context.getString(R.string.inactive))
     }
-    if (reminder.linkedReminderId != 0) {
-        strings.add(linkedReminderString(reminder, context))
-    } else {
-        standardReminderString(reminder, strings, context)
+    when (reminder.reminderType) {
+        Reminder.ReminderType.LINKED -> {
+            strings.add(linkedReminderString(reminder, context))
+        }
+
+        Reminder.ReminderType.INTERVAL_BASED -> {
+            strings.add(intervalBasedReminderString(reminder, context))
+        }
+
+        else -> {
+            timeBasedReminderString(reminder, strings, context)
+        }
     }
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
     }
 
     return java.lang.String.join(", ", strings)
+}
+
+fun intervalBasedReminderString(
+    reminder: Reminder,
+    context: Context
+): String {
+    val interval = Interval(reminder.timeInMinutes)
+    return context.getString(R.string.every_interval, interval.toTranslatedString(context))
 }
 
 fun linkedReminderString(reminder: Reminder, context: Context): String {
@@ -47,7 +63,7 @@ fun linkedReminderString(reminder: Reminder, context: Context): String {
     return "?"
 }
 
-private fun standardReminderString(
+private fun timeBasedReminderString(
     reminder: Reminder,
     strings: MutableList<String>,
     context: Context
@@ -97,10 +113,16 @@ private fun buildReminderStrings(
 }
 
 fun remindersSummary(context: Context, reminders: List<Reminder>): String {
-    val reminderTimes = standardRemindersSummary(
-        reminders.stream().filter { r: Reminder -> r.linkedReminderId == 0 }, context
+    val reminderTimes = timeBasedRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED }, context
     ) + linkedRemindersSummary(
-        reminders.stream().filter { r: Reminder -> r.linkedReminderId != 0 }, context
+        reminders.stream().filter { r: Reminder -> r.reminderType == Reminder.ReminderType.LINKED },
+        context
+    ) + intervalBasedRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.INTERVAL_BASED },
+        context
     )
 
     val len = reminderTimes.size
@@ -110,7 +132,11 @@ fun remindersSummary(context: Context, reminders: List<Reminder>): String {
         len,
         java.lang.String.join(", ", reminderTimes)
     )
+}
 
+fun intervalBasedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
+    return reminders.map { r: Reminder -> intervalBasedReminderString(r, context) }
+        .collect(Collectors.toList())
 }
 
 fun linkedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
@@ -138,7 +164,7 @@ fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     return "?"
 }
 
-private fun standardRemindersSummary(
+private fun timeBasedRemindersSummary(
     reminders: Stream<Reminder>,
     context: Context
 ): ArrayList<String> {
