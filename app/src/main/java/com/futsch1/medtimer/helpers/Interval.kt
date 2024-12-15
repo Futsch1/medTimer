@@ -33,6 +33,22 @@ class Interval(var minutesValue: Int) {
         }
     }
 
+    fun getValue(unit: IntervalUnit): Int {
+        return when (unit) {
+            IntervalUnit.MINUTES -> minutesValue
+            IntervalUnit.HOURS -> minutesValue / 60
+            IntervalUnit.DAYS -> minutesValue / (60 * 24)
+        }
+    }
+
+    fun setValue(value: Int, unit: IntervalUnit) {
+        minutesValue = when (unit) {
+            IntervalUnit.MINUTES -> value
+            IntervalUnit.HOURS -> value * 60
+            IntervalUnit.DAYS -> value * 60 * 24
+        }
+    }
+
     override fun toString(): String {
         return "${getValue()} ${getUnit().toString().lowercase()}"
     }

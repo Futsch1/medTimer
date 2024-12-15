@@ -34,6 +34,9 @@ class NewReminder(
 
         setupCreateReminder()
         setupVisibilities()
+        dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }

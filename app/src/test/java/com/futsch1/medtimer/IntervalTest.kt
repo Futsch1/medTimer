@@ -42,6 +42,18 @@ class IntervalTest {
     }
 
     @Test
+    fun testGetAndSet() {
+        val interval = Interval(30)
+        assertEquals(0, interval.getValue(IntervalUnit.HOURS))
+        assertEquals(0, interval.getValue(IntervalUnit.DAYS))
+
+        interval.setValue(30, IntervalUnit.HOURS)
+        assertEquals(30 * 60, interval.getValue(IntervalUnit.MINUTES))
+        assertEquals(30, interval.getValue(IntervalUnit.HOURS))
+        assertEquals(1, interval.getValue(IntervalUnit.DAYS))
+    }
+
+    @Test
     fun testToString() {
         var interval = Interval(60)
         assertEquals("1 hours", interval.toString())
