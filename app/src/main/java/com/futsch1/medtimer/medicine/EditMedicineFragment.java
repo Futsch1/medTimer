@@ -25,10 +25,8 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.helpers.DialogHelper;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
-import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
 import com.google.android.material.button.MaterialButton;
@@ -41,8 +39,6 @@ import com.maltaisn.icondialog.pack.IconPack;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 import kotlin.Unit;
@@ -126,7 +122,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> DialogHelper.showTextInputDialog(requireContext(), R.string.add_reminder, R.string.create_reminder_dosage_hint, this::createReminder));
+        fab.setOnClickListener(view -> new NewReminder(requireActivity(), medicineId, medicineViewModel));
     }
 
     private void setupEnableColor(boolean useColor) {
@@ -202,19 +198,6 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void sortAndSubmitList(List<Reminder> reminders) {
         adapter.submitList(new LinkedReminderAlgorithms().sortRemindersList(reminders));
-    }
-
-    private void createReminder(String amount) {
-        Reminder reminder = new Reminder(medicineId);
-        reminder.amount = amount;
-        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
-        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay();
-        reminder.instructions = "";
-
-        new TimeHelper.TimePickerWrapper(requireActivity()).show(0, 0, minutes -> {
-            reminder.timeInMinutes = minutes;
-            medicineViewModel.insertReminder(reminder);
-        });
     }
 
     private void deleteItem(long itemId, int adapterPosition) {

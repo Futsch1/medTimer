@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -22,19 +23,20 @@
     <RadioGroup
         android:id="@+id/reminderType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/timeBased">
 
         <RadioButton
             android:id="@+id/timeBased"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="@string/time_based_reminder" />
 
         <RadioButton
             android:id="@+id/intervalBased"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="@string/interval_based_reminder" />
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -57,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:hint="@string/time">
+        android:hint="@string/interval">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editIntervalTime"
@@ -68,30 +70,56 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
+        android:id="@+id/intervalUnit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:checkedButton="@id/intervalHours"
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/intervalMinutes"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Minutes" />
+            android:text="@string/minutes" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/intervalHours"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hours" />
+            android:text="@string/hours" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/intervalDays"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Days" />
+            android:text="@string/days" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelCreateReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/createReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="@string/create_reminder" />
+    </LinearLayout>
 
 </LinearLayout>
