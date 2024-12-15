@@ -24,6 +24,8 @@ import androidx.test.rule.GrantPermissionRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.time.LocalTime;
+
 @LargeTest
 public class DeleteLinkedReminderTest {
 
@@ -37,7 +39,7 @@ public class DeleteLinkedReminderTest {
                     "android.permission.POST_NOTIFICATIONS");
 
     @Test
-    public void notificationTest() {
+    public void deleteLinkedReminderTest() {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         onView(withId(R.id.addMedicine)).perform(click());
@@ -52,9 +54,7 @@ public class DeleteLinkedReminderTest {
         textInputEditText.perform(replaceText("Test med"), closeSoftKeyboard());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
 
-        onView(allOf(withId(R.id.addReminder))).perform(click());
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-        AndroidTestHelper.setTime(0, 0);
+        AndroidTestHelper.createReminder("1", LocalTime.of(0, 0));
 
         onView(withId(R.id.open_advanced_settings)).perform(click());
 

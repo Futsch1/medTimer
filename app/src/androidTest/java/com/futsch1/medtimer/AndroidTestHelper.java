@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -30,6 +31,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class AndroidTestHelper {
@@ -124,6 +126,24 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static void createReminder(String amount, LocalTime time) {
+        ViewInteraction extendedFloatingActionButton2 = onView(
+                allOf(withId(R.id.addReminder)));
+        extendedFloatingActionButton2.perform(click());
+
+        ViewInteraction textInputEditText2 = onView(withId(R.id.editAmount));
+        textInputEditText2.perform(replaceText(amount), closeSoftKeyboard());
+
+        if (time != null) {
+            ViewInteraction materialButton = onView(withId(R.id.editReminderTime));
+            materialButton.perform(click());
+            setTime(time.getHour(), time.getMinute());
+        }
+
+        ViewInteraction materialButton3 = onView(withId(R.id.createReminder));
+        materialButton3.perform(click());
     }
 
     public static String dateToString(Date date) {

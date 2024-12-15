@@ -28,8 +28,6 @@ import androidx.test.uiautomator.Until;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-
 @LargeTest
 public class NotificationTest {
 
@@ -58,21 +56,7 @@ public class NotificationTest {
         textInputEditText.perform(replaceText("Test med"), closeSoftKeyboard());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
 
-        onView(allOf(withId(R.id.addReminder))).perform(click());
-
-        ViewInteraction textInputEditText2 = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText2.perform(replaceText("1"), closeSoftKeyboard());
-
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-
-        LocalDateTime notificationTime = AndroidTestHelper.getNextNotificationTime();
-        AndroidTestHelper.setTime(notificationTime.getHour(), notificationTime.getMinute());
+        AndroidTestHelper.createReminder("1", AndroidTestHelper.getNextNotificationTime().toLocalTime());
 
         onView(withId(R.id.open_advanced_settings)).perform(click());
 

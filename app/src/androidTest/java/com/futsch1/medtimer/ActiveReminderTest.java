@@ -63,20 +63,7 @@ public class ActiveReminderTest {
 
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
 
-        onView(withId(R.id.addReminder)).perform(click());
-
-        ViewInteraction textInputEditText2 = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText2.perform(replaceText("1"), closeSoftKeyboard());
-
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-
-        onView(allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK"))).perform(click());
+        AndroidTestHelper.createReminder("1", null);
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(withId(R.id.open_advanced_settings)).perform(click());
