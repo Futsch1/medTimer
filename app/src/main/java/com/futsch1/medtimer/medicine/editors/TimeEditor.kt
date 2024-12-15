@@ -13,15 +13,18 @@ private const val DEFAULT_TIME = 480
 class TimeEditor(
     private val fragmentActivity: FragmentActivity,
     private val timeEdit: TextInputEditText,
-    initialTime: Int,
+    initialTimeMinutesOfDay: Int,
     val timeChangedCallback: (minutes: Int) -> Unit,
     private val durationHintText: Int?
 ) {
     init {
         timeEdit.setText(
             if (durationHintText == null)
-                TimeHelper.minutesToTimeString(timeEdit.context, initialTime.toLong()) else
-                TimeHelper.minutesToDurationString(initialTime.toLong())
+                TimeHelper.minutesToTimeString(
+                    timeEdit.context,
+                    initialTimeMinutesOfDay.toLong()
+                ) else
+                TimeHelper.minutesToDurationString(initialTimeMinutesOfDay.toLong())
         )
 
         timeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->

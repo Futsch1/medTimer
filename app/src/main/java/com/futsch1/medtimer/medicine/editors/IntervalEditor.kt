@@ -21,7 +21,12 @@ class IntervalEditor(
             val selectedUnit = checkedIntervalUnit(checkedId)
             if (isChecked) {
                 interval.setValue(timeEdit.text.toString().toInt(), unit)
-                timeEdit.setText(interval.getValue(selectedUnit).toString())
+                var value = interval.getValue(selectedUnit)
+                if (value == 0) {
+                    value = 1
+                    interval.setValue(timeEdit.text.toString().toInt(), selectedUnit)
+                }
+                timeEdit.setText(value.toString())
                 unit = selectedUnit
             }
         }
@@ -30,7 +35,7 @@ class IntervalEditor(
     fun getMinutes(): Int {
         val value = timeEdit.text.toString().toInt()
         val unit = checkedIntervalUnit(intervalUnitToggle.checkedButtonId)
-        return Interval(if (value > 0) value else 1, unit).getValue()
+        return Interval(if (value > 0) value else 1, unit).minutesValue
     }
 
     private fun checkedIntervalUnit(checkedId: Int) = when (checkedId) {

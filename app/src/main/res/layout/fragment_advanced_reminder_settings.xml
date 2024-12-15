@@ -103,7 +103,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
                 android:background="?android:attr/listDivider" />
 
             <LinearLayout
@@ -162,15 +161,16 @@
                         tools:ignore="TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="4dp"
+                    android:background="?android:attr/listDivider" />
             </LinearLayout>
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="?android:attr/listDivider" />
+            <include layout="@layout/include_interval_settings" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editInstructionsLayout"
@@ -198,11 +198,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
                 android:background="?android:attr/listDivider" />
 
             <LinearLayout
-                android:id="@+id/remindGroup"
+                android:id="@+id/timeBasedGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

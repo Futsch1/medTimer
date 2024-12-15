@@ -60,7 +60,6 @@ public class Reminder {
     @Expose
     public boolean intervalStartsFromProcessed;
 
-
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
         amount = "?";
@@ -75,5 +74,21 @@ public class Reminder {
         linkedReminderId = 0;
         intervalStart = 0;
         intervalStartsFromProcessed = false;
+    }
+
+    public ReminderType getReminderType() {
+        if (linkedReminderId != 0) {
+            return ReminderType.LINKED;
+        } else if (intervalStart != 0) {
+            return ReminderType.INTERVAL_BASED;
+        } else {
+            return ReminderType.TIME_BASED;
+        }
+    }
+
+    public enum ReminderType {
+        TIME_BASED,
+        INTERVAL_BASED,
+        LINKED
     }
 }

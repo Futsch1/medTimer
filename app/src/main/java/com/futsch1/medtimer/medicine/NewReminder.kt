@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.google.android.material.button.MaterialButton
@@ -22,7 +23,6 @@ class NewReminder(
     val medicineId: Int,
     val medicineViewModel: MedicineViewModel
 ) {
-
     private val dialog: Dialog = Dialog(activity)
 
     init {
@@ -57,12 +57,16 @@ class NewReminder(
                 ViewGroup.GONE
             dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
                 ViewGroup.GONE
+            dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
+                ViewGroup.GONE
             dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
                 ViewGroup.VISIBLE
         } else {
             dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
                 ViewGroup.VISIBLE
             dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
+                ViewGroup.VISIBLE
+            dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
                 ViewGroup.VISIBLE
             dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
                 ViewGroup.GONE
@@ -86,6 +90,12 @@ class NewReminder(
             dialog.findViewById(R.id.intervalUnit), 1
         )
 
+        val intervalStartDateTimeEditor = DateTimeEditor(
+            activity,
+            dialog.findViewById(R.id.editIntervalStartDateTime),
+            Instant.now().epochSecond
+        )
+
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             reminder.amount =
                 dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
@@ -93,13 +103,19 @@ class NewReminder(
             reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
             reminder.instructions = ""
 
-            val minutes = if (dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked) {
+            val isTimeBased = dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked
+
+            val minutes = if (isTimeBased) {
                 timeEditor.getMinutes()
             } else {
                 intervalEditor.getMinutes()
             }
-            if (minutes >= 0) {
-                reminder.timeInMinutes = minutes
+            reminder.timeInMinutes = minutes
+            if (!isTimeBased) {
+                reminder.intervalStart = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
+            }
+            if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
+
                 medicineViewModel.insertReminder(reminder)
             }
             dialog.dismiss()
