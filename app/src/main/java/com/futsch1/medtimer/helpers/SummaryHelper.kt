@@ -49,7 +49,7 @@ fun linkedReminderString(reminder: Reminder, context: Context): String {
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
-        return if (sourceReminder.linkedReminderId != 0) {
+        return if (sourceReminder.reminderType == Reminder.ReminderType.LINKED) {
             // Recursion
             linkedReminderString(sourceReminder, context) + " + " +
                     TimeHelper.minutesToDurationString(sourceReminder.timeInMinutes.toLong())
@@ -149,7 +149,7 @@ fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
-        return if (sourceReminder.linkedReminderId != 0) {
+        return if (sourceReminder.reminderType == Reminder.ReminderType.LINKED) {
             // Recursion
             linkedReminderSummaryString(
                 sourceReminder,
