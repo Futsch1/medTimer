@@ -166,7 +166,6 @@ class SummaryHelperTest {
         mockedDateFormat.close()
     }
 
-
     @Test
     fun test_remindersSummary_linked() {
         val context = mock(Context::class.java)
@@ -217,5 +216,30 @@ class SummaryHelperTest {
 
         mockedDateFormat.close()
         mockedMedicineRepositoryConstruction.close()
+    }
+
+    @Test
+    fun test_remindersSummary_interval() {
+        val context = mock(Context::class.java)
+        Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
+            .thenReturn("ok")
+        val resources = mock(android.content.res.Resources::class.java)
+        Mockito.`when`(context.resources).thenReturn(resources)
+        Mockito.`when`(resources.getQuantityString(R.plurals.hours, 2))
+            .thenReturn("ok")
+        Mockito.`when`(resources.getQuantityString(R.plurals.minutes, 2))
+            .thenReturn("ok")
+        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "ok, ok"))
+            .thenReturn("ok")
+
+        val reminder = Reminder(1)
+        reminder.timeInMinutes = 2
+        reminder.intervalStart = 1
+        val reminder2 = Reminder(2)
+        reminder2.timeInMinutes = 120
+        reminder2.intervalStart = 1
+
+        assertEquals("ok", reminderSummary(context, reminder))
+        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
     }
 }
