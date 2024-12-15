@@ -59,6 +59,8 @@ class NewReminder(
                 ViewGroup.GONE
             dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
                 ViewGroup.GONE
+            dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
+                ViewGroup.GONE
             dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
                 ViewGroup.VISIBLE
         } else {
@@ -67,6 +69,8 @@ class NewReminder(
             dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
                 ViewGroup.VISIBLE
             dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
+                ViewGroup.VISIBLE
+            dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
                 ViewGroup.VISIBLE
             dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
                 ViewGroup.GONE
