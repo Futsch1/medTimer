@@ -98,7 +98,9 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
         setupAddLinkedReminder();
 
-        setupIntervalBasedReminderSettings();
+        if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            setupIntervalBasedReminderSettings();
+        }
 
         setupVisibilities();
     }
@@ -202,7 +204,9 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();
-            putIntervalIntoReminder();
+            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+                putIntervalIntoReminder();
+            }
 
             medicineViewModel.updateReminder(reminder);
         }
