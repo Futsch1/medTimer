@@ -5,6 +5,7 @@ import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import java.time.LocalDate
@@ -48,6 +49,9 @@ class ReminderSchedulerIntervalUnitTest {
         )
 
         reminder.intervalStartsFromProcessed = true
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertEquals(0, scheduledReminders.size)
+
         reminderEventList[0].processedTimestamp = TestHelper.on(1, 121).epochSecond
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(

@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.reminders;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -30,6 +32,7 @@ import com.futsch1.medtimer.widgets.WidgetUpdateReceiver;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -115,9 +118,14 @@ public class RescheduleWork extends Worker {
 
         } else {
             // Immediately remind
+            ZonedDateTime reminderDateTime = timestamp.atZone(ZoneId.systemDefault());
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
-                            .setInputData(new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderNotificationData.reminderId).build())
+                            .setInputData(new Data.Builder()
+                                    .putInt(EXTRA_REMINDER_ID, reminderNotificationData.reminderId)
+                                    .putLong(EXTRA_REMINDER_DATE, reminderDateTime.toLocalDate().toEpochDay())
+                                    .putInt(EXTRA_REMINDER_TIME, reminderDateTime.toLocalTime().toSecondOfDay())
+                                    .build())
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
