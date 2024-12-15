@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -168,6 +170,9 @@ public class AdvancedReminderSettingsFragment extends Fragment {
                 advancedReminderView.findViewById(R.id.editIntervalStartDateTime),
                 reminder.intervalStart
         );
+
+        RadioGroup intervalBasedGroup = advancedReminderView.findViewById(R.id.intervalStartType);
+        intervalBasedGroup.check(reminder.intervalStartsFromProcessed ? R.id.intervalStarsFromProcessed : R.id.intervalStartsFromReminded);
     }
 
     private void setupVisibilities() {
@@ -238,5 +243,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         if (intervalStartDateTime >= 0) {
             reminder.intervalStart = intervalStartDateTime;
         }
+        reminder.intervalStartsFromProcessed = ((RadioButton) advancedReminderView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
     }
 }

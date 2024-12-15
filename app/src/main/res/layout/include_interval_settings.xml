@@ -52,26 +52,40 @@
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/intervalStartType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:checkedButton="@id/intervalStartsFromReminded"
+        android:divider="?android:attr/listDivider">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editIntervalStartDateTimeLayout"
+        <RadioButton
+            android:id="@+id/intervalStartsFromReminded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:hint="@string/interval_start_time">
+            android:text="@string/interval_start_reminded" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editIntervalStartDateTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="datetime" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+        <RadioButton
+            android:id="@+id/intervalStarsFromProcessed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/interval_start_processed" />
+    </RadioGroup>
 
 
-    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editIntervalStartDateTimeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:hint="@string/interval_start_time">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editIntervalStartDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="datetime" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 </LinearLayout>

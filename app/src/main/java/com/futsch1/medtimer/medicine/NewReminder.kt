@@ -113,6 +113,8 @@ class NewReminder(
             reminder.timeInMinutes = minutes
             if (!isTimeBased) {
                 reminder.intervalStart = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
+                reminder.intervalStartsFromProcessed =
+                    dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
             }
             if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
 
