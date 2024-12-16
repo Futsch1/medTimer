@@ -81,16 +81,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private void onFocusEditTime(Reminder reminder, boolean hasFocus) {
-        if (hasFocus) {
-            if (reminder.linkedReminderId == 0) {
-                editDuration(reminder);
-            } else {
-                editTime(reminder);
-            }
-        }
-    }
-
     private void onClickAdvancedSettings(Reminder reminder) {
         NavController navController = Navigation.findNavController(itemView);
         EditMedicineFragmentDirections.ActionEditMedicineToAdvancedReminderSettings action =
