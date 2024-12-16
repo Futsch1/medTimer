@@ -7,7 +7,6 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -46,11 +45,6 @@ public class BasicUITest {
     @Test
     public void basicUITest() {
         AndroidTestHelper.createMedicine("Test");
-
-        ViewInteraction materialButton = onView(
-                allOf(withId(android.R.id.button1), withText("OK")));
-        materialButton.perform(scrollTo(), click());
-
         AndroidTestHelper.createReminder("1", null);
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));

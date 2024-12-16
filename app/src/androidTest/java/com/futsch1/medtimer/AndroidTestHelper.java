@@ -112,29 +112,22 @@ public class AndroidTestHelper {
     }
 
     public static void createReminder(String amount, LocalTime time) {
-        ViewInteraction extendedFloatingActionButton2 = onView(
-                allOf(withId(R.id.addReminder)));
-        extendedFloatingActionButton2.perform(click());
+        onView(withId(R.id.addReminder)).perform(click());
 
-        ViewInteraction textInputEditText2 = onView(withId(R.id.editAmount));
-        textInputEditText2.perform(replaceText(amount), closeSoftKeyboard());
+        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
 
         if (time != null) {
-            ViewInteraction materialButton = onView(withId(R.id.editReminderTime));
-            materialButton.perform(click());
+            onView(withId(R.id.editReminderTime)).perform(click());
             setTime(time.getHour(), time.getMinute());
         }
 
-        ViewInteraction materialButton3 = onView(withId(R.id.createReminder));
-        materialButton3.perform(click());
+        onView(withId(R.id.createReminder)).perform(click());
     }
 
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        ViewInteraction extendedFloatingActionButton = onView(
-                allOf(withId(R.id.addMedicine)));
-        extendedFloatingActionButton.perform(click());
+        onView(withId(R.id.addMedicine)).perform(click());
 
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
