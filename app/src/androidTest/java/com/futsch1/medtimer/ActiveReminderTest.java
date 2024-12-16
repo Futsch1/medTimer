@@ -4,21 +4,13 @@ package com.futsch1.medtimer;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
@@ -48,21 +40,7 @@ public class ActiveReminderTest {
         Calendar pastTime = Calendar.getInstance();
         pastTime.set(year - 1, 1, 1);
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-
-        onView(withId(R.id.addMedicine)).perform(click());
-
-        ViewInteraction textInputEditText = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText.perform(replaceText("Test"), closeSoftKeyboard());
-
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-
+        AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));

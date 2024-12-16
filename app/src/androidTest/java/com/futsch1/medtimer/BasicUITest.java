@@ -45,20 +45,7 @@ public class BasicUITest {
 
     @Test
     public void basicUITest() {
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-
-        ViewInteraction extendedFloatingActionButton = onView(
-                withId(R.id.addMedicine));
-        extendedFloatingActionButton.perform(click());
-
-        ViewInteraction textInputEditText = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText.perform(replaceText("Test"), closeSoftKeyboard());
+        AndroidTestHelper.createMedicine("Test");
 
         ViewInteraction materialButton = onView(
                 allOf(withId(android.R.id.button1), withText("OK")));
