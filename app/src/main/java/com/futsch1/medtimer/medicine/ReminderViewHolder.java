@@ -60,7 +60,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         this.reminder = reminder;
 
         if (reminder.getReminderType() != Reminder.ReminderType.INTERVAL_BASED) {
-            @StringRes int textId = reminder.getReminderType() == Reminder.ReminderType.LINKED ? R.string.time : R.string.delay;
+            @StringRes int textId = reminder.getReminderType() == Reminder.ReminderType.TIME_BASED ? R.string.time : R.string.delay;
             editTimeLayout.setHint(textId);
             timeEditor = new TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, minutes -> {
                 reminder.timeInMinutes = minutes;
