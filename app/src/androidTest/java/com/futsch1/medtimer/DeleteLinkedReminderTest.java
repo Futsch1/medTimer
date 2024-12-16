@@ -36,8 +36,6 @@ public class DeleteLinkedReminderTest {
     @Test
     public void deleteLinkedReminderTest() {
         AndroidTestHelper.createMedicine("Test med");
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-
         AndroidTestHelper.createReminder("1", LocalTime.of(0, 0));
 
         onView(withId(R.id.open_advanced_settings)).perform(click());

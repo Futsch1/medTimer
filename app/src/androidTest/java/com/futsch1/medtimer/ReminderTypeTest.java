@@ -13,6 +13,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
+import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -80,21 +82,48 @@ public class ReminderTypeTest {
         onView(withId(R.id.editIntervalTime)).perform(replaceText("2"), closeSoftKeyboard());
         onView(withId(R.id.createReminder)).perform(click());
 
-        // Now check reminder list
+        // Check reminder list
         ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCard));
         cardOfReminder1.perform(scrollTo());
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
-        cardOfReminder1.check(matches(hasDescendant(withText(containsString(TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60))))));
+        String expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
+        cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
         ViewInteraction cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCard));
         cardOfReminder2.perform(scrollTo());
         cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
-        cardOfReminder2.check(matches(hasDescendant(withText(containsString(context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60)))))));
+        expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
+        cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
         ViewInteraction cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCard));
         cardOfReminder3.perform(scrollTo());
-        String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
+        expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
         cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
+        // Check overview and next reminders
+        navigateTo(OVERVIEW);
+
+        cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCard));
+        cardOfReminder1.perform(scrollTo());
+        expectedString = context.getString(R.string.reminder_event, "1", "Test", "");
+        cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
+        expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
+        cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
+
+        onView(withId(R.id.expandNextReminders)).perform(click());
+
+        cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(1, R.id.nextReminderCard));
+        cardOfReminder3.perform(scrollTo());
+        expectedString = context.getString(R.string.reminder_event, "3", "Test", "");
+        cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
+
+        // If possible, take reminder 1 now and see if reminder 2 appears
+        if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
+            onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(click());
+
+            cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCard));
+            expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
+            cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
+        }
     }
 }
