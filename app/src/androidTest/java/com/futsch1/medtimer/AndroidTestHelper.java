@@ -52,39 +52,27 @@ public class AndroidTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
     }
 
-    public static void navigateTo(MainMenu mainMenu) {
-        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
-                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
-                        isDisplayed()));
-        bottomNavigationItemView.perform(click());
-    }
-
     private static void setReminderTo12AM(int position) {
-        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
 
         setTime(0, 0);
         pressBack();
         pressBack();
     }
 
-    static ViewInteraction onViewWithTimeout(
-            Matcher<View> matcher
-    ) {
-        int retries = 5;
-        while (retries-- >= 0) {
-            try {
-                ViewInteraction viewInteraction = onView(matcher);
-                viewInteraction.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            }
+    public static void createReminder(String amount, LocalTime time) {
+        onView(withId(R.id.addReminder)).perform(click());
+
+        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
+
+        if (time != null) {
+            onView(withId(R.id.editReminderTime)).perform(click());
+            setTime(time.getHour(), time.getMinute());
         }
-        throw new AssertionError("View did not become visible");
+
+        onView(withId(R.id.createReminder)).perform(click());
     }
 
     public static void setTime(int hour, int minute) {
@@ -112,38 +100,6 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
-    public static void createReminder(String amount, LocalTime time) {
-        onView(withId(R.id.addReminder)).perform(click());
-
-        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
-
-        if (time != null) {
-            onView(withId(R.id.editReminderTime)).perform(click());
-            setTime(time.getHour(), time.getMinute());
-        }
-
-        onView(withId(R.id.createReminder)).perform(click());
-    }
-
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
@@ -161,6 +117,15 @@ public class AndroidTestHelper {
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
     }
 
+    public static void navigateTo(MainMenu mainMenu) {
+        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
+                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+    }
+
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -176,6 +141,41 @@ public class AndroidTestHelper {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
                         && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+    static ViewInteraction onViewWithTimeout(
+            Matcher<View> matcher
+    ) {
+        int retries = 10;
+        while (retries-- >= 0) {
+            try {
+                ViewInteraction viewInteraction = onView(matcher);
+                viewInteraction.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            }
+        }
+        throw new AssertionError("View did not become visible");
+    }
+
+    public static ViewAction waitFor(long delay) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for " + delay + "milliseconds";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(delay);
             }
         };
     }
