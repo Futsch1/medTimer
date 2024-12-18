@@ -163,4 +163,30 @@
     <string name="delay">Délai</string>
     <string name="linked_reminder_summary">Après le rappel à %1$s</string>
     <string name="delete_re_raise_event">Souhaitez-vous supprimer cet événement et relancer la notification ?</string>
+    <string name="time_based_reminder">Rappel en fonction de l&amp;apos;heure</string>
+    <string name="interval_based_reminder">Rappel basé sur l&amp;apos;intervalle</string>
+    <plurals name="minutes">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">minute</item>
+        <item quantity="other">minute</item>
+        <item quantity="many">minutes</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">heure</item>
+        <item quantity="other">heures</item>
+        <item quantity="many">heures</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">jour</item>
+        <item quantity="other">jours</item>
+        <item quantity="many">jours</item>
+    </plurals>
+    <string name="minutes">Minutes</string>
+    <string name="hours">Heures</string>
+    <string name="days">Jours</string>
+    <string name="create_reminder">Créer un rappel</string>
+    <string name="interval">Intervalle</string>
+    <string name="interval_start_time">Heure de début de l&amp;apos;intervalle</string>
+    <string name="interval_start_reminded">Intervalle commence lorsqu&amp;apos;il est rappelé</string>
+    <string name="interval_start_processed">Intervalle commence lorsqu&amp;apos;il est pris ou sauté</string>
+    <string name="every_interval">Tous les %s</string>
 </resources>

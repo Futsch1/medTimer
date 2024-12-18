@@ -185,7 +185,7 @@
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>
-    <string name="interval_start_reminded">Next interval starts when reminded</string>
-    <string name="interval_start_processed">Next interval starts when taken or skipped</string>
+    <string name="interval_start_reminded">Interval starts when reminded</string>
+    <string name="interval_start_processed">Interval starts when taken or skipped</string>
     <string name="every_interval">Every %s</string>
 </resources>

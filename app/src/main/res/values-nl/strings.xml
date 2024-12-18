@@ -161,4 +161,27 @@
     <string name="delay">Vertraging</string>
     <string name="linked_reminder_summary">Na herinnering op %1$s</string>
     <string name="delete_re_raise_event">Wil je deze gebeurtenis verwijderen en de melding opnieuw verhogen?</string>
+    <string name="time_based_reminder">Herinnering op basis van tijd</string>
+    <string name="interval_based_reminder">Herinnering op basis van intervallen</string>
+    <plurals name="minutes">
+        <item quantity="one">minuut</item>
+        <item quantity="other">minuten</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">uur</item>
+        <item quantity="other">uren</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">dag</item>
+        <item quantity="other">dagen</item>
+    </plurals>
+    <string name="minutes">Minuten</string>
+    <string name="hours">Uren</string>
+    <string name="days">Dagen</string>
+    <string name="create_reminder">Herinnering maken</string>
+    <string name="interval">Interval</string>
+    <string name="interval_start_time">Starttijd interval</string>
+    <string name="interval_start_reminded">Interval begint wanneer eraan wordt herinnerd</string>
+    <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
+    <string name="every_interval">Elke %s</string>
 </resources>
