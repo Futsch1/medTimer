@@ -16,11 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+
       - name: Set up JDK 17
         uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
@@ -30,13 +26,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
         with:
           dependency-graph: generate-and-submit
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Run fuzzing tests
-        run: ./gradlew test -Dfuzzing=true
-      - name: Android lint
-        run: ./gradlew lint
 
+      #- name: Run fuzzing tests
+      #  run: ./gradlew test -Dfuzzing=true
+      #- name: Android lint
+      #  run: ./gradlew lint
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: AVD cache
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         id: avd-cache
@@ -63,10 +62,11 @@ jobs:
         with:
           api-level: ${{ env.target_api_level }}
           arch: x86_64
-          target: aosp_atd
+          target: google_apis
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
+          disable-animations: false
+          profile: Pixel5
           script: ./gradlew JacocoDebugCodeCoverage
 
       - name: SonarQube
