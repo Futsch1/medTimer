@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -163,7 +164,7 @@
     <string name="delay">Retraso</string>
     <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
     <string name="delete_re_raise_event">¿Desea eliminar este evento y volver a generar la notificación?</string>
-    <string name="time_based_reminder">Recordatorio basado en el tiempo</string>
+    <string name="time_based_reminder">Recordatorio basado en la hora</string>
     <string name="interval_based_reminder">Recordatorio por intervalos</string>
     <plurals name="minutes">
         <item quantity="one">minuto</item>
