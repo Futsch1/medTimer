@@ -17,6 +17,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -55,14 +56,14 @@ public class TestDataAndDeleteAndManualDoseTest {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
+        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());
         onView(withText(R.string.yes)).perform(scrollTo(), click());
 
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
-        onView(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
+        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
+        onViewWithTimeout(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());

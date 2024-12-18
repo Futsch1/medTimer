@@ -78,10 +78,11 @@ jobs:
         run: ./gradlew sonar
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: TestReports
           path: |
             app/build/reports/jacoco/JacocoDebugCodeCoverage/html
             app/build/reports/tests/testDebugUnitTest
-            app/build/outputs/androidTest-results/connected/debug
+            app/build/outputs/androidTest/connected/debug
             app/build/outputs/reports/lint-results-debug.html

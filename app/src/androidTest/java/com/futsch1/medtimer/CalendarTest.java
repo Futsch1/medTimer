@@ -7,6 +7,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -43,7 +44,7 @@ public class CalendarTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        AndroidTestHelper.waitFor(1000);
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
@@ -54,6 +55,7 @@ public class CalendarTest {
         while (takenReminders < 10) {
             try {
                 onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
             } catch (Exception e) {
                 break;
             }
@@ -68,7 +70,7 @@ public class CalendarTest {
 
         onView(allOf(withId(R.id.openCalendar), isDisplayed())).perform(click());
 
-        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
+        onViewWithTimeout(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
 
         pressBack();
 
@@ -76,6 +78,6 @@ public class CalendarTest {
 
         onView(allOf(withId(R.id.calendarChip), isDisplayed())).perform(click());
 
-        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
+        onViewWithTimeout(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
     }
 }
