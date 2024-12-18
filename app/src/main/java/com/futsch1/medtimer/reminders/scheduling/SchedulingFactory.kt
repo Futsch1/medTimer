@@ -15,7 +15,7 @@ class SchedulingFactory {
             }
 
             Reminder.ReminderType.INTERVAL_BASED -> {
-                IntervalScheduling(reminder, filteredEvents)
+                IntervalScheduling(reminder, filteredEvents, timeAccess)
             }
 
             else -> {
