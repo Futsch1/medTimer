@@ -169,7 +169,7 @@ sonar {
         property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/coverage/test/debug/report.xml"
+            "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
         )
     }
 }
