@@ -10,8 +10,9 @@ class LinkedScheduling(
 ) : Scheduling {
     override fun getNextScheduledTime(): Instant? {
         val lastSourceReminderEvent: ReminderEvent? =
-            findLastReminderEvent(reminder.linkedReminderId)
-        val lastReminderEvent: ReminderEvent? = findLastReminderEvent(reminder.reminderId)
+            findLastReminderEvent(reminder.linkedReminderId, reminderEventList)
+        val lastReminderEvent: ReminderEvent? =
+            findLastReminderEvent(reminder.reminderId, reminderEventList)
         if (lastSourceReminderEvent != null &&
             lastSourceReminderEvent.processedTimestamp != 0L &&
             (lastReminderEvent == null
@@ -23,17 +24,4 @@ class LinkedScheduling(
         }
         return null
     }
-
-    private fun findLastReminderEvent(reminderId: Int): ReminderEvent? {
-        var foundReminderEvent: ReminderEvent? = null
-        for (reminderEvent in reminderEventList) {
-            if (reminderEvent.reminderId == reminderId &&
-                (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
-            ) {
-                foundReminderEvent = reminderEvent
-            }
-        }
-        return foundReminderEvent
-    }
-
 }

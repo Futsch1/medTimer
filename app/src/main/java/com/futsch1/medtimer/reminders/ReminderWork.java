@@ -74,7 +74,7 @@ public class ReminderWork extends Worker {
         Result r = Result.failure();
         int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
         LocalDate reminderDate = LocalDate.ofEpochDay(inputData.getLong(EXTRA_REMINDER_DATE, LocalDate.now().toEpochDay()));
-        LocalTime reminderTime = reminder.linkedReminderId == 0 ? LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60) : LocalTime.ofSecondOfDay(inputData.getInt(EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()));
+        LocalTime reminderTime = reminder.getReminderType() == Reminder.ReminderType.TIME_BASED ? LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60) : LocalTime.ofSecondOfDay(inputData.getInt(EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()));
         LocalDateTime reminderDateTime = LocalDateTime.of(reminderDate, reminderTime);
         Medicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
         ReminderEvent reminderEvent =

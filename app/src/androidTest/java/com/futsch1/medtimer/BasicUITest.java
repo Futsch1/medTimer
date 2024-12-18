@@ -7,7 +7,6 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -45,45 +44,8 @@ public class BasicUITest {
 
     @Test
     public void basicUITest() {
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-
-        ViewInteraction extendedFloatingActionButton = onView(
-                withId(R.id.addMedicine));
-        extendedFloatingActionButton.perform(click());
-
-        ViewInteraction textInputEditText = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText.perform(replaceText("Test"), closeSoftKeyboard());
-
-        ViewInteraction materialButton = onView(
-                allOf(withId(android.R.id.button1), withText("OK")));
-        materialButton.perform(scrollTo(), click());
-
-        ViewInteraction extendedFloatingActionButton2 = onView(
-                allOf(withId(R.id.addReminder)));
-        extendedFloatingActionButton2.perform(click());
-
-        ViewInteraction textInputEditText2 = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText2.perform(replaceText("1"), closeSoftKeyboard());
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(android.R.id.button1), withText("OK")));
-        materialButton2.perform(scrollTo(), click());
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(com.google.android.material.R.id.material_timepicker_ok_button), withText("OK")));
-        materialButton3.perform(click());
+        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createReminder("1", null);
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         ViewInteraction materialButton4 = onView(withId(R.id.open_advanced_settings));

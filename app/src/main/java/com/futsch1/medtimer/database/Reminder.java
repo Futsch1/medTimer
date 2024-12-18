@@ -53,6 +53,12 @@ public class Reminder {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int linkedReminderId;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public long intervalStart;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean intervalStartsFromProcessed;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -66,5 +72,23 @@ public class Reminder {
         periodStart = 0;
         periodEnd = 0;
         linkedReminderId = 0;
+        intervalStart = 0;
+        intervalStartsFromProcessed = false;
+    }
+
+    public ReminderType getReminderType() {
+        if (linkedReminderId != 0) {
+            return ReminderType.LINKED;
+        } else if (intervalStart != 0) {
+            return ReminderType.INTERVAL_BASED;
+        } else {
+            return ReminderType.TIME_BASED;
+        }
+    }
+
+    public enum ReminderType {
+        TIME_BASED,
+        INTERVAL_BASED,
+        LINKED
     }
 }

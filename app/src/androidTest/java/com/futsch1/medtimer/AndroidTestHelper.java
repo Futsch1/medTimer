@@ -3,12 +3,15 @@ package com.futsch1.medtimer;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -30,6 +33,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class AndroidTestHelper {
@@ -48,25 +52,6 @@ public class AndroidTestHelper {
             @Override
             public void perform(UiController uiController, View view) {
                 uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
-    public static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
     }
@@ -124,6 +109,55 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static void createReminder(String amount, LocalTime time) {
+        onView(withId(R.id.addReminder)).perform(click());
+
+        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
+
+        if (time != null) {
+            onView(withId(R.id.editReminderTime)).perform(click());
+            setTime(time.getHour(), time.getMinute());
+        }
+
+        onView(withId(R.id.createReminder)).perform(click());
+    }
+
+    public static void createMedicine(String name) {
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+
+        onView(withId(R.id.addMedicine)).perform(click());
+
+        ViewInteraction textInputEditText = onView(
+                allOf(AndroidTestHelper.childAtPosition(
+                                AndroidTestHelper.childAtPosition(
+                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textInputEditText.perform(replaceText(name), closeSoftKeyboard());
+
+        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
+    }
+
+    public static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
     }
 
     public static String dateToString(Date date) {

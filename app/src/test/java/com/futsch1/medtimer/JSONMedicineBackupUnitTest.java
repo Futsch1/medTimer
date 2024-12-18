@@ -79,7 +79,9 @@ class JSONMedicineBackupUnitTest {
           "periodStart": 13,
           "periodEnd": 0,
           "activeDaysOfMonth": 7,
-          "linkedReminderId": 15
+          "linkedReminderId": 15,
+          "intervalStart": 0,
+          "intervalStartsFromProcessed": false
         }
       ],
       "medicine": {
@@ -157,6 +159,8 @@ class JSONMedicineBackupUnitTest {
         reminder2.days.set(6, false);
         reminder2.activeDaysOfMonth = 255;
         reminder2.linkedReminderId = 234;
+        reminder2.intervalStart = 256;
+        reminder2.intervalStartsFromProcessed = true;
         medicineWithReminders2.reminders = new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
@@ -200,7 +204,9 @@ class JSONMedicineBackupUnitTest {
           "periodStart": 0,
           "periodEnd": 0,
           "activeDaysOfMonth": -1,
-          "linkedReminderId": 0
+          "linkedReminderId": 0,
+          "intervalStart": 0,
+          "intervalStartsFromProcessed": false
         }
       ],
       "medicine": {
@@ -234,7 +240,9 @@ class JSONMedicineBackupUnitTest {
           "periodStart": 0,
           "periodEnd": 0,
           "activeDaysOfMonth": -1,
-          "linkedReminderId": 0
+          "linkedReminderId": 0,
+          "intervalStart": 0,
+          "intervalStartsFromProcessed": false
         },
         {
           "reminderId": 2,
@@ -257,7 +265,9 @@ class JSONMedicineBackupUnitTest {
           "periodStart": 0,
           "periodEnd": 0,
           "activeDaysOfMonth": 255,
-          "linkedReminderId": 234
+          "linkedReminderId": 234,
+          "intervalStart": 256,
+          "intervalStartsFromProcessed": true
         }
       ],
       "medicine": {

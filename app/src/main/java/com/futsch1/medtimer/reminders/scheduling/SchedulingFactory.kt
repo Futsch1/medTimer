@@ -9,10 +9,18 @@ class SchedulingFactory {
         filteredEvents: List<ReminderEvent>,
         timeAccess: ReminderScheduler.TimeAccess
     ): Scheduling {
-        return if (reminder.linkedReminderId == 0) {
-            StandardScheduling(reminder, filteredEvents, timeAccess)
-        } else {
-            LinkedScheduling(reminder, filteredEvents)
+        return when (reminder.reminderType) {
+            Reminder.ReminderType.LINKED -> {
+                LinkedScheduling(reminder, filteredEvents)
+            }
+
+            Reminder.ReminderType.INTERVAL_BASED -> {
+                IntervalScheduling(reminder, filteredEvents, timeAccess)
+            }
+
+            else -> {
+                StandardScheduling(reminder, filteredEvents, timeAccess)
+            }
         }
     }
 }

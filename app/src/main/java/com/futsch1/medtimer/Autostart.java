@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -23,6 +24,7 @@ import com.futsch1.medtimer.reminders.ReminderWork;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,13 +47,14 @@ public class Autostart extends BroadcastReceiver {
             @SuppressWarnings("java:S6204") // Using SDK 33
             List<ReminderEvent> reminderEventList = repo.getLastDaysReminderEvents(1).stream().filter((reminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED)).collect(Collectors.toUnmodifiableList());
             for (ReminderEvent reminderEvent : reminderEventList) {
-                long raiseDays = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay();
+                ZonedDateTime previousRemindedTimestamp = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault());
                 WorkRequest reminderWork =
                         new OneTimeWorkRequest.Builder(ReminderWork.class)
                                 .setInputData(new Data.Builder()
                                         .putInt(EXTRA_REMINDER_ID, reminderEvent.reminderId)
                                         .putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
-                                        .putLong(EXTRA_REMINDER_DATE, raiseDays)
+                                        .putLong(EXTRA_REMINDER_DATE, previousRemindedTimestamp.toLocalDate().toEpochDay())
+                                        .putInt(EXTRA_REMINDER_TIME, previousRemindedTimestamp.toLocalTime().toSecondOfDay())
                                         .build())
                                 .build();
                 WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);

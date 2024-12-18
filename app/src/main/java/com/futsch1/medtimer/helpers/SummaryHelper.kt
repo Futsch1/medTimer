@@ -16,10 +16,18 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     if (!isReminderActive(reminder)) {
         strings.add(context.getString(R.string.inactive))
     }
-    if (reminder.linkedReminderId != 0) {
-        strings.add(linkedReminderString(reminder, context))
-    } else {
-        standardReminderString(reminder, strings, context)
+    when (reminder.reminderType) {
+        Reminder.ReminderType.LINKED -> {
+            strings.add(linkedReminderString(reminder, context))
+        }
+
+        Reminder.ReminderType.INTERVAL_BASED -> {
+            strings.add(intervalBasedReminderString(reminder, context))
+        }
+
+        else -> {
+            timeBasedReminderString(reminder, strings, context)
+        }
     }
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
@@ -28,12 +36,20 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     return java.lang.String.join(", ", strings)
 }
 
+fun intervalBasedReminderString(
+    reminder: Reminder,
+    context: Context
+): String {
+    val interval = Interval(reminder.timeInMinutes)
+    return context.getString(R.string.every_interval, interval.toTranslatedString(context))
+}
+
 fun linkedReminderString(reminder: Reminder, context: Context): String {
     val medicineRepository = MedicineRepository(context.applicationContext as Application?)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
-        return if (sourceReminder.linkedReminderId != 0) {
+        return if (sourceReminder.reminderType == Reminder.ReminderType.LINKED) {
             // Recursion
             linkedReminderString(sourceReminder, context) + " + " +
                     TimeHelper.minutesToDurationString(sourceReminder.timeInMinutes.toLong())
@@ -47,7 +63,7 @@ fun linkedReminderString(reminder: Reminder, context: Context): String {
     return "?"
 }
 
-private fun standardReminderString(
+private fun timeBasedReminderString(
     reminder: Reminder,
     strings: MutableList<String>,
     context: Context
@@ -97,10 +113,17 @@ private fun buildReminderStrings(
 }
 
 fun remindersSummary(context: Context, reminders: List<Reminder>): String {
-    val reminderTimes = standardRemindersSummary(
-        reminders.stream().filter { r: Reminder -> r.linkedReminderId == 0 }, context
-    ) + linkedRemindersSummary(
-        reminders.stream().filter { r: Reminder -> r.linkedReminderId != 0 }, context
+    val reminderTimes = timeBasedRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED },
+        context
+    ) + getRemindersSummary(
+        reminders.stream().filter { r: Reminder -> r.reminderType == Reminder.ReminderType.LINKED },
+        ({ r: Reminder -> linkedReminderSummaryString(r, context) })
+    ) + getRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.INTERVAL_BASED },
+        ({ r: Reminder -> intervalBasedReminderString(r, context) })
     )
 
     val len = reminderTimes.size
@@ -110,11 +133,13 @@ fun remindersSummary(context: Context, reminders: List<Reminder>): String {
         len,
         java.lang.String.join(", ", reminderTimes)
     )
-
 }
 
-fun linkedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
-    return reminders.map { r: Reminder -> linkedReminderSummaryString(r, context) }
+fun getRemindersSummary(
+    reminders: Stream<Reminder>,
+    toStringFunction: (Reminder) -> String
+): List<String> {
+    return reminders.map { r: Reminder -> toStringFunction(r) }
         .collect(Collectors.toList())
 }
 
@@ -123,7 +148,7 @@ fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
-        return if (sourceReminder.linkedReminderId != 0) {
+        return if (sourceReminder.reminderType == Reminder.ReminderType.LINKED) {
             // Recursion
             linkedReminderSummaryString(
                 sourceReminder,
@@ -138,7 +163,7 @@ fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     return "?"
 }
 
-private fun standardRemindersSummary(
+private fun timeBasedRemindersSummary(
     reminders: Stream<Reminder>,
     context: Context
 ): ArrayList<String> {

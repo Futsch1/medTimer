@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.medicine
 
-import android.text.format.DateUtils
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
@@ -9,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 import java.time.LocalDate
 
 class PeriodSettings(
@@ -46,8 +45,8 @@ class PeriodSettings(
         periodStartActive.isChecked = reminder.periodStart != 0L
         periodEndActive.isChecked = reminder.periodEnd != 0L
 
-        setupDatePicker(editPeriodStartDate)
-        setupDatePicker(editPeriodEndDate)
+        setupDatePicker(editPeriodStartDate, R.string.period_start)
+        setupDatePicker(editPeriodEndDate, R.string.period_end)
 
         setupActiveSwitch(periodStartActive, editPeriodStartDate)
         setupActiveSwitch(periodEndActive, editPeriodEndDate)
@@ -78,26 +77,20 @@ class PeriodSettings(
         }
     }
 
-    private fun setupDatePicker(textField: EditText) {
+    private fun setupDatePicker(textField: EditText, textId: Int) {
         textField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                var startDate: LocalDate? =
+                val startDate: LocalDate? =
                     TimeHelper.dateStringToDate(textField.getText().toString())
-                if (startDate == null) {
-                    startDate = LocalDate.now()
-                }
-                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setSelection(startDate!!.toEpochDay() * DateUtils.DAY_IN_MILLIS)
-                    .build()
-                datePickerDialog.addOnPositiveButtonClickListener { selectedDate: Long ->
+                val datePickerWrapper = DatePickerWrapper(fragmentManager, textId)
+                datePickerWrapper.show(startDate, { selectedDate ->
                     textField.setText(
                         TimeHelper.daysSinceEpochToDateString(
                             textField.context,
-                            selectedDate / DateUtils.DAY_IN_MILLIS
+                            selectedDate
                         )
                     )
-                }
-                datePickerDialog.show(fragmentManager, "date_picker")
+                })
             }
         }
     }

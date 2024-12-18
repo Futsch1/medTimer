@@ -2,10 +2,13 @@ package com.futsch1.medtimer.helpers;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -83,20 +86,6 @@ public class TimeHelper {
     }
 
     /**
-     * @param context    Context to extract time format
-     * @param timeString Time string in local format
-     * @return Minutes since midnight
-     */
-    public static int timeStringToMinutes(Context context, String timeString) {
-        try {
-            Date date = DateFormat.getTimeFormat(context).parse(timeString);
-            return date != null ? date.toInstant().atOffset(EPOCH_OFFSET).toLocalTime().toSecondOfDay() / 60 : -1;
-        } catch (ParseException e) {
-            return -1;
-        }
-    }
-
-    /**
      * @param context        Context to extract date format
      * @param daysSinceEpoch Days since epoch
      * @return Date string in local format
@@ -111,6 +100,30 @@ public class TimeHelper {
     }
 
     /**
+     * @param context        Context to extract date format
+     * @param dateTimeString String containing date and time
+     * @return Seconds since epoch of date/time
+     */
+    public static long dateTimeStringToSecondsSinceEpoch(Context context, String dateTimeString) {
+        String[] dateTimeComponents = dateTimeString.split(" ");
+        if (dateTimeComponents.length != 2) {
+            return -1;
+        }
+
+        LocalDate date = dateStringToDate(dateTimeComponents[0]);
+        if (date == null) {
+            return -1;
+        }
+
+        int minutes = timeStringToMinutes(context, dateTimeComponents[1]);
+        if (minutes == -1) {
+            return -1;
+        }
+
+        return changeTimeStampDate(instantFromTodayMinutes(minutes).getEpochSecond(), date);
+    }
+
+    /**
      * @param dateString Date string in local format
      * @return Local date
      */
@@ -120,6 +133,31 @@ public class TimeHelper {
         } catch (DateTimeParseException e) {
             return null;
         }
+    }
+
+    /**
+     * @param context    Context to extract time format
+     * @param timeString Time string in local format
+     * @return Minutes since midnight
+     */
+    public static int timeStringToMinutes(Context context, String timeString) {
+        try {
+            Date date = DateFormat.getTimeFormat(context).parse(timeString);
+            return date != null ? date.toInstant().atOffset(EPOCH_OFFSET).toLocalTime().toSecondOfDay() / 60 : -1;
+        } catch (ParseException e) {
+            return -1;
+        }
+    }
+
+    /**
+     * @param remindedTimestamp Time stamp in seconds since epoch
+     * @param localDate         Local date
+     * @return Time stamp in seconds since epoch with given date
+     */
+    public static long changeTimeStampDate(long remindedTimestamp, LocalDate localDate) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(remindedTimestamp), ZoneId.systemDefault());
+        localDateTime = localDateTime.with(localDate);
+        return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
     }
 
     /**
@@ -140,17 +178,6 @@ public class TimeHelper {
     public static long changeTimeStampMinutes(long timeStamp, int localMinutes) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.systemDefault());
         localDateTime = localDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60);
-        return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
-    }
-
-    /**
-     * @param remindedTimestamp Time stamp in seconds since epoch
-     * @param localDate         Local date
-     * @return Time stamp in seconds since epoch with given date
-     */
-    public static long changeTimeStampDate(long remindedTimestamp, LocalDate localDate) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(remindedTimestamp), ZoneId.systemDefault());
-        localDateTime = localDateTime.with(localDate);
         return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
     }
 
@@ -185,6 +212,10 @@ public class TimeHelper {
         void onTimeSelected(int minutes);
     }
 
+    public interface DatePickerResult {
+        void onDateSelected(long daysSinceEpoch);
+    }
+
     public static class TimePickerWrapper {
         final FragmentActivity activity;
         private final Integer titleText;
@@ -217,6 +248,38 @@ public class TimeHelper {
             timePickerDialog.addOnPositiveButtonClickListener(view -> timePickerResult.onTimeSelected(timePickerDialog.getHour() * 60 + timePickerDialog.getMinute()));
 
             timePickerDialog.show(activity.getSupportFragmentManager(), "time_picker");
+        }
+    }
+
+    public static class DatePickerWrapper {
+        final FragmentManager fragmentManager;
+        private final Integer titleText;
+
+        public DatePickerWrapper(FragmentManager fragmentManager) {
+            this.fragmentManager = fragmentManager;
+            this.titleText = null;
+        }
+
+        public DatePickerWrapper(FragmentManager fragmentManager, @StringRes int titleText) {
+            this.fragmentManager = fragmentManager;
+            this.titleText = titleText;
+        }
+
+        public void show(LocalDate startDate, DatePickerResult datePickerResult) {
+            if (startDate == null) {
+                startDate = LocalDate.now();
+            }
+            MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker()
+                    .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS);
+
+            if (titleText != null) {
+                builder.setTitleText(titleText);
+            }
+
+            MaterialDatePicker<Long> datePickerDialog = builder.build();
+            datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> datePickerResult.onDateSelected(selectedDate / DateUtils.DAY_IN_MILLIS));
+
+            datePickerDialog.show(fragmentManager, "date_picker");
         }
     }
 }

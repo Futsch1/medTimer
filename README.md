@@ -57,7 +57,7 @@ Flexible & Personalized Reminders:
 - Weekend mode: Delay reminders to a defined time on chosen days.
 - Snooze notifications for later reminders or be reminded repeatedly.
 - Add extra doses on the fly.
-- Create reminders to take doses following each other in intervals.
+- Create interval based reminders or reminders following each other in intervals.
 
 Simple & Secure Data Management:
 

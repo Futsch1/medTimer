@@ -161,4 +161,27 @@
     <string name="delay">Gecikme</string>
     <string name="linked_reminder_summary">%1$s adresindeki hatırlatmadan sonra</string>
     <string name="delete_re_raise_event">Bu olayı silmek ve bildirimi yeniden yükseltmek istiyor musunuz?</string>
+    <string name="time_based_reminder">Zaman bazlı hatırlatma</string>
+    <string name="interval_based_reminder">Aralık bazlı hatırlatma</string>
+    <plurals name="minutes">
+        <item quantity="one">dakika</item>
+        <item quantity="other">dakika</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">saat</item>
+        <item quantity="other">saat</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">gün</item>
+        <item quantity="other">gün</item>
+    </plurals>
+    <string name="minutes">Dakika</string>
+    <string name="hours">Saatler</string>
+    <string name="days">Günler</string>
+    <string name="create_reminder">Hatırlatma oluşturun</string>
+    <string name="interval">Aralık</string>
+    <string name="interval_start_time">Aralık başlangıç zamanı</string>
+    <string name="interval_start_reminded">Hatırlatıldığında aralık başlar</string>
+    <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
+    <string name="every_interval">Her %s</string>
 </resources>

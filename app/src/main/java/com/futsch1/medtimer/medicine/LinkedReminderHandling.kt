@@ -78,7 +78,7 @@ class LinkedReminderAlgorithms {
         var total = reminder.timeInMinutes
         for (r in reminders) {
             if (r.reminderId == reminder.linkedReminderId) {
-                total += if (r.linkedReminderId != 0) {
+                total += if (r.reminderType == Reminder.ReminderType.LINKED) {
                     getTotalTimeInMinutes(r, reminders)
                 } else {
                     r.timeInMinutes

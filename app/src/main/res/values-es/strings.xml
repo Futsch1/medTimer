@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -164,4 +163,30 @@
     <string name="delay">Retraso</string>
     <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
     <string name="delete_re_raise_event">¿Desea eliminar este evento y volver a generar la notificación?</string>
+    <string name="time_based_reminder">Recordatorio basado en el tiempo</string>
+    <string name="interval_based_reminder">Recordatorio por intervalos</string>
+    <plurals name="minutes">
+        <item quantity="one">minuto</item>
+        <item quantity="other">minutos</item>
+        <item quantity="many">minutos</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">hora</item>
+        <item quantity="other">horas</item>
+        <item quantity="many">horas</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">día</item>
+        <item quantity="other">días</item>
+        <item quantity="many">días</item>
+    </plurals>
+    <string name="minutes">Minutos</string>
+    <string name="hours">Horas</string>
+    <string name="days">Días</string>
+    <string name="create_reminder">Crear recordatorio</string>
+    <string name="interval">Intervalo</string>
+    <string name="interval_start_time">Hora de inicio del intervalo</string>
+    <string name="interval_start_reminded">Intervalo comienza cuando se le recuerda</string>
+    <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
+    <string name="every_interval">Cada %s</string>
 </resources>

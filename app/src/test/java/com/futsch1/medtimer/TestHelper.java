@@ -47,10 +47,10 @@ public class TestHelper {
         return Instant.ofEpochSecond(localDate.atTime(localTime).atZone(ZoneId.of(zoneId)).toEpochSecond());
     }
 
-    public static ReminderEvent buildReminderEvent(int reminderId, long raisedTimestamp) {
+    public static ReminderEvent buildReminderEvent(int reminderId, long remindedTimestamp) {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.reminderId = reminderId;
-        reminderEvent.remindedTimestamp = raisedTimestamp;
+        reminderEvent.remindedTimestamp = remindedTimestamp;
         return reminderEvent;
     }
 

@@ -163,4 +163,30 @@
     <string name="delay">Ritardo</string>
     <string name="linked_reminder_summary">Dopo il promemoria a %1$s</string>
     <string name="delete_re_raise_event">Si vuole cancellare questo evento e rilanciare la notifica?</string>
+    <string name="time_based_reminder">Promemoria a tempo</string>
+    <string name="interval_based_reminder">Promemoria a intervalli</string>
+    <plurals name="minutes">
+        <item quantity="one">minuto</item>
+        <item quantity="other">minuti</item>
+        <item quantity="many">minuti</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">ora</item>
+        <item quantity="other">ore</item>
+        <item quantity="many">ore</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">giorno</item>
+        <item quantity="other">giorni</item>
+        <item quantity="many">giorni</item>
+    </plurals>
+    <string name="minutes">Minuti</string>
+    <string name="hours">Ora</string>
+    <string name="days">Giorni</string>
+    <string name="create_reminder">Creare un promemoria</string>
+    <string name="interval">Intervallo</string>
+    <string name="interval_start_time">Ora di inizio dell&amp;apos;intervallo</string>
+    <string name="interval_start_reminded">Intervallo inizia quando viene ricordato</string>
+    <string name="interval_start_processed">Intervallo inizia quando viene preso o saltato</string>
+    <string name="every_interval">Ogni %s</string>
 </resources>

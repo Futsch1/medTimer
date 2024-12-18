@@ -161,4 +161,27 @@
     <string name="delay">Verzögerung</string>
     <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
     <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
+    <string name="time_based_reminder">Zeitbasierte Erinnerung</string>
+    <string name="interval_based_reminder">Intervallbasierte Erinnerung</string>
+    <plurals name="minutes">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minuten</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">Stunde</item>
+        <item quantity="other">Stunden</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
+    </plurals>
+    <string name="minutes">Minutes</string>
+    <string name="hours">Stunden</string>
+    <string name="days">Tage</string>
+    <string name="create_reminder">Erinnerung erstellen</string>
+    <string name="interval">Interval</string>
+    <string name="interval_start_time">Startzeit des Intervalls</string>
+    <string name="interval_start_reminded">Intervall beginnt zum Zeitpunkt der Erinnerung</string>
+    <string name="interval_start_processed">Intervall beginnt, wenn eingenommen oder übersprungen</string>
+    <string name="every_interval">Alle %s</string>
 </resources>
