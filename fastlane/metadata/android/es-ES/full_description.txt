@@ -1,32 +1,33 @@
-Historial y recordatorios de medicación con total privacidad sin conexión
+Historial y recordatorios de medicación con total privacidad sin conexión 
 
-Controle su medicación con MedTimer
+Mantenga el control de sus medicamentos con MedTimer
 
-MedTimer es una aplicación de recordatorio de medicación de código abierto diseñada para ayudarle a gestionar sus medicamentos y pastillas de forma eficaz y con pleno control de sus datos confidenciales.
+MedTimer es una aplicación de recordatorio de medicación de código abierto diseñada para ayudarle a gestionar sus medicamentos y pastillas de forma eficaz y con un control total de sus datos confidenciales.
 
 Recordatorios flexibles y personalizados:
 
-- Gestiona un número ilimitado de medicamentos con recordatorios personalizados por medicamento (incluyendo recordatorios diarios por defecto).
-- Crea recordatorios flexibles con días consecutivos y de pausa (por ejemplo, para píldoras anticonceptivas).
-- Modo fin de semana: retrasa los recordatorios hasta una hora definida en los días seleccionados.
-- Posponer las notificaciones para recordatorios posteriores o ser recordado repetidamente.
-- Añade dosis adicionales en el momento.
-- Crea recordatorios para tomas su dosis seguidas en intervalos.
+- Gestiona un número ilimitado de medicaciones con recordatorios personalizables por medicación (incluyendo simples predeterminados
+  para recordatorios diarios).
+- Cree recordatorios flexibles con descansos y días específicos (por ejemplo, para píldoras anticonceptivas).
+- Modo fin de semana: Retrasa los recordatorios a una hora definida en los días elegidos.
+- Posponer notificaciones para recordatorios posteriores o recordártelo repetidamente.
+- Añade dosis adicionales sobre la marcha.
+- Crear recordatorios basados en intervalos o recordatorios que se suceden en intervalos.
 
 Gestión de datos sencilla y segura:
 
-- Confirma o descarta los recordatorios para registrar con precisión el seguimiento de la medicación.
-- Obtenga un resumen de las dosis anteriores en una gráfica y en vista de tabla.
-- Puedes exportar tu historial de medicación como un archivo CSV para facilitar el mantenimiento de registros o compartirlo con profesionales de la salud.
-- Haz una copia de seguridad y restaura tu lista de medicamentos como archivo JSON.
+- Confirme o descarte los recordatorios para registrar la adherencia a la medicación con precisión.
+- Obtenga una visión general de las dosis anteriores en un gráfico y una vista tabular.
+- Exporte su historial de medicación como archivo CSV para llevar un registro o compartirlo fácilmente con profesionales sanitarios.
+- Realice copias de seguridad y restaure su lista de medicación como archivo JSON.
 
 Privacidad y accesibilidad sin conexión:
 
-- Todos los datos se almacenan de forma segura en tu dispositivo, lo que garantiza una total privacidad y accesibilidad sin conexión.
-- No requiere conexión a Internet - tus recordatorios de medicación están siempre disponibles.
+- Todos los datos se almacenan de forma segura en su dispositivo, lo que garantiza una total privacidad y accesibilidad sin conexión.
+- No requiere conexión a Internet - sus recordatorios de medicación están siempre disponibles.
 
-MedTimer es una aplicación gratuita sin anuncios.
+MedTimer es una aplicación gratuita sin añadidos.
 
 Consulte la página del proyecto en GitHub: https://github.com/Futsch1/medTimer
 
-El gráfico de características fue creado con https://hotpot.ai
+Gráficos creados con https://hotpot.ai
