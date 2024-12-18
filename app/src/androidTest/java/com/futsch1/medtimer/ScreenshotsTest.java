@@ -94,7 +94,7 @@ public class ScreenshotsTest {
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped)).perform(click());
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(3, scrollTo()));

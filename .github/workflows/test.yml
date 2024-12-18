@@ -68,6 +68,7 @@ jobs:
           disable-animations: true
           profile: Pixel5
           script: ./gradlew JacocoDebugCodeCoverage
+          cores: 4
 
       - name: SonarQube
         env:
