@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -117,7 +118,7 @@
     <string name="show_all">Hepsini göster</string>
     <string name="intro_welcome">MedTimer\'a hoş geldiniz!</string>
     <string name="intro_welcome_description">MedTimer, gizliliğe odaklanan ücretsiz ve açık kaynaklı bir ilaç hatırlatma uygulamasıdır.\n\nİlaç hatırlatıcı bildirimlerini gösterebilmesi için izne ihtiyaç duyar.</string>
-    <string name="intro_medicine_description">Aldığınız ve hatırlatılmasını istediğiniz ilaçları oluşturmak için "İlaç" sekmesini kullanın. Bir ilacı silmek için sola kaydırın.</string>
+    <string name="intro_medicine_description">Aldığınız ve hatırlatılmasını istediğiniz ilaçları oluşturmak için İlaç sekmesini kullanın. Bir ilacı silmek için sola kaydırın.</string>
     <string name="intro_reminder_description">Bir ilacın detaylarını düzenlemek ve almanız gereken ilaç dozları için hatırlatıcılar oluşturmak için ilacı seçin.\n\nHatırlatıcılar, günde belirli bir saatte bir kez görünmek kadar basit veya birkaç gün üst üste ve birkaç gün ara veren karmaşık programlar olabilir.</string>
     <string name="intro_notification_description">Bir hatırlatıcı zamanı geldiğinde, bir bildirim görünür ve bu size bir dozu alındı olarak işaretleme (\"ALINDI\" düğmesine tıklayarak), atlama (bildirimi reddederek) veya belirli bir süre sonra tekrar hatırlatılma (\"ERTELE\") seçeneği sunar.</string>
     <string name="intro_overview_description">Genel bakış ekranında, yaklaşan hatırlatıcıları ve son hatırlatıcı etkinliklerini görebilirsiniz. Hatırlatıcı etkinlikler sağa kaydırarak düzenlenebilir ve sola kaydırarak silinebilir.\n\nAyrıca, yapılandırılmış ilaçlardan birinin veya özel bir ilacın ek dozlarını manuel olarak kaydedebilirsiniz.</string>
