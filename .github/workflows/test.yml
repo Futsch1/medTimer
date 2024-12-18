@@ -51,7 +51,7 @@ jobs:
         with:
           api-level: ${{ env.target_api_level }}
           arch: x86_64
-          target: aosp_atd
+          target: google_apis
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -65,9 +65,9 @@ jobs:
           target: google_apis
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
+          disable-animations: true
           profile: Pixel5
-          script: ./gradlew JacocoDebugCodeCoverage
+          script: ./gradlew JacocoDebugCodeCoverage --stacktrace
 
       - name: SonarQube
         env:
