@@ -7,14 +7,16 @@ enum class IntervalUnit {
     MINUTES, HOURS, DAYS
 }
 
+private fun getMinutes(unit: IntervalUnit, value: Int) = when (unit) {
+    IntervalUnit.MINUTES -> value
+    IntervalUnit.HOURS -> value * 60
+    IntervalUnit.DAYS -> value * 60 * 24
+}
+
 class Interval(var minutesValue: Int) {
 
     constructor(value: Int, unit: IntervalUnit) : this(
-        when (unit) {
-            IntervalUnit.MINUTES -> value
-            IntervalUnit.HOURS -> value * 60
-            IntervalUnit.DAYS -> value * 60 * 24
-        }
+        getMinutes(unit, value)
     )
 
     fun getUnit(): IntervalUnit {
@@ -42,11 +44,7 @@ class Interval(var minutesValue: Int) {
     }
 
     fun setValue(value: Int, unit: IntervalUnit) {
-        minutesValue = when (unit) {
-            IntervalUnit.MINUTES -> value
-            IntervalUnit.HOURS -> value * 60
-            IntervalUnit.DAYS -> value * 60 * 24
-        }
+        minutesValue = getMinutes(unit, value)
     }
 
     override fun toString(): String {

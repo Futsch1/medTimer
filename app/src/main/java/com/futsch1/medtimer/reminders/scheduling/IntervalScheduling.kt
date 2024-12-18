@@ -12,7 +12,8 @@ class IntervalScheduling(
     private val timeAccess: TimeAccess
 ) : Scheduling {
     override fun getNextScheduledTime(): Instant? {
-        val lastReminderEvent: ReminderEvent? = findLastReminderEvent(reminder.reminderId)
+        val lastReminderEvent: ReminderEvent? =
+            findLastReminderEvent(reminder.reminderId, reminderEventList)
         val instant =
             if (lastReminderEvent != null && lastReminderEvent.remindedTimestamp >= reminder.intervalStart) {
                 getNextIntervalTimeFromReminderEvent(lastReminderEvent)
@@ -49,17 +50,4 @@ class IntervalScheduling(
         }
         return adjustedInstant
     }
-
-    private fun findLastReminderEvent(reminderId: Int): ReminderEvent? {
-        var foundReminderEvent: ReminderEvent? = null
-        for (reminderEvent in reminderEventList) {
-            if (reminderEvent.reminderId == reminderId &&
-                (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
-            ) {
-                foundReminderEvent = reminderEvent
-            }
-        }
-        return foundReminderEvent
-    }
-
 }

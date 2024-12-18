@@ -115,14 +115,15 @@ private fun buildReminderStrings(
 fun remindersSummary(context: Context, reminders: List<Reminder>): String {
     val reminderTimes = timeBasedRemindersSummary(
         reminders.stream()
-            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED }, context
-    ) + linkedRemindersSummary(
-        reminders.stream().filter { r: Reminder -> r.reminderType == Reminder.ReminderType.LINKED },
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED },
         context
-    ) + intervalBasedRemindersSummary(
+    ) + getRemindersSummary(
+        reminders.stream().filter { r: Reminder -> r.reminderType == Reminder.ReminderType.LINKED },
+        ({ r: Reminder -> linkedReminderSummaryString(r, context) })
+    ) + getRemindersSummary(
         reminders.stream()
             .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.INTERVAL_BASED },
-        context
+        ({ r: Reminder -> intervalBasedReminderString(r, context) })
     )
 
     val len = reminderTimes.size
@@ -134,13 +135,11 @@ fun remindersSummary(context: Context, reminders: List<Reminder>): String {
     )
 }
 
-fun intervalBasedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
-    return reminders.map { r: Reminder -> intervalBasedReminderString(r, context) }
-        .collect(Collectors.toList())
-}
-
-fun linkedRemindersSummary(reminders: Stream<Reminder>, context: Context): List<String> {
-    return reminders.map { r: Reminder -> linkedReminderSummaryString(r, context) }
+fun getRemindersSummary(
+    reminders: Stream<Reminder>,
+    toStringFunction: (Reminder) -> String
+): List<String> {
+    return reminders.map { r: Reminder -> toStringFunction(r) }
         .collect(Collectors.toList())
 }
 

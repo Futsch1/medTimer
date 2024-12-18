@@ -204,9 +204,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
             putConsecutiveDaysIntoReminder();
             putPauseDaysIntoReminder();
             putStartDateIntoReminder();
-            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
-                putIntervalIntoReminder();
-            }
+            putIntervalIntoReminder();
 
             medicineViewModel.updateReminder(reminder);
         }
@@ -214,9 +212,11 @@ public class AdvancedReminderSettingsFragment extends Fragment {
 
     private void putConsecutiveDaysIntoReminder() {
         try {
-            reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
-            if (reminder.consecutiveDays <= 0) {
-                reminder.consecutiveDays = 1;
+            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+                reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
+                if (reminder.consecutiveDays <= 0) {
+                    reminder.consecutiveDays = 1;
+                }
             }
         } catch (NumberFormatException e) {
             reminder.consecutiveDays = 1;
@@ -239,14 +239,16 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     }
 
     private void putIntervalIntoReminder() {
-        int minutes = intervalEditor.getMinutes();
-        if (minutes > 0) {
-            reminder.timeInMinutes = minutes;
+        if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            int minutes = intervalEditor.getMinutes();
+            if (minutes > 0) {
+                reminder.timeInMinutes = minutes;
+            }
+            long intervalStartDateTime = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch();
+            if (intervalStartDateTime >= 0) {
+                reminder.intervalStart = intervalStartDateTime;
+            }
+            reminder.intervalStartsFromProcessed = ((RadioButton) advancedReminderView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
         }
-        long intervalStartDateTime = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch();
-        if (intervalStartDateTime >= 0) {
-            reminder.intervalStart = intervalStartDateTime;
-        }
-        reminder.intervalStartsFromProcessed = ((RadioButton) advancedReminderView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
     }
 }

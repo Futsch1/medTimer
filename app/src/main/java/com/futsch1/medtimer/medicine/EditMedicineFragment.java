@@ -122,7 +122,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
     private void setupAddReminderButton() {
         ExtendedFloatingActionButton fab = fragmentEditMedicine.findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> new NewReminder(requireActivity(), medicineId, medicineViewModel));
+        fab.setOnClickListener(view -> new NewReminder(requireContext(), requireActivity(), medicineId, medicineViewModel));
     }
 
     private void setupEnableColor(boolean useColor) {

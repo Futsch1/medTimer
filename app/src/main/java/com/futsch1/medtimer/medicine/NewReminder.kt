@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine
 
 import android.app.Dialog
+import android.content.Context
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.FragmentActivity
@@ -19,11 +20,12 @@ import java.time.Instant
 import java.time.LocalDate
 
 class NewReminder(
+    val context: Context,
     val activity: FragmentActivity,
     val medicineId: Int,
     val medicineViewModel: MedicineViewModel
 ) {
-    private val dialog: Dialog = Dialog(activity)
+    private val dialog: Dialog = Dialog(context)
 
     init {
         dialog.setContentView(R.layout.new_reminder)
@@ -52,29 +54,20 @@ class NewReminder(
     }
 
     private fun setVisibilities(checkedId: Int) {
-        if (checkedId == R.id.timeBased) {
-            dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
-                ViewGroup.GONE
-            dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
-                ViewGroup.GONE
-            dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
-                ViewGroup.GONE
-            dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
-                ViewGroup.GONE
-            dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
-                ViewGroup.VISIBLE
-        } else {
-            dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
-                ViewGroup.VISIBLE
-            dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
-                ViewGroup.VISIBLE
-            dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
-                ViewGroup.VISIBLE
-            dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
-                ViewGroup.VISIBLE
-            dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
-                ViewGroup.GONE
-        }
+        val timeBasedVisibility =
+            if (checkedId == R.id.timeBased) ViewGroup.VISIBLE else ViewGroup.GONE
+        val intervalBasedVisibility =
+            if (checkedId == R.id.intervalBased) ViewGroup.VISIBLE else ViewGroup.GONE
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
+            intervalBasedVisibility
+        dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
+            intervalBasedVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
+            intervalBasedVisibility
+        dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
+            intervalBasedVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
+            timeBasedVisibility
     }
 
     private fun setupCreateReminder(
@@ -100,6 +93,20 @@ class NewReminder(
             Instant.now().epochSecond
         )
 
+        setupOnClickCreateReminder(
+            reminder,
+            timeEditor,
+            intervalEditor,
+            intervalStartDateTimeEditor
+        )
+    }
+
+    private fun setupOnClickCreateReminder(
+        reminder: Reminder,
+        timeEditor: TimeEditor,
+        intervalEditor: IntervalEditor,
+        intervalStartDateTimeEditor: DateTimeEditor
+    ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             reminder.amount =
                 dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
@@ -121,7 +128,6 @@ class NewReminder(
                     dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
             }
             if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
-
                 medicineViewModel.insertReminder(reminder)
             }
             dialog.dismiss()

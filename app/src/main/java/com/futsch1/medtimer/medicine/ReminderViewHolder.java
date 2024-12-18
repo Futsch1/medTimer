@@ -59,6 +59,21 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     public void bind(Reminder reminder) {
         this.reminder = reminder;
 
+        setupTimeEditor();
+
+        advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder));
+
+        editAmount.setText(reminder.amount);
+
+        new Handler(thread.getLooper()).post(() -> {
+            String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
+            this.fragmentActivity.runOnUiThread(() ->
+                    advancedSettingsSummary.setText(summary));
+
+        });
+    }
+
+    private void setupTimeEditor() {
         if (reminder.getReminderType() != Reminder.ReminderType.INTERVAL_BASED) {
             @StringRes int textId = reminder.getReminderType() == Reminder.ReminderType.TIME_BASED ? R.string.time : R.string.delay;
             editTimeLayout.setHint(textId);
@@ -69,16 +84,6 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         } else {
             editTimeLayout.setVisibility(View.GONE);
         }
-
-        advancedSettings.setOnClickListener(v -> onClickAdvancedSettings(reminder));
-
-        editAmount.setText(reminder.amount);
-        new Handler(thread.getLooper()).post(() -> {
-            String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
-            this.fragmentActivity.runOnUiThread(() ->
-                    advancedSettingsSummary.setText(summary));
-
-        });
     }
 
     private void onClickAdvancedSettings(Reminder reminder) {

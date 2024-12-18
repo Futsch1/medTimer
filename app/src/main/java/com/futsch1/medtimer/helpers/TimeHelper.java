@@ -105,18 +105,22 @@ public class TimeHelper {
      * @return Seconds since epoch of date/time
      */
     public static long dateTimeStringToSecondsSinceEpoch(Context context, String dateTimeString) {
-        long secondsSinceEpoch = -1;
-        String[] parts = dateTimeString.split(" ");
-        if (parts.length == 2) {
-            LocalDate date = dateStringToDate(parts[0]);
-            if (date != null) {
-                int minutes = timeStringToMinutes(context, parts[1]);
-                if (minutes != -1) {
-                    secondsSinceEpoch = changeTimeStampDate(instantFromTodayMinutes(minutes).getEpochSecond(), date);
-                }
-            }
+        String[] dateTimeComponents = dateTimeString.split(" ");
+        if (dateTimeComponents.length != 2) {
+            return -1;
         }
-        return secondsSinceEpoch;
+
+        LocalDate date = dateStringToDate(dateTimeComponents[0]);
+        if (date == null) {
+            return -1;
+        }
+
+        int minutes = timeStringToMinutes(context, dateTimeComponents[1]);
+        if (minutes == -1) {
+            return -1;
+        }
+
+        return changeTimeStampDate(instantFromTodayMinutes(minutes).getEpochSecond(), date);
     }
 
     /**
