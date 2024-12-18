@@ -29,10 +29,6 @@ class NewReminder(
 
     init {
         dialog.setContentView(R.layout.new_reminder)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
 
         setupCreateReminder()
         setupVisibilities()
