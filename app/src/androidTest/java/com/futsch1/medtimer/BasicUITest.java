@@ -82,13 +82,7 @@ public class BasicUITest {
 
         pressBack();
 
-        ViewInteraction textInputEditText3 = onView(
-                allOf(withId(R.id.editAmount), withText("1")));
-        textInputEditText3.perform(replaceText("2"));
-
-        ViewInteraction textInputEditText4 = onView(
-                allOf(withId(R.id.editAmount), withText("2")));
-        textInputEditText4.perform(closeSoftKeyboard());
+        onView(withId(R.id.editAmount)).perform(replaceText("2"), closeSoftKeyboard());
 
         pressBack();
 
@@ -97,9 +91,7 @@ public class BasicUITest {
                 allOf(withId(R.id.medicineList)));
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
-        ViewInteraction editText2 = onView(
-                allOf(withId(R.id.editAmount), withText("2")));
-        editText2.check(matches(withText("2")));
+        onView(withId(R.id.editAmount)).check(matches(withText("2")));
 
         pressBack();
 
