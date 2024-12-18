@@ -53,16 +53,16 @@ jobs:
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 35
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run Android tests
+      - name: Run Android tests and unit tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 35
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -82,3 +82,4 @@ jobs:
             app/build/reports/jacoco/JacocoDebugCodeCoverage/html
             app/build/reports/tests/testDebugUnitTest
             app/build/outputs/androidTest-results/connected/debug
+            app/build/outputs/reports/lint-results-debug.html
