@@ -15,6 +15,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -83,7 +84,7 @@ public class ReminderTypeTest {
         onView(withId(R.id.createReminder)).perform(click());
 
         // Check reminder list
-        ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCard));
+        ViewInteraction cardOfReminder1 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCard));
         cardOfReminder1.perform(scrollTo());
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
         String expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);

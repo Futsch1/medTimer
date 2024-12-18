@@ -20,6 +20,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -103,7 +104,7 @@ public class ScreenshotsTest {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        ViewInteraction recyclerView = onView(
+        ViewInteraction recyclerView = onViewWithTimeout(
                 allOf(withId(R.id.medicineList)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
@@ -173,6 +174,4 @@ public class ScreenshotsTest {
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText, null))
                 .check(matches(withText(not(startsWith(expectedText)))));
     }
-
-
 }

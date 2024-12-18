@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -47,11 +48,10 @@ public class BasicUITest {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-        ViewInteraction materialButton4 = onView(withId(R.id.open_advanced_settings));
+        ViewInteraction materialButton4 = onViewWithTimeout(withId(R.id.open_advanced_settings));
         materialButton4.perform(click());
 
-        ViewInteraction checkableImageButton = onView(
+        ViewInteraction checkableImageButton = onViewWithTimeout(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
                         AndroidTestHelper.childAtPosition(
                                 AndroidTestHelper.childAtPosition(
@@ -72,33 +72,32 @@ public class BasicUITest {
 
         pressBack();
 
-        ViewInteraction materialButton5 = onView(
+        ViewInteraction materialButton5 = onViewWithTimeout(
                 allOf(withId(R.id.open_advanced_settings)));
         materialButton5.perform(click());
 
-        ViewInteraction editText = onView(
+        ViewInteraction editText = onViewWithTimeout(
                 allOf(withId(R.id.editInstructions), withText(R.string.before_meal)));
         editText.check(matches(withText(R.string.before_meal)));
 
         pressBack();
 
-        onView(withId(R.id.editAmount)).perform(replaceText("2"), closeSoftKeyboard());
+        onViewWithTimeout(withId(R.id.editAmount)).perform(replaceText("2"), closeSoftKeyboard());
 
         pressBack();
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
-        ViewInteraction recyclerView2 = onView(
+        ViewInteraction recyclerView2 = onViewWithTimeout(
                 allOf(withId(R.id.medicineList)));
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.editAmount)).check(matches(withText("2")));
+        onViewWithTimeout(withId(R.id.editAmount)).check(matches(withText("2")));
 
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        ViewInteraction textView = onView(
+        ViewInteraction textView = onViewWithTimeout(
                 new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderText));
         String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "2", "Test", "");
         textView.check(matches(withText(startsWith(expectedText))));

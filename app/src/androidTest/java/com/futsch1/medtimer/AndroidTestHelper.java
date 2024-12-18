@@ -6,10 +6,12 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -20,10 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -37,25 +41,6 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class AndroidTestHelper {
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
     static void setAllRemindersTo12AM() {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
@@ -70,7 +55,7 @@ public class AndroidTestHelper {
     public static void navigateTo(MainMenu mainMenu) {
         int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onView(
+        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
@@ -84,6 +69,22 @@ public class AndroidTestHelper {
         setTime(0, 0);
         pressBack();
         pressBack();
+    }
+
+    static ViewInteraction onViewWithTimeout(
+            Matcher<View> matcher
+    ) {
+        int retries = 5;
+        while (retries-- >= 0) {
+            try {
+                ViewInteraction viewInteraction = onView(matcher);
+                viewInteraction.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            }
+        }
+        throw new AssertionError("View did not become visible");
     }
 
     public static void setTime(int hour, int minute) {
@@ -109,6 +110,25 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+    }
+
+    public static ViewAction waitFor(long delay) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for " + delay + "milliseconds";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(delay);
+            }
+        };
     }
 
     public static void createReminder(String amount, LocalTime time) {
