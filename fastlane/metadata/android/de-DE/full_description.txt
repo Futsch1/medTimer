@@ -9,7 +9,7 @@ Flexible und personalisierte Erinnerungen:
 - Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
 - Verschiebe ("snooze") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
 - Protokolliere zusätzliche, ungeplante Einnahmen.
-- Erstelle Erinnerungen, die auf vorherige Einnahmen in einem definierten Intervall folgen.
+- Erstelle intervallbasierte Erinnerungen und solche, die auf vorherige Einnahmen nach einer gewissen Zeit folgen.
 
 Einfache und sichere Datenverwaltung:
 
