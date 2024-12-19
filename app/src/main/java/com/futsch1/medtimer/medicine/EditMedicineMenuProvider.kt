@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.navigation.Navigation.findNavController
 import com.futsch1.medtimer.MedicineViewModel
@@ -23,7 +24,7 @@ class EditMedicineMenuProvider(
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_medicine, menu)
-        menu.setGroupDividerEnabled(true)
+        MenuCompat.setGroupDividerEnabled(menu, true)
 
         menu.findItem(R.id.activate_all).setOnMenuItemClickListener { _: MenuItem? ->
             setRemindersActive(true)
