@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
-        minSdk = 28
+        minSdk = 26
         multiDexEnabled = true
         targetSdk = 35
         versionCode = 91
