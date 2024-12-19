@@ -87,18 +87,22 @@ public class ReminderTypeTest {
         // Check reminder list
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        ViewInteraction cardOfReminder3 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCardLayout));
+        int positionOfReminder1 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? 0 : 1;
+        int positionOfReminder2 = reminder1Time.isBefore(LocalTime.of(1, 30)) ? 1 : 2;
+        int positionOfReminder3 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? (reminder1Time.isBefore(LocalTime.of(1, 30)) ? 2 : 1) : 0;
+
+        ViewInteraction cardOfReminder3 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.reminderCardLayout));
         cardOfReminder3.perform(scrollTo());
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
         cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder1 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCardLayout));
+        ViewInteraction cardOfReminder1 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.reminderCardLayout));
         cardOfReminder1.perform(scrollTo());
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCardLayout));
+        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.reminderCardLayout));
         cardOfReminder2.perform(scrollTo());
         cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
