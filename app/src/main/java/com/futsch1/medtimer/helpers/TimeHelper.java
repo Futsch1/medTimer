@@ -105,7 +105,7 @@ public class TimeHelper {
      * @return Seconds since epoch of date/time
      */
     public static long dateTimeStringToSecondsSinceEpoch(Context context, String dateTimeString) {
-        String[] dateTimeComponents = dateTimeString.split(" ");
+        String[] dateTimeComponents = dateTimeString.split(" ", 2);
         if (dateTimeComponents.length != 2) {
             return -1;
         }

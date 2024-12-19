@@ -20,6 +20,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -93,8 +95,10 @@ public class ScreenshotsTest {
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(1, scrollTo()));
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
+        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(2, scrollTo()));
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(2, R.id.chipSkipped)).perform(click());
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(3, scrollTo()));
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(3, R.id.chipTaken)).perform(scrollTo(), click());
@@ -103,12 +107,12 @@ public class ScreenshotsTest {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        ViewInteraction recyclerView = onView(
+        ViewInteraction recyclerView = onViewWithTimeout(
                 allOf(withId(R.id.medicineList)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
@@ -139,12 +143,12 @@ public class ScreenshotsTest {
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));
         int tableCellRecyclerViewId = tableView.get().getCellRecyclerView().getId();
 
-        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText(startsWith("Selen (200 µg)"))));
 
         onView(withId(R.id.filter)).perform(replaceText("B"), closeSoftKeyboard());
 
-        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText("B12 (500µg)")));
 
         onView(withId(com.google.android.material.R.id.text_input_end_icon)).perform(click());
@@ -173,6 +177,4 @@ public class ScreenshotsTest {
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.reminderEventText, null))
                 .check(matches(withText(not(startsWith(expectedText)))));
     }
-
-
 }

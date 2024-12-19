@@ -1,4 +1,4 @@
-name: Android CI
+name: Build
 
 on:
   workflow_dispatch:
@@ -28,34 +28,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
         with:
           dependency-graph: generate-and-submit
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Cache SonarCloud packages
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Gradle packages
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Run unit tests
-        run: ./gradlew test createDebugCoverageReport
-      - name: Run fuzzing tests
-        run: ./gradlew test -Dfuzzing=true
-      - name: Android lint
-        run: ./gradlew lint
-      - name: Build
-        run: ./gradlew build
-      - name: Analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ env.SONAR_TOKEN != '' }}
-        run: ./gradlew sonar
+
       - name: Release bundle
         run: ./gradlew bundleRelease
 

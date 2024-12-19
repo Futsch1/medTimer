@@ -27,7 +27,12 @@ android {
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments.putAll(mapOf("clearPackageData" to "true"))
+        testInstrumentationRunnerArguments.putAll(
+            mapOf(
+                "clearPackageData" to "true",
+                "useTestStorageService" to "true"
+            )
+        )
     }
     buildTypes {
         release {
@@ -39,6 +44,7 @@ android {
         }
         debug {
             enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     compileOptions {
@@ -163,10 +169,19 @@ sonar {
         property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/coverage/test/debug/report.xml"
+            "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
         )
     }
 }
+
+val exclusions = listOf(
+    "**/R.class",
+    "**/R\$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+    "**/*Test*.*"
+)
+
 tasks.withType(Test::class) {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
@@ -176,4 +191,39 @@ tasks.withType(Test::class) {
         exclude("**/*FuzzTest.class")
     else
         include("**/*FuzzTest.class")
+}
+
+android {
+    // Define task names for unit tests and Android tests
+    val unitTests = "testDebugUnitTest"
+    val androidTests = "connectedDebugAndroidTest"
+
+    // Register a JacocoReport task for code coverage analysis
+    tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
+        // Depend on unit tests and Android tests tasks
+        dependsOn(listOf(unitTests, androidTests))
+        // Set task grouping and description
+        group = "Reporting"
+        description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
+        // Configure reports to generate both XML and HTML formats
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+        }
+        // Set source directories to the main source directory
+        sourceDirectories.setFrom(layout.projectDirectory.dir("src/main"))
+        // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
+        classDirectories.setFrom(files(
+            fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+                exclude(exclusions)
+            },
+            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+                exclude(exclusions)
+            }
+        ))
+        // Collect execution data from .exec and .ec files generated during test execution
+        executionData.setFrom(files(
+            fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
+        ))
+    }
 }

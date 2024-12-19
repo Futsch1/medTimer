@@ -10,6 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -38,26 +40,26 @@ public class DeleteLinkedReminderTest {
         AndroidTestHelper.createMedicine("Test med");
         AndroidTestHelper.createReminder("1", LocalTime.of(0, 0));
 
-        onView(withId(R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 1);
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(scrollTo(), click());
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 2);
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(scrollTo(), click());
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText(R.string.yes))).perform(scrollTo(), click());
 
         // Check that the reminder list is empty
-        onView(new RecyclerViewMatcher(R.id.reminderList).sizeMatcher(0)).check(matches(isDisplayed()));
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).sizeMatcher(0)).check(matches(isDisplayed()));
 
     }
 

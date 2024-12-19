@@ -31,6 +31,7 @@ public class RecyclerViewMatcher {
         return new TypeSafeMatcher<>() {
             Resources resources = null;
             View childView;
+            String error = "";
 
             public void describeTo(Description description) {
                 String idDescription = Integer.toString(recyclerViewId);
@@ -43,7 +44,7 @@ public class RecyclerViewMatcher {
                     }
                 }
 
-                description.appendText("with id: " + idDescription + "/" + recyclerViewId);
+                description.appendText("with id: " + idDescription + "/" + recyclerViewId + " " + error);
             }
 
             public boolean matchesSafely(View view) {
@@ -57,7 +58,11 @@ public class RecyclerViewMatcher {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
                         if (viewHolder != null) {
                             childView = viewHolder.itemView;
+                        } else {
+                            error = "ViewHolder for position '" + position + "' not found " + recyclerView.getChildCount();
                         }
+                    } else {
+                        error = "RecyclerView with id '" + recyclerViewId + "' not found";
                     }
                 }
 

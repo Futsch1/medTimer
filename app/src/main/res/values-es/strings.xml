@@ -189,4 +189,5 @@
     <string name="interval_start_reminded">Intervalo comienza cuando se le recuerda</string>
     <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
     <string name="every_interval">Cada %s</string>
+    <string name="invalid_input">Entrada no válida</string>
 </resources>

@@ -180,4 +180,5 @@
     <string name="interval_start_reminded">提醒时开始间隔</string>
     <string name="interval_start_processed">服用或跳过时开始间隔</string>
     <string name="every_interval">每 %s</string>
+    <string name="invalid_input">无效输入</string>
 </resources>

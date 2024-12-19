@@ -118,7 +118,6 @@ public class AdvancedReminderSettingsFragment extends Fragment {
                 }
             });
             builder.show();
-
         });
     }
 

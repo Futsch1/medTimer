@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
@@ -168,17 +168,17 @@
     <string name="time_based_reminder">Напоминание по времени</string>
     <string name="interval_based_reminder">Интервальное напоминание</string>
     <plurals name="minutes">
-        <item quantity="one" tools:ignore="ImpliedQuantity">минута</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">минута</item>
         <item quantity="few">минуты</item>
         <item quantity="many">минут</item>
     </plurals>
     <plurals name="hours">
-        <item quantity="one" tools:ignore="ImpliedQuantity">час</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">час</item>
         <item quantity="few">часа</item>
         <item quantity="many">часов</item>
     </plurals>
     <plurals name="days">
-        <item quantity="one" tools:ignore="ImpliedQuantity">день</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
         <item quantity="few">дня</item>
         <item quantity="many">дней</item>
     </plurals>
@@ -191,4 +191,5 @@
     <string name="interval_start_reminded">Интервал начинается с момента напоминания</string>
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="every_interval">Каждый %s</string>
+    <string name="invalid_input">Недопустимый ввод</string>
 </resources>
