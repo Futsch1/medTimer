@@ -68,7 +68,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Pixel5
-          script: ./gradlew JacocoDebugCodeCoverage
+          script: ./gradlew JacocoDebugCodeCoverage --stacktrace
           cores: 4
 
       - name: SonarQube
