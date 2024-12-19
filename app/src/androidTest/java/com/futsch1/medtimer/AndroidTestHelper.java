@@ -30,6 +30,8 @@ import androidx.test.espresso.ViewInteraction;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import junit.framework.AssertionFailedError;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -184,15 +186,17 @@ public class AndroidTestHelper {
     ) {
         int retries = 10;
         while (retries-- >= 0) {
+            ViewInteraction viewInteraction = onView(matcher);
             try {
-                ViewInteraction viewInteraction = onView(matcher);
                 viewInteraction.check(matches(isCompletelyDisplayed()));
                 return viewInteraction;
             } catch (NoMatchingViewException e) {
                 onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            } catch (AssertionFailedError e) {
+                viewInteraction.perform(scrollTo());
             }
         }
-        throw new AssertionError("View did not become visible");
+        throw new AssertionError("View did not become clickable");
     }
 
     public static String dateToString(Date date) {

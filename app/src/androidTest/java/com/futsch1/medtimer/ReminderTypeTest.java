@@ -123,7 +123,7 @@ public class ReminderTypeTest {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
-            onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(click());
+            onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(scrollTo(), click());
 
             cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
