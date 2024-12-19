@@ -193,7 +193,12 @@ public class AndroidTestHelper {
             } catch (NoMatchingViewException e) {
                 onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
             } catch (AssertionFailedError e) {
-                viewInteraction.perform(scrollTo());
+                try {
+                    viewInteraction.perform(scrollTo());
+                } catch (PerformException e2) {
+                    // Intentionally empty
+                }
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
             }
         }
         throw new AssertionError("View did not become clickable");
