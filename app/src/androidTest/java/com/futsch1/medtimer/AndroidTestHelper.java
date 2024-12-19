@@ -10,7 +10,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -164,6 +163,7 @@ public class AndroidTestHelper {
     public static void navigateTo(MainMenu mainMenu) {
         int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        int[] targetView = {R.id.nextRemindersCard, R.id.medicineList, R.id.analysisView};
         ViewInteraction bottomNavigationItemView = onViewWithTimeout(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
@@ -171,11 +171,13 @@ public class AndroidTestHelper {
         while (repeat-- > 0) {
             try {
                 bottomNavigationItemView.perform(click());
-                onViewWithTimeout(withId(menuIds[mainMenu.ordinal()])).check(matches(isSelected()));
+                onViewWithTimeout(withId(targetView[mainMenu.ordinal()])).check(matches(isDisplayed()));
+                return;
             } catch (AssertionFailedError e) {
                 onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
             }
         }
+        assert false;
     }
 
     public static Matcher<View> childAtPosition(

@@ -68,10 +68,10 @@ public class ScreenshotsTest extends BaseHelper {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.wait(Until.findObject(By.desc("More options")), 1000);
-
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
         onView(withText(R.string.generate_test_data)).perform(click());
+
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
