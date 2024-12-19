@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.view.WindowManager;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.RequiresApi;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
@@ -50,22 +51,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 preference.setOnPreferenceChangeListener((preference13, newValue) -> {
                     if (Boolean.TRUE.equals(newValue)) {
-                        AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
-                        if (!alarmManager.canScheduleExactAlarms()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage(R.string.enable_alarm_dialog).
-                                    setPositiveButton(R.string.ok, (dialog, id) -> {
-                                        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                                        requireContext().startActivity(intent);
-                                    }).
-                                    setNegativeButton(R.string.cancel, (dialog, id) -> {
-                                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
-                                        setPreferenceScreen(null);
-                                        addPreferencesFromResource(R.xml.root_preferences);
-                                    });
-                            AlertDialog d = builder.create();
-                            d.show();
-                        }
+                        showExactReminderDialog();
                     }
                     return true;
                 });
@@ -105,6 +91,26 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 requireActivity().getWindow().setFlags(Boolean.TRUE.equals(newValue) ? WindowManager.LayoutParams.FLAG_SECURE : 0, WindowManager.LayoutParams.FLAG_SECURE);
                 return true;
             });
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void showExactReminderDialog() {
+        AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
+        if (!alarmManager.canScheduleExactAlarms()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.enable_alarm_dialog).
+                    setPositiveButton(R.string.ok, (dialog, id) -> {
+                        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                        requireContext().startActivity(intent);
+                    }).
+                    setNegativeButton(R.string.cancel, (dialog, id) -> {
+                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
+                        setPreferenceScreen(null);
+                        addPreferencesFromResource(R.xml.root_preferences);
+                    });
+            AlertDialog d = builder.create();
+            d.show();
         }
     }
 
