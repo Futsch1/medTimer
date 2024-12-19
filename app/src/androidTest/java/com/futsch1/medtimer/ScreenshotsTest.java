@@ -72,7 +72,6 @@ public class ScreenshotsTest extends BaseHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         onView(withText(R.string.generate_test_data)).perform(click());
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
