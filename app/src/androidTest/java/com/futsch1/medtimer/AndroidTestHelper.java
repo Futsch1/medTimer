@@ -10,6 +10,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -166,7 +167,15 @@ public class AndroidTestHelper {
         ViewInteraction bottomNavigationItemView = onViewWithTimeout(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
-        bottomNavigationItemView.perform(click());
+        int repeat = 10;
+        while (repeat-- > 0) {
+            try {
+                bottomNavigationItemView.perform(click());
+                onViewWithTimeout(withId(menuIds[mainMenu.ordinal()])).check(matches(isSelected()));
+            } catch (AssertionFailedError e) {
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            }
+        }
     }
 
     public static Matcher<View> childAtPosition(

@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.WindowManager;
@@ -46,27 +47,31 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     private void setupExactReminders() {
         Preference preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
         if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference13, newValue) -> {
-                if (Boolean.TRUE.equals(newValue)) {
-                    AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
-                    if (!alarmManager.canScheduleExactAlarms()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage(R.string.enable_alarm_dialog).
-                                setPositiveButton(R.string.ok, (dialog, id) -> {
-                                    Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                                    requireContext().startActivity(intent);
-                                }).
-                                setNegativeButton(R.string.cancel, (dialog, id) -> {
-                                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
-                                    setPreferenceScreen(null);
-                                    addPreferencesFromResource(R.xml.root_preferences);
-                                });
-                        AlertDialog d = builder.create();
-                        d.show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                preference.setOnPreferenceChangeListener((preference13, newValue) -> {
+                    if (Boolean.TRUE.equals(newValue)) {
+                        AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
+                        if (!alarmManager.canScheduleExactAlarms()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage(R.string.enable_alarm_dialog).
+                                    setPositiveButton(R.string.ok, (dialog, id) -> {
+                                        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                                        requireContext().startActivity(intent);
+                                    }).
+                                    setNegativeButton(R.string.cancel, (dialog, id) -> {
+                                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
+                                        setPreferenceScreen(null);
+                                        addPreferencesFromResource(R.xml.root_preferences);
+                                    });
+                            AlertDialog d = builder.create();
+                            d.show();
+                        }
                     }
-                }
-                return true;
-            });
+                    return true;
+                });
+            } else {
+                preference.setVisible(false);
+            }
         }
     }
 
@@ -119,7 +124,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
-        if (preference != null) {
+        if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {
                 preference.setChecked(false);

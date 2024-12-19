@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
@@ -26,16 +25,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class CalendarTest {
+public class CalendarTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
 
     @Test
     public void calendarTest() {
@@ -43,8 +37,6 @@ public class CalendarTest {
         device.wait(Until.findObject(By.desc("More options")), 1000);
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
-
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 

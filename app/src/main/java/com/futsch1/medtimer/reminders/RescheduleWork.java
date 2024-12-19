@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -143,7 +144,7 @@ public class RescheduleWork extends Worker {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean exactReminders = sharedPref.getBoolean(PreferencesNames.EXACT_REMINDERS, true);
 
-        return exactReminders && alarmManager.canScheduleExactAlarms();
+        return exactReminders && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms());
     }
 
     private void updateNextReminderWidget() {

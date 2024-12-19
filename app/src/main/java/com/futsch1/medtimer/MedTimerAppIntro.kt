@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.Manifest.permission
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -49,11 +50,13 @@ class MedTimerAppIntro : AppIntro() {
             R.drawable.intro_analysis
         )
 
-        askForPermissions(
-            arrayOf(permission.POST_NOTIFICATIONS),
-            1,
-            true
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askForPermissions(
+                arrayOf(permission.POST_NOTIFICATIONS),
+                1,
+                true
+            )
+        }
         this.isSystemBackButtonLocked = true
         this.isButtonsEnabled = true
         this.isImmersive = false
