@@ -60,9 +60,9 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
         scheduledReminder: ScheduledReminder
     ): String {
         val dayString = getDayString(context, scheduledReminder.timestamp.epochSecond)
-        return dayString + TimeHelper.minutesToTimeString(
+        return dayString + TimeHelper.toLocalizedTimeString(
             context.applicationContext as Application?,
-            scheduledReminder.reminder.timeInMinutes.toLong()
+            scheduledReminder.timestamp.epochSecond
         ) +
                 ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
     }
