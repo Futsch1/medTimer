@@ -28,10 +28,10 @@ jobs:
         with:
           dependency-graph: generate-and-submit
 
-      #- name: Run fuzzing tests
-      #  run: ./gradlew test -Dfuzzing=true
-      #- name: Android lint
-      #  run: ./gradlew lint
+      - name: Run fuzzing tests
+        run: ./gradlew test -Dfuzzing=true
+      - name: Android lint
+        run: ./gradlew lint
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
