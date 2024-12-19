@@ -49,7 +49,7 @@ class WidgetImpl(
             )
             RemoteViews(viewMapping)
         } else {
-            containerView
+            containerViewSmall
         }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
     }
