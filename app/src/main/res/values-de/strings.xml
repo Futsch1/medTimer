@@ -157,7 +157,7 @@
     <string name="time_between_repetitions">Zeit zwischen den Wiederholungen</string>
     <string name="repeat_reminders_summary">Wiederholt automatisch eine Erinnerung, bis sie als erledigt oder übersprungen markiert wird</string>
     <string name="add_linked_reminder">Erinnerung für die folgende Dosis hinzufügen</string>
-    <string name="linked_reminder_delay">Verzögerung der folgende Dosis</string>
+    <string name="linked_reminder_delay">Verzögerung der folgenden Dosis</string>
     <string name="delay">Verzögerung</string>
     <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
     <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
@@ -175,7 +175,7 @@
         <item quantity="one">Tag</item>
         <item quantity="other">Tage</item>
     </plurals>
-    <string name="minutes">Minutes</string>
+    <string name="minutes">Minuten</string>
     <string name="hours">Stunden</string>
     <string name="days">Tage</string>
     <string name="create_reminder">Erinnerung erstellen</string>
