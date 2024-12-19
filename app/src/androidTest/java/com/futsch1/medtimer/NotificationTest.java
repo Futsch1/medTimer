@@ -7,6 +7,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertNotNull;
 
@@ -39,7 +40,7 @@ public class NotificationTest {
         AndroidTestHelper.createMedicine("Test med");
         AndroidTestHelper.createReminder("1", AndroidTestHelper.getNextNotificationTime().toLocalTime());
 
-        onView(withId(R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());

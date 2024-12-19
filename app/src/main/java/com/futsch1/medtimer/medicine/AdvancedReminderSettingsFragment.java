@@ -118,8 +118,8 @@ public class AdvancedReminderSettingsFragment extends Fragment {
                 }
             });
             builder.show();
-
         });
+        instructionSuggestions.setEndIconVisible(true);
     }
 
     private void setupRemindOnDays() {

@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -50,9 +51,7 @@ public class BasicUITest {
         ViewInteraction materialButton4 = onViewWithTimeout(withId(R.id.open_advanced_settings));
         materialButton4.perform(click());
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
-        ViewInteraction checkableImageButton = onViewWithTimeout(
+        ViewInteraction checkableImageButton = onViewWithTimeoutClickable(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
                         isDescendantOfA(withId(R.id.editInstructionsLayout))));
         checkableImageButton.perform(click());

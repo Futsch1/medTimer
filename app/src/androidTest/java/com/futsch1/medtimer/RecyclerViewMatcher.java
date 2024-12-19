@@ -55,11 +55,11 @@ public class RecyclerViewMatcher {
                     RecyclerView recyclerView =
                             view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(position);
+                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
                         if (viewHolder != null) {
                             childView = viewHolder.itemView;
                         } else {
-                            error = "ViewHolder for position '" + position + "' not found";
+                            error = "ViewHolder for position '" + position + "' not found " + recyclerView.getChildCount();
                         }
                     } else {
                         error = "RecyclerView with id '" + recyclerViewId + "' not found";

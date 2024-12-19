@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
+import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -60,7 +61,7 @@ public class ReminderTypeTest {
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         // Linked reminder (amount 2) 30 minutes later
-        onView(withId(R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
         onView(withId(R.id.addLinkedReminder)).perform(click());
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -84,22 +85,24 @@ public class ReminderTypeTest {
         onView(withId(R.id.createReminder)).perform(click());
 
         // Check reminder list
-        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCardLayout));
-        cardOfReminder2.perform(scrollTo());
-        cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
-        String expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
-        cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCardLayout));
+        ViewInteraction cardOfReminder3 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCardLayout));
+        cardOfReminder3.perform(scrollTo());
+        String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
+        cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
+
+        ViewInteraction cardOfReminder1 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCardLayout));
         cardOfReminder1.perform(scrollTo());
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCardLayout));
-        cardOfReminder3.perform(scrollTo());
-        expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
-        cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
+        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCardLayout));
+        cardOfReminder2.perform(scrollTo());
+        cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
+        expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
+        cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
         // Check overview and next reminders
         navigateTo(OVERVIEW);

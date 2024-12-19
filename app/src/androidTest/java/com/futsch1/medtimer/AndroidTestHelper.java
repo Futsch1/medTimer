@@ -7,11 +7,11 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -27,7 +27,6 @@ import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -152,7 +151,7 @@ public class AndroidTestHelper {
         while (retries-- >= 0) {
             try {
                 ViewInteraction viewInteraction = onView(matcher);
-                viewInteraction.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+                viewInteraction.check(matches(isDisplayed()));
                 return viewInteraction;
             } catch (NoMatchingViewException e) {
                 onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
@@ -178,6 +177,22 @@ public class AndroidTestHelper {
                 uiController.loopMainThreadForAtLeast(delay);
             }
         };
+    }
+
+    static ViewInteraction onViewWithTimeoutClickable(
+            Matcher<View> matcher
+    ) {
+        int retries = 10;
+        while (retries-- >= 0) {
+            try {
+                ViewInteraction viewInteraction = onView(matcher);
+                viewInteraction.check(matches(isCompletelyDisplayed()));
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            }
+        }
+        throw new AssertionError("View did not become visible");
     }
 
     public static String dateToString(Date date) {
