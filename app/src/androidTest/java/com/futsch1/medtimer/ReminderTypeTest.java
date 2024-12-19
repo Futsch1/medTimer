@@ -28,6 +28,7 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
 
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -112,7 +113,10 @@ public class ReminderTypeTest extends BaseHelper {
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        onView(withId(R.id.expandNextReminders)).perform(click());
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        if (device.getDisplayWidth() < device.getDisplayHeight()) {
+            onView(withId(R.id.expandNextReminders)).perform(click());
+        }
 
         cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(1, R.id.nextReminderCardLayout));
         cardOfReminder3.perform(scrollTo());
