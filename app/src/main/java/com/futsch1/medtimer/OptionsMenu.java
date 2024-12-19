@@ -20,7 +20,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.Navigation;
 
@@ -64,7 +63,7 @@ public class OptionsMenu implements MenuProvider {
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.main, menu);
-        MenuCompat.setGroupDividerEnabled(menu, true);
+        menu.setGroupDividerEnabled(true);
         enableOptionalIcons(menu);
 
         this.backupManager = new BackupManager(context, menu, medicineViewModel, openFileLauncher);
