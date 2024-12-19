@@ -42,7 +42,7 @@ jobs:
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ env.target_api_level }}
           arch: x86_64
@@ -53,7 +53,7 @@ jobs:
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run Android tests and unit tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ env.target_api_level }}
           arch: x86_64
@@ -77,7 +77,7 @@ jobs:
         if: ${{ env.SONAR_TOKEN != '' }}
         run: ./gradlew sonar
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         if: always()
         with:
           name: TestReports
