@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.widgets
 
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -19,7 +18,6 @@ data class WidgetIds(
     val smallWidgetLayoutId: Int
 )
 
-@TargetApi(Build.VERSION_CODES.S)
 class WidgetImpl(
     val context: Context,
     private val lineProvider: WidgetLineProvider,
@@ -44,11 +42,15 @@ class WidgetImpl(
             getOpenAppPendingIntent()
         )
 
-        val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-            SizeF(110f, 50f) to containerViewSmall,
-            SizeF(110f, 150f) to containerView
-        )
-        val remoteViews = RemoteViews(viewMapping)
+        val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val viewMapping: Map<SizeF, RemoteViews> = mapOf(
+                SizeF(110f, 50f) to containerViewSmall,
+                SizeF(110f, 150f) to containerView
+            )
+            RemoteViews(viewMapping)
+        } else {
+            containerView
+        }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
     }
 
