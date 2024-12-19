@@ -28,7 +28,6 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
 
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -38,16 +37,11 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 @LargeTest
-public class ReminderTypeTest {
+public class ReminderTypeTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
 
     @Test
     public void reminderTypeTest() {
