@@ -184,4 +184,5 @@
     <string name="interval_start_reminded">Interval begint wanneer eraan wordt herinnerd</string>
     <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
     <string name="every_interval">Elke %s</string>
+    <string name="invalid_input">Ongeldige invoer</string>
 </resources>

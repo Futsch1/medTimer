@@ -184,4 +184,5 @@
     <string name="interval_start_reminded">Hatırlatıldığında aralık başlar</string>
     <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
     <string name="every_interval">Her %s</string>
+    <string name="invalid_input">Geçersiz giriş</string>
 </resources>

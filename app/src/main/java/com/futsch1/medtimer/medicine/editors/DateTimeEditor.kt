@@ -24,34 +24,38 @@ class DateTimeEditor(
             )
         )
         dateTimeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val startInstant = Instant.ofEpochSecond(getDateTimeSecondsSinceEpoch())
-                val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+            onFocusChangeListener(hasFocus)
+        }
+    }
 
-                TimeHelper.DatePickerWrapper(fragmentActivity.supportFragmentManager)
-                    .show(
-                        dateTime.toLocalDate()
-                    ) { selectedDate ->
-                        TimePickerWrapper(fragmentActivity).show(
-                            dateTime.hour, dateTime.minute
-                        ) { selectedTime ->
-                            val selectedLocalDateTime = LocalDateTime.of(
-                                LocalDate.ofEpochDay(selectedDate),
-                                LocalTime.of(selectedTime / 60, selectedTime % 60)
-                            )
-                            dateTimeEdit.setText(
-                                TimeHelper.toLocalizedDatetimeString(
-                                    fragmentActivity.baseContext,
-                                    selectedLocalDateTime.toEpochSecond(
-                                        ZoneId.systemDefault().rules.getOffset(
-                                            selectedLocalDateTime
-                                        )
+    private fun onFocusChangeListener(hasFocus: Boolean) {
+        if (hasFocus) {
+            val startInstant = Instant.ofEpochSecond(getDateTimeSecondsSinceEpoch())
+            val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+            TimeHelper.DatePickerWrapper(fragmentActivity.supportFragmentManager)
+                .show(
+                    dateTime.toLocalDate()
+                ) { selectedDate ->
+                    TimePickerWrapper(fragmentActivity).show(
+                        dateTime.hour, dateTime.minute
+                    ) { selectedTime ->
+                        val selectedLocalDateTime = LocalDateTime.of(
+                            LocalDate.ofEpochDay(selectedDate),
+                            LocalTime.of(selectedTime / 60, selectedTime % 60)
+                        )
+                        dateTimeEdit.setText(
+                            TimeHelper.toLocalizedDatetimeString(
+                                fragmentActivity.baseContext,
+                                selectedLocalDateTime.toEpochSecond(
+                                    ZoneId.systemDefault().rules.getOffset(
+                                        selectedLocalDateTime
                                     )
                                 )
                             )
-                        }
+                        )
                     }
-            }
+                }
         }
     }
 

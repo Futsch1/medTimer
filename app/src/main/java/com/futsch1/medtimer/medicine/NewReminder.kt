@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
@@ -29,6 +30,10 @@ class NewReminder(
 
     init {
         dialog.setContentView(R.layout.new_reminder)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         setupCreateReminder()
         setupVisibilities()
@@ -125,8 +130,10 @@ class NewReminder(
             }
             if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
                 medicineViewModel.insertReminder(reminder)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()
             }
-            dialog.dismiss()
         }
     }
 }

@@ -184,4 +184,5 @@
     <string name="interval_start_reminded">Intervall beginnt zum Zeitpunkt der Erinnerung</string>
     <string name="interval_start_processed">Intervall beginnt, wenn eingenommen oder übersprungen</string>
     <string name="every_interval">Alle %s</string>
+    <string name="invalid_input">Ungültige Eingabe</string>
 </resources>
