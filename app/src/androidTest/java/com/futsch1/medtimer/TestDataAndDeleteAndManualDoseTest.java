@@ -12,6 +12,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -53,6 +54,8 @@ public class TestDataAndDeleteAndManualDoseTest {
         device.wait(Until.findObject(By.desc("More options")), 1000);
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
+
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
