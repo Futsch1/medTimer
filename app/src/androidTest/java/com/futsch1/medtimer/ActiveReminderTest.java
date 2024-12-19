@@ -10,52 +10,21 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtP
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
 
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Calendar;
 
 @LargeTest
-public class ActiveReminderTest {
+public class ActiveReminderTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
-
-    @BeforeClass
-    public static void dismissANRSystemDialog() throws UiObjectNotFoundException {
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
-        // If the device is running in English Locale
-        UiObject waitButton = device.findObject(new UiSelector().textContains("wait"));
-        if (waitButton.exists()) {
-            waitButton.click();
-        }
-        try {
-            UiDevice
-                    .getInstance(InstrumentationRegistry.getInstrumentation())
-                    .executeShellCommand(
-                            "am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS");
-        } catch (IOException e) {
-            System.out.println("Exception: " + e);
-        }
-    }
 
     @Test
     public void activeReminderTest() {

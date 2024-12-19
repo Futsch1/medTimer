@@ -16,7 +16,6 @@ import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,16 +23,11 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 @LargeTest
-public class DeleteLinkedReminderTest {
+public class DeleteLinkedReminderTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
 
     @Test
     public void deleteLinkedReminderTest() {

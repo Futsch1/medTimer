@@ -28,7 +28,7 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
+import androidx.test.uiautomator.UiDevice;
 
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -38,16 +38,11 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 @LargeTest
-public class ReminderTypeTest {
+public class ReminderTypeTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
 
     @Test
     public void reminderTypeTest() {
@@ -118,7 +113,10 @@ public class ReminderTypeTest {
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        onView(withId(R.id.expandNextReminders)).perform(click());
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        if (device.getDisplayWidth() < device.getDisplayHeight()) {
+            onView(withId(R.id.expandNextReminders)).perform(click());
+        }
 
         cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(1, R.id.nextReminderCardLayout));
         cardOfReminder3.perform(scrollTo());

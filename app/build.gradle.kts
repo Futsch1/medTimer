@@ -20,7 +20,8 @@ android {
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
-        minSdk = 33
+        minSdk = 28
+        multiDexEnabled = true
         targetSdk = 35
         versionCode = 91
         versionName = "1.13.0-beta.1"
@@ -48,6 +49,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -143,8 +145,9 @@ dependencies {
     androidTestImplementation("androidx.test:runner:$androidTestRunnerVersion")
     androidTestUtil("androidx.test:orchestrator:$androidTestOrchestratorVersion")
 
-
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
 }
 
 play {

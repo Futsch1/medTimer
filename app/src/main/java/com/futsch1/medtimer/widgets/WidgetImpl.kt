@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -41,11 +42,15 @@ class WidgetImpl(
             getOpenAppPendingIntent()
         )
 
-        val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-            SizeF(110f, 50f) to containerViewSmall,
-            SizeF(110f, 150f) to containerView
-        )
-        val remoteViews = RemoteViews(viewMapping)
+        val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val viewMapping: Map<SizeF, RemoteViews> = mapOf(
+                SizeF(110f, 50f) to containerViewSmall,
+                SizeF(110f, 150f) to containerView
+            )
+            RemoteViews(viewMapping)
+        } else {
+            containerViewSmall
+        }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
     }
 

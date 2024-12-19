@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:description="@string/next_reminders"
     android:initialKeyguardLayout="@layout/next_reminders_widget"
     android:initialLayout="@layout/next_reminders_widget"
@@ -14,4 +15,5 @@
     android:targetCellWidth="3"
     android:targetCellHeight="1"
     android:updatePeriodMillis="3600000"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    tools:targetApi="31" />

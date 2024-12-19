@@ -12,7 +12,6 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -28,7 +27,6 @@ import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
@@ -37,16 +35,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class TestDataAndDeleteAndManualDoseTest {
+public class TestDataAndDeleteAndManualDoseTest extends BaseHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule mGrantPermissionRule =
-            GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
 
     @Test
     public void testDataAndDeleteAndManualDoseTest() {
@@ -54,8 +47,6 @@ public class TestDataAndDeleteAndManualDoseTest {
         device.wait(Until.findObject(By.desc("More options")), 1000);
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
-
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
