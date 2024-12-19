@@ -119,10 +119,10 @@ public class ScreenshotsTest extends BaseHelper {
                         0))
                 .atPosition(1).perform(click());
 
-        onView(allOf(withId(R.id.tableChip))).perform(click());
+        onViewWithTimeoutClickable(allOf(withId(R.id.tableChip))).perform(click());
         Screengrab.screenshot("7");
 
-        onView(
+        onViewWithTimeoutClickable(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(
                                 allOf(withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
