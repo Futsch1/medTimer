@@ -7,7 +7,6 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -51,10 +50,12 @@ public class BasicUITest {
         ViewInteraction materialButton4 = onViewWithTimeout(withId(R.id.open_advanced_settings));
         materialButton4.perform(click());
 
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+
         ViewInteraction checkableImageButton = onViewWithTimeout(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
                         isDescendantOfA(withId(R.id.editInstructionsLayout))));
-        checkableImageButton.perform(scrollTo(), click());
+        checkableImageButton.perform(click());
 
         DataInteraction materialTextView = onData(anything())
                 .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),

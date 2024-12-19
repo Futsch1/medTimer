@@ -111,7 +111,7 @@ public class ScreenshotsTest {
         recyclerView.perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
@@ -142,12 +142,12 @@ public class ScreenshotsTest {
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));
         int tableCellRecyclerViewId = tableView.get().getCellRecyclerView().getId();
 
-        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText(startsWith("Selen (200 µg)"))));
 
         onView(withId(R.id.filter)).perform(replaceText("B"), closeSoftKeyboard());
 
-        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText("B12 (500µg)")));
 
         onView(withId(com.google.android.material.R.id.text_input_end_icon)).perform(click());
