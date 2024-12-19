@@ -74,7 +74,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: TestReports
+          name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
           path: |
             app/build/reports/androidTest/connected/debug
             app/build/outputs/androidTest-results
