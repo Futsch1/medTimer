@@ -84,19 +84,19 @@ public class ReminderTypeTest {
         onView(withId(R.id.createReminder)).perform(click());
 
         // Check reminder list
-        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCard));
+        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(2, R.id.reminderCardLayout));
         cardOfReminder2.perform(scrollTo());
         cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
         String expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCard));
+        ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.reminderCardLayout));
         cardOfReminder1.perform(scrollTo());
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCard));
+        ViewInteraction cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.reminderCardLayout));
         cardOfReminder3.perform(scrollTo());
         expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
         cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
@@ -104,7 +104,7 @@ public class ReminderTypeTest {
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 
-        cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCard));
+        cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
         cardOfReminder1.perform(scrollTo());
         expectedString = context.getString(R.string.reminder_event, "1", "Test", "");
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
@@ -113,7 +113,7 @@ public class ReminderTypeTest {
 
         onView(withId(R.id.expandNextReminders)).perform(click());
 
-        cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(1, R.id.nextReminderCard));
+        cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(1, R.id.nextReminderCardLayout));
         cardOfReminder3.perform(scrollTo());
         expectedString = context.getString(R.string.reminder_event, "3", "Test", "");
         cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
@@ -122,7 +122,7 @@ public class ReminderTypeTest {
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
             onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(click());
 
-            cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCard));
+            cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
             cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
         }

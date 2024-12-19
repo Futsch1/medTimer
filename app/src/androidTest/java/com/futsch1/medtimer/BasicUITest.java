@@ -7,10 +7,10 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -53,14 +53,8 @@ public class BasicUITest {
 
         ViewInteraction checkableImageButton = onViewWithTimeout(
                 allOf(withId(com.google.android.material.R.id.text_input_end_icon),
-                        AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.EndCompoundLayout")),
-                                        1),
-                                0),
-                        isDescendantOfA(withId(R.id.editInstructionsLayout)),
-                        isDisplayed()));
-        checkableImageButton.perform(click());
+                        isDescendantOfA(withId(R.id.editInstructionsLayout))));
+        checkableImageButton.perform(scrollTo(), click());
 
         DataInteraction materialTextView = onData(anything())
                 .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
