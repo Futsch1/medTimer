@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.navigation.Navigation.findNavController
 import com.futsch1.medtimer.MedicineViewModel
@@ -20,7 +21,7 @@ class AdvancedReminderSettingsMenuProvider(
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.advanced_reminder_settings, menu)
-        menu.setGroupDividerEnabled(true)
+        MenuCompat.setGroupDividerEnabled(menu, true)
 
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
             LinkedReminderHandling(reminder, medicineViewModel).deleteReminder(
