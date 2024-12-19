@@ -70,3 +70,11 @@ jobs:
           profile: ${{ matrix.profile }}
           script:
             ./gradlew connectedCheck
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TestReports
+          path: |
+            app/build/reports/androidTest/connected/debug
+            app/build/outputs/androidTest-results
