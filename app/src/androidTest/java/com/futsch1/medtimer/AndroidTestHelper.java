@@ -64,7 +64,7 @@ public class AndroidTestHelper {
     }
 
     public static void createReminder(String amount, LocalTime time) {
-        onView(withId(R.id.addReminder)).perform(click());
+        onViewWithTimeoutClickable(withId(R.id.addReminder)).perform(click());
 
         onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
 
@@ -74,6 +74,29 @@ public class AndroidTestHelper {
         }
 
         onView(withId(R.id.createReminder)).perform(click());
+    }
+
+    static ViewInteraction onViewWithTimeoutClickable(
+            Matcher<View> matcher
+    ) {
+        int retries = 10;
+        while (retries-- >= 0) {
+            ViewInteraction viewInteraction = onView(matcher);
+            try {
+                viewInteraction.check(matches(isCompletelyDisplayed()));
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            } catch (AssertionFailedError e) {
+                try {
+                    viewInteraction.perform(scrollTo());
+                } catch (PerformException e2) {
+                    // Intentionally empty
+                }
+                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+            }
+        }
+        throw new AssertionError("View did not become clickable");
     }
 
     public static void setTime(int hour, int minute) {
@@ -101,10 +124,29 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
+    public static ViewAction waitFor(long delay) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for " + delay + "milliseconds";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(delay);
+            }
+        };
+    }
+
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onView(withId(R.id.addMedicine)).perform(click());
+        onViewWithTimeoutClickable(withId(R.id.addMedicine)).perform(click());
 
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -160,48 +202,6 @@ public class AndroidTestHelper {
             }
         }
         throw new AssertionError("View did not become visible");
-    }
-
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
-    static ViewInteraction onViewWithTimeoutClickable(
-            Matcher<View> matcher
-    ) {
-        int retries = 10;
-        while (retries-- >= 0) {
-            ViewInteraction viewInteraction = onView(matcher);
-            try {
-                viewInteraction.check(matches(isCompletelyDisplayed()));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            } catch (AssertionFailedError e) {
-                try {
-                    viewInteraction.perform(scrollTo());
-                } catch (PerformException e2) {
-                    // Intentionally empty
-                }
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            }
-        }
-        throw new AssertionError("View did not become clickable");
     }
 
     public static String dateToString(Date date) {
