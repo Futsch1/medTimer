@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.widgets
 
+import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -17,6 +19,7 @@ data class WidgetIds(
     val smallWidgetLayoutId: Int
 )
 
+@TargetApi(Build.VERSION_CODES.S)
 class WidgetImpl(
     val context: Context,
     private val lineProvider: WidgetLineProvider,
