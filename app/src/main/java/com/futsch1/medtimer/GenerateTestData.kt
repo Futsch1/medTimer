@@ -1,64 +1,119 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.Reminder
+import java.time.Instant
+import java.time.LocalDate
 
-import java.time.LocalDate;
+class GenerateTestData(private val viewModel: MedicineViewModel) {
+    fun generateTestMedicine() {
+        val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
+        val testMedicines = arrayOf(
+            TestMedicine(
+                "Omega 3 (EPA/DHA 500mg)", null, 1, arrayOf(
+                    testReminderOmega3,
+                    TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3)
+                )
+            ),
+            TestMedicine(
+                "B12 (500µg)", -0x750000, 2, arrayOf(
+                    TestReminderTimeBased("2", 7 * 60, 1, 0, "")
+                )
+            ),
+            TestMedicine(
+                "Ginseng (200mg)", -0x6f1170, 3, arrayOf(
+                    TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast")
+                )
+            ),
+            TestMedicine(
+                "Selen (200 µg)", null, 0, arrayOf(
+                    TestReminderTimeBased("2", 9 * 60, 1, 0, ""),
+                    TestReminderIntervalBased("1", 36 * 60)
+                )
+            )
+        )
 
-public class GenerateTestData {
-    private final MedicineViewModel viewModel;
-
-    public GenerateTestData(MedicineViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
-
-    public void generateTestMedicine() {
-        TestMedicine[] testMedicines = new TestMedicine[]{
-                new TestMedicine("Omega 3 (EPA/DHA 500mg)", null, 1, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1, 0, ""),
-                        new TestReminder("1", 18 * 60, 2, 2, "after meals")
-                }),
-                new TestMedicine("B12 (500µg)", 0xFF8b0000, 2, new TestReminder[]{
-                        new TestReminder("2", 7 * 60, 1, 0, "")
-                }),
-                new TestMedicine("Ginseng (200mg)", 0xFF90EE90, 3, new TestReminder[]{
-                        new TestReminder("1", 9 * 60, 1, 0, "before breakfast")
-                }),
-                new TestMedicine("Selen (200 µg)", null, 0, new TestReminder[]{
-                        new TestReminder("2", 9 * 60, 1, 0, ""),
-                        new TestReminder("1", 22 * 60, 1, 1, "")
-                })
-        };
-
-        for (TestMedicine testMedicine : testMedicines) {
-            Medicine medicine = new Medicine(testMedicine.name);
-            if (testMedicine.color != null) {
-                medicine.useColor = true;
-                medicine.color = testMedicine.color;
+        for ((name, color, iconId, reminders) in testMedicines) {
+            val medicine = Medicine(name)
+            if (color != null) {
+                medicine.useColor = true
+                medicine.color = color
             }
-            medicine.iconId = testMedicine.iconId;
-            int medicineId = viewModel.insertMedicine(medicine);
-            for (TestReminder testReminder : testMedicine.reminders) {
-                Reminder reminder = new Reminder(medicineId);
-                reminder.amount = testReminder.amount;
-                reminder.timeInMinutes = testReminder.time;
-                reminder.consecutiveDays = testReminder.consecutiveDays;
-                reminder.instructions = testReminder.instructions;
-                reminder.pauseDays = testReminder.pauseDays;
-                reminder.cycleStartDay = LocalDate.now().toEpochDay();
-                viewModel.insertReminder(reminder);
+            medicine.iconId = iconId
+            val medicineId = viewModel.insertMedicine(medicine)
+            for (testReminder in reminders) {
+                testReminder.id = viewModel.insertReminder(testReminder.toReminder(medicineId))
             }
         }
     }
 
-    @SuppressWarnings("java:S6218")
-    private record TestMedicine(String name, Integer color, int iconId, TestReminder[] reminders) {
-        // Record, intentionally empty
+    // Record, intentionally empty
+    @JvmRecord
+    private data class TestMedicine(
+        val name: String,
+        val color: Int?,
+        val iconId: Int,
+        val reminders: Array<TestReminder>
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as TestMedicine
+
+            return name == other.name
+        }
+
+        override fun hashCode(): Int {
+            return name.hashCode()
+        }
     }
 
-    private record TestReminder(String amount, int time, int consecutiveDays,
-                                int pauseDays,
-                                String instructions) {
-        // Record, intentionally empty
+    private abstract class TestReminder {
+        abstract fun toReminder(medicineId: Int): Reminder
+        var id: Int = -1
+    }
+
+    private class TestReminderTimeBased(
+        val amount: String, val time: Int, val consecutiveDays: Int,
+        val pauseDays: Int,
+        val instructions: String
+    ) : TestReminder() {
+        override fun toReminder(medicineId: Int): Reminder {
+            val reminder = Reminder(medicineId)
+            reminder.amount = amount
+            reminder.timeInMinutes = time
+            reminder.consecutiveDays = consecutiveDays
+            reminder.pauseDays = pauseDays
+            reminder.instructions = instructions
+            reminder.cycleStartDay = LocalDate.now().toEpochDay()
+            return reminder
+        }
+    }
+
+    private class TestReminderLinked(
+        val amount: String, val time: Int, val sourceReminder: TestReminder
+    ) : TestReminder() {
+        override fun toReminder(medicineId: Int): Reminder {
+            val reminder = Reminder(medicineId)
+            reminder.amount = amount
+            reminder.timeInMinutes = time
+            reminder.linkedReminderId = sourceReminder.id
+            return reminder
+        }
+    }
+
+    private class TestReminderIntervalBased(
+        val amount: String, val time: Int
+    ) : TestReminder() {
+        override fun toReminder(medicineId: Int): Reminder {
+            val reminder = Reminder(medicineId)
+            reminder.amount = amount
+            reminder.timeInMinutes = time
+            reminder.intervalStartsFromProcessed = true
+            reminder.intervalStart = Instant.now().epochSecond - 60
+            return reminder
+        }
+
     }
 }

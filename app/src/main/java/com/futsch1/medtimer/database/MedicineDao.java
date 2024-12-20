@@ -51,7 +51,7 @@ public interface MedicineDao {
     long insertMedicine(Medicine medicine);
 
     @Insert
-    void insertReminder(Reminder reminder);
+    long insertReminder(Reminder reminder);
 
     @Update
     void updateMedicine(Medicine medicine);

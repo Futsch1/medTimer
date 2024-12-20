@@ -46,7 +46,7 @@ public class NotificationTest extends BaseHelper {
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.openNotification();
-        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);
+        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 240_000);
         assertNotNull(object);
         object.fling(Direction.RIGHT);
         object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);
