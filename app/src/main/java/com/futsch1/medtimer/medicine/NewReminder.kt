@@ -3,8 +3,10 @@ package com.futsch1.medtimer.medicine
 import android.app.Dialog
 import android.content.Context
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
@@ -19,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.time.Instant
 import java.time.LocalDate
+
 
 class NewReminder(
     val context: Context,
@@ -41,7 +44,18 @@ class NewReminder(
             dialog.dismiss()
         }
 
+        startEditAmount()
         dialog.show()
+    }
+
+    private fun startEditAmount() {
+        val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
+        textInputEditText.requestFocus()
+        textInputEditText.postDelayed({
+            val imm: InputMethodManager? =
+                getSystemService(context, InputMethodManager::class.java)
+            imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+        }, 100)
     }
 
     private fun setupVisibilities() {
