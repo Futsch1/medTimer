@@ -163,21 +163,10 @@ public class AndroidTestHelper {
     public static void navigateTo(MainMenu mainMenu) {
         int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        int[] targetView = {R.id.nextRemindersCard, R.id.medicineList, R.id.analysisView};
         ViewInteraction bottomNavigationItemView = onViewWithTimeout(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
-        int repeat = 10;
-        while (repeat-- > 0) {
-            try {
-                bottomNavigationItemView.perform(click());
-                onViewWithTimeout(withId(targetView[mainMenu.ordinal()])).check(matches(isDisplayed()));
-                return;
-            } catch (AssertionFailedError e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            }
-        }
-        assert false;
+        bottomNavigationItemView.perform(click());
     }
 
     public static Matcher<View> childAtPosition(

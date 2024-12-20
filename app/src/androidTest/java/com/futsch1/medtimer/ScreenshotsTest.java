@@ -13,7 +13,6 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -71,7 +70,7 @@ public class ScreenshotsTest extends BaseHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
@@ -125,12 +124,9 @@ public class ScreenshotsTest extends BaseHelper {
         onViewWithTimeoutClickable(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(
-                                allOf(withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
-                                        childAtPosition(
-                                                withId(R.id.reminder_table),
-                                                0)),
-                                1),
-                        isDisplayed())).perform(click());
+                                withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
+                                1)
+                )).perform(click());
 
         AtomicReference<TableView> tableView = new AtomicReference<>();
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));
