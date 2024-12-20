@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.startsWith;
 
 import android.content.Context;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -82,6 +81,7 @@ public class ScreenshotsTest extends BaseHelper {
         int endY = medTimerNotifications.getVisibleBounds().bottom;
         device.swipe(startX, startY, startX, endY, 100);
         device.swipe(startX, startY + 100, startX, startY + 200, 100);
+        device.waitForIdle();
         Screengrab.screenshot("5");
         device.pressBack();
 
@@ -99,15 +99,14 @@ public class ScreenshotsTest extends BaseHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        ViewInteraction recyclerView = onViewWithTimeout(
-                allOf(withId(R.id.medicineList)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
         clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings));
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
+        clickOnViewWithTimeout(withId(R.id.chartChip));
         Screengrab.screenshot("6");
 
         onView(withId(R.id.timeSpinner)).perform(click());
@@ -118,7 +117,7 @@ public class ScreenshotsTest extends BaseHelper {
                         0))
                 .atPosition(1).perform(click());
 
-        clickOnViewWithTimeout(allOf(withId(R.id.tableChip)));
+        clickOnViewWithTimeout(withId(R.id.tableChip));
         Screengrab.screenshot("7");
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
