@@ -196,7 +196,7 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        if (editInstructions != null) {
+        if (editInstructions != null && reminder != null) {
             reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
 
             periodSettings.updateReminder();

@@ -13,15 +13,14 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -30,7 +29,6 @@ import static org.hamcrest.Matchers.startsWith;
 
 import android.content.Context;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -68,10 +66,10 @@ public class ScreenshotsTest extends BaseHelper {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.wait(Until.findObject(By.desc("More options")), 1000);
-
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
         onView(withText(R.string.generate_test_data)).perform(click());
+
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
@@ -83,6 +81,7 @@ public class ScreenshotsTest extends BaseHelper {
         int endY = medTimerNotifications.getVisibleBounds().bottom;
         device.swipe(startX, startY, startX, endY, 100);
         device.swipe(startX, startY + 100, startX, startY + 200, 100);
+        device.waitForIdle();
         Screengrab.screenshot("5");
         device.pressBack();
 
@@ -100,15 +99,14 @@ public class ScreenshotsTest extends BaseHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        ViewInteraction recyclerView = onViewWithTimeout(
-                allOf(withId(R.id.medicineList)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings));
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
+        clickOnViewWithTimeout(withId(R.id.chartChip));
         Screengrab.screenshot("6");
 
         onView(withId(R.id.timeSpinner)).perform(click());
@@ -119,18 +117,17 @@ public class ScreenshotsTest extends BaseHelper {
                         0))
                 .atPosition(1).perform(click());
 
-        onView(allOf(withId(R.id.tableChip))).perform(click());
+        clickOnViewWithTimeout(withId(R.id.tableChip));
         Screengrab.screenshot("7");
 
-        onView(
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+
+        clickOnViewWithTimeout(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(
-                                allOf(withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
-                                        childAtPosition(
-                                                withId(R.id.reminder_table),
-                                                0)),
-                                1),
-                        isDisplayed())).perform(click());
+                                withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
+                                1)
+                ));
 
         AtomicReference<TableView> tableView = new AtomicReference<>();
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));

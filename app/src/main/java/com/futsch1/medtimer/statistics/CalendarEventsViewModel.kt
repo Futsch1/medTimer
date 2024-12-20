@@ -55,7 +55,7 @@ class CalendarEventsViewModel(
                 if (deltaDay <= 0 && pastDays > 0) {
                     eventStrings += getPastEvents(day)
                 }
-                if (deltaDay >= 0) {
+                if (deltaDay > 0) {
                     eventStrings += getUpcomingEvents(day, medicineId)
                 }
                 dayStrings[day] = buildDayString(day, eventStrings)
@@ -106,9 +106,9 @@ class CalendarEventsViewModel(
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): String {
-        return TimeHelper.minutesToTimeString(
+        return TimeHelper.toLocalizedTimeString(
             getApplication<Application>().applicationContext,
-            scheduledReminder.reminder.timeInMinutes.toLong()
+            scheduledReminder.timestamp.epochSecond
         ) +
                 ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
     }

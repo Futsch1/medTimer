@@ -88,6 +88,9 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
     }
 
     private void setupViews(Medicine medicine) {
+        if (medicine == null) {
+            return;
+        }
         color = medicine.color;
         iconId = medicine.iconId;
 

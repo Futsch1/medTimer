@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -14,9 +15,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -56,7 +57,7 @@ public class ReminderTypeTest extends BaseHelper {
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         // Linked reminder (amount 2) 30 minutes later
-        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.open_advanced_settings));
         onView(withId(R.id.addLinkedReminder)).perform(click());
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -70,6 +71,7 @@ public class ReminderTypeTest extends BaseHelper {
 
         setTime(0, 30);
 
+
         // Interval reminder (amount 3) 2 hours from now
         onView(withId(R.id.addReminder)).perform(click());
 
@@ -78,6 +80,10 @@ public class ReminderTypeTest extends BaseHelper {
         onView(withId(R.id.intervalHours)).perform(click());
         onView(withId(R.id.editIntervalTime)).perform(replaceText("2"), closeSoftKeyboard());
         onView(withId(R.id.createReminder)).perform(click());
+
+        // Check calendar view not crashing
+        clickOnViewWithTimeout(allOf(withId(R.id.openCalendar), isDisplayed()));
+        pressBack();
 
         // Check reminder list
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
@@ -103,6 +109,13 @@ public class ReminderTypeTest extends BaseHelper {
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.open_advanced_settings));
+        pressBack();
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.open_advanced_settings));
+        pressBack();
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.open_advanced_settings));
+        pressBack();
+        
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 
@@ -125,7 +138,7 @@ public class ReminderTypeTest extends BaseHelper {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
-            onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(scrollTo(), click());
+            clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow));
 
             cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");

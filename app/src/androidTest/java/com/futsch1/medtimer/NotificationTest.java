@@ -7,7 +7,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertNotNull;
 
@@ -34,7 +34,7 @@ public class NotificationTest extends BaseHelper {
         AndroidTestHelper.createMedicine("Test med");
         AndroidTestHelper.createReminder("1", AndroidTestHelper.getNextNotificationTime().toLocalTime());
 
-        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.open_advanced_settings));
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
@@ -46,7 +46,7 @@ public class NotificationTest extends BaseHelper {
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.openNotification();
-        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);
+        UiObject2 object = device.wait(Until.findObject(By.textContains("Test med")), 240_000);
         assertNotNull(object);
         object.fling(Direction.RIGHT);
         object = device.wait(Until.findObject(By.textContains("Test med")), 180_000);

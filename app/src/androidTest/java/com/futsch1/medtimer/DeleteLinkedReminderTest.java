@@ -10,8 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -34,19 +34,19 @@ public class DeleteLinkedReminderTest extends BaseHelper {
         AndroidTestHelper.createMedicine("Test med");
         AndroidTestHelper.createReminder("1", LocalTime.of(0, 0));
 
-        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.open_advanced_settings));
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 1);
 
-        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(scrollTo(), click());
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings));
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 2);
 
-        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(scrollTo(), click());
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());

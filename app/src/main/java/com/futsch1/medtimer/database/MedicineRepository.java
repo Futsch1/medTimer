@@ -94,8 +94,8 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicine));
     }
 
-    public void insertReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminder(reminder));
+    public long insertReminder(Reminder reminder) {
+        return internalInsert(reminder, medicineDao::insertReminder);
     }
 
     public void updateReminder(Reminder reminder) {

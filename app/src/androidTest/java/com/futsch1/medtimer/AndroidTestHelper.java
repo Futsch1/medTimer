@@ -7,10 +7,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -31,8 +29,6 @@ import androidx.test.espresso.ViewInteraction;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import junit.framework.AssertionFailedError;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -42,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
+@SuppressWarnings("java:S2925")
 public class AndroidTestHelper {
     static void setAllRemindersTo12AM() {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -54,47 +51,65 @@ public class AndroidTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
     }
 
-    private static void setReminderTo12AM(int position) {
-        onViewWithTimeout(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
+    public static void navigateTo(MainMenu mainMenu) {
+        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
+                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+    }
 
-        onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
+    private static void setReminderTo12AM(int position) {
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard));
+
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime));
 
         setTime(0, 0);
         pressBack();
         pressBack();
     }
 
-    public static void createReminder(String amount, LocalTime time) {
-        onViewWithTimeoutClickable(withId(R.id.addReminder)).perform(click());
-
-        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
-
-        if (time != null) {
-            onView(withId(R.id.editReminderTime)).perform(click());
-            setTime(time.getHour(), time.getMinute());
+    static ViewInteraction onViewWithTimeout(
+            Matcher<View> matcher
+    ) {
+        int retries = 10;
+        while (retries-- >= 0) {
+            try {
+                ViewInteraction viewInteraction = onView(matcher);
+                viewInteraction.check(matches(isDisplayed()));
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
-
-        onView(withId(R.id.createReminder)).perform(click());
+        throw new AssertionError("View did not become visible");
     }
 
-    static ViewInteraction onViewWithTimeoutClickable(
+    static void clickOnViewWithTimeout(
             Matcher<View> matcher
     ) {
         int retries = 10;
         while (retries-- >= 0) {
             ViewInteraction viewInteraction = onView(matcher);
             try {
-                viewInteraction.check(matches(isCompletelyDisplayed()));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            } catch (AssertionFailedError e) {
+                viewInteraction.perform(click());
+                return;
+            } catch (NoMatchingViewException | PerformException e) {
                 try {
                     viewInteraction.perform(scrollTo());
-                } catch (PerformException e2) {
+                } catch (NoMatchingViewException | PerformException e2) {
                     // Intentionally empty
                 }
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
         throw new AssertionError("View did not become clickable");
@@ -144,10 +159,23 @@ public class AndroidTestHelper {
         };
     }
 
+    public static void createReminder(String amount, LocalTime time) {
+        clickOnViewWithTimeout(withId(R.id.addReminder));
+
+        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
+
+        if (time != null) {
+            onView(withId(R.id.editReminderTime)).perform(click());
+            setTime(time.getHour(), time.getMinute());
+        }
+
+        onView(withId(R.id.createReminder)).perform(click());
+    }
+
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onViewWithTimeoutClickable(withId(R.id.addMedicine)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.addMedicine));
 
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -159,23 +187,6 @@ public class AndroidTestHelper {
         textInputEditText.perform(replaceText(name), closeSoftKeyboard());
 
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-    }
-
-    public static void navigateTo(MainMenu mainMenu) {
-        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
-                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
-                        isDisplayed()));
-        int repeat = 10;
-        while (repeat-- > 0) {
-            try {
-                bottomNavigationItemView.perform(click());
-                onViewWithTimeout(withId(menuIds[mainMenu.ordinal()])).check(matches(isSelected()));
-            } catch (AssertionFailedError e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            }
-        }
     }
 
     public static Matcher<View> childAtPosition(
@@ -197,22 +208,6 @@ public class AndroidTestHelper {
         };
     }
 
-    static ViewInteraction onViewWithTimeout(
-            Matcher<View> matcher
-    ) {
-        int retries = 10;
-        while (retries-- >= 0) {
-            try {
-                ViewInteraction viewInteraction = onView(matcher);
-                viewInteraction.check(matches(isDisplayed()));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            }
-        }
-        throw new AssertionError("View did not become visible");
-    }
-
     public static String dateToString(Date date) {
         return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
@@ -220,12 +215,7 @@ public class AndroidTestHelper {
     public static LocalDateTime getNextNotificationTime() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        if (dateTime.getSecond() < 55) {
-            dateTime = dateTime.plusMinutes(1);
-        } else {
-            dateTime = dateTime.plusMinutes(2);
-        }
-        return dateTime;
+        return dateTime.plusMinutes(2);
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}

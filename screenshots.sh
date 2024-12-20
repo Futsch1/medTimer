@@ -42,6 +42,7 @@ do
         --use_timestamp_suffix=false \
         --use_adb_root=true \
         --use_tests_in_classes=com.futsch1.medtimer.ScreenshotsTest
+      adb shell pm clear com.futsch1.medtimer
     stop_clean_status_bar
 done
 
