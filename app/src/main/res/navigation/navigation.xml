@@ -77,18 +77,14 @@
         android:id="@+id/action_global_preferencesFragment"
         app:destination="@id/preferencesFragment" />
     <fragment
-        android:id="@+id/reminderTableFragment"
-        android:name="com.futsch1.medtimer.remindertable.ReminderTableFragment"
-        android:label="@string/tabular_view">
-        <action
-            android:id="@+id/action_reminderTableFragment_to_editEventFragment"
-            app:destination="@id/editEventFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
         android:label="@string/analysis"
-        tools:layout="@layout/fragment_statistics" />
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_statisticsFragment_to_editEventFragment"
+            app:destination="@id/editEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editEventFragment"
         android:name="com.futsch1.medtimer.overview.EditEventFragment"

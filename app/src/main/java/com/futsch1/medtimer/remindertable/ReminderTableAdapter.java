@@ -18,6 +18,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
+import com.futsch1.medtimer.statistics.StatisticsFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
         NavController navController = Navigation.findNavController(tableView);
         ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
         if (reminderEvent != null) {
-            ReminderTableFragmentDirections.ActionReminderTableFragmentToEditEventFragment action = ReminderTableFragmentDirections.actionReminderTableFragmentToEditEventFragment(
+            StatisticsFragmentDirections.ActionStatisticsFragmentToEditEventFragment action = StatisticsFragmentDirections.actionStatisticsFragmentToEditEventFragment(
                     reminderEvent.reminderEventId,
                     reminderEvent.amount,
                     reminderEvent.medicineName,
