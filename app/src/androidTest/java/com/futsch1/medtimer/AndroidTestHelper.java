@@ -215,7 +215,7 @@ public class AndroidTestHelper {
     public static LocalDateTime getNextNotificationTime() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        if (dateTime.getSecond() < 55) {
+        if (dateTime.getSecond() < 45) {
             dateTime = dateTime.plusMinutes(1);
         } else {
             dateTime = dateTime.plusMinutes(2);
