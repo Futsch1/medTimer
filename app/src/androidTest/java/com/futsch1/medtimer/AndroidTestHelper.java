@@ -80,7 +80,11 @@ public class AndroidTestHelper {
                 viewInteraction.check(matches(isDisplayed()));
                 return viewInteraction;
             } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
         throw new AssertionError("View did not become visible");
