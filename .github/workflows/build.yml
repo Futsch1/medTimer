@@ -29,6 +29,8 @@ jobs:
         with:
           dependency-graph: generate-and-submit
 
+      - name: Release
+        run: ./gradlew assembleRelease
       - name: Release bundle
         run: ./gradlew bundleRelease
 
