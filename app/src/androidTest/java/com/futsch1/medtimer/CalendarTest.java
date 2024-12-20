@@ -55,8 +55,8 @@ public class CalendarTest extends BaseHelper {
             }
             takenReminders++;
         }
-
         onViewWithTimeout(new RecyclerViewMatcher(R.id.latestReminders).sizeMatcher(0)).check(matches(isDisplayed()));
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 

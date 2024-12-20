@@ -68,8 +68,10 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         postponeEnterTransition();
         medicineViewModel.getLiveReminder(args.getReminderId()).observe(getViewLifecycleOwner(), reminderArg -> {
             this.reminder = reminderArg;
-            setupView();
-            startPostponedEnterTransition();
+            if (reminder != null) {
+                setupView();
+                startPostponedEnterTransition();
+            }
         });
 
         return advancedReminderView;
