@@ -121,6 +121,8 @@ public class ScreenshotsTest extends BaseHelper {
         onViewWithTimeoutClickable(allOf(withId(R.id.tableChip))).perform(click());
         Screengrab.screenshot("7");
 
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+
         onViewWithTimeoutClickable(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(

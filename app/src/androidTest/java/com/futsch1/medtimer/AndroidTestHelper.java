@@ -60,7 +60,9 @@ public class AndroidTestHelper {
 
         setTime(0, 0);
         pressBack();
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
         pressBack();
+        onView(isRoot()).perform(AndroidTestHelper.waitFor(100));
     }
 
     public static void createReminder(String amount, LocalTime time) {
