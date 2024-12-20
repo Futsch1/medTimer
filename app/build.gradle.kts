@@ -108,6 +108,8 @@ dependencies {
     val androidTestRunnerVersion = "1.6.2"
     val androidTestOrchestratorVersion = "1.5.1"
 
+    val desugarJdkVersion = "2.1.4"
+
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("com.google.android.material:material:$materialVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -147,7 +149,7 @@ dependencies {
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkVersion")
 }
 
 play {
