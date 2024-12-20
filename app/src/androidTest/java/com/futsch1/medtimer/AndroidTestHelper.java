@@ -7,7 +7,7 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -85,7 +85,7 @@ public class AndroidTestHelper {
         while (retries-- >= 0) {
             ViewInteraction viewInteraction = onView(matcher);
             try {
-                viewInteraction.check(matches(isCompletelyDisplayed()));
+                viewInteraction.check(matches(isClickable()));
                 return viewInteraction;
             } catch (NoMatchingViewException e) {
                 onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
