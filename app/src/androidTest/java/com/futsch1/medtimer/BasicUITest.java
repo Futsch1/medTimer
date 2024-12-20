@@ -15,8 +15,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -50,10 +50,9 @@ public class BasicUITest extends BaseHelper {
         // So for the time being skip this part there
         boolean couldClickEndIcon = false;
         try {
-            ViewInteraction checkableImageButton = onViewWithTimeoutClickable(
+            clickOnViewWithTimeout(
                     allOf(withId(com.google.android.material.R.id.text_input_end_icon),
                             isDescendantOfA(withId(R.id.editInstructionsLayout))));
-            checkableImageButton.perform(click());
             couldClickEndIcon = true;
         } catch (AssertionError e) {
             // Intentionally empty

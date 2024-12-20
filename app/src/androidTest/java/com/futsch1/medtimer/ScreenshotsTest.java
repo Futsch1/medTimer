@@ -19,8 +19,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -104,7 +104,7 @@ public class ScreenshotsTest extends BaseHelper {
         recyclerView.perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings));
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
@@ -118,17 +118,17 @@ public class ScreenshotsTest extends BaseHelper {
                         0))
                 .atPosition(1).perform(click());
 
-        onViewWithTimeoutClickable(allOf(withId(R.id.tableChip))).perform(click());
+        clickOnViewWithTimeout(allOf(withId(R.id.tableChip)));
         Screengrab.screenshot("7");
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
-        onViewWithTimeoutClickable(
+        clickOnViewWithTimeout(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(
                                 withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
                                 1)
-                )).perform(click());
+                ));
 
         AtomicReference<TableView> tableView = new AtomicReference<>();
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));

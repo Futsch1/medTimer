@@ -14,9 +14,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeoutClickable;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -56,7 +56,7 @@ public class ReminderTypeTest extends BaseHelper {
         onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         // Linked reminder (amount 2) 30 minutes later
-        onViewWithTimeoutClickable(withId(R.id.open_advanced_settings)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.open_advanced_settings));
         onView(withId(R.id.addLinkedReminder)).perform(click());
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -125,7 +125,7 @@ public class ReminderTypeTest extends BaseHelper {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
-            onViewWithTimeoutClickable(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(scrollTo(), click());
+            clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow));
 
             cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");

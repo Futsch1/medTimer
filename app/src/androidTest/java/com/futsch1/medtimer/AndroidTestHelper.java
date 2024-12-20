@@ -7,7 +7,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -30,8 +29,6 @@ import androidx.test.espresso.ViewInteraction;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import junit.framework.AssertionFailedError;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -41,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
+@SuppressWarnings("java:S2925")
 public class AndroidTestHelper {
     static void setAllRemindersTo12AM() {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -66,7 +64,7 @@ public class AndroidTestHelper {
     }
 
     public static void createReminder(String amount, LocalTime time) {
-        onViewWithTimeoutClickable(withId(R.id.addReminder)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.addReminder));
 
         onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
 
@@ -78,24 +76,26 @@ public class AndroidTestHelper {
         onView(withId(R.id.createReminder)).perform(click());
     }
 
-    static ViewInteraction onViewWithTimeoutClickable(
+    static void clickOnViewWithTimeout(
             Matcher<View> matcher
     ) {
         int retries = 10;
         while (retries-- >= 0) {
             ViewInteraction viewInteraction = onView(matcher);
             try {
-                viewInteraction.check(matches(isClickable()));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
-            } catch (AssertionFailedError e) {
+                viewInteraction.perform(click());
+                return;
+            } catch (NoMatchingViewException | PerformException e) {
                 try {
                     viewInteraction.perform(scrollTo());
-                } catch (PerformException e2) {
+                } catch (NoMatchingViewException | PerformException e2) {
                     // Intentionally empty
                 }
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(500));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
         throw new AssertionError("View did not become clickable");
@@ -126,29 +126,10 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onViewWithTimeoutClickable(withId(R.id.addMedicine)).perform(click());
+        clickOnViewWithTimeout(withId(R.id.addMedicine));
 
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -204,6 +185,25 @@ public class AndroidTestHelper {
             }
         }
         throw new AssertionError("View did not become visible");
+    }
+
+    public static ViewAction waitFor(long delay) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for " + delay + "milliseconds";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(delay);
+            }
+        };
     }
 
     public static String dateToString(Date date) {
