@@ -39,7 +39,7 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 @LargeTest
-public class ReminderTypeTest extends BaseHelper {
+public class ReminderTypeTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
@@ -115,7 +115,7 @@ public class ReminderTypeTest extends BaseHelper {
         pressBack();
         clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.open_advanced_settings));
         pressBack();
-        
+
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 

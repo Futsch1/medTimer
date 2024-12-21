@@ -31,7 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class BasicUITest extends BaseHelper {
+public class BasicUITest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

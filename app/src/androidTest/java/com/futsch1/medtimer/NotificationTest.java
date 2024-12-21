@@ -23,7 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class NotificationTest extends BaseHelper {
+public class NotificationTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

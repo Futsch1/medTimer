@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
@@ -27,14 +25,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            result -> {
-                if (Boolean.FALSE.equals(result)) {
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("show_notification", false).apply();
-                }
-            }
-    );
     private AppBarConfiguration appBarConfiguration;
 
     @Override
@@ -93,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(POST_NOTIFICATIONS);
+            new RequestPostNotificationPermission(this).requestPermission();
         }
     }
 

@@ -156,7 +156,7 @@ public class TimeHelper {
      */
     public static long changeTimeStampDate(long remindedTimestamp, LocalDate localDate) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(remindedTimestamp), ZoneId.systemDefault());
-        localDateTime = localDateTime.with(localDate);
+        localDateTime = localDate != null ? localDateTime.with(localDate) : localDateTime;
         return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
     }
 

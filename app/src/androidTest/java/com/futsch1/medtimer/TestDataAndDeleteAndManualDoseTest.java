@@ -36,7 +36,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class TestDataAndDeleteAndManualDoseTest extends BaseHelper {
+public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

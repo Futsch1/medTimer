@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 @LargeTest
-public class CalendarTest extends BaseHelper {
+public class CalendarTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

@@ -11,6 +11,8 @@ import com.github.appintro.AppIntroFragment
 import com.google.android.material.color.MaterialColors
 
 class MedTimerAppIntro : AppIntro() {
+    private val requestPostNotificationPermission = RequestPostNotificationPermission(this)
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -113,6 +115,7 @@ class MedTimerAppIntro : AppIntro() {
 
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
+        requestPostNotificationPermission.requestPermission()
         finish()
     }
 }

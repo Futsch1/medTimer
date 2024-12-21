@@ -23,7 +23,7 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 @LargeTest
-public class DeleteLinkedReminderTest extends BaseHelper {
+public class DeleteLinkedReminderTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

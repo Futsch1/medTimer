@@ -53,7 +53,7 @@ import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 @LargeTest
-public class ScreenshotsTest extends BaseHelper {
+public class ScreenshotsTest extends BaseTestHelper {
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 

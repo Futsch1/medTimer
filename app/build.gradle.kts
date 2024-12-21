@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 91
-        versionName = "1.13.0"
+        versionCode = 92
+        versionName = "1.13.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,7 +54,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
-        viewBinding = true
         buildConfig = true
     }
     @Suppress("UnstableApiUsage")
@@ -94,7 +93,7 @@ dependencies {
     val calendarVersion = "2.6.1"
     val iconDialogVersion = "3.3.0"
 
-    val junitVersion = "5.11.3"
+    val junitVersion = "5.11.4"
     val mockitoCoreVersion = "5.14.2"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.14.1"
@@ -135,6 +134,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
+    //noinspection GradleDependency v0.23.0 seems to require changes - later
     testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
@@ -184,7 +184,10 @@ val exclusions = listOf(
     "**/R\$*.class",
     "**/BuildConfig.*",
     "**/Manifest*.*",
-    "**/*Test*.*"
+    "**/*Test*.*",
+    "**/RecyclerViewMatcher.*",
+    "**/*Args.*",
+    "**/*Directions.*"
 )
 
 tasks.withType(Test::class) {

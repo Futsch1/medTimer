@@ -20,7 +20,7 @@ import org.junit.Test;
 import java.util.Calendar;
 
 @LargeTest
-public class ActiveReminderTest extends BaseHelper {
+public class ActiveReminderTest extends BaseTestHelper {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
