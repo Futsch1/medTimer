@@ -93,11 +93,11 @@ dependencies {
     val calendarVersion = "2.6.1"
     val iconDialogVersion = "3.3.0"
 
-    val junitVersion = "5.11.3"
+    val junitVersion = "5.11.4"
     val mockitoCoreVersion = "5.14.2"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.14.1"
-    val jazzerVersion = "0.22.1"
+    val jazzerVersion = "0.23.0"
 
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
