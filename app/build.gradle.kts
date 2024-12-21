@@ -185,7 +185,8 @@ val exclusions = listOf(
     "**/Manifest*.*",
     "**/*Test*.*",
     "**/RecyclerViewMatcher.*",
-    "**/generated/*"
+    "**/*Args.*",
+    "**/*Directions.*"
 )
 
 tasks.withType(Test::class) {
