@@ -15,7 +15,7 @@ import org.junit.BeforeClass;
 
 import java.io.IOException;
 
-public class BaseHelper {
+public class BaseTestHelper {
     @BeforeClass
     public static void dismissANRSystemDialog() throws UiObjectNotFoundException {
         UiDevice device = UiDevice.getInstance(getInstrumentation());
