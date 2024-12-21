@@ -54,7 +54,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
-        viewBinding = true
         buildConfig = true
     }
     @Suppress("UnstableApiUsage")
@@ -184,7 +183,9 @@ val exclusions = listOf(
     "**/R\$*.class",
     "**/BuildConfig.*",
     "**/Manifest*.*",
-    "**/*Test*.*"
+    "**/*Test*.*",
+    "**/RecyclerViewMatcher.*",
+    "**/generated/*"
 )
 
 tasks.withType(Test::class) {
