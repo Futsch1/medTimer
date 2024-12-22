@@ -150,10 +150,12 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private void setupCycleStartDate() {
         setCycleStartDate(reminder.cycleStartDay);
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
-                datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
-            }
+            v.post(() -> {
+                if (v.hasFocus()) {
+                    TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
+                    datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
+                }
+            });
         });
     }
 
