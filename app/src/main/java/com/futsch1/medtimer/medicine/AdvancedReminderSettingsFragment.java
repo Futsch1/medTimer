@@ -150,6 +150,9 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private void setupCycleStartDate() {
         setCycleStartDate(reminder.cycleStartDay);
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
+            // On API 26, the DatePicker may be accidentally triggered when exiting this fragment.
+            // To resolve this, I postpone the focus check to the end of the current event loop
+            // iteration, At that point, the UI is expected to no longer be in a transition state.
             v.post(() -> {
                 if (v.hasFocus()) {
                     TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
