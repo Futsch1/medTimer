@@ -80,7 +80,6 @@ public class StatisticsFragment extends Fragment {
         };
         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
 
         activeStatisticsFragment.setActiveFragment(fragmentType);
