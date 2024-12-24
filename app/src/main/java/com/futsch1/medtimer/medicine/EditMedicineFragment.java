@@ -101,6 +101,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         setupSwiping(recyclerView);
         setupSelectIcon();
         setupNotificationImportance(medicine.notificationImportance);
+        setupStockButton();
 
         medicineViewModel.getLiveReminders(medicineId).observe(getViewLifecycleOwner(), l -> {
                     this.sortAndSubmitList(l);
@@ -199,6 +200,16 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
         notificationImportance.setText(NotificationImportanceKt.importanceValueToString(notificationImportanceValue, this.getResources()), false);
     }
 
+    private void setupStockButton() {
+        MaterialButton openStockTracking = fragmentEditMedicine.findViewById(R.id.openStockTracking);
+        openStockTracking.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(openStockTracking);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineStockFragment action =
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineStockFragment(medicineId);
+            navController.navigate(action);
+        });
+    }
+
     private void sortAndSubmitList(List<Reminder> reminders) {
         adapter.submitList(new LinkedReminderAlgorithms().sortRemindersList(reminders));
     }
@@ -220,6 +231,7 @@ public class EditMedicineFragment extends Fragment implements IconDialog.Callbac
 
         if (editMedicineName != null && enableColor != null) {
             String word = editMedicineName.getText().toString();
+            // FIXME: We cannot re-create the medicine here since we would overwrite settings from stock tracking
             Medicine medicine = new Medicine(word, medicineId);
             medicine.useColor = enableColor.isChecked();
             medicine.color = color;
