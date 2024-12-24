@@ -134,7 +134,6 @@ dependencies {
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
-    //noinspection GradleDependency v0.23.0 seems to require changes - later
     testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
