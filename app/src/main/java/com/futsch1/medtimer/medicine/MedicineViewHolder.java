@@ -40,7 +40,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     static MedicineViewHolder create(ViewGroup parent, Activity activity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_medicine, parent, false);
+                .inflate(R.layout.card_medicine, parent, false);
         return new MedicineViewHolder(view, activity, thread);
     }
 

@@ -44,7 +44,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
     static LatestRemindersViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_latest_reminder, parent, false);
+                .inflate(R.layout.card_latest_reminder, parent, false);
         return new LatestRemindersViewHolder(view);
     }
 
@@ -57,7 +57,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
         setupChips(reminderEvent);
         setupColorAndIcon(reminderEvent);
-        
+
         checkedChanged = false;
     }
 
