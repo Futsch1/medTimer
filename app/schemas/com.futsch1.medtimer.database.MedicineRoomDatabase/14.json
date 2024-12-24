@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "2ee1095943248bda9609e825bdb25679",
+    "identityHash": "e64fb2b1e65563b99a2a248a7d0b94be",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `medicationAmountTracking` INTEGER NOT NULL DEFAULT false, `medicationAmount` INTEGER NOT NULL DEFAULT 0, `medicationAmountReminderThreshold` INTEGER NOT NULL DEFAULT 0, `alwaysRemindAmount` INTEGER NOT NULL DEFAULT false, `medicationPackSizes` TEXT DEFAULT '[]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `medicationStockReminder` TEXT DEFAULT false, `medicationAmount` INTEGER NOT NULL DEFAULT 0, `medicationAmountReminderThreshold` INTEGER NOT NULL DEFAULT 0, `medicationPackSizes` TEXT DEFAULT '[]')",
         "fields": [
           {
             "fieldPath": "name",
@@ -49,10 +49,10 @@
             "defaultValue": "0"
           },
           {
-            "fieldPath": "medicationAmountTracking",
-            "columnName": "medicationAmountTracking",
-            "affinity": "INTEGER",
-            "notNull": true,
+            "fieldPath": "medicationStockReminder",
+            "columnName": "medicationStockReminder",
+            "affinity": "TEXT",
+            "notNull": false,
             "defaultValue": "false"
           },
           {
@@ -68,13 +68,6 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
-          },
-          {
-            "fieldPath": "alwaysRemindAmount",
-            "columnName": "alwaysRemindAmount",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "false"
           },
           {
             "fieldPath": "medicationPackSizes",
@@ -317,7 +310,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2ee1095943248bda9609e825bdb25679')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e64fb2b1e65563b99a2a248a7d0b94be')"
     ]
   }
 }

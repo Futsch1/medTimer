@@ -35,16 +35,13 @@ public class Medicine {
     public int iconId;
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean medicationAmountTracking;
+    public MedicationStockReminder medicationStockReminder;
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int medicationAmount;
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int medicationAmountReminderThreshold;
-    @ColumnInfo(defaultValue = "false")
-    @Expose
-    public boolean alwaysRemindAmount;
     @ColumnInfo(defaultValue = "[]")
     @Expose
     public ArrayList<Integer> medicationPackSizes;
@@ -64,5 +61,11 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
+    }
+
+    public enum MedicationStockReminder {
+        OFF,
+        ONCE,
+        ALWAYS
     }
 }

@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
             app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_medicineStockFragment"
+            app:destination="@id/medicineStockFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -119,5 +122,14 @@
         <argument
             android:name="futureDays"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineStockFragment"
+        android:name="com.futsch1.medtimer.medicine.MedicineStockFragment"
+        android:label="fragment_medicine_stock"
+        tools:layout="@layout/fragment_medicine_stock">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
     </fragment>
 </navigation>
