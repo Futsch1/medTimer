@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
+
+@SuppressWarnings("java:S1319")
 @Entity
 public class Medicine {
 
@@ -30,6 +33,21 @@ public class Medicine {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int iconId;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean medicationAmountTracking;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int medicationAmount;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int medicationAmountReminderThreshold;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean alwaysRemindAmount;
+    @ColumnInfo(defaultValue = "[]")
+    @Expose
+    public ArrayList<Integer> medicationPackSizes;
 
     public Medicine(String name) {
         this.name = name;
