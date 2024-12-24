@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.MedicineRepository;
 
 import java.util.List;
 
+@SuppressWarnings("java:S2187")
 public class JSONBackupFuzzTest {
     @FuzzTest
     void fuzzTestMedicineBackup(String json) {
