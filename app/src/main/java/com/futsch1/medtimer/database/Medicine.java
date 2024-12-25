@@ -52,6 +52,8 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
+        this.medicationStockReminder = MedicationStockReminder.OFF;
+        this.medicationPackSizes = new ArrayList<>();
     }
 
     public Medicine(String name, int id) {
@@ -61,6 +63,8 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
+        this.medicationStockReminder = MedicationStockReminder.OFF;
+        this.medicationPackSizes = new ArrayList<>();
     }
 
     public enum MedicationStockReminder {

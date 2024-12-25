@@ -89,7 +89,11 @@ class JSONMedicineBackupUnitTest {
         "color": -65536,
         "useColor": true,
         "notificationImportance": 3,
-        "iconId": 5
+        "iconId": 5,
+        "medicationStockReminder": "OFF",
+        "medicationAmount": 0,
+        "medicationAmountReminderThreshold": 0,
+        "medicationPackSizes": []
       }
     }
   ]
@@ -214,7 +218,11 @@ class JSONMedicineBackupUnitTest {
         "color": -65536,
         "useColor": true,
         "notificationImportance": 4,
-        "iconId": 0
+        "iconId": 0,
+        "medicationStockReminder": "OFF",
+        "medicationAmount": 0,
+        "medicationAmountReminderThreshold": 0,
+        "medicationPackSizes": []
       }
     },
     {
@@ -275,7 +283,11 @@ class JSONMedicineBackupUnitTest {
         "color": -16776961,
         "useColor": false,
         "notificationImportance": 5,
-        "iconId": 7
+        "iconId": 7,
+        "medicationStockReminder": "OFF",
+        "medicationAmount": 0,
+        "medicationAmountReminderThreshold": 0,
+        "medicationPackSizes": []
       }
     }
   ]
