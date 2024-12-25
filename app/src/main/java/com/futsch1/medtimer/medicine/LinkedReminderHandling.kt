@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.medicine
 
+import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
@@ -44,8 +44,8 @@ class LinkedReminderHandling(
         }
     }
 
-    fun deleteReminder(view: View, thread: HandlerThread, postMainAction: () -> Unit) {
-        val deleteHelper = DeleteHelper(view.context)
+    fun deleteReminder(context: Context, thread: HandlerThread, postMainAction: () -> Unit) {
+        val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
             val threadHandler = Handler(thread.getLooper())
             threadHandler.post {

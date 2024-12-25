@@ -33,7 +33,7 @@ public class Medicine {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int iconId;
-    @ColumnInfo(defaultValue = "false")
+    @ColumnInfo(defaultValue = "OFF")
     @Expose
     public MedicationStockReminder medicationStockReminder;
     @ColumnInfo(defaultValue = "0")
