@@ -127,9 +127,6 @@ public class OverviewFragment extends Fragment {
         if (reminderEvent != null) {
             OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
                     reminderEvent.reminderEventId,
-                    reminderEvent.amount,
-                    reminderEvent.medicineName,
-                    reminderEvent.remindedTimestamp,
                     reminderEvent.reminderId <= 0
             );
             requireActivity().runOnUiThread(() ->

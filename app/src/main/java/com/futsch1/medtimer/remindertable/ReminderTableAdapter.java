@@ -94,9 +94,6 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
         if (reminderEvent != null) {
             StatisticsFragmentDirections.ActionStatisticsFragmentToEditEventFragment action = StatisticsFragmentDirections.actionStatisticsFragmentToEditEventFragment(
                     reminderEvent.reminderEventId,
-                    reminderEvent.amount,
-                    reminderEvent.medicineName,
-                    reminderEvent.remindedTimestamp,
                     reminderEvent.reminderId <= 0
             );
             activity.runOnUiThread(() ->

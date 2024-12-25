@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.ReminderEvent
 
 
 class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
@@ -19,6 +20,16 @@ class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medic
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
         medicineViewModel.updateMedicine(entity)
+    }
+}
+
+class ReminderEventEntityInterface : DatabaseEntityEditFragment.EntityInterface<ReminderEvent> {
+    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): ReminderEvent? {
+        return medicineViewModel.getReminderEvent(id)
+    }
+
+    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: ReminderEvent) {
+        medicineViewModel.updateReminderEvent(entity)
     }
 }
 

@@ -97,15 +97,6 @@
             android:name="eventId"
             app:argType="integer" />
         <argument
-            android:name="eventAmount"
-            app:argType="string" />
-        <argument
-            android:name="eventName"
-            app:argType="string" />
-        <argument
-            android:name="eventRemindedTimestamp"
-            app:argType="long" />
-        <argument
             android:name="eventCanEditDate"
             app:argType="boolean" />
     </fragment>
