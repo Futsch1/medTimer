@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 
 
@@ -20,6 +21,16 @@ class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medic
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
         medicineViewModel.updateMedicine(entity)
+    }
+}
+
+class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Reminder> {
+    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Reminder? {
+        return medicineViewModel.getReminder(id)
+    }
+
+    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Reminder) {
+        medicineViewModel.updateReminder(entity)
     }
 }
 
@@ -48,6 +59,7 @@ abstract class DatabaseEntityEditFragment<T>(
     private var entity: T? = null
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
+    private var fragmentReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,24 +72,31 @@ abstract class DatabaseEntityEditFragment<T>(
         savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(layoutId, container, false)
+
+        // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
         val handler = Handler(thread.looper)
         handler.post {
             entity = entityInterface.getEntity(medicineViewModel, getEntityId())
             if (entity != null) {
                 requireActivity().runOnUiThread {
+                    // Signal that entity was loaded
                     onEntityLoaded(entity!!, fragmentView!!)
+                    // Only now allow getting data from fragment UI when it is closed
+                    fragmentReady = true
+                    // Allow setting up the menu
+                    setupMenu(entity!!, fragmentView!!)
+                    // Now enter fragment
                     startPostponedEnterTransition()
                 }
             }
         }
 
-        setupMenu(fragmentView)
 
         return fragmentView!!
     }
 
-    protected open fun setupMenu(fragmentView: View?) {
+    protected open fun setupMenu(entity: T, fragmentView: View) {
         val optionsMenu = OptionsMenu(
             this.requireContext(),
             MedicineViewModel(requireActivity().application),
@@ -94,7 +113,7 @@ abstract class DatabaseEntityEditFragment<T>(
 
     override fun onStop() {
         super.onStop()
-        if (entity != null && fragmentView != null) {
+        if (fragmentReady) {
             fillEntityData(entity!! as T, fragmentView!!)
             entityInterface.updateEntity(medicineViewModel, entity!!)
         }

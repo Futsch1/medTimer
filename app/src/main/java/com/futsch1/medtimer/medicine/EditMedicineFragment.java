@@ -55,7 +55,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     }
 
     @Override
-    protected void setupMenu(View fragmentView) {
+    protected void setupMenu(Medicine medicine, @NonNull View fragmentView) {
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(getEntityId(), this.getThread(), this.getMedicineViewModel(), fragmentView), getViewLifecycleOwner());
     }
 

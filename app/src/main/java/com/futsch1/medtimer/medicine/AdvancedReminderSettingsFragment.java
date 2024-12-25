@@ -2,23 +2,18 @@ package com.futsch1.medtimer.medicine;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.os.Bundle;
-import android.os.HandlerThread;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment;
+import com.futsch1.medtimer.helpers.ReminderEntityInterface;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor;
@@ -31,80 +26,114 @@ import java.time.LocalDate;
 
 import kotlin.Unit;
 
-public class AdvancedReminderSettingsFragment extends Fragment {
+public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment<Reminder> {
 
-    private final HandlerThread backgroundThread;
     private String[] daysArray;
     private EditText editConsecutiveDays;
     private EditText editPauseDays;
     private EditText editCycleStartDate;
     private TextInputEditText editInstructions;
     private TextInputLayout instructionSuggestions;
-    private MedicineViewModel medicineViewModel;
-    private Reminder reminder;
-    private View advancedReminderView;
     private PeriodSettings periodSettings;
     private DateTimeEditor intervalStartDateTimeEditor;
     private IntervalEditor intervalEditor;
 
     public AdvancedReminderSettingsFragment() {
-        backgroundThread = new HandlerThread("AdvancedReminderSettings");
-        backgroundThread.start();
+        super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        AdvancedReminderSettingsFragmentArgs args;
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-
-        assert getArguments() != null;
-        args = AdvancedReminderSettingsFragmentArgs.fromBundle(getArguments());
-
-        daysArray = getResources().getStringArray(R.array.days);
-
-        advancedReminderView = inflater.inflate(R.layout.fragment_advanced_reminder_settings, container, false);
-
-        postponeEnterTransition();
-        medicineViewModel.getLiveReminder(args.getReminderId()).observe(getViewLifecycleOwner(), reminderArg -> {
-            this.reminder = reminderArg;
-            if (reminder != null) {
-                setupView();
-                startPostponedEnterTransition();
-            }
-        });
-
-        return advancedReminderView;
+    protected void setupMenu(Reminder entity, @NonNull View fragmentView) {
+        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(entity, getThread(), medicineViewModel, fragmentView),
+                getViewLifecycleOwner());
     }
 
     @SuppressLint("SetTextI18n")
-    private void setupView() {
-        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(reminder, backgroundThread, medicineViewModel, advancedReminderView),
-                getViewLifecycleOwner());
+    @Override
+    public void onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
+        daysArray = getResources().getStringArray(R.array.days);
 
-        periodSettings = new PeriodSettings(advancedReminderView, getParentFragmentManager(), reminder);
-        editInstructions = advancedReminderView.findViewById(R.id.editInstructions);
-        editPauseDays = advancedReminderView.findViewById(R.id.pauseDays);
-        editConsecutiveDays = advancedReminderView.findViewById(R.id.consecutiveDays);
-        editCycleStartDate = advancedReminderView.findViewById(R.id.cycleStartDate);
-        instructionSuggestions = advancedReminderView.findViewById(R.id.editInstructionsLayout);
+        periodSettings = new PeriodSettings(fragmentView, getParentFragmentManager(), entity);
+        editInstructions = fragmentView.findViewById(R.id.editInstructions);
+        editPauseDays = fragmentView.findViewById(R.id.pauseDays);
+        editConsecutiveDays = fragmentView.findViewById(R.id.consecutiveDays);
+        editCycleStartDate = fragmentView.findViewById(R.id.cycleStartDate);
+        instructionSuggestions = fragmentView.findViewById(R.id.editInstructionsLayout);
 
-        editConsecutiveDays.setText(Integer.toString(reminder.consecutiveDays));
-        editPauseDays.setText(Integer.toString(reminder.pauseDays));
-        editInstructions.setText(reminder.instructions);
+        editConsecutiveDays.setText(Integer.toString(entity.consecutiveDays));
+        editPauseDays.setText(Integer.toString(entity.pauseDays));
+        editInstructions.setText(entity.instructions);
 
         setupInstructionSuggestions();
 
-        setupRemindOnDays();
-        setupCycleStartDate();
+        setupRemindOnDays(entity, fragmentView);
+        setupCycleStartDate(entity);
 
-        setupAddLinkedReminder();
+        setupAddLinkedReminder(entity, fragmentView);
 
-        if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
-            setupIntervalBasedReminderSettings();
+        if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            setupIntervalBasedReminderSettings(entity, fragmentView);
         }
 
-        setupVisibilities();
+        setupVisibilities(entity, fragmentView);
+    }
+
+    @Override
+    public void fillEntityData(Reminder entity, @NonNull View fragmentView) {
+        entity.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+
+        periodSettings.updateReminder();
+        putConsecutiveDaysIntoReminder(entity);
+        putPauseDaysIntoReminder(entity);
+        putStartDateIntoReminder(entity);
+        putIntervalIntoReminder(entity, fragmentView);
+    }
+
+    private void putConsecutiveDaysIntoReminder(Reminder entity) {
+        try {
+            if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+                entity.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
+                if (entity.consecutiveDays <= 0) {
+                    entity.consecutiveDays = 1;
+                }
+            }
+        } catch (NumberFormatException e) {
+            entity.consecutiveDays = 1;
+        }
+    }
+
+    private void putPauseDaysIntoReminder(Reminder entity) {
+        try {
+            entity.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
+        } catch (NumberFormatException e) {
+            entity.pauseDays = 0;
+        }
+    }
+
+    private void putStartDateIntoReminder(Reminder entity) {
+        LocalDate startDate = getCycleStartDate();
+        if (startDate != null) {
+            entity.cycleStartDay = startDate.toEpochDay();
+        }
+    }
+
+    private void putIntervalIntoReminder(Reminder entity, View fragmentView) {
+        if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            int minutes = intervalEditor.getMinutes();
+            if (minutes > 0) {
+                entity.timeInMinutes = minutes;
+            }
+            long intervalStartDateTime = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch();
+            if (intervalStartDateTime >= 0) {
+                entity.intervalStart = intervalStartDateTime;
+            }
+            entity.intervalStartsFromProcessed = ((RadioButton) fragmentView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
+        }
+    }
+
+    @Override
+    public int getEntityId() {
+        return AdvancedReminderSettingsFragmentArgs.fromBundle(requireArguments()).getReminderId();
     }
 
     private void setupInstructionSuggestions() {
@@ -123,71 +152,71 @@ public class AdvancedReminderSettingsFragment extends Fragment {
         });
     }
 
-    private void setupRemindOnDays() {
+    private void setupRemindOnDays(Reminder entity, View fragmentView) {
         String[] daysOfMonth = new String[31];
         for (int i = 0; i < 31; i++) {
             daysOfMonth[i] = Integer.toString(i + 1);
         }
-        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
-                i -> reminder.days.get(i),
+        new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
+                i -> entity.days.get(i),
                 (i, b) -> {
-                    reminder.days.set(i, b);
+                    entity.days.set(i, b);
                     return Unit.INSTANCE;
                 });
-        new RemindOnDays(requireContext(), advancedReminderView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
-                i -> (reminder.activeDaysOfMonth & (1 << i)) != 0,
+        new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
+                i -> (entity.activeDaysOfMonth & (1 << i)) != 0,
                 (i, b) -> {
                     if (Boolean.TRUE.equals(b)) {
-                        reminder.activeDaysOfMonth |= (1 << i);
+                        entity.activeDaysOfMonth |= (1 << i);
                     } else {
-                        reminder.activeDaysOfMonth &= ~(1 << i);
+                        entity.activeDaysOfMonth &= ~(1 << i);
                     }
 
                     return Unit.INSTANCE;
                 });
     }
 
-    private void setupCycleStartDate() {
-        setCycleStartDate(reminder.cycleStartDay);
-        editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
-            // On API 26, the DatePicker may be accidentally triggered when exiting this fragment.
-            // To resolve this, I postpone the focus check to the end of the current event loop
-            // iteration, At that point, the UI is expected to no longer be in a transition state.
-            v.post(() -> {
-                if (v.hasFocus()) {
-                    TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
-                    datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
-                }
-            });
-        });
+    private void setupCycleStartDate(Reminder entity) {
+        setCycleStartDate(entity.cycleStartDay);
+        editCycleStartDate.setOnFocusChangeListener((v, hasFocus) ->
+                // On API 26, the DatePicker may be accidentally triggered when exiting this fragment.
+                // To resolve this, I postpone the focus check to the end of the current event loop
+                // iteration, At that point, the UI is expected to no longer be in a transition state.
+                v.post(() -> {
+                    if (v.hasFocus()) {
+                        TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
+                        datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
+                    }
+                })
+        );
     }
 
-    private void setupAddLinkedReminder() {
-        ExtendedFloatingActionButton addLinkedReminder = advancedReminderView.findViewById(R.id.addLinkedReminder);
-        addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(reminder, medicineViewModel).addLinkedReminder(requireActivity()));
+    private void setupAddLinkedReminder(Reminder entity, View fragmentView) {
+        ExtendedFloatingActionButton addLinkedReminder = fragmentView.findViewById(R.id.addLinkedReminder);
+        addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(entity, medicineViewModel).addLinkedReminder(requireActivity()));
     }
 
-    private void setupIntervalBasedReminderSettings() {
+    private void setupIntervalBasedReminderSettings(Reminder entity, View fragmentView) {
         intervalEditor = new IntervalEditor(
-                advancedReminderView.findViewById(R.id.editIntervalTime),
-                advancedReminderView.findViewById(R.id.intervalUnit), reminder.timeInMinutes
+                fragmentView.findViewById(R.id.editIntervalTime),
+                fragmentView.findViewById(R.id.intervalUnit), entity.timeInMinutes
         );
 
         intervalStartDateTimeEditor = new DateTimeEditor(
                 requireActivity(),
-                advancedReminderView.findViewById(R.id.editIntervalStartDateTime),
-                reminder.intervalStart
+                fragmentView.findViewById(R.id.editIntervalStartDateTime),
+                entity.intervalStart
         );
 
-        RadioGroup intervalBasedGroup = advancedReminderView.findViewById(R.id.intervalStartType);
-        intervalBasedGroup.check(reminder.intervalStartsFromProcessed ? R.id.intervalStarsFromProcessed : R.id.intervalStartsFromReminded);
+        RadioGroup intervalBasedGroup = fragmentView.findViewById(R.id.intervalStartType);
+        intervalBasedGroup.check(entity.intervalStartsFromProcessed ? R.id.intervalStarsFromProcessed : R.id.intervalStartsFromReminded);
     }
 
-    private void setupVisibilities() {
-        Reminder.ReminderType reminderType = reminder.getReminderType();
-        advancedReminderView.findViewById(R.id.cyclicRemindersGroup).setVisibility(reminderType == Reminder.ReminderType.TIME_BASED ? View.VISIBLE : View.GONE);
-        advancedReminderView.findViewById(R.id.timeBasedGroup).setVisibility(reminderType == Reminder.ReminderType.TIME_BASED ? View.VISIBLE : View.GONE);
-        advancedReminderView.findViewById(R.id.intervalBasedGroup).setVisibility(reminderType == Reminder.ReminderType.INTERVAL_BASED ? View.VISIBLE : View.GONE);
+    private void setupVisibilities(Reminder entity, View fragmentView) {
+        Reminder.ReminderType reminderType = entity.getReminderType();
+        fragmentView.findViewById(R.id.cyclicRemindersGroup).setVisibility(reminderType == Reminder.ReminderType.TIME_BASED ? View.VISIBLE : View.GONE);
+        fragmentView.findViewById(R.id.timeBasedGroup).setVisibility(reminderType == Reminder.ReminderType.TIME_BASED ? View.VISIBLE : View.GONE);
+        fragmentView.findViewById(R.id.intervalBasedGroup).setVisibility(reminderType == Reminder.ReminderType.INTERVAL_BASED ? View.VISIBLE : View.GONE);
     }
 
     private @Nullable LocalDate getCycleStartDate() {
@@ -197,64 +226,5 @@ public class AdvancedReminderSettingsFragment extends Fragment {
     private void setCycleStartDate(long daysSinceEpoch) {
         editCycleStartDate.setText(TimeHelper.daysSinceEpochToDateString(editCycleStartDate.getContext(),
                 daysSinceEpoch));
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (editInstructions != null && reminder != null) {
-            reminder.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
-
-            periodSettings.updateReminder();
-            putConsecutiveDaysIntoReminder();
-            putPauseDaysIntoReminder();
-            putStartDateIntoReminder();
-            putIntervalIntoReminder();
-
-            medicineViewModel.updateReminder(reminder);
-        }
-    }
-
-    private void putConsecutiveDaysIntoReminder() {
-        try {
-            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
-                reminder.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
-                if (reminder.consecutiveDays <= 0) {
-                    reminder.consecutiveDays = 1;
-                }
-            }
-        } catch (NumberFormatException e) {
-            reminder.consecutiveDays = 1;
-        }
-    }
-
-    private void putPauseDaysIntoReminder() {
-        try {
-            reminder.pauseDays = Integer.parseInt(editPauseDays.getText().toString());
-        } catch (NumberFormatException e) {
-            reminder.pauseDays = 0;
-        }
-    }
-
-    private void putStartDateIntoReminder() {
-        LocalDate startDate = getCycleStartDate();
-        if (startDate != null) {
-            reminder.cycleStartDay = startDate.toEpochDay();
-        }
-    }
-
-    private void putIntervalIntoReminder() {
-        if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
-            int minutes = intervalEditor.getMinutes();
-            if (minutes > 0) {
-                reminder.timeInMinutes = minutes;
-            }
-            long intervalStartDateTime = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch();
-            if (intervalStartDateTime >= 0) {
-                reminder.intervalStart = intervalStartDateTime;
-            }
-            reminder.intervalStartsFromProcessed = ((RadioButton) advancedReminderView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
-        }
     }
 }
