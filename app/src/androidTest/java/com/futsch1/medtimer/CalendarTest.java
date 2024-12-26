@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 
@@ -42,7 +43,7 @@ public class CalendarTest extends BaseTestHelper {
 
         AndroidTestHelper.setAllRemindersTo12AM();
 
-        onView(allOf(withId(R.id.showOnlyOpen), isDisplayed())).perform(click());
+        clickOnViewWithTimeout(allOf(withId(R.id.showOnlyOpen), isDisplayed()));
 
         int takenReminders = 0;
 
