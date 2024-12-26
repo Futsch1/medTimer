@@ -130,6 +130,7 @@ dependencies {
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
     implementation("com.maltaisn:icondialog:$iconDialogVersion")
     implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
+    implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

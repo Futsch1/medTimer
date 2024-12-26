@@ -39,8 +39,6 @@ public class CalendarTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
-
         clickOnViewWithTimeout(allOf(withId(R.id.showOnlyOpen), isDisplayed()));
 
         int takenReminders = 0;
@@ -48,7 +46,6 @@ public class CalendarTest extends BaseTestHelper {
         while (takenReminders < 10) {
             try {
                 onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
-                onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
             } catch (Exception e) {
                 break;
             }
