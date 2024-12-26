@@ -2,11 +2,9 @@ package com.futsch1.medtimer.reminders
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Color
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
@@ -47,16 +45,8 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
         if (medicine.medicationAmount <= medicine.medicationAmountReminderThreshold && (medicine.medicationStockReminder == Medicine.MedicationStockReminder.ALWAYS ||
                     (medicine.medicationStockReminder == Medicine.MedicationStockReminder.ONCE && medicine.medicationAmount + amount > medicine.medicationAmountReminderThreshold))
         ) {
-            val color = if (medicine.useColor) Color.valueOf(medicine.color) else null
-            val notificationImportance =
-                if (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.value) ReminderNotificationChannelManager.Importance.HIGH else ReminderNotificationChannelManager.Importance.DEFAULT
-
             Notifications(context).showOutOfStockNotification(
-                medicine.name,
-                amount.toString(),
-                color,
-                medicine.iconId,
-                notificationImportance
+                medicine
             )
         }
     }

@@ -11,7 +11,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.PreferencesNames;
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -136,18 +134,10 @@ public class ReminderWork extends Worker {
 
     private void showNotification(Medicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
         if (canShowNotifications()) {
-            Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
             Notifications notifications = new Notifications(context);
             reminderEvent.notificationId =
                     notifications.showNotification(minutesToTimeString(context, reminderDateTime.getHour() * 60L + reminderDateTime.getMinute()),
-                            reminderEvent.medicineName,
-                            reminder.amount,
-                            reminder.instructions,
-                            reminder.reminderId,
-                            reminderEvent.reminderEventId,
-                            color,
-                            medicine.iconId,
-                            medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue() ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT);
+                            medicine, reminder, reminderEvent);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }

@@ -67,6 +67,10 @@ public class Medicine {
         this.medicationPackSizes = new ArrayList<>();
     }
 
+    public boolean isStockManagementActive() {
+        return (this.medicationAmount != 0 || medicationStockReminder != MedicationStockReminder.OFF);
+    }
+
     public enum MedicationStockReminder {
         OFF,
         ONCE,

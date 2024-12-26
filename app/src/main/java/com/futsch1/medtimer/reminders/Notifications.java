@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,8 +17,12 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
+import com.futsch1.medtimer.database.Medicine;
+import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 
+@SuppressLint("DefaultLocale")
 public class Notifications {
     private final Context context;
     private final SharedPreferences sharedPreferences;
@@ -28,10 +33,10 @@ public class Notifications {
     }
 
     @SuppressWarnings("java:S107")
-    public int showNotification(String remindTime, String medicineName, String amount,
-                                String instructions, int reminderId, int reminderEventId,
-                                Color color, int iconId, ReminderNotificationChannelManager.Importance importance) {
+    public int showNotification(String remindTime, Medicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
         int notificationId = getNextNotificationId();
+        ReminderNotificationChannelManager.Importance importance = (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
+        Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
@@ -40,18 +45,18 @@ public class Notifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(getNotificationString(remindTime, amount, medicineName, instructions))
+                .setContentText(getNotificationString(remindTime, reminder, medicine))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
-        if (iconId != 0) {
+        if (medicine.iconId != 0) {
             MedicineIcons icons = new MedicineIcons(context);
-            builder.setLargeIcon(icons.getIconBitmap(iconId));
+            builder.setLargeIcon(icons.getIconBitmap(medicine.iconId));
         }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
         }
 
-        buildActions(builder, notificationId, reminderEventId, reminderId);
+        buildActions(builder, notificationId, reminderEvent.reminderEventId, reminder.reminderId);
 
         notificationManager.notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
@@ -73,15 +78,20 @@ public class Notifications {
         return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private String getNotificationString(String remindTime, String amount, String medicineName, String instructions) {
+    private String getNotificationString(String remindTime, Reminder reminder, Medicine medicine) {
+        String instructions = reminder.instructions;
         if (instructions == null) {
             instructions = "";
         }
         if (!instructions.isEmpty()) {
             instructions = " " + instructions;
         }
-        final int amountStringId = amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
-        return context.getString(amountStringId, remindTime, amount, medicineName, instructions);
+        final int amountStringId = reminder.amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
+        String medicineNameString = medicine.name;
+        if (medicine.isStockManagementActive()) {
+            medicineNameString += " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.medicationAmount), medicine.medicationAmount <= medicine.medicationAmountReminderThreshold ? " ⚠" : "") + ")";
+        }
+        return context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
     }
 
     private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, int reminderId) {
@@ -113,22 +123,24 @@ public class Notifications {
         }
     }
 
-    public void showOutOfStockNotification(String medicineName, String amount, Color color, int iconId, ReminderNotificationChannelManager.Importance importance) {
+    public void showOutOfStockNotification(Medicine medicine) {
         int notificationId = getNextNotificationId();
+        ReminderNotificationChannelManager.Importance importance = (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
+        Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
         String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
-                .setSmallIcon(R.drawable.capsule)
-                .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.out_of_stock_notification, medicineName, amount))
+                .setSmallIcon(R.drawable.box_seam)
+                .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
+                .setContentText(context.getString(R.string.out_of_stock_notification, medicine.name, String.format("%d", medicine.medicationAmount)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
-        if (iconId != 0) {
+        if (medicine.iconId != 0) {
             MedicineIcons icons = new MedicineIcons(context);
-            builder.setLargeIcon(icons.getIconBitmap(iconId));
+            builder.setLargeIcon(icons.getIconBitmap(medicine.iconId));
         }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
