@@ -129,6 +129,7 @@ dependencies {
     implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
     implementation("com.maltaisn:icondialog:$iconDialogVersion")
+    implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

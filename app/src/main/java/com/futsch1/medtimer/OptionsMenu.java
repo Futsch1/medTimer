@@ -23,6 +23,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.IdlingRegistry;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -55,6 +56,8 @@ public class OptionsMenu implements MenuProvider {
         });
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+
+        IdlingRegistry.getInstance().registerLooperAsIdlingResource(backgroundThread.getLooper());
     }
 
     public void fileSelected(Uri data) {
@@ -156,8 +159,8 @@ public class OptionsMenu implements MenuProvider {
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
+                    ReminderProcessor.requestReschedule(context);
                 });
-                handler.post(() -> ReminderProcessor.requestReschedule(context));
                 return true;
             });
         } else {

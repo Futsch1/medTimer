@@ -71,8 +71,6 @@ public class ScreenshotsTest extends BaseTestHelper {
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
-        AndroidTestHelper.setAllRemindersTo12AM();
-
         device.openNotification();
         device.wait(Until.findObject(By.text("MedTimer")), 2000);
         UiObject2 medTimerNotifications = device.findObject(By.text("MedTimer"));

@@ -41,8 +41,6 @@ public class CalendarTest extends BaseTestHelper {
 
         onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
 
-        AndroidTestHelper.setAllRemindersTo12AM();
-
         clickOnViewWithTimeout(allOf(withId(R.id.showOnlyOpen), isDisplayed()));
 
         int takenReminders = 0;

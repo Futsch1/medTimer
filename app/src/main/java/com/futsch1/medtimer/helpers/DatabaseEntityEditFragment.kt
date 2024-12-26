@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
@@ -60,11 +62,14 @@ abstract class DatabaseEntityEditFragment<T>(
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
     private var fragmentReady = false
+    private val idlingResource: CountingIdlingResource =
+        CountingIdlingResource("DatabaseEntityEditFragment")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.thread.start()
         medicineViewModel = MedicineViewModel(this.requireActivity().application)
+        IdlingRegistry.getInstance().register(idlingResource)
     }
 
     override fun onCreateView(
@@ -72,6 +77,8 @@ abstract class DatabaseEntityEditFragment<T>(
         savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(layoutId, container, false)
+
+        idlingResource.increment()
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
@@ -87,6 +94,7 @@ abstract class DatabaseEntityEditFragment<T>(
                     onEntityLoaded(entity!!, fragmentView!!)
                     // Only now allow getting data from fragment UI when it is closed
                     fragmentReady = true
+                    idlingResource.decrement()
                     // Now enter fragment
                     startPostponedEnterTransition()
                 }
@@ -110,6 +118,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onDestroy() {
         super.onDestroy()
         thread.quitSafely()
+        IdlingRegistry.getInstance().unregister(idlingResource)
     }
 
     override fun onStop() {

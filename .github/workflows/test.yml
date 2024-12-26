@@ -56,7 +56,9 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Pixel5
-          script: ./gradlew JacocoDebugCodeCoverage
+          script: |
+            adb shell su 0 date 01012100
+            ./gradlew JacocoDebugCodeCoverage
           cores: 4
 
       - name: Run fuzzing tests
