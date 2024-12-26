@@ -70,8 +70,12 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
                     scheduledReminder.medicine(), scheduledReminder.reminder());
             if (reminderEvent != null) {
                 reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
+                reminderEvent.stockHandled = taken;
                 reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-                medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+                long reminderEventId = medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+                if (taken) {
+                    ReminderProcessor.requestStockHandling(itemView.getContext(), (int) reminderEventId);
+                }
                 ReminderProcessor.requestReschedule(nextReminderText.getContext());
             }
         });

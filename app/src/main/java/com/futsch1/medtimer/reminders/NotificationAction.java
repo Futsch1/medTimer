@@ -27,6 +27,10 @@ public class NotificationAction {
             cancelPendingAlarms(context, reminderEventId);
 
             reminderEvent.status = status;
+            if (!reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN) {
+                reminderEvent.stockHandled = true;
+                ReminderProcessor.requestStockHandling(context, reminderEventId);
+            }
             reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
             medicineRepository.updateReminderEvent(reminderEvent);
             Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",

@@ -190,4 +190,8 @@
     <string name="interval_start_processed">Intervalle commence lorsqu&amp;apos;il est pris ou sauté</string>
     <string name="every_interval">Tous les %s</string>
     <string name="invalid_input">Entrée non valide</string>
+    <string name="off">Arrêt</string>
+    <string name="once_below_threshold">Une fois lors du passage en dessous du seuil</string>
+    <string name="always_below_threshold">Toujours en dessous du seuil</string>
+    <string name="out_of_stock_notification">Il ne reste plus que %2$s de %1$s!\nConsidérez de renouveler le médicament bientôt.</string>
 </resources>

@@ -88,6 +88,17 @@ public class ReminderProcessor extends BroadcastReceiver {
         return snoozeIntent;
     }
 
+    public static void requestStockHandling(Context context, int reminderEventId) {
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
+        OneTimeWorkRequest stockHandlingWork =
+                new OneTimeWorkRequest.Builder(StockHandlingWork.class)
+                        .setInputData(new Data.Builder()
+                                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                                .build())
+                        .build();
+        workManager.enqueue(stockHandlingWork);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);

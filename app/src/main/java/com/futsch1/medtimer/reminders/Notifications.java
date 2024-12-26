@@ -113,4 +113,29 @@ public class Notifications {
         }
     }
 
+    public void showOutOfStockNotification(String medicineName, String amount, Color color, int iconId, ReminderNotificationChannelManager.Importance importance) {
+        int notificationId = getNextNotificationId();
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+
+        PendingIntent contentIntent = getStartAppIntent(notificationId);
+
+        String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
+                .setSmallIcon(R.drawable.capsule)
+                .setContentTitle(context.getString(R.string.notification_title))
+                .setContentText(context.getString(R.string.out_of_stock_notification, medicineName, amount))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(contentIntent);
+        if (iconId != 0) {
+            MedicineIcons icons = new MedicineIcons(context);
+            builder.setLargeIcon(icons.getIconBitmap(iconId));
+        }
+        if (color != null) {
+            builder = builder.setColor(color.toArgb()).setColorized(true);
+        }
+
+        notificationManager.notify(notificationId, builder.build());
+        Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
+    }
+
 }

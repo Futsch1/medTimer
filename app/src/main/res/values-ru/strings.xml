@@ -192,4 +192,8 @@
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="every_interval">Каждый %s</string>
     <string name="invalid_input">Недопустимый ввод</string>
+    <string name="off">С сайта</string>
+    <string name="once_below_threshold">Один раз при падении ниже порога</string>
+    <string name="always_below_threshold">Всегда, когда ниже порога</string>
+    <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
 </resources>
