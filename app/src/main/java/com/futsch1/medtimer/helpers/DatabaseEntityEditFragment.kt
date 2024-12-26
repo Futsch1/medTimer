@@ -75,6 +75,9 @@ abstract class DatabaseEntityEditFragment<T>(
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
+
+        setupMenu(fragmentView!!)
+
         val handler = Handler(thread.looper)
         handler.post {
             entity = entityInterface.getEntity(medicineViewModel, getEntityId())
@@ -84,8 +87,6 @@ abstract class DatabaseEntityEditFragment<T>(
                     onEntityLoaded(entity!!, fragmentView!!)
                     // Only now allow getting data from fragment UI when it is closed
                     fragmentReady = true
-                    // Allow setting up the menu
-                    setupMenu(entity!!, fragmentView!!)
                     // Now enter fragment
                     startPostponedEnterTransition()
                 }
@@ -96,7 +97,7 @@ abstract class DatabaseEntityEditFragment<T>(
         return fragmentView!!
     }
 
-    protected open fun setupMenu(entity: T, fragmentView: View) {
+    protected open fun setupMenu(fragmentView: View) {
         val optionsMenu = OptionsMenu(
             this.requireContext(),
             MedicineViewModel(requireActivity().application),

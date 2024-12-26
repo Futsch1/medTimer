@@ -46,7 +46,6 @@
     <fragment
         android:id="@+id/editMedicineFragment"
         android:name="com.futsch1.medtimer.medicine.EditMedicineFragment"
-        android:label="@string/tab_medicine"
         tools:layout="@layout/fragment_edit_medicine">
         <argument
             android:name="medicineId"
@@ -117,7 +116,6 @@
     <fragment
         android:id="@+id/medicineStockFragment"
         android:name="com.futsch1.medtimer.medicine.MedicineStockFragment"
-        android:label="fragment_medicine_stock"
         tools:layout="@layout/fragment_medicine_stock">
         <argument
             android:name="medicineId"

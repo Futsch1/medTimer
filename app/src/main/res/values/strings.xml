@@ -189,4 +189,7 @@
     <string name="interval_start_processed">Interval starts when taken or skipped</string>
     <string name="every_interval">Every %s</string>
     <string name="invalid_input">Invalid input</string>
+    <string name="off">Off</string>
+    <string name="once_below_threshold">Once when falling below threshold</string>
+    <string name="always_below_threshold">Always when below threshold</string>
 </resources>

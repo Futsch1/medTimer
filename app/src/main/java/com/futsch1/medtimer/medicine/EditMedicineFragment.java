@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -35,6 +36,7 @@ import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.util.List;
+import java.util.Objects;
 
 import kotlin.Unit;
 
@@ -55,7 +57,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     }
 
     @Override
-    protected void setupMenu(Medicine medicine, @NonNull View fragmentView) {
+    protected void setupMenu(@NonNull View fragmentView) {
         requireActivity().addMenuProvider(new EditMedicineMenuProvider(getEntityId(), this.getThread(), this.getMedicineViewModel(), fragmentView), getViewLifecycleOwner());
     }
 
@@ -63,6 +65,8 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     public void onEntityLoaded(Medicine entity, @NonNull View fragmentView) {
         color = entity.color;
         iconId = entity.iconId;
+
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(entity.name);
 
         setupEnableColor(fragmentView, entity.useColor);
         setupColorButton(fragmentView, entity.useColor);
@@ -81,7 +85,6 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
                     startPostponedEnterTransition();
                 }
         );
-
     }
 
     private void setupEnableColor(View fragmentView, boolean useColor) {

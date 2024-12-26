@@ -43,9 +43,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     }
 
     @Override
-    protected void setupMenu(Reminder entity, @NonNull View fragmentView) {
-        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(entity, getThread(), medicineViewModel, fragmentView),
-                getViewLifecycleOwner());
+    protected void setupMenu(@NonNull View fragmentView) {
+        // Intentionally empty
     }
 
     @SuppressLint("SetTextI18n")
@@ -70,6 +69,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         setupCycleStartDate(entity);
 
         setupAddLinkedReminder(entity, fragmentView);
+
+        setupMenu(entity, fragmentView);
 
         if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
             setupIntervalBasedReminderSettings(entity, fragmentView);
@@ -194,6 +195,11 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private void setupAddLinkedReminder(Reminder entity, View fragmentView) {
         ExtendedFloatingActionButton addLinkedReminder = fragmentView.findViewById(R.id.addLinkedReminder);
         addLinkedReminder.setOnClickListener(v -> new LinkedReminderHandling(entity, medicineViewModel).addLinkedReminder(requireActivity()));
+    }
+
+    protected void setupMenu(Reminder entity, @NonNull View fragmentView) {
+        requireActivity().addMenuProvider(new AdvancedReminderSettingsMenuProvider(entity, getThread(), medicineViewModel, fragmentView),
+                getViewLifecycleOwner());
     }
 
     private void setupIntervalBasedReminderSettings(Reminder entity, View fragmentView) {
