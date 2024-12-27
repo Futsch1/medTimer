@@ -6,9 +6,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,16 +35,16 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
     private final InitIdlingResource idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
-    private HandlerThread thread;
     @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
     @SuppressWarnings("java:S1450")
     private MedicineViewAdapter adapter;
+    private HandlerThread thread;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread = new HandlerThread("GetSummary");
         this.thread.start();
     }
 
@@ -100,12 +98,10 @@ public class MedicinesFragment extends Fragment {
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> new Handler(thread.getLooper()).post(() -> {
-            Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-            medicineViewModel.deleteMedicine(medicine);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        }), () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
+            medicineViewModel.deleteMedicine((int) itemId);
+            adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void setupAddMedicineButton(View fragmentView) {

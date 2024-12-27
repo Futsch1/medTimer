@@ -68,7 +68,7 @@ class LinkedReminderHandling(
             internalDelete(r)
         }
 
-        medicineViewModel.deleteReminder(reminder)
+        medicineViewModel.deleteReminder(reminder.reminderId)
     }
 }
 

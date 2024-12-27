@@ -42,8 +42,8 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository.updateMedicine(medicine);
     }
 
-    public void deleteMedicine(Medicine medicine) {
-        medicineRepository.deleteMedicine(medicine);
+    public void deleteMedicine(int medicineId) {
+        medicineRepository.deleteMedicine(medicineId);
     }
 
     public LiveData<List<Reminder>> getLiveReminders(int medicineId) {
@@ -66,8 +66,8 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository.updateReminder(reminder);
     }
 
-    public void deleteReminder(Reminder reminder) {
-        medicineRepository.deleteReminder(reminder);
+    public void deleteReminder(int reminderId) {
+        medicineRepository.deleteReminder(reminderId);
     }
 
     public List<Reminder> getLinkedReminders(int reminderId) {

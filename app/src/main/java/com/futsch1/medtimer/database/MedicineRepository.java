@@ -90,8 +90,8 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
-    public void deleteMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicine));
+    public void deleteMedicine(int medicineId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId)));
     }
 
     public long insertReminder(Reminder reminder) {
@@ -102,8 +102,8 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminder(reminder));
     }
 
-    public void deleteReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(reminder));
+    public void deleteReminder(int reminderId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(medicineDao.getReminder(reminderId)));
     }
 
     public long insertReminderEvent(ReminderEvent reminderEvent) {
@@ -136,20 +136,12 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
     }
 
-    public void deleteReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvent(reminderEvent));
+    public void deleteReminderEvent(int reminderEventId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvent(medicineDao.getReminderEvent(reminderEventId)));
     }
 
     public List<Reminder> getLinkedReminders(int reminderId) {
         return medicineDao.getLinkedReminders(reminderId);
-    }
-
-    public LiveData<Medicine> getLiveMedicine(int medicineId) {
-        return medicineDao.getLiveMedicine(medicineId);
-    }
-
-    public LiveData<Reminder> getLiveReminder(int reminderId) {
-        return medicineDao.getLiveReminder(reminderId);
     }
 
     interface Insert<T> {

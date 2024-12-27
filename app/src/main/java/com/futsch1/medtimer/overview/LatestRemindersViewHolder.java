@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.overview;
 
 import android.app.Application;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private final Chip chipTaken;
     private final Chip chipSkipped;
     private final ChipGroup chipGroup;
-    private final HandlerThread thread;
     private boolean checkedChanged = false;
 
     private LatestRemindersViewHolder(View itemView) {
@@ -37,8 +34,6 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         chipTaken = itemView.findViewById(R.id.chipTaken);
         chipSkipped = itemView.findViewById(R.id.chipSkipped);
         chipGroup = itemView.findViewById(R.id.takenOrSkipped);
-        thread = new HandlerThread("DeleteReminderEvent");
-        thread.start();
     }
 
     static LatestRemindersViewHolder create(ViewGroup parent) {
@@ -97,12 +92,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private void processDeleteReRaiseReminderEvent(ReminderEvent reminderEvent, boolean checked) {
         if (checked && !checkedChanged) {
             new DeleteHelper(itemView.getContext()).deleteItem(R.string.delete_re_raise_event, () -> {
-                Handler handler = new Handler(thread.getLooper());
-                handler.post(() -> {
-                    MedicineRepository medicineRepository = new MedicineRepository((Application) itemView.getContext().getApplicationContext());
-                    medicineRepository.deleteReminderEvent(reminderEvent);
-                    ReminderProcessor.requestReschedule(itemView.getContext());
-                });
+                MedicineRepository medicineRepository = new MedicineRepository((Application) itemView.getContext().getApplicationContext());
+                medicineRepository.deleteReminderEvent(reminderEvent.reminderEventId);
+                ReminderProcessor.requestReschedule(itemView.getContext());
             }, () -> {
                 // Intentionally empty
             });
