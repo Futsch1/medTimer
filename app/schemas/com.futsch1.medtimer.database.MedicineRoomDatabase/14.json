@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "aeebdd3b8ba63273328508914779223d",
+    "identityHash": "fa5c81b75f334598e653b88142dd645f",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `medicationStockReminder` TEXT DEFAULT 'OFF', `medicationAmount` INTEGER NOT NULL DEFAULT 0, `medicationAmountReminderThreshold` INTEGER NOT NULL DEFAULT 0, `medicationPackSizes` TEXT DEFAULT '[]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` INTEGER NOT NULL DEFAULT 0, `outOfStockReminderThreshold` INTEGER NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]')",
         "fields": [
           {
             "fieldPath": "name",
@@ -49,29 +49,29 @@
             "defaultValue": "0"
           },
           {
-            "fieldPath": "medicationStockReminder",
-            "columnName": "medicationStockReminder",
+            "fieldPath": "outOfStockReminder",
+            "columnName": "outOfStockReminder",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "'OFF'"
           },
           {
-            "fieldPath": "medicationAmount",
-            "columnName": "medicationAmount",
+            "fieldPath": "amount",
+            "columnName": "amount",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
           },
           {
-            "fieldPath": "medicationAmountReminderThreshold",
-            "columnName": "medicationAmountReminderThreshold",
+            "fieldPath": "outOfStockReminderThreshold",
+            "columnName": "outOfStockReminderThreshold",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
           },
           {
-            "fieldPath": "medicationPackSizes",
-            "columnName": "medicationPackSizes",
+            "fieldPath": "refillSizes",
+            "columnName": "refillSizes",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "'[]'"
@@ -317,7 +317,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aeebdd3b8ba63273328508914779223d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fa5c81b75f334598e653b88142dd645f')"
     ]
   }
 }

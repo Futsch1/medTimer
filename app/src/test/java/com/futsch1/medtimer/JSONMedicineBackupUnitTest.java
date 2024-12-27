@@ -90,10 +90,10 @@ class JSONMedicineBackupUnitTest {
         "useColor": true,
         "notificationImportance": 3,
         "iconId": 5,
-        "medicationStockReminder": "OFF",
-        "medicationAmount": 0,
-        "medicationAmountReminderThreshold": 0,
-        "medicationPackSizes": []
+        "outOfStockReminder": "OFF",
+        "amount": 0,
+        "outOfStockReminderThreshold": 0,
+        "refillSizes": []
       }
     }
   ]
@@ -219,10 +219,10 @@ class JSONMedicineBackupUnitTest {
         "useColor": true,
         "notificationImportance": 4,
         "iconId": 0,
-        "medicationStockReminder": "OFF",
-        "medicationAmount": 0,
-        "medicationAmountReminderThreshold": 0,
-        "medicationPackSizes": []
+        "outOfStockReminder": "OFF",
+        "amount": 0,
+        "outOfStockReminderThreshold": 0,
+        "refillSizes": []
       }
     },
     {
@@ -284,10 +284,10 @@ class JSONMedicineBackupUnitTest {
         "useColor": false,
         "notificationImportance": 5,
         "iconId": 7,
-        "medicationStockReminder": "OFF",
-        "medicationAmount": 0,
-        "medicationAmountReminderThreshold": 0,
-        "medicationPackSizes": []
+        "outOfStockReminder": "OFF",
+        "amount": 0,
+        "outOfStockReminderThreshold": 0,
+        "refillSizes": []
       }
     }
   ]
