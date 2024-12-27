@@ -28,7 +28,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
     }
 
     @Override
-    public void onEntityLoaded(ReminderEvent entity, @NonNull View fragmentView) {
+    public boolean onEntityLoaded(ReminderEvent entity, @NonNull View fragmentView) {
         editEventName = fragmentView.findViewById(R.id.editEventName);
         editEventName.setText(entity.medicineName);
 
@@ -46,6 +46,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
         editEventRemindedDate.setOnFocusChangeListener((v, hasFocus) -> onFocusEditDate(hasFocus));
         editEventRemindedDate.setVisibility(EditEventFragmentArgs.fromBundle(requireArguments()).getEventCanEditDate() ? View.VISIBLE : View.GONE);
 
+        return true;
     }
 
     private void onFocusEditTime(boolean hasFocus) {

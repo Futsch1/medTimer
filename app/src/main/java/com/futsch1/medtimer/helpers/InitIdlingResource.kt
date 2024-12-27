@@ -6,7 +6,7 @@ import androidx.test.espresso.IdlingResource.ResourceCallback
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.Volatile
 
-class InitIdlingResource(val resourceName: String) : IdlingResource {
+class InitIdlingResource(private val resourceName: String) : IdlingResource {
     init {
         IdlingRegistry.getInstance().register(this)
     }
@@ -27,6 +27,10 @@ class InitIdlingResource(val resourceName: String) : IdlingResource {
 
     override fun registerIdleTransitionCallback(callback: ResourceCallback) {
         mCallback = callback
+    }
+
+    fun resetInitialized() {
+        mIsIdleNow.set(false)
     }
 
     fun setInitialized() {

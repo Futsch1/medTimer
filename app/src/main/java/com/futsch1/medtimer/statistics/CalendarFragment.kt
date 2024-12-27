@@ -53,6 +53,7 @@ class CalendarFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        idlingResource.resetInitialized()
         val fragmentView: View =
             inflater.inflate(R.layout.fragment_calendar, container, false)
 

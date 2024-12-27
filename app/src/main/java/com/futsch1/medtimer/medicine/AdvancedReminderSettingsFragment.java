@@ -49,7 +49,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
+    public boolean onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
         daysArray = getResources().getStringArray(R.array.days);
 
         periodSettings = new PeriodSettings(fragmentView, getParentFragmentManager(), entity);
@@ -77,6 +77,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         }
 
         setupVisibilities(entity, fragmentView);
+
+        return true;
     }
 
     @Override

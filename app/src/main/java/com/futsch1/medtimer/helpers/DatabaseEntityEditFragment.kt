@@ -73,6 +73,7 @@ abstract class DatabaseEntityEditFragment<T>(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        idlingResource.resetInitialized()
         fragmentView = inflater.inflate(layoutId, container, false)
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
@@ -86,18 +87,22 @@ abstract class DatabaseEntityEditFragment<T>(
             if (entity != null) {
                 requireActivity().runOnUiThread {
                     // Signal that entity was loaded
-                    onEntityLoaded(entity!!, fragmentView!!)
-                    // Only now allow getting data from fragment UI when it is closed
-                    fragmentReady = true
-                    idlingResource.setInitialized()
-                    // Now enter fragment
-                    startPostponedEnterTransition()
+                    if (onEntityLoaded(entity!!, fragmentView!!)) {
+                        setFragmentReady()
+                    }
                 }
             }
         }
 
-
         return fragmentView!!
+    }
+
+    protected fun setFragmentReady() {
+        // Only now allow getting data from fragment UI when it is closed
+        fragmentReady = true
+        idlingResource.setInitialized()
+        // Now enter fragment
+        startPostponedEnterTransition()
     }
 
     protected open fun setupMenu(fragmentView: View) {
@@ -124,7 +129,7 @@ abstract class DatabaseEntityEditFragment<T>(
         }
     }
 
-    abstract fun onEntityLoaded(entity: T, fragmentView: View)
+    abstract fun onEntityLoaded(entity: T, fragmentView: View): Boolean
     abstract fun fillEntityData(entity: T, fragmentView: View)
     abstract fun getEntityId(): Int
 }

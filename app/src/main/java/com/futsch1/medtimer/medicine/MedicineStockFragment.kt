@@ -41,7 +41,7 @@ class MedicineStockFragment :
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onEntityLoaded(entity: Medicine, fragmentView: View) {
+    override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
         fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
             .setText(entity.medicationAmount.toString())
         fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold)
@@ -55,5 +55,7 @@ class MedicineStockFragment :
         stockReminder.setText(
             stockReminderValueToString(entity.medicationStockReminder, this.resources), false
         )
+
+        return true
     }
 }

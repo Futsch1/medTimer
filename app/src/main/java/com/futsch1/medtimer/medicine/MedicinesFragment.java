@@ -51,7 +51,7 @@ public class MedicinesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        idlingResource.resetInitialized();
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
         RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
