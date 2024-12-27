@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 
@@ -39,15 +38,13 @@ public class DeleteLinkedReminderTest extends BaseTestHelper {
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 1);
 
-        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(1));
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(scrollTo(), click());
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
         AndroidTestHelper.setTime(0, 2);
 
-        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(0));
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(click());
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(scrollTo(), click());
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());

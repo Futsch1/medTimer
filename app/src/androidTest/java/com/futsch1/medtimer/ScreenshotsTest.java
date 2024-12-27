@@ -92,7 +92,8 @@ public class ScreenshotsTest extends BaseTestHelper {
         onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(1));
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(scrollTo(), click());
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
