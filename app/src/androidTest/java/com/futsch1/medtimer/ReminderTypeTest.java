@@ -136,6 +136,7 @@ public class ReminderTypeTest extends BaseTestHelper {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
+            onView(withId(R.id.nextReminders)).perform(RecyclerViewActions.scrollToPosition(0));
             onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(click());
 
             cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));

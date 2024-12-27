@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
-public class MedicineViewAdapter extends ListAdapter<MedicineWithReminders, MedicineViewHolder> {
+public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders, MedicineViewHolder> {
 
     private final HandlerThread thread;
     private final Activity activity;
 
     public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, HandlerThread thread, Activity activity) {
-        super(diffCallback);
+        super(diffCallback, MedicineViewAdapter.class.getName());
         setHasStableIds(true);
         this.thread = thread;
         this.activity = activity;
