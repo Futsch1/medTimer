@@ -12,6 +12,7 @@ import androidx.core.text.util.LocalePreferences
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.InitIdlingResource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -32,6 +33,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class CalendarFragment : Fragment() {
+    private var idlingResource = InitIdlingResource(CalendarFragment::class.java.name)
     private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
     private var calendarEventsViewModel: CalendarEventsViewModel? = null
@@ -61,6 +63,9 @@ class CalendarFragment : Fragment() {
 
         currentDayEvents = fragmentView.findViewById(R.id.currentDayEvents)
         currentDayEvents?.focusable = View.NOT_FOCUSABLE
+
+        setupCalendarView(medicineCalenderArgs)
+
         calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
         calendarEventsViewModel!!.getEventForDays(
             medicineCalenderArgs.medicineId,
@@ -71,9 +76,8 @@ class CalendarFragment : Fragment() {
                 this.dayStrings = dayStrings
                 calendarView?.notifyCalendarChanged()
                 updateCurrentDay()
+                idlingResource.setInitialized()
             }
-
-        setupCalendarView(medicineCalenderArgs)
 
         return fragmentView
     }
@@ -204,5 +208,10 @@ class CalendarFragment : Fragment() {
         } else {
             currentDayEvents?.setText(null)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        idlingResource.destroy()
     }
 }

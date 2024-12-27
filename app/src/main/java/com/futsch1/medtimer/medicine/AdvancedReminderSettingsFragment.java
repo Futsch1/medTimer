@@ -39,7 +39,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private IntervalEditor intervalEditor;
 
     public AdvancedReminderSettingsFragment() {
-        super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings);
+        super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings, AdvancedReminderSettingsFragment.class.getName());
     }
 
     @Override

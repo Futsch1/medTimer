@@ -54,8 +54,11 @@ public class BaseTestHelper {
         } catch (UiObjectNotFoundException | InterruptedException e) {
             System.out.println("There is no permissions dialog to interact with");
         }
+    }
+
+    protected boolean isTimeBetween18And23() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        assert (dateTime.getHour() >= 18 && dateTime.getHour() <= 23);
+        return (dateTime.getHour() >= 18 && dateTime.getHour() <= 23);
     }
 }

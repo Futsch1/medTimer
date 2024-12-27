@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.overview;
 
 import android.app.Application;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.LayoutInflater;
@@ -92,11 +91,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {
-        Intent i =
-                taken ?
-                        ReminderProcessor.getTakenActionIntent(itemView.getContext(), reminderEvent.reminderEventId) :
-                        ReminderProcessor.getDismissedActionIntent(itemView.getContext(), reminderEvent.reminderEventId);
-        itemView.getContext().sendBroadcast(i, "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
+        ReminderProcessor.requestActionIntent(itemView.getContext(), reminderEvent.reminderEventId, taken);
     }
 
     private void processDeleteReRaiseReminderEvent(ReminderEvent reminderEvent, boolean checked) {

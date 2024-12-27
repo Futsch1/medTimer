@@ -13,14 +13,11 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
-import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -69,11 +66,8 @@ public class ScreenshotsTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(2000));
-
         device.openNotification();
-        device.wait(Until.findObject(By.text("MedTimer")), 2000);
-        UiObject2 medTimerNotifications = device.findObject(By.text("MedTimer"));
+        UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
         int startX = medTimerNotifications.getVisibleBounds().centerX();
         int startY = medTimerNotifications.getVisibleBounds().top;
         int endY = medTimerNotifications.getVisibleBounds().bottom;
@@ -83,9 +77,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         Screengrab.screenshot("5");
         device.pressBack();
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
-        onViewWithTimeout(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+        onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(1, scrollTo()));
         onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(1, R.id.chipTaken)).perform(click());
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(2, scrollTo()));
@@ -97,14 +89,14 @@ public class ScreenshotsTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings));
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
-        clickOnViewWithTimeout(withId(R.id.chartChip));
+        onView(withId(R.id.chartChip)).perform(click());
         Screengrab.screenshot("6");
 
         onView(withId(R.id.timeSpinner)).perform(click());
@@ -115,28 +107,26 @@ public class ScreenshotsTest extends BaseTestHelper {
                         0))
                 .atPosition(1).perform(click());
 
-        clickOnViewWithTimeout(withId(R.id.tableChip));
+        onView(withId(R.id.tableChip)).perform(click());
         Screengrab.screenshot("7");
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
-        clickOnViewWithTimeout(
+        onView(
                 allOf(withId(R.id.tableColumnHeaderContainer),
                         childAtPosition(
                                 withId(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView),
                                 1)
-                ));
+                )).perform(click());
 
         AtomicReference<TableView> tableView = new AtomicReference<>();
         mActivityScenarioRule.getScenario().onActivity(activity -> tableView.set(activity.findViewById(R.id.reminder_table)));
         int tableCellRecyclerViewId = tableView.get().getCellRecyclerView().getId();
 
-        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText(startsWith("Selen (200 µg)"))));
 
         onView(withId(R.id.filter)).perform(replaceText("B"), closeSoftKeyboard());
 
-        onViewWithTimeout(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
+        onView(new RecyclerViewMatcher(tableCellRecyclerViewId).atPositionOnView(0, "medicineName"))
                 .check(matches(withText("B12 (500µg)")));
 
         onView(withId(com.google.android.material.R.id.text_input_end_icon)).perform(click());

@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.navigation.Navigation.findNavController
+import androidx.test.espresso.IdlingRegistry
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
@@ -41,7 +42,8 @@ class EditMedicineMenuProvider(
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
-                val threadHandler = Handler(thread.getLooper())
+                IdlingRegistry.getInstance().registerLooperAsIdlingResource(thread.looper)
+                val threadHandler = Handler(thread.looper)
                 threadHandler.post {
                     medicineViewModel.deleteMedicine(medicineViewModel.getMedicine(medicineId))
                     val mainHandler = Handler(Looper.getMainLooper())
@@ -49,6 +51,7 @@ class EditMedicineMenuProvider(
                         val navController = findNavController(fragmentEditMedicine)
                         navController.navigateUp()
                     }
+                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
                 }
             }, {
                 // do nothing

@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
+import androidx.test.espresso.IdlingRegistry
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
@@ -47,10 +48,12 @@ class LinkedReminderHandling(
     fun deleteReminder(context: Context, thread: HandlerThread, postMainAction: () -> Unit) {
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
-            val threadHandler = Handler(thread.getLooper())
+            IdlingRegistry.getInstance().registerLooperAsIdlingResource(thread.looper)
+            val threadHandler = Handler(thread.looper)
             threadHandler.post {
                 internalDelete(reminder)
                 Handler(Looper.getMainLooper()).post(postMainAction)
+                IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
             }
         }, {})
 

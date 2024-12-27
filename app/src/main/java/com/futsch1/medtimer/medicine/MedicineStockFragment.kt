@@ -15,7 +15,8 @@ import com.google.android.material.textfield.TextInputEditText
 class MedicineStockFragment :
     DatabaseEntityEditFragment<Medicine>(
         MedicineEntityInterface(),
-        R.layout.fragment_medicine_stock
+        R.layout.fragment_medicine_stock,
+        MedicineStockFragment::class.java.name
     ) {
 
     override fun getEntityId(): Int {

@@ -53,7 +53,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
-        super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine);
+        super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment.class.getName());
     }
 
     @Override

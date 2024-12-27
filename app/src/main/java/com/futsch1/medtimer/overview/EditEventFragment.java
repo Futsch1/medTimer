@@ -24,7 +24,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
     private EditText editEventRemindedDate;
 
     public EditEventFragment() {
-        super(new ReminderEventEntityInterface(), R.layout.fragment_edit_event);
+        super(new ReminderEventEntityInterface(), R.layout.fragment_edit_event, EditEventFragment.class.getName());
     }
 
     @Override
