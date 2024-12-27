@@ -68,7 +68,7 @@ public class Medicine {
     }
 
     public boolean isStockManagementActive() {
-        return (this.medicationAmount != 0 || medicationStockReminder != MedicationStockReminder.OFF);
+        return (medicationAmount != 0 || medicationStockReminder != MedicationStockReminder.OFF || medicationAmountReminderThreshold != 0);
     }
 
     public enum MedicationStockReminder {

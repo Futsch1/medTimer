@@ -20,6 +20,7 @@ import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 
 @SuppressLint("DefaultLocale")
@@ -87,10 +88,7 @@ public class Notifications {
             instructions = " " + instructions;
         }
         final int amountStringId = reminder.amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
-        String medicineNameString = medicine.name;
-        if (medicine.isStockManagementActive()) {
-            medicineNameString += " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.medicationAmount), medicine.medicationAmount <= medicine.medicationAmountReminderThreshold ? " ⚠" : "") + ")";
-        }
+        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine);
         return context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
     }
 

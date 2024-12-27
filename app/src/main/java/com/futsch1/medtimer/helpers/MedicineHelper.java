@@ -1,5 +1,11 @@
 package com.futsch1.medtimer.helpers;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+
+import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.Medicine;
+
 import java.util.regex.Pattern;
 
 public class MedicineHelper {
@@ -11,5 +17,14 @@ public class MedicineHelper {
 
     public static String normalizeMedicineName(String medicineName) {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("");
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String getMedicineNameWithStockText(Context context, Medicine medicine) {
+        if (medicine.isStockManagementActive()) {
+            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.medicationAmount), medicine.medicationAmount <= medicine.medicationAmountReminderThreshold ? " ⚠)" : ")");
+        } else {
+            return medicine.name;
+        }
     }
 }
