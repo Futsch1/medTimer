@@ -184,4 +184,12 @@
     <string name="once_below_threshold">低于临界值时一次</string>
     <string name="always_below_threshold">始终低于临界值</string>
     <string name="out_of_stock_notification">只剩下%2$s的%1$s的药了!</string>
+    <string name="medicine_stock_string">%1$s 左 %2$s</string>
+    <string name="out_of_stock_notification_title">药品缺货提醒</string>
+    <string name="medicine_stock">医药库存</string>
+    <string name="amount">金额</string>
+    <string name="out_of_stock_reminder">缺货提醒</string>
+    <string name="reminder_threshold">提醒临界值</string>
+    <string name="refill_size">笔芯尺寸</string>
+    <string name="refill_now">立即加注</string>
 </resources>

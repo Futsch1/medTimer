@@ -194,6 +194,11 @@
     <string name="always_below_threshold">Always when below threshold</string>
     <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
     <string name="medicine_stock_string">%1$s left%2$s</string>
-    <string name="out_of_stock_notification_title">Medicine refill reminder</string>
+    <string name="out_of_stock_notification_title">Medicine out of stock reminder</string>
     <string name="medicine_stock">Medicine stock</string>
+    <string name="amount">Amount</string>
+    <string name="out_of_stock_reminder">Out of stock reminder</string>
+    <string name="reminder_threshold">Reminder threshold</string>
+    <string name="refill_size">Refill size</string>
+    <string name="refill_now">Refill now</string>
 </resources>

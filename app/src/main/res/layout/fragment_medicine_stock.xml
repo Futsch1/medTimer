@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:hint="Amount left">
+        android:hint="@string/amount">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/amountLeft"
@@ -29,7 +29,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Out of stock reminder"
+        android:hint="@string/out_of_stock_reminder"
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -44,39 +44,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:hint="Reminder threshold">
+        android:hint="@string/reminder_threshold">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/reminderThreshold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
+            android:maxWidth="488dp"
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/boxSizeLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:hint="Box size">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/boxSize"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/refillSizeLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            tools:ignore="TextContrastCheck" />
+            android:layout_margin="4dp"
+            android:layout_weight="3"
+            android:hint="@string/refill_size">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/refillSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                tools:ignore="TextContrastCheck" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/openStockTracking"
-        style="?attr/materialIconButtonFilledStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add box size to stock" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/refillNow"
+            style="?attr/materialIconButtonFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxWidth="320dp"
+            android:text="@string/refill_now" />
+    </LinearLayout>
 
 
 </LinearLayout>

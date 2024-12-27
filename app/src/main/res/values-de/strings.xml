@@ -188,5 +188,13 @@
     <string name="off">Aus</string>
     <string name="once_below_threshold">Einmal beim Unterschreiten des Schwellenwerts</string>
     <string name="always_below_threshold">Immer, wenn der Schwellenwert unterschritten wird</string>
-    <string name="out_of_stock_notification">Es ist nur noch %2$s von %1$s übrig! Bitte füllen Sie das Medikament bald nach.</string>
+    <string name="out_of_stock_notification">Es ist nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
+    <string name="medicine_stock_string">%1$s übrig%2$s</string>
+    <string name="out_of_stock_notification_title">Erinnerung an Medikamentenvorrat</string>
+    <string name="medicine_stock">Medikamentenvorrat</string>
+    <string name="amount">Anzahl</string>
+    <string name="out_of_stock_reminder">Vorratserinnerung</string>
+    <string name="reminder_threshold">Erinnerungsschwelle</string>
+    <string name="refill_size">Größe der Nachfüllpackung</string>
+    <string name="refill_now">Jetzt nachfüllen</string>
 </resources>

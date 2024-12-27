@@ -193,5 +193,13 @@
     <string name="off">Spento</string>
     <string name="once_below_threshold">Una volta quando si scende sotto la soglia</string>
     <string name="always_below_threshold">Sempre quando è al di sotto della soglia</string>
-    <string name="out_of_stock_notification">È rimasto solo il %2$s del %1$s!\nConsidera di ricaricare presto il farmaco.</string>
+    <string name="out_of_stock_notification">È rimasto solo il %2$s del %1$s!\nConsidera di ricaricare presto il medicino.</string>
+    <string name="medicine_stock_string">%1$s sinistra%2$s</string>
+    <string name="out_of_stock_notification_title">Promemoria per fare scorta di medicinali</string>
+    <string name="medicine_stock">Scorte de medicinali</string>
+    <string name="amount">Quantità</string>
+    <string name="out_of_stock_reminder">Promemoria sull&amp;apos;esaurimento delle scorte</string>
+    <string name="reminder_threshold">Soglia di richiamo</string>
+    <string name="refill_size">Dimensione della ricarica</string>
+    <string name="refill_now">Ricarica ora</string>
 </resources>

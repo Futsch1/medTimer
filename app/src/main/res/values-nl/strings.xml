@@ -189,4 +189,12 @@
     <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
     <string name="always_below_threshold">Altijd wanneer onder drempel</string>
     <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
+    <string name="medicine_stock_string">%1$s links%2$s</string>
+    <string name="out_of_stock_notification_title">Herinnering aan behandelingsvoorraad</string>
+    <string name="medicine_stock">Behandelingsvoorraad</string>
+    <string name="amount">Hoeveelheid</string>
+    <string name="out_of_stock_reminder">Voorraadherinnering</string>
+    <string name="reminder_threshold">Herinnering drempel</string>
+    <string name="refill_size">Navulformaat</string>
+    <string name="refill_now">Nu bijvullen</string>
 </resources>
