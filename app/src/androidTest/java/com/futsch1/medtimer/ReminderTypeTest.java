@@ -79,7 +79,7 @@ public class ReminderTypeTest extends BaseTestHelper {
         onView(withId(R.id.createReminder)).perform(click());
 
         // Check calendar view not crashing
-        onView(withId(R.id.openCalendar)).perform(click());
+        onView(withId(R.id.openCalendar)).perform(scrollTo(), click());
         pressBack();
 
         // Check reminder list
