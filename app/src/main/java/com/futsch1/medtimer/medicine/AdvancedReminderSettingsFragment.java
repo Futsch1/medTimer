@@ -39,7 +39,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private IntervalEditor intervalEditor;
 
     public AdvancedReminderSettingsFragment() {
-        super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings);
+        super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings, AdvancedReminderSettingsFragment.class.getName());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
+    public boolean onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
         daysArray = getResources().getStringArray(R.array.days);
 
         periodSettings = new PeriodSettings(fragmentView, getParentFragmentManager(), entity);
@@ -77,6 +77,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         }
 
         setupVisibilities(entity, fragmentView);
+
+        return true;
     }
 
     @Override

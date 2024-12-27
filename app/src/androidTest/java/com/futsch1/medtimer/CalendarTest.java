@@ -7,13 +7,10 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -39,7 +36,11 @@ public class CalendarTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        clickOnViewWithTimeout(allOf(withId(R.id.showOnlyOpen), isDisplayed()));
+        if (!isTimeBetween18And23()) {
+            AndroidTestHelper.setAllRemindersTo12AM();
+        }
+
+        onView(allOf(withId(R.id.showOnlyOpen), isDisplayed())).perform(click());
 
         int takenReminders = 0;
 
@@ -51,23 +52,19 @@ public class CalendarTest extends BaseTestHelper {
             }
             takenReminders++;
         }
-        onViewWithTimeout(new RecyclerViewMatcher(R.id.latestReminders).sizeMatcher(0)).check(matches(isDisplayed()));
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
+        onView(new RecyclerViewMatcher(R.id.latestReminders).sizeMatcher(0)).check(matches(isDisplayed()));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onViewWithTimeout(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)).perform(click());
-
+        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)).perform(click());
         onView(allOf(withId(R.id.openCalendar), isDisplayed())).perform(click());
-
-        onViewWithTimeout(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
+        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
 
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
         onView(allOf(withId(R.id.calendarChip), isDisplayed())).perform(click());
-
-        onViewWithTimeout(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
+        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
     }
 }

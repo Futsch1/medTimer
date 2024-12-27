@@ -2,7 +2,6 @@ package com.futsch1.medtimer.medicine
 
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -41,15 +40,9 @@ class EditMedicineMenuProvider(
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
-                val threadHandler = Handler(thread.getLooper())
-                threadHandler.post {
-                    medicineViewModel.deleteMedicine(medicineViewModel.getMedicine(medicineId))
-                    val mainHandler = Handler(Looper.getMainLooper())
-                    mainHandler.post {
-                        val navController = findNavController(fragmentEditMedicine)
-                        navController.navigateUp()
-                    }
-                }
+                medicineViewModel.deleteMedicine(medicineId)
+                val navController = findNavController(fragmentEditMedicine)
+                navController.navigateUp()
             }, {
                 // do nothing
             })

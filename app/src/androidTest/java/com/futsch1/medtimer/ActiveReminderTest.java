@@ -8,7 +8,6 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -37,7 +36,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(withId(R.id.open_advanced_settings)).perform(click());
 
         onView(withId(R.id.inactive)).perform(click());
@@ -45,7 +43,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -56,7 +53,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(1)).check(matches(isEnabled()));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -69,7 +65,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -82,7 +77,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -95,7 +89,6 @@ public class ActiveReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
         onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(1)).check(matches(isEnabled()));
     }
 

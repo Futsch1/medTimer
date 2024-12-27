@@ -53,7 +53,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
-        super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine);
+        super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment.class.getName());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     }
 
     @Override
-    public void onEntityLoaded(Medicine entity, @NonNull View fragmentView) {
+    public boolean onEntityLoaded(Medicine entity, @NonNull View fragmentView) {
         color = entity.color;
         iconId = entity.iconId;
 
@@ -82,9 +82,10 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
         this.getMedicineViewModel().getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), l -> {
                     this.sortAndSubmitList(l);
-                    startPostponedEnterTransition();
+                    this.setFragmentReady();
                 }
         );
+        return false;
     }
 
     private void setupEnableColor(View fragmentView, boolean useColor) {

@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.idling.CountingIdlingResource
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
@@ -49,6 +47,7 @@ class ReminderEventEntityInterface : DatabaseEntityEditFragment.EntityInterface<
 abstract class DatabaseEntityEditFragment<T>(
     private val entityInterface: EntityInterface<T>,
     private val layoutId: Int,
+    val name: String
 ) :
     Fragment() {
 
@@ -62,23 +61,20 @@ abstract class DatabaseEntityEditFragment<T>(
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
     private var fragmentReady = false
-    private val idlingResource: CountingIdlingResource =
-        CountingIdlingResource("DatabaseEntityEditFragment")
+    private val idlingResource = InitIdlingResource(name)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.thread.start()
         medicineViewModel = MedicineViewModel(this.requireActivity().application)
-        IdlingRegistry.getInstance().register(idlingResource)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        idlingResource.resetInitialized()
         fragmentView = inflater.inflate(layoutId, container, false)
-
-        idlingResource.increment()
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
@@ -91,18 +87,22 @@ abstract class DatabaseEntityEditFragment<T>(
             if (entity != null) {
                 requireActivity().runOnUiThread {
                     // Signal that entity was loaded
-                    onEntityLoaded(entity!!, fragmentView!!)
-                    // Only now allow getting data from fragment UI when it is closed
-                    fragmentReady = true
-                    idlingResource.decrement()
-                    // Now enter fragment
-                    startPostponedEnterTransition()
+                    if (onEntityLoaded(entity!!, fragmentView!!)) {
+                        setFragmentReady()
+                    }
                 }
             }
         }
 
-
         return fragmentView!!
+    }
+
+    protected fun setFragmentReady() {
+        // Only now allow getting data from fragment UI when it is closed
+        fragmentReady = true
+        idlingResource.setInitialized()
+        // Now enter fragment
+        startPostponedEnterTransition()
     }
 
     protected open fun setupMenu(fragmentView: View) {
@@ -118,7 +118,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onDestroy() {
         super.onDestroy()
         thread.quitSafely()
-        IdlingRegistry.getInstance().unregister(idlingResource)
+        idlingResource.destroy()
     }
 
     override fun onStop() {
@@ -129,7 +129,7 @@ abstract class DatabaseEntityEditFragment<T>(
         }
     }
 
-    abstract fun onEntityLoaded(entity: T, fragmentView: View)
+    abstract fun onEntityLoaded(entity: T, fragmentView: View): Boolean
     abstract fun fillEntityData(entity: T, fragmentView: View)
     abstract fun getEntityId(): Int
 }

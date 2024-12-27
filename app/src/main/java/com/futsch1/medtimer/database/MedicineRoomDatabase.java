@@ -11,9 +11,12 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class},
@@ -39,7 +42,16 @@ import java.util.concurrent.Executors;
 public abstract class MedicineRoomDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 1;
     static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+            new IdlingThreadPoolExecutor(
+                    "DatabaseWriteExecutor", NUMBER_OF_THREADS, NUMBER_OF_THREADS, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
+                    new ThreadFactory() {
+                        private int count = 1;
+
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            return new Thread(r, "DatabaseWrite-" + count++);
+                        }
+                    });
     // marking the instance as volatile to ensure atomic access to the variable
     @SuppressWarnings("java:S3077")
     private static volatile MedicineRoomDatabase instance;

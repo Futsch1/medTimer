@@ -7,18 +7,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
-public class ReminderViewAdapter extends ListAdapter<Reminder, ReminderViewHolder> {
+public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderViewHolder> {
 
     private final FragmentActivity fragmentActivity;
     private final HandlerThread thread;
 
     public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback,
                                FragmentActivity fragmentActivity, HandlerThread thread) {
-        super(diffCallback);
+        super(diffCallback, ReminderViewAdapter.class.getName());
         this.fragmentActivity = fragmentActivity;
         this.thread = thread;
         setHasStableIds(true);

@@ -1,13 +1,12 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -20,10 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,61 +35,34 @@ import java.util.Date;
 
 @SuppressWarnings("java:S2925")
 public class AndroidTestHelper {
-    public static ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
+    static void setAllRemindersTo12AM() {
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
+        setReminderTo12AM(0);
+        setReminderTo12AM(1);
+        setReminderTo12AM(2);
+        setReminderTo12AM(3);
 
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
     }
 
-    public static void createReminder(String amount, LocalTime time) {
-        clickOnViewWithTimeout(withId(R.id.addReminder));
-
-        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
-
-        if (time != null) {
-            onView(withId(R.id.editReminderTime)).perform(click());
-            setTime(time.getHour(), time.getMinute());
-        }
-
-        onView(withId(R.id.createReminder)).perform(click());
+    public static void navigateTo(MainMenu mainMenu) {
+        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
     }
 
-    static void clickOnViewWithTimeout(
-            Matcher<View> matcher
-    ) {
-        int retries = 10;
-        while (retries-- >= 0) {
-            ViewInteraction viewInteraction = onView(matcher);
-            try {
-                viewInteraction.perform(click());
-                return;
-            } catch (NoMatchingViewException | PerformException e) {
-                try {
-                    viewInteraction.perform(scrollTo());
-                } catch (NoMatchingViewException | PerformException e2) {
-                    // Intentionally empty
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        throw new AssertionError("View did not become clickable");
+    private static void setReminderTo12AM(int position) {
+        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
+
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
+
+        setTime(0, 0);
+        pressBack();
+        pressBack();
     }
 
     public static void setTime(int hour, int minute) {
@@ -121,10 +90,23 @@ public class AndroidTestHelper {
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
+    public static void createReminder(String amount, LocalTime time) {
+        onView(withId(R.id.addReminder)).perform(click());
+
+        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
+
+        if (time != null) {
+            onView(withId(R.id.editReminderTime)).perform(click());
+            setTime(time.getHour(), time.getMinute());
+        }
+
+        onView(withId(R.id.createReminder)).perform(click());
+    }
+
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        clickOnViewWithTimeout(withId(R.id.addMedicine));
+        onView(withId(R.id.addMedicine)).perform(click());
 
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -136,15 +118,6 @@ public class AndroidTestHelper {
         textInputEditText.perform(replaceText(name), closeSoftKeyboard());
 
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-    }
-
-    public static void navigateTo(MainMenu mainMenu) {
-        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onViewWithTimeout(
-                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
-                        isDisplayed()));
-        bottomNavigationItemView.perform(click());
     }
 
     public static Matcher<View> childAtPosition(
@@ -164,26 +137,6 @@ public class AndroidTestHelper {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
-    }
-
-    static ViewInteraction onViewWithTimeout(
-            Matcher<View> matcher
-    ) {
-        int retries = 10;
-        while (retries-- >= 0) {
-            try {
-                ViewInteraction viewInteraction = onView(matcher);
-                viewInteraction.check(matches(isDisplayed()));
-                return viewInteraction;
-            } catch (NoMatchingViewException e) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        throw new AssertionError("View did not become visible");
     }
 
     public static String dateToString(Date date) {

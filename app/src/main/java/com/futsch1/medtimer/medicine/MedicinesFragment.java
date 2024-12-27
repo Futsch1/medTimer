@@ -6,9 +6,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,29 +27,31 @@ import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.helpers.DeleteHelper;
+import com.futsch1.medtimer.helpers.InitIdlingResource;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
-    private HandlerThread thread;
+    private final InitIdlingResource idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
     @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
     @SuppressWarnings("java:S1450")
     private MedicineViewAdapter adapter;
+    private HandlerThread thread;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.thread = new HandlerThread("DeleteMedicine");
+        this.thread = new HandlerThread("GetSummary");
         this.thread.start();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        idlingResource.resetInitialized();
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
         RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
@@ -68,11 +68,6 @@ public class MedicinesFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         postponeEnterTransition();
-        // Connect view model to recycler view adapter
-        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
-            adapter.submitList(l);
-            startPostponedEnterTransition();
-        });
 
         setupAddMedicineButton(fragmentView);
 
@@ -81,6 +76,13 @@ public class MedicinesFragment extends Fragment {
                 this,
                 fragmentView);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
+
+        // Connect view model to recycler view adapter
+        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
+            adapter.submitList(l);
+            startPostponedEnterTransition();
+            idlingResource.setInitialized();
+        });
 
         return fragmentView;
     }
@@ -91,16 +93,15 @@ public class MedicinesFragment extends Fragment {
         if (thread != null) {
             thread.quitSafely();
         }
+        idlingResource.destroy();
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> new Handler(thread.getLooper()).post(() -> {
-            Medicine medicine = medicineViewModel.getMedicine((int) itemId);
-            medicineViewModel.deleteMedicine(medicine);
-            final Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-        }), () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
+            medicineViewModel.deleteMedicine((int) itemId);
+            adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
     private void setupAddMedicineButton(View fragmentView) {
@@ -128,18 +129,18 @@ public class MedicinesFragment extends Fragment {
             Editable e = editText.getText();
             if (e != null) {
                 int medicineId = medicineViewModel.insertMedicine(new Medicine(e.toString()));
-                new Handler(thread.getLooper()).post(() -> navigateToMedicineId(medicineViewModel.getMedicine(medicineId)));
+                navigateToMedicineId(medicineId);
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         return builder;
     }
 
-    private void navigateToMedicineId(Medicine medicine) {
+    private void navigateToMedicineId(int medicineId) {
         NavController navController = Navigation.findNavController(this.requireView());
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicine.medicineId
+                medicineId
         );
-        new Handler(Looper.getMainLooper()).post(() -> navController.navigate(action));
+        navController.navigate(action);
     }
 }

@@ -6,20 +6,20 @@ import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
+public class LatestRemindersViewAdapter extends IdlingListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
     private final Filter filter = new ReminderEventFilter();
     private List<ReminderEvent> data;
 
     public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback) {
-        super(diffCallback);
+        super(diffCallback, LatestRemindersViewAdapter.class.getName());
         setHasStableIds(true);
     }
 

@@ -18,13 +18,13 @@ public class WorkManagerAccess {
     public static WorkManager getWorkManager(Context context) {
         if (!WorkManager.isInitialized()) {
             IdlingThreadPoolExecutor executor = new IdlingThreadPoolExecutor(
-                    "MedTimerExecutor", 1, 1, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
+                    "MedTimerWorkManagerExecutor", 1, 1, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
                     new ThreadFactory() {
                         private int count = 1;
 
                         @Override
                         public Thread newThread(Runnable r) {
-                            return new Thread(r, "MyThread-" + count++);
+                            return new Thread(r, "MedTimerWorkManager-" + count++);
                         }
                     });
             // Make sure work manager runs in a single thread to avoid race conditions
@@ -32,6 +32,7 @@ public class WorkManagerAccess {
                     context,
                     new Configuration.Builder()
                             .setExecutor(executor)
+                            .setTaskExecutor(executor)
                             .build());
         }
         return WorkManager.getInstance(context);

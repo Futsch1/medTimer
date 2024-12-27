@@ -59,7 +59,7 @@ public class RecyclerViewMatcher {
                         if (viewHolder != null) {
                             childView = viewHolder.itemView;
                         } else {
-                            error = "ViewHolder for position '" + position + "' not found " + recyclerView.getChildCount();
+                            error = "ViewHolder for position " + position + " not found, children " + recyclerView.getChildCount();
                         }
                     } else {
                         error = "RecyclerView with id '" + recyclerViewId + "' not found";
