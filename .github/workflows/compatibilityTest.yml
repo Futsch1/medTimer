@@ -63,7 +63,6 @@ jobs:
           profile: ${{ matrix.profile }}
           script: |
             adb shell su 0 date 01012100
-            ./gradlew JacocoDebugCodeCoverage
             ./gradlew connectedCheck
 
       - uses: actions/upload-artifact@v4
