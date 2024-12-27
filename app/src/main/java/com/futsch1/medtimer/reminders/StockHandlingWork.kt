@@ -33,17 +33,17 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
         val match = amountRegex.find(reminder.amount)
         val amount = match?.groupValues?.get(1)?.toInt() ?: 0
 
-        medicine.medicationAmount -= amount
-        if (medicine.medicationAmount < 0) {
-            medicine.medicationAmount = 0
+        medicine.amount -= amount
+        if (medicine.amount < 0) {
+            medicine.amount = 0
         }
 
         checkForThreshold(medicine, amount)
     }
 
     private fun checkForThreshold(medicine: Medicine, amount: Int) {
-        if (medicine.medicationAmount <= medicine.medicationAmountReminderThreshold && (medicine.medicationStockReminder == Medicine.MedicationStockReminder.ALWAYS ||
-                    (medicine.medicationStockReminder == Medicine.MedicationStockReminder.ONCE && medicine.medicationAmount + amount > medicine.medicationAmountReminderThreshold))
+        if (medicine.amount <= medicine.outOfStockReminderThreshold && (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ALWAYS ||
+                    (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ONCE && medicine.amount + amount > medicine.outOfStockReminderThreshold))
         ) {
             Notifications(context).showOutOfStockNotification(
                 medicine

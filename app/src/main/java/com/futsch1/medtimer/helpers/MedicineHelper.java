@@ -22,7 +22,7 @@ public class MedicineHelper {
     @SuppressLint("DefaultLocale")
     public static String getMedicineNameWithStockText(Context context, Medicine medicine) {
         if (medicine.isStockManagementActive()) {
-            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.medicationAmount), medicine.medicationAmount <= medicine.medicationAmountReminderThreshold ? " ⚠)" : ")");
+            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.amount), medicine.amount <= medicine.outOfStockReminderThreshold ? " ⚠)" : ")");
         } else {
             return medicine.name;
         }

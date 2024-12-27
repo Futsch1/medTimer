@@ -35,16 +35,16 @@ public class Medicine {
     public int iconId;
     @ColumnInfo(defaultValue = "OFF")
     @Expose
-    public MedicationStockReminder medicationStockReminder;
+    public OutOfStockReminderType outOfStockReminder;
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int medicationAmount;
+    public int amount;
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int medicationAmountReminderThreshold;
+    public int outOfStockReminderThreshold;
     @ColumnInfo(defaultValue = "[]")
     @Expose
-    public ArrayList<Integer> medicationPackSizes;
+    public ArrayList<Integer> refillSizes;
 
     public Medicine(String name) {
         this.name = name;
@@ -52,8 +52,8 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
-        this.medicationStockReminder = MedicationStockReminder.OFF;
-        this.medicationPackSizes = new ArrayList<>();
+        this.outOfStockReminder = OutOfStockReminderType.OFF;
+        this.refillSizes = new ArrayList<>();
     }
 
     public Medicine(String name, int id) {
@@ -63,15 +63,15 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
-        this.medicationStockReminder = MedicationStockReminder.OFF;
-        this.medicationPackSizes = new ArrayList<>();
+        this.outOfStockReminder = OutOfStockReminderType.OFF;
+        this.refillSizes = new ArrayList<>();
     }
 
     public boolean isStockManagementActive() {
-        return (medicationAmount != 0 || medicationStockReminder != MedicationStockReminder.OFF || medicationAmountReminderThreshold != 0);
+        return (amount != 0 || outOfStockReminder != OutOfStockReminderType.OFF || outOfStockReminderThreshold != 0);
     }
 
-    public enum MedicationStockReminder {
+    public enum OutOfStockReminderType {
         OFF,
         ONCE,
         ALWAYS

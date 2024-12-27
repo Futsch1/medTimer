@@ -71,9 +71,9 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                 medicine.color = color
             }
             if (stock > 0) {
-                medicine.medicationAmount = stock
-                medicine.medicationAmountReminderThreshold = stock / 2
-                medicine.medicationStockReminder = Medicine.MedicationStockReminder.ONCE
+                medicine.amount = stock
+                medicine.outOfStockReminderThreshold = stock / 2
+                medicine.outOfStockReminder = Medicine.OutOfStockReminderType.ONCE
             }
             return medicine
         }
