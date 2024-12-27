@@ -37,7 +37,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-ubuntu-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -65,7 +65,6 @@ jobs:
             adb shell su 0 date 01012100
             ./gradlew JacocoDebugCodeCoverage
             ./gradlew connectedCheck
-          cores: 4
 
       - uses: actions/upload-artifact@v4
         if: always()
