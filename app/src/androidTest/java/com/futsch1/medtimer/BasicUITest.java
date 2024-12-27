@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -50,7 +51,7 @@ public class BasicUITest extends BaseTestHelper {
                     allOf(withId(com.google.android.material.R.id.text_input_end_icon),
                             isDescendantOfA(withId(R.id.editInstructionsLayout)))).perform(click());
             couldClickEndIcon = true;
-        } catch (AssertionError e) {
+        } catch (PerformException e) {
             // Intentionally empty
         }
 
