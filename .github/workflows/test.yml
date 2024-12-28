@@ -58,8 +58,11 @@ jobs:
           profile: Pixel5
           script: |
             adb shell su 0 date 01012100
-            ./gradlew JacocoDebugCodeCoverage
+            set -e
+            EXIT_CODE=0
+            ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? 
             adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
+            exit $EXIT_CODE
           cores: 4
 
       - name: Run fuzzing tests
