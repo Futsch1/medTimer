@@ -102,7 +102,6 @@ class MedicineStockTest : BaseTestHelper() {
         )
         assertNull(o)
         device.pressBack()
-        device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 

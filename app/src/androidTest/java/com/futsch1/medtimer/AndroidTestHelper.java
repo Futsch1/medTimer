@@ -53,7 +53,11 @@ public class AndroidTestHelper {
         ViewInteraction bottomNavigationItemView = onView(
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
-        bottomNavigationItemView.perform(click());
+        try {
+            bottomNavigationItemView.perform(click());
+        } catch (Exception e) {
+            pressBack();
+        }
         bottomNavigationItemView.perform(click());
     }
 
