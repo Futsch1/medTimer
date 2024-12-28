@@ -116,6 +116,7 @@
     <fragment
         android:id="@+id/medicineStockFragment"
         android:name="com.futsch1.medtimer.medicine.MedicineStockFragment"
+        android:label="@string/medicine_stock"
         tools:layout="@layout/fragment_medicine_stock">
         <argument
             android:name="medicineId"

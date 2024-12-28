@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -58,7 +57,7 @@ public class CalendarTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
         onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)).perform(click());
-        onView(allOf(withId(R.id.openCalendar))).perform(scrollTo(), click());
+        onView(allOf(withId(R.id.openCalendar))).perform(click());
         onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
 
         pressBack();
