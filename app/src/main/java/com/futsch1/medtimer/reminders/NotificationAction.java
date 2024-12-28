@@ -31,7 +31,9 @@ public class NotificationAction {
                 reminderEvent.stockHandled = true;
                 ReminderProcessor.requestStockHandling(context, reminderEventId);
             }
-            reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+            if (reminderEvent.processedTimestamp == 0) {
+                reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+            }
             medicineRepository.updateReminderEvent(reminderEvent);
             Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
                     status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",

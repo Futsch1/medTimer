@@ -80,12 +80,7 @@ class MedicineStockTest : BaseTestHelper() {
         onView(
             RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipSkipped)
         ).perform(
-            scrollTo(), click()
-        )
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)
-        ).perform(
-            scrollTo(), click()
+            click()
         )
         device.openNotification()
         o = device.wait(
@@ -95,6 +90,18 @@ class MedicineStockTest : BaseTestHelper() {
         assertNull(o)
         device.pressBack()
 
+        onView(
+            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)
+        ).perform(
+            click()
+        )
+        device.openNotification()
+        o = device.wait(
+            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
+            1_000
+        )
+        assertNull(o)
+        device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 

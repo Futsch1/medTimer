@@ -53,6 +53,7 @@ public class AndroidTestHelper {
                 allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
+        bottomNavigationItemView.perform(click());
     }
 
     private static void setReminderTo12AM(int position) {
