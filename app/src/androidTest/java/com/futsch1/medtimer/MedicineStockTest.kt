@@ -122,7 +122,7 @@ class MedicineStockTest : BaseTestHelper() {
         device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        onView(withId(R.id.medicineCard)).check(matches(withText(containsString("⚠"))))
+        onView(withId(R.id.medicineName)).check(matches(withText(containsString("⚠"))))
 
         onView(
             RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)
@@ -136,7 +136,7 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         pressBack()
 
-        onView(withId(R.id.medicineCard)).check(matches(withText(containsString("14"))))
-        onView(withId(R.id.medicineCard)).check(matches(not(withText(containsString("⚠")))))
+        onView(withId(R.id.medicineName)).check(matches(withText(containsString("14"))))
+        onView(withId(R.id.medicineName)).check(matches(not(withText(containsString("⚠")))))
     }
 }
