@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 
@@ -79,7 +80,7 @@ public class AndroidTestHelper {
             if (hour == 0) {
                 hour = 12;
             }
-        } catch (PerformException e) {
+        } catch (PerformException | NoMatchingViewException e) {
             // Happens when am/pm button is not visible - in this case, we are in 24h format
         }
 
