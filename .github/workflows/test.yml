@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       target_api_level: 34
+      profile: pixel
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -32,7 +33,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ env.target_api_level }}
+          key: avd-${{ env.target_api_level }}-${{ env.profile }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -41,6 +42,7 @@ jobs:
           api-level: ${{ env.target_api_level }}
           arch: x86_64
           target: google_apis
+          profile: ${{ env.profile }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -50,17 +52,18 @@ jobs:
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ env.target_api_level }}
+          profile: ${{ env.profile }}
           arch: x86_64
           target: google_apis
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          profile: pixel
           script: |
             adb shell su 0 date 01012100
             export EXIT_CODE=0
             ./gradlew JacocoDebugCodeCoverage || export EXIT_CODE=$? 
             adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
+            avdmanager list devices
             echo $EXIT_CODE
             exit $EXIT_CODE
           cores: 4

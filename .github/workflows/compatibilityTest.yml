@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 26, 34 ]
-        profile: [ MediumPhone, MediumTablet ]
+        profile: [ pixel, MediumTablet ]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Set up JDK 17
@@ -37,13 +37,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.profile }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ matrix.api-level }}
+          profile: ${{ matrix.profile }}
           target: google_apis
           arch: x86_64
           force-avd-creation: false
@@ -55,12 +56,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ matrix.api-level }}
+          profile: ${{ matrix.profile }}
           target: google_apis
           arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          profile: ${{ matrix.profile }}
           script: |
             adb shell su 0 date 01012100
             ./gradlew connectedCheck
