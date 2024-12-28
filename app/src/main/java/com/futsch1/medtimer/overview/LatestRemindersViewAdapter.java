@@ -19,7 +19,7 @@ public class LatestRemindersViewAdapter extends IdlingListAdapter<ReminderEvent,
     private List<ReminderEvent> data;
 
     public LatestRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ReminderEvent> diffCallback) {
-        super(diffCallback, LatestRemindersViewAdapter.class.getName());
+        super(diffCallback);
         setHasStableIds(true);
     }
 

@@ -61,6 +61,7 @@ abstract class DatabaseEntityEditFragment<T>(
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
     private var fragmentReady = false
+
     private val idlingResource = InitIdlingResource(name)
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -18,7 +18,7 @@ public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderVie
 
     public ReminderViewAdapter(@NonNull DiffUtil.ItemCallback<Reminder> diffCallback,
                                FragmentActivity fragmentActivity, HandlerThread thread) {
-        super(diffCallback, ReminderViewAdapter.class.getName());
+        super(diffCallback);
         this.fragmentActivity = fragmentActivity;
         this.thread = thread;
         setHasStableIds(true);

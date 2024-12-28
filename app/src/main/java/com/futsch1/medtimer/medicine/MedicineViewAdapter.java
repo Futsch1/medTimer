@@ -17,7 +17,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders
     private final Activity activity;
 
     public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, HandlerThread thread, Activity activity) {
-        super(diffCallback, MedicineViewAdapter.class.getName());
+        super(diffCallback);
         setHasStableIds(true);
         this.thread = thread;
         this.activity = activity;

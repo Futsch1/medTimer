@@ -9,11 +9,11 @@ import java.util.List;
 
 public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends ListAdapter<T, VH> {
-    private final InitIdlingResource idlingResource;
+    private static final InitIdlingResource idlingResource = new InitIdlingResource("ListAdapter");
 
-    protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, String name) {
+    protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
         super(diffCallback);
-        idlingResource = new InitIdlingResource(name);
+        idlingResource.resetInitialized();
     }
 
     @Override
