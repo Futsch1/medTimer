@@ -65,19 +65,24 @@ class MedicineStockFragment :
         )
 
         fragmentView.findViewById<View>(R.id.refillNow).setOnClickListener {
-            try {
-                var amount =
-                    fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString()
-                        .toInt()
-                amount += fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString()
-                    .toInt()
-                fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-                    .setText(amount.toString())
-            } catch (e: NumberFormatException) {
-                // Intentionally empty
-            }
+            onRefillClick(fragmentView)
         }
 
         return true
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onRefillClick(fragmentView: View) {
+        try {
+            var amount =
+                fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString()
+                    .toInt()
+            amount += fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString()
+                .toInt()
+            fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
+                .setText(amount.toString())
+        } catch (e: NumberFormatException) {
+            // Intentionally empty
+        }
     }
 }
