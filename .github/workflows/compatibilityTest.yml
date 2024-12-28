@@ -64,7 +64,8 @@ jobs:
           disable-animations: true
           script: |
             adb shell su 0 date 01012100
-            ./gradlew connectedCheck
+            adb rm /sdcard/googletest/test_outputfiles/* || true
+            EXIT_CODE=0 && ./gradlew connectedCheck || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
 
       - uses: actions/upload-artifact@v4
         if: always()
