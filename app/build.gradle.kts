@@ -20,11 +20,11 @@ android {
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
-        minSdk = 26
+        minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 92
-        versionName = "1.13.1"
+        versionCode = 93
+        versionName = "1.14.0-rc.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
