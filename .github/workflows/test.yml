@@ -60,12 +60,7 @@ jobs:
           disable-animations: true
           script: |
             adb shell su 0 date 01012100
-            export EXIT_CODE=0
-            ./gradlew JacocoDebugCodeCoverage || export EXIT_CODE=$? 
-            adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
-            avdmanager list devices
-            echo $EXIT_CODE
-            exit $EXIT_CODE
+            EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
 
       - name: Run fuzzing tests
