@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 26, 34 ]
+        api-level: [ 28, 34 ]
         profile: [ medium_phone, medium_tablet ]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -64,8 +64,9 @@ jobs:
           disable-animations: true
           script: |
             adb shell su 0 date 01012100
-            adb rm /sdcard/googletest/test_outputfiles/* || true
+            adb shell rm /sdcard/googletest/test_outputfiles/* || true
             EXIT_CODE=0 && ./gradlew connectedCheck || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+          cores: 4
 
       - uses: actions/upload-artifact@v4
         if: always()
