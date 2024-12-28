@@ -59,6 +59,7 @@ jobs:
           script: |
             adb shell su 0 date 01012100
             ./gradlew JacocoDebugCodeCoverage
+            adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
           cores: 4
 
       - name: Run fuzzing tests
