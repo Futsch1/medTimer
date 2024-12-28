@@ -55,13 +55,13 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          profile: Pixel5
+          profile: MediumPhone
           script: |
             adb shell su 0 date 01012100
-            set -e
             EXIT_CODE=0
             ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? 
             adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
+            echo $EXIT_CODE
             exit $EXIT_CODE
           cores: 4
 
