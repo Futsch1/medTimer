@@ -94,6 +94,16 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/openStockTracking"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/medicine_stock"
+                app:icon="@drawable/box_seam"
+                app:iconPadding="0dp" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/openCalendar"
                 style="?attr/materialIconButtonFilledStyle"
                 android:layout_width="wrap_content"

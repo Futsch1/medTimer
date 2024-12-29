@@ -5,18 +5,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.ScheduledReminder;
+import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
-public class NextRemindersViewAdapter extends ListAdapter<ScheduledReminder, NextRemindersViewHolder> {
+public class NextRemindersViewAdapter extends IdlingListAdapter<ScheduledReminder, NextRemindersViewHolder> {
 
     private final HandlerThread thread;
     private final MedicineViewModel medicineViewModel;
 
     public NextRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ScheduledReminder> diffCallback, MedicineViewModel medicineViewModel) {
-        super(diffCallback);
+        super(diffCallback, true);
         setHasStableIds(true);
         this.medicineViewModel = medicineViewModel;
         this.thread = new HandlerThread("UpdateNextReminder");

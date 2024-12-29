@@ -192,4 +192,16 @@
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="every_interval">Каждый %s</string>
     <string name="invalid_input">Недопустимый ввод</string>
+    <string name="off">С сайта</string>
+    <string name="once_below_threshold">Один раз при падении ниже порога</string>
+    <string name="always_below_threshold">Всегда, когда ниже порога</string>
+    <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
+    <string name="medicine_stock_string">Осталось %1$s %2$s</string>
+    <string name="out_of_stock_notification_title">Напоминание об отсутствии лекарств на складе</string>
+    <string name="medicine_stock">Запас медикаментов</string>
+    <string name="amount">Сумма</string>
+    <string name="out_of_stock_reminder">Напоминание об отсутствии на складе</string>
+    <string name="reminder_threshold">Порог напоминания</string>
+    <string name="refill_size">Размер заправки</string>
+    <string name="refill_now">Пополнить сейчас</string>
 </resources>

@@ -6,15 +6,15 @@ import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
+public class LatestRemindersViewAdapter extends IdlingListAdapter<ReminderEvent, LatestRemindersViewHolder> implements Filterable {
     private final Filter filter = new ReminderEventFilter();
     private List<ReminderEvent> data;
 
@@ -60,9 +60,10 @@ public class LatestRemindersViewAdapter extends ListAdapter<ReminderEvent, Lates
 
         @Override
         public boolean areContentsTheSame(@NonNull ReminderEvent oldItem, @NonNull ReminderEvent newItem) {
-            return oldItem.reminderEventId == newItem.reminderEventId && oldItem.status.equals(newItem.status)
+            return oldItem.reminderEventId == newItem.reminderEventId
                     && newItem.amount.equals(oldItem.amount) && oldItem.medicineName.equals(newItem.medicineName) &&
-                    oldItem.remindedTimestamp == newItem.remindedTimestamp;
+                    oldItem.remindedTimestamp == newItem.remindedTimestamp &&
+                    oldItem.processedTimestamp == newItem.processedTimestamp;
         }
     }
 

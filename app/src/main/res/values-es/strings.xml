@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -191,4 +190,16 @@
     <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
     <string name="every_interval">Cada %s</string>
     <string name="invalid_input">Entrada no válida</string>
+    <string name="off">Fuera de</string>
+    <string name="once_below_threshold">Una vez al caer por debajo del umbral</string>
+    <string name="always_below_threshold">Siempre que esté por debajo del umbral</string>
+    <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
+    <string name="medicine_stock_string">%1$s restantes%2$s</string>
+    <string name="out_of_stock_notification_title">Recordatorio de medicamentos agotados</string>
+    <string name="medicine_stock">Stock de medicamentos</string>
+    <string name="amount">Cantidad</string>
+    <string name="out_of_stock_reminder">Recordatorio de existencias</string>
+    <string name="reminder_threshold">Umbral recordatorio</string>
+    <string name="refill_size">Tamaño del recargar</string>
+    <string name="refill_now">Recargar ahora</string>
 </resources>

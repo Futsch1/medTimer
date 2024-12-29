@@ -36,7 +36,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
 
     static NextRemindersViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_next_reminder, parent, false);
+                .inflate(R.layout.card_next_reminder, parent, false);
         return new NextRemindersViewHolder(view);
     }
 
@@ -70,8 +70,12 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
                     scheduledReminder.medicine(), scheduledReminder.reminder());
             if (reminderEvent != null) {
                 reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
+                reminderEvent.stockHandled = taken;
                 reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-                medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+                long reminderEventId = medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
+                if (taken) {
+                    ReminderProcessor.requestStockHandling(itemView.getContext(), (int) reminderEventId);
+                }
                 ReminderProcessor.requestReschedule(nextReminderText.getContext());
             }
         });

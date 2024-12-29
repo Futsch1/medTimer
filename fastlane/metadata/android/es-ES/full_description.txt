@@ -20,6 +20,7 @@ Gestión de datos sencilla y segura:
 - Obtenga una visión general de las dosis anteriores en un gráfico y una vista tabular.
 - Exporte su historial de medicación como archivo CSV para llevar un registro o compartirlo fácilmente con profesionales sanitarios.
 - Realice copias de seguridad y restaure su lista de medicación como archivo JSON.
+- Seguimiento de existencias de medicamentos y recordatorios de falta de existencias.
 
 Privacidad y accesibilidad sin conexión:
 

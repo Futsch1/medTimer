@@ -51,7 +51,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     static ReminderViewHolder create(ViewGroup parent, FragmentActivity fragmentActivity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_reminder, parent, false);
+                .inflate(R.layout.card_reminder, parent, false);
         return new ReminderViewHolder(view, fragmentActivity, thread);
     }
 

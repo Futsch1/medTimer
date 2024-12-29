@@ -28,7 +28,8 @@
         android:logo="@mipmap/logo"
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MedTimer">
+        android:theme="@style/Theme.MedTimer"
+        tools:targetApi="tiramisu">
 
         <service
             android:name=".ReminderSchedulerService"
@@ -83,6 +84,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"

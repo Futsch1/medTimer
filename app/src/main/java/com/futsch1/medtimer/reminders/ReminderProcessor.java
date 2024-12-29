@@ -53,21 +53,6 @@ public class ReminderProcessor extends BroadcastReceiver {
         workManager.enqueue(repeatWork);
     }
 
-    public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
-        return buildActionIntent(context, reminderEventId, DISMISSED_ACTION);
-    }
-
-    private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
-        Intent actionIntent = new Intent(context, ReminderProcessor.class);
-        actionIntent.setAction(actionName);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        return actionIntent;
-    }
-
-    public static Intent getTakenActionIntent(@NonNull Context context, int reminderEventId) {
-        return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
-    }
-
     public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId, LocalDateTime reminderDateTime) {
         Intent reminderIntent = new Intent(REMINDER_ACTION);
         reminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
@@ -86,6 +71,49 @@ public class ReminderProcessor extends BroadcastReceiver {
         snoozeIntent.putExtra(EXTRA_SNOOZE_TIME, snoozeTime);
         snoozeIntent.setClass(context, ReminderProcessor.class);
         return snoozeIntent;
+    }
+
+    public static void requestStockHandling(Context context, int reminderEventId) {
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
+        OneTimeWorkRequest stockHandlingWork =
+                new OneTimeWorkRequest.Builder(StockHandlingWork.class)
+                        .setInputData(new Data.Builder()
+                                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                                .build())
+                        .build();
+        workManager.enqueue(stockHandlingWork);
+    }
+
+    public static void requestActionIntent(Context context, int reminderEventId, boolean taken) {
+        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventId) : getDismissedActionIntent(context, reminderEventId);
+        if (taken) {
+            WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWork.class));
+        } else {
+            WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, SkippedWork.class));
+        }
+    }
+
+    public static Intent getTakenActionIntent(@NonNull Context context, int reminderEventId) {
+        return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
+    }
+
+    public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
+        return buildActionIntent(context, reminderEventId, DISMISSED_ACTION);
+    }
+
+    private static <T extends ListenableWorker> WorkRequest buildActionWorkRequest(Intent intent, Class<T> workerClass) {
+        return new OneTimeWorkRequest.Builder(workerClass)
+                .setInputData(new Data.Builder()
+                        .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                        .build())
+                .build();
+    }
+
+    private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
+        Intent actionIntent = new Intent(context, ReminderProcessor.class);
+        actionIntent.setAction(actionName);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        return actionIntent;
     }
 
     @Override
@@ -118,14 +146,6 @@ public class ReminderProcessor extends BroadcastReceiver {
                             .build();
             workManager.enqueue(reminderWork);
         }
-    }
-
-    private <T extends ListenableWorker> WorkRequest buildActionWorkRequest(Intent intent, Class<T> workerClass) {
-        return new OneTimeWorkRequest.Builder(workerClass)
-                .setInputData(new Data.Builder()
-                        .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
-                        .build())
-                .build();
     }
 
 }

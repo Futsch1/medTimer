@@ -20,11 +20,11 @@ android {
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
-        minSdk = 26
+        minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 92
-        versionName = "1.13.1"
+        versionCode = 94
+        versionName = "1.14.0"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -129,6 +129,8 @@ dependencies {
     implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
     implementation("com.kizitonwose.calendar:view:$calendarVersion")
     implementation("com.maltaisn:icondialog:$iconDialogVersion")
+    implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
+    implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

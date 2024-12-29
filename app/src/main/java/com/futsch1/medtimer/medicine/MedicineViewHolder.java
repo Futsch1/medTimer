@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
@@ -40,12 +41,12 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     static MedicineViewHolder create(ViewGroup parent, Activity activity, HandlerThread thread) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_medicine, parent, false);
+                .inflate(R.layout.card_medicine, parent, false);
         return new MedicineViewHolder(view, activity, thread);
     }
 
     public void bind(MedicineWithReminders medicineWithReminders) {
-        medicineNameView.setText(medicineWithReminders.medicine.name);
+        medicineNameView.setText(MedicineHelper.getMedicineNameWithStockText(itemView.getContext(), medicineWithReminders.medicine));
         List<Reminder> activeReminders = medicineWithReminders.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
         if (activeReminders.isEmpty()) {
             if (medicineWithReminders.reminders.isEmpty()) {

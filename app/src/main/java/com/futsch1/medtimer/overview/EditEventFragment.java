@@ -1,69 +1,52 @@
 package com.futsch1.medtimer.overview;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
 
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment;
+import com.futsch1.medtimer.helpers.ReminderEventEntityInterface;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.time.LocalDate;
 
-public class EditEventFragment extends Fragment {
+public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent> {
 
-    private final HandlerThread backgroundThread;
-    private int eventId;
     private EditText editEventName;
     private EditText editEventAmount;
     private EditText editEventRemindedTimestamp;
     private EditText editEventRemindedDate;
-    private MedicineRepository medicineRepository;
 
     public EditEventFragment() {
-        backgroundThread = new HandlerThread("EditEvent");
-        backgroundThread.start();
+        super(new ReminderEventEntityInterface(), R.layout.fragment_edit_event, EditEventFragment.class.getName());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View editEventView = inflater.inflate(R.layout.fragment_edit_event, container, false);
+    public boolean onEntityLoaded(ReminderEvent entity, @NonNull View fragmentView) {
+        editEventName = fragmentView.findViewById(R.id.editEventName);
+        editEventName.setText(entity.medicineName);
 
-        medicineRepository = new MedicineRepository(requireActivity().getApplication());
+        editEventAmount = fragmentView.findViewById(R.id.editEventAmount);
+        editEventAmount.setText(entity.amount);
 
-        assert getArguments() != null;
-        EditEventFragmentArgs editEventArgs = EditEventFragmentArgs.fromBundle(getArguments());
-        eventId = editEventArgs.getEventId();
-
-        editEventName = editEventView.findViewById(R.id.editEventName);
-        editEventName.setText(editEventArgs.getEventName());
-
-        editEventAmount = editEventView.findViewById(R.id.editEventAmount);
-        editEventAmount.setText(editEventArgs.getEventAmount());
-
-        editEventRemindedTimestamp = editEventView.findViewById(R.id.editEventRemindedTimestamp);
+        editEventRemindedTimestamp = fragmentView.findViewById(R.id.editEventRemindedTimestamp);
         editEventRemindedTimestamp.setText(TimeHelper.toLocalizedTimeString(editEventRemindedTimestamp.getContext(),
-                editEventArgs.getEventRemindedTimestamp()));
+                entity.remindedTimestamp));
         editEventRemindedTimestamp.setOnFocusChangeListener((v, hasFocus) -> onFocusEditTime(hasFocus));
 
-        editEventRemindedDate = editEventView.findViewById(R.id.editEventRemindedDate);
+        editEventRemindedDate = fragmentView.findViewById(R.id.editEventRemindedDate);
         editEventRemindedDate.setText(TimeHelper.toLocalizedDateString(editEventRemindedTimestamp.getContext(),
-                editEventArgs.getEventRemindedTimestamp()));
+                entity.remindedTimestamp));
         editEventRemindedDate.setOnFocusChangeListener((v, hasFocus) -> onFocusEditDate(hasFocus));
-        editEventRemindedDate.setVisibility(editEventArgs.getEventCanEditDate() ? View.VISIBLE : View.GONE);
+        editEventRemindedDate.setVisibility(EditEventFragmentArgs.fromBundle(requireArguments()).getEventCanEditDate() ? View.VISIBLE : View.GONE);
 
-        return editEventView;
+        return true;
     }
 
     private void onFocusEditTime(boolean hasFocus) {
@@ -100,28 +83,19 @@ public class EditEventFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (medicineRepository != null) {
-            Handler handler = new Handler(backgroundThread.getLooper());
-            handler.post(() -> {
-                ReminderEvent reminderEvent = medicineRepository.getReminderEvent(eventId);
-                if (reminderEvent != null) {
-                    reminderEvent.medicineName = editEventName.getText().toString();
-                    reminderEvent.amount = editEventAmount.getText().toString();
-                    int minutes = TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString());
-                    if (minutes >= 0) {
-                        reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes);
-                    }
-                    reminderEvent.remindedTimestamp = TimeHelper.changeTimeStampDate(reminderEvent.remindedTimestamp,
-                            TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
-
-                    medicineRepository.updateReminderEvent(reminderEvent);
-                }
-            });
+    public void fillEntityData(ReminderEvent entity, @NonNull View fragmentView) {
+        entity.medicineName = editEventName.getText().toString();
+        entity.amount = editEventAmount.getText().toString();
+        int minutes = TimeHelper.timeStringToMinutes(editEventRemindedTimestamp.getContext(), editEventRemindedTimestamp.getText().toString());
+        if (minutes >= 0) {
+            entity.remindedTimestamp = TimeHelper.changeTimeStampMinutes(entity.remindedTimestamp, minutes);
         }
+        entity.remindedTimestamp = TimeHelper.changeTimeStampDate(entity.remindedTimestamp,
+                TimeHelper.dateStringToDate(editEventRemindedDate.getText().toString()));
+    }
 
-        backgroundThread.quitSafely();
+    @Override
+    public int getEntityId() {
+        return EditEventFragmentArgs.fromBundle(requireArguments()).getEventId();
     }
 }

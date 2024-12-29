@@ -35,6 +35,9 @@ public class ReminderEvent {
     public int iconId;
     @ColumnInfo(defaultValue = "0")
     public int remainingRepeats;
+    @ColumnInfo(defaultValue = "false")
+    public boolean stockHandled;
+
 
     public enum ReminderStatus {
         RAISED,

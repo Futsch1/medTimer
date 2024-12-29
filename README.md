@@ -1,4 +1,5 @@
-[![Build status](https://github.com/Futsch1/medTimer/actions/workflows/android.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/android.yml)
+[![Build](https://github.com/Futsch1/medTimer/actions/workflows/build.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/build.yml)
+[![Unit test](https://github.com/Futsch1/medTimer/actions/workflows/test.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/test.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7239138d83361232bba9/maintainability)](https://codeclimate.com/github/Futsch1/medTimer/maintainability)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
@@ -66,6 +67,7 @@ Simple & Secure Data Management:
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare
   professionals.
 - Backup and restore your medication list as JSON file.
+- Medication stock tracking and out of stock reminders.
 
 Privacy & Offline Accessibility:
 

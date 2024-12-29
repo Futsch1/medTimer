@@ -10,38 +10,33 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(
-                "Omega 3 (EPA/DHA 500mg)", null, 1, arrayOf(
+                "Omega 3 (EPA/DHA 500mg)", null, 1, 10, arrayOf(
                     testReminderOmega3,
                     TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3)
                 )
             ),
             TestMedicine(
-                "B12 (500µg)", -0x750000, 2, arrayOf(
+                "B12 (500µg)", -0x750000, 2, 50, arrayOf(
                     TestReminderTimeBased("2", 7 * 60, 1, 0, "")
                 )
             ),
             TestMedicine(
-                "Ginseng (200mg)", -0x6f1170, 3, arrayOf(
+                "Ginseng (200mg)", -0x6f1170, 3, 0, arrayOf(
                     TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast")
                 )
             ),
             TestMedicine(
-                "Selen (200 µg)", null, 0, arrayOf(
+                "Selen (200 µg)", null, 0, 0, arrayOf(
                     TestReminderTimeBased("2", 9 * 60, 1, 0, ""),
                     TestReminderIntervalBased("1", 36 * 60)
                 )
             )
         )
 
-        for ((name, color, iconId, reminders) in testMedicines) {
-            val medicine = Medicine(name)
-            if (color != null) {
-                medicine.useColor = true
-                medicine.color = color
-            }
-            medicine.iconId = iconId
+        for (testMedicine in testMedicines) {
+            val medicine = testMedicine.toMedicine()
             val medicineId = viewModel.insertMedicine(medicine)
-            for (testReminder in reminders) {
+            for (testReminder in testMedicine.reminders) {
                 testReminder.id = viewModel.insertReminder(testReminder.toReminder(medicineId))
             }
         }
@@ -53,6 +48,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
         val name: String,
         val color: Int?,
         val iconId: Int,
+        val stock: Int,
         val reminders: Array<TestReminder>
     ) {
         override fun equals(other: Any?): Boolean {
@@ -66,6 +62,21 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
 
         override fun hashCode(): Int {
             return name.hashCode()
+        }
+
+        fun toMedicine(): Medicine {
+            val medicine = Medicine(name)
+            if (color != null) {
+                medicine.useColor = true
+                medicine.color = color
+            }
+            medicine.iconId = iconId
+            if (stock > 0) {
+                medicine.amount = stock
+                medicine.outOfStockReminderThreshold = if (stock > 10) stock / 2 else stock * 2
+                medicine.outOfStockReminder = Medicine.OutOfStockReminderType.ONCE
+            }
+            return medicine
         }
     }
 

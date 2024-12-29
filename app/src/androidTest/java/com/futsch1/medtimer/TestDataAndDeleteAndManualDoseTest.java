@@ -12,13 +12,11 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.futsch1.medtimer.AndroidTestHelper.childAtPosition;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -49,18 +47,16 @@ public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());
         onView(withText(R.string.yes)).perform(scrollTo(), click());
 
-        onViewWithTimeout(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
-        onViewWithTimeout(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
+        onView(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());

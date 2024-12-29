@@ -190,4 +190,16 @@
     <string name="interval_start_processed">Intervalle commence lorsqu&amp;apos;il est pris ou sauté</string>
     <string name="every_interval">Tous les %s</string>
     <string name="invalid_input">Entrée non valide</string>
+    <string name="off">Arrêt</string>
+    <string name="once_below_threshold">Une fois lors du passage en dessous du seuil</string>
+    <string name="always_below_threshold">Toujours en dessous du seuil</string>
+    <string name="out_of_stock_notification">Il ne reste plus que %2$s de %1$s!\nConsidérez de renouveler le médicament bientôt.</string>
+    <string name="medicine_stock_string">%1$s restants%2$s</string>
+    <string name="out_of_stock_notification_title">Rappel de la réserve de médicaments</string>
+    <string name="medicine_stock">Réserve de médicaments</string>
+    <string name="amount">Numbre</string>
+    <string name="out_of_stock_reminder">Rappel de la réserve</string>
+    <string name="reminder_threshold">Seuil de rappel</string>
+    <string name="refill_size">Taille de la recharge</string>
+    <string name="refill_now">Rechargez maintenant</string>
 </resources>

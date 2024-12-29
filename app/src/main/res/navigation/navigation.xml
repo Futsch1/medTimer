@@ -46,7 +46,6 @@
     <fragment
         android:id="@+id/editMedicineFragment"
         android:name="com.futsch1.medtimer.medicine.EditMedicineFragment"
-        android:label="@string/tab_medicine"
         tools:layout="@layout/fragment_edit_medicine">
         <argument
             android:name="medicineId"
@@ -57,6 +56,9 @@
         <action
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
             app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_medicineStockFragment"
+            app:destination="@id/medicineStockFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -94,15 +96,6 @@
             android:name="eventId"
             app:argType="integer" />
         <argument
-            android:name="eventAmount"
-            app:argType="string" />
-        <argument
-            android:name="eventName"
-            app:argType="string" />
-        <argument
-            android:name="eventRemindedTimestamp"
-            app:argType="long" />
-        <argument
             android:name="eventCanEditDate"
             app:argType="boolean" />
     </fragment>
@@ -119,5 +112,14 @@
         <argument
             android:name="futureDays"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineStockFragment"
+        android:name="com.futsch1.medtimer.medicine.MedicineStockFragment"
+        android:label="@string/medicine_stock"
+        tools:layout="@layout/fragment_medicine_stock">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
     </fragment>
 </navigation>

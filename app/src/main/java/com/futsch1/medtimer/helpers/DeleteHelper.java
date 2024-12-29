@@ -16,9 +16,9 @@ public class DeleteHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.confirm);
         builder.setMessage(messageStringId);
-        builder.setCancelable(false);
         builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> yesClicked.onButtonClick());
         builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> noClicked.onButtonClick());
+        builder.setOnCancelListener(v -> noClicked.onButtonClick());
         builder.show();
     }
 

@@ -9,15 +9,12 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
-import static com.futsch1.medtimer.AndroidTestHelper.clickOnViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
-import static com.futsch1.medtimer.AndroidTestHelper.onViewWithTimeout;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -26,6 +23,7 @@ import static org.hamcrest.Matchers.is;
 import android.content.Context;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -54,10 +52,9 @@ public class ReminderTypeTest extends BaseTestHelper {
         // Standard time based reminder (amount 1)
         LocalTime reminder1Time = LocalTime.now().plusMinutes(40);
         AndroidTestHelper.createReminder("1", reminder1Time);
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
 
         // Linked reminder (amount 2) 30 minutes later
-        clickOnViewWithTimeout(withId(R.id.open_advanced_settings));
+        onView(withId(R.id.open_advanced_settings)).perform(click());
         onView(withId(R.id.addLinkedReminder)).perform(click());
         ViewInteraction textInputEditText = onView(
                 allOf(AndroidTestHelper.childAtPosition(
@@ -82,38 +79,39 @@ public class ReminderTypeTest extends BaseTestHelper {
         onView(withId(R.id.createReminder)).perform(click());
 
         // Check calendar view not crashing
-        clickOnViewWithTimeout(allOf(withId(R.id.openCalendar), isDisplayed()));
+        onView(withId(R.id.openCalendar)).perform(click());
         pressBack();
 
         // Check reminder list
-        onView(isRoot()).perform(AndroidTestHelper.waitFor(1000));
-
         int positionOfReminder1 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? 0 : 1;
         int positionOfReminder2 = reminder1Time.isBefore(LocalTime.of(1, 30)) ? 1 : 2;
         int positionOfReminder3 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? (reminder1Time.isBefore(LocalTime.of(1, 30)) ? 2 : 1) : 0;
 
-        ViewInteraction cardOfReminder3 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.reminderCardLayout));
-        cardOfReminder3.perform(scrollTo());
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder3));
+        ViewInteraction cardOfReminder3 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.reminderCardLayout));
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
         cardOfReminder3.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder1 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.reminderCardLayout));
-        cardOfReminder1.perform(scrollTo());
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder1));
+        ViewInteraction cardOfReminder1 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.reminderCardLayout));
         cardOfReminder1.check(matches(hasDescendant(withHint(R.string.time))));
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         cardOfReminder1.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        ViewInteraction cardOfReminder2 = onViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.reminderCardLayout));
-        cardOfReminder2.perform(scrollTo());
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder2));
+        ViewInteraction cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.reminderCardLayout));
         cardOfReminder2.check(matches(hasDescendant(withHint(R.string.delay))));
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         cardOfReminder2.check(matches(hasDescendant(withText(containsString(expectedString)))));
 
-        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.open_advanced_settings));
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder3));
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder3, R.id.open_advanced_settings)).perform(click());
         pressBack();
-        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.open_advanced_settings));
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder2));
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder2, R.id.open_advanced_settings)).perform(click());
         pressBack();
-        clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.open_advanced_settings));
+        onView(withId(R.id.reminderList)).perform(RecyclerViewActions.scrollToPosition(positionOfReminder1));
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(positionOfReminder1, R.id.open_advanced_settings)).perform(click());
         pressBack();
 
         // Check overview and next reminders
@@ -138,7 +136,7 @@ public class ReminderTypeTest extends BaseTestHelper {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
-            clickOnViewWithTimeout(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow));
+            onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(scrollTo(), click());
 
             cardOfReminder2 = onView(new RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.nextReminderCardLayout));
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");

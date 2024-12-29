@@ -185,4 +185,16 @@
     <string name="interval_start_processed">Intervall beginnt, wenn eingenommen oder übersprungen</string>
     <string name="every_interval">Alle %s</string>
     <string name="invalid_input">Ungültige Eingabe</string>
+    <string name="off">Aus</string>
+    <string name="once_below_threshold">Einmal beim Erreichen des Schwellwerts</string>
+    <string name="always_below_threshold">Immer, wenn der Schwellwert unterschritten wird</string>
+    <string name="out_of_stock_notification">Es ist nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
+    <string name="medicine_stock_string">%1$s übrig%2$s</string>
+    <string name="out_of_stock_notification_title">Erinnerung an Medikamentenvorrat</string>
+    <string name="medicine_stock">Medikamentenvorrat</string>
+    <string name="amount">Anzahl</string>
+    <string name="out_of_stock_reminder">Vorratserinnerung</string>
+    <string name="reminder_threshold">Warnschwelle</string>
+    <string name="refill_size">Packungsgröße</string>
+    <string name="refill_now">Jetzt nachfüllen</string>
 </resources>

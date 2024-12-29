@@ -23,6 +23,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuProvider;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.IdlingRegistry;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -120,11 +121,13 @@ public class OptionsMenu implements MenuProvider {
             builder.setTitle(R.string.confirm);
             builder.setMessage(R.string.are_you_sure_delete_events);
             builder.setCancelable(false);
-            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> medicineViewModel.deleteReminderEvents());
+            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                medicineViewModel.deleteReminderEvents();
+                ReminderProcessor.requestReschedule(context);
+            });
             builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> { // Intentionally left empty
             });
             builder.show();
-            ReminderProcessor.requestReschedule(context);
             return true;
         });
     }
@@ -147,6 +150,7 @@ public class OptionsMenu implements MenuProvider {
     void setupGenerateTestData() {
         MenuItem item = menu.findItem(R.id.generate_test_data);
         if (BuildConfig.DEBUG) {
+            IdlingRegistry.getInstance().registerLooperAsIdlingResource(backgroundThread.getLooper());
             item.setVisible(true);
             item.setOnMenuItemClickListener(menuItem -> {
                 final Handler handler = new Handler(backgroundThread.getLooper());
@@ -156,8 +160,8 @@ public class OptionsMenu implements MenuProvider {
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
+                    ReminderProcessor.requestReschedule(context);
                 });
-                handler.post(() -> ReminderProcessor.requestReschedule(context));
                 return true;
             });
         } else {
