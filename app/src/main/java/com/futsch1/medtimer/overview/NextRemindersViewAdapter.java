@@ -16,7 +16,7 @@ public class NextRemindersViewAdapter extends IdlingListAdapter<ScheduledReminde
     private final MedicineViewModel medicineViewModel;
 
     public NextRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ScheduledReminder> diffCallback, MedicineViewModel medicineViewModel) {
-        super(diffCallback);
+        super(diffCallback, true);
         setHasStableIds(true);
         this.medicineViewModel = medicineViewModel;
         this.thread = new HandlerThread("UpdateNextReminder");
