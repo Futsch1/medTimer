@@ -181,17 +181,12 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
 
     private void setupCycleStartDate(Reminder entity) {
         setCycleStartDate(entity.cycleStartDay);
-        editCycleStartDate.setOnFocusChangeListener((v, hasFocus) ->
-                // On API 26, the DatePicker may be accidentally triggered when exiting this fragment.
-                // To resolve this, I postpone the focus check to the end of the current event loop
-                // iteration, At that point, the UI is expected to no longer be in a transition state.
-                v.post(() -> {
-                    if (v.hasFocus()) {
-                        TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
-                        datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
-                    }
-                })
-        );
+        editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
+                datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
+            }
+        });
     }
 
     private void setupAddLinkedReminder(Reminder entity, View fragmentView) {
