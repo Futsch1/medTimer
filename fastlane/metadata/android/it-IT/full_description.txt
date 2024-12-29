@@ -18,6 +18,7 @@ Gestione dei Dati Semplice & Sicura:
 - Ottieni un riepilogo grafico e in visualizzazione tabella dei dosaggi assunti in passato.
 - Esporta la cronologia dei medicinali in un file CSV per facilitare la conservazione o la condivisione dei dati con gli operatori sanitari.
 - Backup e ripristino dell'elenco dei medicinali come file JSON.
+- Monitoraggio delle scorte di farmaci e promemoria di esaurimento scorte.
 
 Privacy & Accessibilità Offline:
 

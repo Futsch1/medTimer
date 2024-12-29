@@ -67,6 +67,7 @@ Simple & Secure Data Management:
 - Export your medication history as a CSV file for easy record-keeping or sharing with healthcare
   professionals.
 - Backup and restore your medication list as JSON file.
+- Medication stock tracking and out of stock reminders.
 
 Privacy & Offline Accessibility:
 
