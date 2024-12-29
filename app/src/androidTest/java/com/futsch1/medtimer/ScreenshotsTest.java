@@ -66,7 +66,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
-        if (!isTimeBetween18And23()) {
+        if (isNotTimeBetween9And23()) {
             AndroidTestHelper.setAllRemindersTo12AM();
         }
 

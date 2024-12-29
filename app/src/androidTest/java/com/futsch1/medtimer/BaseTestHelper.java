@@ -56,9 +56,9 @@ public class BaseTestHelper {
         }
     }
 
-    protected boolean isTimeBetween18And23() {
+    protected boolean isNotTimeBetween9And23() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        return (dateTime.getHour() >= 18 && dateTime.getHour() <= 23);
+        return (dateTime.getHour() < 9 || dateTime.getHour() > 23);
     }
 }
