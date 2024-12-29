@@ -99,7 +99,7 @@ class NewReminder(
 
         val intervalEditor = IntervalEditor(
             dialog.findViewById(R.id.editIntervalTime),
-            dialog.findViewById(R.id.intervalUnit), 1
+            dialog.findViewById(R.id.intervalUnit), 12 * 60
         )
 
         val intervalStartDateTimeEditor = DateTimeEditor(
