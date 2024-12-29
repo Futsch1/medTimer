@@ -66,6 +66,10 @@ public class ScreenshotsTest extends BaseTestHelper {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.generate_test_data)).perform(click());
 
+        if (!isTimeBetween18And23()) {
+            AndroidTestHelper.setAllRemindersTo12AM();
+        }
+
         device.openNotification();
         UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
         int startX = medTimerNotifications.getVisibleBounds().centerX();

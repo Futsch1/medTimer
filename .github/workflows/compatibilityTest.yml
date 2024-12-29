@@ -63,6 +63,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
+            adb shell settings put global auto_time 0
             adb shell su 0 date 01012100
             ./gradlew packageDebug
             adb shell input keyevent 3
