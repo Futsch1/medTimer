@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+@SuppressWarnings("java:S119") // Reproducing the naming of the ListAdapter class
 public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends ListAdapter<T, VH> {
     private static final InitIdlingResource idlingResource = new InitIdlingResource("ListAdapter");
@@ -19,5 +20,9 @@ public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public void onCurrentListChanged(@NonNull List<T> previousList, @NonNull List<T> currentList) {
         idlingResource.setInitialized();
+    }
+
+    public void resetInitialized() {
+        idlingResource.resetInitialized();
     }
 }
