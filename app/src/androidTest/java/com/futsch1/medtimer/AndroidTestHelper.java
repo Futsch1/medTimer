@@ -11,9 +11,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Context;
 import android.icu.util.Calendar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,9 @@ import android.view.ViewParent;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -55,8 +60,15 @@ public class AndroidTestHelper {
                         isDisplayed()));
         try {
             bottomNavigationItemView.perform(click());
+
         } catch (Exception e) {
             pressBack();
+            UiDevice device = UiDevice.getInstance(getInstrumentation());
+            Context context = getInstrumentation().getTargetContext();
+            UiObject2 object = device.findObject(By.text(context.getString(R.string.cancel)));
+            if (object != null) {
+                object.click();
+            }
         }
         bottomNavigationItemView.perform(click());
     }
