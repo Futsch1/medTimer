@@ -70,6 +70,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                 medicine.useColor = true
                 medicine.color = color
             }
+            medicine.iconId = iconId
             if (stock > 0) {
                 medicine.amount = stock
                 medicine.outOfStockReminderThreshold = if (stock > 10) stock / 2 else stock * 2
