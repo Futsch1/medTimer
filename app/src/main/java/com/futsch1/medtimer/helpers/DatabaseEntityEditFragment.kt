@@ -12,6 +12,7 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.google.gson.Gson
 
 
 class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
@@ -125,8 +126,11 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onStop() {
         super.onStop()
         if (fragmentReady) {
+            val entityBefore = Gson().toJson(entity)
             fillEntityData(entity!! as T, fragmentView!!)
-            entityInterface.updateEntity(medicineViewModel, entity!!)
+            if (entityBefore != Gson().toJson(entity)) {
+                entityInterface.updateEntity(medicineViewModel, entity!!)
+            }
         }
     }
 
