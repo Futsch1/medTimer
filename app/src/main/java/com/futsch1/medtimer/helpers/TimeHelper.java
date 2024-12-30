@@ -208,6 +208,10 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
+    public static Object toISO8601DatetimeString(long remindedTimestamp) {
+        return Instant.ofEpochSecond(remindedTimestamp).toString();
+    }
+
     public interface TimePickerResult {
         void onTimeSelected(int minutes);
     }

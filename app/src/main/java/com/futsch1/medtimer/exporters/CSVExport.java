@@ -26,12 +26,16 @@ public class CSVExport implements Exporter {
             csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {
-                String line = String.format("%s;%s;%s;%s\n",
+                String line = String.format("%s;%s;%s;%s;%s;%s\n",
                         TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "");
+                                TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "",
+                        TimeHelper.toISO8601DatetimeString(reminderEvent.remindedTimestamp),
+                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
+                                TimeHelper.toISO8601DatetimeString(reminderEvent.processedTimestamp) : ""
+                );
                 csvFile.write(line);
             }
         } catch (IOException e) {

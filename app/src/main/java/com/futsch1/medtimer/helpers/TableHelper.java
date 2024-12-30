@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.futsch1.medtimer.R;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TableHelper {
@@ -13,11 +13,13 @@ public class TableHelper {
     }
 
     public static List<String> getTableHeaders(Context context) {
-        ArrayList<String> header = new ArrayList<>();
-        final int[] headerTexts = {R.string.time, R.string.name, R.string.dosage, R.string.taken};
-        for (int headerText : headerTexts) {
-            header.add(context.getString(headerText));
-        }
-        return header;
+        final String[] headerTexts = {
+                context.getString(R.string.time),
+                context.getString(R.string.name),
+                context.getString(R.string.dosage),
+                context.getString(R.string.taken),
+                context.getString(R.string.time) + " (ISO 8601)",
+                context.getString(R.string.taken) + " (ISO 8601)"};
+        return Arrays.asList(headerTexts);
     }
 }
