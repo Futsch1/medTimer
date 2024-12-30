@@ -66,7 +66,7 @@ public class ReminderTypeTest extends BaseTestHelper {
         textInputEditText.perform(replaceText("2"), closeSoftKeyboard());
         onView(withId(android.R.id.button1)).perform(scrollTo(), click());
 
-        setTime(0, 30);
+        setTime(0, 30, true);
 
 
         // Interval reminder (amount 3) 2 hours from now

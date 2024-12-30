@@ -67,7 +67,7 @@ jobs:
             adb shell su 0 date 01012100
             ./gradlew packageDebug
             adb shell input keyevent 3
-            adb shell rm /sdcard/googletest/test_outputfiles/* || true
+            adb shell settings put secure long_press_timeout 1500
             EXIT_CODE=0 && ./gradlew connectedCheck || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
 

@@ -60,7 +60,7 @@ class CSVExportUnitTest {
 
         // Create a mock File
         File file = mock(File.class);
-        TimeZone utc = TimeZone.getTimeZone("UTC");
+        TimeZone utc = TimeZone.getTimeZone("WET");
         java.text.DateFormat usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US);
         java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
         usTimeFormat.setTimeZone(utc);
@@ -81,9 +81,9 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken\n");
-                verify(fileWriter).write("5/3/21 12:00 AM;Medicine 1;10mg;5/3/21 12:02 AM\n");
-                verify(fileWriter).write("5/3/21 12:30 AM;Medicine 2;20mg;\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken;Time (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
+                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;2021-05-03T00:30:00Z;\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
@@ -118,7 +118,7 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken;Time (ISO 8601);Taken (ISO 8601)\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }

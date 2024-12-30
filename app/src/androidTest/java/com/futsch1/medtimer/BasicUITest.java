@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 
 import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -42,36 +41,24 @@ public class BasicUITest extends BaseTestHelper {
 
         onView(withId(R.id.open_advanced_settings)).perform(click());
 
-        // For some strange reason, this test does not work on GitHub Android emulator.
-        // The text input end icon does not become visible and therefore not clickable.
-        // So for the time being skip this part there
-        boolean couldClickEndIcon = false;
-        try {
-            onView(
-                    allOf(withId(com.google.android.material.R.id.text_input_end_icon),
-                            isDescendantOfA(withId(R.id.editInstructionsLayout)))).perform(click());
-            couldClickEndIcon = true;
-        } catch (PerformException e) {
-            // Intentionally empty
-        }
+        onView(
+                allOf(withId(com.google.android.material.R.id.text_input_end_icon),
+                        isDescendantOfA(withId(R.id.editInstructionsLayout)))).perform(click());
+        DataInteraction materialTextView = onData(anything())
+                .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
+                        AndroidTestHelper.childAtPosition(
+                                withClassName(is("android.widget.FrameLayout")),
+                                0)))
+                .atPosition(1);
+        materialTextView.perform(click());
 
-        if (couldClickEndIcon) {
-            DataInteraction materialTextView = onData(anything())
-                    .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
-                            AndroidTestHelper.childAtPosition(
-                                    withClassName(is("android.widget.FrameLayout")),
-                                    0)))
-                    .atPosition(1);
-            materialTextView.perform(click());
+        pressBack();
 
-            pressBack();
+        onView(allOf(withId(R.id.open_advanced_settings))).perform(click());
 
-            onView(allOf(withId(R.id.open_advanced_settings))).perform(click());
-
-            ViewInteraction editText = onView(
-                    allOf(withId(R.id.editInstructions), withText(R.string.before_meal)));
-            editText.check(matches(withText(R.string.before_meal)));
-        }
+        ViewInteraction editText = onView(
+                allOf(withId(R.id.editInstructions), withText(R.string.before_meal)));
+        editText.check(matches(withText(R.string.before_meal)));
 
         pressBack();
 

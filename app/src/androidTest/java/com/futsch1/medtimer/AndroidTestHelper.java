@@ -21,8 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -78,13 +76,13 @@ public class AndroidTestHelper {
 
         onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
 
-        setTime(0, 0);
+        setTime(0, 0, false);
         pressBack();
         pressBack();
     }
 
-    public static void setTime(int hour, int minute) {
-        try {
+    public static void setTime(int hour, int minute, boolean isDeltaTime) {
+        if (!android.text.format.DateFormat.is24HourFormat(getInstrumentation().getTargetContext()) && !isDeltaTime) {
             onView(withId(com.google.android.material.R.id.material_clock_period_am_button)).perform(click());
             if (hour == 12) {
                 onView(withId(com.google.android.material.R.id.material_clock_period_pm_button)).perform(click());
@@ -96,8 +94,6 @@ public class AndroidTestHelper {
             if (hour == 0) {
                 hour = 12;
             }
-        } catch (PerformException | NoMatchingViewException e) {
-            // Happens when am/pm button is not visible - in this case, we are in 24h format
         }
 
         onView(withId(com.google.android.material.R.id.material_timepicker_mode_button)).perform(click());
@@ -115,7 +111,7 @@ public class AndroidTestHelper {
 
         if (time != null) {
             onView(withId(R.id.editReminderTime)).perform(click());
-            setTime(time.getHour(), time.getMinute());
+            setTime(time.getHour(), time.getMinute(), false);
         }
 
         onView(withId(R.id.createReminder)).perform(click());

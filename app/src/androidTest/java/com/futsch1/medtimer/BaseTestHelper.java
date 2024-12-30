@@ -5,6 +5,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import android.icu.util.Calendar;
 import android.os.Build;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
@@ -12,13 +13,14 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class BaseTestHelper {
+public abstract class BaseTestHelper {
     @Rule
     public GrantPermissionRule mGrantPermissionRule = getPermissionRule();
 
@@ -46,6 +48,12 @@ public class BaseTestHelper {
                     "android.permission.POST_NOTIFICATIONS");
         }
         return null;
+    }
+
+    @Before
+    public void setup() {
+        Espresso.setFailureHandler(new MyFailureHandler(this.getClass().getName(),
+                getInstrumentation().getTargetContext()));
     }
 
     protected boolean isNotTimeBetween9And23() {
