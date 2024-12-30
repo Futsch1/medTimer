@@ -36,13 +36,13 @@ public class DeleteLinkedReminderTest extends BaseTestHelper {
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-        AndroidTestHelper.setTime(0, 1);
+        AndroidTestHelper.setTime(0, 1, true);
 
         onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(scrollTo(), click());
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-        AndroidTestHelper.setTime(0, 2);
+        AndroidTestHelper.setTime(0, 2, true);
 
         onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.open_advanced_settings)).perform(scrollTo(), click());
 

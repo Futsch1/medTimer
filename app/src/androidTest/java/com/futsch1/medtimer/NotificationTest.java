@@ -37,7 +37,7 @@ public class NotificationTest extends BaseTestHelper {
 
         onView(withId(R.id.addLinkedReminder)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-        AndroidTestHelper.setTime(0, 1);
+        AndroidTestHelper.setTime(0, 1, true);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
