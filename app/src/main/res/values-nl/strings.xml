@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -22,7 +23,7 @@
     <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="taken">Ingenomen</string>
-    <string name="skipped">Overslaan</string>
+    <string name="skipped">Overgeslagen</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
@@ -67,11 +68,11 @@
     <string name="backup_failed">Back-up mislukt</string>
     <string name="export_failed">Export mislukt</string>
     <string name="restore_successful">Succesvol herstellen</string>
-    <string name="restore_start">Alle behandelingen-instellingen en/of herinneringsgebeurtenissen worden overschreven.</string>
+    <string name="restore_start">Alle behandelingen-instellingen en/of herinneringsgebeurtenissen worden overschreven.\n\nDoorgaan?</string>
     <string name="log_additional_dose">Extra inname toevoegen</string>
     <string name="dismiss_notification_action">Actie bij het negeren van een melding</string>
     <string name="skip_reminder">Overslaan</string>
-    <string name="snooze">Snoozen</string>
+    <string name="snooze">Sluimer</string>
     <string name="snooze_duration">Sluimertijd</string>
     <string name="minutes_5">5 minuten</string>
     <string name="minutes_10">10 minuten</string>
@@ -118,9 +119,9 @@
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
     <string name="intro_medicine_description">Gebruik het tabblad \"Behandeling\" om de behandeling aan te maken dat je gebruikt en waaraan je herinnerd wilt worden. Veeg naar links om een behandeling te verwijderen.</string>
-    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen aan te maken voor de verschillende doses van het behandeling die je moet innemen. Herinneringen kunnen zo simpel zijn als één keer per dag op een bepaald tijdstip verschijnen of complexe schema\'s met meerdere dagen achter elkaar en meerdere dagen pauze.</string>
+    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen aan te maken voor de verschillende doses van het behandeling die je moet innemen.\n\nHerinneringen kunnen zo simpel zijn als één keer per dag op een bepaald tijdstip verschijnen of complexe schema\'s met meerdere dagen achter elkaar en meerdere dagen pauze.</string>
     <string name="intro_notification_description">Zodra er een herinnering is, verschijnt er een melding die je de mogelijkheid geeft om een dosis te markeren als ingenomen (door op de knop \"INGENOMEN\" te klikken), overgeslagen (door de melding te negeren) of na enige tijd opnieuw te worden herinnerd (\"SNOOZEN\").</string>
-    <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen. Verder kun je handmatig extra doses van een van de geconfigureerde behandelingen of een aangepast behandeling registreren.</string>
+    <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen.\n\nVerder kun je handmatig extra doses van een van de geconfigureerde behandelingen of een aangepast behandeling registreren.</string>
     <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als behandelingen of herinneringen worden verwijderd of een andere naam krijgen.</string>
     <string name="show_intro">Toon app intro</string>
     <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je de herinneringsgebeurtenis wilt verwijderen?</string>
