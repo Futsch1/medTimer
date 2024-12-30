@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends ListAdapter<T, VH> {
     private static final InitIdlingResource idlingResource = new InitIdlingResource("ListAdapter");
-    private static final InitIdlingResource idlingResource2 = new InitIdlingResource("ListAdapter");
+    private static final InitIdlingResource idlingResource2 = new InitIdlingResource("ListAdapter2");
 
     private InitIdlingResource usedResource = idlingResource;
 
