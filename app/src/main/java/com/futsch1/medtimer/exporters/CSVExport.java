@@ -20,6 +20,7 @@ public class CSVExport implements Exporter {
         this.context = context;
     }
 
+    @SuppressWarnings("java:S6300") // Unencrypted file is intended here and not a mistake
     public void export(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
             List<String> headerTexts = TableHelper.getTableHeaders(context);
