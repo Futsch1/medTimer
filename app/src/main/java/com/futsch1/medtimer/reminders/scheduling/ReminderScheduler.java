@@ -43,6 +43,7 @@ public class ReminderScheduler {
         return scheduledReminders;
     }
 
+    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
     private ArrayList<Reminder> getReminders(List<MedicineWithReminders> medicineWithReminders) {
         ArrayList<Reminder> reminders = new ArrayList<>();
         for (MedicineWithReminders medicineWithReminder : medicineWithReminders

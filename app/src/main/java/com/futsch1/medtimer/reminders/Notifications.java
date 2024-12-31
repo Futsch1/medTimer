@@ -28,6 +28,7 @@ public class Notifications {
     private final Context context;
     private final SharedPreferences sharedPreferences;
 
+    @SuppressWarnings("java:S6300") // No sensitive data is stored in the shared preferences
     public Notifications(@NonNull Context context) {
         this.context = context;
         sharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE);

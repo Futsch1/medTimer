@@ -16,8 +16,10 @@ public class MedicineRepository {
 
     private final MedicineDao medicineDao;
     private final MedicineRoomDatabase database;
+    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
     private final List<ReminderEvent.ReminderStatus> allStatusValues = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.DELETED, ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
             collect(Collectors.toList());
+    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
     private final List<ReminderEvent.ReminderStatus> statusValuesWithoutDelete = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
             collect(Collectors.toList());
 
@@ -80,8 +82,7 @@ public class MedicineRepository {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
-            //noinspection CallToPrintStackTrace
-            e1.printStackTrace();
+            return -1;
         }
         return 0;
     }
