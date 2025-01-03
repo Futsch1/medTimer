@@ -57,7 +57,7 @@ class SettingsTest : BaseTestHelper() {
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(notification)
-        notification.fling(Direction.RIGHT)
+        if (!notification.fling(Direction.RIGHT)) notification.fling(Direction.RIGHT)
         device.pressBack()
 
         // Check overview and next reminders
@@ -91,7 +91,7 @@ class SettingsTest : BaseTestHelper() {
         device.openNotification()
         val newNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(newNotification)
-        newNotification.fling(Direction.RIGHT)
+        if (!newNotification.fling(Direction.RIGHT)) newNotification.fling(Direction.RIGHT)
         device.pressBack()
 
         // Check overview and next reminders
