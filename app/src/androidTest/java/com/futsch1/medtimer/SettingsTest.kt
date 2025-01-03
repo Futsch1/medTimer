@@ -1,12 +1,10 @@
 package com.futsch1.medtimer
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
@@ -54,6 +52,8 @@ class SettingsTest : BaseTestHelper() {
         pressBack()
 
         // Now dismiss notification
+        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
+        navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(notification)
@@ -78,18 +78,16 @@ class SettingsTest : BaseTestHelper() {
         onView(withText(R.string.taken)).perform(click())
         device.pressBack()
 
-        navigateTo(MainMenu.MEDICINES)
-        onView(withId(R.id.medicineList)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                0,
-                click()
-            )
-        )
-        // And create new interval reminder (amount 2) 2 hours from now
-        AndroidTestHelper.createIntervalReminder("2", 120)
-        pressBack()
+        // Clear event data (causes reminder to be re-raised)
+        device.wait(Until.findObject(By.desc("More options")), 2000)
+        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        onView(withText(R.string.event_data)).perform(click())
+        onView(withText(R.string.clear_events)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
 
         // Now dismiss notification
+        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
+        navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         val newNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(newNotification)
