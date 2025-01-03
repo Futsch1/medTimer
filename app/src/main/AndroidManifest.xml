@@ -29,6 +29,7 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedTimer"
+        android:usesCleartextTraffic="false"
         tools:targetApi="tiramisu">
 
         <service

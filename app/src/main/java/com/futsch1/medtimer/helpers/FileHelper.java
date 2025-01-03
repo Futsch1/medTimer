@@ -24,6 +24,7 @@ public class FileHelper {
         // Intentionally empty
     }
 
+    @SuppressWarnings("java:S6300") // Unencrypted file is intended here and not a mistake
     public static boolean saveToFile(File file, String content) {
         try {
             try (FileWriter writer = new FileWriter(file)) {

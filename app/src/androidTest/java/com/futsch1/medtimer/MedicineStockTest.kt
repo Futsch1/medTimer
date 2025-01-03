@@ -41,15 +41,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine("Test")
         // Interval reminder (amount 3) 10 minutes from now
-        onView(withId(R.id.addReminder)).perform(click())
-
-        onView(withId(R.id.editAmount))
-            .perform(replaceText("3"), closeSoftKeyboard())
-        onView(withId(R.id.intervalBased)).perform(click())
-        onView(withId(R.id.intervalMinutes)).perform(click())
-        onView(withId(R.id.editIntervalTime))
-            .perform(replaceText("10"), closeSoftKeyboard())
-        onView(withId(R.id.createReminder)).perform(click())
+        AndroidTestHelper.createIntervalReminder("3", 10)
 
         onView(withId(R.id.openStockTracking)).perform(click())
         onView(withId(R.id.amountLeft)).perform(replaceText("10"), closeSoftKeyboard())

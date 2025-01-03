@@ -29,6 +29,7 @@ public class ManualDose {
     private final FragmentActivity activity;
     private final SharedPreferences sharedPreferences;
 
+    @SuppressWarnings("java:S6300") // No sensitive data is stored in the shared preferences
     public ManualDose(Context context, MedicineRepository medicineRepository, FragmentActivity activity) {
         this.context = context;
         this.medicineRepository = medicineRepository;

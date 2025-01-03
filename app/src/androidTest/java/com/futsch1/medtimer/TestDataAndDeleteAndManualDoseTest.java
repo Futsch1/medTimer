@@ -56,8 +56,7 @@ public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
         onView(withText(R.string.yes)).perform(scrollTo(), click());
 
         onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(2, click()));
-        onView(withId(R.id.reminderList)).perform(actionOnItemAtPosition(1, click()));
-
+        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(1, R.id.open_advanced_settings)).perform(click());
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(R.string.delete)).perform(click());
         onView(allOf(withId(android.R.id.button1), withText(R.string.yes))).perform(scrollTo(), click());

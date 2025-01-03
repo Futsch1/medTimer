@@ -58,7 +58,6 @@ public class AndroidTestHelper {
                         isDisplayed()));
         try {
             bottomNavigationItemView.perform(click());
-
         } catch (Exception e) {
             pressBack();
             UiDevice device = UiDevice.getInstance(getInstrumentation());
@@ -114,6 +113,21 @@ public class AndroidTestHelper {
             setTime(time.getHour(), time.getMinute(), false);
         }
 
+        onView(withId(R.id.createReminder)).perform(click());
+    }
+
+    public static void createIntervalReminder(String amount, int intervalMinutes) {
+        onView(withId(R.id.addReminder)).perform(click());
+        onView(withId(R.id.editAmount)).perform(
+                replaceText(amount),
+                closeSoftKeyboard()
+        );
+        onView(withId(R.id.intervalBased)).perform(click());
+        onView(withId(R.id.intervalMinutes)).perform(click());
+        onView(withId(R.id.editIntervalTime)).perform(
+                replaceText(Integer.toString(intervalMinutes)),
+                closeSoftKeyboard()
+        );
         onView(withId(R.id.createReminder)).perform(click());
     }
 
