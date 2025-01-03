@@ -58,7 +58,6 @@ public class AndroidTestHelper {
                         isDisplayed()));
         try {
             bottomNavigationItemView.perform(click());
-            return;
         } catch (Exception e) {
             pressBack();
             UiDevice device = UiDevice.getInstance(getInstrumentation());
