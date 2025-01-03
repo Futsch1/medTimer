@@ -51,14 +51,7 @@ class SettingsTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
 
-        // Now dismiss notification
-        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
-        navigateTo(MainMenu.ANALYSIS)
-        device.openNotification()
-        val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(notification)
-        if (!notification.fling(Direction.RIGHT)) notification.fling(Direction.RIGHT)
-        device.pressBack()
+        dismissNotification(device)
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
@@ -85,14 +78,7 @@ class SettingsTest : BaseTestHelper() {
         onView(withText(R.string.clear_events)).perform(click())
         onView(withId(android.R.id.button1)).perform(click())
 
-        // Now dismiss notification
-        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
-        navigateTo(MainMenu.ANALYSIS)
-        device.openNotification()
-        val newNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(newNotification)
-        if (!newNotification.fling(Direction.RIGHT)) newNotification.fling(Direction.RIGHT)
-        device.pressBack()
+        dismissNotification(device)
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
@@ -138,5 +124,19 @@ class SettingsTest : BaseTestHelper() {
 
         val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(nextNotification)
+    }
+
+    private fun dismissNotification(device: UiDevice) {
+        // Now dismiss notification
+        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
+        navigateTo(MainMenu.ANALYSIS)
+        device.openNotification()
+        var notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
+        Assert.assertNotNull(notification)
+        notification.fling(Direction.RIGHT)
+        notification = device.wait(Until.findObject(By.textContains("Test med")), 500)
+        notification?.fling(Direction.RIGHT)
+
+        device.pressBack()
     }
 }
