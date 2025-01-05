@@ -16,7 +16,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few"></item>
+        <item quantity="few"/>
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -80,4 +80,31 @@
     <string name="minutes_15">15 хвилин</string>
     <string name="minutes_5">5 хвилин</string>
     <string name="minutes_60">60 хвилин</string>
+    <string name="snooze_duration">Тривалість відкладення</string>
+    <string name="weekend_mode">Режим вихідного дня</string>
+    <string name="weekend_mode_days">Дні</string>
+    <string name="monday">Понеділок</string>
+    <string name="tuesday">Вівторок</string>
+    <string name="wednesday">Середа</string>
+    <string name="thursday">Четвер</string>
+    <string name="friday">П\'ятниця</string>
+    <string name="saturday">Субота</string>
+    <string name="sunday">Неділя</string>
+    <string name="weekend_mode_summary">Відкласти сповіщення на певні дні тижня до вказаного часу</string>
+    <string name="custom">Користувацьке…</string>
+    <string name="advanced_settings">Розширені налаштування</string>
+    <string name="remind_on">Нагадати</string>
+    <string name="every_day">Щодня</string>
+    <string name="cycle_pause_days">Призупинити дні</string>
+    <string name="cycle_start_date">Початок першого циклу</string>
+    <string name="cycle_reminders">Циклічні нагадування</string>
+    <string name="reminders">Нагадування</string>
+    <string name="weekday_limited">Обмежується деякими будніми днями</string>
+    <string name="filter">Фільтр</string>
+    <string name="seven_days">7 днів</string>
+    <string name="analysis">Аналіз</string>
+    <string name="tabular_view">Табличний вигляд</string>
+    <string name="fourteen_days">14 днів</string>
+    <string name="thirty_days">30 днів</string>
+    <string name="total">Загалом</string>
 </resources>
