@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -44,7 +45,7 @@
     <string name="color">Colore</string>
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>
-    <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo nei eventi futuri.</string>
+    <string name="change_color_toast">Tieni presente che le modifiche al colore hanno effetto solo negli eventi futuri</string>
     <string name="exact_reminders_summary">I promemoria sono programmati all\'ora esatta (aumenta il consumo della batteria)</string>
     <string name="enable_alarm_dialog">Per consentire la programmazione di allarmi precisi, abilita questo per MedTimer nel seguente menu</string>
     <string name="generate_test_data">Genera dati di prova</string>
@@ -88,7 +89,7 @@
     <string name="friday">Venerdì</string>
     <string name="saturday">Sabato</string>
     <string name="sunday">Domenica</string>
-    <string name="weekend_mode_summary">Ritarda le notifiche in determinati giorni della settimana fino a una determinata ora.</string>
+    <string name="weekend_mode_summary">Ritarda le notifiche in determinati giorni della settimana fino a una determinata ora</string>
     <string name="custom">Personalizzato…</string>
     <string name="advanced_settings">Impostazioni avanzate</string>
     <string name="remind_on">Ricorda</string>
@@ -198,8 +199,8 @@
     <string name="out_of_stock_notification_title">Promemoria per fare scorta di medicinali</string>
     <string name="medicine_stock">Scorte de medicinali</string>
     <string name="amount">Quantità</string>
-    <string name="out_of_stock_reminder">Promemoria sull&amp;apos;esaurimento delle scorte</string>
-    <string name="reminder_threshold">Soglia di richiamo</string>
+    <string name="out_of_stock_reminder">Promemoria sull\'esaurimento delle scorte</string>
+    <string name="reminder_threshold">Soglia di avviso</string>
     <string name="refill_size">Dimensione della ricarica</string>
     <string name="refill_now">Ricarica ora</string>
 </resources>
