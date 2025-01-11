@@ -28,6 +28,12 @@ android {
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments.putAll(
+            mapOf(
+                "clearPackageData" to "true",
+                "useTestStorageService" to "true"
+            )
+        )
     }
     buildTypes {
         release {
@@ -60,6 +66,7 @@ android {
             isIncludeAndroidResources = true
         }
         animationsDisabled = true
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -99,6 +106,7 @@ dependencies {
     val screengrabVersion = "2.1.1"
     val uiautomatorVersion = "2.3.0"
     val androidTestRunnerVersion = "1.6.2"
+    val androidTestOrchestratorVersion = "1.5.1"
     val baristaVersion = "4.2.0"
 
     val desugarJdkVersion = "2.1.4"
@@ -141,7 +149,7 @@ dependencies {
     androidTestImplementation("androidx.test.uiautomator:uiautomator:$uiautomatorVersion")
     androidTestImplementation("androidx.test:runner:$androidTestRunnerVersion")
     androidTestImplementation("com.adevinta.android:barista:$baristaVersion")
-    //androidTestUtil("androidx.test:orchestrator:$androidTestOrchestratorVersion")
+    androidTestUtil("androidx.test:orchestrator:$androidTestOrchestratorVersion")
 
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
