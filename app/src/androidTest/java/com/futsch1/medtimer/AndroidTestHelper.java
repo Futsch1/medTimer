@@ -3,34 +3,23 @@ package com.futsch1.medtimer;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
-import android.content.Context;
 import android.icu.util.Calendar;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
 
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -51,29 +40,14 @@ public class AndroidTestHelper {
     }
 
     public static void navigateTo(MainMenu mainMenu) {
-        int[] menuItems = {R.string.tab_overview, R.string.tab_medicine, R.string.analysis};
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(menuIds[mainMenu.ordinal()]), withContentDescription(menuItems[mainMenu.ordinal()]),
-                        isDisplayed()));
-        try {
-            bottomNavigationItemView.perform(click());
-        } catch (Exception e) {
-            pressBack();
-            UiDevice device = UiDevice.getInstance(getInstrumentation());
-            Context context = getInstrumentation().getTargetContext();
-            UiObject2 object = device.findObject(By.text(context.getString(R.string.cancel)));
-            if (object != null) {
-                object.click();
-            }
-        }
-        bottomNavigationItemView.perform(click());
+        clickOn(menuIds[mainMenu.ordinal()]);
+        clickOn(menuIds[mainMenu.ordinal()]);
     }
 
     private static void setReminderTo12AM(int position) {
-        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(position, R.id.medicineCard)).perform(click());
-
-        onView(new RecyclerViewMatcher(R.id.reminderList).atPositionOnView(0, R.id.editReminderTime)).perform(click());
+        clickListItem(R.id.medicineList, position);
+        clickListItemChild(R.id.reminderList, 0, R.id.editReminderTime);
 
         setTime(0, 0, false);
         pressBack();
@@ -104,67 +78,36 @@ public class AndroidTestHelper {
     }
 
     public static void createReminder(String amount, LocalTime time) {
-        onView(withId(R.id.addReminder)).perform(click());
-
-        onView(withId(R.id.editAmount)).perform(replaceText(amount), closeSoftKeyboard());
+        clickOn(R.id.addReminder);
+        writeTo(R.id.editAmount, amount);
 
         if (time != null) {
-            onView(withId(R.id.editReminderTime)).perform(click());
+            clickOn(R.id.editReminderTime);
             setTime(time.getHour(), time.getMinute(), false);
         }
 
-        onView(withId(R.id.createReminder)).perform(click());
+        clickOn(R.id.createReminder);
     }
 
     public static void createIntervalReminder(String amount, int intervalMinutes) {
-        onView(withId(R.id.addReminder)).perform(click());
-        onView(withId(R.id.editAmount)).perform(
-                replaceText(amount),
-                closeSoftKeyboard()
-        );
-        onView(withId(R.id.intervalBased)).perform(click());
-        onView(withId(R.id.intervalMinutes)).perform(click());
-        onView(withId(R.id.editIntervalTime)).perform(
-                replaceText(Integer.toString(intervalMinutes)),
-                closeSoftKeyboard()
-        );
-        onView(withId(R.id.createReminder)).perform(click());
+        clickOn(R.id.addReminder);
+        writeTo(R.id.editAmount, amount);
+
+        clickOn(R.id.intervalBased);
+        clickOn(R.id.intervalMinutes);
+        writeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
+
+        closeKeyboard();
+        clickOn(R.id.createReminder);
     }
 
     public static void createMedicine(String name) {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onView(withId(R.id.addMedicine)).perform(click());
+        clickOn(R.id.addMedicine);
+        writeTo(R.id.medicineName, name);
 
-        ViewInteraction textInputEditText = onView(
-                allOf(AndroidTestHelper.childAtPosition(
-                                AndroidTestHelper.childAtPosition(
-                                        withClassName(is("com.google.android.material.textfield.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText.perform(replaceText(name), closeSoftKeyboard());
-
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
-    }
-
-    public static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        clickDialogPositiveButton();
     }
 
     public static String dateToString(Date date) {

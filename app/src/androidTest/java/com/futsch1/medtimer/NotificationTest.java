@@ -3,12 +3,10 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.hamcrest.Matchers.allOf;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static org.junit.Assert.assertNotNull;
 
 import android.view.InputDevice;
@@ -19,48 +17,40 @@ import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Tap;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.filters.LargeTest;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
-import org.junit.Rule;
 import org.junit.Test;
 
-@LargeTest
 public class NotificationTest extends BaseTestHelper {
-
-    @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void notificationTest() {
         AndroidTestHelper.createMedicine("Test med");
-        
-        // Set color and icon
-        onView(withId(R.id.enableColor)).perform(click());
-        onView(withId(R.id.selectColor)).perform(click());
-        onView(withResourceName("colorPickerView")).perform(new GeneralClickAction(Tap.SINGLE, GeneralLocation.CENTER_LEFT, Press.FINGER, InputDevice.SOURCE_UNKNOWN, MotionEvent.BUTTON_PRIMARY));
-        onView(withId(android.R.id.button1)).perform(click());
 
-        onView(withId(R.id.selectIcon)).perform(click());
+        // Set color and icon
+        clickOn(R.id.enableColor);
+        clickOn(R.id.selectColor);
+        onView(withResourceName("colorPickerView")).perform(new GeneralClickAction(Tap.SINGLE, GeneralLocation.CENTER_LEFT, Press.FINGER, InputDevice.SOURCE_UNKNOWN, MotionEvent.BUTTON_PRIMARY));
+        clickDialogPositiveButton();
+
+        clickOn(R.id.selectIcon);
         onView(withResourceName("icd_rcv_icon_list")).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
         AndroidTestHelper.createReminder("1", AndroidTestHelper.getNextNotificationTime().toLocalTime());
 
-        onView(withId(R.id.open_advanced_settings)).perform(click());
+        clickOn(R.id.open_advanced_settings);
 
-        onView(withId(R.id.addLinkedReminder)).perform(click());
-        onView(allOf(withId(android.R.id.button1), withText("OK"))).perform(scrollTo(), click());
+        clickOn(R.id.addLinkedReminder);
+        clickDialogPositiveButton();
         AndroidTestHelper.setTime(0, 1, true);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
-        mActivityScenarioRule.getScenario().close();
+        baristaRule.getActivityTestRule().finishActivity();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.openNotification();

@@ -112,6 +112,7 @@ public class MedicinesFragment extends Fragment {
             editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             editText.setHint(R.string.medicine_name);
             editText.setSingleLine();
+            editText.setId(R.id.medicineName);
             textInputLayout.addView(editText);
 
             AlertDialog.Builder builder = getAlertBuilder(textInputLayout, editText);

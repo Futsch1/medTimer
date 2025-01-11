@@ -13,6 +13,8 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.rule.BaristaRule;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public abstract class BaseTestHelper {
+    @Rule
+    public BaristaRule<MainActivity> baristaRule = BaristaRule.create(MainActivity.class);
     @Rule
     public GrantPermissionRule mGrantPermissionRule = getPermissionRule();
 
@@ -54,6 +58,9 @@ public abstract class BaseTestHelper {
     public void setup() {
         Espresso.setFailureHandler(new MyFailureHandler(this.getClass().getName(),
                 getInstrumentation().getTargetContext()));
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.pressHome();
+        baristaRule.launchActivity();
     }
 
     protected boolean isNotTimeBetween9And23() {

@@ -1,70 +1,52 @@
 package com.futsch1.medtimer;
 
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.hamcrest.Matchers.allOf;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
+import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.filters.LargeTest;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.Until;
-
-import org.junit.Rule;
 import org.junit.Test;
 
-@LargeTest
 public class CalendarTest extends BaseTestHelper {
 
-    @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
-
     @Test
+    //@AllowFlaky(attempts = 1)
     public void calendarTest() {
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
-        device.wait(Until.findObject(By.desc("More options")), 1000);
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText(R.string.generate_test_data)).perform(click());
+        openMenu();
+        clickOn(R.string.generate_test_data);
 
         if (isNotTimeBetween9And23()) {
             AndroidTestHelper.setAllRemindersTo12AM();
         }
 
-        onView(allOf(withId(R.id.showOnlyOpen), isDisplayed())).perform(click());
+        clickOn(R.id.showOnlyOpen);
 
         int takenReminders = 0;
 
         while (takenReminders < 10) {
             try {
-                onView(new RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)).perform(click());
+                clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken);
             } catch (Exception e) {
                 break;
             }
             takenReminders++;
         }
-        onView(new RecyclerViewMatcher(R.id.latestReminders).sizeMatcher(0)).check(matches(isDisplayed()));
+        assertListItemCount(R.id.latestReminders, 0);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
-        onView(new RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)).perform(click());
-        onView(allOf(withId(R.id.openCalendar))).perform(click());
-        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Omega 3 (EPA/DHA 500mg)")));
-
+        clickListItem(R.id.medicineList, 0);
+        clickOn(R.id.openCalendar);
+        assertContains(R.id.currentDayEvents, "Omega 3 (EPA/DHA 500mg)");
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
 
-        onView(allOf(withId(R.id.calendarChip), isDisplayed())).perform(click());
-        onView(allOf(withId(R.id.currentDayEvents), isDisplayed())).check(matches(withSubstring("Selen (200 µg)")));
+        clickOn(R.id.calendarChip);
+        assertContains(R.id.currentDayEvents, "Selen (200 µg)");
     }
 }
