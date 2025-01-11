@@ -6,34 +6,28 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.not
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Rule
 import org.junit.Test
 
 @LargeTest
 class MedicineStockTest : BaseTestHelper() {
-
-    @JvmField
-    @Rule
-    var mActivityScenarioRule: ActivityScenarioRule<MainActivity> = ActivityScenarioRule(
-        MainActivity::class.java
-    )
 
     @Test
     fun medicineStockTest() {
@@ -43,23 +37,20 @@ class MedicineStockTest : BaseTestHelper() {
         // Interval reminder (amount 3) 10 minutes from now
         AndroidTestHelper.createIntervalReminder("3", 10)
 
-        onView(withId(R.id.openStockTracking)).perform(click())
-        onView(withId(R.id.amountLeft)).perform(replaceText("10"), closeSoftKeyboard())
-        onView(withId(R.id.medicineStockReminder)).perform(click())
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "10")
+        clickOn(R.id.medicineStockReminder)
         onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
+        writeTo(R.id.reminderThreshold, "4")
         onView(withId(R.id.reminderThreshold)).perform(replaceText("4"), closeSoftKeyboard())
-        onView(withId(R.id.refillSize)).perform(replaceText("10"), closeSoftKeyboard())
+        writeTo(R.id.refillSize, "10")
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)
-        ).perform(
-            scrollTo(), click()
-        )
+        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.openNotification()
         var o = device.wait(
@@ -69,11 +60,7 @@ class MedicineStockTest : BaseTestHelper() {
         assertNull(o)
         device.pressBack()
 
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipSkipped)
-        ).perform(
-            click()
-        )
+        clickListItemChild(R.id.latestReminders, 0, R.id.chipSkipped)
         device.openNotification()
         o = device.wait(
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
@@ -82,11 +69,7 @@ class MedicineStockTest : BaseTestHelper() {
         assertNull(o)
         device.pressBack()
 
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(0, R.id.chipTaken)
-        ).perform(
-            click()
-        )
+        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
         device.openNotification()
         o = device.wait(
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
@@ -97,21 +80,15 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        onView(
-            RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)
-        ).perform(
-            click()
-        )
-        onView(withId(R.id.openStockTracking)).perform(click())
-        onView(withId(R.id.amountLeft)).check(matches(withText("7")))
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(R.id.amountLeft, "7")
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        onView(RecyclerViewMatcher(R.id.nextReminders).atPositionOnView(0, R.id.takenNow)).perform(
-            scrollTo(), click()
-        )
+        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow)
         device.openNotification()
         o = device.wait(
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
@@ -121,21 +98,17 @@ class MedicineStockTest : BaseTestHelper() {
         device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        onView(withId(R.id.medicineName)).check(matches(withText(containsString("⚠"))))
+        assertContains(R.id.medicineName, "⚠")
 
-        onView(
-            RecyclerViewMatcher(R.id.medicineList).atPositionOnView(0, R.id.medicineCard)
-        ).perform(
-            click()
-        )
-        onView(withId(R.id.openStockTracking)).perform(click())
-        onView(withId(R.id.refillNow)).perform(click())
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        clickOn(R.id.refillNow)
 
-        onView(withId(R.id.amountLeft)).check(matches(withText("14")))
+        assertDisplayed(R.id.amountLeft, "14")
         pressBack()
         pressBack()
 
-        onView(withId(R.id.medicineName)).check(matches(withText(containsString("14"))))
-        onView(withId(R.id.medicineName)).check(matches(not(withText(containsString("⚠")))))
+        assertContains(R.id.medicineName, "14")
+        assertNotContains(R.id.medicineName, "⚠")
     }
 }

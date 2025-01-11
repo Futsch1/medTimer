@@ -26,6 +26,7 @@ public class DialogHelper {
         editText.setHint(hint);
         editText.setSingleLine();
         editText.setMinimumHeight(dpToPx(context.getResources(), 48));
+        editText.setId(android.R.id.input);
         textInputLayout.addView(editText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
