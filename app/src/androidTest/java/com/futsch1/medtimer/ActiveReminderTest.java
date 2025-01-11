@@ -3,29 +3,20 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.filters.LargeTest;
-
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Calendar;
 
-@LargeTest
 public class ActiveReminderTest extends BaseTestHelper {
-
-    @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
-
     @Test
+    //@AllowFlaky(attempts = 1)
     public void activeReminderTest() {
         Calendar futureTime = Calendar.getInstance();
         int year = futureTime.get(Calendar.YEAR);
@@ -36,60 +27,58 @@ public class ActiveReminderTest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        onView(withId(R.id.open_advanced_settings)).perform(click());
-
-        onView(withId(R.id.inactive)).perform(click());
-
-        pressBack();
-        pressBack();
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
-
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.open_advanced_settings)).perform(click());
-        onView(withId(R.id.active)).perform(click());
+        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.inactive);
 
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(1)).check(matches(isEnabled()));
+        assertNotDisplayed(R.id.nextReminders);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.open_advanced_settings)).perform(click());
-        onView(withId(R.id.timePeriod)).perform(click());
-        onView(withId(R.id.periodStart)).perform(click());
+        clickListItem(R.id.medicineList, 0);
+        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.active);
+
+        pressBack();
+        pressBack();
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+        assertListItemCount(R.id.nextReminders, 1);
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+        clickListItem(R.id.medicineList, 0);
+        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.timePeriod);
+        clickOn(R.id.periodStart);
         onView(withId(R.id.periodStartDate)).perform(replaceText(AndroidTestHelper.dateToString(futureTime.getTime())));
 
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
+        assertNotDisplayed(R.id.nextReminders);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.open_advanced_settings)).perform(click());
-        onView(withId(R.id.periodStart)).perform(click());
-        onView(withId(R.id.periodEnd)).perform(click());
+        clickListItem(R.id.medicineList, 0);
+        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.periodStart);
+        clickOn(R.id.periodEnd);
         onView(withId(R.id.periodEndDate)).perform(replaceText(AndroidTestHelper.dateToString(pastTime.getTime())));
 
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(0)).check(matches(isEnabled()));
+        assertNotDisplayed(R.id.nextReminders);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-        onView(withId(R.id.medicineList)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.open_advanced_settings)).perform(click());
-        onView(withId(R.id.periodStart)).perform(click());
+        clickListItem(R.id.medicineList, 0);
+        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.periodStart);
         onView(withId(R.id.periodStartDate)).perform(replaceText(AndroidTestHelper.dateToString(pastTime.getTime())));
         onView(withId(R.id.periodEndDate)).perform(replaceText(AndroidTestHelper.dateToString(futureTime.getTime())));
 
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        onView(new RecyclerViewMatcher(R.id.nextReminders).sizeMatcher(1)).check(matches(isEnabled()));
+        assertListItemCount(R.id.nextReminders, 1);
     }
-
 }
