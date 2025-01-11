@@ -58,6 +58,8 @@ public abstract class BaseTestHelper {
     public void setup() {
         Espresso.setFailureHandler(new MyFailureHandler(this.getClass().getName(),
                 getInstrumentation().getTargetContext()));
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.pressHome();
         baristaRule.launchActivity();
     }
 

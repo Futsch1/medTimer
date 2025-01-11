@@ -86,8 +86,6 @@ class SettingsTest : BaseTestHelper() {
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
-        device.pressBack()
         openMenu()
 
         // Repeat reminder every minute
