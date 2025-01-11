@@ -17,7 +17,6 @@ import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Tap;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.filters.LargeTest;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
@@ -26,7 +25,6 @@ import androidx.test.uiautomator.Until;
 
 import org.junit.Test;
 
-@LargeTest
 public class NotificationTest extends BaseTestHelper {
 
     @Test

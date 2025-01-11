@@ -9,11 +9,8 @@ import static com.adevinta.android.barista.interaction.BaristaListInteractions.c
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 
-import androidx.test.filters.LargeTest;
-
 import org.junit.Test;
 
-@LargeTest
 public class CalendarTest extends BaseTestHelper {
 
     @Test

@@ -13,6 +13,7 @@ import static com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.hamcrest.Matchers.allOf;
@@ -99,6 +100,7 @@ public class AndroidTestHelper {
         clickOn(R.id.intervalMinutes);
         clearText(R.id.editIntervalTime);
         typeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
+        closeKeyboard();
 
         clickOn(R.id.createReminder);
     }

@@ -21,7 +21,6 @@ import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 
 import android.content.Context;
 
-import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
@@ -32,7 +31,6 @@ import org.junit.Test;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-@LargeTest
 public class ReminderTest extends BaseTestHelper {
     @Test
     //@AllowFlaky(attempts = 1)
