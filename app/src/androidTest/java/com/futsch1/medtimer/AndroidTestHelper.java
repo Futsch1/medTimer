@@ -10,6 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -17,15 +19,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.icu.util.Calendar;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -47,6 +42,7 @@ public class AndroidTestHelper {
 
     public static void navigateTo(MainMenu mainMenu) {
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        clickOn(menuIds[mainMenu.ordinal()]);
         clickOn(menuIds[mainMenu.ordinal()]);
     }
 
@@ -96,11 +92,13 @@ public class AndroidTestHelper {
 
     public static void createIntervalReminder(String amount, int intervalMinutes) {
         clickOn(R.id.addReminder);
-        writeTo(R.id.editAmount, amount);
+        clearText(R.id.editAmount);
+        typeTo(R.id.editAmount, amount);
 
         clickOn(R.id.intervalBased);
         clickOn(R.id.intervalMinutes);
-        writeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
+        clearText(R.id.editIntervalTime);
+        typeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
 
         clickOn(R.id.createReminder);
     }
@@ -112,25 +110,6 @@ public class AndroidTestHelper {
         writeTo(R.id.medicineName, name);
 
         clickDialogPositiveButton();
-    }
-
-    public static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
     }
 
     public static String dateToString(Date date) {

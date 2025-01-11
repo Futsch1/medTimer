@@ -9,6 +9,8 @@ import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -23,7 +25,6 @@ import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
 import org.junit.Test;
@@ -129,7 +130,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void reminderTypeTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -149,10 +150,12 @@ public class ReminderTest extends BaseTestHelper {
 
         // Interval reminder (amount 3) 2 hours from now
         clickOn(R.id.addReminder);
-        writeTo(R.id.editAmount, "3");
+        clearText(R.id.editAmount);
+        typeTo(R.id.editAmount, "3");
         clickOn(R.id.intervalBased);
         clickOn(R.id.intervalHours);
-        writeTo(R.id.editIntervalTime, "2");
+        clearText(R.id.editIntervalTime);
+        typeTo(R.id.editIntervalTime, "2");
         clickOn(R.id.createReminder);
 
         // Check calendar view not crashing

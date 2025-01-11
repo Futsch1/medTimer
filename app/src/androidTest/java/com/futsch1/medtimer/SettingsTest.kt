@@ -1,47 +1,39 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
-import org.junit.Rule
 import org.junit.Test
 
-@LargeTest
 class SettingsTest : BaseTestHelper() {
 
-    @JvmField
-    @Rule
-    var mActivityScenarioRule: ActivityScenarioRule<MainActivity> = ActivityScenarioRule(
-        MainActivity::class.java
-    )
-
     @Test
+    //@AllowFlaky(attempts = 1)
     fun actionOnDismissedNotification() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.findObject(By.desc("More options")), 2000)
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        openMenu()
 
         // Skip reminder on dismiss
-        onView(withText(R.string.tab_settings)).perform(click())
-        onView(withText(R.string.dismiss_notification_action)).perform(click())
-        onView(withText(R.string.skip_reminder)).perform(click())
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.skip_reminder)
         pressBack()
 
         navigateTo(MainMenu.MEDICINES)
@@ -55,59 +47,58 @@ class SettingsTest : BaseTestHelper() {
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(
-                0,
-                R.id.chipSkipped
-            )
-        ).check(matches(isChecked()))
+        assertCustomAssertionAtPosition(
+            R.id.latestReminders,
+            0,
+            R.id.chipSkipped,
+            matches(isChecked())
+        )
 
         // Now change to action taken on dismiss
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        openMenu()
 
         // Skip reminder on dismiss
-        onView(withText(R.string.tab_settings)).perform(click())
-        onView(withText(R.string.dismiss_notification_action)).perform(click())
-        onView(withText(R.string.taken)).perform(click())
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.taken)
         device.pressBack()
 
         // Clear event data (causes reminder to be re-raised)
-        device.wait(Until.findObject(By.desc("More options")), 2000)
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        onView(withText(R.string.event_data)).perform(click())
-        onView(withText(R.string.clear_events)).perform(click())
-        onView(withId(android.R.id.button1)).perform(click())
+        openMenu()
+        clickOn(R.string.event_data)
+        clickOn(R.string.clear_events)
+        clickDialogPositiveButton()
 
         dismissNotification(device)
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
-        onView(
-            RecyclerViewMatcher(R.id.latestReminders).atPositionOnView(
-                0,
-                R.id.chipTaken
-            )
-        ).check(matches(isChecked()))
+        assertCustomAssertionAtPosition(
+            R.id.latestReminders,
+            0,
+            R.id.chipTaken,
+            matches(isChecked())
+        )
     }
 
     @Test
+    //@AllowFlaky(attempts = 1)
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.findObject(By.desc("More options")), 2000)
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        openMenu()
 
         // Repeat reminder every minute
-        onView(withText(R.string.tab_settings)).perform(click())
-        onView(withText(R.string.repeat_reminders)).perform(click())
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.repeat_reminders)
         onView(
             allOf(
                 withText(R.string.repeat_reminders),
                 withResourceName("title")
             )
         ).perform(click())
-        onView(withText(R.string.time_between_repetitions)).perform(click())
-        onView(withText(R.string.minutes_1)).perform(click())
+        clickOn(R.string.time_between_repetitions)
+        clickOn(R.string.minutes_1)
         pressBack()
 
         navigateTo(MainMenu.MEDICINES)
@@ -119,8 +110,9 @@ class SettingsTest : BaseTestHelper() {
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(notification)
+        val text = notification.text
 
-        device.wait(Until.gone(By.text(notification.text)), 240_000)
+        device.wait(Until.gone(By.text(text)), 240_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(nextNotification)
