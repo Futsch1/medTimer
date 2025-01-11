@@ -116,6 +116,7 @@ class SettingsTest : BaseTestHelper() {
 
         val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
         Assert.assertNotNull(nextNotification)
+        device.pressBack()
     }
 
     private fun dismissNotification(device: UiDevice) {
