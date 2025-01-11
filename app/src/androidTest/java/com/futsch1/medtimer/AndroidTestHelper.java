@@ -11,6 +11,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.hamcrest.Matchers.allOf;
@@ -96,6 +97,7 @@ public class AndroidTestHelper {
         clickOn(R.id.intervalMinutes);
         writeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
 
+        closeKeyboard();
         clickOn(R.id.createReminder);
     }
 

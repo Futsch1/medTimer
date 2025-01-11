@@ -10,6 +10,7 @@ import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
@@ -150,6 +151,7 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.id.intervalBased);
         clickOn(R.id.intervalHours);
         writeTo(R.id.editIntervalTime, "2");
+        closeKeyboard();
         clickOn(R.id.createReminder);
 
         // Check calendar view not crashing
