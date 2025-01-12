@@ -2,11 +2,9 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
@@ -56,25 +54,25 @@ public class AndroidTestHelper {
 
     public static void setTime(int hour, int minute, boolean isDeltaTime) {
         if (!android.text.format.DateFormat.is24HourFormat(getInstrumentation().getTargetContext()) && !isDeltaTime) {
-            onView(withId(com.google.android.material.R.id.material_clock_period_am_button)).perform(click());
+            clickOn(com.google.android.material.R.id.material_clock_period_am_button);
             if (hour == 12) {
-                onView(withId(com.google.android.material.R.id.material_clock_period_pm_button)).perform(click());
+                clickOn(com.google.android.material.R.id.material_clock_period_pm_button);
             }
             if (hour > 12) {
                 hour -= 12;
-                onView(withId(com.google.android.material.R.id.material_clock_period_pm_button)).perform(click());
+                clickOn(com.google.android.material.R.id.material_clock_period_pm_button);
             }
             if (hour == 0) {
                 hour = 12;
             }
         }
 
-        onView(withId(com.google.android.material.R.id.material_timepicker_mode_button)).perform(click());
-        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
+        clickOn(com.google.android.material.R.id.material_timepicker_mode_button);
+        clickOn(com.google.android.material.R.id.material_hour_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
-        onView(withId(com.google.android.material.R.id.material_minute_text_input)).perform(click());
+        clickOn(com.google.android.material.R.id.material_minute_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
-        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
     }
 
     public static void createReminder(String amount, LocalTime time) {
