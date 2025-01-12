@@ -58,7 +58,7 @@ public class Notifications {
             builder = builder.setColor(color.toArgb()).setColorized(true);
         }
 
-        buildActions(builder, notificationId, reminderEvent.reminderEventId, reminder.reminderId);
+        buildActions(builder, notificationId, reminderEvent.reminderEventId, reminder);
 
         notificationManager.notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
@@ -93,19 +93,18 @@ public class Notifications {
         return context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
     }
 
-    private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, int reminderId) {
+    private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, Reminder reminder) {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String dismissNotificationAction = defaultSharedPreferences.getString("dismiss_notification_action", "0");
         int snoozeTime = Integer.parseInt(defaultSharedPreferences.getString("snooze_duration", "15"));
 
-        Intent snooze = ReminderProcessor.getSnoozeIntent(context, reminderId, reminderEventId, notificationId, snoozeTime);
+        Intent snooze = ReminderProcessor.getSnoozeIntent(context, reminder.reminderId, reminderEventId, notificationId, snoozeTime);
         PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent notifyDismissed = ReminderProcessor.getDismissedActionIntent(context, reminderEventId);
         PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, notificationId, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
-        PendingIntent pendingTaken = PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingTaken = getTakenPendingIntent(notificationId, reminderEventId, reminder);
 
         if (dismissNotificationAction.equals("0")) {
             builder.addAction(R.drawable.check2_circle, context.getString(R.string.taken), pendingTaken);
@@ -119,6 +118,17 @@ public class Notifications {
             builder.addAction(R.drawable.x_circle, context.getString(R.string.skipped), pendingDismissed);
             builder.addAction(R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze);
             builder.setDeleteIntent(pendingTaken);
+        }
+    }
+
+    private PendingIntent getTakenPendingIntent(int notificationId, int reminderEventId, Reminder reminder) {
+        if (reminder.variableAmount) {
+            Intent notifyTaken = ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId);
+            return PendingIntent.getActivity(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
+            return PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
         }
     }
 

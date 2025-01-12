@@ -20,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.futsch1.medtimer.overview.VariableAmount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupNavigation();
+
+        new VariableAmount().process(this, this.getIntent());
     }
 
     private void showIntro(SharedPreferences sharedPref) {
@@ -102,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        new VariableAmount().process(this, intent);
     }
 
     @Override

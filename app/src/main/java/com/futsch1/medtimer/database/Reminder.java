@@ -59,6 +59,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "false")
     @Expose
     public boolean intervalStartsFromProcessed;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean variableAmount;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -74,6 +77,7 @@ public class Reminder {
         linkedReminderId = 0;
         intervalStart = 0;
         intervalStartsFromProcessed = false;
+        variableAmount = false;
     }
 
     public ReminderType getReminderType() {

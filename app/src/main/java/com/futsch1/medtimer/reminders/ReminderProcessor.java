@@ -25,6 +25,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.WorkManagerAccess;
 
 import java.time.LocalDateTime;
@@ -112,6 +113,13 @@ public class ReminderProcessor extends BroadcastReceiver {
     private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
         Intent actionIntent = new Intent(context, ReminderProcessor.class);
         actionIntent.setAction(actionName);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        return actionIntent;
+    }
+
+    public static Intent getVariableAmountActionIntent(Context context, int reminderEventId) {
+        Intent actionIntent = new Intent(context, MainActivity.class);
+        actionIntent.setAction("VARIABLE_AMOUNT");
         actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
         return actionIntent;
     }
