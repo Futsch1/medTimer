@@ -1,8 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Light.NoActionBar" />
 
-    <style name="Theme.MedTimer2" parent="Theme.Material3.Light">
+    <style name="Theme.MedTimer2" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

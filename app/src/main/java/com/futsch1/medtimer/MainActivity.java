@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
+        setSupportActionBar(findViewById(R.id.toolbar));
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
                 .build();
