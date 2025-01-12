@@ -183,17 +183,6 @@ sonar {
     }
 }
 
-val exclusions = listOf(
-    "**/R.class",
-    "**/R\$*.class",
-    "**/BuildConfig.*",
-    "**/Manifest*.*",
-    "**/*Test*.*",
-    "**/RecyclerViewMatcher.*",
-    "**/*Args.*",
-    "**/*Directions.*"
-)
-
 tasks.withType(Test::class) {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
@@ -209,6 +198,15 @@ android {
     // Define task names for unit tests and Android tests
     val unitTests = "testDebugUnitTest"
     val androidTests = "connectedDebugAndroidTest"
+    val exclusions = listOf(
+        "**/R.class",
+        "**/R\$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "**/*Args.*",
+        "**/*Directions.*"
+    )
 
     // Register a JacocoReport task for code coverage analysis
     tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
@@ -223,7 +221,7 @@ android {
             html.required.set(true)
         }
         // Set source directories to the main source directory
-        sourceDirectories.setFrom(layout.projectDirectory.dir("src/main"))
+        sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
         // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
         classDirectories.setFrom(files(
             fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
