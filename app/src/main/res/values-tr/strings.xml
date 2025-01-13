@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -198,4 +197,5 @@
     <string name="reminder_threshold">Hatırlatma eşiği</string>
     <string name="refill_size">Dolum boyutu</string>
     <string name="refill_now">Şimdi doldurun</string>
+    <string name="variable_amount">Alındığında dozajı girin</string>
 </resources>

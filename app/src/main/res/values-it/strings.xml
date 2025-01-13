@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -203,4 +202,5 @@
     <string name="reminder_threshold">Soglia di avviso</string>
     <string name="refill_size">Dimensione della ricarica</string>
     <string name="refill_now">Ricarica ora</string>
+    <string name="variable_amount">Inserire il dosaggio al momento dell&amp;apos;assunzione</string>
 </resources>

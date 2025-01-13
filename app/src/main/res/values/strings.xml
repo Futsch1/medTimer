@@ -201,4 +201,5 @@
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
+    <string name="variable_amount">Enter dosage when taken</string>
 </resources>

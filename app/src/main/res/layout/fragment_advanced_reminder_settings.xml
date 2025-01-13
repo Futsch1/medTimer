@@ -103,6 +103,19 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/variableAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/variable_amount" />
+
+            <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

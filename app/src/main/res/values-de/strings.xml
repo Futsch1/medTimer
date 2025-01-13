@@ -197,4 +197,5 @@
     <string name="reminder_threshold">Warnschwelle</string>
     <string name="refill_size">Packungsgröße</string>
     <string name="refill_now">Jetzt nachfüllen</string>
+    <string name="variable_amount">Dosierung bei Einnahme eingeben</string>
 </resources>
