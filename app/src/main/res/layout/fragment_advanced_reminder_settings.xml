@@ -48,6 +48,7 @@
             </RadioGroup>
 
             <LinearLayout
+                android:id="@+id/periodStartLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -75,6 +76,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/periodEndLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
