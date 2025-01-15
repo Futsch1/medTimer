@@ -19,7 +19,19 @@ public class DialogHelper {
         // Intentionally empty
     }
 
-    public static void showTextInputDialog(Context context, int title, int hint, TextSink textSink) {
+    public static void showTextInputDialog(Context context,
+                                           int title,
+                                           int hint,
+                                           TextSink textSink) {
+        showTextInputDialog(context, title, hint, "", textSink, null);
+    }
+
+    public static void showTextInputDialog(Context context,
+                                           int title,
+                                           int hint,
+                                           String initialText,
+                                           TextSink textSink,
+                                           CancelSink cancelSink) {
         TextInputLayout textInputLayout = new TextInputLayout(context);
         TextInputEditText editText = new TextInputEditText(context);
         editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
@@ -27,6 +39,7 @@ public class DialogHelper {
         editText.setSingleLine();
         editText.setMinimumHeight(dpToPx(context.getResources(), 48));
         editText.setId(android.R.id.input);
+        editText.setText(initialText);
         textInputLayout.addView(editText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -37,7 +50,12 @@ public class DialogHelper {
                 textSink.consumeText(e.toString());
             }
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            if (cancelSink != null) {
+                cancelSink.cancel();
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -51,5 +69,9 @@ public class DialogHelper {
 
     public interface TextSink {
         void consumeText(String text);
+    }
+
+    public interface CancelSink {
+        void cancel();
     }
 }

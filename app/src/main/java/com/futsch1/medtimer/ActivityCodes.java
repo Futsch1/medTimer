@@ -9,6 +9,7 @@ public class ActivityCodes {
     public static final String EXTRA_REMINDER_TIME = "com.futsch1.medTimer.EXTRA_REMINDER_TIME";
     public static final String EXTRA_REPEAT_TIME_SECONDS = "com.futsch1.medTimer.EXTRA_REPEAT_TIME_SECONDS";
     public static final String EXTRA_REMAINING_REPEATS = "com.futsch1.medTimer.EXTRA_REMAINING_REPEATS";
+    public static final String EXTRA_AMOUNT = "com.futsch1.medTimer.AMOUNT";
 
     public static final String REMINDER_ACTION = "com.futsch1.medTimer.REMINDER_ACTION";
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";

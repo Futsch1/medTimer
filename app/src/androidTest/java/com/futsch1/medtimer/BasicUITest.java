@@ -19,14 +19,14 @@ public class BasicUITest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
 
         clickOn(com.google.android.material.R.id.text_input_end_icon);
         clickListItem(1);
 
         pressBack();
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         assertContains(R.string.before_meal);
         pressBack();
 

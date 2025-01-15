@@ -22,7 +22,6 @@ import com.futsch1.medtimer.reminders.ReminderWork;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
-import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
 
@@ -69,14 +68,11 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
             ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(scheduledReminder.timestamp().atZone(ZoneId.systemDefault()).toLocalDateTime(),
                     scheduledReminder.medicine(), scheduledReminder.reminder());
             if (reminderEvent != null) {
-                reminderEvent.status = taken ? ReminderEvent.ReminderStatus.TAKEN : ReminderEvent.ReminderStatus.SKIPPED;
-                reminderEvent.stockHandled = taken;
-                reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
                 long reminderEventId = medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
-                if (taken) {
-                    ReminderProcessor.requestStockHandling(itemView.getContext(), (int) reminderEventId);
-                }
-                ReminderProcessor.requestReschedule(nextReminderText.getContext());
+                itemView.getContext().sendBroadcast(taken ?
+                                ReminderProcessor.getTakenActionIntent(itemView.getContext(), (int) reminderEventId)
+                                : ReminderProcessor.getDismissedActionIntent(itemView.getContext(), (int) reminderEventId),
+                        "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
             }
         });
     }

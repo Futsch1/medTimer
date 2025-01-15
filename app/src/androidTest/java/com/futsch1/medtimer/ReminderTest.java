@@ -43,7 +43,7 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.inactive);
 
         pressBack();
@@ -53,7 +53,7 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.active);
 
         pressBack();
@@ -63,7 +63,7 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.timePeriod);
         clickOn(R.id.periodStart);
         writeTo(R.id.periodStartDate, AndroidTestHelper.dateToString(futureTime.getTime()));
@@ -75,7 +75,7 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.periodStart);
         clickOn(R.id.periodEnd);
         writeTo(R.id.periodEndDate, AndroidTestHelper.dateToString(pastTime.getTime()));
@@ -87,7 +87,7 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.periodStart);
         writeTo(R.id.periodStartDate, AndroidTestHelper.dateToString(pastTime.getTime()));
         writeTo(R.id.periodEndDate, AndroidTestHelper.dateToString(futureTime.getTime()));
@@ -104,19 +104,19 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test med");
         AndroidTestHelper.createReminder("1", LocalTime.of(0, 0));
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
 
         clickOn(R.id.addLinkedReminder);
         clickDialogPositiveButton();
         setTime(0, 1, true);
 
-        clickListItemChild(R.id.reminderList, 1, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
 
         clickOn(R.id.addLinkedReminder);
         clickDialogPositiveButton();
         setTime(0, 2, true);
 
-        clickListItemChild(R.id.reminderList, 0, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
 
         openMenu();
         clickOn(R.string.delete);
@@ -138,7 +138,7 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createReminder("1", reminder1Time);
 
         // Linked reminder (amount 2) 30 minutes later
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.addLinkedReminder);
         writeTo(android.R.id.input, "2");
         clickDialogPositiveButton();
@@ -174,11 +174,11 @@ public class ReminderTest extends BaseTestHelper {
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         assertDisplayedAtPosition(R.id.reminderList, positionOfReminder2, R.id.reminderCardLayout, expectedString);
 
-        clickListItemChild(R.id.reminderList, positionOfReminder1, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, positionOfReminder1, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder2, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, positionOfReminder2, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder3, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, positionOfReminder3, R.id.openAdvancedSettings);
         pressBack();
 
         // Check overview and next reminders

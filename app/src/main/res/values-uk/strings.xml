@@ -174,7 +174,7 @@
     <string name="off">Вимкнено</string>
     <string name="once_below_threshold">Один раз при падінні нижче порогового значення</string>
     <string name="always_below_threshold">Завжди, коли нижче порогу</string>
-    <string name="out_of_stock_notification">Залишилося лише %2$ від %1$!\nПодумайте про те, щоб поповнити запас ліків найближчим часом.</string>
+    <string name="out_of_stock_notification">Залишилося лише %2$s від %1$s!\nПодумайте про те, щоб поповнити запас ліків найближчим часом.</string>
     <string name="medicine_stock_string">%1$s left%2$s</string>
     <string name="out_of_stock_notification_title">Нагадування про відсутність ліків на складі</string>
     <string name="medicine_stock">Запас медикаментів</string>

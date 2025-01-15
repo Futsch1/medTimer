@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.reminders;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
@@ -117,10 +119,12 @@ public class ReminderProcessor extends BroadcastReceiver {
         return actionIntent;
     }
 
-    public static Intent getVariableAmountActionIntent(Context context, int reminderEventId) {
+    public static Intent getVariableAmountActionIntent(Context context, int reminderEventId, String amount) {
         Intent actionIntent = new Intent(context, MainActivity.class);
         actionIntent.setAction("VARIABLE_AMOUNT");
+        actionIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        actionIntent.putExtra(EXTRA_AMOUNT, amount);
         return actionIntent;
     }
 

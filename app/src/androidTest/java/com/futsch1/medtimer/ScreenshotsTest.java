@@ -83,7 +83,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         clickListItem(R.id.medicineList, 0);
         Screengrab.screenshot("3");
 
-        clickListItemChild(R.id.reminderList, 1, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);

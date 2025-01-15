@@ -42,7 +42,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editTime = itemView.findViewById(R.id.editReminderTime);
         editTimeLayout = itemView.findViewById(R.id.editReminderTimeLayout);
         editAmount = itemView.findViewById(R.id.editAmount);
-        advancedSettings = itemView.findViewById(R.id.open_advanced_settings);
+        advancedSettings = itemView.findViewById(R.id.openAdvancedSettings);
         advancedSettingsSummary = itemView.findViewById(R.id.advancedSettingsSummary);
         this.thread = thread;
 

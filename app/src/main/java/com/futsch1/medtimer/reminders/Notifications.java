@@ -123,12 +123,11 @@ public class Notifications {
 
     private PendingIntent getTakenPendingIntent(int notificationId, int reminderEventId, Reminder reminder) {
         if (reminder.variableAmount) {
-            Intent notifyTaken = ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId);
+            Intent notifyTaken = ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminder.amount);
             return PendingIntent.getActivity(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE);
         } else {
             Intent notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEventId);
             return PendingIntent.getBroadcast(context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
         }
     }
 
