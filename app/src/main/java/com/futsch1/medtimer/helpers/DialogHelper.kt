@@ -1,77 +1,77 @@
-package com.futsch1.medtimer.helpers;
+package com.futsch1.medtimer.helpers
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.content.res.Resources
+import android.util.TypedValue
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.res.Resources;
-import android.text.Editable;
-import android.util.TypedValue;
-import android.widget.LinearLayout;
+class DialogHelper(var context: Context) {
+    var title: Int? = null
+    var hint: Int? = null
+    var initialText: String? = null
+    var textSink: TextSink? = null
+    var cancelCallback: CancelCallback? = null
 
-import com.futsch1.medtimer.R;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-public class DialogHelper {
-    private DialogHelper() {
-        // Intentionally empty
+    fun interface TextSink {
+        fun consumeText(text: String?)
     }
 
-    public static void showTextInputDialog(Context context,
-                                           int title,
-                                           int hint,
-                                           TextSink textSink) {
-        showTextInputDialog(context, title, hint, "", textSink, null);
+    fun interface CancelCallback {
+        fun cancel()
     }
 
-    public static void showTextInputDialog(Context context,
-                                           int title,
-                                           int hint,
-                                           String initialText,
-                                           TextSink textSink,
-                                           CancelSink cancelSink) {
-        TextInputLayout textInputLayout = new TextInputLayout(context);
-        TextInputEditText editText = new TextInputEditText(context);
-        editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        editText.setHint(hint);
-        editText.setSingleLine();
-        editText.setMinimumHeight(dpToPx(context.getResources(), 48));
-        editText.setId(android.R.id.input);
-        editText.setText(initialText);
-        textInputLayout.addView(editText);
+    fun title(title: Int) = apply { this.title = title }
+    fun hint(hint: Int) = apply { this.hint = hint }
+    fun initialText(initialText: String?) = apply { this.initialText = initialText }
+    fun textSink(textSink: TextSink) = apply { this.textSink = textSink }
+    fun cancelCallback(cancelCallback: CancelCallback) =
+        apply { this.cancelCallback = cancelCallback }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(textInputLayout).setTitle(title);
-        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-            Editable e = editText.getText();
+    fun show() {
+        val textInputLayout = TextInputLayout(context)
+        val editText = TextInputEditText(context)
+        editText.layoutParams =
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        hint?.let(editText::setHint)
+        editText.setSingleLine()
+        editText.minimumHeight = dpToPx(context.resources, 48)
+        editText.id = android.R.id.input
+        initialText?.let(editText::setText)
+        textInputLayout.addView(editText)
+
+        val builder = AlertDialog.Builder(context)
+        builder.setView(textInputLayout)
+        title?.let(builder::setTitle)
+        builder.setPositiveButton(com.futsch1.medtimer.R.string.ok) { _: DialogInterface?, _: Int ->
+            val e = editText.text
             if (e != null) {
-                textSink.consumeText(e.toString());
+                textSink?.consumeText(e.toString())
             }
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
-            dialog.dismiss();
-            if (cancelSink != null) {
-                cancelSink.cancel();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        }
+        builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+            dialog.dismiss()
+            cancelCallback?.cancel()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
-    /**
-     * @noinspection SameParameterValue
-     */
-    private static int dpToPx(Resources r, int dp) {
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-    public interface TextSink {
-        void consumeText(String text);
-    }
-
-    public interface CancelSink {
-        void cancel();
+    @Suppress("SameParameterValue")
+    private fun dpToPx(r: Resources, dp: Int): Int {
+        return Math.round(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp.toFloat(),
+                r.displayMetrics
+            )
+        )
     }
 }

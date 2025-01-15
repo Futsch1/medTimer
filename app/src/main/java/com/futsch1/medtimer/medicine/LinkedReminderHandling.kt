@@ -21,9 +21,13 @@ class LinkedReminderHandling(
     val medicineViewModel: MedicineViewModel
 ) {
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        DialogHelper.showTextInputDialog(
-            fragmentActivity, R.string.add_linked_reminder, R.string.create_reminder_dosage_hint
-        ) { amount: String? -> this.createReminder(fragmentActivity, amount) }
+        DialogHelper(fragmentActivity).title(R.string.add_linked_reminder)
+            .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
+                this.createReminder(
+                    fragmentActivity,
+                    amount
+                )
+            }.show()
     }
 
     private fun createReminder(fragmentActivity: FragmentActivity, amount: String?) {

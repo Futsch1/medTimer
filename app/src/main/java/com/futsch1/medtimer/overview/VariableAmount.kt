@@ -28,20 +28,20 @@ class VariableAmount(private val dispatcher: CoroutineDispatcher = Dispatchers.I
         reminderEventId: Int,
         amount: String?
     ) {
-        DialogHelper.showTextInputDialog(
-            activity,
-            R.string.log_additional_dose,
-            R.string.dosage,
-            amount,
-            { amountLocal: String? ->
+        DialogHelper(activity)
+            .title(R.string.log_additional_dose)
+            .hint(R.string.dosage)
+            .initialText(amount)
+            .textSink { amountLocal: String? ->
                 updateReminderEvent(
                     activity,
                     reminderEventId,
                     amountLocal!!
                 )
-            },
-            { touchReminderEvent(activity, reminderEventId) }
-        )
+            }
+            .cancelCallback { touchReminderEvent(activity, reminderEventId) }
+            .show()
+
     }
 
     private fun touchReminderEvent(activity: AppCompatActivity, reminderEventId: Int) {
