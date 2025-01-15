@@ -8,6 +8,7 @@ import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
+import static com.adevinta.android.barista.interaction.BaristaScrollInteractions.scrollTo;
 
 import org.junit.Test;
 
@@ -21,6 +22,7 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
+        scrollTo(R.id.editInstructionsLayout);
         clickOn(com.google.android.material.R.id.text_input_end_icon);
         clickListItem(1);
 
