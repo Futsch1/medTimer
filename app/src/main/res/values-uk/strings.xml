@@ -139,7 +139,7 @@
     <string name="block_screen_capture">Знімок екрана блоку</string>
     <string name="icon">Ікона</string>
     <string name="every_day_of_month">Щодня протягом місяця</string>
-    <string name="on_day_of_month">У % числах місяця</string>
+    <string name="on_day_of_month">У %s числах місяця</string>
     <string name="clear_all">Зачистити все</string>
     <string name="select_all">Вибрати все</string>
     <string name="never">Ніколи</string>
