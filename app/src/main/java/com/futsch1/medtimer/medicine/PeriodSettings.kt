@@ -3,6 +3,7 @@ package com.futsch1.medtimer.medicine
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RadioGroup
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
@@ -26,6 +27,10 @@ class PeriodSettings(
         advancedReminderSettingsView.findViewById(R.id.periodEnd)
     private val editPeriodEndDate: EditText =
         advancedReminderSettingsView.findViewById(R.id.periodEndDate)
+    private val periodStartLayout: LinearLayout =
+        advancedReminderSettingsView.findViewById(R.id.periodStartLayout)
+    private val periodEndLayout: LinearLayout =
+        advancedReminderSettingsView.findViewById(R.id.periodEndLayout)
 
     init {
         if (!reminder.active) {
@@ -61,10 +66,8 @@ class PeriodSettings(
     }
 
     private fun setViewVisibilities(visible: Int) {
-        editPeriodStartDate.visibility = visible
-        editPeriodEndDate.visibility = visible
-        periodStartActive.visibility = visible
-        periodEndActive.visibility = visible
+        periodStartLayout.visibility = visible
+        periodEndLayout.visibility = visible
     }
 
     private fun setupActiveSwitch(activeCheckBox: CheckBox, textField: EditText) {

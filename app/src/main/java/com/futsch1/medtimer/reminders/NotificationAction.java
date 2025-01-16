@@ -23,22 +23,29 @@ public class NotificationAction {
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
         if (reminderEvent != null) {
-            cancelNotification(context, reminderEvent.notificationId);
-            cancelPendingAlarms(context, reminderEventId);
-
-            reminderEvent.status = status;
-            doStockHandling(context, reminderEventId, reminderEvent);
-            doTimestampHandling(reminderEvent);
-            medicineRepository.updateReminderEvent(reminderEvent);
-            Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
-                    status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
-                    reminderEvent.reminderEventId,
-                    reminderEvent.medicineName));
-
-            // Reschedule since the trigger condition for a linked reminder might have changed
-            ReminderProcessor.requestReschedule(context);
+            if (reminderEvent.askForAmount) {
+                context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
+            } else {
+                processReminderEvent(context, reminderEventId, status, reminderEvent, medicineRepository);
+            }
         }
+    }
 
+    public static void processReminderEvent(Context context, int reminderEventId, ReminderEvent.ReminderStatus status, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
+        cancelNotification(context, reminderEvent.notificationId);
+        cancelPendingAlarms(context, reminderEventId);
+
+        reminderEvent.status = status;
+        doStockHandling(context, reminderEventId, reminderEvent);
+        doTimestampHandling(reminderEvent);
+        medicineRepository.updateReminderEvent(reminderEvent);
+        Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
+                status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
+                reminderEvent.reminderEventId,
+                reminderEvent.medicineName));
+
+        // Reschedule since the trigger condition for a linked reminder might have changed
+        ReminderProcessor.requestReschedule(context);
     }
 
     public static void cancelNotification(Context context, int notificationId) {

@@ -202,4 +202,5 @@
     <string name="reminder_threshold">Umbral recordatorio</string>
     <string name="refill_size">Tamaño del recargar</string>
     <string name="refill_now">Recargar ahora</string>
+    <string name="variable_amount">Introduzca la dosis cuando se toma</string>
 </resources>

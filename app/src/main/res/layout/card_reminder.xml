@@ -56,7 +56,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/open_advanced_settings"
+            android:id="@+id/openAdvancedSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/advanced_settings"

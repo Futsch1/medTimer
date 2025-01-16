@@ -204,4 +204,5 @@
     <string name="reminder_threshold">Порог напоминания</string>
     <string name="refill_size">Размер заправки</string>
     <string name="refill_now">Пополнить сейчас</string>
+    <string name="variable_amount">Укажите дозировку при приеме</string>
 </resources>

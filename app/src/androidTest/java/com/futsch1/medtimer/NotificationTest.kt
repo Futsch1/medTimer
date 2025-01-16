@@ -1,9 +1,18 @@
 package com.futsch1.medtimer
 
+import android.os.Build
+import android.view.InputDevice
+import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.GeneralClickAction
+import androidx.test.espresso.action.GeneralLocation
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Tap
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -13,16 +22,64 @@ import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers.allOf
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
-class SettingsTest : BaseTestHelper() {
+
+class NotificationTest : BaseTestHelper() {
+    @Test
+    fun notificationTest() {
+        AndroidTestHelper.createMedicine("Test med")
+
+        // Set color and icon
+        clickOn(R.id.enableColor)
+        clickOn(R.id.selectColor)
+        onView(withResourceName("colorPickerView")).perform(
+            GeneralClickAction(
+                Tap.SINGLE,
+                GeneralLocation.CENTER_LEFT,
+                Press.FINGER,
+                InputDevice.SOURCE_UNKNOWN,
+                MotionEvent.BUTTON_PRIMARY
+            )
+        )
+        clickDialogPositiveButton()
+
+        clickOn(R.id.selectIcon)
+        onView(withResourceName("icd_rcv_icon_list")).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
+
+        AndroidTestHelper.createReminder(
+            "1",
+            AndroidTestHelper.getNextNotificationTime().toLocalTime()
+        )
+
+        clickOn(R.id.openAdvancedSettings)
+
+        clickOn(R.id.addLinkedReminder)
+        clickDialogPositiveButton()
+        AndroidTestHelper.setTime(0, 1, true)
+
+        navigateTo(MainMenu.OVERVIEW)
+
+        baristaRule.activityTestRule.finishActivity()
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        waitAndDismissNotification(device, 240_000)
+        waitAndDismissNotification(device, 180_000)
+    }
 
     @Test
     //@AllowFlaky(attempts = 1)
@@ -43,7 +100,8 @@ class SettingsTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
 
-        dismissNotification(device)
+        navigateTo(MainMenu.ANALYSIS)
+        waitAndDismissNotification(device)
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
@@ -69,7 +127,8 @@ class SettingsTest : BaseTestHelper() {
         clickOn(R.string.clear_events)
         clickDialogPositiveButton()
 
-        dismissNotification(device)
+        navigateTo(MainMenu.ANALYSIS)
+        waitAndDismissNotification(device)
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
@@ -109,23 +168,65 @@ class SettingsTest : BaseTestHelper() {
 
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(notification)
+        assertNotNull(notification)
         val text = notification.text
 
         device.wait(Until.gone(By.text(text)), 240_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(nextNotification)
+        assertNotNull(nextNotification)
         device.pressBack()
     }
 
-    private fun dismissNotification(device: UiDevice) {
-        // Now dismiss notification
-        // We navigate to analysis first to not accidentally grab another UI object with text "Test med"
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun variableAmount() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createIntervalReminder("1", 1)
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.id.variableAmount)
+        pressBack()
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
-        var notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(notification)
+        device.wait(Until.findObject(By.textContains("Test med")), 2_000)
+        var button = device.findObject(By.text(getNotificationText()))
+        assertNotNull(button)
+        button.click()
+
+        device.pressBack()
+        device.openNotification()
+        device.wait(Until.findObject(By.textContains("Test med")), 240_000)
+        button = device.findObject(By.text(getNotificationText()))
+        assertNotNull(button)
+        button.click()
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        writeTo(android.R.id.input, "Test variable amount")
+        clickDialogPositiveButton()
+        navigateTo(MainMenu.OVERVIEW)
+        assertContains("Test variable amount")
+
+        clickOn(R.id.takenNow)
+        writeTo(android.R.id.input, "Test variable amount again")
+        clickDialogPositiveButton()
+
+        assertContains("Test variable amount again")
+    }
+
+    private fun getNotificationText(): String {
+        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
+        return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            s.uppercase()
+        } else {
+            s
+        }
+    }
+
+    private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
+        device.openNotification()
+        var notification = device.wait(Until.findObject(By.textContains("Test med")), timeout)
+        assertNotNull(notification)
         notification.fling(Direction.RIGHT)
         notification = device.wait(Until.findObject(By.textContains("Test med")), 500)
         notification?.fling(Direction.RIGHT)

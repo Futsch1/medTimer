@@ -9,6 +9,10 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiScrollable;
+import androidx.test.uiautomator.UiSelector;
+
 import org.junit.Test;
 
 public class BasicUITest extends BaseTestHelper {
@@ -19,14 +23,22 @@ public class BasicUITest extends BaseTestHelper {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", null);
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
+
+        UiScrollable appViews = new UiScrollable(
+                new UiSelector().scrollable(true));
+        try {
+            appViews.scrollForward();
+        } catch (UiObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         clickOn(com.google.android.material.R.id.text_input_end_icon);
         clickListItem(1);
 
         pressBack();
 
-        clickOn(R.id.open_advanced_settings);
+        clickOn(R.id.openAdvancedSettings);
         assertContains(R.string.before_meal);
         pressBack();
 

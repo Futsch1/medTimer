@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -193,4 +192,5 @@
     <string name="reminder_threshold">触发提醒数值</string>
     <string name="refill_size">每份药量规格(例如每盒x片)</string>
     <string name="refill_now">添加余量</string>
+    <string name="variable_amount">输入服用剂量</string>
 </resources>

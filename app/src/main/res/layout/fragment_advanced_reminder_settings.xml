@@ -48,6 +48,7 @@
             </RadioGroup>
 
             <LinearLayout
+                android:id="@+id/periodStartLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -75,6 +76,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/periodEndLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -99,6 +101,19 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/variableAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/variable_amount" />
 
             <View
                 android:id="@+id/divider"
@@ -188,8 +203,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textMultiLine"
-                    android:lineBreakStyle="normal"
-                    android:lineBreakWordStyle="phrase"
                     android:lines="2"
                     android:singleLine="false"
                     tools:ignore="TextContrastCheck" />

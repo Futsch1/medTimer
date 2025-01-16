@@ -34,7 +34,7 @@ public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
         assertListItemCount(R.id.medicineList, 3);
 
         clickListItem(R.id.medicineList, 2);
-        clickListItemChild(R.id.reminderList, 1, R.id.open_advanced_settings);
+        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
 
         openMenu();
         clickOn(R.string.delete);

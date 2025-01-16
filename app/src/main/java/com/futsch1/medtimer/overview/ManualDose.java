@@ -75,11 +75,11 @@ public class ManualDose {
         reminderEvent.useColor = entry.useColor;
         reminderEvent.iconId = entry.iconId;
         if (reminderEvent.medicineName.equals(context.getString(R.string.custom))) {
-            DialogHelper.showTextInputDialog(context, R.string.log_additional_dose, R.string.medicine_name, name -> {
+            new DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name).textSink(name -> {
                 setLastCustomDose(name);
                 reminderEvent.medicineName = name;
                 getAmountAndContinue(reminderEvent);
-            });
+            }).show();
         } else {
             if (entry.amount == null) {
                 getAmountAndContinue(reminderEvent);
@@ -103,10 +103,10 @@ public class ManualDose {
     }
 
     private void getAmountAndContinue(ReminderEvent reminderEvent) {
-        DialogHelper.showTextInputDialog(context, R.string.log_additional_dose, R.string.dosage, amount -> {
+        new DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage).textSink(amount -> {
             reminderEvent.amount = amount;
             getTimeAndLog(reminderEvent);
-        });
+        }).show();
     }
 
     private void getTimeAndLog(ReminderEvent reminderEvent) {

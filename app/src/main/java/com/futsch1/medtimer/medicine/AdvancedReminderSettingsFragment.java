@@ -19,6 +19,7 @@ import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor;
 import com.futsch1.medtimer.medicine.editors.IntervalEditor;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,6 +38,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private PeriodSettings periodSettings;
     private DateTimeEditor intervalStartDateTimeEditor;
     private IntervalEditor intervalEditor;
+    private MaterialSwitch variableAmount;
 
     public AdvancedReminderSettingsFragment() {
         super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings, AdvancedReminderSettingsFragment.class.getName());
@@ -58,10 +60,12 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         editConsecutiveDays = fragmentView.findViewById(R.id.consecutiveDays);
         editCycleStartDate = fragmentView.findViewById(R.id.cycleStartDate);
         instructionSuggestions = fragmentView.findViewById(R.id.editInstructionsLayout);
+        variableAmount = fragmentView.findViewById(R.id.variableAmount);
 
         editConsecutiveDays.setText(Integer.toString(entity.consecutiveDays));
         editPauseDays.setText(Integer.toString(entity.pauseDays));
         editInstructions.setText(entity.instructions);
+        variableAmount.setChecked(entity.variableAmount);
 
         setupInstructionSuggestions();
 
@@ -84,6 +88,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     @Override
     public void fillEntityData(Reminder entity, @NonNull View fragmentView) {
         entity.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
+        entity.variableAmount = variableAmount.isChecked();
 
         periodSettings.updateReminder();
         putConsecutiveDaysIntoReminder(entity);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="enable_alarm_dialog">Щоб дозволити планування точних будильників, увімкніть цю опцію для MedTimer у наступному меню</string>
     <string name="tab_overview">Огляд</string>
     <string name="tab_medicine">Ліки</string>
@@ -16,7 +15,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few"/>
+        <item quantity="few" />
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -107,4 +106,106 @@
     <string name="fourteen_days">14 днів</string>
     <string name="thirty_days">30 днів</string>
     <string name="total">Загалом</string>
+    <string name="name">Ім&amp;apos;я</string>
+    <string name="event_data">Дані про подію</string>
+    <string name="backup">Підкріплення</string>
+    <string name="taken_now">Знято зараз</string>
+    <string name="event_name">Назва події</string>
+    <string name="edit_event">Редагувати подію</string>
+    <string name="show_all">Показати всі</string>
+    <string name="intro_welcome">Ласкаво просимо до MedTimer!</string>
+    <string name="intro_welcome_description">MedTimer - це безкоштовна програма з відкритим вихідним кодом для нагадування про прийом ліків з акцентом на конфіденційність.\n\nДля показу сповіщень про нагадування про прийом ліків потрібен дозвіл.</string>
+    <string name="intro_medicine_description">Використовуйте вкладку &amp;quot;Ліки&amp;quot;, щоб створити ліки, які ви приймаєте і про які хочете отримувати нагадування. Проведіть вліво, щоб видалити ліки.</string>
+    <string name="intro_reminder_description">Виберіть лікарський засіб, щоб змінити його дані та створити нагадування для різних доз ліків, які вам потрібно прийняти.\n\nНагадування можуть бути як простими - з&amp;apos;являтися один раз на день у певний час, так і складними - з кількома днями поспіль і кількома днями перерви.</string>
+    <string name="intro_notification_description">Як тільки настане час нагадування, з&amp;apos;явиться сповіщення, яке надасть вам можливість позначити дозу як прийняту (натиснувши кнопку \&amp;quot;ПРИЙНЯТО\&amp;quot;), пропустити (відкинувши сповіщення) або отримати нагадування знову через деякий час (\&amp;quot;ПРОСПИТАТИ\&amp;quot;).</string>
+    <string name="intro_overview_description">На оглядовому екрані ви можете побачити майбутні нагадування та останні події нагадування. Події нагадування можна редагувати, проводячи вправо, і видаляти, проводячи вліво.\n\nОкрім того, ви можете вручну реєструвати додаткові дози одного з налаштованих препаратів або користувацького препарату.</string>
+    <string name="intro_analysis_description">Додаток зберігає всі події нагадування. Ви можете проаналізувати свої минулі дози на екрані аналізу та експортувати історію за допомогою меню &amp;quot;кебаб&amp;quot; (три крапки). Історія збережеться, навіть якщо ліки або нагадування будуть видалені або перейменовані.</string>
+    <string name="show_intro">Показати вступ до програми</string>
+    <string name="are_you_sure_delete_reminder_event">Ви впевнені, що хочете видалити подію-нагадування?</string>
+    <string name="high">Високий</string>
+    <string name="notification_importance">Пріоритет сповіщення</string>
+    <string name="notification_settings_default">Налаштування сповіщень за замовчуванням Пріоритет за замовчуванням</string>
+    <string name="notification_settings_high">Налаштування сповіщень з високим пріоритетом</string>
+    <string name="calendar">Календар</string>
+    <string name="show_only_open">Показати тільки відкриті</string>
+    <string name="date">Дата</string>
+    <string name="active">Активний</string>
+    <string name="inactive">Неактивний</string>
+    <string name="active_in_time_period">Активні в період часу</string>
+    <string name="period_start">Початок менструації</string>
+    <string name="period_end">Кінець періоду</string>
+    <string name="activate_all">Активувати всі нагадування</string>
+    <string name="deactivate_all">Вимкнути всі нагадування</string>
+    <string name="block_screen_capture">Знімок екрана блоку</string>
+    <string name="icon">Ікона</string>
+    <string name="every_day_of_month">Щодня протягом місяця</string>
+    <string name="on_day_of_month">У %s числах місяця</string>
+    <string name="clear_all">Зачистити все</string>
+    <string name="select_all">Вибрати все</string>
+    <string name="never">Ніколи</string>
+    <string name="day_of_month_limited">Обмежено деякими днями місяця</string>
+    <string name="medicines_tab_description">Вкладка &amp;quot;Ліки</string>
+    <string name="overview_tab_description">Вкладка &amp;quot;Огляд</string>
+    <string name="statistics_tab_description">Вкладка Статистика</string>
+    <string name="previous_month">Попередній місяць</string>
+    <string name="next_month">Наступного місяця</string>
+    <string name="repeat_reminders">Повторні нагадування</string>
+    <string name="minutes_1">1 хвилина</string>
+    <string name="number_of_repetitions">Кількість повторень</string>
+    <string name="time_between_repetitions">Час між повтореннями</string>
+    <string name="repeat_reminders_summary">Автоматично повторює нагадування, доки його не буде позначено як прийняте або пропущене</string>
+    <string name="add_linked_reminder">Додати нагадування про наступну дозу</string>
+    <string name="linked_reminder_delay">Затримка для наступної дози</string>
+    <string name="delay">Затримка</string>
+    <string name="linked_reminder_summary">Після нагадування в %1$s</string>
+    <string name="delete_re_raise_event">Ви хочете видалити цю подію і повторно підняти сповіщення?</string>
+    <string name="time_based_reminder">Нагадування на основі часу</string>
+    <string name="interval_based_reminder">Нагадування з інтервалом</string>
+    <string name="minutes">Протокол</string>
+    <string name="hours">Години</string>
+    <string name="days">Дні</string>
+    <string name="create_reminder">Створити нагадування</string>
+    <string name="interval">Інтервал</string>
+    <string name="interval_start_time">Час початку інтервалу</string>
+    <string name="interval_start_reminded">Інтервал починається за нагадуванням</string>
+    <string name="interval_start_processed">Інтервал починається, коли приймається або пропускається</string>
+    <string name="every_interval">Кожні %s</string>
+    <string name="invalid_input">Неправильне введення</string>
+    <string name="off">Вимкнено</string>
+    <string name="once_below_threshold">Один раз при падінні нижче порогового значення</string>
+    <string name="always_below_threshold">Завжди, коли нижче порогу</string>
+    <string name="out_of_stock_notification">Залишилося лише %2$s від %1$s!\nПодумайте про те, щоб поповнити запас ліків найближчим часом.</string>
+    <string name="medicine_stock_string">%1$s left%2$s</string>
+    <string name="out_of_stock_notification_title">Нагадування про відсутність ліків на складі</string>
+    <string name="medicine_stock">Запас медикаментів</string>
+    <string name="amount">Сума</string>
+    <string name="out_of_stock_reminder">Нагадування про відсутність товару на складі</string>
+    <string name="reminder_threshold">Поріг нагадування</string>
+    <string name="refill_size">Розмір поповнення</string>
+    <string name="refill_now">Поповнити зараз</string>
+    <string name="variable_amount">Введіть дозування при прийомі</string>
+    <plurals name="minutes">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">хвилина</item>
+        <item quantity="other">хвилини</item>
+        <item quantity="few">хвилини</item>
+        <item quantity="many">хвилин</item>
+    </plurals>
+    <plurals name="last_n_days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">Останні 24 години</item>
+        <item quantity="other">Останні %1$d дні</item>
+        <item quantity="few">Останні %1$d дні</item>
+        <item quantity="many">Останні %1$d днів</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">година</item>
+        <item quantity="other">години</item>
+        <item quantity="few">години</item>
+        <item quantity="many">годин</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
+        <item quantity="other">дні</item>
+        <item quantity="few">дні</item>
+        <item quantity="many">днів</item>
+    </plurals>
 </resources>

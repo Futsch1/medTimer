@@ -37,7 +37,8 @@ public class ReminderEvent {
     public int remainingRepeats;
     @ColumnInfo(defaultValue = "false")
     public boolean stockHandled;
-
+    @ColumnInfo(defaultValue = "false")
+    public boolean askForAmount;
 
     public enum ReminderStatus {
         RAISED,

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -198,4 +197,5 @@
     <string name="reminder_threshold">Herinnering drempel</string>
     <string name="refill_size">Navulformaat</string>
     <string name="refill_now">Nu bijvullen</string>
+    <string name="variable_amount">Dosering invoeren bij inname</string>
 </resources>

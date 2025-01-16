@@ -202,4 +202,5 @@
     <string name="reminder_threshold">Seuil de rappel</string>
     <string name="refill_size">Taille de la recharge</string>
     <string name="refill_now">Rechargez maintenant</string>
+    <string name="variable_amount">Indiquer le dosage lors de la prise</string>
 </resources>

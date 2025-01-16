@@ -120,6 +120,7 @@ public class ReminderWork extends Worker {
             reminderEvent.useColor = medicine.useColor;
             reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
             reminderEvent.iconId = medicine.iconId;
+            reminderEvent.askForAmount = reminder.variableAmount;
 
             return reminderEvent;
         } else {
