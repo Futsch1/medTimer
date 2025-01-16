@@ -8,7 +8,10 @@ import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
-import static com.adevinta.android.barista.interaction.BaristaScrollInteractions.scrollTo;
+
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiScrollable;
+import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Test;
 
@@ -22,7 +25,14 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
-        scrollTo(R.id.editInstructions);
+        UiScrollable appViews = new UiScrollable(
+                new UiSelector().scrollable(true));
+        try {
+            appViews.scrollForward();
+        } catch (UiObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         clickOn(com.google.android.material.R.id.text_input_end_icon);
         clickListItem(1);
 

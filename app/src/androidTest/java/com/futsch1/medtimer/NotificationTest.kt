@@ -31,7 +31,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers.allOf
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 
@@ -169,13 +169,13 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(notification)
+        assertNotNull(notification)
         val text = notification.text
 
         device.wait(Until.gone(By.text(text)), 240_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
-        Assert.assertNotNull(nextNotification)
+        assertNotNull(nextNotification)
         device.pressBack()
     }
 
@@ -192,11 +192,16 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         device.wait(Until.findObject(By.textContains("Test med")), 2_000)
-        device.findObject(By.text(getNotificationText())).click()
+        var button = device.findObject(By.text(getNotificationText()))
+        assertNotNull(button)
+        button.click()
+
         device.pressBack()
         device.openNotification()
         device.wait(Until.findObject(By.textContains("Test med")), 240_000)
-        device.findObject(By.text(getNotificationText())).click()
+        button = device.findObject(By.text(getNotificationText()))
+        assertNotNull(button)
+        button.click()
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
         clickDialogPositiveButton()
@@ -222,7 +227,7 @@ class NotificationTest : BaseTestHelper() {
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
         var notification = device.wait(Until.findObject(By.textContains("Test med")), timeout)
-        Assert.assertNotNull(notification)
+        assertNotNull(notification)
         notification.fling(Direction.RIGHT)
         notification = device.wait(Until.findObject(By.textContains("Test med")), 500)
         notification?.fling(Direction.RIGHT)
