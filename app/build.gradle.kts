@@ -107,7 +107,7 @@ dependencies {
     val uiautomatorVersion = "2.3.0"
     val androidTestRunnerVersion = "1.6.2"
     val androidTestOrchestratorVersion = "1.5.1"
-    val baristaVersion = "4.2.0"
+    val baristaVersion = "4.3.0"
 
     val desugarJdkVersion = "2.1.4"
 
