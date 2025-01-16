@@ -22,7 +22,7 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
-        scrollTo(R.id.editInstructionsLayout);
+        scrollTo(R.id.editInstructions);
         clickOn(com.google.android.material.R.id.text_input_end_icon);
         clickListItem(1);
 

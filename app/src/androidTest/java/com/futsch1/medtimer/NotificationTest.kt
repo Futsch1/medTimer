@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.os.Build
 import android.view.InputDevice
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
@@ -182,7 +183,6 @@ class NotificationTest : BaseTestHelper() {
     @AllowFlaky(attempts = 1)
     fun variableAmount() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         AndroidTestHelper.createMedicine("Test med")
         AndroidTestHelper.createIntervalReminder("1", 1)
@@ -192,11 +192,11 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         device.wait(Until.findObject(By.textContains("Test med")), 2_000)
-        device.findObject(By.text(context.getString(R.string.taken))).click()
+        device.findObject(By.text(getNotificationText())).click()
         device.pressBack()
         device.openNotification()
         device.wait(Until.findObject(By.textContains("Test med")), 240_000)
-        device.findObject(By.text(context.getString(R.string.taken))).click()
+        device.findObject(By.text(getNotificationText())).click()
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
         clickDialogPositiveButton()
@@ -208,6 +208,15 @@ class NotificationTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         assertContains("Test variable amount again")
+    }
+
+    private fun getNotificationText(): String {
+        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
+        return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            s.uppercase()
+        } else {
+            s
+        }
     }
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
