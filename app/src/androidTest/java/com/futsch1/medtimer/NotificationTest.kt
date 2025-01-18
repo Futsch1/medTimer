@@ -28,7 +28,6 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers.allOf
@@ -181,7 +180,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun variableAmount() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -220,6 +219,35 @@ class NotificationTest : BaseTestHelper() {
         assertContains("Test variable amount again")
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun customSnooze() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.snooze)
+        clickOn(R.string.snooze_duration)
+        clickOn(R.string.custom)
+        pressBack()
+
+        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createIntervalReminder("1", 120)
+
+        navigateTo(MainMenu.ANALYSIS)
+        waitAndDismissNotification(device, 2_000)
+
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        writeTo(android.R.id.input, "1")
+        clickDialogPositiveButton()
+
+        device.openNotification()
+        sleep(2_000)
+        val notification = device.wait(Until.findObject(By.textContains("Test med")), 240_000)
+        internalAssert(notification != null)
+    }
+
     private fun getNotificationText(): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -228,6 +256,7 @@ class NotificationTest : BaseTestHelper() {
             s
         }
     }
+
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
