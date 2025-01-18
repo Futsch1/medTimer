@@ -187,4 +187,16 @@
     <string name="refill_size">மறு நிரப்பல் அளவு</string>
     <string name="refill_now">இப்போது மீண்டும் நிரப்பவும்</string>
     <string name="variable_amount">எடுக்கும்போது அளவை உள்ளிடவும்</string>
+    <plurals name="minutes">
+        <item quantity="one">நிமிடம்</item>
+        <item quantity="other">நிமிடங்கள்</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">மணிநேரம்</item>
+        <item quantity="other">மணிநேரங்கள்</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">நாள்</item>
+        <item quantity="other">நாட்கள்</item>
+    </plurals>
 </resources>

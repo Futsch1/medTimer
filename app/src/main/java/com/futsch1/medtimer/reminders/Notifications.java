@@ -98,8 +98,7 @@ public class Notifications {
         String dismissNotificationAction = defaultSharedPreferences.getString("dismiss_notification_action", "0");
         int snoozeTime = Integer.parseInt(defaultSharedPreferences.getString("snooze_duration", "15"));
 
-        Intent snooze = ReminderProcessor.getSnoozeIntent(context, reminder.reminderId, reminderEventId, notificationId, snoozeTime);
-        PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingSnooze = getSnoozePendingIntent(context, reminder.reminderId, reminderEventId, notificationId, snoozeTime);
 
         Intent notifyDismissed = ReminderProcessor.getDismissedActionIntent(context, reminderEventId);
         PendingIntent pendingDismissed = PendingIntent.getBroadcast(context, notificationId, notifyDismissed, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -118,6 +117,16 @@ public class Notifications {
             builder.addAction(R.drawable.x_circle, context.getString(R.string.skipped), pendingDismissed);
             builder.addAction(R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze);
             builder.setDeleteIntent(pendingTaken);
+        }
+    }
+
+    private PendingIntent getSnoozePendingIntent(Context context, int reminderId, int reminderEventId, int notificationId, int snoozeTime) {
+        if (snoozeTime == -1) {
+            Intent snooze = ReminderProcessor.getCustomSnoozeActionIntent(context, reminderId, reminderEventId, notificationId);
+            return PendingIntent.getActivity(context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            Intent snooze = ReminderProcessor.getSnoozeIntent(context, reminderId, reminderEventId, notificationId, snoozeTime);
+            return PendingIntent.getBroadcast(context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         }
     }
 

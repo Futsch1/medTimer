@@ -15,19 +15,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 
-class VariableAmount(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-    fun process(activity: AppCompatActivity, intent: Intent) {
-        val reminderEventId = intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, -1)
-        if (reminderEventId != -1) {
-            showDialogToEnterAmount(activity, reminderEventId, intent.getStringExtra(EXTRA_AMOUNT))
-        }
-    }
-
-    private fun showDialogToEnterAmount(
-        activity: AppCompatActivity,
-        reminderEventId: Int,
-        amount: String?
-    ) {
+fun variableAmountDialog(
+    activity: AppCompatActivity,
+    intent: Intent,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
+    val reminderEventId = intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, -1)
+    val amount = intent.getStringExtra(EXTRA_AMOUNT)
+    if (reminderEventId != -1) {
         DialogHelper(activity)
             .title(R.string.log_additional_dose)
             .hint(R.string.dosage)
@@ -36,39 +31,44 @@ class VariableAmount(private val dispatcher: CoroutineDispatcher = Dispatchers.I
                 updateReminderEvent(
                     activity,
                     reminderEventId,
-                    amountLocal!!
+                    amountLocal!!,
+                    dispatcher
                 )
             }
-            .cancelCallback { touchReminderEvent(activity, reminderEventId) }
+            .cancelCallback { touchReminderEvent(activity, reminderEventId, dispatcher) }
             .show()
-
     }
+}
 
-    private fun touchReminderEvent(activity: AppCompatActivity, reminderEventId: Int) {
-        activity.lifecycleScope.launch(dispatcher) {
-            val repository = MedicineRepository(activity.application)
-            val reminderEvent = repository.getReminderEvent(reminderEventId)
-            reminderEvent?.processedTimestamp = Instant.now().epochSecond
-            repository.updateReminderEvent(reminderEvent)
-        }
+private fun touchReminderEvent(
+    activity: AppCompatActivity,
+    reminderEventId: Int,
+    dispatcher: CoroutineDispatcher
+) {
+    activity.lifecycleScope.launch(dispatcher) {
+        val repository = MedicineRepository(activity.application)
+        val reminderEvent = repository.getReminderEvent(reminderEventId)
+        reminderEvent?.processedTimestamp = Instant.now().epochSecond
+        repository.updateReminderEvent(reminderEvent)
     }
+}
 
-    private fun updateReminderEvent(
-        activity: AppCompatActivity,
-        reminderEventId: Int,
-        amount: String
-    ) {
-        activity.lifecycleScope.launch(dispatcher) {
-            val repository = MedicineRepository(activity.application)
-            val reminderEvent = repository.getReminderEvent(reminderEventId)
-            reminderEvent?.amount = amount
-            NotificationAction.processReminderEvent(
-                activity,
-                reminderEventId,
-                ReminderEvent.ReminderStatus.TAKEN,
-                reminderEvent!!,
-                repository
-            )
-        }
+private fun updateReminderEvent(
+    activity: AppCompatActivity,
+    reminderEventId: Int,
+    amount: String,
+    dispatcher: CoroutineDispatcher
+) {
+    activity.lifecycleScope.launch(dispatcher) {
+        val repository = MedicineRepository(activity.application)
+        val reminderEvent = repository.getReminderEvent(reminderEventId)
+        reminderEvent?.amount = amount
+        NotificationAction.processReminderEvent(
+            activity,
+            reminderEventId,
+            ReminderEvent.ReminderStatus.TAKEN,
+            reminderEvent!!,
+            repository
+        )
     }
 }
