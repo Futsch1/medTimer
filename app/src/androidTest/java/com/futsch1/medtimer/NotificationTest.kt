@@ -195,7 +195,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         device.wait(Until.findObject(By.textContains("Test med")), 2_000)
         var button = device.findObject(By.text(getNotificationText()))
-        internalAssert(button != null);
+        internalAssert(button != null)
         button.click()
 
         device.pressBack()
