@@ -27,6 +27,8 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers.allOf
@@ -179,28 +181,32 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun variableAmount() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine("Test med")
-        AndroidTestHelper.createIntervalReminder("1", 1)
+        AndroidTestHelper.createIntervalReminder("1", 2)
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.id.variableAmount)
         pressBack()
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
+        sleep(2_000)
         device.wait(Until.findObject(By.textContains("Test med")), 2_000)
         var button = device.findObject(By.text(getNotificationText()))
-        assertNotNull(button)
+        internalAssert(button != null);
         button.click()
 
         device.pressBack()
+
         device.openNotification()
+        sleep(2_000)
         device.wait(Until.findObject(By.textContains("Test med")), 240_000)
         button = device.findObject(By.text(getNotificationText()))
-        assertNotNull(button)
+        internalAssert(button != null)
         button.click()
+
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
         clickDialogPositiveButton()

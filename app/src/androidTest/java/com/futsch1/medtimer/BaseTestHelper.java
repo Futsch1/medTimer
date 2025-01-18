@@ -1,5 +1,6 @@
 package com.futsch1.medtimer;
 
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import android.icu.util.Calendar;
@@ -27,6 +28,9 @@ public abstract class BaseTestHelper {
     public BaristaRule<MainActivity> baristaRule = BaristaRule.create(MainActivity.class);
     @Rule
     public GrantPermissionRule mGrantPermissionRule = getPermissionRule();
+
+    protected MyFailureHandler failureHandler = new MyFailureHandler(this.getClass().getName(),
+            getInstrumentation().getTargetContext());
 
     @BeforeClass
     public static void dismissANRSystemDialog() throws UiObjectNotFoundException {
@@ -56,8 +60,7 @@ public abstract class BaseTestHelper {
 
     @Before
     public void setup() {
-        Espresso.setFailureHandler(new MyFailureHandler(this.getClass().getName(),
-                getInstrumentation().getTargetContext()));
+        Espresso.setFailureHandler(failureHandler);
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.pressHome();
         baristaRule.launchActivity();
@@ -67,5 +70,11 @@ public abstract class BaseTestHelper {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
         return (dateTime.getHour() < 9 || dateTime.getHour() > 23);
+    }
+
+    protected void internalAssert(boolean b) {
+        if (!b) {
+            failureHandler.handle(new AssertionError("Internal assert"), withId(0));
+        }
     }
 }
