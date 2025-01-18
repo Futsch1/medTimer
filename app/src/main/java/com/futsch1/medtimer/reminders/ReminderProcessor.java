@@ -128,6 +128,16 @@ public class ReminderProcessor extends BroadcastReceiver {
         return actionIntent;
     }
 
+    public static Intent getCustomSnoozeActionIntent(Context context, int reminderId, int reminderEventId, int notificationId) {
+        Intent actionIntent = new Intent(context, MainActivity.class);
+        actionIntent.setAction("CUSTOM_SNOOZE");
+        actionIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        actionIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        actionIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        return actionIntent;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);

@@ -13,9 +13,10 @@ import com.google.android.material.textfield.TextInputLayout
 class DialogHelper(var context: Context) {
     var title: Int? = null
     var hint: Int? = null
-    var initialText: String? = null
-    var textSink: TextSink? = null
-    var cancelCallback: CancelCallback? = null
+    private var initialText: String? = null
+    private var textSink: TextSink? = null
+    private var cancelCallback: CancelCallback? = null
+    private var inputType: Int? = null
 
     fun interface TextSink {
         fun consumeText(text: String?)
@@ -32,6 +33,8 @@ class DialogHelper(var context: Context) {
     fun cancelCallback(cancelCallback: CancelCallback) =
         apply { this.cancelCallback = cancelCallback }
 
+    fun inputType(inputType: Int) = apply { this.inputType = inputType }
+
     fun show() {
         val textInputLayout = TextInputLayout(context)
         val editText = TextInputEditText(context)
@@ -46,6 +49,7 @@ class DialogHelper(var context: Context) {
         editText.id = android.R.id.input
         initialText?.let(editText::setText)
         textInputLayout.addView(editText)
+        inputType?.let(editText::setInputType)
 
         val builder = AlertDialog.Builder(context)
         builder.setView(textInputLayout)
