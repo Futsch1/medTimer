@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 import java.time.Instant;
@@ -26,17 +27,17 @@ public class NotificationAction {
             if (reminderEvent.askForAmount) {
                 context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
             } else {
-                processReminderEvent(context, reminderEventId, status, reminderEvent, medicineRepository);
+                processReminderEvent(context, status, reminderEvent, medicineRepository);
             }
         }
     }
 
-    public static void processReminderEvent(Context context, int reminderEventId, ReminderEvent.ReminderStatus status, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
+    public static void processReminderEvent(Context context, ReminderEvent.ReminderStatus status, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
         cancelNotification(context, reminderEvent.notificationId);
-        cancelPendingAlarms(context, reminderEventId);
+        cancelPendingAlarms(context, reminderEvent.reminderEventId);
 
         reminderEvent.status = status;
-        doStockHandling(context, reminderEventId, reminderEvent);
+        doStockHandling(context, reminderEvent, medicineRepository);
         doTimestampHandling(reminderEvent);
         medicineRepository.updateReminderEvent(reminderEvent);
         Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
@@ -64,10 +65,13 @@ public class NotificationAction {
         context.getSystemService(AlarmManager.class).cancel(snoozePendingIntent);
     }
 
-    private static void doStockHandling(Context context, int reminderEventId, ReminderEvent reminderEvent) {
+    private static void doStockHandling(Context context, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
             reminderEvent.stockHandled = true;
-            ReminderProcessor.requestStockHandling(context, reminderEventId);
+            Reminder reminder = medicineRepository.getReminder(reminderEvent.reminderId);
+            if (reminder != null) {
+                ReminderProcessor.requestStockHandling(context, reminder.amount, reminder.medicineRelId);
+            }
         }
     }
 

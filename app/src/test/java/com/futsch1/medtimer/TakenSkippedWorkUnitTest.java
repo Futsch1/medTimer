@@ -1,5 +1,7 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -17,11 +19,14 @@ import android.app.PendingIntent;
 
 import androidx.work.Data;
 import androidx.work.ListenableWorker;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
+import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.SkippedWork;
 import com.futsch1.medtimer.reminders.TakenWork;
@@ -83,8 +88,13 @@ public class TakenSkippedWorkUnitTest {
         reminderEvent.reminderEventId = reminderEventId;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+        Reminder reminder = new Reminder(5);
+        reminder.amount = "4";
 
-        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent));
+        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
+            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
+            when(mock.getReminder(reminderId)).thenReturn(reminder);
+        });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
@@ -101,8 +111,17 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(reminderEventId, captor.getValue().reminderEventId);
             assertEquals(status, captor.getValue().status);
             verify(mockNotificationManager, times(1)).cancel(notificationId);
+
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
             verify(mockAlarmManager, times(1)).cancel(captor1.capture());
+
+            if (status == ReminderEvent.ReminderStatus.TAKEN) {
+                ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);
+                verify(mockWorkManager, times(1)).enqueue(captor2.capture());
+                assertInstanceOf(OneTimeWorkRequest.class, captor2.getValue());
+                assertEquals(reminder.amount, captor2.getValue().getWorkSpec().input.getString(EXTRA_AMOUNT));
+                assertEquals(reminder.medicineRelId, captor2.getValue().getWorkSpec().input.getInt(EXTRA_MEDICINE_ID, -1));
+            }
         }
     }
 

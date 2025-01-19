@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
@@ -76,12 +77,13 @@ public class ReminderProcessor extends BroadcastReceiver {
         return snoozeIntent;
     }
 
-    public static void requestStockHandling(Context context, int reminderEventId) {
+    public static void requestStockHandling(Context context, String amount, int medicineId) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         OneTimeWorkRequest stockHandlingWork =
                 new OneTimeWorkRequest.Builder(StockHandlingWork.class)
                         .setInputData(new Data.Builder()
-                                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                                .putString(EXTRA_AMOUNT, amount)
+                                .putInt(EXTRA_MEDICINE_ID, medicineId)
                                 .build())
                         .build();
         workManager.enqueue(stockHandlingWork);
