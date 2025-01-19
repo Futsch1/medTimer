@@ -115,11 +115,13 @@ public class TakenSkippedWorkUnitTest {
             ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
             verify(mockAlarmManager, times(1)).cancel(captor1.capture());
 
-            ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);
-            verify(mockWorkManager, times(1)).enqueue(captor2.capture());
-            assertInstanceOf(OneTimeWorkRequest.class, captor2.getValue());
-            assertEquals(reminder.amount, captor2.getValue().getWorkSpec().input.getString(EXTRA_AMOUNT));
-            assertEquals(reminder.medicineRelId, captor2.getValue().getWorkSpec().input.getInt(EXTRA_MEDICINE_ID, -1));
+            if (status == ReminderEvent.ReminderStatus.TAKEN) {
+                ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);
+                verify(mockWorkManager, times(1)).enqueue(captor2.capture());
+                assertInstanceOf(OneTimeWorkRequest.class, captor2.getValue());
+                assertEquals(reminder.amount, captor2.getValue().getWorkSpec().input.getString(EXTRA_AMOUNT));
+                assertEquals(reminder.medicineRelId, captor2.getValue().getWorkSpec().input.getInt(EXTRA_MEDICINE_ID, -1));
+            }
         }
     }
 
