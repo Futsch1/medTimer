@@ -7,7 +7,6 @@ import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 
 class StockHandlingWork(val context: Context, workerParameters: WorkerParameters) :
@@ -25,8 +24,8 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
         return Result.success()
     }
 
-    private fun processStock(medicine: Medicine, reminder: Reminder) {
-        val amount: Double? = MedicineHelper.parseAmount(reminder.amount)
+    private fun processStock(medicine: Medicine, reminderAmount: String) {
+        val amount: Double? = MedicineHelper.parseAmount(reminderAmount)
         if (amount != null) {
             medicine.amount -= amount
             if (medicine.amount < 0) {
