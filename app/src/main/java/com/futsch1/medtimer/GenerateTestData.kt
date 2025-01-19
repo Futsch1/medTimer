@@ -10,23 +10,23 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(
-                "Omega 3 (EPA/DHA 500mg)", null, 1, 10, arrayOf(
+                "Omega 3 (EPA/DHA 500mg)", null, 1, 10.0, arrayOf(
                     testReminderOmega3,
                     TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3)
                 )
             ),
             TestMedicine(
-                "B12 (500µg)", -0x750000, 2, 50, arrayOf(
+                "B12 (500µg)", -0x750000, 2, 50.5, arrayOf(
                     TestReminderTimeBased("2", 7 * 60, 1, 0, "")
                 )
             ),
             TestMedicine(
-                "Ginseng (200mg)", -0x6f1170, 3, 0, arrayOf(
+                "Ginseng (200mg)", -0x6f1170, 3, 0.0, arrayOf(
                     TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast")
                 )
             ),
             TestMedicine(
-                "Selen (200 µg)", null, 0, 0, arrayOf(
+                "Selen (200 µg)", null, 0, 0.0, arrayOf(
                     TestReminderTimeBased("2", 9 * 60, 1, 0, ""),
                     TestReminderIntervalBased("1", 36 * 60)
                 )
@@ -48,7 +48,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
         val name: String,
         val color: Int?,
         val iconId: Int,
-        val stock: Int,
+        val stock: Double,
         val reminders: Array<TestReminder>
     ) {
         override fun equals(other: Any?): Boolean {

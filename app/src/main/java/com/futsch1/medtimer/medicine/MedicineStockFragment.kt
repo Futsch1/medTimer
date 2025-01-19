@@ -27,17 +27,17 @@ class MedicineStockFragment :
         try {
             entity.amount =
                 fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString()
-                    .toInt()
+                    .toDouble()
             entity.outOfStockReminder = stockReminderStringToValue(
                 fragmentView.findViewById<AutoCompleteTextView>(R.id.medicineStockReminder).text.toString(),
                 this.resources
             )
             entity.outOfStockReminderThreshold =
                 fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString()
-                    .toInt()
+                    .toDouble()
             entity.refillSizes = arrayListOf(
                 fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString()
-                    .toInt()
+                    .toDouble()
             )
         } catch (e: NumberFormatException) {
             // Empty for now

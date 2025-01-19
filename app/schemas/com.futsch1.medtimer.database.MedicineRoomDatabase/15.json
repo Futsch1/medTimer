@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 15,
-    "identityHash": "91c5f10bab51f886217d048b597b9e53",
+    "identityHash": "96a7a5b67c4e131b5caa32225e5db9b2",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` INTEGER NOT NULL DEFAULT 0, `outOfStockReminderThreshold` INTEGER NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]')",
         "fields": [
           {
             "fieldPath": "name",
@@ -58,14 +58,14 @@
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": true,
             "defaultValue": "0"
           },
           {
             "fieldPath": "outOfStockReminderThreshold",
             "columnName": "outOfStockReminderThreshold",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": true,
             "defaultValue": "0"
           },
@@ -331,7 +331,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '91c5f10bab51f886217d048b597b9e53')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '96a7a5b67c4e131b5caa32225e5db9b2')"
     ]
   }
 }

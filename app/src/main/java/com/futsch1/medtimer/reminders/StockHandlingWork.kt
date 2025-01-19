@@ -35,7 +35,7 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
 
         medicine.amount -= amount
         if (medicine.amount < 0) {
-            medicine.amount = 0
+            medicine.amount = 0.0
         }
 
         checkForThreshold(medicine, amount)
