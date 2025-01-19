@@ -16,6 +16,7 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
@@ -23,7 +24,7 @@ import org.junit.Test
 class MedicineStockTest : BaseTestHelper() {
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -107,11 +108,11 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.openStockTracking)
         clickOn(R.id.refillNow)
 
-        assertDisplayed(R.id.amountLeft, "10")
+        assertDisplayed(R.id.amountLeft, "10.5")
         pressBack()
         pressBack()
 
-        assertContains(R.id.medicineName, "10")
+        assertContains(R.id.medicineName, "10.5")
         assertNotContains(R.id.medicineName, "⚠")
     }
 }
