@@ -1,44 +1,50 @@
-package com.futsch1.medtimer.helpers;
+package com.futsch1.medtimer.helpers
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.annotation.SuppressLint
+import android.content.Context
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Medicine
+import java.text.NumberFormat
+import java.util.regex.Pattern
 
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.Medicine;
+object MedicineHelper {
+    private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d?/\\d?)\\)")
 
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.regex.Pattern;
-
-public class MedicineHelper {
-    private static final Pattern CYCLIC_COUNT = Pattern.compile(" (\\(\\d?/\\d?)\\)");
-
-    private MedicineHelper() {
-        // Intentionally empty
+    @JvmStatic
+    fun normalizeMedicineName(medicineName: String): String {
+        return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
     }
 
-    public static String normalizeMedicineName(String medicineName) {
-        return CYCLIC_COUNT.matcher(medicineName).replaceAll("");
-    }
-
+    @JvmStatic
     @SuppressLint("DefaultLocale")
-    public static String getMedicineNameWithStockText(Context context, Medicine medicine) {
-        if (medicine.isStockManagementActive()) {
-            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, formatAmount(medicine.amount), medicine.amount <= medicine.outOfStockReminderThreshold ? " ⚠)" : ")");
+    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
+        return if (medicine.isStockManagementActive) {
+            medicine.name + " (" + context.getString(
+                R.string.medicine_stock_string,
+                formatAmount(medicine.amount),
+                if (medicine.amount <= medicine.outOfStockReminderThreshold) " ⚠)" else ")"
+            )
         } else {
-            return medicine.name;
+            medicine.name
         }
     }
 
-    public static String formatAmount(double amount) {
-        NumberFormat numberFormat = NumberFormat.getNumberInstance();
-        numberFormat.setMinimumFractionDigits(0);
-        numberFormat.setMaximumFractionDigits(2);
-        return numberFormat.format(amount);
+    @JvmStatic
+    fun formatAmount(amount: Double): String {
+        val numberFormat = NumberFormat.getNumberInstance()
+        numberFormat.minimumFractionDigits = 0
+        numberFormat.maximumFractionDigits = 2
+        return numberFormat.format(amount)
     }
 
-    public static double parseAmount(String amount) throws ParseException {
-        Number n = NumberFormat.getNumberInstance().parse(amount);
-        return n == null ? Double.NaN : n.doubleValue();
+    fun parseAmount(amount: String): Double? {
+        val numberRegex = Pattern.compile("\\d+(?:[.,]\\d+)?")
+        val matcher = numberRegex.matcher(amount)
+
+        return if (matcher.find() && matcher.group(0) != null) {
+            matcher.group(0)?.replace(',', '.')?.toDoubleOrNull()
+        } else {
+            null
+        }
     }
 }

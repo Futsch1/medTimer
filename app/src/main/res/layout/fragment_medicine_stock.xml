@@ -19,7 +19,7 @@
             android:id="@+id/amountLeft"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
+            android:inputType="numberDecimal|numberSigned"
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -50,7 +50,7 @@
             android:id="@+id/reminderThreshold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
+            android:inputType="numberSigned|numberDecimal"
             android:maxWidth="488dp"
             tools:ignore="TextContrastCheck" />
 
@@ -73,7 +73,7 @@
                 android:id="@+id/refillSize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberSigned"
+                android:inputType="numberSigned|numberDecimal"
                 tools:ignore="TextContrastCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>

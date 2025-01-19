@@ -152,7 +152,7 @@ public class Notifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.box_seam)
                 .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
-                .setContentText(context.getString(R.string.out_of_stock_notification, medicine.name, String.format("%d", medicine.amount)))
+                .setContentText(context.getString(R.string.out_of_stock_notification, medicine.name, MedicineHelper.formatAmount(medicine.amount)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
         if (medicine.iconId != 0) {

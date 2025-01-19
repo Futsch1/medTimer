@@ -8,6 +8,7 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.MedicineHelper
 
 class StockHandlingWork(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
@@ -28,20 +29,18 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
     }
 
     private fun processStock(medicine: Medicine, reminder: Reminder) {
-        // Extract number from reminder amount setting using regex
-        val amountRegex = Regex("""(\d+)""")
-        val match = amountRegex.find(reminder.amount)
-        val amount = match?.groupValues?.get(1)?.toInt() ?: 0
+        val amount: Double? = MedicineHelper.parseAmount(reminder.amount)
+        if (amount != null) {
+            medicine.amount -= amount
+            if (medicine.amount < 0) {
+                medicine.amount = 0.0
+            }
 
-        medicine.amount -= amount
-        if (medicine.amount < 0) {
-            medicine.amount = 0.0
+            checkForThreshold(medicine, amount)
         }
-
-        checkForThreshold(medicine, amount)
     }
 
-    private fun checkForThreshold(medicine: Medicine, amount: Int) {
+    private fun checkForThreshold(medicine: Medicine, amount: Double) {
         if (medicine.amount <= medicine.outOfStockReminderThreshold && (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ALWAYS ||
                     (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ONCE && medicine.amount + amount > medicine.outOfStockReminderThreshold))
         ) {
