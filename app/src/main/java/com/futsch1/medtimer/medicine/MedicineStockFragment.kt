@@ -81,10 +81,11 @@ class MedicineStockFragment :
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
 
         if (amount != null) {
+            val amountNow: Double = amount
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
                 ?.let { amount += it }
             fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-                .setText(MedicineHelper.formatAmount(amount))
+                .setText(MedicineHelper.formatAmount(amountNow))
         }
     }
 }
