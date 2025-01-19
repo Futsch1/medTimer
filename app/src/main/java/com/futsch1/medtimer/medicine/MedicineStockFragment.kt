@@ -29,15 +29,17 @@ class MedicineStockFragment :
     }
 
     override fun fillEntityData(entity: Medicine, fragmentView: View) {
-        MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
-            ?.let { entity.amount = it }
+        entity.amount =
+            MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
+                ?: entity.amount
 
         entity.outOfStockReminder = stockReminderStringToValue(
             fragmentView.findViewById<AutoCompleteTextView>(R.id.medicineStockReminder).text.toString(),
             this.resources
         )
-        MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString())
-            ?.let { entity.outOfStockReminderThreshold = it }
+        entity.outOfStockReminderThreshold =
+            MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString())
+                ?: entity.outOfStockReminderThreshold
 
         entity.refillSizes = arrayListOf(
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
