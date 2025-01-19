@@ -15,16 +15,15 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.CoreMatchers.equalTo
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Test
 
 class MedicineStockTest : BaseTestHelper() {
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -52,7 +51,7 @@ class MedicineStockTest : BaseTestHelper() {
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
             1_000
         )
-        assertNull(o)
+        internalAssert(o == null)
         device.pressBack()
 
         clickListItemChild(R.id.latestReminders, 0, R.id.chipSkipped)
@@ -61,7 +60,7 @@ class MedicineStockTest : BaseTestHelper() {
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
             1_000
         )
-        assertNull(o)
+        internalAssert(o == null)
         device.pressBack()
 
         clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
@@ -70,7 +69,7 @@ class MedicineStockTest : BaseTestHelper() {
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
             1_000
         )
-        assertNull(o)
+        internalAssert(o == null)
         device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
@@ -89,7 +88,7 @@ class MedicineStockTest : BaseTestHelper() {
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
             1_000
         )
-        assertNotNull(o)
+        internalAssert(o != null)
         device.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)

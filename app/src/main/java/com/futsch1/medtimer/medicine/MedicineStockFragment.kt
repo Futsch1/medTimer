@@ -79,13 +79,13 @@ class MedicineStockFragment :
     private fun onRefillClick(fragmentView: View) {
         var amount: Double? =
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
-
-        if (amount != null) {
-            val amountNow: Double = amount
+        val refillSize: Double? =
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
-                ?.let { amount += it }
+
+        if (amount != null && refillSize != null) {
+            amount += refillSize
             fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-                .setText(MedicineHelper.formatAmount(amountNow))
+                .setText(MedicineHelper.formatAmount(amount))
         }
     }
 }
