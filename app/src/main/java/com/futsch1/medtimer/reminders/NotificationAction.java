@@ -69,7 +69,9 @@ public class NotificationAction {
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
             reminderEvent.stockHandled = true;
             Reminder reminder = medicineRepository.getReminder(reminderEvent.reminderId);
-            ReminderProcessor.requestStockHandling(context, reminder.amount, reminder.medicineRelId);
+            if (reminder != null) {
+                ReminderProcessor.requestStockHandling(context, reminder.amount, reminder.medicineRelId);
+            }
         }
     }
 
