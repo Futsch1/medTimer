@@ -118,6 +118,9 @@ Allow notification snoozing`).
 
 <img src='notification_snoozing.png' width=200 />
 
+You can also set the snooze interval to `Custom...`, which allows you to enter the snooze interval
+for every snoozed reminder individually when it is snoozed.
+
 ## More nagging, repeating reminders
 
 Reminders can be automatically repeated after a certain delay for a specific number of times. This
@@ -150,3 +153,34 @@ So imagine you would mark the dummy reminder as taken at 08:30, the first follow
 be active at 16:30, the second following reminder will be active at 00:30 and the third following
 reminder will be active at 08:30 on the next day. As soon as you took this last dose, mark the dummy
 reminder as taken, which will restart the chain.
+
+## Interval reminders
+
+In contrast to following doses, interval reminders always keep a certain interval and are not
+dependent on time triggers. Use these if you need to keep an interval which is not bound to 24 hours
+(e.g. every 10 hours) or if it is really important that the interval between each doses stays
+exactly the same. For both use cases, the interval reminder can be configured. It can either start
+when the previous dose has been reminded, consequently keeping a fixed interval between reminders
+at all times. Or it can be configured to start when the previous dose was marked either taken or
+skipped, keeping a fixed interval between taken times.
+
+Additionally, it is required to set a start time of the interval. This time will mark the first
+dose and is used to calculate subsequent doses. If the interval shall be changed, this interval
+start time should be set to the next reminder time.
+
+## Medicine stock tracking
+
+MedTimer can track the stock of your medicine, reducing the amount of medicine for every dose
+that has been taken. To enter the stock settings, click the parcel icon in the medicine view. In the
+following screen, you can set the current amount, the out of stock reminder type and the reminder
+threshold. It is also possible to indicate a refill with a single click. The out of stock reminder
+can either be triggered the moment when the threshold is reached for the first time or every time a
+dose was taken and the remaining amount is below the threshold. When stock tracking is active, the
+remaining amount will also be shown in the medicine list and in every reminder of said medicine. If
+the amount is below threshold, a warning icon `⚠` will be shown.
+
+<img src='medicine_stock.png' width="200" />
+
+The amount to be deducted comes from the amount indicated for the reminders. The amount can also
+contain text, MedTimer will search for the first number in the amount and use this (e.g. `75 mg` or
+`Take 1 pill` will work fine).

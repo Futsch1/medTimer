@@ -92,8 +92,8 @@ class JSONMedicineBackupUnitTest {
         "notificationImportance": 3,
         "iconId": 5,
         "outOfStockReminder": "OFF",
-        "amount": 0,
-        "outOfStockReminderThreshold": 0,
+        "amount": 0.0,
+        "outOfStockReminderThreshold": 0.0,
         "refillSizes": []
       }
     }
@@ -176,6 +176,8 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders2.medicine.color = Color.BLUE;
         medicineWithReminders2.medicine.notificationImportance = 5;
         medicineWithReminders2.medicine.iconId = 7;
+        medicineWithReminders2.medicine.amount = 17.0;
+        medicineWithReminders2.medicine.outOfStockReminderThreshold = 17.5;
         medicinesWithReminders.add(medicineWithReminders2);
 
         String result = jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders);
@@ -223,8 +225,8 @@ class JSONMedicineBackupUnitTest {
         "notificationImportance": 4,
         "iconId": 0,
         "outOfStockReminder": "OFF",
-        "amount": 0,
-        "outOfStockReminderThreshold": 0,
+        "amount": 0.0,
+        "outOfStockReminderThreshold": 0.0,
         "refillSizes": []
       }
     },
@@ -290,8 +292,8 @@ class JSONMedicineBackupUnitTest {
         "notificationImportance": 5,
         "iconId": 7,
         "outOfStockReminder": "OFF",
-        "amount": 0,
-        "outOfStockReminderThreshold": 0,
+        "amount": 17.0,
+        "outOfStockReminderThreshold": 17.5,
         "refillSizes": []
       }
     }

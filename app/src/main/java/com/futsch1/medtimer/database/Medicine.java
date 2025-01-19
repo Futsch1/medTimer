@@ -38,13 +38,13 @@ public class Medicine {
     public OutOfStockReminderType outOfStockReminder;
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int amount;
+    public double amount;
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int outOfStockReminderThreshold;
+    public double outOfStockReminderThreshold;
     @ColumnInfo(defaultValue = "[]")
     @Expose
-    public ArrayList<Integer> refillSizes;
+    public ArrayList<Double> refillSizes;
 
     public Medicine(String name) {
         this.name = name;
