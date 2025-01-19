@@ -65,7 +65,6 @@ private fun updateReminderEvent(
         reminderEvent?.amount = amount
         NotificationAction.processReminderEvent(
             activity,
-            reminderEventId,
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvent!!,
             repository

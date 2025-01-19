@@ -12,9 +12,11 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
@@ -22,7 +24,7 @@ import org.junit.Test
 class MedicineStockTest : BaseTestHelper() {
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -93,15 +95,24 @@ class MedicineStockTest : BaseTestHelper() {
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         assertContains(R.id.medicineName, "⚠")
 
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickOn(R.id.logManualDose)
+        clickListItem(null, 1)
+        writeTo(android.R.id.input, "12")
+        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
         clickOn(R.id.refillNow)
 
-        assertDisplayed(R.id.amountLeft, "14")
+        assertDisplayed(R.id.amountLeft, "10")
         pressBack()
         pressBack()
 
-        assertContains(R.id.medicineName, "14")
+        assertContains(R.id.medicineName, "10")
         assertNotContains(R.id.medicineName, "⚠")
     }
 }

@@ -13,16 +13,13 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 class StockHandlingWork(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
-        val reminderEventId = inputData.getInt(ActivityCodes.EXTRA_REMINDER_EVENT_ID, 0)
+        val amount = inputData.getString(ActivityCodes.EXTRA_AMOUNT) ?: return Result.failure()
+        val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         val medicineRepository = MedicineRepository(context as Application?)
-        val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
-            ?: return Result.failure()
-        val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
-            ?: return Result.failure()
-        val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
+        val medicine = medicineRepository.getMedicine(medicineId)
             ?: return Result.failure()
 
-        processStock(medicine, reminder)
+        processStock(medicine, amount)
         medicineRepository.updateMedicine(medicine)
 
         return Result.success()
