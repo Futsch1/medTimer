@@ -8,9 +8,11 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment
 import com.futsch1.medtimer.helpers.MedicineEntityInterface
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderStringToValue
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderValueToString
 import com.google.android.material.textfield.TextInputEditText
+import java.text.ParseException
 
 class MedicineStockFragment :
     DatabaseEntityEditFragment<Medicine>(
@@ -26,33 +28,30 @@ class MedicineStockFragment :
     override fun fillEntityData(entity: Medicine, fragmentView: View) {
         try {
             entity.amount =
-                fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString()
-                    .toDouble()
+                MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
+
             entity.outOfStockReminder = stockReminderStringToValue(
                 fragmentView.findViewById<AutoCompleteTextView>(R.id.medicineStockReminder).text.toString(),
                 this.resources
             )
             entity.outOfStockReminderThreshold =
-                fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString()
-                    .toDouble()
+                MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString())
             entity.refillSizes = arrayListOf(
-                fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString()
-                    .toDouble()
+                MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
             )
-        } catch (e: NumberFormatException) {
+        } catch (e: ParseException) {
             // Empty for now
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
         fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-            .setText(entity.amount.toString())
+            .setText(MedicineHelper.formatAmount(entity.amount))
         fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold)
-            .setText(entity.outOfStockReminderThreshold.toString())
+            .setText(MedicineHelper.formatAmount(entity.outOfStockReminderThreshold))
         if (entity.refillSizes.isNotEmpty()) {
             fragmentView.findViewById<TextInputEditText>(R.id.refillSize)
-                .setText(entity.refillSizes[0].toString())
+                .setText(MedicineHelper.formatAmount(entity.refillSizes[0]))
         }
 
         val stockReminder: AutoCompleteTextView =
@@ -75,13 +74,12 @@ class MedicineStockFragment :
     private fun onRefillClick(fragmentView: View) {
         try {
             var amount =
-                fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString()
-                    .toInt()
-            amount += fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString()
-                .toInt()
+                MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
+
+            amount += MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
             fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-                .setText(amount.toString())
-        } catch (e: NumberFormatException) {
+                .setText(MedicineHelper.formatAmount(amount))
+        } catch (e: ParseException) {
             // Intentionally empty
         }
     }

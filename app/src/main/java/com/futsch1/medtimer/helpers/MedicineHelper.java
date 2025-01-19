@@ -6,6 +6,8 @@ import android.content.Context;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.regex.Pattern;
 
 public class MedicineHelper {
@@ -22,9 +24,21 @@ public class MedicineHelper {
     @SuppressLint("DefaultLocale")
     public static String getMedicineNameWithStockText(Context context, Medicine medicine) {
         if (medicine.isStockManagementActive()) {
-            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, String.format("%d", medicine.amount), medicine.amount <= medicine.outOfStockReminderThreshold ? " ⚠)" : ")");
+            return medicine.name + " (" + context.getString(R.string.medicine_stock_string, formatAmount(medicine.amount), medicine.amount <= medicine.outOfStockReminderThreshold ? " ⚠)" : ")");
         } else {
             return medicine.name;
         }
+    }
+
+    public static String formatAmount(double amount) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMinimumFractionDigits(0);
+        numberFormat.setMaximumFractionDigits(2);
+        return numberFormat.format(amount);
+    }
+
+    public static double parseAmount(String amount) throws ParseException {
+        Number n = NumberFormat.getNumberInstance().parse(amount);
+        return n == null ? Double.NaN : n.doubleValue();
     }
 }
