@@ -16,7 +16,6 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
@@ -24,7 +23,7 @@ import org.junit.Test
 class MedicineStockTest : BaseTestHelper() {
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -33,11 +32,16 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("Of the pills 3.5 are to be taken", 10)
 
         clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "")
+        writeTo(R.id.reminderThreshold, "")
+        writeTo(R.id.refillSize, "")
+        pressBack()
+
+        clickOn(R.id.openStockTracking)
         writeTo(R.id.amountLeft, "10.5")
         clickOn(R.id.medicineStockReminder)
         onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
-        writeTo(R.id.reminderThreshold, "4")
         writeTo(R.id.reminderThreshold, "4")
         writeTo(R.id.refillSize, "10.5")
         pressBack()
