@@ -1,4 +1,4 @@
-name: Unit test
+name: Tests
 
 on:
   workflow_dispatch:
@@ -68,6 +68,22 @@ jobs:
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+          cores: 4
+
+      - name: Run monkey test
+        uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
+        with:
+          api-level: ${{ env.target_api_level }}
+          profile: ${{ env.profile }}
+          arch: x86_64
+          target: google_apis
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+          disable-animations: true
+          script: |
+            ./gradlew assembleDebug
+            adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
+            adb shell monkey -p com.futsch1.medtimer -v 2000
           cores: 4
 
       - name: Run fuzzing tests
