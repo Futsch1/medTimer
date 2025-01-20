@@ -6,6 +6,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import org.junit.Test
 
@@ -36,9 +37,10 @@ class ExportBackupTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.backup)
-        clickOn(R.string.backup)
-        clickDialogPositiveButton()
         
+        clickListItem(-1, 1)
+        clickDialogPositiveButton()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
         device.pressBack()
