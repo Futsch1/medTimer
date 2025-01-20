@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 95
-        versionName = "1.15.0"
+        versionCode = 96
+        versionName = "1.15.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -85,7 +85,6 @@ dependencies {
     val lifecycleViewmodelKtxVersion = "2.8.7"
     val roomVersion = "2.6.1"
     val colorPickerViewVersion = "2.3.0"
-    val preferenceXVersion = "1.1.0"
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.11.0"
     val tableViewVersion = "0.8.9.4"
@@ -123,7 +122,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleViewmodelKtxVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("com.github.skydoves:colorpickerview:$colorPickerViewVersion")
-    implementation("com.takisoft.preferencex:preferencex:$preferenceXVersion")
     implementation("com.github.wwdablu:SimplyPDF:$simplyPDFVersion")
     implementation("com.google.code.gson:gson:$gsonVersion")
     implementation("com.github.evrencoskun:TableView:v$tableViewVersion")

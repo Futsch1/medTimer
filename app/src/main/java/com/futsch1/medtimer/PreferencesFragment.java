@@ -10,18 +10,19 @@ import android.view.WindowManager;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
     @Override
-    public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
         setupTheme();
@@ -77,7 +78,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         if (preference != null) {
             preference.setOnPreferenceClickListener(preference1 ->
                     {
-                        Navigation.findNavController(requireView()).navigate(actionId);
+                        NavController navController = Navigation.findNavController(requireView());
+                        try {
+                            navController.navigate(actionId);
+                        } catch (IllegalArgumentException e) {
+                            // Intentionally empty
+                        }
                         return true;
                     }
             );

@@ -38,7 +38,6 @@ public class PDFExport implements Exporter {
         this.context = context;
     }
 
-
     public void export(File file) {
         SimplyPdfDocument simplyPdfDocument = getDocument(file);
 
@@ -81,7 +80,7 @@ public class PDFExport implements Exporter {
         TextProperties headerProperties = getHeaderProperties();
         LinkedList<Cell> header = new LinkedList<>();
         int colIndex = 0;
-        for (String headerText : TableHelper.getTableHeaders(context)) {
+        for (String headerText : TableHelper.getTableHeaders(context, false)) {
             header.add(new TextCell(headerText, headerProperties, columnWidths[colIndex++]));
         }
         return header;

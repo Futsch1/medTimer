@@ -12,7 +12,7 @@ public class TableHelper {
         // Intended empty
     }
 
-    public static List<String> getTableHeaders(Context context) {
+    public static List<String> getTableHeaders(Context context, boolean withIsoTimestamps) {
         final String[] headerTexts = {
                 context.getString(R.string.time),
                 context.getString(R.string.name),
@@ -20,6 +20,11 @@ public class TableHelper {
                 context.getString(R.string.taken),
                 context.getString(R.string.time) + " (ISO 8601)",
                 context.getString(R.string.taken) + " (ISO 8601)"};
-        return Arrays.asList(headerTexts);
+        List<String> names = Arrays.asList(headerTexts);
+        if (!withIsoTimestamps) {
+            return names.subList(0, names.size() - 2);
+        } else {
+            return names;
+        }
     }
 }

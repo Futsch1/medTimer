@@ -41,9 +41,9 @@ class MedicineStockFragment :
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).text.toString())
                 ?: entity.outOfStockReminderThreshold
 
-        entity.refillSizes = arrayListOf(
+        val refillSize =
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
-        )
+        refillSize?.let { entity.refillSizes = arrayListOf(it) }
     }
 
     override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {

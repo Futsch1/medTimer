@@ -1,4 +1,4 @@
-name: Unit test
+name: Test
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  unitTest:
+  test:
     runs-on: ubuntu-latest
     env:
       target_api_level: 34
@@ -51,7 +51,7 @@ jobs:
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run Android tests and unit tests
+      - name: Run Android tests, unit tests and monkey test
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: ${{ env.target_api_level }}
@@ -68,6 +68,8 @@ jobs:
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+            adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
+            adb shell monkey -p com.futsch1.medtimer -v 2000
           cores: 4
 
       - name: Run fuzzing tests

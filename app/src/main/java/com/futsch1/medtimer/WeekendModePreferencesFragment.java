@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
-import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
 
     @Override
-    public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.weekend_mode_preferences, rootKey);
 
         setupWeekendMode();
