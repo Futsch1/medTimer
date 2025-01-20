@@ -23,7 +23,7 @@ public class CSVExport implements Exporter {
     @SuppressWarnings("java:S6300") // Unencrypted file is intended here and not a mistake
     public void export(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
-            List<String> headerTexts = TableHelper.getTableHeaders(context);
+            List<String> headerTexts = TableHelper.getTableHeaders(context, true);
             csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {
