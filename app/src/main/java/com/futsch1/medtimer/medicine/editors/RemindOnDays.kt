@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.editReminder
+package com.futsch1.medtimer.medicine.editors
 
 import android.app.AlertDialog
 import android.content.Context
@@ -11,7 +11,7 @@ class RemindOnDays(
     private val button: Button,
     private val strings: Strings,
     private val daysList: Array<String>,
-    private val selectedCallback: (Int) -> (Boolean)
+    selectedCallback: (Int) -> (Boolean)
 ) {
     private val builder: AlertDialog.Builder =
         AlertDialog.Builder(context)
@@ -20,6 +20,10 @@ class RemindOnDays(
     private val checkedItems = BooleanArray(daysList.size)
 
     init {
+        for (i in daysList.indices) {
+            checkedItems[i] = selectedCallback(i)
+        }
+
         setText()
 
         builder.setPositiveButton(R.string.ok) { _, _ ->
@@ -31,9 +35,6 @@ class RemindOnDays(
         ) { dialogInterface: DialogInterface, _ -> dialogInterface.dismiss() }
 
         button.setOnClickListener { _ ->
-            for (i in daysList.indices) {
-                checkedItems[i] = selectedCallback(i)
-            }
             builder.setMultiChoiceItems(
                 daysList, checkedItems
             ) { _, i: Int, b: Boolean ->
@@ -61,7 +62,7 @@ class RemindOnDays(
     private fun setText() {
         val checkedDays = ArrayList<String>()
         for (j in daysList.indices) {
-            if (selectedCallback(j)) {
+            if (checkedItems[j]) {
                 checkedDays.add(daysList[j])
             }
         }

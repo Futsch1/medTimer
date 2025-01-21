@@ -12,8 +12,6 @@ import static com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
-
 import org.junit.Test;
 
 import java.time.LocalTime;
@@ -51,7 +49,7 @@ public class BasicUITest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void menuHandlingTest() {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", LocalTime.of(12, 0));
