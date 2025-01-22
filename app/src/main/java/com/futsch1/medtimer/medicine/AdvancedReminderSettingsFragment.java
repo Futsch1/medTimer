@@ -15,17 +15,15 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment;
 import com.futsch1.medtimer.helpers.ReminderEntityInterface;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.medicine.editReminder.RemindOnDays;
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor;
 import com.futsch1.medtimer.medicine.editors.IntervalEditor;
+import com.futsch1.medtimer.medicine.editors.RemindOnDays;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
-
-import kotlin.Unit;
 
 public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment<Reminder> {
 
@@ -39,6 +37,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private DateTimeEditor intervalStartDateTimeEditor;
     private IntervalEditor intervalEditor;
     private MaterialSwitch variableAmount;
+    private RemindOnDays remindOnDaysOfWeek;
+    private RemindOnDays remindOnDaysOfMonth;
 
     public AdvancedReminderSettingsFragment() {
         super(new ReminderEntityInterface(), R.layout.fragment_advanced_reminder_settings, AdvancedReminderSettingsFragment.class.getName());
@@ -95,15 +95,14 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         putPauseDaysIntoReminder(entity);
         putStartDateIntoReminder(entity);
         putIntervalIntoReminder(entity, fragmentView);
+        putRemindOnDaysIntoReminder(entity);
     }
 
     private void putConsecutiveDaysIntoReminder(Reminder entity) {
         try {
-            if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
-                entity.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
-                if (entity.consecutiveDays <= 0) {
-                    entity.consecutiveDays = 1;
-                }
+            entity.consecutiveDays = Integer.parseInt(editConsecutiveDays.getText().toString());
+            if (entity.consecutiveDays <= 0) {
+                entity.consecutiveDays = 1;
             }
         } catch (NumberFormatException e) {
             entity.consecutiveDays = 1;
@@ -139,6 +138,17 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         }
     }
 
+    private void putRemindOnDaysIntoReminder(Reminder entity) {
+        remindOnDaysOfWeek.getIndices().forEach(p -> entity.days.set(p.getFirst(), p.getSecond()));
+        remindOnDaysOfMonth.getIndices().forEach(p -> {
+            if (Boolean.TRUE.equals(p.getSecond())) {
+                entity.activeDaysOfMonth |= (1 << p.getFirst());
+            } else {
+                entity.activeDaysOfMonth &= ~(1 << p.getFirst());
+            }
+        });
+    }
+
     @Override
     public int getEntityId() {
         return AdvancedReminderSettingsFragmentArgs.fromBundle(requireArguments()).getReminderId();
@@ -165,23 +175,10 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         for (int i = 0; i < 31; i++) {
             daysOfMonth[i] = Integer.toString(i + 1);
         }
-        new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
-                i -> entity.days.get(i),
-                (i, b) -> {
-                    entity.days.set(i, b);
-                    return Unit.INSTANCE;
-                });
-        new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
-                i -> (entity.activeDaysOfMonth & (1 << i)) != 0,
-                (i, b) -> {
-                    if (Boolean.TRUE.equals(b)) {
-                        entity.activeDaysOfMonth |= (1 << i);
-                    } else {
-                        entity.activeDaysOfMonth &= ~(1 << i);
-                    }
-
-                    return Unit.INSTANCE;
-                });
+        remindOnDaysOfWeek = new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnWeekdays), new RemindOnDays.Strings(R.string.every_day, null, R.string.never), daysArray,
+                i -> entity.days.get(i));
+        remindOnDaysOfMonth = new RemindOnDays(requireContext(), fragmentView.findViewById(R.id.remindOnDaysOfMonth), new RemindOnDays.Strings(R.string.every_day_of_month, R.string.on_day_of_month, R.string.never), daysOfMonth,
+                i -> (entity.activeDaysOfMonth & (1 << i)) != 0);
     }
 
     private void setupCycleStartDate(Reminder entity) {
