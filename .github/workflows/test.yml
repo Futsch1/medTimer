@@ -67,7 +67,7 @@ jobs:
             ./gradlew packageDebug
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
-            adb uninstall com.futsch1.medtimer
+            adb uninstall com.futsch1.medtimer || true
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
             adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
             adb shell monkey -p com.futsch1.medtimer -v 2000
