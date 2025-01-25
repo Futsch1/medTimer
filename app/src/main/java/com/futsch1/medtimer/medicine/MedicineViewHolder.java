@@ -78,6 +78,11 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
                 medicineWithReminders.medicine.medicineId
         );
-        navController.navigate(action);
+        try {
+            navController.navigate(action);
+        } catch (IllegalArgumentException e) {
+            // Ignore
+        }
+
     }
 }

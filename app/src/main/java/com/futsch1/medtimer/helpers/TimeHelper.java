@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.helpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -15,6 +16,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.ParseException;
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,8 +44,12 @@ public class TimeHelper {
      * @return Time string in local format
      */
     public static String minutesToTimeString(Context context, long minutes) {
-        Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
-        return DateFormat.getTimeFormat(context).format(date);
+        try {
+            Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+            return DateFormat.getTimeFormat(context).format(date);
+        } catch (DateTimeException e) {
+            return minutesToDurationString(minutes);
+        }
     }
 
     /**
@@ -58,9 +64,9 @@ public class TimeHelper {
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
+    @SuppressLint("DefaultLocale")
     public static String minutesToDurationString(long minutes) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
-        return formatter.format(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
+        return String.format("%d:%02d", minutes / 60, minutes % 60);
     }
 
     /**

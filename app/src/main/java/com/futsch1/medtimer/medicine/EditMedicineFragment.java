@@ -3,8 +3,8 @@ package com.futsch1.medtimer.medicine;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,7 +49,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private MaterialSwitch enableColor;
     private MaterialButton colorButton;
     private int color;
-    private AutoCompleteTextView notificationImportance;
+    private Spinner notificationImportance;
     private MaterialButton selectIconButton;
 
     public EditMedicineFragment() {
@@ -156,7 +156,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setText(NotificationImportanceKt.importanceValueToString(notificationImportanceValue, this.getResources()), false);
+        notificationImportance.setSelection(NotificationImportanceKt.importanceValueToIndex(notificationImportanceValue));
     }
 
     private void setupStockButton(View fragmentView) {
@@ -208,7 +208,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         entity.name = ((EditText) fragmentView.findViewById(R.id.editMedicineName)).getText().toString();
         entity.useColor = enableColor.isChecked();
         entity.color = color;
-        entity.notificationImportance = NotificationImportanceKt.importanceStringToValue(notificationImportance.getText().toString(), this.getResources());
+        entity.notificationImportance = NotificationImportanceKt.importanceIndexToValue(notificationImportance.getSelectedItemPosition());
         entity.iconId = iconId;
 
         updateReminders(fragmentView);

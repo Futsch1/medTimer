@@ -25,6 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 app:iconPadding="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -71,22 +73,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/notificationImportanceLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:hint="@string/notification_importance"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/notificationImportance"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/notificationImportanceLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/notification_importance"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@string/notification_importance"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
+
+                <Spinner
+                    android:id="@+id/notificationImportance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="0dp"
@@ -100,6 +104,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/medicine_stock"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 app:icon="@drawable/box_seam"
                 app:iconPadding="0dp" />
 
@@ -110,6 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/calendar"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 app:icon="@drawable/calendar_week"
                 app:iconPadding="0dp" />
         </LinearLayout>
