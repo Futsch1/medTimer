@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +26,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
+import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -76,6 +78,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         setupSelectIcon(fragmentView);
         setupNotificationImportance(fragmentView, entity.notificationImportance);
         setupStockButton(fragmentView);
+        setupTagsButton(fragmentView);
 
         setupOpenCalendarButton(fragmentView);
         setupAddReminderButton(fragmentView);
@@ -166,6 +169,14 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
             EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineStockFragment action =
                     EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineStockFragment(getEntityId());
             navController.navigate(action);
+        });
+    }
+
+    private void setupTagsButton(View fragmentView) {
+        MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
+        openTags.setOnClickListener(v -> {
+            DialogFragment dialog = new TagsFragment();
+            dialog.show(getParentFragmentManager(), "tags");
         });
     }
 

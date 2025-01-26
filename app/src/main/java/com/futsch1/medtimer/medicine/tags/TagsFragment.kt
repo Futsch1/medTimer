@@ -8,8 +8,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.button.MaterialButton
 
-class TagFragment : DialogFragment() {
+class TagsFragment : DialogFragment() {
     private val tagAdapter = TagsAdapter(listOf()) // Initialize with empty list
 
     override fun onCreateView(
@@ -17,14 +18,19 @@ class TagFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.tags, container, false)
+        return inflater.inflate(R.layout.dialog_fragment_tags, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
         recyclerView.adapter = tagAdapter
+
+        val okButton = view.findViewById<MaterialButton>(R.id.ok)
+        okButton.setOnClickListener {
+            dismiss()
+        }
     }
 }

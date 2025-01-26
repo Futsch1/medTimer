@@ -105,6 +105,18 @@
                     android:layout_weight="1" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/openTags"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/tags"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    app:icon="@drawable/tag"
+                    app:iconPadding="0dp" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/openStockTracking"
                     style="?attr/materialIconButtonFilledStyle"
                     android:layout_width="wrap_content"

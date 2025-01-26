@@ -46,7 +46,11 @@ else:
 for directory in glob.glob('app/src/main/res/*'):
     if directory == 'app/src/main/res/values' or not os.path.exists(directory + '/strings.xml'):
         continue
+
     language = get_language_from_directory(directory)
+    if language == 'ta':
+        continue
+
     language_tree[language] = ET.parse(directory + '/strings.xml')
     resources = language_tree[language].getroot()
     language_strings = []
