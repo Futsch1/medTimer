@@ -9,14 +9,18 @@ import com.google.android.material.chip.Chip
 class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val chip: Chip = itemView.findViewById(R.id.tag)
 
-    fun bind(tagWithState: TagWithState) {
+    fun bind(tagWithState: TagWithState, selectable: Boolean) {
         chip.apply {
             text = tagWithState.tag.name
             isChecked = tagWithState.isSelected
             gravity = Gravity.CENTER
-            setOnCheckedChangeListener { _, isChecked ->
-                // Update the tag's selected state
-                tagWithState.isSelected = isChecked
+            if (selectable) {
+                setOnCheckedChangeListener { _, isChecked ->
+                    // Update the tag's selected state
+                    tagWithState.isSelected = isChecked
+                }
+            } else {
+                isCheckable = false
             }
         }
     }

@@ -1,21 +1,23 @@
 package com.futsch1.medtimer.medicine.tags
 
+import android.app.ActionBar.LayoutParams
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.helpers.DialogHelper
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.button.MaterialButton
 
-class TagsFragment(val editable: Boolean) : DialogFragment() {
+
+class TagsFragment(private val editable: Boolean = false, selectable: Boolean = true) :
+    DialogFragment() {
     private val tagAdapter =
-        TagsAdapter(mutableListOf(TagWithState(Tag("test"), false))) // Initialize with empty list
+        TagsAdapter(mutableListOf(TagWithState(Tag("test"), false)), selectable)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +29,8 @@ class TagsFragment(val editable: Boolean) : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
@@ -41,19 +45,32 @@ class TagsFragment(val editable: Boolean) : DialogFragment() {
     }
 
     private fun setupAddTag(view: View) {
-        val addTagLayout = view.findViewById<LinearLayout>(R.id.addTagLayout)
+        val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
         if (editable) {
-            addTagLayout.visibility = View.VISIBLE
-            val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
-            val addTagName = view.findViewById<EditText>(R.id.addTagName)
+            addTagButton.visibility = View.VISIBLE
             addTagButton.setOnClickListener {
-                if (addTagName.text.isNotBlank()) {
-                    tagAdapter.tags.add(TagWithState(Tag(addTagName.text.toString()), false))
-                    tagAdapter.notifyItemInserted(tagAdapter.tags.size - 1)
-                }
+                DialogHelper(requireContext())
+                    .title(R.string.add_tag)
+                    .hint(R.string.name)
+                    .initialText("Blablabla")
+                    .textSink { tagName: String? ->
+                        if (!tagName.isNullOrBlank()) {
+                            tagAdapter.tags.add(TagWithState(Tag(tagName), false))
+                            tagAdapter.notifyItemInserted(tagAdapter.tags.size - 1)
+                            growWindow()
+                        }
+                    }
+                    .show()
             }
         } else {
-            addTagLayout.visibility = View.GONE
+            addTagButton.visibility = View.GONE
         }
+    }
+
+    private fun growWindow() {
+        dialog!!.window!!.setLayout(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT
+        )
     }
 }

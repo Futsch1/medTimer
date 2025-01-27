@@ -11,7 +11,8 @@ data class TagWithState(
     var isSelected: Boolean
 )
 
-class TagsAdapter(val tags: MutableList<TagWithState>) : RecyclerView.Adapter<TagViewHolder>() {
+class TagsAdapter(val tags: MutableList<TagWithState>, private val selectable: Boolean) :
+    RecyclerView.Adapter<TagViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tag, parent, false)
         return TagViewHolder(view)
@@ -22,6 +23,6 @@ class TagsAdapter(val tags: MutableList<TagWithState>) : RecyclerView.Adapter<Ta
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-        return holder.bind(tags[position])
+        return holder.bind(tags[position], selectable)
     }
 }

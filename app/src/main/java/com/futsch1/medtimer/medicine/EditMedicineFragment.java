@@ -175,7 +175,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private void setupTagsButton(View fragmentView) {
         MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
         openTags.setOnClickListener(v -> {
-            DialogFragment dialog = new TagsFragment(true);
+            DialogFragment dialog = new TagsFragment(true, true);
             dialog.show(getParentFragmentManager(), "tags");
         });
     }
