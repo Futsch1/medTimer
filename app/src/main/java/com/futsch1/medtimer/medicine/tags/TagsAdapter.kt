@@ -8,10 +8,10 @@ import com.futsch1.medtimer.database.Tag
 
 data class TagWithState(
     val tag: Tag,
-    val isSelected: Boolean
+    var isSelected: Boolean
 )
 
-class TagsAdapter(private val tags: List<TagWithState>) : RecyclerView.Adapter<TagViewHolder>() {
+class TagsAdapter(val tags: MutableList<TagWithState>) : RecyclerView.Adapter<TagViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tag, parent, false)
         return TagViewHolder(view)
@@ -22,6 +22,6 @@ class TagsAdapter(private val tags: List<TagWithState>) : RecyclerView.Adapter<T
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-        return holder.bind(tags[position].tag, tags[position].isSelected)
+        return holder.bind(tags[position])
     }
 }

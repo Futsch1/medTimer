@@ -11,4 +11,8 @@ public class Tag {
     public int tagId;
     @Expose
     public String name;
+
+    public Tag(String name) {
+        this.name = name;
+    }
 }

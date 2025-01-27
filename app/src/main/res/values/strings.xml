@@ -203,4 +203,5 @@
     <string name="refill_now">Refill now</string>
     <string name="variable_amount">Enter dosage when taken</string>
     <string name="tags" translatable="false">Tags</string>
+    <string name="add_tag" translatable="false">Add tag</string>
 </resources>
