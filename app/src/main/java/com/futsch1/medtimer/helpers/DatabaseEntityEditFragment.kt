@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
@@ -68,7 +69,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.thread.start()
-        medicineViewModel = MedicineViewModel(this.requireActivity().application)
+        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -110,7 +111,7 @@ abstract class DatabaseEntityEditFragment<T>(
     protected open fun setupMenu(fragmentView: View) {
         val optionsMenu = OptionsMenu(
             this.requireContext(),
-            MedicineViewModel(requireActivity().application),
+            ViewModelProvider(this)[MedicineViewModel::class.java],
             this,
             fragmentView
         )

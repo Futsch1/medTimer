@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.OptionsMenu;
@@ -43,7 +44,7 @@ public class StatisticsFragment extends Fragment {
         loadActiveFragment(activeStatisticsFragment.getActiveFragment());
 
         OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
-                new MedicineViewModel(requireActivity().getApplication()),
+                new ViewModelProvider(this).get(MedicineViewModel.class),
                 this,
                 statisticsView);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
