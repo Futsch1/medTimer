@@ -123,7 +123,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
     private @NonNull RecyclerView setupMedicineList(View fragmentView) {
         RecyclerView recyclerView = fragmentView.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), requireActivity(), getThread());
+        adapter = new ReminderViewAdapter(requireActivity(), getThread());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         return recyclerView;

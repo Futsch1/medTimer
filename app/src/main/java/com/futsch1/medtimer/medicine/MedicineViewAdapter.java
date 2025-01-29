@@ -6,6 +6,7 @@ import android.os.HandlerThread;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.futsch1.medtimer.database.MedicineWithReminders;
@@ -15,12 +16,14 @@ public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders
 
     private final HandlerThread thread;
     private final Activity activity;
+    private final LifecycleOwner lifecycleOwner;
 
-    public MedicineViewAdapter(@NonNull DiffUtil.ItemCallback<MedicineWithReminders> diffCallback, HandlerThread thread, Activity activity) {
-        super(diffCallback);
+    public MedicineViewAdapter(HandlerThread thread, Activity activity, LifecycleOwner lifecycleOwner) {
+        super(new MedicineDiff());
         setHasStableIds(true);
         this.thread = thread;
         this.activity = activity;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
 
@@ -35,7 +38,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         MedicineWithReminders current = getItem(position);
-        holder.bind(current);
+        holder.bind(current, lifecycleOwner);
     }
 
     @Override

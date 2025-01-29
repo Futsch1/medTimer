@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineWithTags
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.InitIdlingResource
@@ -24,12 +23,11 @@ class TagsFragment(
     private val selectable: Boolean = true
 ) :
     DialogFragment() {
-    private var tags: List<Tag>? = null
-    private var medicineWithTags: MedicineWithTags? = null
 
     private val idlingResource = InitIdlingResource(TagsFragment::class.java.name)
     private lateinit var viewModel: MedicineWithTagsViewModel
-    private lateinit var tagAdapter: TagsAdapter
+    private lateinit var tagsAdapter: TagsAdapter
+    private lateinit var tagsWithStateCollector: TagWithStateCollector
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +45,13 @@ class TagsFragment(
                 medicineId
             )
         )[MedicineWithTagsViewModel::class.java]
-        tagAdapter = TagsAdapter(viewModel).selectable(selectable)
+        tagsAdapter = TagsAdapter(viewModel).selectable(selectable)
+        tagsWithStateCollector =
+            TagWithStateCollector(tagsAdapter) { idlingResource.setInitialized() }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
-        recyclerView.adapter = tagAdapter
+        recyclerView.adapter = tagsAdapter
 
         val okButton = view.findViewById<MaterialButton>(R.id.ok)
         okButton.setOnClickListener {
@@ -61,27 +61,13 @@ class TagsFragment(
         setupAddTag(view)
 
         viewModel.tags.observe(this) {
-            this.tags = it
-            this.dataUpdated()
+            tagsWithStateCollector.tags = it
         }
         viewModel.medicineWithTags.observe(this) {
-            this.medicineWithTags = it
-            this.dataUpdated()
+            tagsWithStateCollector.medicineWithTags = it
         }
 
         return view
-    }
-
-    private fun dataUpdated() {
-        if (tags != null && medicineWithTags != null) {
-            tagAdapter.submitList(tags!!.map {
-                TagWithState(
-                    it,
-                    medicineWithTags!!.tags.contains(it)
-                )
-            })
-            idlingResource.setInitialized()
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
