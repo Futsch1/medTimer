@@ -74,14 +74,13 @@ class TagsFragment(
 
     private fun dataUpdated() {
         if (tags != null && medicineWithTags != null) {
-            idlingResource.setInitialized()
-
             tagAdapter.submitList(tags!!.map {
                 TagWithState(
                     it,
                     medicineWithTags!!.tags.contains(it)
                 )
             })
+            idlingResource.setInitialized()
         }
     }
 
@@ -89,6 +88,11 @@ class TagsFragment(
         super.onViewCreated(view, savedInstanceState)
 
         dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        idlingResource.destroy()
     }
 
     private fun setupAddTag(view: View) {

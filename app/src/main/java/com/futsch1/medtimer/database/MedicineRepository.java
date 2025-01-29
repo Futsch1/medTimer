@@ -93,8 +93,10 @@ public class MedicineRepository {
     }
 
     public void deleteMedicine(int medicineId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTagForMedicine(medicineId));
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId)));
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteMedicineToTagForMedicine(medicineId);
+            medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId));
+        });
     }
 
     public long insertReminder(Reminder reminder) {
@@ -164,8 +166,10 @@ public class MedicineRepository {
     }
 
     public void deleteTag(@NotNull Tag tag) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTagForTag(tag.tagId));
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteTag(tag));
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteMedicineToTagForTag(tag.tagId);
+            medicineDao.deleteTag(tag);
+        });
     }
 
     public void insertMedicineToTag(int medicineId, int tagId) {
