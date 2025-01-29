@@ -72,7 +72,7 @@ public class MedicinesFragment extends Fragment {
         setupAddMedicineButton(fragmentView);
 
         OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
-                new MedicineViewModel(requireActivity().getApplication()),
+                new ViewModelProvider(this).get(MedicineViewModel.class),
                 this,
                 fragmentView);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());

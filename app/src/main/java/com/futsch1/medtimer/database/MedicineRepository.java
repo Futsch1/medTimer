@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
@@ -92,6 +93,7 @@ public class MedicineRepository {
     }
 
     public void deleteMedicine(int medicineId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTagForMedicine(medicineId));
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId)));
     }
 
@@ -123,6 +125,8 @@ public class MedicineRepository {
         deleteReminders();
         deleteMedicines();
         deleteReminderEvents();
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
     }
 
     public void deleteReminders() {
@@ -143,6 +147,33 @@ public class MedicineRepository {
 
     public List<Reminder> getLinkedReminders(int reminderId) {
         return medicineDao.getLinkedReminders(reminderId);
+    }
+
+    @NotNull
+    public LiveData<MedicineWithTags> getLiveMedicineWithTags(int medicineId) {
+        return medicineDao.getLiveMedicineWithTags(medicineId);
+    }
+
+    @NotNull
+    public LiveData<List<Tag>> getLiveTags() {
+        return medicineDao.getLiveTags();
+    }
+
+    public long insertTag(@NotNull Tag tag) {
+        return internalInsert(tag, medicineDao::insertTag);
+    }
+
+    public void deleteTag(@NotNull Tag tag) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTagForTag(tag.tagId));
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteTag(tag));
+    }
+
+    public void insertMedicineToTag(int medicineId, int tagId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertMedicineToTag(new MedicineToTag(medicineId, tagId)));
+    }
+
+    public void deleteMedicineToTag(int medicineId, int tagId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTag(new MedicineToTag(medicineId, tagId)));
     }
 
     interface Insert<T> {

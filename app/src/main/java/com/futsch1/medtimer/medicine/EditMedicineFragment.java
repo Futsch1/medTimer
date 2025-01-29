@@ -78,7 +78,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         setupSelectIcon(fragmentView);
         setupNotificationImportance(fragmentView, entity.notificationImportance);
         setupStockButton(fragmentView);
-        setupTagsButton(fragmentView);
+        setupTagsButton(fragmentView, entity.medicineId);
 
         setupOpenCalendarButton(fragmentView);
         setupAddReminderButton(fragmentView);
@@ -172,10 +172,10 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         });
     }
 
-    private void setupTagsButton(View fragmentView) {
+    private void setupTagsButton(View fragmentView, int medicineId) {
         MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
         openTags.setOnClickListener(v -> {
-            DialogFragment dialog = new TagsFragment(true, true);
+            DialogFragment dialog = new TagsFragment(medicineId, true, true);
             dialog.show(getParentFragmentManager(), "tags");
         });
     }

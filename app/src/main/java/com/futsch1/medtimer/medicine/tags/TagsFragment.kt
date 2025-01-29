@@ -1,36 +1,53 @@
 package com.futsch1.medtimer.medicine.tags
 
 import android.app.ActionBar.LayoutParams
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineWithTags
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.InitIdlingResource
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.button.MaterialButton
 
 
-class TagsFragment(private val editable: Boolean = false, selectable: Boolean = true) :
+class TagsFragment(
+    private val medicineId: Int,
+    private val editable: Boolean = false,
+    private val selectable: Boolean = true
+) :
     DialogFragment() {
-    private val tagAdapter =
-        TagsAdapter(mutableListOf(TagWithState(Tag("test"), false)), selectable)
+    private var tags: List<Tag>? = null
+    private var medicineWithTags: MedicineWithTags? = null
+
+    private val idlingResource = InitIdlingResource(TagsFragment::class.java.name)
+    private lateinit var viewModel: MedicineWithTagsViewModel
+    private lateinit var tagAdapter: TagsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.dialog_fragment_tags, container, false)
-    }
+        idlingResource.resetInitialized()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val view = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
 
-        dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        viewModel = ViewModelProvider(
+            this,
+            MedicineWithTagsViewModel.Factory(
+                context?.applicationContext as Application,
+                medicineId
+            )
+        )[MedicineWithTagsViewModel::class.java]
+        tagAdapter = TagsAdapter(viewModel).selectable(selectable)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
@@ -42,6 +59,36 @@ class TagsFragment(private val editable: Boolean = false, selectable: Boolean = 
         }
 
         setupAddTag(view)
+
+        viewModel.tags.observe(this) {
+            this.tags = it
+            this.dataUpdated()
+        }
+        viewModel.medicineWithTags.observe(this) {
+            this.medicineWithTags = it
+            this.dataUpdated()
+        }
+
+        return view
+    }
+
+    private fun dataUpdated() {
+        if (tags != null && medicineWithTags != null) {
+            idlingResource.setInitialized()
+
+            tagAdapter.submitList(tags!!.map {
+                TagWithState(
+                    it,
+                    medicineWithTags!!.tags.contains(it)
+                )
+            })
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
     private fun setupAddTag(view: View) {
@@ -52,11 +99,10 @@ class TagsFragment(private val editable: Boolean = false, selectable: Boolean = 
                 DialogHelper(requireContext())
                     .title(R.string.add_tag)
                     .hint(R.string.name)
-                    .initialText("Blablabla")
                     .textSink { tagName: String? ->
                         if (!tagName.isNullOrBlank()) {
-                            tagAdapter.tags.add(TagWithState(Tag(tagName), false))
-                            tagAdapter.notifyItemInserted(tagAdapter.tags.size - 1)
+                            val tagId = viewModel.medicineRepository.insertTag(Tag(tagName))
+                            viewModel.associateTag(tagId.toInt())
                             growWindow()
                         }
                     }

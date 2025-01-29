@@ -9,7 +9,11 @@ import com.google.android.material.chip.Chip
 class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val chip: Chip = itemView.findViewById(R.id.tag)
 
-    fun bind(tagWithState: TagWithState, selectable: Boolean) {
+    fun bind(
+        tagWithState: TagWithState,
+        viewModel: MedicineWithTagsViewModel,
+        selectable: Boolean
+    ) {
         chip.apply {
             text = tagWithState.tag.name
             isChecked = tagWithState.isSelected
@@ -18,9 +22,17 @@ class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 setOnCheckedChangeListener { _, isChecked ->
                     // Update the tag's selected state
                     tagWithState.isSelected = isChecked
+                    if (isChecked) {
+                        viewModel.associateTag(tagWithState.tag.tagId)
+                    } else {
+                        viewModel.disassociateTag(tagWithState.tag.tagId)
+                    }
                 }
             } else {
                 isCheckable = false
+            }
+            setOnCloseIconClickListener {
+                viewModel.medicineRepository.deleteTag(tagWithState.tag)
             }
         }
     }
