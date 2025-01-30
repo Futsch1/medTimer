@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.helpers;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,28 +11,26 @@ import java.util.List;
 @SuppressWarnings("java:S119") // Reproducing the naming of the ListAdapter class
 public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends ListAdapter<T, VH> {
-    private static final InitIdlingResource idlingResource = new InitIdlingResource("ListAdapter");
-    private static final InitIdlingResource idlingResource2 = new InitIdlingResource("ListAdapter2");
 
-    private InitIdlingResource usedResource = idlingResource;
+    private final InitIdlingResource idlingResource;
 
     protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        super(diffCallback);
-        usedResource.resetInitialized();
+        this(diffCallback, "IdlingListAdapter");
     }
 
-    protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, boolean useSecondResource) {
+    protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, String idlingResourceName) {
         super(diffCallback);
-        usedResource = useSecondResource ? idlingResource2 : idlingResource;
-        usedResource.resetInitialized();
+        idlingResource = IdlingResourcesPool.getInstance().getResource(idlingResourceName);
+        idlingResource.resetInitialized();
     }
 
     @Override
-    public void onCurrentListChanged(@NonNull List<T> previousList, @NonNull List<T> currentList) {
-        usedResource.setInitialized();
+    public void submitList(@Nullable List<T> list) {
+        super.submitList(list);
+        idlingResource.setInitialized();
     }
 
     public void resetInitialized() {
-        usedResource.resetInitialized();
+        idlingResource.resetInitialized();
     }
 }

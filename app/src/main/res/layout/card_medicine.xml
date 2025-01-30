@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/tags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

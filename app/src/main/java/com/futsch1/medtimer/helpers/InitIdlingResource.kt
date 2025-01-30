@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.helpers
 
+import android.util.Log
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.IdlingResource.ResourceCallback
@@ -9,6 +10,7 @@ import kotlin.concurrent.Volatile
 class InitIdlingResource(private val resourceName: String) : IdlingResource {
     init {
         IdlingRegistry.getInstance().register(this)
+        Log.d("InitIdlingResource", "Registered resource: $resourceName")
     }
 
     @Volatile
@@ -30,17 +32,20 @@ class InitIdlingResource(private val resourceName: String) : IdlingResource {
     }
 
     fun resetInitialized() {
+        Log.d("InitIdlingResource", "Reset initialized: $resourceName")
         mIsIdleNow.set(false)
     }
 
     fun setInitialized() {
         if (!mIsIdleNow.get()) {
+            Log.d("InitIdlingResource", "Set initialized: $resourceName")
             mIsIdleNow.set(true)
             mCallback?.onTransitionToIdle()
         }
     }
 
     fun destroy() {
+        Log.d("InitIdlingResource", "Unregister: $resourceName")
         IdlingRegistry.getInstance().unregister(this)
     }
 }

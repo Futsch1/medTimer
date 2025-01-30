@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.medicine.tags
 
 import android.app.ActionBar.LayoutParams
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,14 +39,10 @@ class TagsFragment(
 
         viewModel = ViewModelProvider(
             this,
-            MedicineWithTagsViewModel.Factory(
-                context?.applicationContext as Application,
-                medicineId
-            )
         )[MedicineWithTagsViewModel::class.java]
-        tagsAdapter = TagsAdapter(viewModel).selectable(selectable)
+        tagsAdapter = TagsAdapter(viewModel, medicineId).selectable(selectable)
         tagsWithStateCollector =
-            TagWithStateCollector(tagsAdapter) { idlingResource.setInitialized() }
+            TagWithStateCollector { tagsAdapter.submitList(it); idlingResource.setInitialized() }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
@@ -63,7 +58,7 @@ class TagsFragment(
         viewModel.tags.observe(this) {
             tagsWithStateCollector.tags = it
         }
-        viewModel.medicineWithTags.observe(this) {
+        viewModel.getMedicineWithTags(medicineId).observe(this) {
             tagsWithStateCollector.medicineWithTags = it
         }
 
@@ -92,7 +87,7 @@ class TagsFragment(
                     .textSink { tagName: String? ->
                         if (!tagName.isNullOrBlank()) {
                             val tagId = viewModel.medicineRepository.insertTag(Tag(tagName))
-                            viewModel.associateTag(tagId.toInt())
+                            viewModel.associateTag(medicineId, tagId.toInt())
                             growWindow()
                         }
                     }

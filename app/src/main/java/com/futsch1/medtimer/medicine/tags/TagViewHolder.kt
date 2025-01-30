@@ -13,6 +13,7 @@ class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(
         tagWithState: TagWithState,
+        medicineId: Int,
         viewModel: MedicineWithTagsViewModel,
         selectable: Boolean
     ) {
@@ -25,9 +26,9 @@ class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     // Update the tag's selected state
                     tagWithState.isSelected = isChecked
                     if (isChecked) {
-                        viewModel.associateTag(tagWithState.tag.tagId)
+                        viewModel.associateTag(medicineId, tagWithState.tag.tagId)
                     } else {
-                        viewModel.disassociateTag(tagWithState.tag.tagId)
+                        viewModel.disassociateTag(medicineId, tagWithState.tag.tagId)
                     }
                 }
             } else {

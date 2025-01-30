@@ -1,11 +1,11 @@
 package com.futsch1.medtimer.medicine;
 
 
-import android.app.Activity;
 import android.os.HandlerThread;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -15,10 +15,10 @@ import com.futsch1.medtimer.helpers.IdlingListAdapter;
 public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders, MedicineViewHolder> {
 
     private final HandlerThread thread;
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final LifecycleOwner lifecycleOwner;
 
-    public MedicineViewAdapter(HandlerThread thread, Activity activity, LifecycleOwner lifecycleOwner) {
+    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity, LifecycleOwner lifecycleOwner) {
         super(new MedicineDiff());
         setHasStableIds(true);
         this.thread = thread;

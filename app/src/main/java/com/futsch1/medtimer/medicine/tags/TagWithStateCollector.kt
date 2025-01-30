@@ -4,8 +4,7 @@ import com.futsch1.medtimer.database.MedicineWithTags
 import com.futsch1.medtimer.database.Tag
 
 class TagWithStateCollector(
-    private val tagsAdapter: TagsAdapter,
-    private val doneCallback: () -> Unit
+    private val doneCallback: (list: List<TagWithState>) -> Unit
 ) {
     private var allTags: Boolean = true
 
@@ -24,8 +23,7 @@ class TagWithStateCollector(
 
     private fun dataUpdated() {
         if (tags != null && medicineWithTags != null) {
-            tagsAdapter.submitList(getTagsWithState())
-            doneCallback()
+            doneCallback(getTagsWithState())
         }
     }
 

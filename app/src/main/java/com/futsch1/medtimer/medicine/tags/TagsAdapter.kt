@@ -12,7 +12,7 @@ data class TagWithState(
     var isSelected: Boolean
 )
 
-class TagsAdapter(private val viewModel: MedicineWithTagsViewModel) :
+class TagsAdapter(private val viewModel: MedicineWithTagsViewModel, private val medicineId: Int) :
     IdlingListAdapter<TagWithState, TagViewHolder>(TagsWithStateDiffCallback()) {
 
     private var selectable: Boolean = false
@@ -26,7 +26,7 @@ class TagsAdapter(private val viewModel: MedicineWithTagsViewModel) :
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tagWithState = getItem(position)
-        return holder.bind(tagWithState, viewModel, selectable)
+        return holder.bind(tagWithState, medicineId, viewModel, selectable)
     }
 
     class TagsWithStateDiffCallback : DiffUtil.ItemCallback<TagWithState>() {

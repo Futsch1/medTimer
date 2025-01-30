@@ -13,13 +13,12 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import org.junit.Test
 
 class TagTest : BaseTestHelper() {
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun tagHandling() {
         createMedicine("Test")
 
@@ -44,6 +43,10 @@ class TagTest : BaseTestHelper() {
         clickOn(R.id.ok)
 
         pressBack()
+
+        assertContains("New tag")
+        assertNotContains("Another tag")
+
         createMedicine("Test 2")
 
         clickOn(R.id.openTags)
