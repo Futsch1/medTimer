@@ -6,47 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.DialogHelper
-import com.futsch1.medtimer.helpers.InitIdlingResource
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.button.MaterialButton
 
 
 class TagsFragment(
-    private val medicineId: Int,
-    private val editable: Boolean = false,
-    private val selectable: Boolean = true
+    private val tagDataProvider: TagDataProvider
 ) :
     DialogFragment() {
-
-    private val idlingResource = InitIdlingResource(TagsFragment::class.java.name)
-    private lateinit var viewModel: MedicineWithTagsViewModel
-    private lateinit var tagsAdapter: TagsAdapter
-    private lateinit var tagsWithStateCollector: TagWithStateCollector
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        idlingResource.resetInitialized()
-
         val view = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
-
-        viewModel = ViewModelProvider(
-            this,
-        )[MedicineWithTagsViewModel::class.java]
-        tagsAdapter = TagsAdapter(viewModel, medicineId).selectable(selectable)
-        tagsWithStateCollector =
-            TagWithStateCollector { tagsAdapter.submitList(it); idlingResource.setInitialized() }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
-        recyclerView.adapter = tagsAdapter
+        recyclerView.adapter = tagDataProvider.getAdapter()
 
         val okButton = view.findViewById<MaterialButton>(R.id.ok)
         okButton.setOnClickListener {
@@ -54,13 +35,6 @@ class TagsFragment(
         }
 
         setupAddTag(view)
-
-        viewModel.tags.observe(this) {
-            tagsWithStateCollector.tags = it
-        }
-        viewModel.getMedicineWithTags(medicineId).observe(this) {
-            tagsWithStateCollector.medicineWithTags = it
-        }
 
         return view
     }
@@ -71,14 +45,9 @@ class TagsFragment(
         dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        idlingResource.destroy()
-    }
-
     private fun setupAddTag(view: View) {
         val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
-        if (editable) {
+        if (tagDataProvider.canAddTag()) {
             addTagButton.visibility = View.VISIBLE
             addTagButton.setOnClickListener {
                 DialogHelper(requireContext())
@@ -86,8 +55,7 @@ class TagsFragment(
                     .hint(R.string.name)
                     .textSink { tagName: String? ->
                         if (!tagName.isNullOrBlank()) {
-                            val tagId = viewModel.medicineRepository.insertTag(Tag(tagName))
-                            viewModel.associateTag(medicineId, tagId.toInt())
+                            tagDataProvider.addTag(tagName)
                             growWindow()
                         }
                     }

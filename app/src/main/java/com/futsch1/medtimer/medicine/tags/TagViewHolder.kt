@@ -13,35 +13,32 @@ class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(
         tagWithState: TagWithState,
-        medicineId: Int,
-        viewModel: MedicineWithTagsViewModel,
-        selectable: Boolean
+        selectCallback: TagCallback?,
+        deleteCallback: TagCallback?
     ) {
         chip.apply {
             text = tagWithState.tag.name
             isChecked = tagWithState.isSelected
             gravity = Gravity.CENTER
-            if (selectable) {
+            if (selectCallback != null) {
                 setOnCheckedChangeListener { _, isChecked ->
-                    // Update the tag's selected state
                     tagWithState.isSelected = isChecked
-                    if (isChecked) {
-                        viewModel.associateTag(medicineId, tagWithState.tag.tagId)
-                    } else {
-                        viewModel.disassociateTag(medicineId, tagWithState.tag.tagId)
-                    }
+                    selectCallback(tagWithState)
                 }
             } else {
                 isCheckable = false
-                isCloseIconVisible = false
                 setOnClickListener {
                     (this.parent as View).performClick()
                 }
                 rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
                 isFocusable = false
             }
-            setOnCloseIconClickListener {
-                viewModel.medicineRepository.deleteTag(tagWithState.tag)
+            if (deleteCallback != null) {
+                setOnCloseIconClickListener {
+                    deleteCallback(tagWithState)
+                }
+            } else {
+                isCloseIconVisible = false
             }
         }
     }

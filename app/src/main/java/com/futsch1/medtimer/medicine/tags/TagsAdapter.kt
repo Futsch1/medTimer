@@ -7,17 +7,18 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 
+typealias TagCallback = ((TagWithState) -> Unit)
+
 data class TagWithState(
     val tag: Tag,
     var isSelected: Boolean
 )
 
-class TagsAdapter(private val viewModel: MedicineWithTagsViewModel, private val medicineId: Int) :
+class TagsAdapter(
+    private val selectCallback: TagCallback?,
+    private val deleteCallback: TagCallback?
+) :
     IdlingListAdapter<TagWithState, TagViewHolder>(TagsWithStateDiffCallback()) {
-
-    private var selectable: Boolean = false
-
-    fun selectable(selectable: Boolean) = apply { this.selectable = selectable }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tag, parent, false)
@@ -26,7 +27,7 @@ class TagsAdapter(private val viewModel: MedicineWithTagsViewModel, private val 
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tagWithState = getItem(position)
-        return holder.bind(tagWithState, medicineId, viewModel, selectable)
+        return holder.bind(tagWithState, selectCallback, deleteCallback)
     }
 
     class TagsWithStateDiffCallback : DiffUtil.ItemCallback<TagWithState>() {

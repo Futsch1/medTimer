@@ -26,6 +26,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
+import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -175,7 +176,8 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private void setupTagsButton(View fragmentView, int medicineId) {
         MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
         openTags.setOnClickListener(v -> {
-            DialogFragment dialog = new TagsFragment(medicineId, true, true);
+            TagDataFromMedicine tagDataFromMedicine = new TagDataFromMedicine(this, medicineId);
+            DialogFragment dialog = new TagsFragment(tagDataFromMedicine);
             dialog.show(getParentFragmentManager(), "tags");
         });
     }
