@@ -15,13 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.IdlingRegistry;
 
@@ -30,6 +31,8 @@ import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
+import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences;
+import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.io.File;
@@ -38,6 +41,7 @@ import java.lang.reflect.Method;
 
 public class OptionsMenu implements MenuProvider {
     private final Context context;
+    private final Fragment fragment;
     private final MedicineViewModel medicineViewModel;
     private final View view;
     private final HandlerThread backgroundThread;
@@ -45,11 +49,12 @@ public class OptionsMenu implements MenuProvider {
     private Menu menu;
     private BackupManager backupManager;
 
-    public OptionsMenu(Context context, MedicineViewModel medicineViewModel, ActivityResultCaller caller, View view) {
-        this.context = context;
+    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, View view) {
+        this.fragment = fragment;
+        this.context = fragment.requireContext();
         this.medicineViewModel = medicineViewModel;
         this.view = view;
-        this.openFileLauncher = caller.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        this.openFileLauncher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 this.fileSelected(result.getData().getData());
             }
@@ -77,6 +82,8 @@ public class OptionsMenu implements MenuProvider {
         setupExport();
         setupGenerateTestData();
         setupShowAppIntro();
+
+        setupTagFilter();
     }
 
     @SuppressLint("RestrictedApi")
@@ -180,6 +187,16 @@ public class OptionsMenu implements MenuProvider {
         } else {
             item.setVisible(false);
         }
+    }
+
+    private void setupTagFilter() {
+        MenuItem item = menu.findItem(R.id.tag_filter);
+        item.setOnMenuItemClickListener(menuItem -> {
+            TagDataFromPreferences tagDataFromPreferences = new TagDataFromPreferences(fragment);
+            DialogFragment dialog = new TagsFragment(tagDataFromPreferences);
+            dialog.show(fragment.getParentFragmentManager(), "tags");
+            return true;
+        });
     }
 
     private void export(Exporter exporter) {

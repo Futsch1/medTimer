@@ -59,9 +59,8 @@ public class OverviewFragment extends Fragment {
         setupSwipeDelete(latestReminders);
         setupFilterButton();
 
-        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
+        OptionsMenu optionsMenu = new OptionsMenu(this,
                 medicineViewModel,
-                this,
                 fragmentOverview);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 

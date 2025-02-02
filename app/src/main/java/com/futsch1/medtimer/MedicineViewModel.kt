@@ -54,7 +54,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         return false
     }
 
-    fun getMedicine(medicineId: Int): Medicine {
+    fun getMedicine(medicineId: Int): Medicine? {
         return medicineRepository.getMedicine(medicineId)
     }
 
@@ -78,7 +78,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         return medicineRepository.getReminders(medicineId)
     }
 
-    fun getReminder(reminderId: Int): Reminder {
+    fun getReminder(reminderId: Int): Reminder? {
         return medicineRepository.getReminder(reminderId)
     }
 
