@@ -12,14 +12,12 @@ import static com.adevinta.android.barista.interaction.BaristaListInteractions.c
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
-
 import org.junit.Test;
 
 public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void testDataAndDeleteAndManualDoseTest() {
         openMenu();
         clickOn(R.string.generate_test_data);
