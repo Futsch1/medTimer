@@ -1,96 +1,124 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import android.app.Application;
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.MedicineToTag
+import com.futsch1.medtimer.database.MedicineWithReminders
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
+import java.util.stream.Collectors
 
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+class MedicineViewModel(application: Application) : AndroidViewModel(application) {
+    @JvmField
+    val medicineRepository: MedicineRepository = MedicineRepository(application)
+    private val liveMedicines: LiveData<List<MedicineWithReminders>> =
+        medicineRepository.liveMedicines
 
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.MedicineWithReminders;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
+    @JvmField
+    val validTagIds: MutableLiveData<List<Int>> = MutableLiveData(listOf())
+    private lateinit var medicineToTags: List<MedicineToTag>
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
-public class MedicineViewModel extends AndroidViewModel {
-
-    public final MedicineRepository medicineRepository;
-    private final LiveData<List<MedicineWithReminders>> medicines;
-
-    public MedicineViewModel(Application application) {
-        super(application);
-        medicineRepository = new MedicineRepository(application);
-        medicines = medicineRepository.getLiveMedicines();
+    init {
+        medicineRepository.liveMedicineToTags.observeForever {
+            medicineToTags = it
+        }
     }
 
-    public LiveData<List<MedicineWithReminders>> getMedicines() {
-        return medicines;
+    val medicines: LiveData<List<MedicineWithReminders>>
+        get() {
+            return liveMedicines.map {
+                it.stream()
+                    .filter { medicineWithReminders -> filterMedicineId(medicineWithReminders.medicine.medicineId) }
+                    .collect(Collectors.toList())
+            }
+        }
+
+    private fun filterMedicineId(medicineId: Int): Boolean {
+        if (validTagIds.value == null || validTagIds.value!!.isEmpty()) {
+            return true
+        }
+        val medicineTags: List<Int> = medicineToTags.stream()
+            .filter { medicineToTag -> medicineToTag.medicineId == medicineId }
+            .map { medicineToTag -> medicineToTag.tagId }
+            .collect(Collectors.toList())
+        for (tagId in validTagIds.value!!) {
+            if (medicineTags.contains(tagId)) {
+                return true
+            }
+        }
+        return false
     }
 
-    public Medicine getMedicine(int medicineId) {
-        return medicineRepository.getMedicine(medicineId);
+    fun getMedicine(medicineId: Int): Medicine {
+        return medicineRepository.getMedicine(medicineId)
     }
 
-    public int insertMedicine(Medicine medicine) {
-        return (int) medicineRepository.insertMedicine(medicine);
+    fun insertMedicine(medicine: Medicine?): Int {
+        return medicineRepository.insertMedicine(medicine).toInt()
     }
 
-    public void updateMedicine(Medicine medicine) {
-        medicineRepository.updateMedicine(medicine);
+    fun updateMedicine(medicine: Medicine?) {
+        medicineRepository.updateMedicine(medicine)
     }
 
-    public void deleteMedicine(int medicineId) {
-        medicineRepository.deleteMedicine(medicineId);
+    fun deleteMedicine(medicineId: Int) {
+        medicineRepository.deleteMedicine(medicineId)
     }
 
-    public LiveData<List<Reminder>> getLiveReminders(int medicineId) {
-        return medicineRepository.getLiveReminders(medicineId);
+    fun getLiveReminders(medicineId: Int): LiveData<List<Reminder>> {
+        return medicineRepository.getLiveReminders(medicineId)
     }
 
-    public List<Reminder> getReminders(int medicineId) {
-        return medicineRepository.getReminders(medicineId);
+    fun getReminders(medicineId: Int): List<Reminder> {
+        return medicineRepository.getReminders(medicineId)
     }
 
-    public Reminder getReminder(int reminderId) {
-        return medicineRepository.getReminder(reminderId);
+    fun getReminder(reminderId: Int): Reminder {
+        return medicineRepository.getReminder(reminderId)
     }
 
-    public int insertReminder(Reminder reminder) {
-        return (int) medicineRepository.insertReminder(reminder);
+    fun insertReminder(reminder: Reminder?): Int {
+        return medicineRepository.insertReminder(reminder).toInt()
     }
 
-    public void updateReminder(Reminder reminder) {
-        medicineRepository.updateReminder(reminder);
+    fun updateReminder(reminder: Reminder?) {
+        medicineRepository.updateReminder(reminder)
     }
 
-    public void deleteReminder(int reminderId) {
-        medicineRepository.deleteReminder(reminderId);
+    fun deleteReminder(reminderId: Int) {
+        medicineRepository.deleteReminder(reminderId)
     }
 
-    public List<Reminder> getLinkedReminders(int reminderId) {
-        return medicineRepository.getLinkedReminders(reminderId);
+    fun getLinkedReminders(reminderId: Int): List<Reminder> {
+        return medicineRepository.getLinkedReminders(reminderId)
     }
 
-    public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, long timeStamp, boolean withDeleted) {
-        return medicineRepository.getLiveReminderEvents(limit, timeStamp, withDeleted);
+    fun getLiveReminderEvents(
+        limit: Int,
+        timeStamp: Long,
+        withDeleted: Boolean
+    ): LiveData<List<ReminderEvent>> {
+        return medicineRepository.getLiveReminderEvents(limit, timeStamp, withDeleted)
     }
 
-    public void deleteReminderEvents() {
-        medicineRepository.deleteReminderEvents();
+    fun deleteReminderEvents() {
+        medicineRepository.deleteReminderEvents()
     }
 
-    public void deleteAll() {
-        medicineRepository.deleteAll();
+    fun deleteAll() {
+        medicineRepository.deleteAll()
     }
 
-    public @Nullable ReminderEvent getReminderEvent(int reminderEventId) {
-        return medicineRepository.getReminderEvent(reminderEventId);
+    fun getReminderEvent(reminderEventId: Int): ReminderEvent? {
+        return medicineRepository.getReminderEvent(reminderEventId)
     }
 
-    public void updateReminderEvent(ReminderEvent reminderEvent) {
-        medicineRepository.updateReminderEvent(reminderEvent);
+    fun updateReminderEvent(reminderEvent: ReminderEvent?) {
+        medicineRepository.updateReminderEvent(reminderEvent)
     }
 }

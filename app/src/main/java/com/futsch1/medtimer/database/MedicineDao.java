@@ -114,4 +114,7 @@ public interface MedicineDao {
 
     @Query("DELETE FROM MedicineToTag")
     void deleteMedicineToTags();
+
+    @Query("SELECT * FROM MedicineToTag")
+    LiveData<List<MedicineToTag>> getLiveMedicineToTags();
 }

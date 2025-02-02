@@ -180,6 +180,11 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTag(new MedicineToTag(medicineId, tagId)));
     }
 
+    @NotNull
+    public LiveData<List<MedicineToTag>> getLiveMedicineToTags() {
+        return medicineDao.getLiveMedicineToTags();
+    }
+
     interface Insert<T> {
         long insert(T item);
     }
