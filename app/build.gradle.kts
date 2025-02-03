@@ -86,7 +86,7 @@ dependencies {
     val roomVersion = "2.6.1"
     val colorPickerViewVersion = "2.3.0"
     val simplyPDFVersion = "2.1.1"
-    val gsonVersion = "2.11.0"
+    val gsonVersion = "2.12.1"
     val tableViewVersion = "0.8.9.4"
     val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
