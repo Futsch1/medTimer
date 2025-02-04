@@ -13,6 +13,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import org.junit.Test
 
@@ -62,6 +63,44 @@ class TagTest : BaseTestHelper() {
 
         clickOn(R.id.openTags)
         assertNotContains("Another tag")
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    fun medicineVisibility() {
+        createMedicine("Test")
+        clickOn(R.id.openTags)
+        addTag("Tag1")
+        clickOn(R.id.ok)
+        pressBack()
+
+        createMedicine("Else")
+        clickOn(R.id.openTags)
+        addTag("Tag2")
+        clickOn(R.id.ok)
+        pressBack()
+
+        assertContains("Test")
+        assertContains("Else")
+
+        clickOn(R.id.tag_filter)
+        clickOn("Tag1")
+        assertChecked("Tag1")
+        assertUnchecked("Tag2")
+        clickOn(R.id.ok)
+
+        assertContains("Test")
+        assertNotContains("Else")
+
+        clickOn(R.id.tag_filter)
+        clickOn("Tag1")
+        clickOn("Tag2")
+        assertUnchecked("Tag1")
+        assertChecked("Tag2")
+        clickOn(R.id.ok)
+
+        assertNotContains("Test")
+        assertContains("Else")
     }
 
     private fun addTag(tagName: String) {

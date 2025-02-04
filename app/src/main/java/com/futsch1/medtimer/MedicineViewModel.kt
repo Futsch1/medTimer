@@ -44,11 +44,11 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         liveData: LiveData<List<MedicineWithReminders>>,
         validTagIds: MutableLiveData<Set<Int>>
     ): List<MedicineWithReminders> {
-        if (validTagIds.value.isNullOrEmpty()) {
-            return liveData.value!!
-        }
         if (liveData.value.isNullOrEmpty()) {
             return emptyList()
+        }
+        if (validTagIds.value.isNullOrEmpty()) {
+            return liveData.value!!
         }
         return liveData.value!!.stream()
             .filter { medicine ->
