@@ -3,7 +3,9 @@ package com.futsch1.medtimer.medicine.tags
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.helpers.DeleteHelper
 
 class TagDataFromMedicine(fragment: Fragment, private val medicineId: Int) : TagDataProvider() {
 
@@ -17,7 +19,10 @@ class TagDataFromMedicine(fragment: Fragment, private val medicineId: Int) : Tag
             viewModel.disassociateTag(medicineId, it.tag.tagId)
         }
     }, { it: TagWithState ->
-        viewModel.medicineRepository.deleteTag(it.tag)
+        val deleteHelper = DeleteHelper(fragment.context)
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_tag, {
+            viewModel.medicineRepository.deleteTag(it.tag)
+        }, {})
     })
 
     init {

@@ -10,10 +10,9 @@ import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnc
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import org.junit.Test
 
@@ -59,6 +58,7 @@ class TagTest : BaseTestHelper() {
                 removeChip()
             )
         )
+        clickDialogPositiveButton()
         clickOn(R.id.ok)
 
         clickOn(R.id.openTags)
@@ -66,7 +66,7 @@ class TagTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun medicineVisibility() {
         createMedicine("Test")
         clickOn(R.id.openTags)
@@ -106,6 +106,6 @@ class TagTest : BaseTestHelper() {
     private fun addTag(tagName: String) {
         clickOn(R.id.addTag)
         writeTo(android.R.id.input, tagName)
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
     }
 }
