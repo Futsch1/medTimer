@@ -3,14 +3,15 @@ package com.futsch1.medtimer
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import java.util.stream.Collectors
 
 class MedicineViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,34 +20,55 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     private val liveMedicines: LiveData<List<MedicineWithReminders>> =
         medicineRepository.liveMedicines
 
-    @JvmField
-    val validTagIds: MutableLiveData<List<Int>> = MutableLiveData(listOf())
+    private val validTagIds: MutableLiveData<Set<Int>> = MutableLiveData(setOf())
+    val tagFilterStore = TagFilterStore(application, validTagIds)
     private lateinit var medicineToTags: List<MedicineToTag>
+
+    private val filteredMedicine = MediatorLiveData<List<MedicineWithReminders>>()
+    val medicines: LiveData<List<MedicineWithReminders>> = filteredMedicine
 
     init {
         medicineRepository.liveMedicineToTags.observeForever {
             medicineToTags = it
         }
+
+        filteredMedicine.addSource(liveMedicines) {
+            filteredMedicine.value = getFilteredMedicine(liveMedicines, validTagIds)
+        }
+        filteredMedicine.addSource(validTagIds) {
+            filteredMedicine.value = getFilteredMedicine(liveMedicines, validTagIds)
+        }
     }
 
-    val medicines: LiveData<List<MedicineWithReminders>>
-        get() {
-            return liveMedicines.map {
-                it.stream()
-                    .filter { medicineWithReminders -> filterMedicineId(medicineWithReminders.medicine.medicineId) }
-                    .collect(Collectors.toList())
-            }
+    private fun getFilteredMedicine(
+        liveData: LiveData<List<MedicineWithReminders>>,
+        validTagIds: MutableLiveData<Set<Int>>
+    ): List<MedicineWithReminders> {
+        if (validTagIds.value.isNullOrEmpty()) {
+            return liveData.value!!
         }
+        if (liveData.value.isNullOrEmpty()) {
+            return emptyList()
+        }
+        return liveData.value!!.stream()
+            .filter { medicine ->
+                filterMedicineId(
+                    medicine.medicine.medicineId,
+                    validTagIds.value
+                )
+            }
+            .collect(Collectors.toList())
+    }
 
-    private fun filterMedicineId(medicineId: Int): Boolean {
-        if (validTagIds.value == null || validTagIds.value!!.isEmpty()) {
+    private fun filterMedicineId(medicineId: Int, validTagIds: Set<Int>? = null): Boolean {
+        if (validTagIds.isNullOrEmpty()) {
             return true
         }
         val medicineTags: List<Int> = medicineToTags.stream()
             .filter { medicineToTag -> medicineToTag.medicineId == medicineId }
             .map { medicineToTag -> medicineToTag.tagId }
             .collect(Collectors.toList())
-        for (tagId in validTagIds.value!!) {
+        for (tagId in validTagIds) {
             if (medicineTags.contains(tagId)) {
                 return true
             }
