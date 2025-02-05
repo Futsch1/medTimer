@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.NextRemindersViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineWithReminders
@@ -30,7 +28,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel
 ) {
-    private val nextRemindersViewModel: NextRemindersViewModel
     private val nextRemindersViewAdapter =
         NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
     private val expandNextReminders: MaterialButton =
@@ -50,9 +47,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             }
         })
 
-        nextRemindersViewModel =
-            ViewModelProvider(parentFragment)[NextRemindersViewModel::class.java]
-        nextRemindersViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner) { scheduledReminders: List<ScheduledReminder>? ->
+        medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner) { scheduledReminders: List<ScheduledReminder>? ->
             this.updatedNextReminders(
                 scheduledReminders
             )
@@ -103,7 +98,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         expandNextReminders.setOnClickListener {
             nextRemindersExpanded = !nextRemindersExpanded
             adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
-            updatedNextReminders(nextRemindersViewModel.scheduledReminders.value)
+            updatedNextReminders(medicineViewModel.scheduledReminders.value)
         }
 
         adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
@@ -151,6 +146,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         val reminders = scheduler.schedule(
             medicineWithReminders, reminderEvents
         )
-        nextRemindersViewModel.setScheduledReminders(reminders)
+        medicineViewModel.setScheduledReminders(reminders)
     }
 }

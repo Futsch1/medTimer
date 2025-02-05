@@ -139,10 +139,10 @@ public class OverviewFragment extends Fragment {
             final Handler threadHandler = new Handler(thread.getLooper());
             threadHandler.post(() -> {
 
-                ReminderEvent reminderEvent = medicineViewModel.getReminderEvent((int) itemId);
+                ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) itemId);
                 if (reminderEvent != null) {
                     reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
-                    medicineViewModel.updateReminderEvent(reminderEvent);
+                    medicineViewModel.medicineRepository.updateReminderEvent(reminderEvent);
                     final Handler mainHandler = new Handler(Looper.getMainLooper());
                     mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
                 }

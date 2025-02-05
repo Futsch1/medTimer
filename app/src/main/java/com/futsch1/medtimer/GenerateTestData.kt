@@ -35,9 +35,11 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
 
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine()
-            val medicineId = viewModel.insertMedicine(medicine)
+            val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
-                testReminder.id = viewModel.insertReminder(testReminder.toReminder(medicineId))
+                testReminder.id =
+                    viewModel.medicineRepository.insertReminder(testReminder.toReminder(medicineId))
+                        .toInt()
             }
         }
     }

@@ -18,31 +18,31 @@ import com.google.gson.Gson
 
 class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Medicine? {
-        return medicineViewModel.getMedicine(id)
+        return medicineViewModel.medicineRepository.getMedicine(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
-        medicineViewModel.updateMedicine(entity)
+        medicineViewModel.medicineRepository.updateMedicine(entity)
     }
 }
 
 class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Reminder> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Reminder? {
-        return medicineViewModel.getReminder(id)
+        return medicineViewModel.medicineRepository.getReminder(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Reminder) {
-        medicineViewModel.updateReminder(entity)
+        medicineViewModel.medicineRepository.updateReminder(entity)
     }
 }
 
 class ReminderEventEntityInterface : DatabaseEntityEditFragment.EntityInterface<ReminderEvent> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): ReminderEvent? {
-        return medicineViewModel.getReminderEvent(id)
+        return medicineViewModel.medicineRepository.getReminderEvent(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: ReminderEvent) {
-        medicineViewModel.updateReminderEvent(entity)
+        medicineViewModel.medicineRepository.updateReminderEvent(entity)
     }
 }
 

@@ -98,7 +98,7 @@ public class MedicinesFragment extends Fragment {
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
         deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
-            medicineViewModel.deleteMedicine((int) itemId);
+            medicineViewModel.medicineRepository.deleteMedicine((int) itemId);
             adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
@@ -128,7 +128,7 @@ public class MedicinesFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
-                int medicineId = medicineViewModel.insertMedicine(new Medicine(e.toString()));
+                int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(new Medicine(e.toString()));
                 navigateToMedicineId(medicineId);
             }
         });

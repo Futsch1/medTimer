@@ -34,6 +34,7 @@ import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.futsch1.medtimer.statistics.StatisticsFragment;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -83,7 +84,9 @@ public class OptionsMenu implements MenuProvider {
         setupGenerateTestData();
         setupShowAppIntro();
 
-        setupTagFilter();
+        if (fragment.getClass() != StatisticsFragment.class) {
+            setupTagFilter();
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -129,7 +132,7 @@ public class OptionsMenu implements MenuProvider {
             builder.setMessage(R.string.are_you_sure_delete_events);
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                medicineViewModel.deleteReminderEvents();
+                medicineViewModel.medicineRepository.deleteReminderEvents();
                 ReminderProcessor.requestReschedule(context);
             });
             builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> { // Intentionally left empty
@@ -163,7 +166,7 @@ public class OptionsMenu implements MenuProvider {
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
                     Log.i("GenerateTestData", "Delete all data");
-                    medicineViewModel.deleteAll();
+                    medicineViewModel.medicineRepository.deleteAll();
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
