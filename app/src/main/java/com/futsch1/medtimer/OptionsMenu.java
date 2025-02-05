@@ -84,7 +84,7 @@ public class OptionsMenu implements MenuProvider {
         setupGenerateTestData();
         setupShowAppIntro();
 
-        if (fragment.getClass() != StatisticsFragment.class) {
+        if (isTagFilterVisible()) {
             setupTagFilter();
         } else {
             menu.findItem(R.id.tag_filter).setVisible(false);
@@ -192,6 +192,10 @@ public class OptionsMenu implements MenuProvider {
         } else {
             item.setVisible(false);
         }
+    }
+
+    private boolean isTagFilterVisible() {
+        return fragment.getClass() != StatisticsFragment.class || medicineViewModel.medicineRepository.hasTags();
     }
 
     private void setupTagFilter() {

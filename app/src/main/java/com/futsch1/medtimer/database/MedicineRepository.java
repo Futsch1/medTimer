@@ -185,6 +185,10 @@ public class MedicineRepository {
         return medicineDao.getLiveMedicineToTags();
     }
 
+    public boolean hasTags() {
+        return medicineDao.countTags() > 0;
+    }
+
     interface Insert<T> {
         long insert(T item);
     }

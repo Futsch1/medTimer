@@ -117,4 +117,7 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM MedicineToTag")
     LiveData<List<MedicineToTag>> getLiveMedicineToTags();
+
+    @Query("SELECT COUNT(*) FROM Tag")
+    int countTags();
 }
