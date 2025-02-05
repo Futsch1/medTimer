@@ -19,7 +19,7 @@ class IntervalEditor(
         intervalUnitToggle.check(intervalUnitToggle.getChildAt(unit.ordinal).id)
         intervalUnitToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
             val selectedUnit = checkedIntervalUnit(checkedId)
-            if (isChecked) {
+            if (isChecked && timeEdit.text.toString().isNotBlank()) {
                 interval.setValue(timeEdit.text.toString().toInt(), unit)
                 var value = interval.getValue(selectedUnit)
                 if (value == 0) {
