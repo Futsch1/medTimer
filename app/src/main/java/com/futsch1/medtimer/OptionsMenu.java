@@ -86,6 +86,8 @@ public class OptionsMenu implements MenuProvider {
 
         if (fragment.getClass() != StatisticsFragment.class) {
             setupTagFilter();
+        } else {
+            menu.findItem(R.id.tag_filter).setVisible(false);
         }
     }
 
@@ -199,6 +201,13 @@ public class OptionsMenu implements MenuProvider {
             DialogFragment dialog = new TagsFragment(tagDataFromPreferences);
             dialog.show(fragment.getParentFragmentManager(), "tags");
             return true;
+        });
+        medicineViewModel.getValidTagIds().observe(fragment.getViewLifecycleOwner(), validTagIds -> {
+            if (validTagIds.isEmpty()) {
+                item.setIcon(R.drawable.tag);
+            } else {
+                item.setIcon(R.drawable.tag_fill);
+            }
         });
     }
 

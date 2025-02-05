@@ -18,7 +18,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     private val liveMedicines: LiveData<List<MedicineWithReminders>> =
         medicineRepository.liveMedicines
 
-    private val validTagIds: MutableLiveData<Set<Int>> = MutableLiveData()
+    val validTagIds: MutableLiveData<Set<Int>> = MutableLiveData()
     val tagFilterStore = TagFilterStore(application, validTagIds)
     private lateinit var medicineToTags: List<MedicineToTag>
 
