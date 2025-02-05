@@ -39,6 +39,7 @@ import com.futsch1.medtimer.statistics.StatisticsFragment;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 
 public class OptionsMenu implements MenuProvider {
     private final Context context;
@@ -84,11 +85,7 @@ public class OptionsMenu implements MenuProvider {
         setupGenerateTestData();
         setupShowAppIntro();
 
-        if (isTagFilterVisible()) {
-            setupTagFilter();
-        } else {
-            menu.findItem(R.id.tag_filter).setVisible(false);
-        }
+        handleTagFilter();
     }
 
     @SuppressLint("RestrictedApi")
@@ -194,12 +191,31 @@ public class OptionsMenu implements MenuProvider {
         }
     }
 
-    private boolean isTagFilterVisible() {
-        return fragment.getClass() != StatisticsFragment.class || medicineViewModel.medicineRepository.hasTags();
+    private void handleTagFilter() {
+        if (fragment.getClass() != StatisticsFragment.class) {
+            new Handler(backgroundThread.getLooper()).post(() -> {
+                if (medicineViewModel.medicineRepository.hasTags()) {
+                    fragment.requireActivity().runOnUiThread(this::setupTagFilter);
+                } else {
+                    medicineViewModel.getValidTagIds().postValue(new HashSet<>());
+                }
+            });
+        }
+    }
+
+    private void export(Exporter exporter) {
+        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
+        try {
+            exporter.export(csvFile);
+            FileHelper.shareFile(context, csvFile);
+        } catch (Exporter.ExporterException e) {
+            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupTagFilter() {
         MenuItem item = menu.findItem(R.id.tag_filter);
+        item.setVisible(true);
         item.setOnMenuItemClickListener(menuItem -> {
             TagDataFromPreferences tagDataFromPreferences = new TagDataFromPreferences(fragment);
             DialogFragment dialog = new TagsFragment(tagDataFromPreferences);
@@ -213,16 +229,6 @@ public class OptionsMenu implements MenuProvider {
                 item.setIcon(R.drawable.tag_fill);
             }
         });
-    }
-
-    private void export(Exporter exporter) {
-        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
-        try {
-            exporter.export(csvFile);
-            FileHelper.shareFile(context, csvFile);
-        } catch (Exporter.ExporterException e) {
-            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override

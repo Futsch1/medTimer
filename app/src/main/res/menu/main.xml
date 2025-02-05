@@ -5,7 +5,8 @@
         android:id="@+id/tag_filter"
         android:icon="@drawable/tag"
         android:title="@string/filter"
-        app:showAsAction="always"/>
+        android:visible="false"
+        app:showAsAction="always" />
 
     <group android:id="@+id/settings_group">
         <item

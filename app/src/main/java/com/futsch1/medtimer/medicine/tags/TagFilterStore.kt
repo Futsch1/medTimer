@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import java.util.stream.Collectors
 
-class TagFilterStore(context: Context, private var validTagIds: MutableLiveData<Set<Int>>) {
+class TagFilterStore(
+    context: Context,
+    private var validTagIds: MutableLiveData<Set<Int>>
+) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
     private val sharedPreferences =
         context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
