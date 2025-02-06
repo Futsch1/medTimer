@@ -7,10 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import android.graphics.Color;
 
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.JSONMedicineBackup;
 import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.Tag;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +27,8 @@ class JSONMedicineBackupUnitTest {
     @Test
     void test_creates_backup_with_version_and_medicines_array() {
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
-        List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
-        MedicineWithReminders medicineWithReminders = new MedicineWithReminders();
+        List<FullMedicine> medicinesWithReminders = new ArrayList<>();
+        FullMedicine medicineWithReminders = new FullMedicine();
         Reminder reminder = new Reminder(0);
         reminder.reminderId = 14;
         reminder.timeInMinutes = 60;
@@ -45,6 +46,8 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine.useColor = true;
         medicineWithReminders.medicine.color = Color.RED;
         medicineWithReminders.medicine.iconId = 5;
+        medicineWithReminders.tags = new ArrayList<>();
+        medicineWithReminders.tags.add(new Tag("Tag A"));
         medicinesWithReminders.add(medicineWithReminders);
 
         String result = jsonMedicineBackup.createBackupAsString(5, medicinesWithReminders);
@@ -57,6 +60,22 @@ class JSONMedicineBackupUnitTest {
   "version": 5,
   "list": [
     {
+      "medicine": {
+        "name": "Medicine A",
+        "color": -65536,
+        "useColor": true,
+        "notificationImportance": 3,
+        "iconId": 5,
+        "outOfStockReminder": "OFF",
+        "amount": 0.0,
+        "outOfStockReminderThreshold": 0.0,
+        "refillSizes": []
+      },
+      "tags": [
+        {
+          "name": "Tag A"
+        }
+      ],
       "reminders": [
         {
           "reminderId": 14,
@@ -84,36 +103,25 @@ class JSONMedicineBackupUnitTest {
           "intervalStartsFromProcessed": false,
           "variableAmount": false
         }
-      ],
-      "medicine": {
-        "name": "Medicine A",
-        "color": -65536,
-        "useColor": true,
-        "notificationImportance": 3,
-        "iconId": 5,
-        "outOfStockReminder": "OFF",
-        "amount": 0.0,
-        "outOfStockReminderThreshold": 0.0,
-        "refillSizes": []
-      }
+      ]
     }
   ]
 }""", result);
         // @formatter:on
 
-        List<MedicineWithReminders> parsedReminders = jsonMedicineBackup.parseBackup(result);
+        List<FullMedicine> parsedReminders = jsonMedicineBackup.parseBackup(result);
         assertNotNull(parsedReminders);
-        compareListMedicineWithReminders(parsedReminders, medicinesWithReminders);
+        compareListFullMedicine(parsedReminders, medicinesWithReminders);
     }
 
-    private void compareListMedicineWithReminders(List<MedicineWithReminders> actual, List<MedicineWithReminders> expected) {
+    private void compareListFullMedicine(List<FullMedicine> actual, List<FullMedicine> expected) {
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < actual.size(); i++) {
-            compareMedicineWithReminders(actual.get(i), expected.get(i));
+            compareFullMedicine(actual.get(i), expected.get(i));
         }
     }
 
-    private void compareMedicineWithReminders(MedicineWithReminders medicineWithReminders, MedicineWithReminders medicineWithReminders1) {
+    private void compareFullMedicine(FullMedicine medicineWithReminders, FullMedicine medicineWithReminders1) {
         assertEquals(medicineWithReminders.reminders.size(), medicineWithReminders1.reminders.size());
         for (int i = 0; i < medicineWithReminders.reminders.size(); i++) {
             compareReminder(medicineWithReminders.reminders.get(i), medicineWithReminders1.reminders.get(i));
@@ -130,12 +138,12 @@ class JSONMedicineBackupUnitTest {
         assertEquals(reminder.amount, reminder1.amount);
     }
 
-    // iterates over the list of MedicineWithReminders and adds each one to the medicines array as a JSONObject
+    // iterates over the list of FullMedicine and adds each one to the medicines array as a JSONObject
     @Test
     void test_iterates_over_medicinesWithReminders_and_adds_to_medicines_array() {
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
-        List<MedicineWithReminders> medicinesWithReminders = new ArrayList<>();
-        MedicineWithReminders medicineWithReminders1 = new MedicineWithReminders();
+        List<FullMedicine> medicinesWithReminders = new ArrayList<>();
+        FullMedicine medicineWithReminders1 = new FullMedicine();
         Reminder reminder1 = new Reminder(0);
         reminder1.reminderId = 1;
         reminder1.timeInMinutes = 60;
@@ -152,7 +160,7 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders1.medicine.notificationImportance = 4;
         medicinesWithReminders.add(medicineWithReminders1);
 
-        MedicineWithReminders medicineWithReminders2 = new MedicineWithReminders();
+        FullMedicine medicineWithReminders2 = new FullMedicine();
         Reminder reminder2 = new Reminder(0);
         reminder2.reminderId = 2;
         reminder2.timeInMinutes = 120;
@@ -190,6 +198,17 @@ class JSONMedicineBackupUnitTest {
   "version": 4,
   "list": [
     {
+      "medicine": {
+        "name": "Medicine A",
+        "color": -65536,
+        "useColor": true,
+        "notificationImportance": 4,
+        "iconId": 0,
+        "outOfStockReminder": "OFF",
+        "amount": 0.0,
+        "outOfStockReminderThreshold": 0.0,
+        "refillSizes": []
+      },
       "reminders": [
         {
           "reminderId": 1,
@@ -217,20 +236,20 @@ class JSONMedicineBackupUnitTest {
           "intervalStartsFromProcessed": false,
           "variableAmount": false
         }
-      ],
-      "medicine": {
-        "name": "Medicine A",
-        "color": -65536,
-        "useColor": true,
-        "notificationImportance": 4,
-        "iconId": 0,
-        "outOfStockReminder": "OFF",
-        "amount": 0.0,
-        "outOfStockReminderThreshold": 0.0,
-        "refillSizes": []
-      }
+      ]
     },
     {
+      "medicine": {
+        "name": "Medicine B",
+        "color": -16776961,
+        "useColor": false,
+        "notificationImportance": 5,
+        "iconId": 7,
+        "outOfStockReminder": "OFF",
+        "amount": 17.0,
+        "outOfStockReminderThreshold": 17.5,
+        "refillSizes": []
+      },
       "reminders": [
         {
           "reminderId": 1,
@@ -284,26 +303,15 @@ class JSONMedicineBackupUnitTest {
           "intervalStartsFromProcessed": true,
           "variableAmount": true
         }
-      ],
-      "medicine": {
-        "name": "Medicine B",
-        "color": -16776961,
-        "useColor": false,
-        "notificationImportance": 5,
-        "iconId": 7,
-        "outOfStockReminder": "OFF",
-        "amount": 17.0,
-        "outOfStockReminderThreshold": 17.5,
-        "refillSizes": []
-      }
+      ]
     }
   ]
 }""", result);
         // @formatter:on
 
-        List<MedicineWithReminders> parsedReminders = jsonMedicineBackup.parseBackup(result);
+        List<FullMedicine> parsedReminders = jsonMedicineBackup.parseBackup(result);
         assertNotNull(parsedReminders);
-        compareListMedicineWithReminders(parsedReminders, medicinesWithReminders);
+        compareListFullMedicine(parsedReminders, medicinesWithReminders);
     }
 
     @Test
@@ -313,7 +321,7 @@ class JSONMedicineBackupUnitTest {
         String validJsonBackup = "{\"version\": 1, \"medicinesWithReminders\": [{\"reminders\": [], \"medicine\": {}}]}";
 
         // Act
-        List<MedicineWithReminders> result = jsonMedicineBackup.parseBackup(validJsonBackup);
+        List<FullMedicine> result = jsonMedicineBackup.parseBackup(validJsonBackup);
 
         // Assert
         assertNull(result);
@@ -326,7 +334,7 @@ class JSONMedicineBackupUnitTest {
         String invalidJsonBackup = "invalid_json";
 
         // Act
-        List<MedicineWithReminders> result = jsonMedicineBackup.parseBackup(invalidJsonBackup);
+        List<FullMedicine> result = jsonMedicineBackup.parseBackup(invalidJsonBackup);
 
         // Assert
         assertNull(result);
@@ -339,7 +347,7 @@ class JSONMedicineBackupUnitTest {
         String jsonBackupWithMissingFields = "{\"version\": 1}";
 
         // Act
-        List<MedicineWithReminders> result = jsonMedicineBackup.parseBackup(jsonBackupWithMissingFields);
+        List<FullMedicine> result = jsonMedicineBackup.parseBackup(jsonBackupWithMissingFields);
 
         // Assert
         assertNull(result);

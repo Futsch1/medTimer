@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -33,7 +33,7 @@ class CalendarEventsViewModel(
     val medicineRepository = MedicineRepository(application)
     private var dispatcher = Dispatchers.IO
     private var liveReminderEvents: List<ReminderEvent> = listOf()
-    private var medicineWithReminders: List<MedicineWithReminders> = listOf()
+    private var FullMedicine: List<FullMedicine> = listOf()
     private var medicine: Medicine? = null
     private val liveData: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
 
@@ -44,9 +44,9 @@ class CalendarEventsViewModel(
     ): LiveData<Map<LocalDate, String>> {
         viewModelScope.launch(dispatcher) {
             liveReminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
-            medicineWithReminders = medicineRepository.medicines
+            FullMedicine = medicineRepository.medicines
             if (medicineId > 0) {
-                medicine = medicineRepository.getMedicine(medicineId)
+                medicine = medicineRepository.getOnlyMedicine(medicineId)
             }
             val dayStrings: MutableMap<LocalDate, String> = mutableMapOf()
             for (deltaDay in -pastDays..futureDays) {
@@ -87,9 +87,9 @@ class CalendarEventsViewModel(
             }
         }
         )
-        return scheduler.schedule(medicineWithReminders, liveReminderEvents)
+        return scheduler.schedule(FullMedicine, liveReminderEvents)
             .filter {
-                (medicineId <= 0 || it.medicine.medicineId == medicineId) && isOnDay(
+                (medicineId <= 0 || it.medicine.medicine.medicineId == medicineId) && isOnDay(
                     day,
                     it.timestamp
                 )
@@ -110,7 +110,7 @@ class CalendarEventsViewModel(
             getApplication<Application>().applicationContext,
             scheduledReminder.timestamp.epochSecond
         ) +
-                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
+                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
     }
 
     private fun getPastEvents(day: LocalDate): List<String> {

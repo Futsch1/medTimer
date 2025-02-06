@@ -64,7 +64,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
             context.applicationContext as Application?,
             scheduledReminder.timestamp.epochSecond
         ) +
-                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.name
+                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
     }
 }
 

@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.medicine.tags
 
-import com.futsch1.medtimer.database.MedicineWithTags
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Tag
 
 class TagWithStateCollector(
@@ -15,14 +15,14 @@ class TagWithStateCollector(
             field = value
             dataUpdated()
         }
-    var medicineWithTags: MedicineWithTags? = null
+    var fullMedicine: FullMedicine? = null
         set(value) {
             field = value
             dataUpdated()
         }
 
     private fun dataUpdated() {
-        if (tags != null && medicineWithTags != null) {
+        if (tags != null && fullMedicine != null) {
             doneCallback(getTagsWithState())
         }
     }
@@ -32,12 +32,12 @@ class TagWithStateCollector(
             tags!!.map {
                 TagWithState(
                     it,
-                    medicineWithTags!!.tags.contains(it)
+                    fullMedicine!!.tags.contains(it)
                 )
             }
         } else {
             tags!!.filter {
-                medicineWithTags!!.tags.contains(it)
+                fullMedicine!!.tags.contains(it)
             }.map {
                 TagWithState(
                     it,

@@ -6,7 +6,7 @@ import static com.futsch1.medtimer.TestHelper.onTZ;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
@@ -27,10 +27,10 @@ class ReminderSchedulerTimezoneUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders1 = TestHelper.buildMedicineWithReminders(1, "Test1");
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 1, 1);
         medicineWithReminders1.reminders.add(reminder1);
-        ArrayList<MedicineWithReminders> medicineWithReminders = new ArrayList<>() {{
+        ArrayList<FullMedicine> medicineWithReminders = new ArrayList<>() {{
             add(medicineWithReminders1);
         }};
         ArrayList<ReminderEvent> reminderEvents = new ArrayList<>() {{

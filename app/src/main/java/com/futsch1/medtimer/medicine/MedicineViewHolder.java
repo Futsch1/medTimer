@@ -19,7 +19,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
@@ -60,27 +60,27 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view, activity, thread);
     }
 
-    public void bind(MedicineWithReminders medicineWithReminders, LifecycleOwner lifecycleOwner) {
-        medicineNameView.setText(MedicineHelper.getMedicineNameWithStockText(itemView.getContext(), medicineWithReminders.medicine));
-        setupSummary(medicineWithReminders);
+    public void bind(FullMedicine medicine, LifecycleOwner lifecycleOwner) {
+        medicineNameView.setText(MedicineHelper.getMedicineNameWithStockText(itemView.getContext(), medicine.medicine));
+        setupSummary(medicine);
 
-        itemView.setOnClickListener(view -> navigateToEditFragment(medicineWithReminders));
+        itemView.setOnClickListener(view -> navigateToEditFragment(medicine));
 
-        if (medicineWithReminders.medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicineWithReminders.medicine.color);
+        if (medicine.medicine.useColor) {
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicine.medicine.color);
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
 
-        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicineWithReminders.medicine.iconId);
+        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId);
 
-        setupTags(medicineWithReminders.medicine.medicineId, lifecycleOwner);
+        setupTags(medicine.medicine.medicineId, lifecycleOwner);
     }
 
-    private void setupSummary(MedicineWithReminders medicineWithReminders) {
-        List<Reminder> activeReminders = medicineWithReminders.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
+    private void setupSummary(FullMedicine medicine) {
+        List<Reminder> activeReminders = medicine.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
         if (activeReminders.isEmpty()) {
-            if (medicineWithReminders.reminders.isEmpty()) {
+            if (medicine.reminders.isEmpty()) {
                 remindersSummaryView.setText(R.string.no_reminders);
             } else {
                 remindersSummaryView.setText(R.string.inactive);
@@ -94,10 +94,10 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void navigateToEditFragment(MedicineWithReminders medicineWithReminders) {
+    private void navigateToEditFragment(FullMedicine medicine) {
         NavController navController = Navigation.findNavController(itemView);
         MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicineWithReminders.medicine.medicineId
+                medicine.medicine.medicineId
         );
         try {
             navController.navigate(action);
@@ -115,7 +115,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
         tags.removeAllViews();
         medicineWithTagsViewModel.getTags().observe(lifecycleOwner, collector::setTags);
-        medicineWithTagsViewModel.getMedicineWithTags(medicineId).observe(lifecycleOwner, collector::setMedicineWithTags);
+        medicineWithTagsViewModel.getMedicineWithTags(medicineId).observe(lifecycleOwner, collector::setFullMedicine);
     }
 
     Unit buildTags(List<TagWithState> list) {

@@ -30,6 +30,8 @@ class JSONReminderEventBackupUnitTest {
         reminderEvent.processedTimestamp = 2;
         reminderEvent.reminderId = 3;
         reminderEvent.iconId = 4;
+        reminderEvent.tags = new ArrayList<>();
+        reminderEvent.tags.add("Tag A");
         reminderEvents.add(reminderEvent);
 
         String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
@@ -50,7 +52,10 @@ class JSONReminderEventBackupUnitTest {
       "remindedTimestamp": 1,
       "processedTimestamp": 2,
       "reminderId": 3,
-      "iconId": 4
+      "iconId": 4,
+      "tags": [
+        "Tag A"
+      ]
     }
   ]
 }""", result);

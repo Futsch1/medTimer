@@ -33,7 +33,7 @@ class TagDataFromMedicine(fragment: Fragment, private val medicineId: Int) : Tag
             tagsWithStateCollector.tags = it
         }
         viewModel.getMedicineWithTags(medicineId).observe(fragment) {
-            tagsWithStateCollector.medicineWithTags = it
+            tagsWithStateCollector.fullMedicine = it
         }
 
     }

@@ -18,7 +18,7 @@ import com.google.gson.Gson
 
 class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Medicine? {
-        return medicineViewModel.medicineRepository.getMedicine(id)
+        return medicineViewModel.medicineRepository.getOnlyMedicine(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {

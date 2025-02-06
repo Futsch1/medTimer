@@ -23,7 +23,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String fromSet(List<Boolean> list) {
+    public static String fromList(List<Boolean> list) {
         Gson gson = new Gson();
         return gson.toJson(list);
     }
@@ -40,4 +40,18 @@ public class Converters {
         Gson gson = new Gson();
         return gson.toJson(list);
     }
+
+    @TypeConverter
+    public static List<String> fromStringString(String value) {
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
+        return new Gson().fromJson(value, listType);
+    }
+
+    @TypeConverter
+    public static String fromStringList(List<String> list) {
+        Gson gson = new Gson();
+        return gson.toJson(list);
+    }
+
 }

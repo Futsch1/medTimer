@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
@@ -26,12 +26,12 @@ class ReminderSchedulerActivePeriodUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         reminder.active = false;
         medicineWithReminders.reminders.add(reminder);
 
-        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();
@@ -48,20 +48,20 @@ class ReminderSchedulerActivePeriodUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         reminder.periodStart = 3;
         reminder.periodEnd = 4;
         medicineWithReminders.reminders.add(reminder);
 
-        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();
 
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertEquals(on(4, 480), scheduledReminders.get(0).timestamp());
-        assertEquals(medicineWithReminders.medicine, scheduledReminders.get(0).medicine());
+        assertEquals(medicineWithReminders.medicine, scheduledReminders.get(0).medicine().medicine);
         assertEquals(reminder, scheduledReminders.get(0).reminder());
 
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));

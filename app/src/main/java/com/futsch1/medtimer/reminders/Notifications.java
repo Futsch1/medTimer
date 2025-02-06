@@ -17,6 +17,7 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -35,10 +36,10 @@ public class Notifications {
     }
 
     @SuppressWarnings("java:S107")
-    public int showNotification(String remindTime, Medicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
+    public int showNotification(String remindTime, FullMedicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
         int notificationId = getNextNotificationId();
-        ReminderNotificationChannelManager.Importance importance = (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
-        Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
+        ReminderNotificationChannelManager.Importance importance = (medicine.medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
+        Color color = medicine.medicine.useColor ? Color.valueOf(medicine.medicine.color) : null;
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
@@ -47,12 +48,12 @@ public class Notifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(getNotificationString(remindTime, reminder, medicine))
+                .setContentText(getNotificationString(remindTime, reminder, medicine.medicine))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
-        if (medicine.iconId != 0) {
+        if (medicine.medicine.iconId != 0) {
             MedicineIcons icons = new MedicineIcons(context);
-            builder.setLargeIcon(icons.getIconBitmap(medicine.iconId));
+            builder.setLargeIcon(icons.getIconBitmap(medicine.medicine.iconId));
         }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);

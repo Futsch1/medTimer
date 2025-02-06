@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
-import com.futsch1.medtimer.database.MedicineWithReminders
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.overview.NextRemindersViewAdapter.ScheduledReminderDiff
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
@@ -35,7 +35,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private var reminderEvents: List<ReminderEvent> = ArrayList()
     private var nextRemindersExpanded =
         fragmentView.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE
-    private var medicineWithReminders: List<MedicineWithReminders> = ArrayList()
+    private var FullMedicine: List<FullMedicine> = ArrayList()
 
     init {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.nextReminders)
@@ -86,9 +86,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
                     reminderEvents
                 )
             }
-        medicineViewModel.medicines.observe(parentFragment.viewLifecycleOwner) { medicineWithReminders: List<MedicineWithReminders> ->
+        medicineViewModel.medicines.observe(parentFragment.viewLifecycleOwner) { FullMedicine: List<FullMedicine> ->
             this.changedMedicines(
-                medicineWithReminders
+                FullMedicine
             )
         }
     }
@@ -109,8 +109,8 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         calculateSchedule()
     }
 
-    private fun changedMedicines(medicineWithReminders: List<MedicineWithReminders>) {
-        this.medicineWithReminders = medicineWithReminders
+    private fun changedMedicines(FullMedicine: List<FullMedicine>) {
+        this.FullMedicine = FullMedicine
         calculateSchedule()
     }
 
@@ -144,7 +144,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         })
 
         val reminders = scheduler.schedule(
-            medicineWithReminders, reminderEvents
+            FullMedicine, reminderEvents
         )
         medicineViewModel.setScheduledReminders(reminders)
     }

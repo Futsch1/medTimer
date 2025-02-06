@@ -3,8 +3,8 @@ package com.futsch1.medtimer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -29,8 +29,8 @@ public class TestHelper {
         return reminder;
     }
 
-    public static MedicineWithReminders buildMedicineWithReminders(int medicineId, String medicineName) {
-        MedicineWithReminders medicineWithReminders = new MedicineWithReminders();
+    public static FullMedicine buildFullMedicine(int medicineId, String medicineName) {
+        FullMedicine medicineWithReminders = new FullMedicine();
         medicineWithReminders.medicine = new Medicine(medicineName);
         medicineWithReminders.medicine.medicineId = medicineId;
         medicineWithReminders.reminders = new ArrayList<>();
@@ -61,7 +61,7 @@ public class TestHelper {
     public static void assertRemindedAtIndex(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder, int index) {
         assertTrue(scheduledReminders.size() > index);
         assertEquals(timestamp, scheduledReminders.get(index).timestamp());
-        assertEquals(medicine, scheduledReminders.get(index).medicine());
+        assertEquals(medicine, scheduledReminders.get(index).medicine().medicine);
         assertEquals(reminder, scheduledReminders.get(index).reminder());
     }
 

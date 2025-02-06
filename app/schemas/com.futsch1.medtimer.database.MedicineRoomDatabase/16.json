@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 16,
-    "identityHash": "a0b0440798bfe33c9cc79ab0c9267b82",
+    "identityHash": "6a0abf6dcd388b25ccd47c020a09029b",
     "entities": [
       {
         "tableName": "Medicine",
@@ -224,7 +224,7 @@
       },
       {
         "tableName": "ReminderEvent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT, `amount` TEXT, `color` INTEGER NOT NULL DEFAULT 0, `useColor` INTEGER NOT NULL DEFAULT false, `status` TEXT, `remindedTimestamp` INTEGER NOT NULL, `processedTimestamp` INTEGER NOT NULL, `reminderId` INTEGER NOT NULL, `notificationId` INTEGER NOT NULL DEFAULT 0, `iconId` INTEGER NOT NULL DEFAULT 0, `remainingRepeats` INTEGER NOT NULL DEFAULT 0, `stockHandled` INTEGER NOT NULL DEFAULT false, `askForAmount` INTEGER NOT NULL DEFAULT false)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT, `amount` TEXT, `color` INTEGER NOT NULL DEFAULT 0, `useColor` INTEGER NOT NULL DEFAULT false, `status` TEXT, `remindedTimestamp` INTEGER NOT NULL, `processedTimestamp` INTEGER NOT NULL, `reminderId` INTEGER NOT NULL, `notificationId` INTEGER NOT NULL DEFAULT 0, `iconId` INTEGER NOT NULL DEFAULT 0, `remainingRepeats` INTEGER NOT NULL DEFAULT 0, `stockHandled` INTEGER NOT NULL DEFAULT false, `askForAmount` INTEGER NOT NULL DEFAULT false, `tags` TEXT DEFAULT '[]')",
         "fields": [
           {
             "fieldPath": "reminderEventId",
@@ -316,6 +316,13 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "'[]'"
           }
         ],
         "primaryKey": {
@@ -394,7 +401,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0b0440798bfe33c9cc79ab0c9267b82')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6a0abf6dcd388b25ccd47c020a09029b')"
     ]
   }
 }

@@ -18,7 +18,7 @@ import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYLegendWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
 import java.text.DecimalFormat;
@@ -30,12 +30,12 @@ import java.util.List;
 
 public class MedicinePerDayChart {
     private final XYPlot medicinesPerDayChart;
-    private final List<MedicineWithReminders> medicines;
+    private final List<FullMedicine> medicines;
     private final ChartHelper chartHelper;
     private final Context context;
     private int colorIndex;
 
-    public MedicinePerDayChart(XYPlot medicinesPerDayChart, Context context, List<MedicineWithReminders> medicines) {
+    public MedicinePerDayChart(XYPlot medicinesPerDayChart, Context context, List<FullMedicine> medicines) {
         this.medicinesPerDayChart = medicinesPerDayChart;
         this.context = context;
         this.chartHelper = new ChartHelper(context);
@@ -187,7 +187,7 @@ public class MedicinePerDayChart {
     }
 
     private int getColor(String title) {
-        for (MedicineWithReminders medicine : medicines) {
+        for (FullMedicine medicine : medicines) {
             if (medicine.medicine.name.equals(title) && medicine.medicine.useColor) {
                 return medicine.medicine.color;
             }

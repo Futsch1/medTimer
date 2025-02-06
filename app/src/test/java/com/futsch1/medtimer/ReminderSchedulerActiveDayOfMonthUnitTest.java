@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
@@ -26,12 +26,12 @@ class ReminderSchedulerActiveDayOfMonthUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        MedicineWithReminders medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         reminder.activeDaysOfMonth = 0x7;
         medicineWithReminders.reminders.add(reminder);
 
-        List<MedicineWithReminders> medicineList = new ArrayList<>();
+        List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);
 
         List<ReminderEvent> reminderEventList = new ArrayList<>();

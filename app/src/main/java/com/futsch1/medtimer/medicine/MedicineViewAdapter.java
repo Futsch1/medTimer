@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
-public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders, MedicineViewHolder> {
+public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, MedicineViewHolder> {
 
     private final HandlerThread thread;
     private final FragmentActivity activity;
@@ -37,7 +37,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
-        MedicineWithReminders current = getItem(position);
+        FullMedicine current = getItem(position);
         holder.bind(current, lifecycleOwner);
     }
 
@@ -46,15 +46,15 @@ public class MedicineViewAdapter extends IdlingListAdapter<MedicineWithReminders
         return getItem(position).medicine.medicineId;
     }
 
-    public static class MedicineDiff extends DiffUtil.ItemCallback<MedicineWithReminders> {
+    public static class MedicineDiff extends DiffUtil.ItemCallback<FullMedicine> {
 
         @Override
-        public boolean areItemsTheSame(@NonNull MedicineWithReminders oldItem, @NonNull MedicineWithReminders newItem) {
+        public boolean areItemsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
             return oldItem == newItem;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull MedicineWithReminders oldItem, @NonNull MedicineWithReminders newItem) {
+        public boolean areContentsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
             return oldItem.medicine.medicineId == newItem.medicine.medicineId;
         }
     }

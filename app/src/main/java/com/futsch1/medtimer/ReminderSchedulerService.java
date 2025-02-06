@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleService;
 
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class ReminderSchedulerService extends LifecycleService {
         Log.i(LogTags.SCHEDULER, "Service created");
     }
 
-    public void updateMedicine(List<MedicineWithReminders> ignoredMedicineWithReminders) {
+    public void updateMedicine(List<FullMedicine> ignoredFullMedicine) {
         scheduleRequest();
     }
 

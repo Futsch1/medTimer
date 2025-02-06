@@ -33,15 +33,23 @@ public class MedicineRepository {
         return database.getVersion();
     }
 
-    public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
+    public LiveData<List<FullMedicine>> getLiveMedicines() {
         return medicineDao.getLiveMedicines();
     }
 
-    public List<MedicineWithReminders> getMedicines() {
+    public List<FullMedicine> getMedicines() {
         return medicineDao.getMedicines();
     }
 
-    public Medicine getMedicine(int medicineId) {
+    public Medicine getOnlyMedicine(int medicineId) {
+        return medicineDao.getOnlyMedicine(medicineId);
+    }
+
+    public LiveData<FullMedicine> getLiveMedicine(int medicineId) {
+        return medicineDao.getLiveMedicine(medicineId);
+    }
+
+    public FullMedicine getMedicine(int medicineId) {
         return medicineDao.getMedicine(medicineId);
     }
 
@@ -95,7 +103,7 @@ public class MedicineRepository {
     public void deleteMedicine(int medicineId) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.deleteMedicineToTagForMedicine(medicineId);
-            medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId));
+            medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId));
         });
     }
 
@@ -152,11 +160,6 @@ public class MedicineRepository {
     }
 
     @NotNull
-    public LiveData<MedicineWithTags> getLiveMedicineWithTags(int medicineId) {
-        return medicineDao.getLiveMedicineWithTags(medicineId);
-    }
-
-    @NotNull
     public LiveData<List<Tag>> getLiveTags() {
         return medicineDao.getLiveTags();
     }
@@ -187,6 +190,10 @@ public class MedicineRepository {
 
     public boolean hasTags() {
         return medicineDao.countTags() > 0;
+    }
+
+    public Tag getTagByName(String name) {
+        return medicineDao.getTagByName(name);
     }
 
     interface Insert<T> {

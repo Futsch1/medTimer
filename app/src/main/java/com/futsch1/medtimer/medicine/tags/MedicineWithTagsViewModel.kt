@@ -3,15 +3,15 @@ package com.futsch1.medtimer.medicine.tags
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineWithTags
 import com.futsch1.medtimer.database.Tag
 
 class MedicineWithTagsViewModel(application: Application) :
     AndroidViewModel(application) {
     val medicineRepository = MedicineRepository(application)
-    fun getMedicineWithTags(medicineId: Int): LiveData<MedicineWithTags> =
-        medicineRepository.getLiveMedicineWithTags(medicineId)
+    fun getMedicineWithTags(medicineId: Int): LiveData<FullMedicine> =
+        medicineRepository.getLiveMedicine(medicineId)
 
     val tags: LiveData<List<Tag>> = medicineRepository.liveTags
 
