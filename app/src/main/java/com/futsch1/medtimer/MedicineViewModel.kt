@@ -35,26 +35,26 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         }
 
         filteredMedicine.addSource(liveMedicines) {
-            filteredMedicine.value = getFilteredMedicine(liveMedicines, validTagIds)
+            filteredMedicine.value = getFiltered(liveMedicines, validTagIds)
         }
         filteredMedicine.addSource(validTagIds) {
-            filteredMedicine.value = getFilteredMedicine(liveMedicines, validTagIds)
+            filteredMedicine.value = getFiltered(liveMedicines, validTagIds)
         }
 
         filteredScheduledReminders.addSource(liveScheduledReminders) {
             filteredScheduledReminders.value =
-                getFilteredScheduledReminders(liveScheduledReminders, validTagIds)
+                getFiltered(liveScheduledReminders, validTagIds)
         }
         filteredScheduledReminders.addSource(validTagIds) {
             filteredScheduledReminders.value =
-                getFilteredScheduledReminders(liveScheduledReminders, validTagIds)
+                getFiltered(liveScheduledReminders, validTagIds)
         }
     }
 
-    private fun getFilteredScheduledReminders(
-        liveData: MutableLiveData<List<ScheduledReminder>>,
+    private fun <T : Any> getFiltered(
+        liveData: LiveData<List<T>>,
         validTagIds: MutableLiveData<Set<Int>>
-    ): List<ScheduledReminder> {
+    ): List<T> {
         if (liveData.value.isNullOrEmpty()) {
             return emptyList()
         }
@@ -64,31 +64,19 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         return liveData.value!!.stream()
             .filter { medicine ->
                 filterMedicineId(
-                    medicine.medicine.medicineId,
+                    getId(medicine),
                     validTagIds.value
                 )
             }
             .collect(Collectors.toList())
     }
 
-    private fun getFilteredMedicine(
-        liveData: LiveData<List<MedicineWithReminders>>,
-        validTagIds: MutableLiveData<Set<Int>>
-    ): List<MedicineWithReminders> {
-        if (liveData.value.isNullOrEmpty()) {
-            return emptyList()
+    private fun getId(medicineWithReminder: Any): Int {
+        return if (medicineWithReminder is MedicineWithReminders) {
+            medicineWithReminder.medicine.medicineId
+        } else {
+            (medicineWithReminder as ScheduledReminder).medicine.medicineId
         }
-        if (validTagIds.value.isNullOrEmpty()) {
-            return liveData.value!!
-        }
-        return liveData.value!!.stream()
-            .filter { medicine ->
-                filterMedicineId(
-                    medicine.medicine.medicineId,
-                    validTagIds.value
-                )
-            }
-            .collect(Collectors.toList())
     }
 
     private fun filterMedicineId(medicineId: Int, validTagIds: Set<Int>? = null): Boolean {
