@@ -42,6 +42,7 @@ public class OverviewFragment extends Fragment {
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
     private Chip showOnlyOpen;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -59,7 +60,7 @@ public class OverviewFragment extends Fragment {
         setupSwipeDelete(latestReminders);
         setupFilterButton();
 
-        OptionsMenu optionsMenu = new OptionsMenu(this,
+        optionsMenu = new OptionsMenu(this,
                 medicineViewModel,
                 fragmentOverview);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
@@ -180,7 +181,10 @@ public class OverviewFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (thread != null) {
-            thread.quitSafely();
+            thread.quit();
+        }
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
         }
     }
 }

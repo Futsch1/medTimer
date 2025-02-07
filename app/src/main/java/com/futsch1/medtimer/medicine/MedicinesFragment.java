@@ -40,6 +40,7 @@ public class MedicinesFragment extends Fragment {
     @SuppressWarnings("java:S1450")
     private MedicineViewAdapter adapter;
     private HandlerThread thread;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class MedicinesFragment extends Fragment {
 
         setupAddMedicineButton(fragmentView);
 
-        OptionsMenu optionsMenu = new OptionsMenu(this,
+        optionsMenu = new OptionsMenu(this,
                 new ViewModelProvider(this).get(MedicineViewModel.class),
                 fragmentView);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
@@ -90,9 +91,12 @@ public class MedicinesFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (thread != null) {
-            thread.quitSafely();
+            thread.quit();
         }
         idlingResource.destroy();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {

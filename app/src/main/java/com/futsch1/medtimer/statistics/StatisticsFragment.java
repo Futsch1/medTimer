@@ -25,6 +25,7 @@ public class StatisticsFragment extends Fragment {
     private ChartsFragment chartsFragment;
     private AnalysisDays analysisDays;
     private ActiveStatisticsFragment activeStatisticsFragment;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +44,20 @@ public class StatisticsFragment extends Fragment {
 
         loadActiveFragment(activeStatisticsFragment.getActiveFragment());
 
-        OptionsMenu optionsMenu = new OptionsMenu(this,
+        optionsMenu = new OptionsMenu(this,
                 new ViewModelProvider(this).get(MedicineViewModel.class),
                 statisticsView);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
     }
 
     private void setupFragmentButtons(View statisticsView) {

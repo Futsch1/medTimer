@@ -119,7 +119,7 @@ abstract class DatabaseEntityEditFragment<T>(
 
     override fun onDestroy() {
         super.onDestroy()
-        thread.quitSafely()
+        thread.quit()
         idlingResource.destroy()
     }
 

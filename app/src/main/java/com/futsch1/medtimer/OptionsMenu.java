@@ -235,4 +235,8 @@ public class OptionsMenu implements MenuProvider {
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
+
+    public void onDestroy() {
+        backgroundThread.quit();
+    }
 }
