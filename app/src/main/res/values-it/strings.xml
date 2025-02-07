@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -204,4 +203,7 @@
     <string name="refill_size">Dimensione della ricarica</string>
     <string name="refill_now">Ricarica ora</string>
     <string name="variable_amount">Inserisci dosaggio al momento dell\'assunzione</string>
+    <string name="tags">Tag</string>
+    <string name="add_tag">Aggiungi tag</string>
+    <string name="are_you_sure_delete_tag">Sei sicuro di voler eliminare il tag?</string>
 </resources>

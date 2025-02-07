@@ -198,4 +198,7 @@
     <string name="refill_size">Navulformaat</string>
     <string name="refill_now">Nu bijvullen</string>
     <string name="variable_amount">Dosering invoeren bij inname</string>
+    <string name="tags">Tags</string>
+    <string name="add_tag">Label toevoegen</string>
+    <string name="are_you_sure_delete_tag">Weet je zeker dat je de tag moet verwijderen?</string>
 </resources>

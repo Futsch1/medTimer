@@ -205,4 +205,7 @@
     <string name="refill_size">Размер заправки</string>
     <string name="refill_now">Пополнить сейчас</string>
     <string name="variable_amount">Укажите дозировку при приеме</string>
+    <string name="tags">Теги</string>
+    <string name="add_tag">Добавить метку</string>
+    <string name="are_you_sure_delete_tag">Вы уверены, что хотите удалить тег?</string>
 </resources>
