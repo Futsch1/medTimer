@@ -13,6 +13,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
@@ -109,7 +110,7 @@ class TagTest : BaseTestHelper() {
 
     @Test
     @AllowFlaky(attempts = 1)
-    fun overviewVisibility() {
+    fun activateAndOverviewVisibility() {
         createMedicine("Test")
         clickOn(R.id.openTags)
         addTag("Tag1")
@@ -124,6 +125,31 @@ class TagTest : BaseTestHelper() {
         clickOn(R.id.ok)
         createIntervalReminder("Amount2", 60)
         pressBack()
+
+        // First, deactivate all of Test
+        clickOn(R.id.tag_filter)
+        clickOn("Tag1")
+        clickOn(R.id.ok)
+
+        openMenu()
+        clickOn(R.string.deactivate_all)
+        assertContains(R.string.inactive)
+
+        // Now, check that Else is not deactivated
+        clickOn(R.id.tag_filter)
+        clickOn("Tag1")
+        clickOn("Tag2")
+        clickOn(R.id.ok)
+
+        assertNotContains(R.string.inactive)
+
+        clickOn(R.id.tag_filter)
+        clickOn("Tag2")
+        clickOn(R.id.ok)
+
+        // And activate Test again
+        openMenu()
+        clickOn(R.string.activate_all)
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 

@@ -49,7 +49,6 @@ class EditMedicineMenuProvider(
         }
     }
 
-
     private fun setRemindersActive(active: Boolean) {
         val handler = Handler(thread.getLooper())
         handler.post {

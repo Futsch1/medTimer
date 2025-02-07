@@ -119,6 +119,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     }
 
     Unit buildTags(List<TagWithState> list) {
+        tags.removeAllViews();
         for (TagWithState tagWithState : list) {
             @SuppressLint("InflateParams")
             Chip chip = (Chip) LayoutInflater.from(itemView.getContext()).inflate(R.layout.tag, null);
