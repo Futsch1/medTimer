@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.Tag
 import java.time.Instant
 import java.time.LocalDate
 
@@ -13,23 +14,23 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                 "Omega 3 (EPA/DHA 500mg)", null, 1, 10.0, arrayOf(
                     testReminderOmega3,
                     TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3)
-                )
+                ), arrayOf("Supplements")
             ),
             TestMedicine(
                 "B12 (500µg)", -0x750000, 2, 50.5, arrayOf(
                     TestReminderTimeBased("2", 7 * 60, 1, 0, "")
-                )
+                ), arrayOf("Vitamins", "Energy")
             ),
             TestMedicine(
                 "Ginseng (200mg)", -0x6f1170, 3, 0.0, arrayOf(
                     TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast")
-                )
+                ), arrayOf("Energy")
             ),
             TestMedicine(
                 "Selen (200 µg)", null, 0, 0.0, arrayOf(
                     TestReminderTimeBased("2", 9 * 60, 1, 0, ""),
                     TestReminderIntervalBased("1", 36 * 60)
-                )
+                ), arrayOf("Supplements")
             )
         )
 
@@ -41,6 +42,10 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                     viewModel.medicineRepository.insertReminder(testReminder.toReminder(medicineId))
                         .toInt()
             }
+            for (tag in testMedicine.tags) {
+                val tagId = viewModel.medicineRepository.insertTag(Tag(tag))
+                viewModel.medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
+            }
         }
     }
 
@@ -51,7 +56,8 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
         val color: Int?,
         val iconId: Int,
         val stock: Double,
-        val reminders: Array<TestReminder>
+        val reminders: Array<TestReminder>,
+        val tags: Array<String>
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
