@@ -165,7 +165,16 @@ public class MedicineRepository {
     }
 
     public long insertTag(@NotNull Tag tag) {
-        return internalInsert(tag, medicineDao::insertTag);
+        Tag existingTag = getTagByName(tag.name);
+        if (existingTag == null) {
+            return internalInsert(tag, medicineDao::insertTag);
+        } else {
+            return existingTag.tagId;
+        }
+    }
+
+    public Tag getTagByName(String name) {
+        return medicineDao.getTagByName(name);
     }
 
     public void deleteTag(@NotNull Tag tag) {
@@ -190,10 +199,6 @@ public class MedicineRepository {
 
     public boolean hasTags() {
         return medicineDao.countTags() > 0;
-    }
-
-    public Tag getTagByName(String name) {
-        return medicineDao.getTagByName(name);
     }
 
     interface Insert<T> {

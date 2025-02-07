@@ -56,11 +56,6 @@ public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
 
     private void processTags(MedicineRepository medicineRepository, FullMedicine fullMedicine, int medicineId) {
         for (Tag tag : fullMedicine.tags) {
-            Tag existingTag = medicineRepository.getTagByName(tag.name);
-            if (existingTag != null) {
-                medicineRepository.insertMedicineToTag(medicineId, existingTag.tagId);
-                continue;
-            }
             int tagId = (int) medicineRepository.insertTag(tag);
             medicineRepository.insertMedicineToTag(medicineId, tagId);
         }
