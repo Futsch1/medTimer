@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,6 +130,15 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             chip.setCloseIconVisible(false);
             chip.setOnClickListener(v -> itemView.performClick());
             chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT));
+            FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            int margin = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 4, this.itemView.getResources().getDisplayMetrics()
+            );
+            params.setMargins(margin, 0, margin, 0);
+            chip.setLayoutParams(params);
             tags.addView(chip);
         }
         return Unit.INSTANCE;
