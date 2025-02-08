@@ -2,12 +2,20 @@ package com.futsch1.medtimer.medicine.tags
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.DeleteHelper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TagDataFromMedicine(fragment: Fragment, private val medicineId: Int) : TagDataProvider() {
+class TagDataFromMedicine(
+    private val fragment: Fragment,
+    private val medicineId: Int,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : TagDataProvider() {
 
     private var viewModel: MedicineWithTagsViewModel = ViewModelProvider(
         fragment,
@@ -47,7 +55,9 @@ class TagDataFromMedicine(fragment: Fragment, private val medicineId: Int) : Tag
     }
 
     override fun addTag(tagName: String) {
-        val tagId = viewModel.medicineRepository.insertTag(Tag(tagName))
-        viewModel.associateTag(medicineId, tagId.toInt())
+        fragment.lifecycleScope.launch(dispatcher) {
+            val tagId = viewModel.medicineRepository.insertTag(Tag(tagName))
+            viewModel.associateTag(medicineId, tagId.toInt())
+        }
     }
 }

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Objects;
 
 import kotlin.Unit;
+import kotlinx.coroutines.Dispatchers;
 
 public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         implements IconDialog.Callback {
@@ -176,7 +177,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private void setupTagsButton(View fragmentView, int medicineId) {
         MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
         openTags.setOnClickListener(v -> {
-            TagDataFromMedicine tagDataFromMedicine = new TagDataFromMedicine(this, medicineId);
+            TagDataFromMedicine tagDataFromMedicine = new TagDataFromMedicine(this, medicineId, Dispatchers.getIO());
             DialogFragment dialog = new TagsFragment(tagDataFromMedicine);
             dialog.show(getParentFragmentManager(), "tags");
         });
