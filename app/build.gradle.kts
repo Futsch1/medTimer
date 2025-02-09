@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 99
-        versionName = "1.16.0-beta.1"
+        versionCode = 100
+        versionName = "1.16.0"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
