@@ -22,13 +22,11 @@ class MedicinesMenu(
         menuInflater.inflate(R.menu.medicines, menu)
         menu.setGroupDividerEnabled(true)
 
-        menu.findItem(R.id.activate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        setupActivateMenu(menu, R.id.activate_all) {
             setRemindersActive(true)
-            true
         }
-        menu.findItem(R.id.deactivate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        setupActivateMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
-            true
         }
     }
 
@@ -48,6 +46,17 @@ class MedicinesMenu(
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return false
+    }
+
+    companion object {
+        fun setupActivateMenu(
+            menu: Menu, menuId: Int, activateCallback: () -> Unit
+        ) {
+            menu.findItem(menuId).setOnMenuItemClickListener { _: MenuItem? ->
+                activateCallback()
+                true
+            }
+        }
     }
 
 }

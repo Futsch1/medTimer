@@ -24,13 +24,11 @@ class EditMedicineMenuProvider(
         menuInflater.inflate(R.menu.edit_medicine, menu)
         menu.setGroupDividerEnabled(true)
 
-        menu.findItem(R.id.activate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        MedicinesMenu.setupActivateMenu(menu, R.id.activate_all) {
             setRemindersActive(true)
-            true
         }
-        menu.findItem(R.id.deactivate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        MedicinesMenu.setupActivateMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
-            true
         }
         setupDeleteMenu(menu)
     }

@@ -20,26 +20,40 @@ class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             text = tagWithState.tag.name
             isChecked = tagWithState.isSelected
             gravity = Gravity.CENTER
-            if (selectCallback != null) {
-                setOnCheckedChangeListener { _, isChecked ->
-                    tagWithState.isSelected = isChecked
-                    selectCallback(tagWithState)
-                }
-            } else {
-                isCheckable = false
-                setOnClickListener {
-                    (this.parent as View).performClick()
-                }
-                rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
-                isFocusable = false
+            setupSelectable(selectCallback, tagWithState)
+            setupDeletable(deleteCallback, tagWithState)
+        }
+    }
+
+    private fun Chip.setupDeletable(
+        deleteCallback: TagCallback?,
+        tagWithState: TagWithState
+    ) {
+        if (deleteCallback != null) {
+            setOnCloseIconClickListener {
+                deleteCallback(tagWithState)
             }
-            if (deleteCallback != null) {
-                setOnCloseIconClickListener {
-                    deleteCallback(tagWithState)
-                }
-            } else {
-                isCloseIconVisible = false
+        } else {
+            isCloseIconVisible = false
+        }
+    }
+
+    private fun Chip.setupSelectable(
+        selectCallback: TagCallback?,
+        tagWithState: TagWithState
+    ) {
+        if (selectCallback != null) {
+            setOnCheckedChangeListener { _, isChecked ->
+                tagWithState.isSelected = isChecked
+                selectCallback(tagWithState)
             }
+        } else {
+            isCheckable = false
+            setOnClickListener {
+                (this.parent as View).performClick()
+            }
+            rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
+            isFocusable = false
         }
     }
 }
