@@ -45,6 +45,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "[]")
     @Expose
     public ArrayList<Double> refillSizes;
+    @ColumnInfo(defaultValue = "")
+    @Expose
+    public String unit;
 
     public Medicine(String name) {
         this.name = name;
