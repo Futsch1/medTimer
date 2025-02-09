@@ -18,6 +18,7 @@ Einfache und sichere Datenverwaltung:
 - Exportiere deine Medikamentenhistorie als CSV-Datei für eine einfache Aufzeichnung oder Weitergabe an medizinisches Fachpersonal.
 - Sichern und Wiederherstellen deiner Medikamentenliste als JSON-Datei.
 - Verwaltung des Medikamentenvorrats und Nachfüll-Erinnerungen.
+- Tagge und filtere deine Medikamente.
 
 Datenschutz und Offline-Zugriff:
 

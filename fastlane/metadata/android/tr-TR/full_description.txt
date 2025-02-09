@@ -20,6 +20,7 @@ Basit ve Güvenli Veri Yönetimi:
 - Kolay kayıt tutmak veya sağlık uzmanlarıyla paylaşmak için ilaç geçmişinizi CSV dosyası olarak dışa aktarın.
 - İlaç listenizi JSON dosyası olarak yedekleyin ve geri yükleyin.
 - İlaç stok takibi ve stok tükenme hatırlatmaları.
+- İlaçlarınızı etiketleyin ve filtreleyin.
 
 Gizlilik ve Çevrimdışı Erişilebilirlik:
 
