@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 16,
-    "identityHash": "6a0abf6dcd388b25ccd47c020a09029b",
+    "identityHash": "2cad2177287c5bb26c403f4de0f4017c",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '')",
         "fields": [
           {
             "fieldPath": "name",
@@ -75,6 +75,13 @@
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -401,7 +408,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6a0abf6dcd388b25ccd47c020a09029b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2cad2177287c5bb26c403f4de0f4017c')"
     ]
   }
 }

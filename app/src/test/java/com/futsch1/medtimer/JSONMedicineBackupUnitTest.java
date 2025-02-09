@@ -46,6 +46,7 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine.useColor = true;
         medicineWithReminders.medicine.color = Color.RED;
         medicineWithReminders.medicine.iconId = 5;
+        medicineWithReminders.medicine.unit = "pills";
         medicineWithReminders.tags = new ArrayList<>();
         medicineWithReminders.tags.add(new Tag("Tag A"));
         medicinesWithReminders.add(medicineWithReminders);
@@ -69,7 +70,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminder": "OFF",
         "amount": 0.0,
         "outOfStockReminderThreshold": 0.0,
-        "refillSizes": []
+        "refillSizes": [],
+        "unit": "pills"
       },
       "tags": [
         {
@@ -207,7 +209,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminder": "OFF",
         "amount": 0.0,
         "outOfStockReminderThreshold": 0.0,
-        "refillSizes": []
+        "refillSizes": [],
+        "unit": ""
       },
       "reminders": [
         {
@@ -248,7 +251,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminder": "OFF",
         "amount": 17.0,
         "outOfStockReminderThreshold": 17.5,
-        "refillSizes": []
+        "refillSizes": [],
+        "unit": ""
       },
       "reminders": [
         {
