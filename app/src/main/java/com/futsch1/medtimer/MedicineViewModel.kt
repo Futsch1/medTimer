@@ -41,68 +41,74 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
         }
 
         filteredMedicine.addSource(liveMedicines) {
-            filteredMedicine.value = getFiltered(liveMedicines, validTagIds)
+            if (validTagIds.value != null) {
+                filteredMedicine.value = getFiltered(it, validTagIds.value!!)
+            }
         }
         filteredMedicine.addSource(validTagIds) {
-            filteredMedicine.value = getFiltered(liveMedicines, validTagIds)
+            if (liveMedicines.value != null) {
+                filteredMedicine.value = getFiltered(liveMedicines.value!!, it)
+            }
         }
 
         filteredScheduledReminders.addSource(liveScheduledReminders) {
-            filteredScheduledReminders.value =
-                getFiltered(liveScheduledReminders, validTagIds)
+            if (validTagIds.value != null) {
+                filteredScheduledReminders.value =
+                    getFiltered(it, validTagIds.value!!)
+            }
         }
         filteredScheduledReminders.addSource(validTagIds) {
-            filteredScheduledReminders.value =
-                getFiltered(liveScheduledReminders, validTagIds)
+            if (liveScheduledReminders.value != null) {
+                filteredScheduledReminders.value =
+                    getFiltered(liveScheduledReminders.value!!, it)
+            }
         }
 
         filteredReminderEvents.addSource(validTagIds) {
-            filteredReminderEvents.value =
-                getFilteredEvents(liveReminderEvents, validTagIds, liveTags)
+            if (liveReminderEvents.isInitialized && liveReminderEvents.value != null && liveTags.value != null) {
+                filteredReminderEvents.value =
+                    getFilteredEvents(liveReminderEvents.value!!, it, liveTags.value!!)
+            }
         }
         filteredReminderEvents.addSource(liveTags) {
-            filteredReminderEvents.value =
-                getFilteredEvents(liveReminderEvents, validTagIds, liveTags)
+            if (liveReminderEvents.isInitialized && liveReminderEvents.value != null && validTagIds.value != null) {
+                filteredReminderEvents.value =
+                    getFilteredEvents(liveReminderEvents.value!!, validTagIds.value!!, it)
+            }
         }
     }
 
     private fun <T : Any> getFiltered(
-        liveData: LiveData<List<T>>,
-        validTagIds: MutableLiveData<Set<Int>>
+        liveData: List<T>,
+        validTagIds: Set<Int>
     ): List<T> {
-        if (liveData.value.isNullOrEmpty()) {
-            return emptyList()
+        if (validTagIds.isEmpty()) {
+            return liveData
         }
-        if (validTagIds.value.isNullOrEmpty()) {
-            return liveData.value!!
-        }
-        return liveData.value!!.stream()
+        return liveData.stream()
             .filter { medicine ->
                 filterMedicineId(
                     getId(medicine),
-                    validTagIds.value
+                    validTagIds
                 )
             }
             .collect(Collectors.toList())
     }
 
     private fun getFilteredEvents(
-        liveData: LiveData<List<ReminderEvent>>,
-        validTagIds: MutableLiveData<Set<Int>>,
-        liveTags: LiveData<MutableList<Tag>>
+        liveData: List<ReminderEvent>,
+        validTagIds: Set<Int>,
+        liveTags: MutableList<Tag>
     ): List<ReminderEvent> {
-        if (!liveData.isInitialized || liveData.value.isNullOrEmpty()) {
-            return emptyList()
-        }
-        if (validTagIds.value.isNullOrEmpty() || liveTags.value.isNullOrEmpty()) {
-            return liveData.value!!
+        if (validTagIds.isEmpty()) {
+            return liveData
         }
         // Get all valid tag names from the list of valid IDs
         val validTagNames =
-            liveTags.value!!.stream().filter { tag -> validTagIds.value!!.contains(tag.tagId) }
+            liveTags.stream().filter { tag -> validTagIds.contains(tag.tagId) }
                 .map { tag -> tag.name }.collect(Collectors.toSet())
         // Now filter all reminder events and check if they contain any of the valid tags
-        return liveData.value!!.stream().filter { reminderEvent ->
+        return liveData.stream().filter { reminderEvent ->
             validTagNames.stream().filter { reminderEvent.tags.contains(it) }.count() > 0
         }.collect(Collectors.toList())
 
@@ -139,13 +145,15 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     ): LiveData<List<ReminderEvent>> {
         liveReminderEvents = medicineRepository.getLiveReminderEvents(limit, timeStamp, withDeleted)
         filteredReminderEvents.addSource(liveReminderEvents) {
-            filteredReminderEvents.value =
-                getFilteredEvents(liveReminderEvents, validTagIds, liveTags)
+            if (validTagIds.value != null && liveTags.value != null) {
+                filteredReminderEvents.value =
+                    getFilteredEvents(it, validTagIds.value!!, liveTags.value!!)
+            }
         }
         return filteredReminderEvents
     }
 
     fun setScheduledReminders(scheduledReminders: List<ScheduledReminder>) {
-        this.liveScheduledReminders.value = scheduledReminders
+        this.liveScheduledReminders.postValue(scheduledReminders)
     }
 }

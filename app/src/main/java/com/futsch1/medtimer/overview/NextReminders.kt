@@ -32,10 +32,10 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
     private val expandNextReminders: MaterialButton =
         fragmentView.findViewById(R.id.expandNextReminders)
-    private var reminderEvents: List<ReminderEvent> = ArrayList()
+    private lateinit var reminderEvents: List<ReminderEvent>
     private var nextRemindersExpanded =
         fragmentView.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE
-    private var FullMedicine: List<FullMedicine> = ArrayList()
+    private lateinit var fullMedicines: List<FullMedicine>
 
     init {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.nextReminders)
@@ -76,7 +76,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     }
 
     private fun setupScheduleObservers(parentFragment: Fragment) {
-        medicineViewModel.getLiveReminderEvents(
+        medicineViewModel.medicineRepository.getLiveReminderEvents(
             0,
             Instant.now().toEpochMilli() / 1000 - 48 * 60 * 60,
             true
@@ -86,9 +86,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
                     reminderEvents
                 )
             }
-        medicineViewModel.medicines.observe(parentFragment.viewLifecycleOwner) { FullMedicine: List<FullMedicine> ->
+        medicineViewModel.medicineRepository.liveMedicines.observe(parentFragment.viewLifecycleOwner) { fullMedicines: List<FullMedicine> ->
             this.changedMedicines(
-                FullMedicine
+                fullMedicines
             )
         }
     }
@@ -109,8 +109,8 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         calculateSchedule()
     }
 
-    private fun changedMedicines(FullMedicine: List<FullMedicine>) {
-        this.FullMedicine = FullMedicine
+    private fun changedMedicines(fullMedicine: List<FullMedicine>) {
+        this.fullMedicines = fullMedicine
         calculateSchedule()
     }
 
@@ -133,6 +133,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     }
 
     private fun calculateSchedule() {
+        if (!::fullMedicines.isInitialized || !::reminderEvents.isInitialized) {
+            return
+        }
         val scheduler = ReminderScheduler(object : TimeAccess {
             override fun systemZone(): ZoneId {
                 return ZoneId.systemDefault()
@@ -144,7 +147,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         })
 
         val reminders = scheduler.schedule(
-            FullMedicine, reminderEvents
+            fullMedicines, reminderEvents
         )
         medicineViewModel.setScheduledReminders(reminders)
     }

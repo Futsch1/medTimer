@@ -74,10 +74,6 @@ public class MedicinesFragment extends Fragment {
 
         MedicinesMenu medicinesMenu = new MedicinesMenu(medicineViewModel, thread);
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner());
-        optionsMenu = new OptionsMenu(this,
-                new ViewModelProvider(this).get(MedicineViewModel.class),
-                fragmentView);
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         // Connect view model to recycler view adapter
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
@@ -86,6 +82,11 @@ public class MedicinesFragment extends Fragment {
             startPostponedEnterTransition();
             idlingResource.setInitialized();
         });
+
+        optionsMenu = new OptionsMenu(this,
+                new ViewModelProvider(this).get(MedicineViewModel.class),
+                fragmentView);
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentView;
     }
