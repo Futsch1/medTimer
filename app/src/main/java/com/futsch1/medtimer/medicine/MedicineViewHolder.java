@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.Tag;
 import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
-import com.futsch1.medtimer.medicine.tags.MedicineWithTagsViewModel;
-import com.futsch1.medtimer.medicine.tags.TagWithState;
-import com.futsch1.medtimer.medicine.tags.TagWithStateCollector;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -36,8 +31,6 @@ import com.google.android.material.chip.Chip;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import kotlin.Unit;
 
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
@@ -61,7 +54,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         return new MedicineViewHolder(view, activity, thread);
     }
 
-    public void bind(FullMedicine medicine, LifecycleOwner lifecycleOwner) {
+    public void bind(FullMedicine medicine) {
         medicineNameView.setText(MedicineHelper.getMedicineNameWithStockText(itemView.getContext(), medicine.medicine));
         setupSummary(medicine);
 
@@ -75,7 +68,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId);
 
-        setupTags(medicine.medicine.medicineId, lifecycleOwner);
+        buildTags(medicine.tags);
     }
 
     private void setupSummary(FullMedicine medicine) {
@@ -108,23 +101,12 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupTags(int medicineId, LifecycleOwner lifecycleOwner) {
-        Log.d("Idling", "MedicineViewHolder" + getBindingAdapterPosition() + " setupTags");
-        MedicineWithTagsViewModel medicineWithTagsViewModel = new ViewModelProvider(activity).get(MedicineWithTagsViewModel.class);
-        TagWithStateCollector collector = new TagWithStateCollector(this::buildTags).allTags(false);
-
+    void buildTags(List<Tag> tagsList) {
         tags.removeAllViews();
-        medicineWithTagsViewModel.getTags().observe(lifecycleOwner, collector::setTags);
-        medicineWithTagsViewModel.getMedicineWithTags(medicineId).observe(lifecycleOwner, collector::setFullMedicine);
-    }
-
-    Unit buildTags(List<TagWithState> list) {
-        tags.removeAllViews();
-        for (TagWithState tagWithState : list) {
+        for (Tag tag : tagsList) {
             @SuppressLint("InflateParams")
             Chip chip = (Chip) LayoutInflater.from(itemView.getContext()).inflate(R.layout.tag, null);
-            chip.setText(tagWithState.getTag().name);
+            chip.setText(tag.name);
             chip.setChecked(true);
             chip.setCheckable(false);
             chip.setCloseIconVisible(false);
@@ -141,6 +123,5 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             chip.setLayoutParams(params);
             tags.addView(chip);
         }
-        return Unit.INSTANCE;
     }
 }

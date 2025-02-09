@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.futsch1.medtimer.database.FullMedicine;
@@ -16,14 +15,12 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
 
     private final HandlerThread thread;
     private final FragmentActivity activity;
-    private final LifecycleOwner lifecycleOwner;
 
-    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity, LifecycleOwner lifecycleOwner) {
+    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity) {
         super(new MedicineDiff());
         setHasStableIds(true);
         this.thread = thread;
         this.activity = activity;
-        this.lifecycleOwner = lifecycleOwner;
     }
 
 
@@ -38,7 +35,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         FullMedicine current = getItem(position);
-        holder.bind(current, lifecycleOwner);
+        holder.bind(current);
     }
 
     @Override
