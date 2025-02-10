@@ -97,6 +97,9 @@ public class Notifications {
         String notificationString = context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
         @SuppressWarnings("java:S6204")
         List<String> tagNames = medicine.tags.stream().map(t -> t.name).collect(Collectors.toList());
+        if (tagNames.isEmpty()) {
+            return notificationString;
+        }
         return notificationString + "\n(" + String.join(", ", tagNames) + ")";
     }
 

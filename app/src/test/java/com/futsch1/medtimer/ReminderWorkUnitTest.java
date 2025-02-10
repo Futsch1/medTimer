@@ -144,6 +144,7 @@ public class ReminderWorkUnitTest {
             when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
             FullMedicine medicine = new FullMedicine();
             medicine.medicine = new Medicine("TestMedicine");
+            medicine.tags = new ArrayList<>();
             when(mock.getMedicine(medicineId)).thenReturn(medicine);
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminderId;
