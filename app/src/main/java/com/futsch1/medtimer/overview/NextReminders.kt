@@ -146,7 +146,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             }
         })
 
-        val reminders = scheduler.schedule(
+        val reminders: List<ScheduledReminder> = scheduler.schedule(
             fullMedicines, reminderEvents
         )
         medicineViewModel.setScheduledReminders(reminders)
