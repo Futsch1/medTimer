@@ -112,7 +112,8 @@ abstract class DatabaseEntityEditFragment<T>(
         val optionsMenu = OptionsMenu(
             this,
             ViewModelProvider(this)[MedicineViewModel::class.java],
-            fragmentView
+            fragmentView,
+            true
         )
         requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
     }
