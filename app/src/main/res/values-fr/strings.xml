@@ -203,4 +203,7 @@
     <string name="refill_size">Taille de la recharge</string>
     <string name="refill_now">Rechargez maintenant</string>
     <string name="variable_amount">Indiquer le dosage lors de la prise</string>
+    <string name="tags">Tags</string>
+    <string name="add_tag">Ajouter une étiquette</string>
+    <string name="are_you_sure_delete_tag">Êtes-vous sûr de vouloir supprimer la balise ?</string>
 </resources>

@@ -6,17 +6,17 @@ import com.google.gson.JsonElement;
 import java.time.Instant;
 import java.util.List;
 
-public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
+public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
 
     public JSONMedicineBackup() {
-        super(MedicineWithReminders.class);
+        super(FullMedicine.class);
     }
 
     @Override
-    public JsonElement createBackup(int databaseVersion, List<MedicineWithReminders> list) {
+    public JsonElement createBackup(int databaseVersion, List<FullMedicine> list) {
         // Fix the medicines where the instructions are null
-        for (MedicineWithReminders medicineWithReminders : list) {
-            medicineWithReminders.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
+        for (FullMedicine FullMedicine : list) {
+            FullMedicine.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
         }
         return super.createBackup(databaseVersion, list);
     }
@@ -25,30 +25,39 @@ public class JSONMedicineBackup extends JSONBackup<MedicineWithReminders> {
     protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
         return builder
                 .registerTypeAdapter(Medicine.class, new FullDeserialize<Medicine>())
+                .registerTypeAdapter(Tag.class, new FullDeserialize<Tag>())
                 .registerTypeAdapter(Reminder.class, new FullDeserialize<Reminder>());
     }
 
-    protected boolean isInvalid(MedicineWithReminders medicineWithReminders) {
-        return medicineWithReminders == null || medicineWithReminders.medicine == null || medicineWithReminders.reminders == null;
+    protected boolean isInvalid(FullMedicine fullMedicine) {
+        return fullMedicine == null || fullMedicine.medicine == null || fullMedicine.reminders == null;
     }
 
-    public void applyBackup(List<MedicineWithReminders> listOfMedicineWithReminders, MedicineRepository medicineRepository) {
+    public void applyBackup(List<FullMedicine> listOfFullMedicine, MedicineRepository medicineRepository) {
         medicineRepository.deleteReminders();
         medicineRepository.deleteMedicines();
 
-        for (MedicineWithReminders medicineWithReminders : listOfMedicineWithReminders) {
-            long medicineId = medicineRepository.insertMedicine(medicineWithReminders.medicine);
-            processReminders(medicineRepository, medicineWithReminders, (int) medicineId);
+        for (FullMedicine FullMedicine : listOfFullMedicine) {
+            long medicineId = medicineRepository.insertMedicine(FullMedicine.medicine);
+            processReminders(medicineRepository, FullMedicine, (int) medicineId);
+            processTags(medicineRepository, FullMedicine, (int) medicineId);
         }
     }
 
-    private static void processReminders(MedicineRepository medicineRepository, MedicineWithReminders medicineWithReminders, int medicineId) {
-        for (Reminder reminder : medicineWithReminders.reminders) {
+    private static void processReminders(MedicineRepository medicineRepository, FullMedicine fullMedicine, int medicineId) {
+        for (Reminder reminder : fullMedicine.reminders) {
             if (reminder != null) {
                 reminder.medicineRelId = medicineId;
                 reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
                 medicineRepository.insertReminder(reminder);
             }
+        }
+    }
+
+    private void processTags(MedicineRepository medicineRepository, FullMedicine fullMedicine, int medicineId) {
+        for (Tag tag : fullMedicine.tags) {
+            int tagId = (int) medicineRepository.insertTag(tag);
+            medicineRepository.insertMedicineToTag(medicineId, tagId);
         }
     }
 }

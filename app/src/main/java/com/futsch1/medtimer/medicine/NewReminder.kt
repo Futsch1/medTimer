@@ -143,7 +143,7 @@ class NewReminder(
                     dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
             }
             if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
-                medicineViewModel.insertReminder(reminder)
+                medicineViewModel.medicineRepository.insertReminder(reminder)
                 dialog.dismiss()
             } else {
                 Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()

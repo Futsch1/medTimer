@@ -2,7 +2,7 @@ package com.futsch1.medtimer
 
 import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.TestHelper.assertRemindedAtIndex
-import com.futsch1.medtimer.database.MedicineWithReminders
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
@@ -21,14 +21,14 @@ class ReminderSchedulerLinkedUnitTest {
 
         val scheduler = ReminderScheduler(mockTimeAccess)
 
-        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1)
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = ArrayList()
         medicineList.add(medicineWithReminders)
 
         val reminderEventList: List<ReminderEvent> = ArrayList()
@@ -46,14 +46,14 @@ class ReminderSchedulerLinkedUnitTest {
 
         val scheduler = ReminderScheduler(mockTimeAccess)
 
-        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1)
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = ArrayList()
         medicineList.add(medicineWithReminders)
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()
@@ -116,7 +116,7 @@ class ReminderSchedulerLinkedUnitTest {
 
         val scheduler = ReminderScheduler(mockTimeAccess)
 
-        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked1 = TestHelper.buildReminder(1, 2, "2", 60, 1)
@@ -126,7 +126,7 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked2.linkedReminderId = 2
         medicineWithReminders.reminders.add(reminderLinked2)
 
-        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = ArrayList()
         medicineList.add(medicineWithReminders)
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()

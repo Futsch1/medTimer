@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
@@ -32,15 +33,23 @@ public class MedicineRepository {
         return database.getVersion();
     }
 
-    public LiveData<List<MedicineWithReminders>> getLiveMedicines() {
+    public LiveData<List<FullMedicine>> getLiveMedicines() {
         return medicineDao.getLiveMedicines();
     }
 
-    public List<MedicineWithReminders> getMedicines() {
+    public List<FullMedicine> getMedicines() {
         return medicineDao.getMedicines();
     }
 
-    public Medicine getMedicine(int medicineId) {
+    public Medicine getOnlyMedicine(int medicineId) {
+        return medicineDao.getOnlyMedicine(medicineId);
+    }
+
+    public LiveData<FullMedicine> getLiveMedicine(int medicineId) {
+        return medicineDao.getLiveMedicine(medicineId);
+    }
+
+    public FullMedicine getMedicine(int medicineId) {
         return medicineDao.getMedicine(medicineId);
     }
 
@@ -92,7 +101,10 @@ public class MedicineRepository {
     }
 
     public void deleteMedicine(int medicineId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicine(medicineDao.getMedicine(medicineId)));
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteMedicineToTagForMedicine(medicineId);
+            medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId));
+        });
     }
 
     public long insertReminder(Reminder reminder) {
@@ -123,6 +135,8 @@ public class MedicineRepository {
         deleteReminders();
         deleteMedicines();
         deleteReminderEvents();
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
     }
 
     public void deleteReminders() {
@@ -143,6 +157,48 @@ public class MedicineRepository {
 
     public List<Reminder> getLinkedReminders(int reminderId) {
         return medicineDao.getLinkedReminders(reminderId);
+    }
+
+    @NotNull
+    public LiveData<List<Tag>> getLiveTags() {
+        return medicineDao.getLiveTags();
+    }
+
+    public long insertTag(@NotNull Tag tag) {
+        Tag existingTag = getTagByName(tag.name);
+        if (existingTag == null) {
+            return internalInsert(tag, medicineDao::insertTag);
+        } else {
+            return existingTag.tagId;
+        }
+    }
+
+    public Tag getTagByName(String name) {
+        return medicineDao.getTagByName(name);
+    }
+
+    public void deleteTag(@NotNull Tag tag) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
+            medicineDao.deleteMedicineToTagForTag(tag.tagId);
+            medicineDao.deleteTag(tag);
+        });
+    }
+
+    public void insertMedicineToTag(int medicineId, int tagId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertMedicineToTag(new MedicineToTag(medicineId, tagId)));
+    }
+
+    public void deleteMedicineToTag(int medicineId, int tagId) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTag(new MedicineToTag(medicineId, tagId)));
+    }
+
+    @NotNull
+    public LiveData<List<MedicineToTag>> getLiveMedicineToTags() {
+        return medicineDao.getLiveMedicineToTags();
+    }
+
+    public boolean hasTags() {
+        return medicineDao.countTags() > 0;
     }
 
     interface Insert<T> {

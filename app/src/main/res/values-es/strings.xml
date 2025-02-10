@@ -203,4 +203,7 @@
     <string name="refill_size">Tamaño del recargar</string>
     <string name="refill_now">Recargar ahora</string>
     <string name="variable_amount">Introduzca la dosis cuando se toma</string>
+    <string name="tags">Etiquetas</string>
+    <string name="add_tag">Añadir etiqueta</string>
+    <string name="are_you_sure_delete_tag">¿Estás seguro de borrar la etiqueta?</string>
 </resources>

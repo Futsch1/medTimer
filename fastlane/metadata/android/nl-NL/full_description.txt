@@ -20,6 +20,7 @@ Eenvoudig en veilig gegevensbeheer:
 - Exporteer je medicatiegeschiedenis als CSV-bestand om ze gemakkelijk bij te houden of te delen met zorgverleners.
 - Maak een back-up van je medicatielijst en zet deze terug als JSON-bestand.
 - Medicijnvoorraad bijhouden en voorraadtekortmeldingen.
+- Label en filter je medicatie.
 
 Privacy en offline toegankelijkheid:
 

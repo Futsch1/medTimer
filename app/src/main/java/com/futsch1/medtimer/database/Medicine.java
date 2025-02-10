@@ -45,6 +45,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "[]")
     @Expose
     public ArrayList<Double> refillSizes;
+    @ColumnInfo(defaultValue = "")
+    @Expose
+    public String unit;
 
     public Medicine(String name) {
         this.name = name;
@@ -54,6 +57,7 @@ public class Medicine {
         this.iconId = 0;
         this.outOfStockReminder = OutOfStockReminderType.OFF;
         this.refillSizes = new ArrayList<>();
+        this.unit = "";
     }
 
     public Medicine(String name, int id) {
@@ -65,6 +69,7 @@ public class Medicine {
         this.iconId = 0;
         this.outOfStockReminder = OutOfStockReminderType.OFF;
         this.refillSizes = new ArrayList<>();
+        this.unit = "";
     }
 
     public boolean isStockManagementActive() {

@@ -202,4 +202,7 @@
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
     <string name="variable_amount">Enter dosage when taken</string>
+    <string name="tags">Tags</string>
+    <string name="add_tag">Add tag</string>
+    <string name="are_you_sure_delete_tag">Are you sure to delete the tag?</string>
 </resources>

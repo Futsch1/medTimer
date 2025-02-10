@@ -25,8 +25,8 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.PreferencesNames;
 import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.WorkManagerAccess;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.MedicineWithReminders;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver;
 
@@ -58,15 +58,15 @@ public class RescheduleWork extends Worker {
 
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = getReminderScheduler();
-        List<MedicineWithReminders> medicineWithReminders = medicineRepository.getMedicines();
-        List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(medicineWithReminders, medicineRepository.getLastDaysReminderEvents(2));
+        List<FullMedicine> fullMedicines = medicineRepository.getMedicines();
+        List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(2));
         if (!scheduledReminders.isEmpty()) {
             ScheduledReminder scheduledReminder = scheduledReminders.get(0);
             this.enqueueNotification(
                     new ReminderNotificationData(
                             scheduledReminder.timestamp(),
                             scheduledReminder.reminder().reminderId,
-                            scheduledReminder.medicine().name));
+                            scheduledReminder.medicine().medicine.name));
         } else {
             this.cancelNextReminder();
         }

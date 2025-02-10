@@ -193,4 +193,7 @@
     <string name="refill_size">每份药量规格(例如每盒x片)</string>
     <string name="refill_now">添加余量</string>
     <string name="variable_amount">输入服用剂量</string>
+    <string name="tags">标签</string>
+    <string name="add_tag">添加标签</string>
+    <string name="are_you_sure_delete_tag">您确定要删除标签吗？</string>
 </resources>

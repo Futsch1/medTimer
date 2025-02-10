@@ -17,11 +17,15 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.MedicineIcons;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressLint("DefaultLocale")
 public class Notifications {
@@ -35,10 +39,10 @@ public class Notifications {
     }
 
     @SuppressWarnings("java:S107")
-    public int showNotification(String remindTime, Medicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
+    public int showNotification(String remindTime, FullMedicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
         int notificationId = getNextNotificationId();
-        ReminderNotificationChannelManager.Importance importance = (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
-        Color color = medicine.useColor ? Color.valueOf(medicine.color) : null;
+        ReminderNotificationChannelManager.Importance importance = (medicine.medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
+        Color color = medicine.medicine.useColor ? Color.valueOf(medicine.medicine.color) : null;
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
@@ -50,9 +54,9 @@ public class Notifications {
                 .setContentText(getNotificationString(remindTime, reminder, medicine))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
-        if (medicine.iconId != 0) {
+        if (medicine.medicine.iconId != 0) {
             MedicineIcons icons = new MedicineIcons(context);
-            builder.setLargeIcon(icons.getIconBitmap(medicine.iconId));
+            builder.setLargeIcon(icons.getIconBitmap(medicine.medicine.iconId));
         }
         if (color != null) {
             builder = builder.setColor(color.toArgb()).setColorized(true);
@@ -80,7 +84,7 @@ public class Notifications {
         return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private String getNotificationString(String remindTime, Reminder reminder, Medicine medicine) {
+    private String getNotificationString(String remindTime, Reminder reminder, FullMedicine medicine) {
         String instructions = reminder.instructions;
         if (instructions == null) {
             instructions = "";
@@ -89,8 +93,14 @@ public class Notifications {
             instructions = " " + instructions;
         }
         final int amountStringId = reminder.amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
-        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine);
-        return context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
+        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine.medicine);
+        String notificationString = context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
+        @SuppressWarnings("java:S6204")
+        List<String> tagNames = medicine.tags.stream().map(t -> t.name).collect(Collectors.toList());
+        if (tagNames.isEmpty()) {
+            return notificationString;
+        }
+        return notificationString + "\n(" + String.join(", ", tagNames) + ")";
     }
 
     private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, Reminder reminder) {

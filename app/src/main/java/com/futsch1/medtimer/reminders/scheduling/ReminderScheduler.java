@@ -3,8 +3,7 @@ package com.futsch1.medtimer.reminders.scheduling;
 import androidx.annotation.NonNull;
 
 import com.futsch1.medtimer.ScheduledReminder;
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.MedicineWithReminders;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
@@ -25,8 +24,8 @@ public class ReminderScheduler {
         this.timeAccess = timeAccess;
     }
 
-    public List<ScheduledReminder> schedule(@NonNull List<MedicineWithReminders> medicineWithReminders, @NonNull List<ReminderEvent> reminderEvents) {
-        ArrayList<Reminder> reminders = getReminders(medicineWithReminders);
+    public List<ScheduledReminder> schedule(@NonNull List<FullMedicine> fullMedicineWithTagsAndReminders, @NonNull List<ReminderEvent> reminderEvents) {
+        ArrayList<Reminder> reminders = getReminders(fullMedicineWithTagsAndReminders);
         ArrayList<ScheduledReminder> scheduledReminders = new ArrayList<>();
 
         for (Reminder reminder : reminders) {
@@ -34,7 +33,7 @@ public class ReminderScheduler {
             Instant reminderScheduledTime = scheduling.getNextScheduledTime();
 
             if (reminderScheduledTime != null) {
-                scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, medicineWithReminders), reminder, reminderScheduledTime));
+                scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, fullMedicineWithTagsAndReminders), reminder, reminderScheduledTime));
             }
         }
 
@@ -44,9 +43,9 @@ public class ReminderScheduler {
     }
 
     @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
-    private ArrayList<Reminder> getReminders(List<MedicineWithReminders> medicineWithReminders) {
+    private ArrayList<Reminder> getReminders(List<FullMedicine> fullMedicineWithTagsAndReminders) {
         ArrayList<Reminder> reminders = new ArrayList<>();
-        for (MedicineWithReminders medicineWithReminder : medicineWithReminders
+        for (FullMedicine medicineWithReminder : fullMedicineWithTagsAndReminders
         ) {
             //noinspection SimplifyStreamApiCallChains
             reminders.addAll(medicineWithReminder.reminders.stream().filter(r -> r.active).collect(Collectors.toList()));
@@ -54,12 +53,12 @@ public class ReminderScheduler {
         return reminders;
     }
 
-    private Medicine getMedicine(Reminder reminder, List<MedicineWithReminders> medicineWithReminders) {
+    private FullMedicine getMedicine(Reminder reminder, List<FullMedicine> fullMedicineWithTagsAndReminders) {
         int medicineId = reminder.medicineRelId;
 
-        Optional<MedicineWithReminders> medicineOptional = medicineWithReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst();
+        Optional<FullMedicine> medicineOptional = fullMedicineWithTagsAndReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst();
         if (medicineOptional.isPresent()) {
-            return medicineOptional.get().medicine;
+            return medicineOptional.get();
         } else {
             throw new NoSuchElementException();
         }

@@ -15,7 +15,7 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
         val amount = inputData.getString(ActivityCodes.EXTRA_AMOUNT) ?: return Result.failure()
         val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         val medicineRepository = MedicineRepository(context as Application?)
-        val medicine = medicineRepository.getMedicine(medicineId)
+        val medicine = medicineRepository.getOnlyMedicine(medicineId)
             ?: return Result.failure()
 
         processStock(medicine, amount)

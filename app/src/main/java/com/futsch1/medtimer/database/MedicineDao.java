@@ -14,17 +14,22 @@ import java.util.List;
 public interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine")
-    LiveData<List<MedicineWithReminders>> getLiveMedicines();
+    LiveData<List<FullMedicine>> getLiveMedicines();
 
     @Transaction
     @Query("SELECT * FROM Medicine")
-    List<MedicineWithReminders> getMedicines();
+    List<FullMedicine> getMedicines();
 
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    Medicine getMedicine(int medicineId);
+    Medicine getOnlyMedicine(int medicineId);
 
+    @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    LiveData<Medicine> getLiveMedicine(int medicineId);
+    FullMedicine getMedicine(int medicineId);
+
+    @Transaction
+    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
+    LiveData<FullMedicine> getLiveMedicine(int medicineId);
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
     LiveData<List<Reminder>> getLiveReminders(int medicineId);
@@ -34,9 +39,6 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
-
-    @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
-    LiveData<Reminder> getLiveReminder(int reminderId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
     LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
@@ -88,4 +90,41 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
     List<Reminder> getLinkedReminders(int reminderId);
+
+    @Transaction
+    @Query("SELECT * FROM Tag")
+    LiveData<List<Tag>> getLiveTags();
+
+    @Query("SELECT * FROM Tag WHERE name= :name")
+    Tag getTagByName(String name);
+
+    @Insert
+    long insertTag(Tag tag);
+
+    @Delete
+    void deleteTag(Tag tag);
+
+    @Insert
+    void insertMedicineToTag(MedicineToTag medicineToTag);
+
+    @Delete
+    void deleteMedicineToTag(MedicineToTag medicineToTag);
+
+    @Query("DELETE FROM MedicineToTag WHERE tagId= :tagId")
+    void deleteMedicineToTagForTag(int tagId);
+
+    @Query("DELETE FROM MedicineToTag WHERE medicineId= :medicineId")
+    void deleteMedicineToTagForMedicine(int medicineId);
+
+    @Query("DELETE FROM Tag")
+    void deleteTags();
+
+    @Query("DELETE FROM MedicineToTag")
+    void deleteMedicineToTags();
+
+    @Query("SELECT * FROM MedicineToTag")
+    LiveData<List<MedicineToTag>> getLiveMedicineToTags();
+
+    @Query("SELECT COUNT(*) FROM Tag")
+    int countTags();
 }

@@ -1,7 +1,7 @@
 package com.futsch1.medtimer
 
 import com.futsch1.medtimer.TestHelper.assertReminded
-import com.futsch1.medtimer.database.MedicineWithReminders
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
@@ -20,14 +20,14 @@ class ReminderSchedulerIntervalUnitTest {
 
         val scheduler = ReminderScheduler(mockTimeAccess)
 
-        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
         reminder.intervalStart = TestHelper.on(1, 120).epochSecond
         reminder.intervalStartsFromProcessed = false
-        medicineWithReminders.reminders.add(reminder)
+        medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
-        medicineList.add(medicineWithReminders)
+        val medicineList: MutableList<FullMedicine> = ArrayList()
+        medicineList.add(medicine)
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()
 
@@ -35,7 +35,7 @@ class ReminderSchedulerIntervalUnitTest {
         assertReminded(
             scheduledReminders,
             TestHelper.on(1, 120),
-            medicineWithReminders.medicine,
+            medicine.medicine,
             reminder
         )
 
@@ -45,7 +45,7 @@ class ReminderSchedulerIntervalUnitTest {
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 600),
-            medicineWithReminders.medicine,
+            medicine.medicine,
             reminder
         )
 
@@ -58,7 +58,7 @@ class ReminderSchedulerIntervalUnitTest {
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 601),
-            medicineWithReminders.medicine,
+            medicine.medicine,
             reminder
         )
     }
@@ -71,14 +71,14 @@ class ReminderSchedulerIntervalUnitTest {
 
         val scheduler = ReminderScheduler(mockTimeAccess)
 
-        val medicineWithReminders = TestHelper.buildMedicineWithReminders(1, "Test")
+        val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
         reminder.intervalStart = TestHelper.on(1, 120).epochSecond
         reminder.intervalStartsFromProcessed = false
-        medicineWithReminders.reminders.add(reminder)
+        fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<MedicineWithReminders> = ArrayList()
-        medicineList.add(medicineWithReminders)
+        val medicineList: MutableList<FullMedicine> = ArrayList()
+        medicineList.add(fullMedicine)
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 600).epochSecond))
@@ -87,7 +87,7 @@ class ReminderSchedulerIntervalUnitTest {
         assertReminded(
             scheduledReminders,
             TestHelper.on(4, 120),
-            medicineWithReminders.medicine,
+            fullMedicine.medicine,
             reminder
         )
     }

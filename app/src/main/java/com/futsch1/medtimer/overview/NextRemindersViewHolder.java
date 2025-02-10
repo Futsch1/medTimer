@@ -47,19 +47,19 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
 
         String nextTime = TimeHelper.toLocalizedDatetimeString(nextReminderText.getContext(), scheduledReminder.timestamp().toEpochMilli() / 1000);
         final int amountStringId = scheduledReminder.reminder().amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
-        nextReminderText.setText(nextReminderText.getContext().getString(amountStringId, scheduledReminder.reminder().amount, scheduledReminder.medicine().name, nextTime));
+        nextReminderText.setText(nextReminderText.getContext().getString(amountStringId, scheduledReminder.reminder().amount, scheduledReminder.medicine().medicine.name, nextTime));
 
         boolean isToday = isToday(scheduledReminder.timestamp().toEpochMilli());
         takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
         skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
 
-        if (scheduledReminder.medicine().useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(nextReminderText), scheduledReminder.medicine().color);
+        if (scheduledReminder.medicine().medicine.useColor) {
+            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(nextReminderText), scheduledReminder.medicine().medicine.color);
         } else {
             ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(nextReminderText));
         }
 
-        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().iconId);
+        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().medicine.iconId);
     }
 
     private void processFutureReminder(ScheduledReminder scheduledReminder, boolean taken, Looper looper, MedicineViewModel medicineViewModel) {

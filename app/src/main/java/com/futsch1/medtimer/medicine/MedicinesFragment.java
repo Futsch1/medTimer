@@ -40,6 +40,7 @@ public class MedicinesFragment extends Fragment {
     @SuppressWarnings("java:S1450")
     private MedicineViewAdapter adapter;
     private HandlerThread thread;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        adapter = new MedicineViewAdapter(new MedicineViewAdapter.MedicineDiff(), thread, requireActivity());
+        adapter = new MedicineViewAdapter(thread, requireActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -71,18 +72,21 @@ public class MedicinesFragment extends Fragment {
 
         setupAddMedicineButton(fragmentView);
 
-        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
-                new MedicineViewModel(requireActivity().getApplication()),
-                this,
-                fragmentView);
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
+        MedicinesMenu medicinesMenu = new MedicinesMenu(medicineViewModel, thread);
+        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner());
 
         // Connect view model to recycler view adapter
         medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
             adapter.submitList(l);
+            medicinesMenu.medicinesList = l;
             startPostponedEnterTransition();
             idlingResource.setInitialized();
         });
+
+        optionsMenu = new OptionsMenu(this,
+                new ViewModelProvider(this).get(MedicineViewModel.class),
+                fragmentView, false);
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentView;
     }
@@ -91,15 +95,18 @@ public class MedicinesFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (thread != null) {
-            thread.quitSafely();
+            thread.quit();
         }
         idlingResource.destroy();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
     }
 
     private void deleteItem(Context context, long itemId, int adapterPosition) {
         DeleteHelper deleteHelper = new DeleteHelper(context);
         deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> {
-            medicineViewModel.deleteMedicine((int) itemId);
+            medicineViewModel.medicineRepository.deleteMedicine((int) itemId);
             adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
@@ -129,7 +136,7 @@ public class MedicinesFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
-                int medicineId = medicineViewModel.insertMedicine(new Medicine(e.toString()));
+                int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(new Medicine(e.toString()));
                 navigateToMedicineId(medicineId);
             }
         });

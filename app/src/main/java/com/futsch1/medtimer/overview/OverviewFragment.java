@@ -42,6 +42,7 @@ public class OverviewFragment extends Fragment {
     private LiveData<List<ReminderEvent>> liveData;
     private HandlerThread thread;
     private Chip showOnlyOpen;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -59,10 +60,9 @@ public class OverviewFragment extends Fragment {
         setupSwipeDelete(latestReminders);
         setupFilterButton();
 
-        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
+        optionsMenu = new OptionsMenu(this,
                 medicineViewModel,
-                this,
-                fragmentOverview);
+                fragmentOverview, false);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentOverview;
@@ -140,10 +140,10 @@ public class OverviewFragment extends Fragment {
             final Handler threadHandler = new Handler(thread.getLooper());
             threadHandler.post(() -> {
 
-                ReminderEvent reminderEvent = medicineViewModel.getReminderEvent((int) itemId);
+                ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) itemId);
                 if (reminderEvent != null) {
                     reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
-                    medicineViewModel.updateReminderEvent(reminderEvent);
+                    medicineViewModel.medicineRepository.updateReminderEvent(reminderEvent);
                     final Handler mainHandler = new Handler(Looper.getMainLooper());
                     mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
                 }
@@ -181,7 +181,10 @@ public class OverviewFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (thread != null) {
-            thread.quitSafely();
+            thread.quit();
+        }
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
         }
     }
 }

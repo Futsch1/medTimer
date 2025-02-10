@@ -198,4 +198,7 @@
     <string name="refill_size">Dolum boyutu</string>
     <string name="refill_now">Şimdi doldurun</string>
     <string name="variable_amount">Alındığında dozajı girin</string>
+    <string name="tags">Etiketler</string>
+    <string name="add_tag">Etiket ekle</string>
+    <string name="are_you_sure_delete_tag">Etiketi silmek istediğinizden emin misiniz?</string>
 </resources>

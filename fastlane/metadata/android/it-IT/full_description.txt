@@ -21,6 +21,7 @@ Gestione dati semplice e sicura:
 - Esporta la cronologia dei tuoi farmaci come file CSV per una facile tenuta dei registri o per la condivisione con i professionisti sanitari.
 - Esegui il backup e il ripristino dell'elenco dei farmaci come file JSON.
 - Monitoraggio delle scorte di farmaci e promemoria di esaurimento scorte.
+- Tagga e filtra i tuoi farmaci.
 
 Privacy e accessibilità offline:
 

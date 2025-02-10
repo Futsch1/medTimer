@@ -6,9 +6,8 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineWithReminders
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -44,7 +43,7 @@ class ManualDose(
         }
     }
 
-    private fun getManualDoseEntries(medicines: List<MedicineWithReminders>): List<ManualDoseEntry> {
+    private fun getManualDoseEntries(medicines: List<FullMedicine>): List<ManualDoseEntry> {
         val lastCustomDose = lastCustomDose!!
         val entries: MutableList<ManualDoseEntry> = ArrayList()
         entries.add(ManualDoseEntry(context.getString(R.string.custom)))
@@ -52,7 +51,7 @@ class ManualDose(
             entries.add(ManualDoseEntry(lastCustomDose))
         }
         for (medicine in medicines) {
-            entries.add(ManualDoseEntry(medicine.medicine, null))
+            entries.add(ManualDoseEntry(medicine, null))
             addInactiveReminders(medicine, entries)
         }
         return entries
@@ -67,6 +66,7 @@ class ManualDose(
         reminderEvent.color = entry.color
         reminderEvent.useColor = entry.useColor
         reminderEvent.iconId = entry.iconId
+        reminderEvent.tags = entry.tags
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
             DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String? ->
@@ -119,6 +119,7 @@ class ManualDose(
         val amount: String?
         val iconId: Int
         val medicineId: Int
+        val tags: List<String>
 
         constructor(name: String) {
             this.name = name
@@ -127,30 +128,32 @@ class ManualDose(
             this.amount = null
             this.iconId = 0
             this.medicineId = -1
+            this.tags = ArrayList()
         }
 
-        constructor(medicine: Medicine, amount: String?) {
+        constructor(medicine: FullMedicine, amount: String?) {
             if (amount != null) {
-                this.name = medicine.name + " (" + amount + ")"
+                this.name = medicine.medicine.name + " (" + amount + ")"
             } else {
-                this.name = medicine.name
+                this.name = medicine.medicine.name
             }
-            this.color = medicine.color
-            this.useColor = medicine.useColor
+            this.color = medicine.medicine.color
+            this.useColor = medicine.medicine.useColor
             this.amount = amount
-            this.iconId = medicine.iconId
-            this.medicineId = medicine.medicineId
+            this.iconId = medicine.medicine.iconId
+            this.medicineId = medicine.medicine.medicineId
+            this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
         }
     }
 
     companion object {
         private fun addInactiveReminders(
-            medicine: MedicineWithReminders,
+            medicine: FullMedicine,
             entries: MutableList<ManualDoseEntry>
         ) {
             for (reminder in medicine.reminders) {
                 if (!isReminderActive(reminder)) {
-                    entries.add(ManualDoseEntry(medicine.medicine, reminder.amount))
+                    entries.add(ManualDoseEntry(medicine, reminder.amount))
                 }
             }
         }

@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 98
-        versionName = "1.15.3"
+        versionCode = 100
+        versionName = "1.16.0"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -92,6 +92,7 @@ dependencies {
     val appIntroVersion = "6.3.1"
     val calendarVersion = "2.6.2"
     val iconDialogVersion = "3.3.0"
+    val flexboxVersion = "3.0.0"
 
     val junitVersion = "5.11.4"
     val mockitoCoreVersion = "5.15.2"
@@ -131,6 +132,7 @@ dependencies {
     implementation("com.maltaisn:icondialog:$iconDialogVersion")
     implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
     implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
+    implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

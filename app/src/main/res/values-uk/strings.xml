@@ -208,4 +208,7 @@
         <item quantity="few">дні</item>
         <item quantity="many">днів</item>
     </plurals>
+    <string name="tags">Теги</string>
+    <string name="add_tag">Додати тег</string>
+    <string name="are_you_sure_delete_tag">Ви впевнені, що хочете видалити тег?</string>
 </resources>

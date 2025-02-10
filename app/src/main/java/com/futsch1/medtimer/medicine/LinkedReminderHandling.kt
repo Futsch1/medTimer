@@ -44,7 +44,7 @@ class LinkedReminderHandling(
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
             linkedReminder.timeInMinutes = minutes
-            medicineViewModel.insertReminder(linkedReminder)
+            medicineViewModel.medicineRepository.insertReminder(linkedReminder)
             fragmentActivity.supportFragmentManager.popBackStack()
         }
     }
@@ -67,12 +67,13 @@ class LinkedReminderHandling(
     private fun internalDelete(
         reminder: Reminder
     ) {
-        val reminders: List<Reminder> = medicineViewModel.getLinkedReminders(reminder.reminderId)
+        val reminders: List<Reminder> =
+            medicineViewModel.medicineRepository.getLinkedReminders(reminder.reminderId)
         for (r in reminders) {
             internalDelete(r)
         }
 
-        medicineViewModel.deleteReminder(reminder.reminderId)
+        medicineViewModel.medicineRepository.deleteReminder(reminder.reminderId)
     }
 }
 

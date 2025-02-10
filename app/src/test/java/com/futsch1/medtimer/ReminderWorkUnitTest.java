@@ -31,6 +31,7 @@ import androidx.work.ListenableWorker;
 import androidx.work.WorkManager;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -52,6 +53,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 
 import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
@@ -114,7 +116,7 @@ public class ReminderWorkUnitTest {
         // Medicine is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
             when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
-            when(mock.getMedicine(medicineId)).thenReturn(null);
+            when(mock.getOnlyMedicine(medicineId)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
@@ -125,7 +127,7 @@ public class ReminderWorkUnitTest {
         // Reminder event is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> {
             when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
-            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("Test"));
+            when(mock.getOnlyMedicine(medicineId)).thenReturn(new Medicine("Test"));
             when(mock.getReminderEvent(reminderEventId)).thenReturn(null);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
@@ -140,7 +142,10 @@ public class ReminderWorkUnitTest {
     public void testDoWorkNotifications() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
             when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
-            when(mock.getMedicine(medicineId)).thenReturn(new Medicine("TestMedicine"));
+            FullMedicine medicine = new FullMedicine();
+            medicine.medicine = new Medicine("TestMedicine");
+            medicine.tags = new ArrayList<>();
+            when(mock.getMedicine(medicineId)).thenReturn(medicine);
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminderId;
             reminderEvent.reminderEventId = reminderEventId;
@@ -187,8 +192,10 @@ public class ReminderWorkUnitTest {
             Reminder reminder = new Reminder(medicineId);
             reminder.reminderId = reminderId;
             when(mock.getReminder(reminderId)).thenReturn(reminder);
-            Medicine medicine = new Medicine("TestMedicine");
-            medicine.iconId = 16;
+            FullMedicine medicine = new FullMedicine();
+            medicine.medicine = new Medicine("TestMedicine");
+            medicine.medicine.iconId = 16;
+            medicine.tags = new ArrayList<>();
             when(mock.getMedicine(medicineId)).thenReturn(medicine);
             when(mock.insertReminderEvent(any())).thenReturn((long) reminderEventId);
         });

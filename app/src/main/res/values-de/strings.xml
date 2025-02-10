@@ -123,7 +123,7 @@
     <string name="intro_overview_description">Auf dem Übersichtsbildschirm können Sie anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Wischen nach rechts bearbeitet und nach links gelöscht werden.\n\n Darüber hinaus können Sie manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
     <string name="intro_analysis_description">Die App speichert alle Ereignisse. Sie können Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
     <string name="show_intro">App-Intro anzeigen</string>
-    <string name="are_you_sure_delete_reminder_event">Sind Sie sicher, dass Sie das Ereignis löschen wollen?</string>
+    <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
     <string name="high">Hoch</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
     <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
@@ -198,4 +198,7 @@
     <string name="refill_size">Packungsgröße</string>
     <string name="refill_now">Jetzt nachfüllen</string>
     <string name="variable_amount">Dosierung bei Einnahme eingeben</string>
+    <string name="tags">Tags</string>
+    <string name="add_tag">Tag hinzufügen</string>
+    <string name="are_you_sure_delete_tag">Tag wirklich löschen?</string>
 </resources>

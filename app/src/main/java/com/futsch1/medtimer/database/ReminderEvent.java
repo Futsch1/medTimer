@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.List;
+
 @Entity
 public class ReminderEvent {
     @PrimaryKey(autoGenerate = true)
@@ -39,6 +41,9 @@ public class ReminderEvent {
     public boolean stockHandled;
     @ColumnInfo(defaultValue = "false")
     public boolean askForAmount;
+    @ColumnInfo(defaultValue = "[]")
+    @Expose
+    public List<String> tags;
 
     public enum ReminderStatus {
         RAISED,

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
@@ -17,31 +18,31 @@ import com.google.gson.Gson
 
 class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Medicine? {
-        return medicineViewModel.getMedicine(id)
+        return medicineViewModel.medicineRepository.getOnlyMedicine(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
-        medicineViewModel.updateMedicine(entity)
+        medicineViewModel.medicineRepository.updateMedicine(entity)
     }
 }
 
 class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Reminder> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Reminder? {
-        return medicineViewModel.getReminder(id)
+        return medicineViewModel.medicineRepository.getReminder(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Reminder) {
-        medicineViewModel.updateReminder(entity)
+        medicineViewModel.medicineRepository.updateReminder(entity)
     }
 }
 
 class ReminderEventEntityInterface : DatabaseEntityEditFragment.EntityInterface<ReminderEvent> {
     override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): ReminderEvent? {
-        return medicineViewModel.getReminderEvent(id)
+        return medicineViewModel.medicineRepository.getReminderEvent(id)
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: ReminderEvent) {
-        medicineViewModel.updateReminderEvent(entity)
+        medicineViewModel.medicineRepository.updateReminderEvent(entity)
     }
 }
 
@@ -68,7 +69,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.thread.start()
-        medicineViewModel = MedicineViewModel(this.requireActivity().application)
+        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -109,17 +110,17 @@ abstract class DatabaseEntityEditFragment<T>(
 
     protected open fun setupMenu(fragmentView: View) {
         val optionsMenu = OptionsMenu(
-            this.requireContext(),
-            MedicineViewModel(requireActivity().application),
             this,
-            fragmentView
+            ViewModelProvider(this)[MedicineViewModel::class.java],
+            fragmentView,
+            true
         )
         requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        thread.quitSafely()
+        thread.quit()
         idlingResource.destroy()
     }
 

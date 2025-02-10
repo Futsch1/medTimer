@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +26,8 @@ import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
+import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine;
+import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -39,6 +42,7 @@ import java.util.List;
 import java.util.Objects;
 
 import kotlin.Unit;
+import kotlinx.coroutines.Dispatchers;
 
 public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         implements IconDialog.Callback {
@@ -76,11 +80,12 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         setupSelectIcon(fragmentView);
         setupNotificationImportance(fragmentView, entity.notificationImportance);
         setupStockButton(fragmentView);
+        setupTagsButton(fragmentView, entity.medicineId);
 
         setupOpenCalendarButton(fragmentView);
         setupAddReminderButton(fragmentView);
 
-        this.getMedicineViewModel().getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), l -> {
+        this.getMedicineViewModel().medicineRepository.getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), l -> {
                     this.sortAndSubmitList(l);
                     this.setFragmentReady();
                 }
@@ -120,7 +125,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
     private @NonNull RecyclerView setupMedicineList(View fragmentView) {
         RecyclerView recyclerView = fragmentView.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(new ReminderViewAdapter.ReminderDiff(), requireActivity(), getThread());
+        adapter = new ReminderViewAdapter(requireActivity(), getThread());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         return recyclerView;
@@ -169,6 +174,15 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         });
     }
 
+    private void setupTagsButton(View fragmentView, int medicineId) {
+        MaterialButton openTags = fragmentView.findViewById(R.id.openTags);
+        openTags.setOnClickListener(v -> {
+            TagDataFromMedicine tagDataFromMedicine = new TagDataFromMedicine(this, medicineId, Dispatchers.getIO());
+            DialogFragment dialog = new TagsFragment(tagDataFromMedicine);
+            dialog.show(getParentFragmentManager(), "tags");
+        });
+    }
+
     private void setupOpenCalendarButton(View fragmentView) {
         MaterialButton openCalendar = fragmentView.findViewById(R.id.openCalendar);
         openCalendar.setOnClickListener(v -> {
@@ -195,11 +209,13 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private void deleteItem(long itemId, int adapterPosition) {
         final Handler threadHandler = new Handler(getThread().getLooper());
         threadHandler.post(() -> {
-            Reminder reminder = this.getMedicineViewModel().getReminder((int) itemId);
-            new LinkedReminderHandling(reminder, this.getMedicineViewModel()).deleteReminder(requireContext(), getThread(), () -> {
-                adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
-                return Unit.INSTANCE;
-            });
+            Reminder reminder = this.getMedicineViewModel().medicineRepository.getReminder((int) itemId);
+            if (reminder != null) {
+                new LinkedReminderHandling(reminder, this.getMedicineViewModel()).deleteReminder(requireContext(), getThread(), () -> {
+                    adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+                    return Unit.INSTANCE;
+                });
+            }
         });
     }
 
@@ -220,7 +236,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 ReminderViewHolder viewHolder = (ReminderViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
-                this.getMedicineViewModel().updateReminder(viewHolder.getReminder());
+                this.getMedicineViewModel().medicineRepository.updateReminder(viewHolder.getReminder());
             }
         }
     }

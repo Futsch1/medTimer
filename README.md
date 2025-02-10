@@ -68,6 +68,7 @@ Simple & Secure Data Management:
   professionals.
 - Backup and restore your medication list as JSON file.
 - Medication stock tracking and out of stock reminders.
+- Tag and filter your medication.
 
 Privacy & Offline Accessibility:
 

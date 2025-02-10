@@ -21,6 +21,7 @@ Simple et efficace Gestion sécurisée des données:
 - Exportez votre historique de médicaments sous forme de fichier CSV pour faciliter la tenue de dossiers ou le partage avec les soins de santé professionnels.
 - Sauvegardez et restaurez votre liste de médicaments sous forme de fichier JSON.
 - Suivi du stock de médicaments et rappels de rupture de stock.
+- Taggez et filtrez vos médicaments.
 
 Confidentialité et confidentialité Accessibilité hors ligne:
 

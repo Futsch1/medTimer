@@ -24,13 +24,11 @@ class EditMedicineMenuProvider(
         menuInflater.inflate(R.menu.edit_medicine, menu)
         menu.setGroupDividerEnabled(true)
 
-        menu.findItem(R.id.activate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        MedicinesMenu.setupActivateMenu(menu, R.id.activate_all) {
             setRemindersActive(true)
-            true
         }
-        menu.findItem(R.id.deactivate_all).setOnMenuItemClickListener { _: MenuItem? ->
+        MedicinesMenu.setupActivateMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
-            true
         }
         setupDeleteMenu(menu)
     }
@@ -39,7 +37,7 @@ class EditMedicineMenuProvider(
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
-                medicineViewModel.deleteMedicine(medicineId)
+                medicineViewModel.medicineRepository.deleteMedicine(medicineId)
                 val navController = findNavController(fragmentEditMedicine)
                 navController.navigateUp()
             }, {
@@ -49,15 +47,14 @@ class EditMedicineMenuProvider(
         }
     }
 
-
     private fun setRemindersActive(active: Boolean) {
         val handler = Handler(thread.getLooper())
         handler.post {
             val reminders: List<Reminder> =
-                medicineViewModel.getReminders(medicineId)
+                medicineViewModel.medicineRepository.getReminders(medicineId)
             for (reminder in reminders) {
                 reminder.active = active
-                medicineViewModel.updateReminder(reminder)
+                medicineViewModel.medicineRepository.updateReminder(reminder)
             }
         }
     }

@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.OptionsMenu;
@@ -24,6 +25,7 @@ public class StatisticsFragment extends Fragment {
     private ChartsFragment chartsFragment;
     private AnalysisDays analysisDays;
     private ActiveStatisticsFragment activeStatisticsFragment;
+    private OptionsMenu optionsMenu = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,13 +44,20 @@ public class StatisticsFragment extends Fragment {
 
         loadActiveFragment(activeStatisticsFragment.getActiveFragment());
 
-        OptionsMenu optionsMenu = new OptionsMenu(this.requireContext(),
-                new MedicineViewModel(requireActivity().getApplication()),
-                this,
-                statisticsView);
+        optionsMenu = new OptionsMenu(this,
+                new ViewModelProvider(this).get(MedicineViewModel.class),
+                statisticsView, true);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
     }
 
     private void setupFragmentButtons(View statisticsView) {

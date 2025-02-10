@@ -16,7 +16,7 @@ public class NextRemindersViewAdapter extends IdlingListAdapter<ScheduledReminde
     private final MedicineViewModel medicineViewModel;
 
     public NextRemindersViewAdapter(@NonNull DiffUtil.ItemCallback<ScheduledReminder> diffCallback, MedicineViewModel medicineViewModel) {
-        super(diffCallback, true);
+        super(diffCallback, "NextRemindersViewAdapter");
         setHasStableIds(true);
         this.medicineViewModel = medicineViewModel;
         this.thread = new HandlerThread("UpdateNextReminder");
@@ -50,7 +50,7 @@ public class NextRemindersViewAdapter extends IdlingListAdapter<ScheduledReminde
         @Override
         public boolean areContentsTheSame(@NonNull ScheduledReminder oldItem, @NonNull ScheduledReminder newItem) {
             return oldItem.reminder().reminderId == newItem.reminder().reminderId && oldItem.timestamp().equals(newItem.timestamp()) &&
-                    oldItem.reminder().amount.equals(newItem.reminder().amount) && oldItem.medicine().iconId == newItem.medicine().iconId;
+                    oldItem.reminder().amount.equals(newItem.reminder().amount) && oldItem.medicine().medicine.iconId == newItem.medicine().medicine.iconId;
         }
     }
 }
