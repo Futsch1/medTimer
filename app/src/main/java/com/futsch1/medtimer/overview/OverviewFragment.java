@@ -62,7 +62,7 @@ public class OverviewFragment extends Fragment {
 
         optionsMenu = new OptionsMenu(this,
                 medicineViewModel,
-                fragmentOverview);
+                fragmentOverview, false);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentOverview;

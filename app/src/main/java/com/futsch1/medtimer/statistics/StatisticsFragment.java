@@ -46,7 +46,7 @@ public class StatisticsFragment extends Fragment {
 
         optionsMenu = new OptionsMenu(this,
                 new ViewModelProvider(this).get(MedicineViewModel.class),
-                statisticsView);
+                statisticsView, true);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;

@@ -34,7 +34,6 @@ import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
-import com.futsch1.medtimer.statistics.StatisticsFragment;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -48,14 +47,16 @@ public class OptionsMenu implements MenuProvider {
     private final View view;
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
+    private final boolean hideFilter;
     private Menu menu;
     private BackupManager backupManager;
 
-    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, View view) {
+    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, View view, boolean hideFilter) {
         this.fragment = fragment;
         this.context = fragment.requireContext();
         this.medicineViewModel = medicineViewModel;
         this.view = view;
+        this.hideFilter = hideFilter;
         this.openFileLauncher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 this.fileSelected(result.getData().getData());
@@ -192,7 +193,7 @@ public class OptionsMenu implements MenuProvider {
     }
 
     private void handleTagFilter() {
-        if (fragment.getClass() != StatisticsFragment.class) {
+        if (!hideFilter) {
             new Handler(backgroundThread.getLooper()).post(() -> {
                 if (medicineViewModel.medicineRepository.hasTags()) {
                     fragment.requireActivity().runOnUiThread(this::setupTagFilter);
