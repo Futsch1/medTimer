@@ -24,6 +24,9 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineHelper;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @SuppressLint("DefaultLocale")
 public class Notifications {
     private final Context context;
@@ -48,7 +51,7 @@ public class Notifications {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(getNotificationString(remindTime, reminder, medicine.medicine))
+                .setContentText(getNotificationString(remindTime, reminder, medicine))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent);
         if (medicine.medicine.iconId != 0) {
@@ -81,7 +84,7 @@ public class Notifications {
         return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private String getNotificationString(String remindTime, Reminder reminder, Medicine medicine) {
+    private String getNotificationString(String remindTime, Reminder reminder, FullMedicine medicine) {
         String instructions = reminder.instructions;
         if (instructions == null) {
             instructions = "";
@@ -90,8 +93,11 @@ public class Notifications {
             instructions = " " + instructions;
         }
         final int amountStringId = reminder.amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
-        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine);
-        return context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
+        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine.medicine);
+        String notificationString = context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
+        @SuppressWarnings("java:S6204")
+        List<String> tagNames = medicine.tags.stream().map(t -> t.name).collect(Collectors.toList());
+        return notificationString + "\n(" + String.join(", ", tagNames) + ")";
     }
 
     private void buildActions(NotificationCompat.Builder builder, int notificationId, int reminderEventId, Reminder reminder) {
