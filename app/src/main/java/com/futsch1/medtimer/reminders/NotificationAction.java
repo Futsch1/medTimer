@@ -38,7 +38,8 @@ public class NotificationAction {
 
         reminderEvent.status = status;
         doStockHandling(context, reminderEvent, medicineRepository);
-        doTimestampHandling(reminderEvent);
+        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+        
         medicineRepository.updateReminderEvent(reminderEvent);
         Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
                 status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
@@ -72,12 +73,6 @@ public class NotificationAction {
             if (reminder != null) {
                 ReminderProcessor.requestStockHandling(context, reminder.amount, reminder.medicineRelId);
             }
-        }
-    }
-
-    private static void doTimestampHandling(ReminderEvent reminderEvent) {
-        if (reminderEvent.processedTimestamp == 0) {
-            reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
         }
     }
 }
