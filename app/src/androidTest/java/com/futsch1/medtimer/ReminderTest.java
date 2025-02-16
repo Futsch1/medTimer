@@ -1,7 +1,10 @@
 package com.futsch1.medtimer;
 
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
@@ -17,18 +20,24 @@ import static com.adevinta.android.barista.interaction.BaristaMenuClickInteracti
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
+import static junit.framework.TestCase.assertEquals;
 
 import android.content.Context;
+import android.widget.TextView;
 
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
+import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ReminderTest extends BaseTestHelper {
     @Test
@@ -204,5 +213,55 @@ public class ReminderTest extends BaseTestHelper {
             expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
             assertContains(R.id.nextReminderText, expectedString);
         }
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void editReminderTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        AndroidTestHelper.createMedicine("Test");
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+
+        clickOn(R.id.logManualDose);
+
+        clickListItem(1);
+
+        writeTo(android.R.id.input, "12");
+        clickDialogPositiveButton();
+        long now = Instant.now().getEpochSecond();
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
+
+        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
+        assertContains(R.id.editEventName, "Test");
+        assertContains(R.id.editEventAmount, "12");
+        assertContains(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, now));
+        assertContains(R.id.editEventRemindedDate, TimeHelper.toLocalizedDateString(context, now));
+        assertContains(R.id.editEventTakenTimestamp, TimeHelper.toLocalizedTimeString(context, now));
+        assertContains(R.id.editEventTakenDate, TimeHelper.toLocalizedDateString(context, now));
+
+        long newReminded = now + 60 * 60 * 24 + 120;
+        writeTo(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, newReminded));
+        writeTo(R.id.editEventRemindedDate, TimeHelper.toLocalizedDateString(context, newReminded));
+
+        long newTaken = now + 60 * 60 * 48 + 180;
+        writeTo(R.id.editEventTakenTimestamp, TimeHelper.toLocalizedTimeString(context, newTaken));
+        writeTo(R.id.editEventTakenDate, TimeHelper.toLocalizedDateString(context, newTaken));
+
+        pressBack();
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
+
+        clickOn(R.id.tableChip);
+
+        AtomicReference<TableView> tableView = new AtomicReference<>();
+        tableView.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.reminder_table));
+
+        TextView view = tableView.get().getCellRecyclerView().findViewWithTag("time");
+        assertEquals(TimeHelper.toLocalizedDatetimeString(context, newReminded), view.getText());
+        view = tableView.get().getCellRecyclerView().findViewWithTag("taken");
+        assertEquals(TimeHelper.toLocalizedDatetimeString(context, newTaken), view.getText());
+
     }
 }

@@ -28,7 +28,6 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -48,7 +47,7 @@ public class ScreenshotsTest extends BaseTestHelper {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());

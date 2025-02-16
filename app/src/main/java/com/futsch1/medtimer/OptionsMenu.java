@@ -215,6 +215,10 @@ public class OptionsMenu implements MenuProvider {
     }
 
     private void setupTagFilter() {
+        if (fragment.getView() == null) {
+            return;
+        }
+        
         MenuItem item = menu.findItem(R.id.tag_filter);
         item.setVisible(true);
         item.setOnMenuItemClickListener(menuItem -> {
