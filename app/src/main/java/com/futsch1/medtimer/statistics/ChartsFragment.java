@@ -59,7 +59,11 @@ public class ChartsFragment extends Fragment {
     }
 
     private void setupMedicinesPerDayChart() {
-        this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView, requireContext(), medicineRepository.getMedicines());
+        try {
+            this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView, requireContext(), medicineRepository.getMedicines());
+        } catch (IllegalStateException e) {
+            // Intentionally empty
+        }
     }
 
     @Override
@@ -82,6 +86,12 @@ public class ChartsFragment extends Fragment {
 
         StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
         requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
+    }
+
+    @Override
+    public void onDestroy() {
+        backgroundThread.quit();
+        super.onDestroy();
     }
 
     public void setDays(int days) {
