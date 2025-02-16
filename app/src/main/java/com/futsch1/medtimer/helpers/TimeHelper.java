@@ -75,7 +75,7 @@ public class TimeHelper {
      */
     public static int durationStringToMinutes(String timeString) {
         try {
-            TemporalAccessor accessor = DateTimeFormatter.ofPattern("HH:mm").parse(timeString);
+            TemporalAccessor accessor = DateTimeFormatter.ofPattern("H:mm").parse(timeString);
             return accessor.get(ChronoField.HOUR_OF_DAY) * 60 + accessor.get(ChronoField.MINUTE_OF_HOUR);
         } catch (DateTimeParseException e) {
             return -1;
