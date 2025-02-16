@@ -49,7 +49,6 @@ public class AndroidTestHelper {
 
         setTime(0, 0, false);
         pressBack();
-        pressBack();
     }
 
     public static void setTime(int hour, int minute, boolean isDeltaTime) {

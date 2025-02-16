@@ -35,6 +35,9 @@ class TimeEditor(
                 hasFocus -> editTime()
             }
         }
+        timeEdit.setOnClickListener {
+            timeEdit.onFocusChangeListener.onFocusChange(timeEdit, true)
+        }
     }
 
     private fun editDuration() {
