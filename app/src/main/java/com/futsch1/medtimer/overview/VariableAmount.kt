@@ -24,7 +24,7 @@ fun variableAmountDialog(
     val amount = intent.getStringExtra(EXTRA_AMOUNT)
     if (reminderEventId != -1) {
         DialogHelper(activity)
-            .title(R.string.log_additional_dose)
+            .title(R.string.amount)
             .hint(R.string.dosage)
             .initialText(amount)
             .textSink { amountLocal: String? ->
