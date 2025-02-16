@@ -24,7 +24,7 @@ public class NotificationAction {
         ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
         if (reminderEvent != null) {
-            if (reminderEvent.askForAmount) {
+            if (reminderEvent.askForAmount && status == ReminderEvent.ReminderStatus.TAKEN) {
                 context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
             } else {
                 processReminderEvent(context, status, reminderEvent, medicineRepository);
