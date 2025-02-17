@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,64 +11,63 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/nextRemindersCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="8dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
-        app:contentPadding="10dp">
+        app:contentPadding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/overviewDivider"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nextRemindersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/next_reminders"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/nextReminders"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nextReminders"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/expandNextReminders"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight="wrap_content_constrained"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nextRemindersText" />
-
-            <Button
-                android:id="@+id/expandNextReminders"
-                style="?attr/materialIconButtonFilledTonalStyle"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:contentDescription="@string/show_all"
-                app:icon="@drawable/chevron_down"
-                app:iconGravity="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nextReminders"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Button
-        android:id="@+id/logManualDose"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:text="@string/log_additional_dose"
-        app:icon="@drawable/capsule" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/overviewDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="8dp"
+        app:dividerInsetEnd="20dp"
+        app:dividerInsetStart="20dp"
+        app:dividerThickness="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <ImageView
+        android:id="@+id/dividerImage"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:src="@drawable/arrows_expand"
+        app:layout_constraintBottom_toBottomOf="@id/overviewDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/overviewDivider" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/latestRemindersCard"
@@ -78,7 +77,10 @@
         android:layout_weight="1"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
-        app:contentPadding="10dp">
+        app:contentPadding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overviewDivider"
+        tools:layout_editor_absoluteX="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,10 +127,27 @@
                 android:id="@+id/latestReminders"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
                 android:contentDescription="@string/recent_events"
+                android:paddingBottom="60dp"
                 android:scrollbars="vertical" />
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/logManualDose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:contentDescription="@string/log_additional_dose"
+        android:text="@string/log_additional_dose"
+        app:icon="@drawable/capsule"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +14,6 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.overview.NextRemindersViewAdapter.ScheduledReminderDiff
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -30,11 +25,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
 ) {
     private val nextRemindersViewAdapter =
         NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
-    private val expandNextReminders: MaterialButton =
-        fragmentView.findViewById(R.id.expandNextReminders)
     private lateinit var reminderEvents: List<ReminderEvent>
-    private var nextRemindersExpanded =
-        fragmentView.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE
     private lateinit var fullMedicines: List<FullMedicine>
 
     init {
@@ -54,23 +45,14 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         }
 
         setupScheduleObservers(parentFragment)
-        setupExpandNextReminders(fragmentView)
     }
 
     private fun updatedNextReminders(scheduledReminders: List<ScheduledReminder>?) {
         if (scheduledReminders.isNullOrEmpty()) {
-            expandNextReminders.visibility = View.GONE
-
             nextRemindersViewAdapter.submitList(ArrayList())
         } else {
-            if (expandNextReminders.context.resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
-                expandNextReminders.visibility = View.GONE
-            } else {
-                expandNextReminders.visibility = View.VISIBLE
-            }
-
             nextRemindersViewAdapter.submitList(
-                if (nextRemindersExpanded) scheduledReminders else scheduledReminders.subList(0, 1)
+                scheduledReminders
             )
         }
     }
@@ -93,17 +75,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         }
     }
 
-    private fun setupExpandNextReminders(fragmentView: View) {
-        val nextRemindersCard = fragmentView.findViewById<MaterialCardView>(R.id.nextRemindersCard)
-        expandNextReminders.setOnClickListener {
-            nextRemindersExpanded = !nextRemindersExpanded
-            adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
-            updatedNextReminders(medicineViewModel.scheduledReminders.value)
-        }
-
-        adaptUIToNextRemindersExpandedState(expandNextReminders, nextRemindersCard)
-    }
-
     private fun changedReminderEvents(reminderEvents: List<ReminderEvent>) {
         this.reminderEvents = reminderEvents
         calculateSchedule()
@@ -112,24 +83,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private fun changedMedicines(fullMedicine: List<FullMedicine>) {
         this.fullMedicines = fullMedicine
         calculateSchedule()
-    }
-
-    private fun adaptUIToNextRemindersExpandedState(
-        expandNextReminders: MaterialButton,
-        nextRemindersCard: MaterialCardView
-    ) {
-        val layoutParams = nextRemindersCard.layoutParams as LinearLayout.LayoutParams
-        if (nextRemindersExpanded) {
-            expandNextReminders.setIconResource(R.drawable.chevron_up)
-            layoutParams.height = 0
-            layoutParams.weight = 1f
-            nextRemindersCard.layoutParams = layoutParams
-        } else {
-            expandNextReminders.setIconResource(R.drawable.chevron_down)
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            layoutParams.weight = 0f
-            nextRemindersCard.layoutParams = layoutParams
-        }
     }
 
     private fun calculateSchedule() {
