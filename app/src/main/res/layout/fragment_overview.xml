@@ -55,19 +55,32 @@
         app:dividerInsetEnd="20dp"
         app:dividerInsetStart="20dp"
         app:dividerThickness="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline" />
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/dividerImage"
+        android:id="@+id/dividerImageUp"
         android:layout_width="wrap_content"
         android:layout_height="10dp"
-        android:src="@drawable/arrows_expand"
-        app:layout_constraintBottom_toBottomOf="@id/overviewDivider"
+        android:layout_marginBottom="-1dp"
+        android:src="@drawable/caret_up_fill"
+        app:layout_constraintBottom_toTopOf="@id/overviewDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/overviewDivider" />
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/dividerImageDown"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginTop="-1dp"
+        android:src="@drawable/caret_down_fill"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overviewDivider"
+        tools:ignore="ContentDescription" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/latestRemindersCard"
@@ -142,7 +155,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="8dp"
-        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:contentDescription="@string/log_additional_dose"
         android:text="@string/log_additional_dose"

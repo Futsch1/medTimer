@@ -3,6 +3,7 @@ package com.futsch1.medtimer.overview;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -135,7 +137,8 @@ public class OverviewFragment extends Fragment {
         MaterialDivider resizeHandle = fragmentOverview.findViewById(R.id.overviewDivider);
         if (resizeHandle != null) {
             resizeHandle.setOnTouchListener(touchDivider(resizeHandle));
-            fragmentOverview.findViewById(R.id.dividerImage).setOnTouchListener(touchDivider(resizeHandle));
+            fragmentOverview.findViewById(R.id.dividerImageDown).setOnTouchListener(touchDivider(resizeHandle));
+            fragmentOverview.findViewById(R.id.dividerImageUp).setOnTouchListener(touchDivider(resizeHandle));
         }
     }
 
@@ -188,10 +191,14 @@ public class OverviewFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     private View.OnTouchListener touchDivider(MaterialDivider resizeHandle) {
+        ImageView dividerImageUp = fragmentOverview.findViewById(R.id.dividerImageUp);
+        ImageView dividerImageDown = fragmentOverview.findViewById(R.id.dividerImageDown);
         return (v, e) -> {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     resizeHandle.setDividerColor(MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorPrimary));
+                    dividerImageDown.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorPrimary));
+                    dividerImageUp.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorPrimary));
                     break;
                 case MotionEvent.ACTION_MOVE:
                     float percentage = getPercentage(e);
@@ -201,6 +208,8 @@ public class OverviewFragment extends Fragment {
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
                     sharedPref.edit().putFloat("overview_divider_percentage", getPercentage(e)).apply();
                     resizeHandle.setDividerColor(MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorOutlineVariant));
+                    dividerImageDown.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorOutlineVariant));
+                    dividerImageUp.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorOutlineVariant));
                     break;
                 default:
                     break;
