@@ -48,16 +48,6 @@
                         android:layout_height="wrap_content"
                         android:scrollbars="vertical" />
 
-                    <Button
-                        android:id="@+id/expandNextReminders"
-                        style="?attr/materialIconButtonFilledTonalStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:contentDescription="@string/show_all"
-                        app:icon="@drawable/chevron_down"
-                        app:iconGravity="textStart"
-                        tools:ignore="TouchTargetSizeCheck" />
-
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

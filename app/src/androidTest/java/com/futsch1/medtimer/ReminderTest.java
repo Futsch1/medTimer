@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
@@ -27,7 +28,10 @@ import android.widget.TextView;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.Until;
 
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -140,6 +144,13 @@ public class ReminderTest extends BaseTestHelper {
     public void reminderTypeTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        UiObject2 divider = device.wait(Until.findObject(By.res(device.getCurrentPackageName(), "overviewDivider")), 2_000);
+        int startX = divider.getVisibleBounds().centerX();
+        int startY = divider.getVisibleBounds().top;
+        int endY = device.getDisplayHeight() / 2;
+        device.swipe(startX, startY, startX, endY, 100);
+
         AndroidTestHelper.createMedicine("Test");
 
         // Standard time based reminder (amount 1)
@@ -197,11 +208,6 @@ public class ReminderTest extends BaseTestHelper {
         assertContains(R.id.nextReminderText, expectedString);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         assertContains(R.id.nextReminderText, expectedString);
-
-        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        if (device.getDisplayWidth() < device.getDisplayHeight()) {
-            clickOn(R.id.expandNextReminders);
-        }
 
         expectedString = context.getString(R.string.reminder_event, "3", "Test", "");
         assertContains(R.id.nextReminderText, expectedString);
