@@ -30,6 +30,7 @@ public class ChartsFragment extends Fragment {
 
     private int days = 0;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         backgroundThread = new HandlerThread("LoadStatistics");
