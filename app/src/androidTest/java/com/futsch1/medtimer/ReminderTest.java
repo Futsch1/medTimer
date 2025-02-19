@@ -145,11 +145,13 @@ public class ReminderTest extends BaseTestHelper {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
-        UiObject2 divider = device.wait(Until.findObject(By.res(device.getCurrentPackageName(), "overviewDivider")), 2_000);
-        int startX = divider.getVisibleBounds().centerX();
-        int startY = divider.getVisibleBounds().top;
-        int endY = device.getDisplayHeight() / 2;
-        device.swipe(startX, startY, startX, endY, 100);
+        if (device.getDisplayWidth() < device.getDisplayHeight()) {
+            UiObject2 divider = device.wait(Until.findObject(By.res(device.getCurrentPackageName(), "overviewDivider")), 2_000);
+            int startX = divider.getVisibleBounds().centerX();
+            int startY = divider.getVisibleBounds().top;
+            int endY = device.getDisplayHeight() / 2;
+            device.swipe(startX, startY, startX, endY, 100);
+        }
 
         AndroidTestHelper.createMedicine("Test");
 
