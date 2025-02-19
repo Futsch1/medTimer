@@ -18,7 +18,7 @@ import com.futsch1.medtimer.database.MedicineRepository;
 import java.util.List;
 
 public class ChartsFragment extends Fragment {
-    private final HandlerThread backgroundThread;
+    private HandlerThread backgroundThread;
     private MedicineRepository medicineRepository;
 
     private PieChart takenSkippedChartView;
@@ -30,8 +30,8 @@ public class ChartsFragment extends Fragment {
 
     private int days = 0;
 
-
-    public ChartsFragment() {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         backgroundThread = new HandlerThread("LoadStatistics");
         backgroundThread.start();
     }
@@ -90,8 +90,8 @@ public class ChartsFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        backgroundThread.quit();
         super.onDestroy();
+        backgroundThread.quit();
     }
 
     public void setDays(int days) {
