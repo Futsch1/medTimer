@@ -193,12 +193,16 @@ public class OverviewFragment extends Fragment {
     private View.OnTouchListener touchDivider(MaterialDivider resizeHandle) {
         ImageView dividerImageUp = fragmentOverview.findViewById(R.id.dividerImageUp);
         ImageView dividerImageDown = fragmentOverview.findViewById(R.id.dividerImageDown);
+        int colorDown = MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorPrimary);
+        ColorStateList colorStateListDown = ColorStateList.valueOf(colorDown);
+        int colorUp = MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorOutlineVariant);
+        ColorStateList colorStateListUp = ColorStateList.valueOf(colorUp);
         return (v, e) -> {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    resizeHandle.setDividerColor(MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorPrimary));
-                    dividerImageDown.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorPrimary));
-                    dividerImageUp.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorPrimary));
+                    resizeHandle.setDividerColor(colorDown);
+                    dividerImageDown.setImageTintList(colorStateListDown);
+                    dividerImageUp.setImageTintList(colorStateListDown);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     float percentage = getPercentage(e);
@@ -207,9 +211,9 @@ public class OverviewFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(fragmentOverview.getContext());
                     sharedPref.edit().putFloat("overview_divider_percentage", getPercentage(e)).apply();
-                    resizeHandle.setDividerColor(MaterialColors.getColor(resizeHandle, com.google.android.material.R.attr.colorOutlineVariant));
-                    dividerImageDown.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorOutlineVariant));
-                    dividerImageUp.setImageTintList(ColorStateList.valueOf(com.google.android.material.R.attr.colorOutlineVariant));
+                    resizeHandle.setDividerColor(colorUp);
+                    dividerImageDown.setImageTintList(colorStateListUp);
+                    dividerImageUp.setImageTintList(colorStateListUp);
                     break;
                 default:
                     break;
