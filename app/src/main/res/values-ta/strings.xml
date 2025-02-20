@@ -202,4 +202,5 @@
     <string name="tags">குறியீடுகள்</string>
     <string name="add_tag">குறியீட்டைச் சேர்</string>
     <string name="are_you_sure_delete_tag">குறியீட்டை நீக்க உறுதியாக இருக்கிறீர்களா?</string>
+    <string name="unit">அலகு</string>
 </resources>

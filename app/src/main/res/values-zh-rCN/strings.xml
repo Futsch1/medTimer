@@ -196,4 +196,5 @@
     <string name="tags">标签</string>
     <string name="add_tag">添加标签</string>
     <string name="are_you_sure_delete_tag">您确定要删除标签吗？</string>
+    <string name="unit">单位</string>
 </resources>

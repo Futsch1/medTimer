@@ -26,7 +26,7 @@ class MedicineHelperTest {
 
     @Test
     fun testFormat() {
-        assertEquals("3.5", MedicineHelper.formatAmount(3.5))
-        assertEquals("5", MedicineHelper.formatAmount(5.0))
+        assertEquals("3.5", MedicineHelper.formatAmount(3.5, ""))
+        assertEquals("5 pills", MedicineHelper.formatAmount(5.0, "pills "))
     }
 }

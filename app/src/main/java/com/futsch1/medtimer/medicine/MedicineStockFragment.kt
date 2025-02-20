@@ -33,6 +33,9 @@ class MedicineStockFragment :
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
                 ?: entity.amount
 
+        entity.unit =
+            fragmentView.findViewById<TextInputEditText>(R.id.stockUnit).text.toString()
+
         entity.outOfStockReminder = stockReminderStringToValue(
             fragmentView.findViewById<AutoCompleteTextView>(R.id.medicineStockReminder).text.toString(),
             this.resources
@@ -48,16 +51,18 @@ class MedicineStockFragment :
 
     override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
         fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-            .setText(MedicineHelper.formatAmount(entity.amount))
+            .setText(MedicineHelper.formatAmount(entity.amount, ""))
         fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).addDoubleValidator()
 
+        fragmentView.findViewById<TextInputEditText>(R.id.stockUnit).setText(entity.unit)
+
         fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold)
-            .setText(MedicineHelper.formatAmount(entity.outOfStockReminderThreshold))
+            .setText(MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, ""))
         fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).addDoubleValidator()
 
         if (entity.refillSizes.isNotEmpty()) {
             fragmentView.findViewById<TextInputEditText>(R.id.refillSize)
-                .setText(MedicineHelper.formatAmount(entity.refillSizes[0]))
+                .setText(MedicineHelper.formatAmount(entity.refillSizes[0], ""))
         }
         fragmentView.findViewById<TextInputEditText>(R.id.refillSize).addDoubleValidator()
 
@@ -87,7 +92,7 @@ class MedicineStockFragment :
         if (amount != null && refillSize != null) {
             amount += refillSize
             fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-                .setText(MedicineHelper.formatAmount(amount))
+                .setText(MedicineHelper.formatAmount(amount, ""))
         }
     }
 }
