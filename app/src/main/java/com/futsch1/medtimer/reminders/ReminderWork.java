@@ -103,7 +103,7 @@ public class ReminderWork extends Worker {
 
         showNotification(medicine, reminderEvent, reminder, reminderDateTime);
 
-        if (reminderEvent.remainingRepeats > 0 && isRepeatReminders()) {
+        if (reminderEvent.remainingRepeats != 0 && isRepeatReminders()) {
             ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
         }
 

@@ -209,4 +209,5 @@
     <string name="add_tag">Добавить метку</string>
     <string name="are_you_sure_delete_tag">Вы уверены, что хотите удалить тег?</string>
     <string name="unit">Единица</string>
+    <string name="unlimited">Неограниченное количество</string>
 </resources>

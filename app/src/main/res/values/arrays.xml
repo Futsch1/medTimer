@@ -102,12 +102,21 @@
         <item>@string/medicine_data</item>
         <item>@string/event_data</item>
     </string-array>
+    <string-array name="repeat_reminders_repetitions">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>@string/unlimited</item>
+    </string-array>
     <string-array name="repeat_reminders_repetitions_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>-1</item>
     </string-array>
     <string-array name="time_between_repetitions_entries">
         <item>@string/minutes_1</item>

@@ -207,4 +207,5 @@
     <string name="add_tag">Ajouter une étiquette</string>
     <string name="are_you_sure_delete_tag">Êtes-vous sûr de vouloir supprimer la balise ?</string>
     <string name="unit">Unité</string>
+    <string name="unlimited">Illimité</string>
 </resources>

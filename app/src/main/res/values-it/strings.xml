@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -208,4 +207,5 @@
     <string name="add_tag">Aggiungi tag</string>
     <string name="are_you_sure_delete_tag">Sei sicuro di voler eliminare il tag?</string>
     <string name="unit">Unità</string>
+    <string name="unlimited">Illimitato</string>
 </resources>

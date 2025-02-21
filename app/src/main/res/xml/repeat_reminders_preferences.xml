@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="3"
-        android:entries="@array/repeat_reminders_repetitions_values"
+        android:entries="@array/repeat_reminders_repetitions"
         android:entryValues="@array/repeat_reminders_repetitions_values"
         app:dependency="repeat_reminders"
         app:key="repeat_reminders_repetitions"

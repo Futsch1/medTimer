@@ -202,4 +202,5 @@
     <string name="add_tag">Label toevoegen</string>
     <string name="are_you_sure_delete_tag">Weet je zeker dat je de tag moet verwijderen?</string>
     <string name="unit">Eenheid</string>
+    <string name="unlimited">Onbeperkt</string>
 </resources>
