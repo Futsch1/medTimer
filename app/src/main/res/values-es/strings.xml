@@ -206,4 +206,5 @@
     <string name="tags">Etiquetas</string>
     <string name="add_tag">Añadir etiqueta</string>
     <string name="are_you_sure_delete_tag">¿Estás seguro de borrar la etiqueta?</string>
+    <string name="unit">Unidad</string>
 </resources>

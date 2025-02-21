@@ -39,6 +39,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickOn(R.id.openStockTracking)
         writeTo(R.id.amountLeft, "10.5")
+        writeTo(R.id.stockUnit, "pills")
         clickOn(R.id.medicineStockReminder)
         onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
             .perform(click())
@@ -98,6 +99,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         assertContains(R.id.medicineName, "⚠")
+        assertContains(R.id.medicineName, "pills")
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
         clickOn(R.id.logManualDose)
@@ -118,5 +120,6 @@ class MedicineStockTest : BaseTestHelper() {
 
         assertContains(R.id.medicineName, "10.5")
         assertNotContains(R.id.medicineName, "⚠")
+        assertContains(R.id.medicineName, "pills")
     }
 }

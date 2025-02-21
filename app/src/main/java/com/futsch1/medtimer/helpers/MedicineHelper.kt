@@ -21,7 +21,7 @@ object MedicineHelper {
         return if (medicine.isStockManagementActive) {
             medicine.name + " (" + context.getString(
                 R.string.medicine_stock_string,
-                formatAmount(medicine.amount),
+                formatAmount(medicine.amount, medicine.unit),
                 if (medicine.amount <= medicine.outOfStockReminderThreshold) " ⚠)" else ")"
             )
         } else {
@@ -30,11 +30,11 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun formatAmount(amount: Double): String {
+    fun formatAmount(amount: Double, unit: String): String {
         val numberFormat = NumberFormat.getNumberInstance()
         numberFormat.minimumFractionDigits = 0
         numberFormat.maximumFractionDigits = 2
-        return numberFormat.format(amount)
+        return numberFormat.format(amount) + if (unit.isEmpty()) "" else " $unit"
     }
 
     fun parseAmount(amount: String): Double? {
