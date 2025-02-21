@@ -37,11 +37,15 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         Preference preference = getPreferenceScreen().findPreference("theme");
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                Intent intent = new Intent(requireActivity(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                requireActivity().finish();
-                startActivity(intent);
-                return true;
+                try {
+                    Intent intent = new Intent(requireActivity(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    requireActivity().finish();
+                    startActivity(intent);
+                    return true;
+                } catch (IllegalStateException e) {
+                    return false;
+                }
             });
         }
     }

@@ -202,4 +202,5 @@
     <string name="add_tag">Tag hinzufügen</string>
     <string name="are_you_sure_delete_tag">Tag wirklich löschen?</string>
     <string name="unit">Einheit</string>
+    <string name="unlimited">Unbegrenzt</string>
 </resources>
