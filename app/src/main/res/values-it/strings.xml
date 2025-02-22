@@ -116,7 +116,6 @@
     <string name="taken_now">Preso ora</string>
     <string name="event_name">Nome dell\'evento</string>
     <string name="edit_event">Modifica evento</string>
-    <string name="show_all">Mostra tutto</string>
     <string name="intro_welcome">Benvenuti su MedTimer!</string>
     <string name="intro_welcome_description">MedTimer è un\'applicazione gratuita e open source per i promemoria dei medicinali, con particolare attenzione alla privacy.\n\nRichiede l\'autorizzazione per mostrare le notifiche dei promemoria dei medicinali.</string>
     <string name="intro_medicine_description">Utilizza la scheda \"Medicinali\" per aggiungere il medicinale che stai assumendo e che desideri ricordare. Scorri verso sinistra per eliminare un medicinale.</string>

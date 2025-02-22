@@ -114,7 +114,6 @@
     <string name="taken_now">Şimdi alındı</string>
     <string name="event_name">Etkinlik adı</string>
     <string name="edit_event">Etkinliği düzenle</string>
-    <string name="show_all">Hepsini göster</string>
     <string name="intro_welcome">MedTimer\'a hoş geldiniz!</string>
     <string name="intro_welcome_description">MedTimer, gizliliğe odaklanan ücretsiz ve açık kaynaklı bir ilaç hatırlatma uygulamasıdır.\n\nİlaç hatırlatıcı bildirimlerini gösterebilmesi için izne ihtiyaç duyar.</string>
     <string name="intro_medicine_description">Aldığınız ve hatırlatılmasını istediğiniz ilaçları oluşturmak için İlaç sekmesini kullanın. Bir ilacı silmek için sola kaydırın.</string>

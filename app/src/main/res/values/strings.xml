@@ -116,7 +116,6 @@
     <string name="taken_now">Taken now</string>
     <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>
-    <string name="show_all">Show all</string>
     <string name="intro_welcome">Welcome to MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is a free and open source medication reminder app with a focus on privacy.\n\nIt requires permission to show notifications for medication reminders.</string>
     <string name="intro_medicine_description">Use the \"Medicine\" tab to create the medicine you are taking and want to be reminded of. Swipe left to delete a medicine.</string>

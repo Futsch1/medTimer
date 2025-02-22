@@ -114,7 +114,6 @@
     <string name="taken_now">Ingenomen</string>
     <string name="event_name">Herinneringennaam</string>
     <string name="edit_event">Herinnering bewerken</string>
-    <string name="show_all">Alles weergeven</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
     <string name="intro_medicine_description">Gebruik het tabblad \"Behandeling\" om de behandeling aan te maken dat je gebruikt en waaraan je herinnerd wilt worden. Veeg naar links om een behandeling te verwijderen.</string>
