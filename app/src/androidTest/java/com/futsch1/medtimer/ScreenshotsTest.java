@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
@@ -79,7 +80,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         Screengrab.screenshot("2");
 
-        clickListItem(R.id.medicineList, 0);
+        onView(withId(R.id.medicineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
         clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
