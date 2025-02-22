@@ -71,6 +71,11 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    lint {
+        abortOnError = true
+        warningsAsErrors = true
+        disable.add("IconLocation")
+    }
 }
 
 dependencies {
