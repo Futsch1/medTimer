@@ -206,4 +206,7 @@
     <string name="are_you_sure_delete_tag">Are you sure to delete the tag?</string>
     <string name="unit">Unit</string>
     <string name="unlimited">Unlimited</string>
+    <string name="override_dnd">Always play notification sound</string>
+    <string name="override_dnd_summary">Plays notifications sound if only vibrate is on or do not disturb with not vibrate or muted</string>
+    <string name="enable_dnd_dialog">In order to allow always playing notification sounds, enable Do not disturb access for MedTimer in the following menu</string>
 </resources>
