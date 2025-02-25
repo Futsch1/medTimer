@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.preference.PreferenceManager
@@ -78,7 +79,9 @@ class NotificationSoundManager(val context: Context) {
                                 AudioManager.ADJUST_MUTE,
                                 0
                             )
-                            audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
+                            if (Build.VERSION.SDK_INT > 28) {
+                                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
+                            }
                         }
                         pending = false
                         scheduledRunnable = null

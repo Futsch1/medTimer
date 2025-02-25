@@ -207,4 +207,7 @@
     <string name="are_you_sure_delete_tag">Êtes-vous sûr de vouloir supprimer la balise ?</string>
     <string name="unit">Unité</string>
     <string name="unlimited">Illimité</string>
+    <string name="override_dnd">Toujours jouer le son de la notification</string>
+    <string name="override_dnd_summary">Joue le son des notifications si seul le vibreur est activé ou ne pas déranger sans le vibreur ou la sourdine</string>
+    <string name="enable_dnd_dialog">Pour que les sons de notification soient toujours diffusés, activez l&amp;apos;accès Ne pas déranger pour MedTimer dans le menu suivant</string>
 </resources>

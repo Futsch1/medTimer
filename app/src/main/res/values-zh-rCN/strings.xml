@@ -197,4 +197,7 @@
     <string name="are_you_sure_delete_tag">您确定要删除标签吗？</string>
     <string name="unit">单位</string>
     <string name="unlimited">无限制</string>
+    <string name="override_dnd">始终播放通知声音</string>
+    <string name="override_dnd_summary">如果只开启振动，则播放通知音；如果未开启振动或静音，则播放勿扰音</string>
+    <string name="enable_dnd_dialog">为了允许始终播放通知声音，请在以下菜单中为 MedTimer 启用请勿打扰访问功能</string>
 </resources>

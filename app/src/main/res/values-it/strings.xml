@@ -207,4 +207,7 @@
     <string name="are_you_sure_delete_tag">Sei sicuro di voler eliminare il tag?</string>
     <string name="unit">Unità</string>
     <string name="unlimited">Illimitato</string>
+    <string name="override_dnd">Riprodurre sempre il suono di notifica</string>
+    <string name="override_dnd_summary">Riproduce il suono delle notifiche se è attiva solo la vibrazione o non disturbare senza vibrazione o silenziamento</string>
+    <string name="enable_dnd_dialog">Per consentire la riproduzione continua dei suoni di notifica, attivare l&amp;apos;accesso Non disturbare per MedTimer nel seguente menu</string>
 </resources>

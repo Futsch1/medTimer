@@ -202,4 +202,7 @@
     <string name="are_you_sure_delete_tag">Etiketi silmek istediğinizden emin misiniz?</string>
     <string name="unit">Birim</string>
     <string name="unlimited">Sınırsız</string>
+    <string name="override_dnd">Her zaman bildirim sesini çal</string>
+    <string name="override_dnd_summary">Sadece titreşim açıksa bildirim sesi çalar veya titreşim veya sessiz olmadan rahatsız etmeyin</string>
+    <string name="enable_dnd_dialog">Bildirim seslerinin her zaman çalınmasına izin vermek için, aşağıdaki menüde MedTimer için Rahatsız etmeyin erişimini etkinleştirin</string>
 </resources>

@@ -202,4 +202,7 @@
     <string name="are_you_sure_delete_tag">Tag wirklich löschen?</string>
     <string name="unit">Einheit</string>
     <string name="unlimited">Unbegrenzt</string>
+    <string name="override_dnd">Benachrichtigungston immer abspielen</string>
+    <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder stumm</string>
+    <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktivieren Sie den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
 </resources>

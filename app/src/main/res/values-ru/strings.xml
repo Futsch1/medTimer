@@ -209,4 +209,7 @@
     <string name="are_you_sure_delete_tag">Вы уверены, что хотите удалить тег?</string>
     <string name="unit">Единица</string>
     <string name="unlimited">Неограниченное количество</string>
+    <string name="override_dnd">Всегда воспроизводите звук уведомления</string>
+    <string name="override_dnd_summary">Воспроизводит звук уведомлений, если включена только вибрация или не беспокоить без вибрации или отключения звука</string>
+    <string name="enable_dnd_dialog">Чтобы разрешить постоянное воспроизведение звуков уведомлений, включите доступ &amp;quot;Не беспокоить&amp;quot; для MedTimer в следующем меню</string>
 </resources>
