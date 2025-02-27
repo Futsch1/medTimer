@@ -89,8 +89,10 @@ class NotificationSoundManager(val context: Context) {
                 }
                 handler.postDelayed(scheduledRunnable!!, 5000)
             } else {
-                handler.removeCallbacks(scheduledRunnable!!)
-                handler.postDelayed(scheduledRunnable!!, 5000)
+                if (scheduledRunnable != null) {
+                    handler.removeCallbacks(scheduledRunnable!!)
+                    handler.postDelayed(scheduledRunnable!!, 5000)
+                }
             }
         }
     }
