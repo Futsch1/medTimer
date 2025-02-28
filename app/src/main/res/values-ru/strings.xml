@@ -118,7 +118,6 @@
     <string name="taken_now">Принято сейчас</string>
     <string name="event_name">Название события</string>
     <string name="edit_event">Изменить событие</string>
-    <string name="show_all">Показать все</string>
     <string name="intro_welcome">Добро пожаловать в MedTimer!</string>
     <string name="intro_welcome_description">MedTimer — это свободное приложение для напоминания о приеме лекарств с открытым исходным кодом, в котором особое внимание уделяется конфиденциальности.\n\nДля показа уведомлений о напоминаниях о приеме лекарств требуется разрешение.</string>
     <string name="intro_medicine_description">Используйте вкладку \"Лекарства\", чтобы создать лекарство, которое вы принимаете и о котором хотите напомнить. Проведите пальцем влево, чтобы удалить лекарство.</string>
@@ -210,4 +209,7 @@
     <string name="are_you_sure_delete_tag">Вы уверены, что хотите удалить тег?</string>
     <string name="unit">Единица</string>
     <string name="unlimited">Неограниченное количество</string>
+    <string name="override_dnd">Всегда воспроизводите звук уведомления</string>
+    <string name="override_dnd_summary">Воспроизводит звук уведомлений, если включена только вибрация или не беспокоить без вибрации или отключения звука</string>
+    <string name="enable_dnd_dialog">Чтобы разрешить постоянное воспроизведение звуков уведомлений, включите доступ &amp;quot;Не беспокоить&amp;quot; для MedTimer в следующем меню</string>
 </resources>

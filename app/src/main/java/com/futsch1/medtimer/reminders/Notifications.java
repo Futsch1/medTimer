@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -43,7 +44,6 @@ public class Notifications {
         int notificationId = getNextNotificationId();
         ReminderNotificationChannelManager.Importance importance = (medicine.medicine.notificationImportance == ReminderNotificationChannelManager.Importance.HIGH.getValue()) ? ReminderNotificationChannelManager.Importance.HIGH : ReminderNotificationChannelManager.Importance.DEFAULT;
         Color color = medicine.medicine.useColor ? Color.valueOf(medicine.medicine.color) : null;
-        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
@@ -53,6 +53,7 @@ public class Notifications {
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(getNotificationString(remindTime, reminder, medicine))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(Notification.CATEGORY_REMINDER)
                 .setContentIntent(contentIntent);
         if (medicine.medicine.iconId != 0) {
             MedicineIcons icons = new MedicineIcons(context);
@@ -64,7 +65,7 @@ public class Notifications {
 
         buildActions(builder, notificationId, reminderEvent.reminderEventId, reminder);
 
-        notificationManager.notify(notificationId, builder.build());
+        notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
 
         return notificationId;
@@ -130,6 +131,16 @@ public class Notifications {
         }
     }
 
+    private void notify(int notificationId, Notification notification) {
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+
+        NotificationSoundManager soundManager = new NotificationSoundManager(context);
+
+        notificationManager.notify(notificationId, notification);
+
+        soundManager.restore();
+    }
+
     private PendingIntent getSnoozePendingIntent(Context context, int reminderId, int reminderEventId, int notificationId, int snoozeTime) {
         if (snoozeTime == -1) {
             Intent snooze = ReminderProcessor.getCustomSnoozeActionIntent(context, reminderId, reminderEventId, notificationId);
@@ -176,5 +187,4 @@ public class Notifications {
         notificationManager.notify(notificationId, builder.build());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
     }
-
 }

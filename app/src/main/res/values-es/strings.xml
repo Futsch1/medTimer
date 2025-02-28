@@ -116,7 +116,6 @@
     <string name="taken_now">Tomado ahora</string>
     <string name="event_name">Nombre del evento</string>
     <string name="edit_event">Editar evento</string>
-    <string name="show_all">Mostrar todo</string>
     <string name="intro_welcome">¡Bienvenido a MedTimer!</string>
     <string name="intro_welcome_description">MedTimer es una aplicación de recordatorio de medicación gratuita y de código abierto centrada en la privacidad.\n\nRequiere permiso para mostrar notificaciones de recordatorios de medicación.</string>
     <string name="intro_medicine_description">Utilice la pestaña \"Medicación\" para crear el medicamento que está tomando y que desea que se le recuerde. Desliza el dedo hacia la izquierda para eliminar un medicamento.</string>
@@ -208,4 +207,7 @@
     <string name="are_you_sure_delete_tag">¿Estás seguro de borrar la etiqueta?</string>
     <string name="unit">Unidad</string>
     <string name="unlimited">Sin límites</string>
+    <string name="override_dnd">Reproducir siempre el sonido de notificación</string>
+    <string name="override_dnd_summary">Reproduce el sonido de las notificaciones si sólo está activada la vibración o no molestar sin vibración ni silencio</string>
+    <string name="enable_dnd_dialog">Para permitir la reproducción permanente de sonidos de notificación, active el acceso No molestar para MedTimer en el siguiente menú</string>
 </resources>

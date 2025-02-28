@@ -117,7 +117,6 @@
     <string name="taken_now">Preso ora</string>
     <string name="event_name">Nome dell\'evento</string>
     <string name="edit_event">Modifica evento</string>
-    <string name="show_all">Mostra tutto</string>
     <string name="intro_welcome">Benvenuti su MedTimer!</string>
     <string name="intro_welcome_description">MedTimer è un\'applicazione gratuita e open source per i promemoria dei medicinali, con particolare attenzione alla privacy.\n\nRichiede l\'autorizzazione per mostrare le notifiche dei promemoria dei medicinali.</string>
     <string name="intro_medicine_description">Utilizza la scheda \"Medicinali\" per aggiungere il medicinale che stai assumendo e che desideri ricordare. Scorri verso sinistra per eliminare un medicinale.</string>
@@ -209,4 +208,7 @@
     <string name="are_you_sure_delete_tag">Sei sicuro di voler eliminare il tag?</string>
     <string name="unit">Unità</string>
     <string name="unlimited">Illimitato</string>
+    <string name="override_dnd">Riprodurre sempre il suono di notifica</string>
+    <string name="override_dnd_summary">Riproduce il suono delle notifiche se è attiva solo la vibrazione o non disturbare senza vibrazione o silenziamento</string>
+    <string name="enable_dnd_dialog">Per consentire la riproduzione continua dei suoni di notifica, attivare l&amp;apos;accesso Non disturbare per MedTimer nel seguente menu</string>
 </resources>

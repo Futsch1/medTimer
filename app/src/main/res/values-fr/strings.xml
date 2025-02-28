@@ -116,7 +116,6 @@
     <string name="taken_now">Pris maintenant</string>
     <string name="event_name">Nom de l\'événement</string>
     <string name="edit_event">Modifier l\'événement</string>
-    <string name="show_all">Afficher tout</string>
     <string name="intro_welcome">Bienvenue à MedTimer!</string>
     <string name="intro_welcome_description">MedTimer est une application gratuite et open source de rappel de prise de médicaments qui met l\'accent sur la protection de la vie privée.\n\nIl faut une autorisation pour afficher les notifications de rappel de prise de médicaments.</string>
     <string name="intro_medicine_description">Utilisez l\'onglet \"Médicaments\" pour créer le médicament que vous prenez et dont vous voulez qu\'on vous rappelle la prise. Glissez vers la gauche pour supprimer un médicament.</string>
@@ -208,4 +207,7 @@
     <string name="are_you_sure_delete_tag">Êtes-vous sûr de vouloir supprimer la balise ?</string>
     <string name="unit">Unité</string>
     <string name="unlimited">Illimité</string>
+    <string name="override_dnd">Toujours jouer le son de la notification</string>
+    <string name="override_dnd_summary">Joue le son des notifications si seul le vibreur est activé ou ne pas déranger sans le vibreur ou la sourdine</string>
+    <string name="enable_dnd_dialog">Pour que les sons de notification soient toujours diffusés, activez l&amp;apos;accès Ne pas déranger pour MedTimer dans le menu suivant</string>
 </resources>

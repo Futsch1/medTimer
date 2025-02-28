@@ -112,7 +112,6 @@
     <string name="taken_now">Знято зараз</string>
     <string name="event_name">Назва події</string>
     <string name="edit_event">Редагувати подію</string>
-    <string name="show_all">Показати всі</string>
     <string name="intro_welcome">Ласкаво просимо до MedTimer!</string>
     <string name="intro_welcome_description">MedTimer - це безкоштовна програма з відкритим вихідним кодом для нагадування про прийом ліків з акцентом на конфіденційність.\n\nДля показу сповіщень про нагадування про прийом ліків потрібен дозвіл.</string>
     <string name="intro_medicine_description">Використовуйте вкладку &amp;quot;Ліки&amp;quot;, щоб створити ліки, які ви приймаєте і про які хочете отримувати нагадування. Проведіть вліво, щоб видалити ліки.</string>
@@ -213,4 +212,7 @@
     <string name="are_you_sure_delete_tag">Ви впевнені, що хочете видалити тег?</string>
     <string name="unit">Одиниця</string>
     <string name="unlimited">Необмежена</string>
+    <string name="override_dnd">Завжди вмикати звук сповіщень</string>
+    <string name="override_dnd_summary">Відтворення звуку сповіщень, якщо увімкнено лише вібрацію, або не турбувати без вібрації чи без звуку</string>
+    <string name="enable_dnd_dialog">Щоб увімкнути постійне відтворення звуків сповіщень, увімкніть опцію Не турбувати доступ для MedTimer у наступному меню</string>
 </resources>
