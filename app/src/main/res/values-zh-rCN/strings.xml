@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -116,7 +117,7 @@
     <string name="intro_welcome_description">MedTimer 注重隐私、开源免费，提醒你按时服药。\n\n请授予权限以显示服药提醒通知。</string>
     <string name="intro_medicine_description">在“药品”页面创建你服用的药物，并可设置提醒。向左滑动即可删除药品。</string>
     <string name="intro_reminder_description">选择一个药品可以编辑详细信息，可以创建不同剂量的多个提醒。\n\n可以指定时间每天提醒一次，亦可设置连续服药、间隔停药的天数。</string>
-    <string name="intro_notification_description">根据您设置的提醒时间，将准时通知您服药，可以选择已服用（点击“已服用”按钮）、跳过本次服药（关闭这条通知）或稍后提醒</string>
+    <string name="intro_notification_description">到了设定的提醒时间，会出现一则通知，提供三种操作选项。标记为已服用（单击“已服用”按钮），跳过（关闭此通知），或一段时间后再次提醒（“打盹”）。</string>
     <string name="intro_overview_description">在主页会显示下次服药提醒与近期服药记录。向右滑动以编辑服药记录，向左滑动以删除服药记录。\n\n此外，也可以手动记录已添加药品或未添加药品的单次服药记录。</string>
     <string name="intro_analysis_description">所有服药记录储存于本地。您可以在“分析”页面中查看过去的用药情况，也可以通过 更多（三个点）菜单导出历史记录。即使药品、服药记录被删除或重命名，已导出的历史记录也会保留。</string>
     <string name="show_intro">查看使用说明</string>
@@ -182,7 +183,7 @@
     <string name="off">关闭</string>
     <string name="once_below_threshold">低于设定值时提醒一次</string>
     <string name="always_below_threshold">低于设定值时总是提醒</string>
-    <string name="out_of_stock_notification">【%1$s】余量不足，仅剩【%2$s】!</string>
+    <string name="out_of_stock_notification">%1$s 只剩下 %2$s 了！\n请考虑马上重新配药。</string>
     <string name="medicine_stock_string">还剩 %1$s 粒 %2$s</string>
     <string name="out_of_stock_notification_title">药品低余量提醒</string>
     <string name="medicine_stock">药品余量</string>
