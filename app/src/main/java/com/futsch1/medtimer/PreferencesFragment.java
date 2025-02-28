@@ -167,6 +167,11 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
+        resumeExactReminders();
+        resumeOverrideDnd();
+    }
+
+    private void resumeExactReminders() {
         SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
         if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
@@ -174,7 +179,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 preference.setChecked(false);
             }
         }
+    }
 
+    private void resumeOverrideDnd() {
+        SwitchPreferenceCompat preference;
         preference = getPreferenceScreen().findPreference(PreferencesNames.OVERRIDE_DND);
         if (preference != null && !requireContext().getSystemService(NotificationManager.class).isNotificationPolicyAccessGranted()) {
             preference.setChecked(false);

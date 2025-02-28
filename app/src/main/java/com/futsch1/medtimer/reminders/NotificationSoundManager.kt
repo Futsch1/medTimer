@@ -16,19 +16,12 @@ class NotificationSoundManager(val context: Context) {
         context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     init {
-        if (notificationManager.isNotificationPolicyAccessGranted()) {
-            if (PreferenceManager.getDefaultSharedPreferences(context)
-                    .getBoolean(PreferencesNames.OVERRIDE_DND, false)
-            ) {
-                loadPendingRingerMode(audioManager, notificationManager)
-            } else {
-                notificationManager.notificationPolicy = NotificationManager.Policy(
-                    0,
-                    NotificationManager.Policy.PRIORITY_SENDERS_ANY,
-                    NotificationManager.Policy.PRIORITY_SENDERS_ANY
-                )
-
-            }
+        if (notificationManager.isNotificationPolicyAccessGranted() && PreferenceManager.getDefaultSharedPreferences(
+                context
+            )
+                .getBoolean(PreferencesNames.OVERRIDE_DND, false)
+        ) {
+            loadPendingRingerMode(audioManager, notificationManager)
         }
     }
 
@@ -57,10 +50,11 @@ class NotificationSoundManager(val context: Context) {
                     )
                     pendingWasMuted = true
                 }
+                val policy = notificationManager.notificationPolicy
                 notificationManager.notificationPolicy = NotificationManager.Policy(
-                    NotificationManager.Policy.PRIORITY_CATEGORY_REMINDERS,
-                    NotificationManager.Policy.PRIORITY_SENDERS_ANY,
-                    NotificationManager.Policy.PRIORITY_SENDERS_ANY,
+                    policy.priorityCategories or NotificationManager.Policy.PRIORITY_CATEGORY_REMINDERS,
+                    policy.priorityCallSenders,
+                    policy.priorityMessageSenders,
                     0
                 )
             }
@@ -70,30 +64,28 @@ class NotificationSoundManager(val context: Context) {
         fun restorePendingRingerMode(
             audioManager: AudioManager
         ) {
-            if (pending) {
-                if (scheduledRunnable == null) {
-                    scheduledRunnable = Runnable {
-                        if (pendingWasMuted) {
-                            audioManager.adjustStreamVolume(
-                                AudioManager.STREAM_RING,
-                                AudioManager.ADJUST_MUTE,
-                                0
-                            )
-                            if (Build.VERSION.SDK_INT > 28) {
-                                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
-                            }
-                        }
-                        pending = false
-                        scheduledRunnable = null
-                    }
-                }
+            if (pending && scheduledRunnable == null) {
+                scheduledRunnable = createRunnable(audioManager)
+            }
+            if (scheduledRunnable != null) {
+                handler.removeCallbacks(scheduledRunnable!!)
                 handler.postDelayed(scheduledRunnable!!, 5000)
-            } else {
-                if (scheduledRunnable != null) {
-                    handler.removeCallbacks(scheduledRunnable!!)
-                    handler.postDelayed(scheduledRunnable!!, 5000)
+            }
+        }
+
+        private fun createRunnable(audioManager: AudioManager) = Runnable {
+            if (pendingWasMuted) {
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_RING,
+                    AudioManager.ADJUST_MUTE,
+                    0
+                )
+                if (Build.VERSION.SDK_INT > 28) {
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
                 }
             }
+            pending = false
+            scheduledRunnable = null
         }
     }
 }
