@@ -98,6 +98,7 @@ dependencies {
     val calendarVersion = "2.6.2"
     val iconDialogVersion = "3.3.0"
     val flexboxVersion = "3.0.0"
+    val biometricVersion = "1.1.0"
 
     val junitVersion = "5.12.0"
     val mockitoCoreVersion = "5.15.2"
@@ -138,6 +139,8 @@ dependencies {
     implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
     implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
     implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
+    implementation("androidx.biometric:biometric:$biometricVersion")
+
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

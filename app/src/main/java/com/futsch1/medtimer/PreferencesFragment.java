@@ -32,6 +32,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupPreferencesLink("repeat_reminders_preferences", R.id.action_preferencesFragment_to_repeatRemindersPreferencesFragment);
         setupPreferencesLink("weekend_mode", R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
         setupBlockScreenCapture();
+        setupAppAuthentication();
     }
 
     private void setupTheme() {
@@ -111,6 +112,13 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 requireActivity().getWindow().setFlags(Boolean.TRUE.equals(newValue) ? WindowManager.LayoutParams.FLAG_SECURE : 0, WindowManager.LayoutParams.FLAG_SECURE);
                 return true;
             });
+        }
+    }
+
+    private void setupAppAuthentication() {
+        Preference preference = getPreferenceScreen().findPreference("app_authentication");
+        if (preference != null) {
+            preference.setEnabled(new Biometrics(this.requireContext()).hasBiometrics());
         }
     }
 

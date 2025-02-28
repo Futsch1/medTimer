@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -211,4 +210,5 @@
     <string name="override_dnd">Riprodurre sempre il suono di notifica</string>
     <string name="override_dnd_summary">Riproduce il suono delle notifiche se è attiva solo la vibrazione o non disturbare senza vibrazione o silenziamento</string>
     <string name="enable_dnd_dialog">Per consentire la riproduzione continua dei suoni di notifica, attivare l&amp;apos;accesso Non disturbare per MedTimer nel seguente menu</string>
+    <string name="app_authentication">Richiedere l&amp;apos;autenticazione per aprire l&amp;apos;app</string>
 </resources>

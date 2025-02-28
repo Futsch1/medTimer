@@ -215,4 +215,5 @@
     <string name="override_dnd">Завжди вмикати звук сповіщень</string>
     <string name="override_dnd_summary">Відтворення звуку сповіщень, якщо увімкнено лише вібрацію, або не турбувати без вібрації чи без звуку</string>
     <string name="enable_dnd_dialog">Щоб увімкнути постійне відтворення звуків сповіщень, увімкніть опцію Не турбувати доступ для MedTimer у наступному меню</string>
+    <string name="app_authentication">Вимагати автентифікацію для відкриття програми</string>
 </resources>

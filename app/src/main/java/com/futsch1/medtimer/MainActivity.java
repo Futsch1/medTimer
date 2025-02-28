@@ -24,6 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
+import kotlin.Unit;
+
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
@@ -49,11 +51,18 @@ public class MainActivity extends AppCompatActivity {
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
-        setContentView(R.layout.activity_main);
-
-        setupNavigation();
-
-        ActivityIntentKt.dispatch(this, this.getIntent());
+        if (sharedPref.getBoolean("app_authentication", false)) {
+            new Biometrics(this).authenticate(this,
+                    () -> {
+                        start();
+                        return Unit.INSTANCE;
+                    }, () -> {
+                        this.finish();
+                        return Unit.INSTANCE;
+                    });
+        } else {
+            start();
+        }
     }
 
     private void showIntro(SharedPreferences sharedPref) {
@@ -63,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
             sharedPref.edit().putBoolean("intro_shown", true).apply();
         } else {
             checkPermissions();
+        }
+    }
+
+    private void start() {
+
+        setContentView(R.layout.activity_main);
+        setupNavigation();
+
+        ActivityIntentKt.dispatch(this, this.getIntent());
+    }
+
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            new RequestPostNotificationPermission(this).requestPermission();
         }
     }
 
@@ -82,12 +105,6 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.onNavDestinationSelected(item, navController);
             return true;
         });
-    }
-
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            new RequestPostNotificationPermission(this).requestPermission();
-        }
     }
 
     @Override
