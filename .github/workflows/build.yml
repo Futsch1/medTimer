@@ -41,7 +41,7 @@ jobs:
             -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $AAB_RELEASE_DIRECTORY/MedTimer-release.aab ${{ secrets.SIGNING_ALIAS }}
         continue-on-error: true
       - name: Upload App Bundle
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: aab
           path: ${{env.AAB_RELEASE_DIRECTORY}}/MedTimer-release.aab
@@ -63,14 +63,14 @@ jobs:
         continue-on-error: true
       - name: Upload App Package
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: apk
           path: ${{env.APK_RELEASE_DIRECTORY}}/MedTimer-release-signed.apk
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87 # v1.15.0
+        uses: ncipollo/release-action@440c8c1cb0ed28b9f43e4d1d670870f059653174 # v1.16.0
         with:
           artifacts: "app/build/outputs/bundle/release/*.aab,app/build/outputs/apk/release/*.apk"
           generateReleaseNotes: true
