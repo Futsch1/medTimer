@@ -52,11 +52,11 @@ class Biometrics(val context: Context) {
             })
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric login for my app")
-            .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Use account password")
+            .setTitle(context.getString(R.string.login))
+            .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
             .build()
 
+        @Suppress("kotlin:S6293") // No cryptography required inside app, only use authentication to protect app access
         biometricPrompt.authenticate(promptInfo)
     }
 }

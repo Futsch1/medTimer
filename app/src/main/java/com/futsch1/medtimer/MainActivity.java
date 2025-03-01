@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void start() {
-
         setContentView(R.layout.activity_main);
         setupNavigation();
 

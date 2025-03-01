@@ -211,4 +211,5 @@
     <string name="override_dnd_summary">Reproduce el sonido de las notificaciones si sólo está activada la vibración o no molestar sin vibración ni silencio</string>
     <string name="enable_dnd_dialog">Para permitir la reproducción permanente de sonidos de notificación, active el acceso No molestar para MedTimer en el siguiente menú</string>
     <string name="app_authentication">Requiere autenticación para abrir la aplicación</string>
+    <string name="login">Inicio de sesión en MedTimer mediante autenticación biométrica</string>
 </resources>

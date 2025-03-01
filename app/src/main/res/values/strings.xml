@@ -210,4 +210,5 @@
     <string name="override_dnd_summary">Plays notifications sound if only vibrate is on or do not disturb without vibrate or mute</string>
     <string name="enable_dnd_dialog">In order to allow always playing notification sounds, enable Do not disturb access for MedTimer in the following menu</string>
     <string name="app_authentication">Require authentication to open the app</string>
+    <string name="login">Login to MedTimer using biometric authentication</string>
 </resources>

@@ -206,4 +206,5 @@
     <string name="override_dnd_summary">Speelt meldingen af als alleen trillen is ingeschakeld of niet storen zonder trillen of dempen</string>
     <string name="enable_dnd_dialog">Als u wilt dat meldingsgeluiden altijd worden afgespeeld, schakelt u de toegang Niet storen voor MedTimer in het volgende menu in</string>
     <string name="app_authentication">Verificatie vereist om de app te openen</string>
+    <string name="login">Aanmelden bij MedTimer met biometrische verificatie</string>
 </resources>
