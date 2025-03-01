@@ -114,7 +114,6 @@
     <string name="taken_now">Jetzt eingenommen</string>
     <string name="event_name">Ereignisname</string>
     <string name="edit_event">Ereignis bearbeiten</string>
-    <string name="show_all">Alle anzeigen</string>
     <string name="intro_welcome">Willkommen bei MedTimer!</string>
     <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf dem Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen, um an Medikamente zu erinnern.</string>
     <string name="intro_medicine_description">Verwenden Sie die Registerkarte \"Medikamente\" um das Medikament zu erstellen, das Sie einnehmen und an das Sie erinnert werden möchten. Wischen Sie nach links, um ein Medikament zu löschen.</string>
@@ -203,4 +202,7 @@
     <string name="are_you_sure_delete_tag">Tag wirklich löschen?</string>
     <string name="unit">Einheit</string>
     <string name="unlimited">Unbegrenzt</string>
+    <string name="override_dnd">Benachrichtigungston immer abspielen</string>
+    <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder stumm</string>
+    <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktivieren Sie den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
 </resources>

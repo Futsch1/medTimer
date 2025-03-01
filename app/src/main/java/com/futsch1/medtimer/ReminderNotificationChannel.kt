@@ -17,6 +17,10 @@ class ReminderNotificationChannel(
     private var notificationChannel: NotificationChannel =
         getOrCreateChannel()
 
+    init {
+        notificationChannel.setBypassDnd(true)
+    }
+
     private fun getOrCreateChannel(): NotificationChannel {
         return notificationManager.getNotificationChannel(importance.toString()) ?: createChannel()
     }

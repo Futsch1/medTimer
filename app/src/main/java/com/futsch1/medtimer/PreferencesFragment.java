@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,6 +76,15 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         if (preference != null) {
             setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.DEFAULT);
         }
+        preference = getPreferenceScreen().findPreference(PreferencesNames.OVERRIDE_DND);
+        if (preference != null) {
+            preference.setOnPreferenceChangeListener((preference1, value) -> {
+                if (Boolean.TRUE.equals(value)) {
+                    showDndPermissions();
+                }
+                return true;
+            });
+        }
     }
 
     private void setupPreferencesLink(String preferenceKey, @IdRes int actionId) {
@@ -112,7 +122,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             builder.setMessage(R.string.enable_alarm_dialog).
                     setPositiveButton(R.string.ok, (dialog, id) -> {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                        requireContext().startActivity(intent);
+                        safeStartActivity(intent);
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
                         PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
@@ -136,15 +146,54 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         );
     }
 
+    private void showDndPermissions() {
+        if (!requireContext().getSystemService(NotificationManager.class).isNotificationPolicyAccessGranted()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.enable_dnd_dialog).
+                    setPositiveButton(R.string.ok, (dialog, id) -> {
+                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                        safeStartActivity(intent);
+                    }).
+                    setNegativeButton(R.string.cancel, (dialog, id) -> {
+                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
+                        setPreferenceScreen(null);
+                        addPreferencesFromResource(R.xml.root_preferences);
+                    });
+            AlertDialog d = builder.create();
+            d.show();
+        }
+    }
+
+    private void safeStartActivity(Intent intent) {
+        try {
+            startActivity(intent);
+        } catch (IllegalStateException e) {
+            // Intentionally empty
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        resumeExactReminders();
+        resumeOverrideDnd();
+    }
+
+    private void resumeExactReminders() {
         SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
         if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
             if (!alarmManager.canScheduleExactAlarms()) {
                 preference.setChecked(false);
             }
+        }
+    }
+
+    private void resumeOverrideDnd() {
+        SwitchPreferenceCompat preference;
+        preference = getPreferenceScreen().findPreference(PreferencesNames.OVERRIDE_DND);
+        if (preference != null && !requireContext().getSystemService(NotificationManager.class).isNotificationPolicyAccessGranted()) {
+            preference.setChecked(false);
         }
     }
 

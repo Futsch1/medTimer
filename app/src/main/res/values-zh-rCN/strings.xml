@@ -113,7 +113,6 @@
     <string name="taken_now">现在服药</string>
     <string name="event_name">药品名称</string>
     <string name="edit_event">编辑服药记录</string>
-    <string name="show_all">显示全部</string>
     <string name="intro_welcome">欢迎使用 MedTimer!</string>
     <string name="intro_welcome_description">MedTimer 注重隐私、开源免费，提醒你按时服药。\n\n请授予权限以显示服药提醒通知。</string>
     <string name="intro_medicine_description">在“药品”页面创建你服用的药物，并可设置提醒。向左滑动即可删除药品。</string>
@@ -199,4 +198,7 @@
     <string name="are_you_sure_delete_tag">您确定要删除标签吗？</string>
     <string name="unit">单位</string>
     <string name="unlimited">无限制</string>
+    <string name="override_dnd">始终播放通知声音</string>
+    <string name="override_dnd_summary">如果只开启振动，则播放通知音；如果未开启振动或静音，则播放勿扰音</string>
+    <string name="enable_dnd_dialog">为了允许始终播放通知声音，请在以下菜单中为 MedTimer 启用请勿打扰访问功能</string>
 </resources>

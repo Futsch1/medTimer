@@ -8,6 +8,7 @@ public class PreferencesNames {
     public static final String REPEAT_REMINDERS = "repeat_reminders";
     public static final String NUMBER_OF_REPETITIONS = "repeat_reminders_repetitions";
     public static final String REPEAT_DELAY = "repeat_reminders_delay";
+    public static final String OVERRIDE_DND = "override_dnd";
 
     private PreferencesNames() {
         // Intended empty

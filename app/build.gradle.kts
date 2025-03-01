@@ -71,13 +71,18 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    lint {
+        abortOnError = true
+        warningsAsErrors = true
+        disable.add("IconLocation")
+    }
 }
 
 dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
-    val constraintLayoutVersion = "2.2.0"
-    val androidXNavigationVersion = "2.8.7"
+    val constraintLayoutVersion = "2.2.1"
+    val androidXNavigationVersion = "2.8.8"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.0"
@@ -109,7 +114,7 @@ dependencies {
     val androidTestOrchestratorVersion = "1.5.1"
     val baristaVersion = "4.3.0"
 
-    val desugarJdkVersion = "2.1.4"
+    val desugarJdkVersion = "2.1.5"
 
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("com.google.android.material:material:$materialVersion")

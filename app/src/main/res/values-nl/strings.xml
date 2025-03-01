@@ -114,7 +114,6 @@
     <string name="taken_now">Ingenomen</string>
     <string name="event_name">Herinneringennaam</string>
     <string name="edit_event">Herinnering bewerken</string>
-    <string name="show_all">Alles weergeven</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
     <string name="intro_medicine_description">Gebruik het tabblad \"Behandeling\" om de behandeling aan te maken dat je gebruikt en waaraan je herinnerd wilt worden. Veeg naar links om een behandeling te verwijderen.</string>
@@ -203,4 +202,7 @@
     <string name="are_you_sure_delete_tag">Weet je zeker dat je de tag moet verwijderen?</string>
     <string name="unit">Eenheid</string>
     <string name="unlimited">Onbeperkt</string>
+    <string name="override_dnd">Altijd meldingsgeluid afspelen</string>
+    <string name="override_dnd_summary">Speelt meldingen af als alleen trillen is ingeschakeld of niet storen zonder trillen of dempen</string>
+    <string name="enable_dnd_dialog">Als u wilt dat meldingsgeluiden altijd worden afgespeeld, schakelt u de toegang Niet storen voor MedTimer in het volgende menu in</string>
 </resources>

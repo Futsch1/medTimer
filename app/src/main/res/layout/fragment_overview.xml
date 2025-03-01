@@ -45,7 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.3"
+        tools:ignore="InconsistentLayout" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/overviewDivider"
@@ -56,7 +57,8 @@
         app:dividerInsetStart="20dp"
         app:dividerThickness="2dp"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="InconsistentLayout" />
 
     <ImageView
         android:id="@+id/dividerImageUp"
@@ -68,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,ImageContrastCheck,InconsistentLayout" />
 
     <ImageView
         android:id="@+id/dividerImageDown"
@@ -80,7 +82,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/overviewDivider"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,ImageContrastCheck,InconsistentLayout" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/latestRemindersCard"
@@ -128,10 +130,12 @@
                         android:layout_height="wrap_content"
                         android:checkable="true"
                         android:checked="false"
+                        android:minHeight="32dp"
                         android:text="@string/show_only_open"
                         app:checkedIcon="@drawable/funnel"
                         app:checkedIconVisible="true"
-                        app:chipMinTouchTargetSize="0dp" />
+                        app:chipMinTouchTargetSize="0dp"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.chip.ChipGroup>
             </LinearLayout>
