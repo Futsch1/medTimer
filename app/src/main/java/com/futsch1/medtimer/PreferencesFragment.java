@@ -130,7 +130,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             builder.setMessage(R.string.enable_alarm_dialog).
                     setPositiveButton(R.string.ok, (dialog, id) -> {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                        startActivity(intent);
+                        safeStartActivity(intent);
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
                         PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
@@ -160,7 +160,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             builder.setMessage(R.string.enable_dnd_dialog).
                     setPositiveButton(R.string.ok, (dialog, id) -> {
                         Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                        startActivity(intent);
+                        safeStartActivity(intent);
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
                         PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
@@ -169,6 +169,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     });
             AlertDialog d = builder.create();
             d.show();
+        }
+    }
+
+    private void safeStartActivity(Intent intent) {
+        try {
+            startActivity(intent);
+        } catch (IllegalStateException e) {
+            // Intentionally empty
         }
     }
 
