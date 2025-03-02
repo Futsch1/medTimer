@@ -14,6 +14,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -28,8 +29,10 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -248,6 +251,29 @@ class NotificationTest : BaseTestHelper() {
         internalAssert(notification != null)
     }
 
+    @Test
+    @AllowFlaky(attempts = 1)
+    fun hiddenMedicineName() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        onView(withClassName(Matchers.equalTo(RecyclerView::class.java.name))).perform(
+            RecyclerViewActions.scrollToLastPosition<RecyclerView.ViewHolder>()
+        )
+        clickOn(R.string.privacy_settings)
+        clickOn(R.string.hide_med_name)
+
+        pressBack()
+
+        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createIntervalReminder("1", 120)
+
+        device.openNotification()
+        val notification = device.wait(Until.findObject(By.textContains("T*******")), 2000)
+        assertNotNull(notification)
+    }
+
     private fun getNotificationText(): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -256,7 +282,6 @@ class NotificationTest : BaseTestHelper() {
             s
         }
     }
-
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
