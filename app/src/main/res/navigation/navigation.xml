@@ -128,5 +128,5 @@
     <fragment
         android:id="@+id/privacyPreferencesFragment"
         android:name="com.futsch1.medtimer.preferences.PrivacyPreferencesFragment"
-        android:label="PrivacyPreferencesFragment" />
+        android:label="@string/privacy_settings" />
 </navigation>
