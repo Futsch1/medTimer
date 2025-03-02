@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/preferencesFragment"
-        android:name="com.futsch1.medtimer.PreferencesFragment"
+        android:name="com.futsch1.medtimer.preferences.PreferencesFragment"
         android:label="@string/tab_settings">
         <action
             android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
@@ -37,11 +37,11 @@
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
-        android:name="com.futsch1.medtimer.WeekendModePreferencesFragment"
+        android:name="com.futsch1.medtimer.preferences.WeekendModePreferencesFragment"
         android:label="@string/weekend_mode" />
     <fragment
         android:id="@+id/repeatRemindersPreferencesFragment"
-        android:name="com.futsch1.medtimer.RepeatRemindersPreferencesFragment"
+        android:name="com.futsch1.medtimer.preferences.RepeatRemindersPreferencesFragment"
         android:label="@string/repeat_reminders" />
     <fragment
         android:id="@+id/editMedicineFragment"

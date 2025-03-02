@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.preferences;
 
 public class PreferencesNames {
     public static final String WEEKEND_TIME = "weekend_time";
