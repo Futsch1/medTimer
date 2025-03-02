@@ -3,11 +3,13 @@
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:icon="@drawable/bell"
         android:title="@string/notification_settings_default"
         app:key="notification_settings_default" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:icon="@drawable/bell"
         android:title="@string/notification_settings_high"
         app:key="notification_settings_high" />
     <SwitchPreferenceCompat
@@ -27,8 +29,8 @@
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="@string/repeat_reminders"
         android:summary="@string/repeat_reminders_summary"
+        android:title="@string/repeat_reminders"
         app:key="repeat_reminders_preferences" />
     <ListPreference
         android:defaultValue="15"
@@ -45,9 +47,14 @@
         android:title="@string/exact_reminders"
         app:key="exact_reminders" />
     <Preference
+        app:icon="@drawable/calendar_week"
         app:key="weekend_mode"
         app:summary="@string/weekend_mode_summary"
         app:title="@string/weekend_mode" />
+    <Preference
+        android:icon="@drawable/shield_lock"
+        app:key="privacy_settings"
+        app:title="@string/privacy_settings" />
     <ListPreference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +64,6 @@
         android:title="@string/overview_events"
         app:key="overview_events"
         app:useSimpleSummaryProvider="true" />
-    <Preference app:key="privacy_settings" app:title="@string/privacy_settings" />
     <ListPreference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
