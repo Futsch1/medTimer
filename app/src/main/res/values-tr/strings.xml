@@ -207,4 +207,6 @@
     <string name="enable_dnd_dialog">Bildirim seslerinin her zaman çalınmasına izin vermek için, aşağıdaki menüde MedTimer için Rahatsız etmeyin erişimini etkinleştirin</string>
     <string name="app_authentication">Uygulamayı açmak için kimlik doğrulama gerektir</string>
     <string name="login">Biyometrik kimlik doğrulama kullanarak MedTimer&amp;apos;a giriş yapın</string>
+    <string name="privacy_settings">Gizlilik ayarları</string>
+    <string name="hide_med_name">Bildirimde ilaç adını gizleme</string>
 </resources>
