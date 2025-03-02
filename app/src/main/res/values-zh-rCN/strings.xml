@@ -201,4 +201,6 @@
     <string name="override_dnd">始终播放通知声音</string>
     <string name="override_dnd_summary">如果只开启振动，则播放通知音；如果未开启振动或静音，则播放勿扰音</string>
     <string name="enable_dnd_dialog">为了允许始终播放通知声音，请在以下菜单中为 MedTimer 启用请勿打扰访问功能</string>
+    <string name="app_authentication">打开应用程序需要验证</string>
+    <string name="login">使用生物识别身份验证登录 MedTimer</string>
 </resources>

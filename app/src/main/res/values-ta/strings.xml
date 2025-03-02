@@ -206,4 +206,6 @@
     <string name="override_dnd">எப்போதும் அறிவிப்பு ஒலியை இயக்கு</string>
     <string name="override_dnd_summary">அதிர்வு மட்டும் இயக்கப்பட்டிருந்தால் அல்லது அதிர்வு அல்லது ஒலி அடக்கம் இல்லாமல் தொந்தரவு செய்யாதே என அமைக்கப்பட்டிருந்தால் அறிவிப்பு ஒலியை இயக்கும்</string>
     <string name="enable_dnd_dialog">எப்போதும் அறிவிப்பு ஒலியை இயக்க அனுமதிப்பதற்கு, பின்வரும் மெனுவில் MedTimer க்கு தொந்தரவு செய்யாதே அணுகலை இயக்கவும்</string>
+    <string name="app_authentication">செயலியை திறக்க அங்கீகாரம் தேவை</string>
+    <string name="login">உயிர் அடையாள அங்கீகரிப்பு மூலம் MedTimer-ல் உள்நுழையவும்</string>
 </resources>
