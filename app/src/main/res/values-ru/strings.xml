@@ -212,4 +212,6 @@
     <string name="override_dnd">Всегда воспроизводите звук уведомления</string>
     <string name="override_dnd_summary">Воспроизводит звук уведомлений, если включена только вибрация или не беспокоить без вибрации или отключения звука</string>
     <string name="enable_dnd_dialog">Чтобы разрешить постоянное воспроизведение звуков уведомлений, включите доступ &amp;quot;Не беспокоить&amp;quot; для MedTimer в следующем меню</string>
+    <string name="app_authentication">Требуйте аутентификации для открытия приложения</string>
+    <string name="login">Вход в MedTimer с помощью биометрической аутентификации</string>
 </resources>
