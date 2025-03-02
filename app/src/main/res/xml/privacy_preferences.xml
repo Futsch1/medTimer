@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="window_flag_secure"
+        android:title="@string/block_screen_capture" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="hide_med_name"
+        android:title="@string/hide_med_name" />
+</androidx.preference.PreferenceScreen>

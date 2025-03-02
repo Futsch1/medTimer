@@ -209,4 +209,6 @@
     <string name="override_dnd">Always play notification sound</string>
     <string name="override_dnd_summary">Plays notifications sound if only vibrate is on or do not disturb without vibrate or mute</string>
     <string name="enable_dnd_dialog">In order to allow always playing notification sounds, enable Do not disturb access for MedTimer in the following menu</string>
+    <string name="privacy_settings">Privacy settings</string>
+    <string name="hide_med_name">Hide medication name in notification</string>
 </resources>
