@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_preferencesFragment_to_repeatRemindersPreferencesFragment"
             app:destination="@id/repeatRemindersPreferencesFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_privacyPreferencesFragment"
+            app:destination="@id/privacyPreferencesFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -122,4 +125,8 @@
             android:name="medicineId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/privacyPreferencesFragment"
+        android:name="com.futsch1.medtimer.preferences.PrivacyPreferencesFragment"
+        android:label="PrivacyPreferencesFragment" />
 </navigation>

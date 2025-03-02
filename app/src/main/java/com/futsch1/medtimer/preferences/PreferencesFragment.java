@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.WindowManager;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
@@ -16,7 +15,6 @@ import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.futsch1.medtimer.MainActivity;
@@ -35,8 +33,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setupNotificationSettings();
         setupPreferencesLink("repeat_reminders_preferences", R.id.action_preferencesFragment_to_repeatRemindersPreferencesFragment);
         setupPreferencesLink("weekend_mode", R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
-        setupBlockScreenCapture();
-        setupAppAuthentication();
+        setupPreferencesLink("privacy_settings", R.id.action_preferencesFragment_to_privacyPreferencesFragment);
+
     }
 
     private void setupTheme() {
@@ -106,23 +104,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         return true;
                     }
             );
-        }
-    }
-
-    private void setupBlockScreenCapture() {
-        SwitchPreference preference = getPreferenceScreen().findPreference("window_flag_secure");
-        if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference12, newValue) -> {
-                requireActivity().getWindow().setFlags(Boolean.TRUE.equals(newValue) ? WindowManager.LayoutParams.FLAG_SECURE : 0, WindowManager.LayoutParams.FLAG_SECURE);
-                return true;
-            });
-        }
-    }
-
-    private void setupAppAuthentication() {
-        Preference preference = getPreferenceScreen().findPreference("app_authentication");
-        if (preference != null) {
-            preference.setEnabled(new Biometrics(this.requireContext()).hasBiometrics());
         }
     }
 

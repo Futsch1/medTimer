@@ -58,15 +58,6 @@
         app:key="overview_events"
         app:useSimpleSummaryProvider="true" />
     <Preference app:key="privacy_settings" app:title="@string/privacy_settings" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="window_flag_secure"
-        android:title="@string/block_screen_capture" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="app_authentication"
-        android:enabled="false"
-        android:title="@string/app_authentication" />
     <ListPreference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
