@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Screen capture
-        if (sharedPref.getBoolean("window_flag_secure", false)) {
+        if (sharedPref.getBoolean(SECURE_WINDOW, false)) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -51,18 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
-        if (sharedPref.getBoolean("app_authentication", false)) {
-            new Biometrics(this).authenticate(this,
-                    () -> {
-                        start();
-                        return Unit.INSTANCE;
-                    }, () -> {
-                        this.finish();
-                        return Unit.INSTANCE;
-                    });
-        } else {
-            start();
-        }
+        authenticate(sharedPref);
     }
 
     private void showIntro(SharedPreferences sharedPref) {
@@ -75,17 +65,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void start() {
-        setContentView(R.layout.activity_main);
-        setupNavigation();
-
-        ActivityIntentKt.dispatch(this, this.getIntent());
+    private void authenticate(SharedPreferences sharedPref) {
+        Biometrics biometrics = new Biometrics(this);
+        if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+            biometrics.authenticate(this,
+                    () -> {
+                        start();
+                        return Unit.INSTANCE;
+                    }, () -> {
+                        this.finish();
+                        return Unit.INSTANCE;
+                    });
+        } else {
+            start();
+        }
     }
 
     private void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             new RequestPostNotificationPermission(this).requestPermission();
         }
+    }
+
+    private void start() {
+        setContentView(R.layout.activity_main);
+        setupNavigation();
+
+        ActivityIntentKt.dispatch(this, this.getIntent());
     }
 
     private void setupNavigation() {

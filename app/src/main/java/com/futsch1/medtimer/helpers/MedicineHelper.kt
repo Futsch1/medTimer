@@ -2,8 +2,10 @@ package com.futsch1.medtimer.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import java.text.NumberFormat
 import java.util.regex.Pattern
 
@@ -18,12 +20,24 @@ object MedicineHelper {
     @JvmStatic
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
+        val name = getMedicineNameForNotification(context, medicine)
         return if (medicine.isStockManagementActive) {
-            medicine.name + " (" + context.getString(
+            "$name (" + context.getString(
                 R.string.medicine_stock_string,
                 formatAmount(medicine.amount, medicine.unit),
                 if (medicine.amount <= medicine.outOfStockReminderThreshold) " ⚠)" else ")"
             )
+        } else {
+            name
+        }
+    }
+
+    @JvmStatic
+    fun getMedicineNameForNotification(context: Context, medicine: Medicine): String {
+        return if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(HIDE_MED_NAME, false)
+        ) {
+            medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {
             medicine.name
         }

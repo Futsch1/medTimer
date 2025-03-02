@@ -214,4 +214,6 @@
     <string name="enable_dnd_dialog">Чтобы разрешить постоянное воспроизведение звуков уведомлений, включите доступ &amp;quot;Не беспокоить&amp;quot; для MedTimer в следующем меню</string>
     <string name="app_authentication">Требуйте аутентификации для открытия приложения</string>
     <string name="login">Вход в MedTimer с помощью биометрической аутентификации</string>
+    <string name="privacy_settings">Настройки конфиденциальности</string>
+    <string name="hide_med_name">Скрыть название лекарства в уведомлении</string>
 </resources>

@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import android.content.SharedPreferences;
 import android.util.ArraySet;
 
+import com.futsch1.medtimer.preferences.PreferencesNames;
 import com.futsch1.medtimer.reminders.WeekendMode;
 
 import org.junit.jupiter.api.Test;

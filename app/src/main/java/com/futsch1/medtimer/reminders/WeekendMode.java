@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders;
 import android.content.SharedPreferences;
 import android.util.ArraySet;
 
-import com.futsch1.medtimer.PreferencesNames;
+import com.futsch1.medtimer.preferences.PreferencesNames;
 
 import java.time.DayOfWeek;
 import java.time.Instant;

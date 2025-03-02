@@ -212,4 +212,6 @@
     <string name="enable_dnd_dialog">Para permitir la reproducción permanente de sonidos de notificación, active el acceso No molestar para MedTimer en el siguiente menú</string>
     <string name="app_authentication">Requiere autenticación para abrir la aplicación</string>
     <string name="login">Inicio de sesión en MedTimer mediante autenticación biométrica</string>
+    <string name="privacy_settings">Privacidad</string>
+    <string name="hide_med_name">Ocultar el nombre del medicamento en la notificación</string>
 </resources>

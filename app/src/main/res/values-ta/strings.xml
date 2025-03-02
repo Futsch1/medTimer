@@ -208,4 +208,6 @@
     <string name="enable_dnd_dialog">எப்போதும் அறிவிப்பு ஒலியை இயக்க அனுமதிப்பதற்கு, பின்வரும் மெனுவில் MedTimer க்கு தொந்தரவு செய்யாதே அணுகலை இயக்கவும்</string>
     <string name="app_authentication">செயலியை திறக்க அங்கீகாரம் தேவை</string>
     <string name="login">உயிர் அடையாள அங்கீகரிப்பு மூலம் MedTimer-ல் உள்நுழையவும்</string>
+    <string name="privacy_settings">தனியுரிமை அமைப்புகள்</string>
+    <string name="hide_med_name">அறிவிப்பில் மருந்து பெயரை மறை</string>
 </resources>
