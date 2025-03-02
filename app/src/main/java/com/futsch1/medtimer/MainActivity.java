@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Screen capture
-        if (sharedPref.getBoolean("window_flag_secure", false)) {
+        if (sharedPref.getBoolean(SECURE_WINDOW, false)) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -51,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
-        if (sharedPref.getBoolean("app_authentication", false)) {
-            new Biometrics(this).authenticate(this,
+        Biometrics biometrics = new Biometrics(this);
+        if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+            biometrics.authenticate(this,
                     () -> {
                         start();
                         return Unit.INSTANCE;
