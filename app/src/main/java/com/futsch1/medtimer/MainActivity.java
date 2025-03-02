@@ -52,6 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
+        authenticate(sharedPref);
+    }
+
+    private void showIntro(SharedPreferences sharedPref) {
+        boolean introShown = sharedPref.getBoolean("intro_shown", false);
+        if (!introShown && !BuildConfig.DEBUG) {
+            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+            sharedPref.edit().putBoolean("intro_shown", true).apply();
+        } else {
+            checkPermissions();
+        }
+    }
+
+    private void authenticate(SharedPreferences sharedPref) {
         Biometrics biometrics = new Biometrics(this);
         if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
             biometrics.authenticate(this,
@@ -67,13 +81,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showIntro(SharedPreferences sharedPref) {
-        boolean introShown = sharedPref.getBoolean("intro_shown", false);
-        if (!introShown && !BuildConfig.DEBUG) {
-            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
-            sharedPref.edit().putBoolean("intro_shown", true).apply();
-        } else {
-            checkPermissions();
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            new RequestPostNotificationPermission(this).requestPermission();
         }
     }
 
@@ -82,12 +92,6 @@ public class MainActivity extends AppCompatActivity {
         setupNavigation();
 
         ActivityIntentKt.dispatch(this, this.getIntent());
-    }
-
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            new RequestPostNotificationPermission(this).requestPermission();
-        }
     }
 
     private void setupNavigation() {
