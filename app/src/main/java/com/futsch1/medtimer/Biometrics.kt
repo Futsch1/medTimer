@@ -28,28 +28,7 @@ class Biometrics(val context: Context) {
         failureCallback: () -> Unit
     ) {
         executor = ContextCompat.getMainExecutor(context)
-        biometricPrompt = BiometricPrompt(activity, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    super.onAuthenticationError(errorCode, errString)
-                    failureCallback()
-                }
-
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
-                    super.onAuthenticationSucceeded(result)
-                    successCallback()
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    failureCallback()
-                }
-            })
+        biometricPrompt = getPrompt(activity, failureCallback, successCallback)
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(context.getString(R.string.login))
@@ -59,4 +38,31 @@ class Biometrics(val context: Context) {
         @Suppress("kotlin:S6293") // No cryptography required inside app, only use authentication to protect app access
         biometricPrompt.authenticate(promptInfo)
     }
+
+    private fun getPrompt(
+        activity: FragmentActivity,
+        failureCallback: () -> Unit,
+        successCallback: () -> Unit
+    ) = BiometricPrompt(activity, executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                super.onAuthenticationError(errorCode, errString)
+                failureCallback()
+            }
+
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                super.onAuthenticationSucceeded(result)
+                successCallback()
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                failureCallback()
+            }
+        })
 }
