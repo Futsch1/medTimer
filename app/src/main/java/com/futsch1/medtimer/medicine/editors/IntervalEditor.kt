@@ -33,7 +33,12 @@ class IntervalEditor(
     }
 
     fun getMinutes(): Int {
-        val value = timeEdit.text.toString().toInt()
+        var value = 1
+        try {
+            value = timeEdit.text.toString().toInt()
+        } catch (e: NumberFormatException) {
+            // Intentionally empty
+        }
         val unit = checkedIntervalUnit(intervalUnitToggle.checkedButtonId)
         return Interval(if (value > 0) value else 1, unit).minutesValue
     }
