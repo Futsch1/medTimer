@@ -97,7 +97,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         try {
                             navController.navigate(actionId);
                         } catch (IllegalArgumentException e) {
-                            // Intentionally empty
+                            // Intentionally empty (monkey test can cause this to fail)
                         }
                         return true;
                     }
@@ -163,9 +163,13 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         safeStartActivity(intent);
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
-                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
-                        setPreferenceScreen(null);
-                        addPreferencesFromResource(R.xml.root_preferences);
+                        try {
+                            PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
+                            setPreferenceScreen(null);
+                            addPreferencesFromResource(R.xml.root_preferences);
+                        } catch (IllegalStateException e) {
+                            // Intentionally empty (monkey test can cause this to fail)
+                        }
                     });
             AlertDialog d = builder.create();
             d.show();

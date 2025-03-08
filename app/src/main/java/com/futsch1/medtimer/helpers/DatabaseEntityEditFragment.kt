@@ -90,7 +90,7 @@ abstract class DatabaseEntityEditFragment<T>(
             if (entity != null) {
                 requireActivity().runOnUiThread {
                     // Signal that entity was loaded
-                    if (onEntityLoaded(entity!!, fragmentView!!)) {
+                    if (activity != null && onEntityLoaded(entity!!, fragmentView!!)) {
                         setFragmentReady()
                     }
                 }
