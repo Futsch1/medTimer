@@ -32,7 +32,7 @@ class NewReminderDialog(
     private val dialog: Dialog = Dialog(context)
 
     init {
-        dialog.setContentView(R.layout.new_reminder)
+        dialog.setContentView(R.layout.dialog_new_reminder)
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT

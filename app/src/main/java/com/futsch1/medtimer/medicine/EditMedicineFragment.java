@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,25 +102,12 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private void setupColorButton(View fragmentView, boolean useColor) {
         colorButton = fragmentView.findViewById(R.id.selectColor);
         ViewColorHelper.setButtonBackground(colorButton, color);
-        colorButton.setOnClickListener(v -> {
-            new ColorPickerDialog(requireContext(), requireActivity(), color);
-            /*ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(requireContext())
-                    .setTitle(R.string.color)
-                    .setPositiveButton(getString(R.string.confirm),
-                            (ColorEnvelopeListener) (envelope, fromUser) -> {
-                                color = envelope.getColor();
-                                ViewColorHelper.setButtonBackground(colorButton, color);
-                                Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show();
-                            })
-                    .setNegativeButton(getString(R.string.cancel),
-                            (dialogInterface, i) -> dialogInterface.dismiss())
-                    .attachAlphaSlideBar(false)
-                    .setBottomSpace(12);
-
-            builder.show();
-            // Workaround to make the brightness slider be setup correctly
-            new Handler(requireActivity().getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));*/
-        });
+        colorButton.setOnClickListener(v -> new ColorPickerDialog(requireContext(), requireActivity(), color, newColor -> {
+            color = newColor;
+            ViewColorHelper.setButtonBackground(colorButton, color);
+            Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show();
+            return Unit.INSTANCE;
+        }));
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
     }
 
