@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static androidx.navigation.ActivityKt.findNavController;
 import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
@@ -110,12 +111,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         this.getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
-    }
-
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            new RequestPostNotificationPermission(this).requestPermission();
-        }
     }
 
     private void setupNavigation() {
