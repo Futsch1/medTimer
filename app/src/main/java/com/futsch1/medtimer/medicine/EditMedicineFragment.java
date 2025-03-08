@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +24,8 @@ import com.futsch1.medtimer.helpers.MedicineEntityInterface;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
+import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog;
+import com.futsch1.medtimer.medicine.dialogs.NewReminderDialog;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
@@ -35,8 +36,6 @@ import com.maltaisn.icondialog.IconDialog;
 import com.maltaisn.icondialog.IconDialogSettings;
 import com.maltaisn.icondialog.data.Icon;
 import com.maltaisn.icondialog.pack.IconPack;
-import com.skydoves.colorpickerview.ColorPickerDialog;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 import java.util.List;
 import java.util.Objects;
@@ -103,7 +102,8 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         colorButton = fragmentView.findViewById(R.id.selectColor);
         ViewColorHelper.setButtonBackground(colorButton, color);
         colorButton.setOnClickListener(v -> {
-            ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(requireContext())
+            new ColorPickerDialog(requireContext(), requireActivity(), color);
+            /*ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(requireContext())
                     .setTitle(R.string.color)
                     .setPositiveButton(getString(R.string.confirm),
                             (ColorEnvelopeListener) (envelope, fromUser) -> {
@@ -118,7 +118,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
             builder.show();
             // Workaround to make the brightness slider be setup correctly
-            new Handler(requireActivity().getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));
+            new Handler(requireActivity().getMainLooper()).post(() -> builder.getColorPickerView().setInitialColor(color));*/
         });
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
     }
@@ -199,7 +199,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
     private void setupAddReminderButton(View fragmentView) {
         ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> new NewReminder(requireContext(), requireActivity(), getEntityId(), this.getMedicineViewModel()));
+        fab.setOnClickListener(view -> new NewReminderDialog(requireContext(), requireActivity(), getEntityId(), this.getMedicineViewModel()));
     }
 
     private void sortAndSubmitList(List<Reminder> reminders) {

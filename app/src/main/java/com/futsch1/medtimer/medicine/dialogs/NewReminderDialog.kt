@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine
+package com.futsch1.medtimer.medicine.dialogs
 
 import android.app.Dialog
 import android.content.Context
@@ -23,7 +23,7 @@ import java.time.Instant
 import java.time.LocalDate
 
 
-class NewReminder(
+class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
     val medicineId: Int,
