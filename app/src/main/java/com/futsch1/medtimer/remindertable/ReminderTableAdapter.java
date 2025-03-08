@@ -96,8 +96,13 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
                     reminderEvent.reminderEventId,
                     reminderEvent.reminderId <= 0
             );
-            activity.runOnUiThread(() ->
-                    navController.navigate(action));
+            activity.runOnUiThread(() -> {
+                try {
+                    navController.navigate(action);
+                } catch (IllegalArgumentException e) {
+                    // Intentionally empty, avoids race conditions
+                }
+            });
         }
     }
 

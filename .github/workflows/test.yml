@@ -70,7 +70,7 @@ jobs:
             adb uninstall com.futsch1.medtimer || true
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
             adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
-            adb shell monkey -p com.futsch1.medtimer -v 3000 --throttle 20
+            adb shell monkey -p com.futsch1.medtimer -v 5000
           cores: 4
 
       - name: Run fuzzing tests

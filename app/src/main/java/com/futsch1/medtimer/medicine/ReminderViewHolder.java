@@ -92,7 +92,11 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
                 EditMedicineFragmentDirections.actionEditMedicineToAdvancedReminderSettings(
                         reminder.reminderId
                 );
-        navController.navigate(action);
+        try {
+            navController.navigate(action);
+        } catch (IllegalArgumentException e) {
+            // Intentionally empty (monkey test can cause this to fail)
+        }
     }
 
     public Reminder getReminder() {

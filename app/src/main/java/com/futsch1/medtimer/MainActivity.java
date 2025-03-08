@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static androidx.navigation.ActivityKt.findNavController;
 import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
@@ -9,13 +10,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             start();
         }
+
+        handleBackPressed();
     }
 
     private void checkPermissions() {
@@ -92,6 +96,21 @@ public class MainActivity extends AppCompatActivity {
         setupNavigation();
 
         ActivityIntentKt.dispatch(this, this.getIntent());
+    }
+
+    private void handleBackPressed() {
+        // Post the back event to the main loop to make sure all pending events are handled before
+        OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Post the back event to the main loop to make sure all pending events are handled before
+                new Handler(getMainLooper()).postDelayed(() -> {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }, 20);
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
     }
 
     private void setupNavigation() {
@@ -136,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.navHost);
+        NavController navController = findNavController(this, R.id.navHost);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
