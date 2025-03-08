@@ -1,15 +1,10 @@
 package com.futsch1.medtimer
 
 import android.os.Build
-import android.view.InputDevice
-import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.GeneralClickAction
-import androidx.test.espresso.action.GeneralLocation
-import androidx.test.espresso.action.Press
-import androidx.test.espresso.action.Tap
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -29,7 +24,6 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.hamcrest.Matchers
@@ -40,22 +34,18 @@ import org.junit.Test
 
 class NotificationTest : BaseTestHelper() {
     @Test
+    //@AllowFlaky(attempts = 1)
     fun notificationTest() {
         AndroidTestHelper.createMedicine("Test med")
 
         // Set color and icon
         clickOn(R.id.enableColor)
         clickOn(R.id.selectColor)
-        onView(withResourceName("colorPickerView")).perform(
-            GeneralClickAction(
-                Tap.SINGLE,
-                GeneralLocation.CENTER_LEFT,
-                Press.FINGER,
-                InputDevice.SOURCE_UNKNOWN,
-                MotionEvent.BUTTON_PRIMARY
-            )
+        onView(withResourceName("hexEdit")).perform(
+            ViewActions.clearText(),
+            ViewActions.typeText("deadbe")
         )
-        clickDialogPositiveButton()
+        clickOn(R.id.confirmSelectColor)
 
         clickOn(R.id.selectIcon)
         onView(withResourceName("icd_rcv_icon_list")).perform(
@@ -252,7 +242,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun hiddenMedicineName() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
