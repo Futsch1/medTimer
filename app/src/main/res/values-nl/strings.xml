@@ -207,4 +207,6 @@
     <string name="enable_dnd_dialog">Als u wilt dat meldingsgeluiden altijd worden afgespeeld, schakelt u de toegang Niet storen voor MedTimer in het volgende menu in</string>
     <string name="app_authentication">Verificatie vereist om de app te openen</string>
     <string name="login">Aanmelden bij MedTimer met biometrische verificatie</string>
+    <string name="privacy_settings">Privacy-instellingen</string>
+    <string name="hide_med_name">Verberg medicijnnaam in melding</string>
 </resources>

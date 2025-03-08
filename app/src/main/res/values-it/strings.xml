@@ -213,4 +213,6 @@
     <string name="enable_dnd_dialog">Per consentire la riproduzione continua dei suoni di notifica, attivare l&amp;apos;accesso Non disturbare per MedTimer nel seguente menu</string>
     <string name="app_authentication">Richiedere l&amp;apos;autenticazione per aprire l&amp;apos;app</string>
     <string name="login">Accedere a MedTimer utilizzando l&amp;apos;autenticazione biometrica</string>
+    <string name="privacy_settings">Impostazioni sulla privacy</string>
+    <string name="hide_med_name">Nascondere il nome del farmaco nella notifica</string>
 </resources>

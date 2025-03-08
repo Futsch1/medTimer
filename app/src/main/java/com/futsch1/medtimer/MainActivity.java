@@ -1,7 +1,7 @@
 package com.futsch1.medtimer;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
-import static androidx.navigation.ActivityKt.findNavController;
+import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Screen capture
-        if (sharedPref.getBoolean("window_flag_secure", false)) {
+        if (sharedPref.getBoolean(SECURE_WINDOW, false)) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -53,8 +53,23 @@ public class MainActivity extends AppCompatActivity {
 
         ReminderNotificationChannelManager.Companion.initialize(this);
 
-        if (sharedPref.getBoolean("app_authentication", false)) {
-            new Biometrics(this).authenticate(this,
+        authenticate(sharedPref);
+    }
+
+    private void showIntro(SharedPreferences sharedPref) {
+        boolean introShown = sharedPref.getBoolean("intro_shown", false);
+        if (!introShown && !BuildConfig.DEBUG) {
+            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
+            sharedPref.edit().putBoolean("intro_shown", true).apply();
+        } else {
+            checkPermissions();
+        }
+    }
+
+    private void authenticate(SharedPreferences sharedPref) {
+        Biometrics biometrics = new Biometrics(this);
+        if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+            biometrics.authenticate(this,
                     () -> {
                         start();
                         return Unit.INSTANCE;
@@ -69,13 +84,9 @@ public class MainActivity extends AppCompatActivity {
         handleBackPressed();
     }
 
-    private void showIntro(SharedPreferences sharedPref) {
-        boolean introShown = sharedPref.getBoolean("intro_shown", false);
-        if (!introShown && !BuildConfig.DEBUG) {
-            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
-            sharedPref.edit().putBoolean("intro_shown", true).apply();
-        } else {
-            checkPermissions();
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            new RequestPostNotificationPermission(this).requestPermission();
         }
     }
 

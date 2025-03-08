@@ -21,11 +21,11 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.LogTags;
-import com.futsch1.medtimer.PreferencesNames;
 import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.preferences.PreferencesNames;
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper;
 
 import java.time.Instant;

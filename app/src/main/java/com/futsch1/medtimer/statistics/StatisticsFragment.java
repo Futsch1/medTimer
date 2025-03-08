@@ -58,6 +58,7 @@ public class StatisticsFragment extends Fragment {
         if (optionsMenu != null) {
             optionsMenu.onDestroy();
         }
+        requireActivity().getSupportFragmentManager().executePendingTransactions();
     }
 
     private void setupFragmentButtons(View statisticsView) {

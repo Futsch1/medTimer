@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.PreferencesNames
+import com.futsch1.medtimer.preferences.PreferencesNames
 
 class NotificationSoundManager(val context: Context) {
     private val notificationManager: NotificationManager =

@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 

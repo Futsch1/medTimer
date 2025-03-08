@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -203,4 +202,6 @@
     <string name="enable_dnd_dialog">为了允许始终播放通知声音，请在以下菜单中为 MedTimer 启用请勿打扰访问功能</string>
     <string name="app_authentication">打开应用程序需要验证</string>
     <string name="login">使用生物识别身份验证登录 MedTimer</string>
+    <string name="privacy_settings">隐私设置</string>
+    <string name="hide_med_name">在通知中隐藏药物名称</string>
 </resources>

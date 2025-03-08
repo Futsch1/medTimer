@@ -205,6 +205,8 @@
     <string name="override_dnd">Benachrichtigungston immer abspielen</string>
     <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder stumm</string>
     <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktivieren Sie den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
-    <string name="app_authentication">Authentifizierung zum Öffnen der App erforderlich machen</string>
+    <string name="app_authentication">Authentifizierung notwendig für Zugriff auf die App</string>
     <string name="login">Anmeldung bei MedTimer mit biometrischer Authentifizierung</string>
+    <string name="privacy_settings">Datenschutz-Einstellungen</string>
+    <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
 </resources>
