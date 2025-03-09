@@ -123,11 +123,9 @@ class NewReminderDialog(
         intervalStartDateTimeEditor: DateTimeEditor
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
+            setDefaults(reminder)
             reminder.amount =
                 dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
-            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-            reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-            reminder.instructions = ""
 
             val isTimeBased = dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked
 
@@ -149,5 +147,11 @@ class NewReminderDialog(
                 Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun setDefaults(reminder: Reminder) {
+        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
+        reminder.instructions = ""
     }
 }
