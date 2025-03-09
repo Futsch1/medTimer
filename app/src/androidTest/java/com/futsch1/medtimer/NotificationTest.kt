@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
@@ -45,6 +46,7 @@ class NotificationTest : BaseTestHelper() {
             ViewActions.clearText(),
             ViewActions.typeText("deadbe")
         )
+        closeSoftKeyboard()
         clickOn(R.id.confirmSelectColor)
 
         clickOn(R.id.selectIcon)
