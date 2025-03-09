@@ -19,13 +19,13 @@ class ColorPickerDialog(
 
     init {
         dialog.setContentView(R.layout.dialog_color_editor)
-        colorPickerView = dialog.findViewById<ColorPickerView>(R.id.colorPickerView)
+        colorPickerView = dialog.findViewById(R.id.colorPickerView)
         colorPickerView.setColor(color)
         colorPickerView.showAlpha(false)
         colorPickerView.showHex(true)
         colorPickerView.showPreview(false)
         dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
