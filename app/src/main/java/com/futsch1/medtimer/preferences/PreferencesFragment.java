@@ -23,9 +23,11 @@ import com.futsch1.medtimer.ReminderNotificationChannelManager;
 
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
+    String rootKey;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        this.rootKey = rootKey;
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
         setupTheme();
@@ -119,8 +121,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
                         PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
-                        setPreferenceScreen(null);
-                        addPreferencesFromResource(R.xml.root_preferences);
+                        setPreferencesFromResource(R.xml.root_preferences, rootKey);
                     });
             AlertDialog d = builder.create();
             d.show();
@@ -150,8 +151,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
                         try {
                             PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
-                            setPreferenceScreen(null);
-                            addPreferencesFromResource(R.xml.root_preferences);
+                            setPreferencesFromResource(R.xml.root_preferences, rootKey);
                         } catch (IllegalStateException e) {
                             // Intentionally empty (monkey test can cause this to fail)
                         }
