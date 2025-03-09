@@ -53,12 +53,26 @@ public class StatisticsFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        try {
+            requireActivity().getSupportFragmentManager().executePendingTransactions();
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            // Intentionally empty
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (optionsMenu != null) {
             optionsMenu.onDestroy();
         }
-        requireActivity().getSupportFragmentManager().executePendingTransactions();
+        try {
+            requireActivity().getSupportFragmentManager().executePendingTransactions();
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            // Intentionally empty
+        }
     }
 
     private void setupFragmentButtons(View statisticsView) {

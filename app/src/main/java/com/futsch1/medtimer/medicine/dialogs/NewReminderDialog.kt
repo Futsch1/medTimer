@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine
+package com.futsch1.medtimer.medicine.dialogs
 
 import android.app.Dialog
 import android.content.Context
@@ -23,7 +23,7 @@ import java.time.Instant
 import java.time.LocalDate
 
 
-class NewReminder(
+class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
     val medicineId: Int,
@@ -32,7 +32,7 @@ class NewReminder(
     private val dialog: Dialog = Dialog(context)
 
     init {
-        dialog.setContentView(R.layout.new_reminder)
+        dialog.setContentView(R.layout.dialog_new_reminder)
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -123,11 +123,9 @@ class NewReminder(
         intervalStartDateTimeEditor: DateTimeEditor
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
+            setDefaults(reminder)
             reminder.amount =
                 dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
-            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-            reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-            reminder.instructions = ""
 
             val isTimeBased = dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked
 
@@ -149,5 +147,11 @@ class NewReminder(
                 Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun setDefaults(reminder: Reminder) {
+        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
+        reminder.instructions = ""
     }
 }

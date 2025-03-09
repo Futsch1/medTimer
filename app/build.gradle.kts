@@ -89,7 +89,7 @@ dependencies {
     val coreKtxVersion = "1.15.0"
     val lifecycleViewmodelKtxVersion = "2.8.7"
     val roomVersion = "2.6.1"
-    val colorPickerViewVersion = "2.3.0"
+    val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.12.1"
     val tableViewVersion = "0.8.9.4"
@@ -128,7 +128,7 @@ dependencies {
     implementation("androidx.core:core-ktx:$coreKtxVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleViewmodelKtxVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("com.github.skydoves:colorpickerview:$colorPickerViewVersion")
+    implementation("com.github.martin-stone:hsv-alpha-color-picker-android:$colorPickerViewVersion")
     implementation("com.github.wwdablu:SimplyPDF:$simplyPDFVersion")
     implementation("com.google.code.gson:gson:$gsonVersion")
     implementation("com.github.evrencoskun:TableView:v$tableViewVersion")

@@ -123,7 +123,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun filterMedicineId(medicineId: Int, validTagIds: Set<Int>? = null): Boolean {
-        if (validTagIds.isNullOrEmpty()) {
+        if (validTagIds.isNullOrEmpty() || !this::medicineToTags.isInitialized) {
             return true
         }
         val medicineTags: List<Int> = medicineToTags.stream()
