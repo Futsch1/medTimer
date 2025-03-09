@@ -120,8 +120,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         safeStartActivity(intent);
                     }).
                     setNegativeButton(R.string.cancel, (dialog, id) -> {
-                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
-                        setPreferencesFromResource(R.xml.root_preferences, rootKey);
+                        try {
+                            PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
+                            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+                        } catch (IllegalStateException e) {
+                            // Intentionally empty (monkey test can cause this to fail)
+                        }
                     });
             AlertDialog d = builder.create();
             d.show();
