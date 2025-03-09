@@ -60,7 +60,7 @@ public class StatisticsFragment extends Fragment {
         }
         try {
             requireActivity().getSupportFragmentManager().executePendingTransactions();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | IllegalArgumentException e) {
             // Intentionally empty
         }
     }
