@@ -210,4 +210,5 @@
     <string name="login">Aanmelden bij MedTimer met biometrische verificatie</string>
     <string name="privacy_settings">Privacy-instellingen</string>
     <string name="hide_med_name">Verberg medicijnnaam in melding</string>
+    <string name="re_raise_event">Opnieuw verhogen</string>
 </resources>

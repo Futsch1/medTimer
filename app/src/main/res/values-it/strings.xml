@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -215,4 +214,5 @@
     <string name="login">Accedere a MedTimer utilizzando l&amp;apos;autenticazione biometrica</string>
     <string name="privacy_settings">Impostazioni sulla privacy</string>
     <string name="hide_med_name">Nascondere il nome del farmaco nella notifica</string>
+    <string name="re_raise_event">Evento di rilancio</string>
 </resources>

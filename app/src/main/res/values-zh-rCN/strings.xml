@@ -205,4 +205,5 @@
     <string name="login">使用生物识别身份验证登录 MedTimer</string>
     <string name="privacy_settings">隐私设置</string>
     <string name="hide_med_name">在通知中隐藏药物名称</string>
+    <string name="re_raise_event">再加注事件</string>
 </resources>

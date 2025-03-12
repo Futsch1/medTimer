@@ -29,6 +29,12 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
         super(new ReminderEventEntityInterface(), R.layout.fragment_edit_event, EditEventFragment.class.getName());
     }
 
+
+    @Override
+    protected void setupMenu(@NonNull View fragmentView) {
+        requireActivity().addMenuProvider(new EditEventMenuProvider(getEntityId(), this.getThread(), this.getMedicineViewModel(), fragmentView), getViewLifecycleOwner());
+    }
+
     @Override
     public boolean onEntityLoaded(ReminderEvent entity, @NonNull View fragmentView) {
         editEventName = fragmentView.findViewById(R.id.editEventName);

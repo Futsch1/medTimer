@@ -215,4 +215,5 @@
     <string name="login">Se connecter à MedTimer en utilisant l&amp;apos;authentification biométrique</string>
     <string name="privacy_settings">Paramètres de confidentialité</string>
     <string name="hide_med_name">Cacher le nom du médicament dans la notification</string>
+    <string name="re_raise_event">Événement de relance</string>
 </resources>

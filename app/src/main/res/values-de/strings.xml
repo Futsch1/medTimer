@@ -209,4 +209,5 @@
     <string name="login">Anmeldung bei MedTimer mit biometrischer Authentifizierung</string>
     <string name="privacy_settings">Datenschutz-Einstellungen</string>
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
+    <string name="re_raise_event">Ereignis erneut auslösen</string>
 </resources>

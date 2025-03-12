@@ -215,4 +215,5 @@
     <string name="login">Inicio de sesión en MedTimer mediante autenticación biométrica</string>
     <string name="privacy_settings">Privacidad</string>
     <string name="hide_med_name">Ocultar el nombre del medicamento en la notificación</string>
+    <string name="re_raise_event">Evento de reaumento</string>
 </resources>
