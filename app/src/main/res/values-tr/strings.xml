@@ -210,5 +210,5 @@
     <string name="login">Biyometrik kimlik doğrulama kullanarak MedTimer&amp;apos;a giriş yapın</string>
     <string name="privacy_settings">Gizlilik ayarları</string>
     <string name="hide_med_name">Bildirimde ilaç adını gizleme</string>
-    <string name="re_raise_event">Yeniden yükseltme etkinliği</string>
+    <string name="re_raise_event">Olayı yeniden tetiklemek</string>
 </resources>

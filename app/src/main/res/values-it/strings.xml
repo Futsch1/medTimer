@@ -214,5 +214,5 @@
     <string name="login">Accedere a MedTimer utilizzando l&amp;apos;autenticazione biometrica</string>
     <string name="privacy_settings">Impostazioni sulla privacy</string>
     <string name="hide_med_name">Nascondere il nome del farmaco nella notifica</string>
-    <string name="re_raise_event">Evento di rilancio</string>
+    <string name="re_raise_event">Riavviare l&amp;apos;evento</string>
 </resources>
