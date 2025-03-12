@@ -17,10 +17,13 @@ object MedicineHelper {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
     }
 
-    @JvmStatic
     @SuppressLint("DefaultLocale")
-    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
-        val name = getMedicineNameForNotification(context, medicine)
+    fun getMedicineNameWithStockTextInternal(
+        context: Context,
+        medicine: Medicine,
+        notification: Boolean
+    ): String {
+        val name = getMedicineName(context, medicine, notification)
         return if (medicine.isStockManagementActive) {
             "$name (" + context.getString(
                 R.string.medicine_stock_string,
@@ -33,9 +36,22 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun getMedicineNameForNotification(context: Context, medicine: Medicine): String {
+    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
+        return getMedicineNameWithStockTextInternal(context, medicine, false)
+    }
+
+    @JvmStatic
+    fun getMedicineNameWithStockTextForNotification(context: Context, medicine: Medicine): String {
+        return getMedicineNameWithStockTextInternal(context, medicine, true)
+    }
+
+    private fun getMedicineName(
+        context: Context,
+        medicine: Medicine,
+        notification: Boolean
+    ): String {
         return if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(HIDE_MED_NAME, false)
+                .getBoolean(HIDE_MED_NAME, false) && notification
         ) {
             medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {
