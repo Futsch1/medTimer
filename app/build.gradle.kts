@@ -82,7 +82,7 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.8.8"
+    val androidXNavigationVersion = "2.8.9"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.0"
@@ -233,17 +233,17 @@ android {
         // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
         classDirectories.setFrom(
             files(
-            fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
-                exclude(exclusions)
-            },
-            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
-                exclude(exclusions)
-            }
-        ))
+                fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+                    exclude(exclusions)
+                },
+                fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+                    exclude(exclusions)
+                }
+            ))
         // Collect execution data from .exec and .ec files generated during test execution
         executionData.setFrom(
             files(
-            fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
-        ))
+                fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
+            ))
     }
 }
