@@ -94,7 +94,7 @@ public class Notifications {
             instructions = " " + instructions;
         }
         final int amountStringId = reminder.amount.isBlank() ? R.string.notification_content_blank : R.string.notification_content;
-        String medicineNameString = MedicineHelper.getMedicineNameWithStockText(context, medicine.medicine);
+        String medicineNameString = MedicineHelper.getMedicineNameWithStockTextForNotification(context, medicine.medicine);
         String notificationString = context.getString(amountStringId, remindTime, reminder.amount, medicineNameString, instructions);
         @SuppressWarnings("java:S6204")
         List<String> tagNames = medicine.tags.stream().map(t -> t.name).collect(Collectors.toList());

@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 103
-        versionName = "1.16.3"
+        versionCode = 104
+        versionName = "1.16.4"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -231,7 +231,8 @@ android {
         // Set source directories to the main source directory
         sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
         // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
-        classDirectories.setFrom(files(
+        classDirectories.setFrom(
+            files(
             fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
                 exclude(exclusions)
             },
@@ -240,7 +241,8 @@ android {
             }
         ))
         // Collect execution data from .exec and .ec files generated during test execution
-        executionData.setFrom(files(
+        executionData.setFrom(
+            files(
             fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
         ))
     }

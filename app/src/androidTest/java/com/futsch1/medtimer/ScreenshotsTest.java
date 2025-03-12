@@ -84,6 +84,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         Screengrab.screenshot("3");
 
         clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
+        assertContains(R.string.active_in_time_period);
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
