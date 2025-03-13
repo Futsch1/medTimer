@@ -217,4 +217,5 @@
     <string name="login">Вход в MedTimer с помощью биометрической аутентификации</string>
     <string name="privacy_settings">Настройки конфиденциальности</string>
     <string name="hide_med_name">Скрыть название лекарства в уведомлении</string>
+    <string name="re_raise_event">Повторно вызвать событие</string>
 </resources>

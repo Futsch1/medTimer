@@ -210,4 +210,5 @@
     <string name="login">உயிர் அடையாள அங்கீகரிப்பு மூலம் MedTimer-ல் உள்நுழையவும்</string>
     <string name="privacy_settings">தனியுரிமை அமைப்புகள்</string>
     <string name="hide_med_name">அறிவிப்பில் மருந்து பெயரை மறை</string>
+    <string name="re_raise_event">மீண்டும் உயர்த்தும் நிகழ்வு</string>
 </resources>

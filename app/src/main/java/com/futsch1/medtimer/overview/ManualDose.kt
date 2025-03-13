@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -85,8 +86,8 @@ class ManualDose(
 
     private var lastCustomDose: String?
         get() = sharedPreferences.getString("lastCustomDose", "")
-        private set(lastCustomDose) {
-            sharedPreferences.edit().putString("lastCustomDose", lastCustomDose).apply()
+        set(lastCustomDose) {
+            sharedPreferences.edit { putString("lastCustomDose", lastCustomDose) }
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, medicineId: Int) {

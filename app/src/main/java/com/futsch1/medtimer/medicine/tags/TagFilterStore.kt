@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine.tags
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
 import java.util.stream.Collectors
 
@@ -14,8 +15,9 @@ class TagFilterStore(
     var selectedTags =
         tagIdSetFromStringSet(sharedPreferences.getStringSet("filterTags", emptySet()))
         set(value) {
-            sharedPreferences.edit()
-                .putStringSet("filterTags", value.map { it.toString() }.toSet()).apply()
+            sharedPreferences.edit {
+                putStringSet("filterTags", value.map { it.toString() }.toSet())
+            }
             field = value
             validTagIds.value = value
         }

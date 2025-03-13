@@ -21,10 +21,7 @@ import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,7 +61,6 @@ public class OverviewFragment extends Fragment {
         RecyclerView latestReminders = setupLatestReminders();
         new NextReminders(fragmentOverview, this, medicineViewModel);
         setupLogManualDose();
-        setupSwipeEdit(latestReminders);
         setupSwipeDelete(latestReminders);
         setupFilterButton();
         setupResizeHandle();
@@ -105,20 +101,6 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    private void setupSwipeEdit(RecyclerView latestReminders) {
-        SwipeHelper swipeHelperEdit = new SwipeHelper(requireContext(), ItemTouchHelper.RIGHT, 0xFF006400, android.R.drawable.ic_menu_edit) {
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.RIGHT) {
-                    Handler handler = new Handler(thread.getLooper());
-                    handler.post(() -> navigateToEditEvent(viewHolder.getItemId()));
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHelperEdit);
-        itemTouchHelper.attachToRecyclerView(latestReminders);
-    }
-
     private void setupSwipeDelete(RecyclerView latestReminders) {
         SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteReminderEvent(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
                 .attachToRecyclerView(latestReminders);
@@ -149,19 +131,6 @@ public class OverviewFragment extends Fragment {
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
             params.guidePercent = percentage;
             guideline.setLayoutParams(params);
-        }
-    }
-
-    private void navigateToEditEvent(long eventId) {
-        NavController navController = Navigation.findNavController(fragmentOverview);
-        ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
-        if (reminderEvent != null) {
-            OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
-                    reminderEvent.reminderEventId,
-                    reminderEvent.reminderId <= 0
-            );
-            requireActivity().runOnUiThread(() ->
-                    navController.navigate(action));
         }
     }
 

@@ -213,4 +213,5 @@
     <string name="login">Login to MedTimer using biometric authentication</string>
     <string name="privacy_settings">Privacy settings</string>
     <string name="hide_med_name">Hide medication name in notification</string>
+    <string name="re_raise_event">Re-raise event</string>
 </resources>

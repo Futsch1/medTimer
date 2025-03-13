@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
@@ -51,6 +53,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
         setupChips(reminderEvent);
         setupColorAndIcon(reminderEvent);
+        setupEditEvent(reminderEvent);
 
         checkedChanged = false;
     }
@@ -83,6 +86,22 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
+    }
+
+    private void setupEditEvent(ReminderEvent reminderEvent) {
+        this.itemView.setOnClickListener((View v) -> {
+            NavController navController = Navigation.findNavController(this.itemView);
+            OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
+                    reminderEvent.reminderEventId,
+                    reminderEvent.reminderId <= 0
+            );
+            try {
+                navController.navigate(action);
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                // Intentionally empty
+            }
+        });
+
     }
 
     private void processTakenOrSkipped(ReminderEvent reminderEvent, boolean taken) {
