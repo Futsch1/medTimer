@@ -95,7 +95,11 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
                     reminderEvent.reminderEventId,
                     reminderEvent.reminderId <= 0
             );
-            navController.navigate(action);
+            try {
+                navController.navigate(action);
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                // Intentionally empty
+            }
         });
 
     }
