@@ -102,27 +102,29 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="4dp">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recent_events"
-                    android:textStyle="bold" />
-
-                <Space
+                    android:id="@+id/textView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:maxLines="2"
+                    android:singleLine="false"
+                    android:text="@string/recent_events"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/recentFilters"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/recentFilters"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/showOnlyOpen"
@@ -138,7 +140,7 @@
                         tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.chip.ChipGroup>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/latestReminders"
@@ -161,6 +163,7 @@
         android:layout_margin="8dp"
         android:clickable="true"
         android:contentDescription="@string/log_additional_dose"
+        android:maxLines="2"
         android:text="@string/log_additional_dose"
         app:icon="@drawable/capsule"
         app:layout_constraintBottom_toBottomOf="parent"

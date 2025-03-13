@@ -26,6 +26,7 @@
         android:layout_margin="8dp"
         android:clickable="true"
         android:contentDescription="@string/add_medicine"
+        android:maxLines="2"
         android:text="@string/add_medicine"
         app:icon="@android:drawable/ic_menu_add" />
 
