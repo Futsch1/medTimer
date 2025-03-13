@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.database;
 
+import static androidx.room.OnConflictStrategy.IGNORE;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -104,7 +106,7 @@ public interface MedicineDao {
     @Delete
     void deleteTag(Tag tag);
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     void insertMedicineToTag(MedicineToTag medicineToTag);
 
     @Delete
