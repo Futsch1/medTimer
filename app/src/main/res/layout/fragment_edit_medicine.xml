@@ -152,6 +152,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="8dp"
         android:clickable="true"
+        android:maxLines="2"
         android:text="@string/add_reminder"
         app:icon="@android:drawable/ic_menu_add" />
 
