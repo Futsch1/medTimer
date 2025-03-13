@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.edit
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
@@ -32,7 +34,7 @@ class MedicineIcons(context: Context) {
         }
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         if (iconColor != 0) {
-            sharedPref.edit().putInt("icon_color", iconColor).apply()
+            sharedPref.edit { putInt("icon_color", iconColor) }
         } else {
             iconColor = sharedPref.getInt("icon_color", Color.BLACK)
         }
@@ -49,9 +51,7 @@ class MedicineIcons(context: Context) {
     fun getIconBitmap(id: Int): Bitmap {
         val drawable = getIconDrawable(id)
 
-        val bit = Bitmap.createBitmap(
-            drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
-        )
+        val bit = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
 
         val canvas = Canvas(bit)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
