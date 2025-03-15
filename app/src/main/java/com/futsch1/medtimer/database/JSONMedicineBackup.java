@@ -36,6 +36,7 @@ public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
     public void applyBackup(List<FullMedicine> listOfFullMedicine, MedicineRepository medicineRepository) {
         medicineRepository.deleteReminders();
         medicineRepository.deleteMedicines();
+        medicineRepository.deleteTags();
 
         for (FullMedicine FullMedicine : listOfFullMedicine) {
             long medicineId = medicineRepository.insertMedicine(FullMedicine.medicine);

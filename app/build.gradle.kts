@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 35
-        versionCode = 104
-        versionName = "1.16.4"
+        versionCode = 105
+        versionName = "1.16.5"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -60,7 +60,6 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
