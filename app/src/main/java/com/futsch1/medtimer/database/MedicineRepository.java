@@ -135,8 +135,7 @@ public class MedicineRepository {
         deleteReminders();
         deleteMedicines();
         deleteReminderEvents();
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
+        deleteTags();
     }
 
     public void deleteReminders() {
@@ -149,6 +148,11 @@ public class MedicineRepository {
 
     public void deleteReminderEvents() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
+    }
+
+    public void deleteTags() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
+        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
     }
 
     public void deleteReminderEvent(int reminderEventId) {

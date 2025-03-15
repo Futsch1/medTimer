@@ -67,7 +67,7 @@ public class OptionsMenu implements MenuProvider {
     }
 
     public void fileSelected(Uri data) {
-        backupManager.fileSelected(data);
+        new Handler(backgroundThread.getLooper()).post(() -> backupManager.fileSelected(data));
     }
 
     @Override
@@ -218,7 +218,7 @@ public class OptionsMenu implements MenuProvider {
         if (fragment.getView() == null) {
             return;
         }
-        
+
         MenuItem item = menu.findItem(R.id.tag_filter);
         item.setVisible(true);
         item.setOnMenuItemClickListener(menuItem -> {
