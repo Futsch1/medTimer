@@ -33,7 +33,7 @@ class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
     private fun setupAppAuthentication() {
         val preference = preferenceScreen.findPreference<Preference>("app_authentication")
         if (preference != null) {
-            preference.isEnabled = Biometrics(this.requireContext()).hasBiometrics()
+            preference.isEnabled = Biometrics(this.requireActivity(), {}, {}).hasBiometrics()
         }
     }
 

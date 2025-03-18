@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.content.Context
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -11,10 +10,14 @@ import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.Executor
 
 
-class Biometrics(val context: Context) {
+class Biometrics(
+    val activity: FragmentActivity,
+    val successCallback: () -> Unit,
+    val failureCallback: () -> Unit
+) {
     fun hasBiometrics(): Boolean {
         val biometricManager =
-            BiometricManager.from(context)
+            BiometricManager.from(activity)
         return biometricManager.canAuthenticate(BIOMETRIC_WEAK or DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
     }
 
@@ -23,15 +26,12 @@ class Biometrics(val context: Context) {
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
     fun authenticate(
-        activity: FragmentActivity,
-        successCallback: () -> Unit,
-        failureCallback: () -> Unit
     ) {
-        executor = ContextCompat.getMainExecutor(context)
+        executor = ContextCompat.getMainExecutor(activity)
         biometricPrompt = getPrompt(activity, failureCallback, successCallback)
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(R.string.login))
+            .setTitle(activity.getString(R.string.login))
             .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
             .build()
 
@@ -43,7 +43,8 @@ class Biometrics(val context: Context) {
         activity: FragmentActivity,
         failureCallback: () -> Unit,
         successCallback: () -> Unit
-    ) = BiometricPrompt(activity, executor,
+    ) = BiometricPrompt(
+        activity, executor,
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(
                 errorCode: Int,
@@ -62,7 +63,7 @@ class Biometrics(val context: Context) {
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                failureCallback()
+                authenticate()
             }
         })
 }
