@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      target_api_level: 34
+      target_api_level: 35
       profile: medium_phone
 
     steps:
@@ -70,7 +70,7 @@ jobs:
             adb uninstall com.futsch1.medtimer || true
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
             adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
-            adb shell monkey -p com.futsch1.medtimer -v 5000 --throttle 10
+            adb shell monkey -p com.futsch1.medtimer -v 3s000 --throttle 25
           cores: 4
 
       - name: Run fuzzing tests
