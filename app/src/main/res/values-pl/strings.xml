@@ -31,8 +31,8 @@
     <string name="confirm">Potwierdź</string>
     <string name="notification_content_blank">Jest %1$s - czas wziąć %2$s%3$s%4$s</string>
     <string name="notification_content">Jest %1$s - czas wziąć %2$s z %3$s%4$s</string>
-    <string name="taken">Wzięty</string>
-    <string name="skipped">Pominięty</string>
+    <string name="taken">Wzięto</string>
+    <string name="skipped">Pominięto</string>
     <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
     <string name="reminder_event">%1$s z %2$s, %3$s</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>
@@ -102,8 +102,8 @@
     </plurals>
     <string name="name">Nazwa</string>
     <string name="event_data">Dane zdarzeń</string>
-    <string name="backup">Kopiuj</string>
-    <string name="taken_now">Wzięty teraz</string>
+    <string name="backup">Kopia zapasowa</string>
+    <string name="taken_now">Wzięto teraz</string>
     <string name="event_name">Nazwa zdarzenia</string>
     <string name="intro_medicine_description">Użyj zakładki „Lekarstwa”, aby utworzyć lek, który przyjmujesz i chcesz otrzymać przypomnienie. Możesz przypisać tagi do leków i skonfigurować ich zapasy.</string>
     <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia o różnych dawkach leku, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub interwałach i można je ograniczyć do konkretnych dni.</string>
