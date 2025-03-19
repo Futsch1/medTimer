@@ -68,16 +68,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void authenticate(SharedPreferences sharedPref) {
-        Biometrics biometrics = new Biometrics(this);
+        Biometrics biometrics = new Biometrics(this,
+                () -> {
+                    start();
+                    return Unit.INSTANCE;
+                }, () -> {
+            this.finish();
+            return Unit.INSTANCE;
+        });
         if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
-            biometrics.authenticate(this,
-                    () -> {
-                        start();
-                        return Unit.INSTANCE;
-                    }, () -> {
-                        this.finish();
-                        return Unit.INSTANCE;
-                    });
+            biometrics.authenticate();
         } else {
             start();
         }
