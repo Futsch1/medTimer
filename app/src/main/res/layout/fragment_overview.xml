@@ -111,7 +111,6 @@
                     android:id="@+id/textView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
                     android:singleLine="false"
                     android:text="@string/recent_events"
                     android:textStyle="bold"
