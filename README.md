@@ -16,6 +16,9 @@ height="80">](https://f-droid.org/packages/com.futsch1.medtimer/)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
 alt="Get it on IzzyOnDroid"
 height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.futsch1.medtimer)
+[<img src="https://www.openapk.net/images/openapk-badge.png"
+alt="Get it on OpenApk"
+height="80">](https://www.openapk.net/medtimer/com.futsch1.medtimer/)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
 alt="Get it on Google Play"
 height="80">](https://play.google.com/store/apps/details?id=com.futsch1.medtimer)
