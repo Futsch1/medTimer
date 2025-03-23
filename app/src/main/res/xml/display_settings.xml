@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
+        android:title="@string/use_relative_date_time"
+        app:key="use_relative_date_time" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="24"
+        android:entries="@array/overview_events_titles"
+        android:entryValues="@array/overview_events_values"
+        android:title="@string/overview_events"
+        app:key="overview_events"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="0"
+        android:entries="@array/theme_entries_titles"
+        android:entryValues="@array/theme_entries_values"
+        android:title="@string/theme"
+        app:key="theme"
+        app:useSimpleSummaryProvider="true" />
+</androidx.preference.PreferenceScreen>

@@ -214,4 +214,7 @@
     <string name="privacy_settings">Privacy settings</string>
     <string name="hide_med_name">Hide medication name in notification</string>
     <string name="re_raise_event">Re-raise event</string>
+    <string name="notification_reminder_settings">Notification and reminder settings</string>
+    <string name="display_settings">Display settings</string>
+    <string name="use_relative_date_time">Show relative date/time for reminders</string>
 </resources>

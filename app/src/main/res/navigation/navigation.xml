@@ -32,11 +32,14 @@
             android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
             app:destination="@id/weekendModePreferencesFragment" />
         <action
-            android:id="@+id/action_preferencesFragment_to_repeatRemindersPreferencesFragment"
-            app:destination="@id/repeatRemindersPreferencesFragment" />
-        <action
             android:id="@+id/action_preferencesFragment_to_privacyPreferencesFragment"
             app:destination="@id/privacyPreferencesFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_notificationSettingsFragment"
+            app:destination="@id/notificationSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_displaySettingsFragment"
+            app:destination="@id/displaySettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -129,4 +132,16 @@
         android:id="@+id/privacyPreferencesFragment"
         android:name="com.futsch1.medtimer.preferences.PrivacyPreferencesFragment"
         android:label="@string/privacy_settings" />
+    <fragment
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.futsch1.medtimer.preferences.NotificationSettingsFragment"
+        android:label="@string/notification_reminder_settings">
+        <action
+            android:id="@+id/action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment"
+            app:destination="@id/repeatRemindersPreferencesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/displaySettingsFragment"
+        android:name="com.futsch1.medtimer.preferences.DisplaySettingsFragment"
+        android:label="@string/display_settings" />
 </navigation>

@@ -1,201 +1,104 @@
-package com.futsch1.medtimer.preferences;
+package com.futsch1.medtimer.preferences
 
-import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.Settings;
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import androidx.annotation.IdRes
+import androidx.navigation.Navigation.findNavController
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
+import com.futsch1.medtimer.MainActivity
+import com.futsch1.medtimer.R
 
-import androidx.annotation.IdRes;
-import androidx.annotation.RequiresApi;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreferenceCompat;
-
-import com.futsch1.medtimer.MainActivity;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
-
-
-public class PreferencesFragment extends PreferenceFragmentCompat {
-    String rootKey;
-
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        this.rootKey = rootKey;
-        setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
-        setupTheme();
-        setupExactReminders();
-        setupNotificationSettings();
-        setupPreferencesLink("repeat_reminders_preferences", R.id.action_preferencesFragment_to_repeatRemindersPreferencesFragment);
-        setupPreferencesLink("weekend_mode", R.id.action_preferencesFragment_to_weekendModePreferencesFragment);
-        setupPreferencesLink("privacy_settings", R.id.action_preferencesFragment_to_privacyPreferencesFragment);
-
-    }
-
-    private void setupTheme() {
-        Preference preference = getPreferenceScreen().findPreference("theme");
-        if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                try {
-                    Intent intent = new Intent(requireActivity(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    requireActivity().finish();
-                    startActivity(intent);
-                    return true;
-                } catch (IllegalStateException e) {
-                    return false;
-                }
-            });
-        }
-    }
-
-    private void setupExactReminders() {
-        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
-        if (preference != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                preference.setOnPreferenceChangeListener((preference13, newValue) -> {
-                    if (Boolean.TRUE.equals(newValue)) {
-                        showExactReminderDialog();
-                    }
-                    return true;
-                });
-            } else {
-                preference.setVisible(false);
-            }
-        }
-    }
-
-    private void setupNotificationSettings() {
-        Preference preference = getPreferenceScreen().findPreference("notification_settings_high");
-        if (preference != null) {
-            setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.HIGH);
-        }
-        preference = getPreferenceScreen().findPreference("notification_settings_default");
-        if (preference != null) {
-            setupNotificationSettingsPreference(preference, ReminderNotificationChannelManager.Importance.DEFAULT);
-        }
-        preference = getPreferenceScreen().findPreference(PreferencesNames.OVERRIDE_DND);
-        if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference1, value) -> {
-                if (Boolean.TRUE.equals(value)) {
-                    showDndPermissions();
-                }
-                return true;
-            });
-        }
-    }
-
-    private void setupPreferencesLink(String preferenceKey, @IdRes int actionId) {
-        Preference preference = getPreferenceScreen().findPreference(preferenceKey);
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(preference1 ->
-                    {
-                        NavController navController = Navigation.findNavController(requireView());
-                        try {
-                            navController.navigate(actionId);
-                        } catch (IllegalArgumentException e) {
-                            // Intentionally empty (monkey test can cause this to fail)
-                        }
-                        return true;
-                    }
-            );
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    private void showExactReminderDialog() {
-        AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
-        if (!alarmManager.canScheduleExactAlarms()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.enable_alarm_dialog).
-                    setPositiveButton(R.string.ok, (dialog, id) -> {
-                        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                        safeStartActivity(intent);
-                    }).
-                    setNegativeButton(R.string.cancel, (dialog, id) -> {
-                        try {
-                            PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.EXACT_REMINDERS, false).apply();
-                            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-                        } catch (IllegalStateException e) {
-                            // Intentionally empty (monkey test can cause this to fail)
-                        }
-                    });
-            AlertDialog d = builder.create();
-            d.show();
-        }
-    }
-
-    private void setupNotificationSettingsPreference(Preference preference, ReminderNotificationChannelManager.Importance importance) {
-        preference.setOnPreferenceClickListener(preference1 ->
-                {
-                    Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
-                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
-                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, Integer.toString(importance.getValue()));
-                    startActivity(intent);
-                    return true;
-                }
-        );
-    }
-
-    private void showDndPermissions() {
-        if (!requireContext().getSystemService(NotificationManager.class).isNotificationPolicyAccessGranted()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.enable_dnd_dialog).
-                    setPositiveButton(R.string.ok, (dialog, id) -> {
-                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                        safeStartActivity(intent);
-                    }).
-                    setNegativeButton(R.string.cancel, (dialog, id) -> {
-                        try {
-                            PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().putBoolean(PreferencesNames.OVERRIDE_DND, false).apply();
-                            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-                        } catch (IllegalStateException e) {
-                            // Intentionally empty (monkey test can cause this to fail)
-                        }
-                    });
-            AlertDialog d = builder.create();
-            d.show();
-        }
-    }
-
-    private void safeStartActivity(Intent intent) {
+fun setupPreferencesLink(
+    preferencesFragment: PreferencesFragment,
+    preferenceKey: String,
+    @IdRes actionId: Int
+) {
+    val preference = preferencesFragment.findPreference<Preference?>(preferenceKey)
+    preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+        val navController = findNavController(preferencesFragment.requireView())
         try {
-            startActivity(intent);
-        } catch (IllegalStateException e) {
-            // Intentionally empty
+            navController.navigate(actionId)
+        } catch (_: IllegalArgumentException) {
+            // Intentionally empty (monkey test can cause this to fail)
         }
+        true
+    }
+}
+
+open class PreferencesFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+        setupTheme()
+        setupPreferencesLink(
+            this,
+            "notification_settings",
+            R.id.action_preferencesFragment_to_notificationSettingsFragment
+        )
+        setupPreferencesLink(
+            this,
+            "display_settings",
+            R.id.action_preferencesFragment_to_displaySettingsFragment
+        )
+        setupPreferencesLink(
+            this,
+            "weekend_mode",
+            R.id.action_preferencesFragment_to_weekendModePreferencesFragment
+        )
+        setupPreferencesLink(
+            this,
+            "privacy_settings",
+            R.id.action_preferencesFragment_to_privacyPreferencesFragment
+        )
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        resumeExactReminders();
-        resumeOverrideDnd();
+    private fun setupTheme() {
+        val preference = preferenceScreen.findPreference<Preference?>("theme")
+        preference?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, _ ->
+                try {
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    requireActivity().finish()
+                    startActivity(intent)
+                    return@OnPreferenceChangeListener true
+                } catch (_: IllegalStateException) {
+                    return@OnPreferenceChangeListener false
+                }
+            }
     }
 
-    private void resumeExactReminders() {
-        SwitchPreferenceCompat preference = getPreferenceScreen().findPreference(PreferencesNames.EXACT_REMINDERS);
+    override fun onResume() {
+        super.onResume()
+        resumeExactReminders()
+        resumeOverrideDnd()
+    }
+
+    private fun resumeExactReminders() {
+        val preference =
+            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.EXACT_REMINDERS)
         if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlarmManager alarmManager = requireContext().getSystemService(AlarmManager.class);
+            val alarmManager =
+                requireContext().getSystemService<AlarmManager>(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
-                preference.setChecked(false);
+                preference.setChecked(false)
             }
         }
     }
 
-    private void resumeOverrideDnd() {
-        SwitchPreferenceCompat preference;
-        preference = getPreferenceScreen().findPreference(PreferencesNames.OVERRIDE_DND);
-        if (preference != null && !requireContext().getSystemService(NotificationManager.class).isNotificationPolicyAccessGranted()) {
-            preference.setChecked(false);
+    private fun resumeOverrideDnd() {
+        val preference =
+            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.OVERRIDE_DND)
+        if (preference != null && !requireContext().getSystemService<NotificationManager?>(
+                NotificationManager::class.java
+            ).isNotificationPolicyAccessGranted()
+        ) {
+            preference.setChecked(false)
         }
     }
-
 }
