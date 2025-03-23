@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
@@ -28,6 +30,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     private final Chip chipTaken;
     private final Chip chipSkipped;
     private final ChipGroup chipGroup;
+    private final SharedPreferences sharedPreferences;
     private boolean checkedChanged = false;
 
     private LatestRemindersViewHolder(View itemView) {
@@ -36,6 +39,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         chipTaken = itemView.findViewById(R.id.chipTaken);
         chipSkipped = itemView.findViewById(R.id.chipSkipped);
         chipGroup = itemView.findViewById(R.id.takenOrSkipped);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(itemView.getContext());
     }
 
     static LatestRemindersViewHolder create(ViewGroup parent) {
@@ -45,7 +49,8 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(ReminderEvent reminderEvent) {
-        String takenDateTime = TimeHelper.toLocalizedDatetimeString(reminderEventText.getContext(),
+        String takenDateTime = TimeHelper.toConfigurableDateTimeString(reminderEventText.getContext(),
+                sharedPreferences,
                 reminderEvent.remindedTimestamp);
         final int amountStringId = reminderEvent.amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
         String reminderEventTextString = reminderEventText.getContext().getString(amountStringId, reminderEvent.amount, reminderEvent.medicineName, takenDateTime);

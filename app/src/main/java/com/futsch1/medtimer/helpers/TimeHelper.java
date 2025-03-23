@@ -2,6 +2,7 @@ package com.futsch1.medtimer.helpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
@@ -185,6 +186,19 @@ public class TimeHelper {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.systemDefault());
         localDateTime = localDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60);
         return localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
+    }
+
+    /**
+     * @param context   Context to extract date and time formats
+     * @param timeStamp Time stamp in seconds since epoch
+     * @return Date and time string in local format as relative date time string
+     */
+    public static String toConfigurableDateTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+        if (preferences.getBoolean("use_relative_date_time", true)) {
+            return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+        } else {
+            return toLocalizedDatetimeString(context, timeStamp);
+        }
     }
 
     /**
