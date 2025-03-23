@@ -194,7 +194,7 @@ public class TimeHelper {
      * @return Date and time string in local format as relative date time string
      */
     public static String toConfigurableDateTimeString(Context context, SharedPreferences preferences, long timeStamp) {
-        if (preferences.getBoolean("use_relative_date_time", true)) {
+        if (preferences.getBoolean("use_relative_date_time", false)) {
             return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
         } else {
             return toLocalizedDatetimeString(context, timeStamp);
