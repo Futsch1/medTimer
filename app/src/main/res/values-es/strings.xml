@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -216,4 +215,7 @@
     <string name="privacy_settings">Privacidad</string>
     <string name="hide_med_name">Ocultar el nombre del medicamento en la notificación</string>
     <string name="re_raise_event">Volver a activar el evento</string>
+    <string name="notification_reminder_settings">Configuración de notificaciones y recordatorios</string>
+    <string name="display_settings">Configuración de la pantalla</string>
+    <string name="use_relative_date_time">Mostrar la fecha/hora relativa de los recordatorios</string>
 </resources>

@@ -210,4 +210,7 @@
     <string name="privacy_settings">Datenschutz-Einstellungen</string>
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
+    <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
+    <string name="display_settings">Einstellungen anzeigen</string>
+    <string name="use_relative_date_time">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
 </resources>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -216,4 +215,7 @@
     <string name="privacy_settings">Impostazioni sulla privacy</string>
     <string name="hide_med_name">Nascondere il nome del farmaco nella notifica</string>
     <string name="re_raise_event">Riavviare l&amp;apos;evento</string>
+    <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
+    <string name="display_settings">Impostazioni del display</string>
+    <string name="use_relative_date_time">Mostra la data/ora relativa per i promemoria</string>
 </resources>

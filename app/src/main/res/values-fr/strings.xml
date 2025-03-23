@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -216,4 +215,7 @@
     <string name="privacy_settings">Paramètres de confidentialité</string>
     <string name="hide_med_name">Cacher le nom du médicament dans la notification</string>
     <string name="re_raise_event">Redéclencher l&amp;apos;événement</string>
+    <string name="notification_reminder_settings">Paramètres de notification et de rappel</string>
+    <string name="display_settings">Paramètres d&amp;apos;affichage</string>
+    <string name="use_relative_date_time">Afficher la date et l&amp;apos;heure relatives pour les rappels</string>
 </resources>

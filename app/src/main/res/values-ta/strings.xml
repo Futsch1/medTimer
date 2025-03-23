@@ -211,4 +211,7 @@
     <string name="privacy_settings">தனியுரிமை அமைப்புகள்</string>
     <string name="hide_med_name">அறிவிப்பில் மருந்து பெயரை மறை</string>
     <string name="re_raise_event">மீண்டும் உயர்த்தும் நிகழ்வு</string>
+    <string name="notification_reminder_settings">அறிவிப்பு மற்றும் நினைவூட்டல் அமைப்புகள்</string>
+    <string name="display_settings">காட்சி அமைப்புகள்</string>
+    <string name="use_relative_date_time">நினைவூட்டல்களுக்கு தொடர்புடைய தேதி/நேரத்தை காட்டு</string>
 </resources>

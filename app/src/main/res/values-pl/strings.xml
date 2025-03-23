@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="period_end">Koniec okresu</string>
     <string name="tab_overview">Przegląd</string>
@@ -203,4 +202,25 @@
     <string name="refill_now">Uzupełnij teraz</string>
     <string name="enable_dnd_dialog">Aby umożliwić ciągłe odtwarzanie dźwięków powiadomień, włącz opcję Nie przeszkadzać dla MedTimer w następującym menu</string>
     <string name="add_tag">Dodaj tag</string>
+    <string name="notification_reminder_settings">Ustawienia powiadomień i przypomnień</string>
+    <string name="display_settings">Ustawienia wyświetlacza</string>
+    <string name="use_relative_date_time">Wyświetlanie względnej daty/godziny dla przypomnień</string>
+    <plurals name="minutes">
+        <item quantity="one">minuta</item>
+        <item quantity="few">minuty</item>
+        <item quantity="many">minut</item>
+        <item quantity="other">minut</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">godzina</item>
+        <item quantity="few">godziny</item>
+        <item quantity="many">godzin</item>
+        <item quantity="other">godzin</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">dzień</item>
+        <item quantity="few">dni</item>
+        <item quantity="many">dni</item>
+        <item quantity="other">dni</item>
+    </plurals>
 </resources>
