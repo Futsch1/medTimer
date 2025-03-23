@@ -1,11 +1,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:icon="@drawable/calendar_week"
+        app:icon="@drawable/bell"
         app:key="notification_settings"
         app:title="@string/notification_reminder_settings" />
     <Preference
-        android:icon="@drawable/shield_lock"
+        android:icon="@drawable/display"
         app:key="display_settings"
         app:title="@string/display_settings" />
     <Preference
