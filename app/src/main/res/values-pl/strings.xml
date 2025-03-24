@@ -204,7 +204,7 @@
     <string name="add_tag">Dodaj tag</string>
     <string name="notification_reminder_settings">Ustawienia powiadomień i przypomnień</string>
     <string name="display_settings">Ustawienia wyświetlacza</string>
-    <string name="use_relative_date_time">Wyświetlanie względnej daty/godziny dla przypomnień</string>
+    <string name="use_relative_date_time_summary">Wyświetlanie względnej daty/godziny dla przypomnień</string>
     <plurals name="minutes">
         <item quantity="one">minuta</item>
         <item quantity="few">minuty</item>
@@ -223,4 +223,5 @@
         <item quantity="many">dni</item>
         <item quantity="other">dni</item>
     </plurals>
+    <string name="use_relative_date_time">Względna data/godzina</string>
 </resources>

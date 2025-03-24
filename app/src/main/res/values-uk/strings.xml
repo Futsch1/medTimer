@@ -222,5 +222,6 @@
     <string name="re_raise_event">Повторно запустити подію</string>
     <string name="notification_reminder_settings">Налаштування сповіщень та нагадувань</string>
     <string name="display_settings">Налаштування дисплея</string>
-    <string name="use_relative_date_time">Показувати відносну дату/час для нагадувань</string>
+    <string name="use_relative_date_time_summary">Показувати відносну дату/час для нагадувань</string>
+    <string name="use_relative_date_time">Відносна дата/час</string>
 </resources>

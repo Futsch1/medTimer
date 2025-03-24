@@ -217,5 +217,6 @@
     <string name="re_raise_event">Redéclencher l&amp;apos;événement</string>
     <string name="notification_reminder_settings">Paramètres de notification et de rappel</string>
     <string name="display_settings">Paramètres d&amp;apos;affichage</string>
-    <string name="use_relative_date_time">Afficher la date et l&amp;apos;heure relatives pour les rappels</string>
+    <string name="use_relative_date_time_summary">Afficher la date et l&amp;apos;heure relatives pour les rappels</string>
+    <string name="use_relative_date_time">Date/heure relative</string>
 </resources>

@@ -217,5 +217,6 @@
     <string name="re_raise_event">Volver a activar el evento</string>
     <string name="notification_reminder_settings">Configuración de notificaciones y recordatorios</string>
     <string name="display_settings">Configuración de la pantalla</string>
-    <string name="use_relative_date_time">Mostrar la fecha/hora relativa de los recordatorios</string>
+    <string name="use_relative_date_time_summary">Mostrar la fecha/hora relativa de los recordatorios</string>
+    <string name="use_relative_date_time">Fecha/hora relativa</string>
 </resources>

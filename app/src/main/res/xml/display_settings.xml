@@ -6,6 +6,7 @@
         android:layout_height="wrap_content"
         android:defaultValue="false"
         android:title="@string/use_relative_date_time"
+        android:summary="@string/use_relative_date_time_summary"
         app:key="use_relative_date_time" />
     <ListPreference
         android:layout_width="wrap_content"

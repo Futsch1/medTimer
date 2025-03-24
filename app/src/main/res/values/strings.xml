@@ -216,5 +216,6 @@
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
     <string name="display_settings">Display settings</string>
-    <string name="use_relative_date_time">Show relative date/time for reminders</string>
+    <string name="use_relative_date_time_summary">Show relative date/time for reminders</string>
+    <string name="use_relative_date_time">Relative date/time</string>
 </resources>

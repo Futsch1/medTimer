@@ -219,5 +219,6 @@
     <string name="re_raise_event">Повторно вызвать событие</string>
     <string name="notification_reminder_settings">Настройки уведомлений и напоминаний</string>
     <string name="display_settings">Настройки дисплея</string>
-    <string name="use_relative_date_time">Показывайте относительную дату/время для напоминаний</string>
+    <string name="use_relative_date_time_summary">Показывайте относительную дату/время для напоминаний</string>
+    <string name="use_relative_date_time">Относительная дата/время</string>
 </resources>
