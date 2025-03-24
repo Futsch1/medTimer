@@ -206,20 +206,17 @@ public class ReminderTest extends BaseTestHelper {
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 
-        expectedString = context.getString(R.string.reminder_event, "1", "Test", "");
-        assertContains(R.id.nextReminderText, expectedString);
+        assertContains(R.id.nextReminderText, "Test (1)");
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         assertContains(R.id.nextReminderText, expectedString);
 
-        expectedString = context.getString(R.string.reminder_event, "3", "Test", "");
-        assertContains(R.id.nextReminderText, expectedString);
+        assertContains(R.id.nextReminderText, "Test (3)");
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
             clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
 
-            expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
-            assertContains(R.id.nextReminderText, expectedString);
+            assertContains(R.id.nextReminderText, "Test (2)");
         }
     }
 
