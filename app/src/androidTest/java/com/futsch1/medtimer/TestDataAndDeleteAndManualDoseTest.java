@@ -53,7 +53,7 @@ public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
 
         String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "12", "Ginseng (200mg)", "");
-        assertContains(R.id.reminderEventDose, expectedText);
+        assertContains(R.id.reminderEventText, expectedText);
     }
 
 }
