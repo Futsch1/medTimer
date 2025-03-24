@@ -16,7 +16,7 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DeleteHelper;
-import com.futsch1.medtimer.helpers.TimeHelper;
+import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.google.android.material.card.MaterialCardView;
@@ -49,12 +49,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(ReminderEvent reminderEvent) {
-        String takenDateTime = TimeHelper.toConfigurableDateTimeString(reminderEventText.getContext(),
-                sharedPreferences,
-                reminderEvent.remindedTimestamp);
-        final int amountStringId = reminderEvent.amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
-        String reminderEventTextString = reminderEventText.getContext().getString(amountStringId, reminderEvent.amount, reminderEvent.medicineName, takenDateTime);
-        reminderEventText.setText(reminderEventTextString);
+        reminderEventText.setText(ReminderHelperKt.formatReminderString(reminderEventText.getContext(), reminderEvent, sharedPreferences));
 
         setupChips(reminderEvent);
         setupColorAndIcon(reminderEvent);

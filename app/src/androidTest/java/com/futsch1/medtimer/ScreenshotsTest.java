@@ -127,12 +127,12 @@ public class ScreenshotsTest extends BaseTestHelper {
         Context targetContext = getInstrumentation().getTargetContext();
         String dateString = TimeHelper.toLocalizedDateString(targetContext, LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000);
         String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "Much", "TestMedicine", dateString);
-        assertContains(R.id.reminderEventText, expectedText);
+        assertContains(R.id.reminderEventDose, expectedText);
 
         // And now delete it
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
         clickDialogPositiveButton();
 
-        assertNotContains(R.id.reminderEventText, expectedText);
+        assertNotContains(R.id.reminderEventDose, expectedText);
     }
 }

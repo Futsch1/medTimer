@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview;
 
 import static android.text.format.DateUtils.isToday;
+import static com.futsch1.medtimer.helpers.ReminderHelperKt.formatScheduledReminderString;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -17,7 +18,6 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.futsch1.medtimer.reminders.ReminderWork;
@@ -49,9 +49,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         takenNow.setOnClickListener(v -> processFutureReminder(scheduledReminder, true, looper, medicineViewModel));
         skippedNow.setOnClickListener(v -> processFutureReminder(scheduledReminder, false, looper, medicineViewModel));
 
-        String nextTime = TimeHelper.toConfigurableDateTimeString(nextReminderText.getContext(), sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000);
-        final int amountStringId = scheduledReminder.reminder().amount.isBlank() ? R.string.reminder_event_blank : R.string.reminder_event;
-        nextReminderText.setText(nextReminderText.getContext().getString(amountStringId, scheduledReminder.reminder().amount, scheduledReminder.medicine().medicine.name, nextTime));
+        nextReminderText.setText(formatScheduledReminderString(nextReminderText.getContext(), scheduledReminder, sharedPreferences));
 
         boolean isToday = isToday(scheduledReminder.timestamp().toEpochMilli());
         takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);

@@ -161,8 +161,8 @@ class TagTest : BaseTestHelper() {
 
         assertContains(R.id.nextReminderText, "Amount1")
         assertNotContains(R.id.nextReminderText, "Amount2")
-        assertContains(R.id.reminderEventText, "Amount1")
-        assertNotContains(R.id.reminderEventText, "Amount2")
+        assertContains(R.id.reminderEventDose, "Amount1")
+        assertNotContains(R.id.reminderEventDose, "Amount2")
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
@@ -171,8 +171,8 @@ class TagTest : BaseTestHelper() {
 
         assertNotContains(R.id.nextReminderText, "Amount1")
         assertContains(R.id.nextReminderText, "Amount2")
-        assertNotContains(R.id.reminderEventText, "Amount1")
-        assertContains(R.id.reminderEventText, "Amount2")
+        assertNotContains(R.id.reminderEventDose, "Amount1")
+        assertContains(R.id.reminderEventDose, "Amount2")
     }
 
     private fun addTag(tagName: String) {

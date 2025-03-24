@@ -3,12 +3,14 @@ package com.futsch1.medtimer.widgets
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.formatReminderStringForWidget
+import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -21,7 +23,7 @@ import java.time.ZoneId
 fun interface WidgetLineProvider {
     fun getWidgetLine(
         line: Int
-    ): String
+    ): Spanned
 }
 
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
@@ -47,7 +49,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
     override fun getWidgetLine(
         line: Int
-    ): String {
+    ): Spanned {
         runBlocking {
             job.join()
         }
@@ -56,18 +58,17 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         return if (scheduledReminder != null) scheduledReminderToString(
             scheduledReminder
-        ) else ""
+        ) else SpannableStringBuilder()
     }
 
     private fun scheduledReminderToString(
         scheduledReminder: ScheduledReminder
-    ): String {
-        return TimeHelper.toConfigurableDateTimeString(
-            context.applicationContext as Application?,
-            sharedPreferences,
-            scheduledReminder.timestamp.epochSecond
-        ) +
-                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
+    ): Spanned {
+        return formatScheduledReminderStringForWidget(
+            context,
+            scheduledReminder,
+            sharedPreferences!!
+        )
     }
 }
 
@@ -82,7 +83,7 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
     override fun getWidgetLine(
         line: Int
-    ): String {
+    ): Spanned {
         runBlocking {
             job.join()
         }
@@ -90,25 +91,12 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         return if (reminderEvent != null) reminderEventToString(
             reminderEvent
-        ) else ""
+        ) else SpannableStringBuilder()
     }
 
     private fun reminderEventToString(
         reminderEvent: ReminderEvent
-    ): String {
-        return TimeHelper.toConfigurableDateTimeString(
-            context.applicationContext as Application?,
-            sharedPreferences,
-            reminderEvent.remindedTimestamp
-        ) + ": " + statusToString(reminderEvent.status) +
-                reminderEvent.amount + " " + reminderEvent.medicineName
-    }
-
-    private fun statusToString(status: ReminderEvent.ReminderStatus?): String {
-        return when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken) + " "
-            ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped) + " "
-            else -> ""
-        }
+    ): Spanned {
+        return formatReminderStringForWidget(context, reminderEvent, sharedPreferences!!)
     }
 }
