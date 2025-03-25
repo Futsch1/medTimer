@@ -20,7 +20,7 @@ class IntervalScheduling(
             } else {
                 Instant.ofEpochSecond(reminder.intervalStart)
             }
-        return adjustToToday(instant)
+        return if (reminder.intervalStartsFromProcessed) instant else adjustToToday(instant)
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
@@ -39,6 +39,8 @@ class IntervalScheduling(
     private fun adjustToToday(instant: Instant?): Instant? {
         var adjustedInstant = instant
         if (instant != null) {
+            // If the interval has been missed several times, do not re-raise the interval for all the past,
+            // limit to the first interval today.
             val today = timeAccess.localDate().atStartOfDay()
             val todayInstant = today.toInstant(timeAccess.systemZone().rules.getOffset(today))
             if (instant.isBefore(todayInstant)) {
