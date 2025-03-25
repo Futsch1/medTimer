@@ -23,8 +23,6 @@
     <string name="notification_content">Şu anda %1$s - %3$s ilacından %2$s almanın zamanı geldi%4$s</string>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s %2$s, %3$s</string>
     <string name="recent_events">Son etkinlikler</string>
     <string name="next_reminders">Sonraki hatırlatıcılar</string>
     <string name="version">Versiyon %s</string>

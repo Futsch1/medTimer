@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
@@ -16,6 +17,14 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.icu.util.Calendar;
+import android.view.InputDevice;
+import android.view.MotionEvent;
+
+import androidx.test.espresso.action.GeneralClickAction;
+import androidx.test.espresso.action.GeneralLocation;
+import androidx.test.espresso.action.Press;
+import androidx.test.espresso.action.Tap;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -72,6 +81,15 @@ public class AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_minute_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
+    }
+
+    public static void editLatestEvent() {
+        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new GeneralClickAction(
+                Tap.SINGLE,
+                GeneralLocation.TOP_RIGHT,
+                Press.FINGER,
+                InputDevice.SOURCE_UNKNOWN,
+                MotionEvent.BUTTON_PRIMARY)));
     }
 
     public static void createReminder(String amount, LocalTime time) {

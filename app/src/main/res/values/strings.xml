@@ -24,8 +24,6 @@
     <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s of %2$s, %3$s</string>
     <string name="recent_events">Recent events</string>
     <string name="next_reminders">Next reminders</string>
     <string name="version">Version %s</string>

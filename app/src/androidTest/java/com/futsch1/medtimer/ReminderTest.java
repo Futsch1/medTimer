@@ -1,9 +1,7 @@
 package com.futsch1.medtimer;
 
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
@@ -23,15 +21,8 @@ import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static junit.framework.TestCase.assertEquals;
 
 import android.content.Context;
-import android.view.InputDevice;
-import android.view.MotionEvent;
 import android.widget.TextView;
 
-import androidx.test.espresso.action.GeneralClickAction;
-import androidx.test.espresso.action.GeneralLocation;
-import androidx.test.espresso.action.Press;
-import androidx.test.espresso.action.Tap;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -243,12 +234,7 @@ public class ReminderTest extends BaseTestHelper {
         long now = Instant.now().getEpochSecond();
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
 
-        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new GeneralClickAction(
-                Tap.SINGLE,
-                GeneralLocation.TOP_RIGHT,
-                Press.FINGER,
-                InputDevice.SOURCE_UNKNOWN,
-                MotionEvent.BUTTON_PRIMARY)));
+        AndroidTestHelper.editLatestEvent();
         assertContains(R.id.editEventName, "Test");
         assertContains(R.id.editEventAmount, "12");
         assertContains(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, now));

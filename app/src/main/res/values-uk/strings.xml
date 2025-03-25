@@ -21,8 +21,6 @@
     </plurals>
     <string name="notification_content">Зараз %1$s - час прийняти %2$s з %3$s%4$s</string>
     <string name="notification_content_blank">Зараз %1$s - час прийняти %2$s%3$s%4$s</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s з %2$s, %3$s</string>
     <string name="show_notifications">Показувати сповіщення</string>
     <string name="overview_events">Огляд відображених подій</string>
     <string name="four_hours">4 години</string>

@@ -32,8 +32,6 @@
     <string name="notification_content">இது %1$s - %2$s %3$s %4$s ஐ எடுக்க நேரம்</string>
     <string name="taken">எடுக்கப்பட்டது</string>
     <string name="skipped">தவிர்க்கப்பட்டது</string>
-    <string name="reminder_event_blank">%1$s %2$s, %3$s</string>
-    <string name="reminder_event">%1$s %2$s, %3$s</string>
     <string name="recent_events">அண்மைக் கால நிகழ்வுகள்</string>
     <string name="next_reminders">அடுத்த நினைவூட்டல்கள்</string>
     <string name="version">பதிப்பு %s</string>

@@ -22,8 +22,6 @@
     <string name="notification_content">现在是 %1$s - 请服用 %2$s 剂量的 %3$s%4$s</string>
     <string name="taken">已服用</string>
     <string name="skipped">已跳过</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s %2$s, %3$s</string>
     <string name="recent_events">近期服药记录</string>
     <string name="next_reminders">下次服药提醒</string>
     <string name="version">版本 %s</string>

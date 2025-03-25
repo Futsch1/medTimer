@@ -7,7 +7,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -119,20 +118,20 @@ public class ScreenshotsTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
         // Edit most recent reminder event
-        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
+        AndroidTestHelper.editLatestEvent();
         writeTo(R.id.editEventName, "TestMedicine");
         writeTo(R.id.editEventAmount, "Much");
         pressBack();
 
         Context targetContext = getInstrumentation().getTargetContext();
         String dateString = TimeHelper.toLocalizedDateString(targetContext, LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000);
-        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "Much", "TestMedicine", dateString);
-        assertContains(R.id.reminderEventText, expectedText);
+        assertContains(R.id.reminderEventText, "TestMedicine (Much)");
+        assertContains(R.id.reminderEventText, dateString);
 
         // And now delete it
         onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
         clickDialogPositiveButton();
 
-        assertNotContains(R.id.reminderEventText, expectedText);
+        assertNotContains(R.id.reminderEventText, "TestMedicine (Much)");
     }
 }

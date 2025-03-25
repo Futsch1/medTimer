@@ -23,8 +23,6 @@
     <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s von %2$s, %3$s</string>
     <string name="recent_events">Kürzliche Ereignisse</string>
     <string name="next_reminders">Nächste Erinnerungen</string>
     <string name="version">Version %s</string>
