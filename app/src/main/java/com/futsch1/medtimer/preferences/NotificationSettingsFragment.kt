@@ -99,10 +99,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             }
             builder.setNegativeButton(R.string.cancel) { _, _ ->
                 try {
-                    PreferenceManager.getDefaultSharedPreferences(requireContext()).edit {
-                        putBoolean(PreferencesNames.EXACT_REMINDERS, false)
-                    }
-                    setPreferencesFromResource(R.xml.root_preferences, rootKey)
+                    resetBooleanPreferenceAndReload(PreferencesNames.EXACT_REMINDERS)
                 } catch (_: IllegalStateException) {
                     // Intentionally empty (monkey test can cause this to fail)
                 }
@@ -112,11 +109,27 @@ class NotificationSettingsFragment : PreferencesFragment() {
         }
     }
 
+    private fun resetBooleanPreferenceAndReload(preferenceName: String) {
+        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit {
+            putBoolean(preferenceName, false)
+        }
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+    }
+
+
     private fun safeStartActivity(intent: Intent) {
         try {
             startActivity(intent)
         } catch (_: IllegalStateException) {
             // Intentionally empty
+        }
+    }
+
+    private fun cancelOverrideDnd() {
+        try {
+            resetBooleanPreferenceAndReload(PreferencesNames.OVERRIDE_DND)
+        } catch (_: IllegalStateException) {
+            // Intentionally empty (monkey test can cause this to fail)
         }
     }
 
@@ -134,18 +147,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
                 }
             }
 
-            builder.setNegativeButton(R.string.cancel) { _, _ ->
-                {
-                    try {
-                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit {
-                            putBoolean(PreferencesNames.OVERRIDE_DND, false)
-                        }
-                        setPreferencesFromResource(R.xml.root_preferences, rootKey)
-                    } catch (_: IllegalStateException) {
-                        // Intentionally empty (monkey test can cause this to fail)
-                    }
-                }
-            }
+            builder.setNegativeButton(R.string.cancel) { _, _ -> cancelOverrideDnd() }
             val d = builder.create()
             d.show()
         }
