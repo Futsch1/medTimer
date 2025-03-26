@@ -91,4 +91,34 @@ class ReminderSchedulerIntervalUnitTest {
             reminder
         )
     }
+
+    @Test
+    fun test_scheduleIntervalReminder_NotTaken() {
+        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(9))
+
+        val scheduler = ReminderScheduler(mockTimeAccess)
+
+        val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 24 * 60 * 3, 1)
+        reminder.intervalStart = TestHelper.on(1, 120).epochSecond
+        reminder.intervalStartsFromProcessed = true
+        fullMedicine.reminders.add(reminder)
+
+        val medicineList: MutableList<FullMedicine> = ArrayList()
+        medicineList.add(fullMedicine)
+
+        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 120).epochSecond))
+        reminderEventList[0].processedTimestamp = TestHelper.on(5, 130).epochSecond
+
+        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(8, 130),
+            fullMedicine.medicine,
+            reminder
+        )
+    }
 }
