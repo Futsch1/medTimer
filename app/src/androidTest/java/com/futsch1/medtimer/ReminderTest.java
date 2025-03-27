@@ -1,10 +1,7 @@
 package com.futsch1.medtimer;
 
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
@@ -26,7 +23,6 @@ import static junit.framework.TestCase.assertEquals;
 import android.content.Context;
 import android.widget.TextView;
 
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -206,20 +202,17 @@ public class ReminderTest extends BaseTestHelper {
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 
-        expectedString = context.getString(R.string.reminder_event, "1", "Test", "");
-        assertContains(R.id.nextReminderText, expectedString);
+        assertContains(R.id.nextReminderText, "Test (1)");
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         assertContains(R.id.nextReminderText, expectedString);
 
-        expectedString = context.getString(R.string.reminder_event, "3", "Test", "");
-        assertContains(R.id.nextReminderText, expectedString);
+        assertContains(R.id.nextReminderText, "Test (3)");
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
             clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
 
-            expectedString = context.getString(R.string.reminder_event, "2", "Test", "");
-            assertContains(R.id.nextReminderText, expectedString);
+            assertContains(R.id.nextReminderText, "Test (2)");
         }
     }
 
@@ -241,7 +234,7 @@ public class ReminderTest extends BaseTestHelper {
         long now = Instant.now().getEpochSecond();
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
 
-        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
+        AndroidTestHelper.editLatestEvent();
         assertContains(R.id.editEventName, "Test");
         assertContains(R.id.editEventAmount, "12");
         assertContains(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, now));

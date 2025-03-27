@@ -10,7 +10,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
-import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -27,7 +26,6 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -85,8 +83,10 @@ class NotificationTest : BaseTestHelper() {
 
         // Skip reminder on dismiss
         clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.skip_reminder)
+        pressBack()
         pressBack()
 
         navigateTo(MainMenu.MEDICINES)
@@ -113,9 +113,11 @@ class NotificationTest : BaseTestHelper() {
 
         // Skip reminder on dismiss
         clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.taken)
-        device.pressBack()
+        pressBack()
+        pressBack()
 
         // Clear event data (causes reminder to be re-raised)
         openMenu()
@@ -145,6 +147,7 @@ class NotificationTest : BaseTestHelper() {
 
         // Repeat reminder every minute
         clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.repeat_reminders)
         onView(
             allOf(
@@ -154,6 +157,7 @@ class NotificationTest : BaseTestHelper() {
         ).perform(click())
         clickOn(R.string.time_between_repetitions)
         clickOn(R.string.minutes_1)
+        pressBack()
         pressBack()
 
         navigateTo(MainMenu.MEDICINES)
@@ -221,10 +225,12 @@ class NotificationTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.snooze)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
+        pressBack()
         pressBack()
 
         AndroidTestHelper.createMedicine("Test med")
@@ -250,9 +256,6 @@ class NotificationTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.tab_settings)
-        onView(withClassName(Matchers.equalTo(RecyclerView::class.java.name))).perform(
-            RecyclerViewActions.scrollToLastPosition<RecyclerView.ViewHolder>()
-        )
         clickOn(R.string.privacy_settings)
         clickOn(R.string.hide_med_name)
 

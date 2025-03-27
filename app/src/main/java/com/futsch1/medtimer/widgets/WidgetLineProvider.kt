@@ -2,25 +2,28 @@ package com.futsch1.medtimer.widgets
 
 import android.app.Application
 import android.content.Context
-import com.futsch1.medtimer.R
+import android.content.SharedPreferences
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.formatReminderStringForWidget
+import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
 fun interface WidgetLineProvider {
     fun getWidgetLine(
         line: Int
-    ): String
+    ): Spanned
 }
 
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
@@ -41,10 +44,12 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }
+    val sharedPreferences: SharedPreferences? =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
         line: Int
-    ): String {
+    ): Spanned {
         runBlocking {
             job.join()
         }
@@ -53,18 +58,17 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         return if (scheduledReminder != null) scheduledReminderToString(
             scheduledReminder
-        ) else ""
+        ) else SpannableStringBuilder()
     }
 
     private fun scheduledReminderToString(
         scheduledReminder: ScheduledReminder
-    ): String {
-        val dayString = getDayString(context, scheduledReminder.timestamp.epochSecond)
-        return dayString + TimeHelper.toLocalizedTimeString(
-            context.applicationContext as Application?,
-            scheduledReminder.timestamp.epochSecond
-        ) +
-                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
+    ): Spanned {
+        return formatScheduledReminderStringForWidget(
+            context,
+            scheduledReminder,
+            sharedPreferences!!
+        )
     }
 }
 
@@ -74,10 +78,12 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
         val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
+    val sharedPreferences: SharedPreferences? =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
         line: Int
-    ): String {
+    ): Spanned {
         runBlocking {
             job.join()
         }
@@ -85,37 +91,12 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         return if (reminderEvent != null) reminderEventToString(
             reminderEvent
-        ) else ""
+        ) else SpannableStringBuilder()
     }
 
     private fun reminderEventToString(
         reminderEvent: ReminderEvent
-    ): String {
-        val dayString = getDayString(context, reminderEvent.remindedTimestamp)
-        return dayString + TimeHelper.toLocalizedTimeString(
-            context.applicationContext as Application?,
-            reminderEvent.remindedTimestamp
-        ) + ": " + statusToString(reminderEvent.status) +
-                reminderEvent.amount + " " + reminderEvent.medicineName
-    }
-
-    private fun statusToString(status: ReminderEvent.ReminderStatus?): String {
-        return when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken) + " "
-            ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped) + " "
-            else -> ""
-        }
-    }
-}
-
-fun getDayString(context: Context, timestamp: Long): String {
-    val reminderDate = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
-    return if (reminderDate == LocalDate.now()) {
-        ""
-    } else {
-        TimeHelper.toLocalizedDateString(
-            context,
-            timestamp
-        ) + " "
+    ): Spanned {
+        return formatReminderStringForWidget(context, reminderEvent, sharedPreferences!!)
     }
 }

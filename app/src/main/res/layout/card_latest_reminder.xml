@@ -8,63 +8,61 @@
     app:cardElevation="5dp"
     app:contentPadding="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/reminderEventText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical" />
+            app:layout_constraintEnd_toStartOf="@id/latestReminderIcon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/latestReminderIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/capsule" />
 
-            <ImageView
-                android:id="@+id/latestReminderIcon"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/takenOrSkipped"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminderEventText"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTaken"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/capsule" />
-
-            <Space
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:text="@string/taken"
+                app:checkedIcon="@drawable/check2_circle"
+                app:checkedIconVisible="true" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/takenOrSkipped"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSkipped"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                app:singleSelection="true">
+                android:text="@string/skipped"
+                app:checkedIcon="@drawable/x_circle"
+                app:checkedIconVisible="true"
+                app:closeIconVisible="false" />
+        </com.google.android.material.chip.ChipGroup>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipTaken"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/taken"
-                    app:checkedIcon="@drawable/check2_circle"
-                    app:checkedIconVisible="true" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipSkipped"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/skipped"
-                    app:checkedIcon="@drawable/x_circle"
-                    app:checkedIconVisible="true"
-                    app:closeIconVisible="false" />
-            </com.google.android.material.chip.ChipGroup>
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

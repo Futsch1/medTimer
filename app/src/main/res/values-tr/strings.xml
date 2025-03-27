@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -24,8 +23,6 @@
     <string name="notification_content">Şu anda %1$s - %3$s ilacından %2$s almanın zamanı geldi%4$s</string>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s %2$s, %3$s</string>
     <string name="recent_events">Son etkinlikler</string>
     <string name="next_reminders">Sonraki hatırlatıcılar</string>
     <string name="version">Versiyon %s</string>
@@ -211,4 +208,8 @@
     <string name="privacy_settings">Gizlilik ayarları</string>
     <string name="hide_med_name">Bildirimde ilaç adını gizleme</string>
     <string name="re_raise_event">Olayı yeniden tetiklemek</string>
+    <string name="notification_reminder_settings">Bildirim ve hatırlatma ayarları</string>
+    <string name="display_settings">Ekran ayarları</string>
+    <string name="use_relative_date_time_summary">Hatırlatıcılar için ilgili tarih/saati göster</string>
+    <string name="use_relative_date_time">Göreceli tarih/saat</string>
 </resources>

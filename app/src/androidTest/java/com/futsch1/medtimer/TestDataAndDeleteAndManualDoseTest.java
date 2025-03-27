@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
@@ -52,8 +51,7 @@ public class TestDataAndDeleteAndManualDoseTest extends BaseTestHelper {
 
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
 
-        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "12", "Ginseng (200mg)", "");
-        assertContains(R.id.reminderEventText, expectedText);
+        assertContains(R.id.reminderEventText, "Ginseng (200mg) (12)");
     }
 
 }

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -25,8 +24,6 @@
     <string name="notification_content">Sono le %1$s: è ora di prendere %2$s di %3$s%4$s</string>
     <string name="taken">Preso</string>
     <string name="skipped">Saltato</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s di %2$s, %3$s</string>
     <string name="recent_events">Eventi recenti</string>
     <string name="next_reminders">Prossimi promemoria</string>
     <string name="version">Versione %s</string>
@@ -216,4 +213,8 @@
     <string name="privacy_settings">Impostazioni sulla privacy</string>
     <string name="hide_med_name">Nascondere il nome del farmaco nella notifica</string>
     <string name="re_raise_event">Riavviare l&amp;apos;evento</string>
+    <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
+    <string name="display_settings">Impostazioni del display</string>
+    <string name="use_relative_date_time_summary">Mostra la data/ora relativa per i promemoria</string>
+    <string name="use_relative_date_time">Data/ora relativa</string>
 </resources>

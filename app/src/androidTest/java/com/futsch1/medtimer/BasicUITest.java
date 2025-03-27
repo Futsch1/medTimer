@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertChecked;
 import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -56,8 +55,7 @@ public class BasicUITest extends BaseTestHelper {
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        String expectedText = getInstrumentation().getTargetContext().getString(R.string.reminder_event, "2", "Test", "");
-        assertContains(expectedText);
+        assertContains("Test (2)");
     }
 
     @Test

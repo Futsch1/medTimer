@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -25,8 +24,6 @@
     <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s de %2$s, %3$s</string>
     <string name="recent_events">Événements récents</string>
     <string name="next_reminders">Prochains rappels</string>
     <string name="version">Version %s</string>
@@ -216,4 +213,8 @@
     <string name="privacy_settings">Paramètres de confidentialité</string>
     <string name="hide_med_name">Cacher le nom du médicament dans la notification</string>
     <string name="re_raise_event">Redéclencher l&amp;apos;événement</string>
+    <string name="notification_reminder_settings">Paramètres de notification et de rappel</string>
+    <string name="display_settings">Paramètres d&amp;apos;affichage</string>
+    <string name="use_relative_date_time_summary">Afficher la date et l&amp;apos;heure relatives pour les rappels</string>
+    <string name="use_relative_date_time">Date/heure relative</string>
 </resources>

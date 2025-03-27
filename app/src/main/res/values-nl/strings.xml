@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -24,8 +23,6 @@
     <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="taken">Ingenomen</string>
     <string name="skipped">Overgeslagen</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s van %2$s, %3$s</string>
     <string name="recent_events">Recente herinneringen</string>
     <string name="next_reminders">Volgende herinneringen</string>
     <string name="version">Versie %s</string>
@@ -211,4 +208,8 @@
     <string name="privacy_settings">Privacy-instellingen</string>
     <string name="hide_med_name">Verberg medicijnnaam in melding</string>
     <string name="re_raise_event">De gebeurtenis opnieuw activeren</string>
+    <string name="notification_reminder_settings">Instellingen voor meldingen en herinneringen</string>
+    <string name="display_settings">Weergave-instellingen</string>
+    <string name="use_relative_date_time_summary">Toon relatieve datum/tijd voor herinneringen</string>
+    <string name="use_relative_date_time">Relatieve datum/tijd</string>
 </resources>

@@ -23,8 +23,6 @@
     <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
-    <string name="reminder_event_blank">%1$s%2$s, %3$s</string>
-    <string name="reminder_event">%1$s von %2$s, %3$s</string>
     <string name="recent_events">Kürzliche Ereignisse</string>
     <string name="next_reminders">Nächste Erinnerungen</string>
     <string name="version">Version %s</string>
@@ -210,4 +208,8 @@
     <string name="privacy_settings">Datenschutz-Einstellungen</string>
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
+    <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
+    <string name="display_settings">Einstellungen anzeigen</string>
+    <string name="use_relative_date_time_summary">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
+    <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>
 </resources>

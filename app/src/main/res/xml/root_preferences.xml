@@ -1,76 +1,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/bell"
-        android:title="@string/notification_settings_default"
-        app:key="notification_settings_default" />
+        app:icon="@drawable/bell"
+        app:key="notification_settings"
+        app:title="@string/notification_reminder_settings" />
     <Preference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/bell"
-        android:title="@string/notification_settings_high"
-        app:key="notification_settings_high" />
-    <SwitchPreferenceCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="false"
-        android:summary="@string/override_dnd_summary"
-        android:title="@string/override_dnd"
-        app:key="override_dnd" />
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/dismiss_notification_action"
-        android:entryValues="@array/values_0_to_2"
-        android:key="dismiss_notification_action"
-        android:title="@string/dismiss_notification_action"
-        app:useSimpleSummaryProvider="true" />
+        android:icon="@drawable/display"
+        app:key="display_settings"
+        app:title="@string/display_settings" />
     <Preference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:summary="@string/repeat_reminders_summary"
-        android:title="@string/repeat_reminders"
-        app:key="repeat_reminders_preferences" />
-    <ListPreference
-        android:defaultValue="15"
-        android:entries="@array/snooze_duration"
-        android:entryValues="@array/snooze_duration_values"
-        android:key="snooze_duration"
-        android:title="@string/snooze_duration"
-        app:useSimpleSummaryProvider="true" />
-    <SwitchPreferenceCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="false"
-        android:summary="@string/exact_reminders_summary"
-        android:title="@string/exact_reminders"
-        app:key="exact_reminders" />
+        android:icon="@drawable/shield_lock"
+        app:key="privacy_settings"
+        app:title="@string/privacy_settings" />
     <Preference
         app:icon="@drawable/calendar_week"
         app:key="weekend_mode"
         app:summary="@string/weekend_mode_summary"
         app:title="@string/weekend_mode" />
-    <Preference
-        android:icon="@drawable/shield_lock"
-        app:key="privacy_settings"
-        app:title="@string/privacy_settings" />
-    <ListPreference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="24"
-        android:entries="@array/overview_events_titles"
-        android:entryValues="@array/overview_events_values"
-        android:title="@string/overview_events"
-        app:key="overview_events"
-        app:useSimpleSummaryProvider="true" />
-    <ListPreference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="0"
-        android:entries="@array/theme_entries_titles"
-        android:entryValues="@array/theme_entries_values"
-        android:title="@string/theme"
-        app:key="theme"
-        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

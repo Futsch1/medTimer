@@ -102,7 +102,7 @@ public class StatisticsFragment extends Fragment {
             case CALENDAR -> new CalendarFragment();
             default -> chartsFragment;
         };
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commit();
 
