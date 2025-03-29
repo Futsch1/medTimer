@@ -1,0 +1,32 @@
+Kontroluj swoje leki z MedTimer w pełni offline
+
+MedTimer to aplikacja open-source do przypominania o lekach, zaprojektowana tak, aby pomagać w skutecznym zarządzaniu lekami i tabletkami, zapewniając pełną kontrolę nad Twoimi danymi osobistymi.
+
+Elastyczne i spersonalizowane przypomnienia:
+
+- Zarządzaj nieograniczoną liczbą leków z konfigurowalnymi przypomnieniami dla każdego z nich (w tym prostymi domyślnymi ustawieniami dla codziennych przypomnień).
+- Twórz elastyczne przypomnienia z przerwami i określonymi dniami (np. dla tabletek antykoncepcyjnych).
+- Tryb weekendowy: opóźniaj przypomnienia do określonej godziny w wybrane dni.
+- Drzemka powiadomień – odłóż przypomnienie na później lub ustaw powtarzające się alerty.
+- Dodawaj dodatkowe dawki w dowolnym momencie.
+- Twórz przypomnienia oparte na interwałach lub następujące po sobie w określonych odstępach czasu.
+
+Proste i bezpieczne zarządzanie danymi:
+
+- Potwierdzaj lub odrzucaj przypomnienia, aby dokładnie rejestrować przestrzeganie dawkowania.
+- Przeglądaj historię zażywania leków w formie wykresu i tabeli.
+- Eksportuj historię leków do pliku CSV, aby łatwo przechowywać dane lub udostępniać je lekarzowi.
+- Twórz kopie zapasowe i przywracaj listę leków w formacie JSON.
+- Śledź stan zapasów leków i otrzymuj powiadomienia o ich wyczerpywaniu.
+- Oznaczaj i filtruj swoje leki.
+
+Prywatność i dostępność offline:
+
+- Wszystkie dane są przechowywane bezpiecznie na Twoim urządzeniu, gwarantując pełną prywatność i dostępność offline.
+- Nie wymaga połączenia z internetem – Twoje przypomnienia zawsze będą dostępne.
+
+MedTimer to darmowa aplikacja bez reklam.
+
+Zobacz stronę projektu na GitHubie: https://github.com/Futsch1/medTimer
+
+Grafika promocyjna została stworzona za pomocą: https://hotpot.ai
