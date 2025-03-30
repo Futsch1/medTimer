@@ -217,4 +217,5 @@
     <string name="display_settings">Configuración de la pantalla</string>
     <string name="use_relative_date_time_summary">Mostrar la fecha/hora relativa de los recordatorios</string>
     <string name="use_relative_date_time">Fecha/hora relativa</string>
+    <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
 </resources>

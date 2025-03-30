@@ -222,4 +222,5 @@
         <item quantity="other">dni</item>
     </plurals>
     <string name="use_relative_date_time">Względna data/godzina</string>
+    <string name="invalid_amount">Kwota musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
 </resources>

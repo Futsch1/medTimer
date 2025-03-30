@@ -216,4 +216,5 @@
     <string name="display_settings">Display settings</string>
     <string name="use_relative_date_time_summary">Show relative date/time for reminders</string>
     <string name="use_relative_date_time">Relative date/time</string>
+    <string name="invalid_amount">The amount has to contain a number to enable medicine stock tracking for this reminder.</string>
 </resources>

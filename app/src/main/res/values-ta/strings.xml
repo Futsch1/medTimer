@@ -213,4 +213,5 @@
     <string name="display_settings">காட்சி அமைப்புகள்</string>
     <string name="use_relative_date_time_summary">நினைவூட்டல்களுக்கு தொடர்புடைய தேதி/நேரத்தை காட்டு</string>
     <string name="use_relative_date_time">ஒப்பீட்டு தேதி/நேரம்</string>
+    <string name="invalid_amount">இந்த நினைவூட்டலுக்கான மருந்து கையிருப்பு கண்காணிப்பை இயக்க தொகை ஒரு எண்ணைக் கொண்டிருக்க வேண்டும்.</string>
 </resources>

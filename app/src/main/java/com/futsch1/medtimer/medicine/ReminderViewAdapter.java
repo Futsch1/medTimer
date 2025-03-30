@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.helpers.IdlingListAdapter;
 
@@ -15,12 +16,17 @@ public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderVie
 
     private final FragmentActivity fragmentActivity;
     private final HandlerThread thread;
+    private Medicine medicine;
 
     public ReminderViewAdapter(FragmentActivity fragmentActivity, HandlerThread thread) {
         super(new ReminderDiff());
         this.fragmentActivity = fragmentActivity;
         this.thread = thread;
         setHasStableIds(true);
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
     }
 
 
@@ -35,7 +41,7 @@ public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderVie
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder current = getItem(position);
-        holder.bind(current);
+        holder.bind(current, medicine);
     }
 
     @Override

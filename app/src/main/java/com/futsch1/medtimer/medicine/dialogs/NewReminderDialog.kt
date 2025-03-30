@@ -10,7 +10,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
@@ -26,7 +28,7 @@ import java.time.LocalDate
 class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
-    val medicineId: Int,
+    val medicine: Medicine,
     val medicineViewModel: MedicineViewModel
 ) {
     private val dialog: Dialog = Dialog(context)
@@ -56,6 +58,15 @@ class NewReminderDialog(
                 getSystemService(context, InputMethodManager::class.java)
             imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
+        if (medicine.isStockManagementActive) {
+            textInputEditText.addTextChangedListener(
+                AmountTextWatcher(
+                    textInputEditText
+                )
+            )
+        } else {
+            dialog.findViewById<TextInputLayout>(R.id.editAmountLayout).isErrorEnabled = false
+        }
     }
 
     private fun setupVisibilities() {
@@ -87,7 +98,7 @@ class NewReminderDialog(
 
     private fun setupCreateReminder(
     ) {
-        val reminder = Reminder(medicineId)
+        val reminder = Reminder(medicine.medicineId)
 
         val timeEditor = TimeEditor(
             activity,

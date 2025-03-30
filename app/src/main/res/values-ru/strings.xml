@@ -219,4 +219,5 @@
     <string name="display_settings">Настройки дисплея</string>
     <string name="use_relative_date_time_summary">Показывайте относительную дату/время для напоминаний</string>
     <string name="use_relative_date_time">Относительная дата/время</string>
+    <string name="invalid_amount">Сумма должна содержать число, чтобы включить отслеживание запасов лекарств для этого напоминания.</string>
 </resources>

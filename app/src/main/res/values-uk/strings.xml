@@ -222,4 +222,5 @@
     <string name="display_settings">Налаштування дисплея</string>
     <string name="use_relative_date_time_summary">Показувати відносну дату/час для нагадувань</string>
     <string name="use_relative_date_time">Відносна дата/час</string>
+    <string name="invalid_amount">Сума повинна містити число, щоб увімкнути відстеження запасів ліків для цього нагадування.</string>
 </resources>

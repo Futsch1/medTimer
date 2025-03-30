@@ -83,8 +83,10 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         setupTagsButton(fragmentView, entity.medicineId);
 
         setupOpenCalendarButton(fragmentView);
-        setupAddReminderButton(fragmentView);
+        setupAddReminderButton(fragmentView, entity);
 
+        adapter.setMedicine(entity);
+        
         this.getMedicineViewModel().medicineRepository.getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), l -> {
                     this.sortAndSubmitList(l);
                     this.setFragmentReady();
@@ -185,9 +187,9 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         });
     }
 
-    private void setupAddReminderButton(View fragmentView) {
+    private void setupAddReminderButton(View fragmentView, Medicine medicine) {
         ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addReminder);
-        fab.setOnClickListener(view -> new NewReminderDialog(requireContext(), requireActivity(), getEntityId(), this.getMedicineViewModel()));
+        fab.setOnClickListener(view -> new NewReminderDialog(requireContext(), requireActivity(), medicine, this.getMedicineViewModel()));
     }
 
     private void sortAndSubmitList(List<Reminder> reminders) {
