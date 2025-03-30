@@ -213,4 +213,6 @@
     <string name="use_relative_date_time_summary">Hatırlatıcılar için ilgili tarih/saati göster</string>
     <string name="use_relative_date_time">Göreceli tarih/saat</string>
     <string name="invalid_amount">Bu hatırlatıcı için ilaç stok takibini etkinleştirmek için miktar bir sayı içermelidir.</string>
+    <string name="time_reminder_type_hint">Günün belirli bir saatinde hatırlatır.</string>
+    <string name="interval_reminder_type_hint">Son hatırlatmadan sonra belirli bir süre geçtikten sonra hatırlatır.</string>
 </resources>

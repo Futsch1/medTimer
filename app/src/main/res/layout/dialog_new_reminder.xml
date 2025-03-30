@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -20,6 +21,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="4dp" />
+
     <RadioGroup
         android:id="@+id/reminderType"
         android:layout_width="match_parent"
@@ -38,6 +44,20 @@
             android:layout_height="wrap_content"
             android:text="@string/interval_based_reminder" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/reminderTypeHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:drawablePadding="5dp"
+        android:text="@string/time_reminder_type_hint"
+        app:drawableStartCompat="@drawable/info_circle" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="4dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editReminderTimeLayout"

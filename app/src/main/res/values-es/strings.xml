@@ -218,4 +218,6 @@
     <string name="use_relative_date_time_summary">Mostrar la fecha/hora relativa de los recordatorios</string>
     <string name="use_relative_date_time">Fecha/hora relativa</string>
     <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
+    <string name="time_reminder_type_hint">Recuerda una hora concreta del día.</string>
+    <string name="interval_reminder_type_hint">Recuerda una vez transcurrido un tiempo especificado desde el último recordatorio.</string>
 </resources>

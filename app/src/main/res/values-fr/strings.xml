@@ -218,4 +218,6 @@
     <string name="use_relative_date_time_summary">Afficher la date et l&amp;apos;heure relatives pour les rappels</string>
     <string name="use_relative_date_time">Date/heure relative</string>
     <string name="invalid_amount">Le montant doit contenir un nombre pour activer le suivi du stock de médicaments pour ce rappel.</string>
+    <string name="time_reminder_type_hint">Rappelle à une heure précise de la journée.</string>
+    <string name="interval_reminder_type_hint">Rappelle après un délai spécifié après le dernier rappel.</string>
 </resources>

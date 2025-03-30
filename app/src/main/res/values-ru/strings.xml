@@ -220,4 +220,6 @@
     <string name="use_relative_date_time_summary">Показывайте относительную дату/время для напоминаний</string>
     <string name="use_relative_date_time">Относительная дата/время</string>
     <string name="invalid_amount">Сумма должна содержать число, чтобы включить отслеживание запасов лекарств для этого напоминания.</string>
+    <string name="time_reminder_type_hint">Напоминание в определенное время суток.</string>
+    <string name="interval_reminder_type_hint">Напоминает по истечении заданного времени после последнего напоминания.</string>
 </resources>
