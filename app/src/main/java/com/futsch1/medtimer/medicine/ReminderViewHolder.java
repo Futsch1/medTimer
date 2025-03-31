@@ -6,7 +6,6 @@ import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
@@ -16,18 +15,22 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.helpers.AmountTextWatcher;
 import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.medicine.editors.TimeEditor;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 import kotlin.Unit;
 
 public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final TextInputEditText editTime;
-    private final EditText editAmount;
+    private final TextInputEditText editAmount;
     private final MaterialButton advancedSettings;
     private final FragmentActivity fragmentActivity;
     private final TextView advancedSettingsSummary;
@@ -56,7 +59,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void bind(Reminder reminder) {
+    public void bind(Reminder reminder, Medicine medicine) {
         this.reminder = reminder;
 
         setupTimeEditor();
@@ -69,8 +72,17 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
             String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
             this.fragmentActivity.runOnUiThread(() ->
                     advancedSettingsSummary.setText(summary));
-
         });
+
+        if (medicine.isStockManagementActive()) {
+            editAmount.addTextChangedListener(
+                    new AmountTextWatcher(
+                            editAmount
+                    )
+            );
+        } else {
+            ((TextInputLayout) itemView.findViewById(R.id.editAmountLayout)).setErrorEnabled(false);
+        }
     }
 
     private void setupTimeEditor() {
@@ -100,7 +112,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     public Reminder getReminder() {
-        reminder.amount = editAmount.getText().toString();
+        reminder.amount = Objects.requireNonNull(editAmount.getText()).toString();
         if (timeEditor != null) {
             int minutes = timeEditor.getMinutes();
             if (minutes >= 0) {

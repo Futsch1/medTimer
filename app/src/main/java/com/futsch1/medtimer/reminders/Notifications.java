@@ -48,10 +48,12 @@ public class Notifications {
         PendingIntent contentIntent = getStartAppIntent(notificationId);
 
         String notificationChannelId = ReminderNotificationChannelManager.Companion.getNotificationChannel(context, importance).getId();
+        String notificationMessage = getNotificationString(remindTime, reminder, medicine);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationChannelId)
                 .setSmallIcon(R.drawable.capsule)
                 .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(getNotificationString(remindTime, reminder, medicine))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
+                .setContentText(notificationMessage)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(Notification.CATEGORY_REMINDER)
                 .setContentIntent(contentIntent);

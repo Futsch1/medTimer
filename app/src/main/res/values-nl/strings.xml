@@ -212,4 +212,7 @@
     <string name="display_settings">Weergave-instellingen</string>
     <string name="use_relative_date_time_summary">Toon relatieve datum/tijd voor herinneringen</string>
     <string name="use_relative_date_time">Relatieve datum/tijd</string>
+    <string name="invalid_amount">Het bedrag moet een getal bevatten om de medicijnvoorraad-tracking voor deze herinnering in te schakelen.</string>
+    <string name="time_reminder_type_hint">Herinnert op een specifiek tijdstip.</string>
+    <string name="interval_reminder_type_hint">Herinnert nadat een opgegeven tijd is verstreken na de laatste herinnering.</string>
 </resources>

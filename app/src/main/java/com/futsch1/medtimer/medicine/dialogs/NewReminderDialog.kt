@@ -10,7 +10,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
@@ -19,6 +21,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
 import java.time.Instant
 import java.time.LocalDate
 
@@ -26,7 +29,7 @@ import java.time.LocalDate
 class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
-    val medicineId: Int,
+    val medicine: Medicine,
     val medicineViewModel: MedicineViewModel
 ) {
     private val dialog: Dialog = Dialog(context)
@@ -48,6 +51,15 @@ class NewReminderDialog(
         dialog.show()
     }
 
+    private fun setReminderTypeHint(checkedId: Int) {
+        val reminderTypeHint = dialog.findViewById<MaterialTextView>(R.id.reminderTypeHint)
+        if (checkedId == R.id.timeBased) {
+            reminderTypeHint.setText(R.string.time_reminder_type_hint)
+        } else {
+            reminderTypeHint.setText(R.string.interval_reminder_type_hint)
+        }
+    }
+
     private fun startEditAmount() {
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
         textInputEditText.requestFocus()
@@ -56,12 +68,22 @@ class NewReminderDialog(
                 getSystemService(context, InputMethodManager::class.java)
             imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
+        if (medicine.isStockManagementActive) {
+            textInputEditText.addTextChangedListener(
+                AmountTextWatcher(
+                    textInputEditText
+                )
+            )
+        } else {
+            dialog.findViewById<TextInputLayout>(R.id.editAmountLayout).isErrorEnabled = false
+        }
     }
 
     private fun setupVisibilities() {
         dialog.findViewById<RadioGroup>(R.id.reminderType)
             .setOnCheckedChangeListener { _, checkedId ->
                 setVisibilities(checkedId)
+                setReminderTypeHint(checkedId)
             }
         setVisibilities(
             dialog.findViewById<RadioGroup>(R.id.reminderType).checkedRadioButtonId
@@ -87,7 +109,7 @@ class NewReminderDialog(
 
     private fun setupCreateReminder(
     ) {
-        val reminder = Reminder(medicineId)
+        val reminder = Reminder(medicine.medicineId)
 
         val timeEditor = TimeEditor(
             activity,

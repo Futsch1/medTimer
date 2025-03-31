@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
@@ -121,5 +122,26 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, "10.5")
         assertNotContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun reminderAmountWarningTest() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        AndroidTestHelper.createMedicine("Test")
+
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "10.5")
+        writeTo(R.id.stockUnit, "pills")
+        clickOn(R.id.medicineStockReminder)
+        onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+        writeTo(R.id.reminderThreshold, "4")
+        pressBack()
+
+        clickOn(R.id.addReminder)
+        writeTo(R.id.editAmount, "something")
+
+        assertErrorDisplayed(R.id.editAmount, R.string.invalid_amount)
     }
 }

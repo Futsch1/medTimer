@@ -217,4 +217,7 @@
     <string name="display_settings">Impostazioni del display</string>
     <string name="use_relative_date_time_summary">Mostra la data/ora relativa per i promemoria</string>
     <string name="use_relative_date_time">Data/ora relativa</string>
+    <string name="invalid_amount">L&amp;apos;importo deve contenere un numero per abilitare il tracciamento delle scorte di farmaci per questo promemoria.</string>
+    <string name="time_reminder_type_hint">Ricorda a un&amp;apos;ora specifica del giorno.</string>
+    <string name="interval_reminder_type_hint">Richiama dopo un determinato periodo di tempo dall&amp;apos;ultimo richiamo.</string>
 </resources>
