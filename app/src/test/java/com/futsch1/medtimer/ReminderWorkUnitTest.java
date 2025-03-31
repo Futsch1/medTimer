@@ -157,6 +157,7 @@ public class ReminderWorkUnitTest {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
                  assertEquals(String.format("%d", 3), context.arguments().get(1));
                  when(mock.setSmallIcon(R.drawable.capsule)).thenReturn(mock);
+                 when(mock.setStyle(any())).thenReturn(mock);
                  when(mock.setContentTitle("NotificationTitle")).thenReturn(mock);
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
                  when(mock.setPriority(NotificationCompat.PRIORITY_DEFAULT)).thenReturn(mock);
@@ -207,6 +208,7 @@ public class ReminderWorkUnitTest {
                  // Implicitly verify arguments because invalid arguments will break the call chain of the builder
                  assertEquals(String.format("%d", 3), context.arguments().get(1));
                  when(mock.setSmallIcon(R.drawable.capsule)).thenReturn(mock);
+                 when(mock.setStyle(any())).thenReturn(mock);
                  when(mock.setContentTitle("NotificationTitle")).thenReturn(mock);
                  when(mock.setContentText("NotificationContent")).thenReturn(mock); // Should not be necessary?
                  when(mock.setPriority(NotificationCompat.PRIORITY_DEFAULT)).thenReturn(mock);
