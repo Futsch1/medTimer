@@ -47,21 +47,16 @@ class NewReminderDialog(
             dialog.dismiss()
         }
 
-        setupSelectReminderType()
-
         startEditAmount()
         dialog.show()
     }
 
-    private fun setupSelectReminderType() {
-        val reminderType = dialog.findViewById<RadioGroup>(R.id.reminderType)
-        reminderType.setOnCheckedChangeListener { _, checkedId ->
-            val reminderTypeHint = dialog.findViewById<MaterialTextView>(R.id.reminderTypeHint)
-            if (checkedId == R.id.timeBased) {
-                reminderTypeHint.setText(R.string.time_reminder_type_hint)
-            } else {
-                reminderTypeHint.setText(R.string.interval_reminder_type_hint)
-            }
+    private fun setReminderTypeHint(checkedId: Int) {
+        val reminderTypeHint = dialog.findViewById<MaterialTextView>(R.id.reminderTypeHint)
+        if (checkedId == R.id.timeBased) {
+            reminderTypeHint.setText(R.string.time_reminder_type_hint)
+        } else {
+            reminderTypeHint.setText(R.string.interval_reminder_type_hint)
         }
     }
 
@@ -88,6 +83,7 @@ class NewReminderDialog(
         dialog.findViewById<RadioGroup>(R.id.reminderType)
             .setOnCheckedChangeListener { _, checkedId ->
                 setVisibilities(checkedId)
+                setReminderTypeHint(checkedId)
             }
         setVisibilities(
             dialog.findViewById<RadioGroup>(R.id.reminderType).checkedRadioButtonId
