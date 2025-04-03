@@ -14,13 +14,20 @@ class IntervalScheduling(
     override fun getNextScheduledTime(): Instant? {
         val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.reminderId, reminderEventList)
+        if (reminder.intervalStartsFromProcessed) {
+            return if (lastReminderEvent != null) {
+                getNextIntervalTimeFromReminderEvent(lastReminderEvent)
+            } else {
+                Instant.ofEpochSecond(reminder.intervalStart)
+            }
+        }
         val instant =
             if (lastReminderEvent != null && lastReminderEvent.remindedTimestamp >= reminder.intervalStart) {
                 getNextIntervalTimeFromReminderEvent(lastReminderEvent)
             } else {
                 Instant.ofEpochSecond(reminder.intervalStart)
             }
-        return if (reminder.intervalStartsFromProcessed) instant else adjustToToday(instant)
+        return adjustToToday(instant)
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
