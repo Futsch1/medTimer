@@ -47,8 +47,8 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM ReminderEvent t1 WHERE " +
             "status IN (:statusValues) AND " +
-            "(SELECT MAX(t2.remindedTimestamp) FROM ReminderEvent t2 WHERE t1.reminderEventId = t2.reminderEventId) " +
-            " OR remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
+            "(SELECT MAX(t2.remindedTimestamp) FROM ReminderEvent t2 WHERE t1.reminderEventId = t2.reminderEventId OR " +
+            "remindedTimestamp > :fromTimestamp) ORDER BY remindedTimestamp DESC")
     LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Query("SELECT * FROM ReminderEvent t1 WHERE " +
