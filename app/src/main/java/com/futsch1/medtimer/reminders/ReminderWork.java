@@ -28,7 +28,6 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.preferences.PreferencesNames;
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -114,7 +113,7 @@ public class ReminderWork extends Worker {
         if (medicine != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.remindedTimestamp = remindedDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+            reminderEvent.remindedTimestamp = remindedDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(remindedDateTime));
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder);
             reminderEvent.color = medicine.medicine.color;

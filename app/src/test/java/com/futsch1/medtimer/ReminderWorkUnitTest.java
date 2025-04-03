@@ -50,7 +50,6 @@ import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.robolectric.annotation.Config;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -242,8 +241,9 @@ public class ReminderWorkUnitTest {
             assertEquals(notificationId, captor.getValue().notificationId);
             assertEquals(reminderId, captor.getValue().reminderId);
             assertEquals(reminderEventId, captor.getValue().reminderEventId);
-            assertEquals(LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60))
-                    .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(Instant.now())), captor.getValue().remindedTimestamp);
+            LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
+            assertEquals(reminderEventTime
+                    .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)), captor.getValue().remindedTimestamp);
             verify(mockNotificationManager, times(1)).notify(eq(notificationId), any());
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(any());
         }
