@@ -69,16 +69,16 @@ public class MedicineRepository {
         if (limit == 0) {
             return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, withDeleted ? allStatusValues : statusValuesWithoutDelete);
         } else {
-            return medicineDao.getLiveReminderEvents(limit, withDeleted ? allStatusValues : statusValuesWithoutDelete);
+            return medicineDao.getReminderEventsStartingFrom(limit, withDeleted ? allStatusValues : statusValuesWithoutDelete);
         }
     }
 
     public List<ReminderEvent> getAllReminderEventsWithoutDeleted() {
-        return medicineDao.getLiveReminderEvents(0L, statusValuesWithoutDelete);
+        return medicineDao.getReminderEventsStartingFrom(0L, statusValuesWithoutDelete);
     }
 
     public List<ReminderEvent> getLastDaysReminderEvents(int days) {
-        return medicineDao.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
+        return medicineDao.getReminderEventsStartingFrom(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
     }
 
     public long insertMedicine(Medicine medicine) {

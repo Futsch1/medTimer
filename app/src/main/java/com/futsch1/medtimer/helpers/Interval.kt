@@ -13,7 +13,7 @@ private fun getMinutes(unit: IntervalUnit, value: Int) = when (unit) {
     IntervalUnit.DAYS -> value * 60 * 24
 }
 
-class Interval(var minutesValue: Int) {
+class Interval(var minutesValue: Int, var maxMinutesValue: Int = 31 * 60 * 24) {
 
     constructor(value: Int, unit: IntervalUnit) : this(
         getMinutes(unit, value)
@@ -45,6 +45,9 @@ class Interval(var minutesValue: Int) {
 
     fun setValue(value: Int, unit: IntervalUnit) {
         minutesValue = getMinutes(unit, value)
+        if (minutesValue > maxMinutesValue) {
+            minutesValue = maxMinutesValue
+        }
     }
 
     override fun toString(): String {

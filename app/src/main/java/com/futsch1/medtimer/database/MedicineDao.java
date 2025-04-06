@@ -43,19 +43,13 @@ public interface MedicineDao {
     Reminder getReminder(int reminderId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) ORDER BY remindedTimestamp DESC LIMIT :limit")
-    LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, List<ReminderEvent.ReminderStatus> statusValues);
+    LiveData<List<ReminderEvent>> getReminderEventsStartingFrom(int limit, List<ReminderEvent.ReminderStatus> statusValues);
 
-    @Query("SELECT * FROM ReminderEvent t1 WHERE " +
-            "status IN (:statusValues) AND " +
-            "(SELECT MAX(t2.remindedTimestamp) FROM ReminderEvent t2 WHERE t1.reminderEventId = t2.reminderEventId OR " +
-            "remindedTimestamp > :fromTimestamp) ORDER BY remindedTimestamp DESC")
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
     LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
-    @Query("SELECT * FROM ReminderEvent t1 WHERE " +
-            "status IN (:statusValues) AND " +
-            "(SELECT MAX(t2.remindedTimestamp) FROM ReminderEvent t2 WHERE t1.reminderEventId = t2.reminderEventId OR " +
-            "remindedTimestamp > :fromTimestamp) ORDER BY remindedTimestamp")
-    List<ReminderEvent> getLiveReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
+    List<ReminderEvent> getReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
 
     @Insert
     long insertMedicine(Medicine medicine);
