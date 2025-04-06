@@ -31,7 +31,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
         val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         val medicinesWithReminders = medicineRepository.medicines
-        val reminderEvents = medicineRepository.allReminderEventsWithoutDeleted
+        val reminderEvents = medicineRepository.getLastDaysReminderEvents(33)
         val reminderScheduler = ReminderScheduler(object : ReminderScheduler.TimeAccess {
             override fun systemZone(): ZoneId {
                 return ZoneId.systemDefault()

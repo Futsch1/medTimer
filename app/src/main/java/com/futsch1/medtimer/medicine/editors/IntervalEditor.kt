@@ -36,7 +36,7 @@ class IntervalEditor(
         var value = 1
         try {
             value = timeEdit.text.toString().toInt()
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             // Intentionally empty
         }
         val unit = checkedIntervalUnit(intervalUnitToggle.checkedButtonId)

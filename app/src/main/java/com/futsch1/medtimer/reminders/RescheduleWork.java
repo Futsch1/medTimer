@@ -59,7 +59,7 @@ public class RescheduleWork extends Worker {
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = getReminderScheduler();
         List<FullMedicine> fullMedicines = medicineRepository.getMedicines();
-        List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(2));
+        List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(33));
         if (!scheduledReminders.isEmpty()) {
             ScheduledReminder scheduledReminder = scheduledReminders.get(0);
             this.enqueueNotification(

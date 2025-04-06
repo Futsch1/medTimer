@@ -65,20 +65,16 @@ public class MedicineRepository {
         return medicineDao.getReminder(reminderId);
     }
 
-    public LiveData<List<ReminderEvent>> getLiveReminderEvents(int limit, long timeStamp, boolean withDeleted) {
-        if (limit == 0) {
-            return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, withDeleted ? allStatusValues : statusValuesWithoutDelete);
-        } else {
-            return medicineDao.getLiveReminderEvents(limit, withDeleted ? allStatusValues : statusValuesWithoutDelete);
-        }
+    public LiveData<List<ReminderEvent>> getLiveReminderEvents(long timeStamp, boolean withDeleted) {
+        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, withDeleted ? allStatusValues : statusValuesWithoutDelete);
     }
 
     public List<ReminderEvent> getAllReminderEventsWithoutDeleted() {
-        return medicineDao.getLiveReminderEvents(0L, statusValuesWithoutDelete);
+        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete);
     }
 
     public List<ReminderEvent> getLastDaysReminderEvents(int days) {
-        return medicineDao.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
+        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
     }
 
     public long insertMedicine(Medicine medicine) {
