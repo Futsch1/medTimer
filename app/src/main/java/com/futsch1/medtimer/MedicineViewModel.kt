@@ -139,11 +139,10 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun getLiveReminderEvents(
-        limit: Int,
         timeStamp: Long,
         withDeleted: Boolean
     ): LiveData<List<ReminderEvent>> {
-        liveReminderEvents = medicineRepository.getLiveReminderEvents(limit, timeStamp, withDeleted)
+        liveReminderEvents = medicineRepository.getLiveReminderEvents(timeStamp, withDeleted)
         filteredReminderEvents.addSource(liveReminderEvents) {
             if (validTagIds.value != null && liveTags.value != null) {
                 filteredReminderEvents.value =

@@ -207,7 +207,7 @@ public class OverviewFragment extends Fragment {
             liveData.removeObservers(getViewLifecycleOwner());
         }
         adapter.resetInitialized();
-        liveData = medicineViewModel.getLiveReminderEvents(0, Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60), false);
+        liveData = medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (eventAgeHours * 60 * 60), false);
         liveData.observe(getViewLifecycleOwner(), reminders -> {
             adapter.setData(reminders);
             updateFilter();

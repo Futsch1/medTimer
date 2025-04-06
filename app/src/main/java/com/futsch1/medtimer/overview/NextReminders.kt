@@ -59,7 +59,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
 
     private fun setupScheduleObservers(parentFragment: Fragment) {
         medicineViewModel.medicineRepository.getLiveReminderEvents(
-            0,
             Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
             true
         )
