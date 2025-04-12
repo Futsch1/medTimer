@@ -209,7 +209,7 @@
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
     <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
-    <string name="display_settings">Einstellungen anzeigen</string>
+    <string name="display_settings">Anzeigeeinstellungen</string>
     <string name="use_relative_date_time_summary">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
     <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>
     <string name="invalid_amount">Der Betrag muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>

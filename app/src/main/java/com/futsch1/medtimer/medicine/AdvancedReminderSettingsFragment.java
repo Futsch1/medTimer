@@ -225,7 +225,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     }
 
     private @Nullable LocalDate getCycleStartDate() {
-        return TimeHelper.dateStringToDate(editCycleStartDate.getText().toString());
+        return TimeHelper.dateStringToDate(editCycleStartDate.getContext(), editCycleStartDate.getText().toString());
     }
 
     private void setCycleStartDate(long daysSinceEpoch) {
