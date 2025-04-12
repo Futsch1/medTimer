@@ -84,16 +84,16 @@ class PeriodSettings(
         textField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val startDate: LocalDate? =
-                    TimeHelper.dateStringToDate(textField.getText().toString())
+                    TimeHelper.dateStringToDate(textField.context, textField.getText().toString())
                 val datePickerWrapper = DatePickerWrapper(fragmentManager, textId)
-                datePickerWrapper.show(startDate, { selectedDate ->
+                datePickerWrapper.show(startDate) { selectedDate ->
                     textField.setText(
                         TimeHelper.daysSinceEpochToDateString(
                             textField.context,
                             selectedDate
                         )
                     )
-                })
+                }
             }
         }
     }
@@ -130,7 +130,7 @@ class PeriodSettings(
         ) else 0L
 
     private fun getDaysSinceEpoch(textField: EditText): Long {
-        val dateString = TimeHelper.dateStringToDate(textField.text.toString())
+        val dateString = TimeHelper.dateStringToDate(textField.context, textField.text.toString())
         return dateString?.toEpochDay() ?: 0L
     }
 }

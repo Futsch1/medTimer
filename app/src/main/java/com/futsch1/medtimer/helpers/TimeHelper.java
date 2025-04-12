@@ -117,7 +117,7 @@ public class TimeHelper {
             return -1;
         }
 
-        LocalDate date = dateStringToDate(dateTimeComponents[0]);
+        LocalDate date = dateStringToDate(context, dateTimeComponents[0]);
         if (date == null) {
             return -1;
         }
@@ -134,13 +134,23 @@ public class TimeHelper {
      * @param dateString Date string in local format
      * @return Local date
      */
-    public static @Nullable LocalDate dateStringToDate(String dateString) {
+    public static @Nullable LocalDate dateStringToDate(Context context, String dateString) {
         try {
             return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
         } catch (DateTimeParseException e) {
-            return null;
+            try {
+                Date date = DateFormat.getDateFormat(context).parse(dateString);
+                if (date != null) {
+                    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                }
+            } catch (ParseException ignored) {
+                // Intentionally empty
+            }
+
         }
+        return null;
     }
+
 
     /**
      * @param context    Context to extract time format

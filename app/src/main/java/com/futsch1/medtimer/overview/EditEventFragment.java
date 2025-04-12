@@ -91,7 +91,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
 
     private void onFocusEditDate(boolean hasFocus, EditText editText) {
         if (hasFocus) {
-            LocalDate startDate = TimeHelper.dateStringToDate(editText.getText().toString());
+            LocalDate startDate = TimeHelper.dateStringToDate(requireContext(), editText.getText().toString());
             if (startDate == null) {
                 startDate = LocalDate.now();
             }
@@ -123,7 +123,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
             timestamp = TimeHelper.changeTimeStampMinutes(timestamp, minutes);
         }
         timestamp = TimeHelper.changeTimeStampDate(timestamp,
-                TimeHelper.dateStringToDate(editDate.getText().toString()));
+                TimeHelper.dateStringToDate(requireContext(), editDate.getText().toString()));
         return timestamp;
     }
 
