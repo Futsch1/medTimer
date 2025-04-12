@@ -219,4 +219,6 @@
     <string name="invalid_amount">The amount has to contain a number to enable medicine stock tracking for this reminder.</string>
     <string name="time_reminder_type_hint">Reminds at a specific time of day.</string>
     <string name="interval_reminder_type_hint">Reminds after a specified time has elapsed after the last reminder.</string>
+    <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
+    <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer</string>
 </resources>

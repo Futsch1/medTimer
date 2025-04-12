@@ -29,6 +29,10 @@ class NotificationSettingsFragment : PreferencesFragment() {
             "repeat_reminders_preferences",
             R.id.action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment
         )
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            preferenceScreen.findPreference<Preference?>("sticky_on_lockscreen")?.isVisible = false
+        }
     }
 
 

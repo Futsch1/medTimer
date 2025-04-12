@@ -20,13 +20,6 @@
         android:summary="@string/override_dnd_summary"
         android:title="@string/override_dnd"
         app:key="override_dnd" />
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/dismiss_notification_action"
-        android:entryValues="@array/values_0_to_2"
-        android:key="dismiss_notification_action"
-        android:title="@string/dismiss_notification_action"
-        app:useSimpleSummaryProvider="true" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,12 +27,26 @@
         android:title="@string/repeat_reminders"
         app:key="repeat_reminders_preferences" />
     <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/dismiss_notification_action"
+        android:entryValues="@array/values_0_to_2"
+        android:key="dismiss_notification_action"
+        android:title="@string/dismiss_notification_action"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
         android:defaultValue="15"
         android:entries="@array/snooze_duration"
         android:entryValues="@array/snooze_duration_values"
         android:key="snooze_duration"
         android:title="@string/snooze_duration"
         app:useSimpleSummaryProvider="true" />
+    <SwitchPreferenceCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
+        android:summary="@string/sticky_on_lockscreen_summary"
+        android:title="@string/sticky_on_lockscreen"
+        app:key="sticky_on_lockscreen" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

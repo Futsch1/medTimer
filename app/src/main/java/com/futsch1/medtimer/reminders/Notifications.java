@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -110,6 +111,7 @@ public class Notifications {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String dismissNotificationAction = defaultSharedPreferences.getString("dismiss_notification_action", "0");
         int snoozeTime = Integer.parseInt(defaultSharedPreferences.getString("snooze_duration", "15"));
+        boolean stickyOnLockscreen = defaultSharedPreferences.getBoolean("sticky_on_lockscreen", false);
 
         PendingIntent pendingSnooze = getSnoozePendingIntent(context, reminder.reminderId, reminderEventId, notificationId, snoozeTime);
 
@@ -130,6 +132,12 @@ public class Notifications {
             builder.addAction(R.drawable.x_circle, context.getString(R.string.skipped), pendingDismissed);
             builder.addAction(R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze);
             builder.setDeleteIntent(pendingTaken);
+        }
+
+
+        // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && stickyOnLockscreen) {
+            builder.setOngoing(true);
         }
     }
 

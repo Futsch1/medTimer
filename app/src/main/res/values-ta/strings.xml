@@ -216,4 +216,6 @@
     <string name="invalid_amount">இந்த நினைவூட்டலுக்கான மருந்து கையிருப்பு கண்காணிப்பை இயக்க தொகை ஒரு எண்ணைக் கொண்டிருக்க வேண்டும்.</string>
     <string name="time_reminder_type_hint">நாளின் ஒரு குறிப்பிட்ட நேரத்தில் நினைவூட்டுகிறது.</string>
     <string name="interval_reminder_type_hint">கடைசி நினைவூட்டலுக்குப் பிறகு குறிப்பிட்ட நேரம் கடந்ததும் நினைவூட்டுகிறது.</string>
+    <string name="sticky_on_lockscreen">பூட்டுத் திரையில் நிலையான நினைவூட்டல்கள்</string>
+    <string name="sticky_on_lockscreen_summary">நினைவூட்டல்களை பூட்டுத் திரையில் இருந்து நீக்க முடியாது, அறிவிப்புகள் இழுப்பறையில் இருந்து மட்டுமே நீக்க முடியும்</string>
 </resources>

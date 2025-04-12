@@ -210,4 +210,6 @@
     <string name="invalid_amount">金额必须包含数字，才能为此提醒启用药品库存跟踪。</string>
     <string name="time_reminder_type_hint">在一天中的特定时间提醒。</string>
     <string name="interval_reminder_type_hint">在最后一次提醒后的指定时间后提醒。</string>
+    <string name="sticky_on_lockscreen">锁屏上的持续提醒</string>
+    <string name="sticky_on_lockscreen_summary">不能从锁屏解除提醒，只能从通知抽屉解除提醒</string>
 </resources>
