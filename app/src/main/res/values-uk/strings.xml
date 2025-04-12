@@ -225,4 +225,6 @@
     <string name="invalid_amount">Сума повинна містити число, щоб увімкнути відстеження запасів ліків для цього нагадування.</string>
     <string name="time_reminder_type_hint">Нагадує в певний час доби.</string>
     <string name="interval_reminder_type_hint">Нагадує через певний час після останнього нагадування.</string>
+    <string name="sticky_on_lockscreen">Постійні нагадування на екрані блокування</string>
+    <string name="sticky_on_lockscreen_summary">Нагадування не можна відкинути з екрана блокування, тільки зі скриньки сповіщень</string>
 </resources>

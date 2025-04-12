@@ -215,4 +215,6 @@
     <string name="invalid_amount">Der Betrag muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>
     <string name="time_reminder_type_hint">Erinnert zu einer bestimmten Tageszeit.</string>
     <string name="interval_reminder_type_hint">Erinnert nach einer bestimmten Zeit, die nach der letzten Erinnerung vergangen ist.</string>
+    <string name="sticky_on_lockscreen">Dauerhafte Erinnerungen auf dem Sperrbildschirm</string>
+    <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht über den Sperrbildschirm, sondern nur über die Benachrichtigungsleiste verworfen werden</string>
 </resources>

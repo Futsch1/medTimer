@@ -220,4 +220,6 @@
     <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
     <string name="time_reminder_type_hint">Recuerda una hora concreta del día.</string>
     <string name="interval_reminder_type_hint">Recuerda una vez transcurrido un tiempo especificado desde el último recordatorio.</string>
+    <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
+    <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, sólo desde el cajón de notificaciones</string>
 </resources>

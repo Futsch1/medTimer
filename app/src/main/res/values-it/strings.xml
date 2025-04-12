@@ -220,4 +220,6 @@
     <string name="invalid_amount">L&amp;apos;importo deve contenere un numero per abilitare il tracciamento delle scorte di farmaci per questo promemoria.</string>
     <string name="time_reminder_type_hint">Ricorda a un&amp;apos;ora specifica del giorno.</string>
     <string name="interval_reminder_type_hint">Richiama dopo un determinato periodo di tempo dall&amp;apos;ultimo richiamo.</string>
+    <string name="sticky_on_lockscreen">Promemoria persistenti sulla schermata di blocco</string>
+    <string name="sticky_on_lockscreen_summary">I promemoria non possono essere eliminati dalla schermata di blocco, ma solo dal cassetto delle notifiche</string>
 </resources>
