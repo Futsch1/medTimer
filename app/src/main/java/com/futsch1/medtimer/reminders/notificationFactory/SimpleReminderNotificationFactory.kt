@@ -8,22 +8,21 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockTextForNotification
-import com.futsch1.medtimer.reminders.ReminderProcessor
-import java.util.stream.Collectors
 
 class SimpleReminderNotificationFactory(
     context: Context,
     notificationId: Int,
     val remindTime: String,
-    val medicine: FullMedicine,
-    val reminder: Reminder,
-    val reminderEvent: ReminderEvent
+    medicine: FullMedicine,
+    reminder: Reminder,
+    reminderEvent: ReminderEvent
 ) : ReminderNotificationFactory(
     context,
     notificationId,
-    medicine.medicine
+    medicine,
+    reminder,
+    reminderEvent
 ) {
     override fun build() {
         val notificationMessage: String = getNotificationString(remindTime, reminder, medicine)
@@ -31,7 +30,7 @@ class SimpleReminderNotificationFactory(
         builder.setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)
 
-        buildActions(builder, notificationId, reminderEvent.reminderEventId, reminder)
+        buildActions()
     }
 
     private fun getNotificationString(
@@ -39,26 +38,13 @@ class SimpleReminderNotificationFactory(
         reminder: Reminder,
         medicine: FullMedicine
     ): String {
-        var instructions = reminder.instructions
-        if (instructions == null) {
-            instructions = ""
-        }
-        if (instructions.isNotEmpty()) {
-            instructions = " $instructions"
-        }
-        val amountStringId: Int =
-            if (reminder.amount.isBlank()) R.string.notification_content_blank else R.string.notification_content
         val medicineNameString =
             getMedicineNameWithStockTextForNotification(context, medicine.medicine)
-        val notificationString = context.getString(
-            amountStringId,
-            remindTime,
-            reminder.amount,
-            medicineNameString,
-            instructions
-        )
+        val notificationString =
+            "$medicineNameString (${reminder.amount}) ${getInstructions()} - $remindTime"
+
         val tagNames =
-            medicine.tags.stream().map<String?> { t: Tag? -> t!!.name }.collect(Collectors.toList())
+            getTagNames()
         if (tagNames.isEmpty()) {
             return notificationString
         }
@@ -66,34 +52,17 @@ class SimpleReminderNotificationFactory(
     }
 
     private fun buildActions(
-        builder: NotificationCompat.Builder,
-        notificationId: Int,
-        reminderEventId: Int,
-        reminder: Reminder
     ) {
         val dismissNotificationAction: String? =
             defaultSharedPreferences.getString("dismiss_notification_action", "0")
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
         val stickyOnLockscreen: Boolean =
             defaultSharedPreferences.getBoolean("sticky_on_lockscreen", false)
 
-        val pendingSnooze: PendingIntent? = getSnoozePendingIntent(
-            context,
-            reminder.reminderId,
-            reminderEventId,
-            snoozeTime
-        )
-
-        val notifyDismissed = ReminderProcessor.getDismissedActionIntent(context, reminderEventId)
-        val pendingDismissed = PendingIntent.getBroadcast(
-            context,
-            notificationId,
-            notifyDismissed,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pendingSnooze: PendingIntent = getSnoozePendingIntent()
+        val pendingSkipped = getSkippedPendingIntent()
 
         val pendingTaken: PendingIntent? =
-            getTakenPendingIntent(reminderEventId, reminder)
+            getTakenPendingIntent()
 
         if (dismissNotificationAction == "0") {
             builder.addAction(
@@ -106,7 +75,7 @@ class SimpleReminderNotificationFactory(
                 context.getString(R.string.snooze),
                 pendingSnooze
             )
-            builder.setDeleteIntent(pendingDismissed)
+            builder.setDeleteIntent(pendingSkipped)
         } else if (dismissNotificationAction == "1") {
             builder.addAction(
                 R.drawable.check2_circle,
@@ -116,14 +85,14 @@ class SimpleReminderNotificationFactory(
             builder.addAction(
                 R.drawable.x_circle,
                 context.getString(R.string.skipped),
-                pendingDismissed
+                pendingSkipped
             )
             builder.setDeleteIntent(pendingSnooze)
         } else {
             builder.addAction(
                 R.drawable.x_circle,
                 context.getString(R.string.skipped),
-                pendingDismissed
+                pendingSkipped
             )
             builder.addAction(
                 R.drawable.hourglass_split,
@@ -139,39 +108,4 @@ class SimpleReminderNotificationFactory(
         }
     }
 
-    private fun getSnoozePendingIntent(
-        context: Context,
-        reminderId: Int,
-        reminderEventId: Int,
-        snoozeTime: Int
-    ): PendingIntent? {
-        return if (snoozeTime == -1) {
-            val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
-                context,
-                reminderId,
-                reminderEventId,
-                notificationId
-            )
-            PendingIntent.getActivity(
-                context,
-                notificationId,
-                snooze,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-        } else {
-            val snooze = ReminderProcessor.getSnoozeIntent(
-                context,
-                reminderId,
-                reminderEventId,
-                notificationId,
-                snoozeTime
-            )
-            PendingIntent.getBroadcast(
-                context,
-                notificationId,
-                snooze,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-    }
 }

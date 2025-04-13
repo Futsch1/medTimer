@@ -27,14 +27,25 @@ object MedicineHelper {
         notification: Boolean
     ): String {
         val name = getMedicineName(context, medicine, notification)
+        var stockText = getStockText(context, medicine)
+        if (stockText.isNotEmpty()) {
+            if (medicine.isOutOfStock) {
+                stockText += " ⚠"
+            }
+            stockText = " ($stockText)"
+        }
+        return "$name$stockText"
+    }
+
+    @JvmStatic
+    fun getStockText(context: Context, medicine: Medicine): String {
         return if (medicine.isStockManagementActive) {
-            "$name (" + context.getString(
+            context.getString(
                 R.string.medicine_stock_string,
-                formatAmount(medicine.amount, medicine.unit),
-                if (medicine.amount <= medicine.outOfStockReminderThreshold) " ⚠)" else ")"
+                formatAmount(medicine.amount, medicine.unit)
             )
         } else {
-            name
+            ""
         }
     }
 
@@ -48,7 +59,8 @@ object MedicineHelper {
         return getMedicineNameWithStockTextInternal(context, medicine, true)
     }
 
-    private fun getMedicineName(
+    @JvmStatic
+    fun getMedicineName(
         context: Context,
         medicine: Medicine,
         notification: Boolean

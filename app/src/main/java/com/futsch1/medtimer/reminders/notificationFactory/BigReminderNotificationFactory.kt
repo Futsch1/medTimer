@@ -6,32 +6,42 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.MedicineHelper
 
 class BigReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    remindTime: String,
+    val remindTime: String,
     medicine: FullMedicine,
-    val reminder: Reminder,
-    val reminderEvent: ReminderEvent
+    reminder: Reminder,
+    reminderEvent: ReminderEvent
 ) : ReminderNotificationFactory(
     context,
     notificationId,
-    medicine.medicine
+    medicine,
+    reminder,
+    reminderEvent
 ) {
     val views: RemoteViews = RemoteViews(context.packageName, R.layout.notification)
 
     override fun build() {
+        val medicineNameString =
+            MedicineHelper.getMedicineName(context, medicine.medicine, true)
+        val stockString =
+            addLineBreakIfNotEmpty(MedicineHelper.getStockText(context, medicine.medicine))
+        val notificationString =
+            "$medicineNameString (${reminder.amount})\n${getInstructions()}$stockString$remindTime"
+
         views.setTextViewText(
             R.id.notificationTitle,
-            context.getString(R.string.notification_title)
+            notificationString
         )
 
-        views.setOnClickPendingIntent(
-            R.id.takenButton,
-            getTakenPendingIntent(reminderEvent.reminderEventId, reminder)
-        )
+        views.setOnClickPendingIntent(R.id.takenButton, getTakenPendingIntent())
+        views.setOnClickPendingIntent(R.id.skippedButton, getSkippedPendingIntent())
+        views.setOnClickPendingIntent(R.id.snoozeButton, getSnoozePendingIntent())
+
         builder.setCustomBigContentView(views)
-
+        builder.setContentText("$medicineNameString (${reminder.amount})")
     }
 }

@@ -175,7 +175,7 @@
     <string name="once_below_threshold">ஒருமுறை வாசலுக்கு கீழே விழும்போது</string>
     <string name="always_below_threshold">எப்போதும் வாசலுக்கு கீழே இருக்கும்போது</string>
     <string name="out_of_stock_notification">%2$s மட்டுமே %1$s உள்ளன!\n விரைவில் மருந்தை மீண்டும் நிரப்புவதைக் கவனியுங்கள்.</string>
-    <string name="medicine_stock_string">%1$s இடது%2$s</string>
+    <string name="medicine_stock_string">%1$s இடது</string>
     <string name="out_of_stock_notification_title">பங்கு நினைவூட்டலுக்கு வெளியே மருத்துவம்</string>
     <string name="medicine_stock">மருந்து பங்கு</string>
     <string name="amount">தொகை</string>

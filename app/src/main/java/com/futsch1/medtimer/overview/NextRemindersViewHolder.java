@@ -73,7 +73,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
                 long reminderEventId = medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
                 itemView.getContext().sendBroadcast(taken ?
                                 ReminderProcessor.getTakenActionIntent(itemView.getContext(), (int) reminderEventId)
-                                : ReminderProcessor.getDismissedActionIntent(itemView.getContext(), (int) reminderEventId),
+                                : ReminderProcessor.getSkippedActionIntent(itemView.getContext(), (int) reminderEventId),
                         "com.futsch1.medtimer.NOTIFICATION_PROCESSED");
             }
         });

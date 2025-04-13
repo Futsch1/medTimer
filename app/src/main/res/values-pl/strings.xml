@@ -133,7 +133,7 @@
     <string name="create_reminder">Utwórz przypomnienie</string>
     <string name="every_interval">Co %s</string>
     <string name="always_below_threshold">Zawsze poniżej progu</string>
-    <string name="medicine_stock_string">%1$s pozostało%2$s</string>
+    <string name="medicine_stock_string">%1$s pozostało</string>
     <string name="out_of_stock_notification_title">Przypomnienie o wyczerpaniu zapasów leków</string>
     <string name="medicine_stock">Zapasy leków</string>
     <string name="out_of_stock_reminder">Przypomnienie o wyczerpaniu zapasów</string>

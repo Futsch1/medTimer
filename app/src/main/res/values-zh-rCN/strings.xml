@@ -181,7 +181,7 @@
     <string name="once_below_threshold">低于设定值时提醒一次</string>
     <string name="always_below_threshold">低于设定值时总是提醒</string>
     <string name="out_of_stock_notification">%1$s 只剩下 %2$s 了！\n请考虑马上重新配药。</string>
-    <string name="medicine_stock_string">还剩 %1$s %2$s</string>
+    <string name="medicine_stock_string">还剩 %1$s</string>
     <string name="out_of_stock_notification_title">药品低余量提醒</string>
     <string name="medicine_stock">药品余量</string>
     <string name="amount">数量</string>
