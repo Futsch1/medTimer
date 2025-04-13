@@ -207,7 +207,7 @@ android {
     val androidTests = "connectedDebugAndroidTest"
     val exclusions = listOf(
         "**/R.class",
-        "**/R\$*.class",
+        "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
         "**/*Test*.*",

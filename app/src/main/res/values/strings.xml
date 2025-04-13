@@ -221,4 +221,5 @@
     <string name="interval_reminder_type_hint">Reminds after a specified time has elapsed after the last reminder.</string>
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer</string>
+    <string name="big_notifications">Big notifications</string>
 </resources>
