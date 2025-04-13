@@ -227,4 +227,5 @@
     <string name="interval_reminder_type_hint">Przypomina po upływie określonego czasu od ostatniego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
     <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
+    <string name="big_notifications">Duże powiadomienia</string>
 </resources>

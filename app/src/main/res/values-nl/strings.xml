@@ -217,4 +217,5 @@
     <string name="interval_reminder_type_hint">Herinnert nadat een opgegeven tijd is verstreken na de laatste herinnering.</string>
     <string name="sticky_on_lockscreen">Aanhoudende herinneringen op het vergrendelscherm</string>
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden verwijderd vanaf het vergrendelscherm, alleen vanuit de meldingenlade</string>
+    <string name="big_notifications">Grote meldingen</string>
 </resources>

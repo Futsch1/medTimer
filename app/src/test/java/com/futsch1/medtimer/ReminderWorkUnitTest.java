@@ -164,6 +164,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
+                 when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
@@ -215,6 +216,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
+                 when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
