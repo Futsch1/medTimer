@@ -35,7 +35,7 @@ class BigReminderNotificationFactory(
         views.setOnClickPendingIntent(R.id.snoozeButton, pendingSnooze)
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,
-            if (medicine.medicine.isOutOfStock) R.drawable.box_seam else 0,
+            if (medicine.medicine.isOutOfStock) R.drawable.exclamation_triangle_fill else 0,
             0,
             0,
             0
