@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/notificationTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/notificationTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/medicine_name" />
-
-        <ImageView
-            android:id="@+id/stockIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/holo_red_dark"
-            android:minWidth="48dp"
-            app:srcCompat="@drawable/box_seam" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:drawableTint="@android:color/holo_red_dark"
+        android:text="@string/medicine_name"
+        tools:ignore="UseCompatTextViewDrawableXml" />
 
     <Button
         android:id="@+id/takenButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="@string/taken" />
+        android:contentDescription="@string/taken"
+        android:text="@string/taken"
+        app:icon="@drawable/check2_circle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="@string/skipped" />
+            android:text="@string/skipped"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/snoozeButton"
@@ -53,7 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/snooze" />
+            android:text="@string/snooze"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
 </LinearLayout>
