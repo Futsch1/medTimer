@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
@@ -28,22 +29,28 @@ object MedicineHelper {
         medicine: Medicine,
         notification: Boolean
     ): SpannableStringBuilder {
-        val builder = SpannableStringBuilder(getMedicineName(context, medicine, notification))
-        builder.append(" (").append(getStockText(context, medicine))
-            .append(getOutOfStockText(context, medicine)).append(")")
+        val builder = SpannableStringBuilder().bold {
+            append(
+                getMedicineName(
+                    context,
+                    medicine,
+                    notification
+                )
+            )
+        }
+        if (medicine.isStockManagementActive) {
+            builder.append(" (").append(getStockText(context, medicine))
+                .append(getOutOfStockText(context, medicine)).append(")")
+        }
         return builder
     }
 
     @JvmStatic
     fun getStockText(context: Context, medicine: Medicine): String {
-        return if (medicine.isStockManagementActive) {
-            context.getString(
-                R.string.medicine_stock_string,
-                formatAmount(medicine.amount, medicine.unit)
-            )
-        } else {
-            ""
-        }
+        return context.getString(
+            R.string.medicine_stock_string,
+            formatAmount(medicine.amount, medicine.unit)
+        )
     }
 
     @JvmStatic

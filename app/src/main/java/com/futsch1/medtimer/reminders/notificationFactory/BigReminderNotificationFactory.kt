@@ -30,9 +30,9 @@ class BigReminderNotificationFactory(
             getNotificationString()
         )
 
-        views.setOnClickPendingIntent(R.id.takenButton, getTakenPendingIntent())
-        views.setOnClickPendingIntent(R.id.skippedButton, getSkippedPendingIntent())
-        views.setOnClickPendingIntent(R.id.snoozeButton, getSnoozePendingIntent())
+        views.setOnClickPendingIntent(R.id.takenButton, pendingTaken)
+        views.setOnClickPendingIntent(R.id.skippedButton, pendingSkipped)
+        views.setOnClickPendingIntent(R.id.snoozeButton, pendingSnooze)
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,
             if (medicine.medicine.isOutOfStock) R.drawable.box_seam else 0,

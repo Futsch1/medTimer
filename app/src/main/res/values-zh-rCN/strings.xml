@@ -210,5 +210,5 @@
     <string name="interval_reminder_type_hint">在最后一次提醒后的指定时间后提醒。</string>
     <string name="sticky_on_lockscreen">锁屏上的持续提醒</string>
     <string name="sticky_on_lockscreen_summary">不能从锁屏解除提醒，只能从通知抽屉解除提醒</string>
-    <string name="big_notifications">大通知</string>
+    <string name="big_notifications">大通知按钮</string>
 </resources>
