@@ -19,8 +19,6 @@
         <item quantity="other">%1$d Erinnerungen\n%2$s</item>
     </plurals>
     <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="notification_content_blank">Es ist %1$s Uhr - Zeit, %2$s%3$s%4$s einzunehmen</string>
-    <string name="notification_content">Es ist %1$s Uhr - Zeit, %2$s von %3$s%4$s einzunehmen</string>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
     <string name="recent_events">Kürzliche Ereignisse</string>

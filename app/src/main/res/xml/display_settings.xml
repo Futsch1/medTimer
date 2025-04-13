@@ -5,8 +5,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
-        android:title="@string/use_relative_date_time"
+        android:title="@string/big_notifications"
+        app:key="big_notifications" />
+    <SwitchPreferenceCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
         android:summary="@string/use_relative_date_time_summary"
+        android:title="@string/use_relative_date_time"
         app:key="use_relative_date_time" />
     <ListPreference
         android:layout_width="wrap_content"

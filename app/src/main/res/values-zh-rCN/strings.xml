@@ -18,8 +18,6 @@
         <item quantity="other">共有 %1$d 条提醒\n%2$s</item>
     </plurals>
     <string name="notification_title">服药提醒</string>
-    <string name="notification_content_blank">现在是 %1$s - 请服用 %2$s%3$s%4$s</string>
-    <string name="notification_content">现在是 %1$s - 请服用 %2$s 剂量的 %3$s%4$s</string>
     <string name="taken">已服用</string>
     <string name="skipped">已跳过</string>
     <string name="recent_events">近期服药记录</string>

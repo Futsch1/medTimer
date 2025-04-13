@@ -3,7 +3,9 @@ package com.futsch1.medtimer.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import androidx.core.text.color
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
@@ -25,16 +27,11 @@ object MedicineHelper {
         context: Context,
         medicine: Medicine,
         notification: Boolean
-    ): String {
-        val name = getMedicineName(context, medicine, notification)
-        var stockText = getStockText(context, medicine)
-        if (stockText.isNotEmpty()) {
-            if (medicine.isOutOfStock) {
-                stockText += " ⚠"
-            }
-            stockText = " ($stockText)"
-        }
-        return "$name$stockText"
+    ): SpannableStringBuilder {
+        val builder = SpannableStringBuilder(getMedicineName(context, medicine, notification))
+        builder.append(" (").append(getStockText(context, medicine))
+            .append(getOutOfStockText(context, medicine)).append(")")
+        return builder
     }
 
     @JvmStatic
@@ -50,13 +47,20 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
-        return getMedicineNameWithStockTextInternal(context, medicine, false)
+    fun getOutOfStockText(
+        context: Context,
+        medicine: Medicine
+    ): SpannableStringBuilder {
+        if (medicine.isOutOfStock) {
+            return SpannableStringBuilder().append(" ")
+                .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
+        }
+        return SpannableStringBuilder()
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockTextForNotification(context: Context, medicine: Medicine): String {
-        return getMedicineNameWithStockTextInternal(context, medicine, true)
+    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): SpannableStringBuilder {
+        return getMedicineNameWithStockTextInternal(context, medicine, false)
     }
 
     @JvmStatic

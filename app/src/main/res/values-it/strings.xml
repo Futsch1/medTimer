@@ -20,8 +20,6 @@
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
     <string name="notification_title">Promemoria per i medicinali</string>
-    <string name="notification_content_blank">Sono le %1$s : è ora di prendere %2$s%3$s%4$s</string>
-    <string name="notification_content">Sono le %1$s: è ora di prendere %2$s di %3$s%4$s</string>
     <string name="taken">Preso</string>
     <string name="skipped">Saltato</string>
     <string name="recent_events">Eventi recenti</string>

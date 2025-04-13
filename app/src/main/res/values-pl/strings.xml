@@ -28,8 +28,6 @@
     <string name="delete">Usuń</string>
     <string name="cancel">Anuluj</string>
     <string name="confirm">Potwierdź</string>
-    <string name="notification_content_blank">Jest %1$s - czas wziąć %2$s%3$s%4$s</string>
-    <string name="notification_content">Jest %1$s - czas wziąć %2$s z %3$s%4$s</string>
     <string name="taken">Wzięto</string>
     <string name="skipped">Pominięto</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>

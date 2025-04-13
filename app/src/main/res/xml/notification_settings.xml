@@ -17,12 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
-        android:title="@string/big_notifications"
-        app:key="big_notifications" />
-    <SwitchPreferenceCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="false"
         android:summary="@string/override_dnd_summary"
         android:title="@string/override_dnd"
         app:key="override_dnd" />

@@ -19,8 +19,6 @@
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
-    <string name="notification_content">Зараз %1$s - час прийняти %2$s з %3$s%4$s</string>
-    <string name="notification_content_blank">Зараз %1$s - час прийняти %2$s%3$s%4$s</string>
     <string name="show_notifications">Показувати сповіщення</string>
     <string name="overview_events">Огляд відображених подій</string>
     <string name="four_hours">4 години</string>

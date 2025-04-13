@@ -20,8 +20,6 @@
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
     <string name="notification_title">Rappel de médicaments</string>
-    <string name="notification_content_blank">Il est %1$s: il est temps de prendre %2$s%3$s%4$s</string>
-    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
     <string name="recent_events">Événements récents</string>

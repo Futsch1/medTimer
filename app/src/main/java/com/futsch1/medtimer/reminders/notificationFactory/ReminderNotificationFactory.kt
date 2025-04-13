@@ -4,13 +4,17 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
+import androidx.core.text.bold
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.ReminderProcessor
 import java.util.stream.Collectors
 
@@ -49,12 +53,21 @@ fun getReminderNotificationFactory(
 abstract class ReminderNotificationFactory(
     context: Context,
     notificationId: Int,
+    val remindTime: String,
     val medicine: FullMedicine,
     val reminder: Reminder,
     val reminderEvent: ReminderEvent
 ) : NotificationFactory(context, notificationId, medicine.medicine) {
     val defaultSharedPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
+    val baseString: SpannableStringBuilder
+
+    val pendingSnooze = getSnoozePendingIntent()
+    val pendingSkipped = getSkippedPendingIntent()
+    val pendingTaken = getTakenPendingIntent()
+
+    val dismissNotificationAction: String? =
+        defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
     init {
         val contentIntent: PendingIntent? = getStartAppIntent()
@@ -64,6 +77,33 @@ abstract class ReminderNotificationFactory(
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(Notification.CATEGORY_REMINDER)
             .setContentIntent(contentIntent)
+
+        val medicineNameString =
+            MedicineHelper.getMedicineName(context, medicine.medicine, true)
+        baseString = SpannableStringBuilder().bold { append(medicineNameString) }
+            .append(" (${reminder.amount})")
+
+        addDismissNotification()
+
+        // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
+                "sticky_on_lockscreen",
+                false
+            )
+        ) {
+            builder.setOngoing(true)
+        }
+    }
+
+    private fun addDismissNotification() {
+        if (dismissNotificationAction == "0") {
+            builder.setDeleteIntent(pendingSkipped)
+        } else if (dismissNotificationAction == "1") {
+            builder.setDeleteIntent(pendingSnooze)
+        } else {
+            builder.setDeleteIntent(pendingTaken)
+        }
+
     }
 
     abstract fun build()
@@ -113,6 +153,24 @@ abstract class ReminderNotificationFactory(
         } else {
             "$string\n"
         }
+    }
+
+    fun getNotificationString(): SpannableStringBuilder {
+        var builder = SpannableStringBuilder(baseString).append("\n${getInstructions()}")
+        if (medicine.medicine.isStockManagementActive) {
+            builder.append(MedicineHelper.getStockText(context, medicine.medicine))
+            if (showOutOfStockIcon()) {
+                builder.append(MedicineHelper.getOutOfStockText(context, medicine.medicine))
+            }
+            builder.append("\n")
+        }
+
+        builder.append("$remindTime\n${getTagNames()}")
+        return builder
+    }
+
+    open fun showOutOfStockIcon(): Boolean {
+        return true
     }
 
     fun getTagNames(): String {

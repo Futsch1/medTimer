@@ -20,8 +20,6 @@
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
     <string name="notification_title">Recordatorio de medicación</string>
-    <string name="notification_content_blank">Son las %1$s - hora de tomar %2$s%3$s%4$s</string>
-    <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
     <string name="recent_events">Eventos recientes</string>
