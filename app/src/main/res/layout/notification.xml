@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:drawableStart="@drawable/fast_forward_fill"
+            android:drawableStart="@drawable/x_circle"
             android:text="@string/skipped"
             tools:ignore="ButtonStyle" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:drawableStart="@drawable/alarm_fill"
+            android:drawableStart="@drawable/alarm"
             android:text="@string/snooze"
             tools:ignore="ButtonStyle" />
     </LinearLayout>

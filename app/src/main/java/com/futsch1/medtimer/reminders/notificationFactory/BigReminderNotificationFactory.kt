@@ -43,6 +43,8 @@ class BigReminderNotificationFactory(
 
         builder.setCustomBigContentView(views)
         builder.setContentText(baseString)
+
+        buildActions()
     }
 
     override fun showOutOfStockIcon(): Boolean {

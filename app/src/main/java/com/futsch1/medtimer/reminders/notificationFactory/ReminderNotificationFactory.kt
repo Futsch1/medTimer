@@ -223,4 +223,46 @@ abstract class ReminderNotificationFactory(
         }
     }
 
+
+    fun buildActions(
+    ) {
+        val dismissNotificationAction: String? =
+            defaultSharedPreferences.getString("dismiss_notification_action", "0")
+
+        if (dismissNotificationAction == "0") {
+            addTakenAction()
+            addSnoozeAction()
+        } else if (dismissNotificationAction == "1") {
+            addTakenAction()
+            addSkippedAction()
+        } else {
+            addSkippedAction()
+            addSnoozeAction()
+        }
+    }
+
+    private fun addSkippedAction() {
+        builder.addAction(
+            R.drawable.x_circle,
+            context.getString(R.string.skipped),
+            pendingSkipped
+        )
+    }
+
+    private fun addSnoozeAction() {
+        builder.addAction(
+            R.drawable.hourglass_split,
+            context.getString(R.string.snooze),
+            pendingSnooze
+        )
+    }
+
+    private fun addTakenAction() {
+        builder.addAction(
+            R.drawable.check2_circle,
+            context.getString(R.string.taken),
+            pendingTaken
+        )
+    }
+
 }
