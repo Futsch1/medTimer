@@ -193,20 +193,22 @@ abstract class ReminderNotificationFactory(
     fun getSnoozePendingIntent(): PendingIntent {
         val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
 
-        return if (snoozeTime == -1) {
+        fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
                 context,
                 reminder.reminderId,
                 reminderEvent.reminderEventId,
                 notificationId
             )
-            PendingIntent.getActivity(
+            return PendingIntent.getActivity(
                 context,
                 notificationId,
                 snooze,
                 PendingIntent.FLAG_IMMUTABLE
             )
-        } else {
+        }
+
+        fun getStandardSnoozeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getSnoozeIntent(
                 context,
                 reminder.reminderId,
@@ -214,12 +216,18 @@ abstract class ReminderNotificationFactory(
                 notificationId,
                 snoozeTime
             )
-            PendingIntent.getBroadcast(
+            return PendingIntent.getBroadcast(
                 context,
                 notificationId,
                 snooze,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
+        }
+
+        return if (snoozeTime == -1) {
+            getSnoozeCustomTimeIntent()
+        } else {
+            getStandardSnoozeIntent()
         }
     }
 
