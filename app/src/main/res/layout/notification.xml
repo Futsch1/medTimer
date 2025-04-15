@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.MedTimer">
 
     <TextView
         android:id="@+id/notificationTitle"
@@ -21,7 +22,8 @@
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/taken"
         android:drawableStart="@drawable/check2_circle"
-        android:text="@string/taken" />
+        android:text="@string/taken"
+        android:textAllCaps="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,6 +38,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/x_circle"
             android:text="@string/skipped"
+            android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
 
         <Button
@@ -46,6 +49,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/alarm"
             android:text="@string/snooze"
+            android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 
