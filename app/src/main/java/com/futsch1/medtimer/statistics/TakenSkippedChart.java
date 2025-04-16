@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.statistics;
 
+import static java.lang.Math.round;
+
 import android.content.Context;
 
 import com.androidplot.pie.PieChart;
@@ -56,7 +58,7 @@ public class TakenSkippedChart {
         segment.setValue(selfValue);
         if (selfValue > 0) {
             segment.setTitle(context.getString(stringId) + ": " +
-                    String.format(Locale.US, "%d%%", 100 * selfValue / (selfValue + otherValue)));
+                    String.format(Locale.US, "%d%%", round(100 * (float) selfValue / (selfValue + otherValue))));
         } else {
             segment.setTitle("");
         }
