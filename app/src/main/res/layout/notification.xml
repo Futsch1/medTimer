@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MedTimer">
+
+    <TextView
+        android:id="@+id/notificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:drawableTint="@android:color/holo_red_dark"
+        android:text="@string/medicine_name"
+        tools:ignore="UseCompatTextViewDrawableXml" />
+
+    <Button
+        android:id="@+id/takenButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/taken"
+        android:drawableStart="@drawable/check2_circle"
+        android:text="@string/taken"
+        android:textAllCaps="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/skippedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/x_circle"
+            android:text="@string/skipped"
+            android:textAllCaps="false"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/snoozeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/alarm"
+            android:text="@string/snooze"
+            android:textAllCaps="false"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+
+</LinearLayout>

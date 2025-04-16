@@ -3,7 +3,10 @@ package com.futsch1.medtimer.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import androidx.core.text.bold
+import androidx.core.text.color
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
@@ -25,30 +28,50 @@ object MedicineHelper {
         context: Context,
         medicine: Medicine,
         notification: Boolean
-    ): String {
-        val name = getMedicineName(context, medicine, notification)
-        return if (medicine.isStockManagementActive) {
-            "$name (" + context.getString(
-                R.string.medicine_stock_string,
-                formatAmount(medicine.amount, medicine.unit),
-                if (medicine.amount <= medicine.outOfStockReminderThreshold) " ⚠)" else ")"
+    ): SpannableStringBuilder {
+        val builder = SpannableStringBuilder().bold {
+            append(
+                getMedicineName(
+                    context,
+                    medicine,
+                    notification
+                )
             )
-        } else {
-            name
         }
+        if (medicine.isStockManagementActive) {
+            builder.append(" (").append(getStockText(context, medicine))
+                .append(getOutOfStockText(context, medicine)).append(")")
+        }
+        return builder
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): String {
+    fun getStockText(context: Context, medicine: Medicine): String {
+        return context.getString(
+            R.string.medicine_stock_string,
+            formatAmount(medicine.amount, medicine.unit)
+        )
+    }
+
+    @JvmStatic
+    fun getOutOfStockText(
+        context: Context,
+        medicine: Medicine
+    ): SpannableStringBuilder {
+        if (medicine.isOutOfStock) {
+            return SpannableStringBuilder().append(" ")
+                .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
+        }
+        return SpannableStringBuilder()
+    }
+
+    @JvmStatic
+    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): SpannableStringBuilder {
         return getMedicineNameWithStockTextInternal(context, medicine, false)
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockTextForNotification(context: Context, medicine: Medicine): String {
-        return getMedicineNameWithStockTextInternal(context, medicine, true)
-    }
-
-    private fun getMedicineName(
+    fun getMedicineName(
         context: Context,
         medicine: Medicine,
         notification: Boolean

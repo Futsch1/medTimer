@@ -20,8 +20,6 @@
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
     <string name="notification_title">Rappel de médicaments</string>
-    <string name="notification_content_blank">Il est %1$s: il est temps de prendre %2$s%3$s%4$s</string>
-    <string name="notification_content">Il est %1$s: il est temps de prendre %2$s de %3$s%4$s</string>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
     <string name="recent_events">Événements récents</string>
@@ -191,7 +189,7 @@
     <string name="once_below_threshold">Une fois lors du passage en dessous du seuil</string>
     <string name="always_below_threshold">Toujours en dessous du seuil</string>
     <string name="out_of_stock_notification">Il ne reste plus que %2$s de %1$s!\nConsidérez de renouveler le médicament bientôt.</string>
-    <string name="medicine_stock_string">%1$s restants%2$s</string>
+    <string name="medicine_stock_string">%1$s restants</string>
     <string name="out_of_stock_notification_title">Rappel de la réserve de médicaments</string>
     <string name="medicine_stock">Réserve de médicaments</string>
     <string name="amount">Numbre</string>
@@ -222,4 +220,5 @@
     <string name="interval_reminder_type_hint">Rappelle après un délai spécifié après le dernier rappel.</string>
     <string name="sticky_on_lockscreen">Rappels persistants sur l&amp;apos;écran de verrouillage</string>
     <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être supprimés à partir de l&amp;apos;écran de verrouillage, mais uniquement à partir du tiroir de notifications</string>
+    <string name="big_notifications">Gros boutons de notification</string>
 </resources>

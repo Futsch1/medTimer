@@ -72,6 +72,10 @@ public class Medicine {
         this.unit = "";
     }
 
+    public boolean isOutOfStock() {
+        return isStockManagementActive() && amount <= outOfStockReminderThreshold;
+    }
+
     public boolean isStockManagementActive() {
         return (amount != 0 || outOfStockReminder != OutOfStockReminderType.OFF || outOfStockReminderThreshold != 0);
     }

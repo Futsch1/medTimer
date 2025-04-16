@@ -19,8 +19,6 @@
         <item quantity="other">%1$d hatırlatıcı\n%2$s</item>
     </plurals>
     <string name="notification_title">İlaç hatırlatıcısı</string>
-    <string name="notification_content_blank">Şu anda %1$s - %2$s%3$s ilacından almanın zamanı geldi%4$s</string>
-    <string name="notification_content">Şu anda %1$s - %3$s ilacından %2$s almanın zamanı geldi%4$s</string>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
     <string name="recent_events">Son etkinlikler</string>
@@ -186,7 +184,7 @@
     <string name="once_below_threshold">Eşiğin altına düştüğünde bir kez</string>
     <string name="always_below_threshold">Her zaman eşiğin altında olduğunda</string>
     <string name="out_of_stock_notification">%1$s&amp;apos;dan sadece %2$s kaldı!\nİlacı yakında yeniden doldurmayı düşünün.</string>
-    <string name="medicine_stock_string">%1$s kaldı%2$s</string>
+    <string name="medicine_stock_string">%1$s kaldı</string>
     <string name="out_of_stock_notification_title">İlaç stokta yok hatırlatması</string>
     <string name="medicine_stock">İlaç stoğu</string>
     <string name="amount">Miktar</string>
@@ -217,4 +215,5 @@
     <string name="interval_reminder_type_hint">Son hatırlatmadan sonra belirli bir süre geçtikten sonra hatırlatır.</string>
     <string name="sticky_on_lockscreen">Kilit ekranında kalıcı hatırlatıcılar</string>
     <string name="sticky_on_lockscreen_summary">Hatırlatıcılar kilit ekranından kapatılamaz, sadece bildirim çekmecesinden kapatılabilir</string>
+    <string name="big_notifications">Büyük bildirim düğmeleri</string>
 </resources>

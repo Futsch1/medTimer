@@ -19,8 +19,6 @@
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
-    <string name="notification_content">Зараз %1$s - час прийняти %2$s з %3$s%4$s</string>
-    <string name="notification_content_blank">Зараз %1$s - час прийняти %2$s%3$s%4$s</string>
     <string name="show_notifications">Показувати сповіщення</string>
     <string name="overview_events">Огляд відображених подій</string>
     <string name="four_hours">4 години</string>
@@ -172,7 +170,7 @@
     <string name="once_below_threshold">Один раз при падінні нижче порогового значення</string>
     <string name="always_below_threshold">Завжди, коли нижче порогу</string>
     <string name="out_of_stock_notification">Залишилося лише %2$s від %1$s!\nПодумайте про те, щоб поповнити запас ліків найближчим часом.</string>
-    <string name="medicine_stock_string">%1$s left%2$s</string>
+    <string name="medicine_stock_string">Залишилося %1$s</string>
     <string name="out_of_stock_notification_title">Нагадування про відсутність ліків на складі</string>
     <string name="medicine_stock">Запас медикаментів</string>
     <string name="amount">Сума</string>
@@ -227,4 +225,5 @@
     <string name="interval_reminder_type_hint">Нагадує через певний час після останнього нагадування.</string>
     <string name="sticky_on_lockscreen">Постійні нагадування на екрані блокування</string>
     <string name="sticky_on_lockscreen_summary">Нагадування не можна відкинути з екрана блокування, тільки зі скриньки сповіщень</string>
+    <string name="big_notifications">Великі кнопки сповіщень</string>
 </resources>

@@ -90,7 +90,7 @@ public class ReminderProcessor extends BroadcastReceiver {
     }
 
     public static void requestActionIntent(Context context, int reminderEventId, boolean taken) {
-        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventId) : getDismissedActionIntent(context, reminderEventId);
+        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventId) : getSkippedActionIntent(context, reminderEventId);
         if (taken) {
             WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWork.class));
         } else {
@@ -102,7 +102,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
     }
 
-    public static Intent getDismissedActionIntent(@NonNull Context context, int reminderEventId) {
+    public static Intent getSkippedActionIntent(@NonNull Context context, int reminderEventId) {
         return buildActionIntent(context, reminderEventId, DISMISSED_ACTION);
     }
 

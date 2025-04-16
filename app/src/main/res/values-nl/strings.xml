@@ -19,8 +19,6 @@
         <item quantity="other">%1$d herinneringen\n%2$s</item>
     </plurals>
     <string name="notification_title">Herinneringen van de behandeling</string>
-    <string name="notification_content_blank">Het is %1$s - tijd om %2$s%3$s%4$s te nemen</string>
-    <string name="notification_content">Het is %1$s - tijd om %2$s van %3$s%4$s te nemen</string>
     <string name="taken">Ingenomen</string>
     <string name="skipped">Overgeslagen</string>
     <string name="recent_events">Recente herinneringen</string>
@@ -186,7 +184,7 @@
     <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
     <string name="always_below_threshold">Altijd wanneer onder drempel</string>
     <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
-    <string name="medicine_stock_string">%1$s over%2$s</string>
+    <string name="medicine_stock_string">%1$s over</string>
     <string name="out_of_stock_notification_title">Herinnering aan behandelingsvoorraad</string>
     <string name="medicine_stock">Behandelingsvoorraad</string>
     <string name="amount">Hoeveelheid</string>
@@ -217,4 +215,5 @@
     <string name="interval_reminder_type_hint">Herinnert nadat een opgegeven tijd is verstreken na de laatste herinnering.</string>
     <string name="sticky_on_lockscreen">Aanhoudende herinneringen op het vergrendelscherm</string>
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden verwijderd vanaf het vergrendelscherm, alleen vanuit de meldingenlade</string>
+    <string name="big_notifications">Grote meldingsknoppen</string>
 </resources>

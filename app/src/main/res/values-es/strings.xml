@@ -20,8 +20,6 @@
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
     <string name="notification_title">Recordatorio de medicación</string>
-    <string name="notification_content_blank">Son las %1$s - hora de tomar %2$s%3$s%4$s</string>
-    <string name="notification_content">Son las %1$s - hora de tomar %2$s de %3$s%4$s</string>
     <string name="taken">Tomado</string>
     <string name="skipped">Omitido</string>
     <string name="recent_events">Eventos recientes</string>
@@ -191,7 +189,7 @@
     <string name="once_below_threshold">Una vez al caer por debajo del umbral</string>
     <string name="always_below_threshold">Siempre que esté por debajo del umbral</string>
     <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
-    <string name="medicine_stock_string">%1$s restantes%2$s</string>
+    <string name="medicine_stock_string">%1$s restantes</string>
     <string name="out_of_stock_notification_title">Recordatorio de medicamentos agotados</string>
     <string name="medicine_stock">Stock de medicamentos</string>
     <string name="amount">Cantidad</string>
@@ -222,4 +220,5 @@
     <string name="interval_reminder_type_hint">Recuerda una vez transcurrido un tiempo especificado desde el último recordatorio.</string>
     <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
     <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, sólo desde el cajón de notificaciones</string>
+    <string name="big_notifications">Botones de notificación grandes</string>
 </resources>

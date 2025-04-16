@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 109
-        versionName = "1.16.9"
+        versionCode = 111
+        versionName = "1.16.10"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -207,7 +207,7 @@ android {
     val androidTests = "connectedDebugAndroidTest"
     val exclusions = listOf(
         "**/R.class",
-        "**/R\$*.class",
+        "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
         "**/*Test*.*",

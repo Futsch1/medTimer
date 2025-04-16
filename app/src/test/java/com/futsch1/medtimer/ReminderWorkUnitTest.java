@@ -99,7 +99,6 @@ public class ReminderWorkUnitTest {
         when(mockApplication.getSharedPreferences(anyString(), anyInt())).thenReturn(mockSharedPreferences);
         when(mockApplication.getString(R.string.notification_title)).thenReturn("NotificationTitle");
         when(mockApplication.getString(R.string.taken)).thenReturn("NotificationTaken");
-        when(mockApplication.getString(eq(R.string.notification_content), any(Object[].class))).thenReturn("NotificationContent");
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
     }
@@ -164,6 +163,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
+                 when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
@@ -215,6 +215,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq("NotificationTaken"), any())).thenReturn(mock());
+                 when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);

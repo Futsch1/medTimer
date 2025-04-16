@@ -20,8 +20,6 @@
         <item quantity="other">%1$d reminders\n%2$s</item>
     </plurals>
     <string name="notification_title">Medicine reminder</string>
-    <string name="notification_content_blank">It is %1$s - time to take %2$s%3$s%4$s</string>
-    <string name="notification_content">It is %1$s - time to take %2$s of %3$s%4$s</string>
     <string name="taken">Taken</string>
     <string name="skipped">Skipped</string>
     <string name="recent_events">Recent events</string>
@@ -190,7 +188,7 @@
     <string name="once_below_threshold">Once when falling below threshold</string>
     <string name="always_below_threshold">Always when below threshold</string>
     <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
-    <string name="medicine_stock_string">%1$s left%2$s</string>
+    <string name="medicine_stock_string">%1$s left</string>
     <string name="out_of_stock_notification_title">Medicine out of stock reminder</string>
     <string name="medicine_stock">Medicine stock</string>
     <string name="amount">Amount</string>
@@ -221,4 +219,5 @@
     <string name="interval_reminder_type_hint">Reminds after a specified time has elapsed after the last reminder.</string>
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer</string>
+    <string name="big_notifications">Big notification buttons</string>
 </resources>

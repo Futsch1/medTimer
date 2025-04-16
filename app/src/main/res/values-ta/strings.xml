@@ -28,8 +28,6 @@
         <item quantity="other">%1$d நினைவூட்டல்கள்\n %2$s</item>
     </plurals>
     <string name="notification_title">மருந்து நினைவூட்டல்</string>
-    <string name="notification_content_blank">இது %1$s - %2$s %3$s %4$s ஐ எடுக்க நேரம்</string>
-    <string name="notification_content">இது %1$s - %2$s %3$s %4$s ஐ எடுக்க நேரம்</string>
     <string name="taken">எடுக்கப்பட்டது</string>
     <string name="skipped">தவிர்க்கப்பட்டது</string>
     <string name="recent_events">அண்மைக் கால நிகழ்வுகள்</string>
@@ -175,7 +173,7 @@
     <string name="once_below_threshold">ஒருமுறை வாசலுக்கு கீழே விழும்போது</string>
     <string name="always_below_threshold">எப்போதும் வாசலுக்கு கீழே இருக்கும்போது</string>
     <string name="out_of_stock_notification">%2$s மட்டுமே %1$s உள்ளன!\n விரைவில் மருந்தை மீண்டும் நிரப்புவதைக் கவனியுங்கள்.</string>
-    <string name="medicine_stock_string">%1$s இடது%2$s</string>
+    <string name="medicine_stock_string">%1$s இடது</string>
     <string name="out_of_stock_notification_title">பங்கு நினைவூட்டலுக்கு வெளியே மருத்துவம்</string>
     <string name="medicine_stock">மருந்து பங்கு</string>
     <string name="amount">தொகை</string>
@@ -218,4 +216,5 @@
     <string name="interval_reminder_type_hint">கடைசி நினைவூட்டலுக்குப் பிறகு குறிப்பிட்ட நேரம் கடந்ததும் நினைவூட்டுகிறது.</string>
     <string name="sticky_on_lockscreen">பூட்டுத் திரையில் நிலையான நினைவூட்டல்கள்</string>
     <string name="sticky_on_lockscreen_summary">நினைவூட்டல்களை பூட்டுத் திரையில் இருந்து நீக்க முடியாது, அறிவிப்புகள் இழுப்பறையில் இருந்து மட்டுமே நீக்க முடியும்</string>
+    <string name="big_notifications">பெரிய அறிவிப்பு பொத்தான்கள்</string>
 </resources>
