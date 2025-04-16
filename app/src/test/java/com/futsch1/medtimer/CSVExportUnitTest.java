@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -41,6 +42,7 @@ class CSVExportUnitTest {
         reminderEvent1.medicineName = "Medicine 1";
         reminderEvent1.amount = "10mg";
         reminderEvent1.status = ReminderEvent.ReminderStatus.TAKEN;
+        reminderEvent1.tags = Arrays.asList("Tag1", "Tag2");
         reminderEvents.add(reminderEvent1);
 
         ReminderEvent reminderEvent2 = new ReminderEvent();
@@ -49,6 +51,7 @@ class CSVExportUnitTest {
         reminderEvent2.medicineName = "Medicine 2";
         reminderEvent2.amount = "20mg";
         reminderEvent2.status = ReminderEvent.ReminderStatus.SKIPPED;
+        reminderEvent2.tags = new ArrayList<>();
         reminderEvents.add(reminderEvent2);
 
         // Create a mock Context
@@ -57,6 +60,7 @@ class CSVExportUnitTest {
         when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
+        when(context.getString(R.string.tags)).thenReturn("Tags");
 
         // Create a mock File
         File file = mock(File.class);
@@ -81,9 +85,9 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken;Time (ISO 8601);Taken (ISO 8601)\n");
-                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
-                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;2021-05-03T00:30:00Z;\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken;Tags;Time (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
+                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;2021-05-03T00:30:00Z;\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
@@ -103,6 +107,7 @@ class CSVExportUnitTest {
         when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
+        when(context.getString(R.string.tags)).thenReturn("Tags");
 
         // Create a mock File
         File file = mock(File.class);
@@ -118,7 +123,7 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken;Time (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("Time;Name;Amount;Taken;Tags;Time (ISO 8601);Taken (ISO 8601)\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
