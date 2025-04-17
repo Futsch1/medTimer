@@ -271,6 +271,44 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun bigButtons() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val packageName = device.currentPackageName
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.big_notifications)
+
+        pressBack()
+
+        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createIntervalReminder("1", 120)
+        pressBack()
+
+        device.openNotification()
+        assert(
+            device.wait(
+                Until.hasObject(By.res(packageName, "takenButton")),
+                2000
+            )
+        )
+        assert(
+            device.wait(
+                Until.hasObject(By.res(packageName, "skippedButton")),
+                2000
+            )
+        )
+        assert(
+            device.wait(
+                Until.hasObject(By.res(packageName, "snoozeButton")),
+                2000
+            )
+        )
+
+    }
+
     private fun getNotificationText(): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
