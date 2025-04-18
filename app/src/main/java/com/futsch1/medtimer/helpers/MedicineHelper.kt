@@ -16,7 +16,7 @@ import java.text.NumberFormat
 import java.util.regex.Pattern
 
 object MedicineHelper {
-    private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d?/\\d?)\\)")
+    private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
 
     @JvmStatic
     fun normalizeMedicineName(medicineName: String): String {
