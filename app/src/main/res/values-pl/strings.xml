@@ -221,7 +221,7 @@
         <item quantity="other">dni</item>
     </plurals>
     <string name="use_relative_date_time">Względna data/godzina</string>
-    <string name="invalid_amount">Kwota musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
+    <string name="invalid_amount">Pole musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
     <string name="time_reminder_type_hint">Przypomina o określonej porze dnia.</string>
     <string name="interval_reminder_type_hint">Przypomina po upływie określonego czasu od ostatniego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
