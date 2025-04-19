@@ -1,7 +1,6 @@
 package com.futsch1.medtimer;
 
 
-import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static androidx.test.espresso.Espresso.pressBack;
 import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertChecked;
 import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked;
@@ -12,12 +11,11 @@ import static com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
+import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
-
-import com.adevinta.android.barista.interaction.PermissionGranter;
 
 import org.junit.Test;
 
@@ -120,12 +118,14 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(com.github.appintro.R.id.next);
 
-        PermissionGranter.allowPermissionsIfNeeded(POST_NOTIFICATIONS);
+        sleep(1000);
 
         assertDisplayed(R.string.tab_medicine);
         assertDisplayed(R.string.intro_medicine_description);
 
         clickOn(com.github.appintro.R.id.skip);
+
+        sleep(1000);
 
         assertDisplayed(R.string.next_reminders);
     }
