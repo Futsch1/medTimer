@@ -26,15 +26,14 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
-        medicine: Medicine,
-        notification: Boolean
+        medicine: Medicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 getMedicineName(
                     context,
                     medicine,
-                    notification
+                    false
                 )
             )
         }
@@ -67,7 +66,7 @@ object MedicineHelper {
 
     @JvmStatic
     fun getMedicineNameWithStockText(context: Context, medicine: Medicine): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, medicine, false)
+        return getMedicineNameWithStockTextInternal(context, medicine)
     }
 
     @JvmStatic

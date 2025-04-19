@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.mockStatic
 import org.robolectric.annotation.Config
 import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 
@@ -49,10 +50,6 @@ class MedicineHelperTest {
         var contextMock = mock(Context::class.java)
         Mockito.`when`(contextMock.getString(R.string.medicine_stock_string, "12 pills"))
             .thenReturn("12 pills left")
-        var preferencesMock = mock(SharedPreferences::class.java)
-        Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(false)
-        Mockito.`when`(PreferenceManager.getDefaultSharedPreferences(contextMock))
-            .thenReturn(preferencesMock)
 
         // Standard case without stock
         var medicine = Medicine("test")
@@ -76,14 +73,23 @@ class MedicineHelperTest {
             "test (12 pills left ⚠)",
             MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
         )
+    }
 
-        // Hidden med name case
+    @Test
+    fun testGetMedicineName() {
+        var contextMock = mock(Context::class.java)
+        var preferencesMock = mock(SharedPreferences::class.java)
         Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(true)
+        var preferencesManager = mockStatic(PreferenceManager::class.java)
+        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
+
+        var medicine = Medicine("test")
         medicine.outOfStockReminder = Medicine.OutOfStockReminderType.OFF
+        medicine.outOfStockReminderThreshold = 0.0
         medicine.amount = 0.0
         assertEquals(
             "t***",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
+            MedicineHelper.getMedicineName(contextMock, medicine, true).toString()
         )
     }
 }
