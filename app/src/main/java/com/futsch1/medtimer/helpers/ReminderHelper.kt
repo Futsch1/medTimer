@@ -49,16 +49,17 @@ fun formatReminderStringForWidget(
         reminderEvent.remindedTimestamp
     ) + ": "
 
+    val amountStatusString =
+        "${reminderEvent.amount} ${statusToString(context, reminderEvent.status)}".trim()
+
     return SpannableStringBuilder().append(takenTime).bold { append(reminderEvent.medicineName) }
-        .append(" (")
-        .append(reminderEvent.amount).append(statusToString(context, reminderEvent.status))
-        .append(")")
+        .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
 }
 
 private fun statusToString(context: Context, status: ReminderEvent.ReminderStatus?): String {
     return when (status) {
-        ReminderEvent.ReminderStatus.TAKEN -> " " + context.getString(R.string.taken)
-        ReminderEvent.ReminderStatus.SKIPPED -> " " + context.getString(R.string.skipped)
+        ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken)
+        ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped)
         else -> ""
     }
 }
