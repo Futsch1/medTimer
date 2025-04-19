@@ -76,5 +76,14 @@ class MedicineHelperTest {
             "test (12 pills left ⚠)",
             MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
         )
+
+        // Hidden med name case
+        Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(true)
+        medicine.outOfStockReminder = Medicine.OutOfStockReminderType.OFF
+        medicine.amount = 0.0
+        assertEquals(
+            "t***",
+            MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
+        )
     }
 }

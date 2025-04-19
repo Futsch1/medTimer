@@ -33,8 +33,9 @@ fun formatReminderString(
         reminderEvent.remindedTimestamp
     )
 
-    return SpannableStringBuilder().bold { append(reminderEvent.medicineName) }.append(" (")
-        .append(reminderEvent.amount).append(")\n").append(takenTime)
+    return SpannableStringBuilder().bold { append(reminderEvent.medicineName) }
+        .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
+        .append("\n").append(takenTime)
 }
 
 fun formatReminderStringForWidget(
@@ -74,8 +75,8 @@ fun formatScheduledReminderString(
     )
 
     return SpannableStringBuilder().bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(" (")
-        .append(scheduledReminder.reminder().amount).append(")\n").append(scheduledTime)
+        .append(if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else "")
+        .append("\n").append(scheduledTime)
 }
 
 fun formatScheduledReminderStringForWidget(
@@ -91,6 +92,5 @@ fun formatScheduledReminderStringForWidget(
 
     return SpannableStringBuilder().append(scheduledTime)
         .bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(" (")
-        .append(scheduledReminder.reminder().amount).append(")")
+        .append(if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else "")
 }

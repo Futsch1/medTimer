@@ -11,6 +11,7 @@ public class PreferencesNames {
     public static final String OVERRIDE_DND = "override_dnd";
     public static final String HIDE_MED_NAME = "hide_med_name";
     public static final String SECURE_WINDOW = "window_flag_secure";
+    public static final String USE_RELATIVE_DATE_TIME = "use_relative_date_time";
 
     private PreferencesNames() {
         // Intended empty
