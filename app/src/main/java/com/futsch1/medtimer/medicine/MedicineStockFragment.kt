@@ -50,24 +50,14 @@ class MedicineStockFragment :
     }
 
     override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
-        fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
-            .setText(MedicineHelper.formatAmount(entity.amount, ""))
-        fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).addDoubleValidator()
+        amountToView(fragmentView, R.id.amountLeft, entity.amount)
 
         fragmentView.findViewById<TextInputEditText>(R.id.stockUnit).setText(entity.unit)
 
-        fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold)
-            .setText(MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, ""))
-        fragmentView.findViewById<TextInputEditText>(R.id.reminderThreshold).addDoubleValidator()
+        amountToView(fragmentView, R.id.reminderThreshold, entity.outOfStockReminderThreshold)
+        amountToView(fragmentView, R.id.refillSize, if (entity.refillSizes.isNotEmpty()) entity.refillSizes[0] else 0.0)
 
-        if (entity.refillSizes.isNotEmpty()) {
-            fragmentView.findViewById<TextInputEditText>(R.id.refillSize)
-                .setText(MedicineHelper.formatAmount(entity.refillSizes[0], ""))
-        }
-        fragmentView.findViewById<TextInputEditText>(R.id.refillSize).addDoubleValidator()
-
-        val stockReminder: AutoCompleteTextView =
-            fragmentView.findViewById(R.id.medicineStockReminder)
+        val stockReminder: AutoCompleteTextView = fragmentView.findViewById(R.id.medicineStockReminder)
         val importanceTexts = this.resources.getStringArray(R.array.stock_reminder)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
         stockReminder.setAdapter<ArrayAdapter<String>>(arrayAdapter)
@@ -80,6 +70,11 @@ class MedicineStockFragment :
         }
 
         return true
+    }
+
+    private fun amountToView(fragmentView: View, i: Int, d: Double) {
+        fragmentView.findViewById<TextInputEditText>(i).setText(MedicineHelper.formatAmount(d, ""))
+        fragmentView.findViewById<TextInputEditText>(i).addDoubleValidator()
     }
 
     @SuppressLint("SetTextI18n")
