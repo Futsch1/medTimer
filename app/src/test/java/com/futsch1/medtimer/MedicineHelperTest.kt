@@ -78,6 +78,8 @@ class MedicineHelperTest {
             "test (12 pills left ⚠)",
             MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
         )
+
+        preferencesManager.close()
     }
 
     @Test
@@ -96,5 +98,7 @@ class MedicineHelperTest {
             "t***",
             MedicineHelper.getMedicineName(contextMock, medicine, true).toString()
         )
+
+        preferencesManager.close()
     }
 }
