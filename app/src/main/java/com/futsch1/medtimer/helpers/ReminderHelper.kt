@@ -76,7 +76,7 @@ fun formatScheduledReminderString(
     )
 
     return SpannableStringBuilder().bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else "")
+        .append(getAmountString(scheduledReminder))
         .append("\n").append(scheduledTime)
 }
 
@@ -93,5 +93,8 @@ fun formatScheduledReminderStringForWidget(
 
     return SpannableStringBuilder().append(scheduledTime)
         .bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else "")
+        .append(getAmountString(scheduledReminder))
 }
+
+private fun getAmountString(scheduledReminder: ScheduledReminder): String =
+    if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""
