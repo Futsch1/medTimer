@@ -33,8 +33,9 @@ fun formatReminderString(
         reminderEvent.remindedTimestamp
     )
 
-    return SpannableStringBuilder().bold { append(reminderEvent.medicineName) }.append(" (")
-        .append(reminderEvent.amount).append(")\n").append(takenTime)
+    return SpannableStringBuilder().bold { append(reminderEvent.medicineName) }
+        .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
+        .append("\n").append(takenTime)
 }
 
 fun formatReminderStringForWidget(
@@ -48,16 +49,17 @@ fun formatReminderStringForWidget(
         reminderEvent.remindedTimestamp
     ) + ": "
 
+    val amountStatusString =
+        "${reminderEvent.amount} ${statusToString(context, reminderEvent.status)}".trim()
+
     return SpannableStringBuilder().append(takenTime).bold { append(reminderEvent.medicineName) }
-        .append(" (")
-        .append(reminderEvent.amount).append(statusToString(context, reminderEvent.status))
-        .append(")")
+        .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
 }
 
 private fun statusToString(context: Context, status: ReminderEvent.ReminderStatus?): String {
     return when (status) {
-        ReminderEvent.ReminderStatus.TAKEN -> " " + context.getString(R.string.taken)
-        ReminderEvent.ReminderStatus.SKIPPED -> " " + context.getString(R.string.skipped)
+        ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken)
+        ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped)
         else -> ""
     }
 }
@@ -74,8 +76,8 @@ fun formatScheduledReminderString(
     )
 
     return SpannableStringBuilder().bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(" (")
-        .append(scheduledReminder.reminder().amount).append(")\n").append(scheduledTime)
+        .append(getAmountString(scheduledReminder))
+        .append("\n").append(scheduledTime)
 }
 
 fun formatScheduledReminderStringForWidget(
@@ -91,6 +93,8 @@ fun formatScheduledReminderStringForWidget(
 
     return SpannableStringBuilder().append(scheduledTime)
         .bold { append(scheduledReminder.medicine().medicine.name) }
-        .append(" (")
-        .append(scheduledReminder.reminder().amount).append(")")
+        .append(getAmountString(scheduledReminder))
 }
+
+private fun getAmountString(scheduledReminder: ScheduledReminder): String =
+    if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""

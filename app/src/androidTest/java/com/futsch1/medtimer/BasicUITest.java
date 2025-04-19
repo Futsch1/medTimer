@@ -10,6 +10,7 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
+import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
@@ -102,6 +103,21 @@ public class BasicUITest extends BaseTestHelper {
         assertChecked("2");
         assertUnchecked("3");
         clickDialogPositiveButton();
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void appIntro() {
+        openMenu();
+
+        clickOn(R.string.show_intro);
+
+        assertDisplayed(R.string.intro_welcome);
+        assertDisplayed(R.string.intro_welcome_description);
+
+        clickOn(com.github.appintro.R.id.skip);
+
+        assertDisplayed(R.string.next_reminders);
     }
 
 }

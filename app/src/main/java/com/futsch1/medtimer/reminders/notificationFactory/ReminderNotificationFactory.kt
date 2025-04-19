@@ -81,7 +81,7 @@ abstract class ReminderNotificationFactory(
         val medicineNameString =
             MedicineHelper.getMedicineName(context, medicine.medicine, true)
         baseString = SpannableStringBuilder().bold { append(medicineNameString) }
-            .append(" (${reminder.amount})")
+            .append(if (reminder.amount.isNotEmpty()) " (${reminder.amount})" else "")
 
         addDismissNotification()
 
