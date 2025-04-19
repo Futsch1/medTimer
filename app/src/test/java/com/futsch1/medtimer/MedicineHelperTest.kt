@@ -48,6 +48,11 @@ class MedicineHelperTest {
     @Test
     fun testMedicineNameWithStockText() {
         var contextMock = mock(Context::class.java)
+        var preferencesMock = mock(SharedPreferences::class.java)
+        Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(false)
+        var preferencesManager = mockStatic(PreferenceManager::class.java)
+        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
+
         Mockito.`when`(contextMock.getString(R.string.medicine_stock_string, "12 pills"))
             .thenReturn("12 pills left")
 
