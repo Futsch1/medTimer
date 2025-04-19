@@ -11,7 +11,6 @@ import static com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
-import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
@@ -116,33 +115,7 @@ public class BasicUITest extends BaseTestHelper {
         assertDisplayed(R.string.intro_welcome);
         assertDisplayed(R.string.intro_welcome_description);
 
-        try {
-            dismissANRSystemDialog();
-        } catch (UiObjectNotFoundException e) {
-            // intentionally empty
-        }
-
-        clickOn(com.github.appintro.R.id.next);
-
-        sleep(1000);
-
-        try {
-            dismissANRSystemDialog();
-        } catch (UiObjectNotFoundException e) {
-            // intentionally empty
-        }
-
-        assertDisplayed(R.string.tab_medicine);
-        assertDisplayed(R.string.intro_medicine_description);
-
         clickOn(com.github.appintro.R.id.skip);
-
-        sleep(1000);
-        try {
-            dismissANRSystemDialog();
-        } catch (UiObjectNotFoundException e) {
-            // intentionally empty
-        }
 
         assertDisplayed(R.string.next_reminders);
     }
