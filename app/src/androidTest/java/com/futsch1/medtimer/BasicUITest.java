@@ -116,9 +116,21 @@ public class BasicUITest extends BaseTestHelper {
         assertDisplayed(R.string.intro_welcome);
         assertDisplayed(R.string.intro_welcome_description);
 
+        try {
+            dismissANRSystemDialog();
+        } catch (UiObjectNotFoundException e) {
+            // intentionally empty
+        }
+
         clickOn(com.github.appintro.R.id.next);
 
         sleep(1000);
+
+        try {
+            dismissANRSystemDialog();
+        } catch (UiObjectNotFoundException e) {
+            // intentionally empty
+        }
 
         assertDisplayed(R.string.tab_medicine);
         assertDisplayed(R.string.intro_medicine_description);
@@ -126,6 +138,11 @@ public class BasicUITest extends BaseTestHelper {
         clickOn(com.github.appintro.R.id.skip);
 
         sleep(1000);
+        try {
+            dismissANRSystemDialog();
+        } catch (UiObjectNotFoundException e) {
+            // intentionally empty
+        }
 
         assertDisplayed(R.string.next_reminders);
     }
