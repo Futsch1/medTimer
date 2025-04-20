@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <com.kizitonwose.calendar.view.CalendarView
         android:id="@+id/medicineCalendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="@string/calendar"
         app:cv_daySize="seventhWidth"
         app:cv_dayViewResource="@layout/calendar_day_layout"
         app:cv_monthHeaderResource="@layout/month_header_layout">
@@ -18,8 +20,9 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/currentDayEventsCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
