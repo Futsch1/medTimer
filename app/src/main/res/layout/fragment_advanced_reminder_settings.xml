@@ -248,7 +248,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
                     android:hint="@string/every_day_of_month"
-                    android:padding="0dp"
                     android:text="@string/every_day_of_month" />
             </LinearLayout>
 
