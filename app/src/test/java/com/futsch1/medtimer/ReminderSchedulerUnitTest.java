@@ -330,6 +330,13 @@ class ReminderSchedulerUnitTest {
 
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertReminded(scheduledReminders, on(8, 480), medicineWithReminders.medicine, reminder);
+
+        // Reminder already scheduled for tomorrow
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(6));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, on(8, 480).getEpochSecond()));
+
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        assertReminded(scheduledReminders, on(11, 480), medicineWithReminders.medicine, reminder);
     }
 
 
@@ -355,5 +362,30 @@ class ReminderSchedulerUnitTest {
 
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertReminded(scheduledReminders, on(2, 23 * 60 + 45), medicineWithReminders.medicine, reminder);
+    }
+
+    @Test
+    void test_reminderTomorrow() {
+        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
+        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
+        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
+
+        ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
+
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
+        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
+        medicineWithReminders1.reminders.add(reminder1);
+
+        List<FullMedicine> medicines = new ArrayList<>() {{
+            add(medicineWithReminders1);
+        }};
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        reminderEventList.add(TestHelper.buildReminderEvent(1, on(1, 16).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, on(2, 16).getEpochSecond()));
+
+        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicines, reminderEventList);
+        assertReminded(scheduledReminders, on(3, 16), medicineWithReminders1.medicine, reminder1);
+
     }
 }

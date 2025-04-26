@@ -24,6 +24,7 @@ import com.futsch1.medtimer.reminders.ReminderWork;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.Collections;
 
@@ -51,9 +52,9 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
 
         nextReminderText.setText(formatScheduledReminderString(nextReminderText.getContext(), scheduledReminder, sharedPreferences));
 
-        boolean isToday = isToday(scheduledReminder.timestamp().toEpochMilli());
-        takenNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
-        skippedNow.setVisibility(isToday ? View.VISIBLE : View.GONE);
+        boolean isTodayOrTomorrow = isToday(scheduledReminder.timestamp().toEpochMilli()) || isToday(scheduledReminder.timestamp().minus(Period.ofDays(1)).toEpochMilli());
+        takenNow.setVisibility(isTodayOrTomorrow ? View.VISIBLE : View.GONE);
+        skippedNow.setVisibility(isTodayOrTomorrow ? View.VISIBLE : View.GONE);
 
         if (scheduledReminder.medicine().medicine.useColor) {
             ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(nextReminderText), scheduledReminder.medicine().medicine.color);
