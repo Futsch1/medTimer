@@ -81,25 +81,7 @@ public class BackupManager {
         alertDialogBuilder.setMultiChoiceItems(R.array.backup_types, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
         alertDialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Handler handler = new Handler(backgroundThread.getLooper());
-            handler.post(() -> {
-                ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                progressDialogFragment.show(fragmentManager, "backup");
-
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                JsonObject jsonObject = new JsonObject();
-                if (checkedItems[0]) {
-                    jsonObject.add(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
-                            medicineViewModel.medicineRepository.getMedicines()));
-                }
-                if (checkedItems[1]) {
-                    jsonObject.add(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
-                            medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
-                }
-                if (checkedItems[0] || checkedItems[1]) {
-                    createAndSave(gson.toJson(jsonObject));
-                }
-                progressDialogFragment.dismiss();
-            });
+            handler.post(() -> performBackup(checkedItems));
         });
         alertDialogBuilder.show();
     }
@@ -109,6 +91,26 @@ public class BackupManager {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/json");
         openFileLauncher.launch(intent);
+    }
+
+    private void performBackup(boolean[] checkedItems) {
+        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+        progressDialogFragment.show(fragmentManager, "backup");
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonObject jsonObject = new JsonObject();
+        if (checkedItems[0]) {
+            jsonObject.add(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
+                    medicineViewModel.medicineRepository.getMedicines()));
+        }
+        if (checkedItems[1]) {
+            jsonObject.add(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
+                    medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
+        }
+        if (checkedItems[0] || checkedItems[1]) {
+            createAndSave(gson.toJson(jsonObject));
+        }
+        progressDialogFragment.dismiss();
     }
 
     private <T> JsonElement createBackup(JSONBackup<T> jsonBackup, List<T> backupData) {
