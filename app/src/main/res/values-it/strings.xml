@@ -221,5 +221,5 @@
     <string name="sticky_on_lockscreen">Promemoria persistenti sulla schermata di blocco</string>
     <string name="sticky_on_lockscreen_summary">I promemoria non possono essere eliminati dalla schermata di blocco, ma solo dal cassetto delle notifiche</string>
     <string name="big_notifications">Grandi pulsanti di notifica</string>
-    <string name="please_wait">Attendere prego...</string>
+    <string name="please_wait">Attendere prego…</string>
 </resources>
