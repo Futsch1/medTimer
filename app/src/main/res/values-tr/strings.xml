@@ -216,4 +216,5 @@
     <string name="sticky_on_lockscreen">Kilit ekranında kalıcı hatırlatıcılar</string>
     <string name="sticky_on_lockscreen_summary">Hatırlatıcılar kilit ekranından kapatılamaz, sadece bildirim çekmecesinden kapatılabilir</string>
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
+    <string name="please_wait">Lütfen bekleyin…</string>
 </resources>

@@ -76,7 +76,7 @@ public class OptionsMenu implements MenuProvider {
         MenuCompat.setGroupDividerEnabled(menu, true);
         enableOptionalIcons(menu);
 
-        this.backupManager = new BackupManager(context, menu, medicineViewModel, openFileLauncher);
+        this.backupManager = new BackupManager(context, fragment.getParentFragmentManager(), menu, medicineViewModel, openFileLauncher);
         this.menu = menu;
         setupSettings();
         setupVersion();
@@ -147,12 +147,12 @@ public class OptionsMenu implements MenuProvider {
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context)));
+            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), context)));
+            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
             return true;
         });
     }
