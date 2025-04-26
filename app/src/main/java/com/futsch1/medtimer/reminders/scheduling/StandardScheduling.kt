@@ -18,26 +18,28 @@ class StandardScheduling(
     private val timeAccess: TimeAccess
 ) : Scheduling {
     private val raisedToday: Boolean
+    private val raisedTomorrow: Boolean
     private val possibleDays: BooleanArray
 
     init {
-        this.raisedToday = isRaisedToday(filterEvents(reminderEventList))
+        this.raisedToday = isRaisedOn(filterEvents(reminderEventList), today())
+        this.raisedTomorrow = isRaisedOn(filterEvents(reminderEventList), today() + 1)
         // Bit map of possible days in the future on where the reminder may be raised
         this.possibleDays = BooleanArray(31)
     }
 
-    private fun isRaisedToday(reminderEventList: List<ReminderEvent>): Boolean {
+    private fun isRaisedOn(reminderEventList: List<ReminderEvent>, epochDay: Long): Boolean {
         for (reminderEvent in reminderEventList) {
-            if (isToday(reminderEvent.remindedTimestamp)) {
+            if (isOnDay(reminderEvent.remindedTimestamp, epochDay)) {
                 return true
             }
         }
         return false
     }
 
-    private fun isToday(epochSeconds: Long): Boolean {
+    private fun isOnDay(epochSeconds: Long, epochDay: Long): Boolean {
         return TimeHelper.secondsSinceEpochToLocalDate(epochSeconds, timeAccess.systemZone())
-            .toEpochDay() == today()
+            .toEpochDay() == epochDay
     }
 
     private fun today(): Long {
@@ -79,11 +81,14 @@ class StandardScheduling(
         }
         // Only schedule today if it's not already raised
         possibleDays[0] = possibleDays[0] and !raisedToday
+        // Only schedule tomorrow if it's not already raised
+        possibleDays[1] = possibleDays[1] and !raisedTomorrow
     }
 
     private fun canScheduleEveryDay() {
         Arrays.fill(possibleDays, true)
         possibleDays[0] = reminderBeforeCreation() && !raisedToday
+        possibleDays[1] = !raisedTomorrow
     }
 
     private fun clearPossibleDaysByWeekday() {
