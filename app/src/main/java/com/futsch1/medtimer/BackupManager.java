@@ -12,12 +12,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentManager;
 
 import com.futsch1.medtimer.database.JSONBackup;
 import com.futsch1.medtimer.database.JSONMedicineBackup;
 import com.futsch1.medtimer.database.JSONReminderEventBackup;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
+import com.futsch1.medtimer.helpers.ProgressDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,10 +39,12 @@ public class BackupManager {
     private final Menu menu;
     private final MedicineViewModel medicineViewModel;
     private final ActivityResultLauncher<Intent> openFileLauncher;
+    private final FragmentManager fragmentManager;
 
 
-    public BackupManager(Context context, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
+    public BackupManager(Context context, FragmentManager fragmentManager, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
         this.context = context;
+        this.fragmentManager = fragmentManager;
         this.menu = menu;
         this.medicineViewModel = medicineViewModel;
         this.openFileLauncher = openFileLauncher;
@@ -78,6 +82,9 @@ public class BackupManager {
         alertDialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Handler handler = new Handler(backgroundThread.getLooper());
             handler.post(() -> {
+                ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+                progressDialogFragment.show(fragmentManager, "backup");
+
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonObject jsonObject = new JsonObject();
                 if (checkedItems[0]) {
@@ -91,6 +98,7 @@ public class BackupManager {
                 if (checkedItems[0] || checkedItems[1]) {
                     createAndSave(gson.toJson(jsonObject));
                 }
+                progressDialogFragment.dismiss();
             });
         });
         alertDialogBuilder.show();
@@ -119,6 +127,9 @@ public class BackupManager {
 
     public void fileSelected(Uri data) {
         String json = FileHelper.readFromUri(data, context.getContentResolver());
+
+        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+        progressDialogFragment.show(fragmentManager, "restore");
         boolean restoreSuccessful = false;
         if (json != null) {
             Log.d("BackupManager", "Starting backup restore: " + data);
@@ -130,6 +141,8 @@ public class BackupManager {
             restoreSuccessful = restoreBackup(json, new JSONMedicineBackup()) || restoreBackup(json, new JSONReminderEventBackup());
         }
         Log.d("BackupManager", "Backup restore finished");
+        progressDialogFragment.dismiss();
+
         new AlertDialog.Builder(context)
                 .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {

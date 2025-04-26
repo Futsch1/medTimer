@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import androidx.fragment.app.FragmentManager;
+
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -74,9 +76,10 @@ class CSVExportUnitTest {
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
             dateAccessMockedStatic.when(() -> DateFormat.getDateFormat(context)).thenReturn(usDateFormat);
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(context)).thenReturn(usTimeFormat);
+            FragmentManager fragmentManager = mock(FragmentManager.class);
 
             // Create the CSVCreator object
-            CSVExport csvExport = new CSVExport(reminderEvents, context);
+            CSVExport csvExport = new CSVExport(reminderEvents, fragmentManager, context);
 
             try {
                 // Call the create method
@@ -113,8 +116,9 @@ class CSVExportUnitTest {
         File file = mock(File.class);
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class)) {
+            FragmentManager fragmentManager = mock(FragmentManager.class);
             // Create the CSVCreator object
-            CSVExport csvExport = new CSVExport(reminderEvents, context);
+            CSVExport csvExport = new CSVExport(reminderEvents, fragmentManager, context);
 
             try {
                 // Call the create method

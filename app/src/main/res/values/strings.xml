@@ -220,5 +220,5 @@
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer</string>
     <string name="big_notifications">Big notification buttons</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait…</string>
 </resources>

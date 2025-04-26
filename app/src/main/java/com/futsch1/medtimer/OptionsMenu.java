@@ -76,7 +76,7 @@ public class OptionsMenu implements MenuProvider {
         MenuCompat.setGroupDividerEnabled(menu, true);
         enableOptionalIcons(menu);
 
-        this.backupManager = new BackupManager(context, menu, medicineViewModel, openFileLauncher);
+        this.backupManager = new BackupManager(context, fragment.getParentFragmentManager(), menu, medicineViewModel, openFileLauncher);
         this.menu = menu;
         setupSettings();
         setupVersion();
