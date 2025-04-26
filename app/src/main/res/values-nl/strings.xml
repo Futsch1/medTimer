@@ -216,4 +216,5 @@
     <string name="sticky_on_lockscreen">Aanhoudende herinneringen op het vergrendelscherm</string>
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden verwijderd vanaf het vergrendelscherm, alleen vanuit de meldingenlade</string>
     <string name="big_notifications">Grote meldingsknoppen</string>
+    <string name="please_wait">Even geduld...</string>
 </resources>

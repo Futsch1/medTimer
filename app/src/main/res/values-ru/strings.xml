@@ -223,4 +223,5 @@
     <string name="sticky_on_lockscreen">Постоянные напоминания на экране блокировки</string>
     <string name="sticky_on_lockscreen_summary">Напоминания нельзя отменить на экране блокировки, только в ящике уведомлений</string>
     <string name="big_notifications">Большие кнопки уведомлений</string>
+    <string name="please_wait">Пожалуйста, подождите...</string>
 </resources>

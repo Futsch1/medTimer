@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="period_end">Koniec okresu</string>
     <string name="tab_overview">Przegląd</string>
@@ -227,4 +226,5 @@
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
     <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
+    <string name="please_wait">Proszę czekać...</string>
 </resources>

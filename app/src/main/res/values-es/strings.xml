@@ -221,4 +221,5 @@
     <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
     <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, sólo desde el cajón de notificaciones</string>
     <string name="big_notifications">Botones de notificación grandes</string>
+    <string name="please_wait">Por favor, espere...</string>
 </resources>

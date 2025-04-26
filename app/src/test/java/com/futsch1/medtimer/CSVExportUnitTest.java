@@ -80,7 +80,7 @@ class CSVExportUnitTest {
 
             try {
                 // Call the create method
-                csvExport.export(file);
+                csvExport.exportInternal(file);
 
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
@@ -118,7 +118,7 @@ class CSVExportUnitTest {
 
             try {
                 // Call the create method
-                csvExport.export(file);
+                csvExport.exportInternal(file);
 
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 

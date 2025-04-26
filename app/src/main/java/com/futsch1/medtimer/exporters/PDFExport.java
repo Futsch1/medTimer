@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.print.PrintAttributes;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TableHelper;
@@ -28,17 +29,18 @@ import java.util.List;
 import kotlin.coroutines.EmptyCoroutineContext;
 import kotlinx.coroutines.BuildersKt;
 
-public class PDFExport implements Exporter {
+public class PDFExport extends Exporter {
     public static final String BLACK = "#000000";
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
 
-    public PDFExport(List<ReminderEvent> reminderEvents, Context context) {
+    public PDFExport(List<ReminderEvent> reminderEvents, FragmentManager fragmentManager, Context context) {
+        super(fragmentManager);
         this.reminderEvents = reminderEvents;
         this.context = context;
     }
 
-    public void export(File file) {
+    public void exportInternal(File file) {
         SimplyPdfDocument simplyPdfDocument = getDocument(file);
 
         LinkedList<LinkedList<Cell>> rows = new LinkedList<>();

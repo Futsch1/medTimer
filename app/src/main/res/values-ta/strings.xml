@@ -217,4 +217,5 @@
     <string name="sticky_on_lockscreen">பூட்டுத் திரையில் நிலையான நினைவூட்டல்கள்</string>
     <string name="sticky_on_lockscreen_summary">நினைவூட்டல்களை பூட்டுத் திரையில் இருந்து நீக்க முடியாது, அறிவிப்புகள் இழுப்பறையில் இருந்து மட்டுமே நீக்க முடியும்</string>
     <string name="big_notifications">பெரிய அறிவிப்பு பொத்தான்கள்</string>
+    <string name="please_wait">தயவுசெய்து காத்திருக்கவும்...</string>
 </resources>
