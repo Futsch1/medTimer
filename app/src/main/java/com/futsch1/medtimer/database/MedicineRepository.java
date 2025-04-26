@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.database;
 
 import android.app.Application;
+import android.util.Log;
+import com.futsch1.medtimer.LogTags;
 
 import androidx.lifecycle.LiveData;
 
@@ -78,6 +80,7 @@ public class MedicineRepository {
     }
 
     public long insertMedicine(Medicine medicine) {
+        Log.i(LogTags.REMINDER,"Check insert medicine");
         return internalInsert(medicine, medicineDao::insertMedicine);
     }
 
@@ -93,10 +96,12 @@ public class MedicineRepository {
     }
 
     public void updateMedicine(Medicine medicine) {
+        Log.i(LogTags.REMINDER,"Check update medicine");
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
     public void deleteMedicine(int medicineId) {
+        Log.i(LogTags.REMINDER,"Check delete medicine");
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
             medicineDao.deleteMedicineToTagForMedicine(medicineId);
             medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId));
@@ -104,14 +109,17 @@ public class MedicineRepository {
     }
 
     public long insertReminder(Reminder reminder) {
+        Log.i(LogTags.REMINDER,"Check insert reminder");
         return internalInsert(reminder, medicineDao::insertReminder);
     }
 
     public void updateReminder(Reminder reminder) {
+        Log.i(LogTags.REMINDER,"Check update reminder");
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminder(reminder));
     }
 
     public void deleteReminder(int reminderId) {
+        Log.i(LogTags.REMINDER,"Check delete reminder");
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(medicineDao.getReminder(reminderId)));
     }
 
@@ -135,10 +143,12 @@ public class MedicineRepository {
     }
 
     public void deleteReminders() {
+        Log.i(LogTags.REMINDER,"Check delete reminders");
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminders);
     }
 
     public void deleteMedicines() {
+        Log.i(LogTags.REMINDER,"Check delete medicines");
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicines);
     }
 
