@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -139,13 +140,16 @@ public class OverviewFragment extends Fragment {
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, () -> {
             final Handler threadHandler = new Handler(thread.getLooper());
             threadHandler.post(() -> {
-
+// new log
+                Log.d("OverviewFragment", "Deleting reminder event with ID: $itemId");
                 ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) itemId);
                 if (reminderEvent != null) {
                     reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
                     medicineViewModel.medicineRepository.updateReminderEvent(reminderEvent);
                     final Handler mainHandler = new Handler(Looper.getMainLooper());
                     mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+                    //new log
+                    Log.d("OverviewFragment", "Reminder event with ID: $itemId deleted successfully");
                 }
             });
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
