@@ -130,11 +130,13 @@ public class ReminderWork extends Worker {
     }
 
     private int getNumberOfRepeats() {
+        Log.i(LogTags.REMINDER, "Check for number of repeat reminders");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return Integer.parseInt(sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3"));
     }
 
     private void showNotification(FullMedicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
+        Log.i(LogTags.REMINDER, "Check for showing notification");
         if (canShowNotifications()) {
             Notifications notifications = new Notifications(context);
             reminderEvent.notificationId =
@@ -145,16 +147,19 @@ public class ReminderWork extends Worker {
     }
 
     private boolean isRepeatReminders() {
+        Log.i(LogTags.REMINDER, "Check for repeat reminders");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedPref.getBoolean(PreferencesNames.REPEAT_REMINDERS, false);
     }
 
     private int getRepeatTimeSeconds() {
+        Log.i(LogTags.REMINDER, "Check repeat time");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
     }
 
     private boolean canShowNotifications() {
+        Log.i(LogTags.REMINDER, "Check for show notifications");
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || context.checkSelfPermission(POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
     }
 }
