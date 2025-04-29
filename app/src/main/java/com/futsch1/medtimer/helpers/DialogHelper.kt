@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlin.math.roundToInt
 
 class DialogHelper(var context: Context) {
     var title: Int? = null
@@ -70,12 +71,10 @@ class DialogHelper(var context: Context) {
 
     @Suppress("SameParameterValue")
     private fun dpToPx(r: Resources, dp: Int): Int {
-        return Math.round(
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp.toFloat(),
-                r.displayMetrics
-            )
-        )
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            r.displayMetrics
+        ).roundToInt()
     }
 }
