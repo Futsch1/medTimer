@@ -128,7 +128,7 @@
     <string name="linked_reminder_delay">Opóźnienie dla następnej dawki</string>
     <string name="delay">Opóźnienie</string>
     <string name="minutes_string">Minut</string>
-    <string name="hours_string">Godziny</string>
+    <string name="hours_string">Godzin</string>
     <string name="create_reminder">Utwórz przypomnienie</string>
     <string name="every_interval">Co %s</string>
     <string name="always_below_threshold">Zawsze, gdy poniżej progu</string>
