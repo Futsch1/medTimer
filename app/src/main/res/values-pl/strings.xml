@@ -126,8 +126,8 @@
     <string name="add_linked_reminder">Dodaj przypomnienie o następnej dawce</string>
     <string name="linked_reminder_delay">Opóźnienie dla następnej dawki</string>
     <string name="delay">Opóźnienie</string>
-    <string name="minutes">Minutes</string>
-    <string name="hours">Hours</string>
+    <string name="minutes_string">Minutes</string>
+    <string name="hours_string">Hours</string>
     <string name="create_reminder">Utwórz przypomnienie</string>
     <string name="every_interval">Co %s</string>
     <string name="always_below_threshold">Zawsze, gdy poniżej progu</string>
@@ -185,7 +185,7 @@
     <string name="next_month">Następny miesiąc</string>
     <string name="minutes_1">1 minuta</string>
     <string name="advanced_settings">Zaawansowane</string>
-    <string name="days">Days</string>
+    <string name="days_string">Days</string>
     <string name="every_day">Codziennie</string>
     <string name="cycle_reminders">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>

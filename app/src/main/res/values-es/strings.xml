@@ -175,9 +175,9 @@
         <item quantity="other">días</item>
         <item quantity="many">días</item>
     </plurals>
-    <string name="minutes">Minutos</string>
-    <string name="hours">Horas</string>
-    <string name="days">Días</string>
+    <string name="minutes_string">Minutos</string>
+    <string name="hours_string">Horas</string>
+    <string name="days_string">Días</string>
     <string name="create_reminder">Crear recordatorio</string>
     <string name="interval">Intervalo</string>
     <string name="interval_start_time">Hora de inicio del intervalo</string>

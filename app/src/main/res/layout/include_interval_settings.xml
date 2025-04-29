@@ -34,21 +34,21 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/minutes" />
+            android:text="@string/minutes_string" />
 
         <Button
             android:id="@+id/intervalHours"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hours" />
+            android:text="@string/hours_string" />
 
         <Button
             android:id="@+id/intervalDays"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/days" />
+            android:text="@string/days_string" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 

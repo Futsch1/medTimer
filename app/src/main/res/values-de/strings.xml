@@ -170,9 +170,9 @@
         <item quantity="one">Tag</item>
         <item quantity="other">Tage</item>
     </plurals>
-    <string name="minutes">Minuten</string>
-    <string name="hours">Stunden</string>
-    <string name="days">Tage</string>
+    <string name="minutes_string">Minuten</string>
+    <string name="hours_string">Stunden</string>
+    <string name="days_string">Tage</string>
     <string name="create_reminder">Erinnerung erstellen</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>

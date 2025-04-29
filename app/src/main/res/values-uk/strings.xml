@@ -156,9 +156,9 @@
     <string name="delete_re_raise_event">Ви хочете видалити цю подію і повторно підняти сповіщення?</string>
     <string name="time_based_reminder">Нагадування на основі часу</string>
     <string name="interval_based_reminder">Нагадування з інтервалом</string>
-    <string name="minutes">Протокол</string>
-    <string name="hours">Години</string>
-    <string name="days">Дні</string>
+    <string name="minutes_string">Протокол</string>
+    <string name="hours_string">Години</string>
+    <string name="days_string">Дні</string>
     <string name="create_reminder">Створити нагадування</string>
     <string name="interval">Інтервал</string>
     <string name="interval_start_time">Час початку інтервалу</string>

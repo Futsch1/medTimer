@@ -165,9 +165,9 @@
     <plurals name="days">
         <item quantity="other">天</item>
     </plurals>
-    <string name="minutes">分钟</string>
-    <string name="hours">小时</string>
-    <string name="days">天</string>
+    <string name="minutes_string">分钟</string>
+    <string name="hours_string">小时</string>
+    <string name="days_string">天</string>
     <string name="create_reminder">创建提醒</string>
     <string name="interval">间隔</string>
     <string name="interval_start_time">间隔提醒起始时间</string>
