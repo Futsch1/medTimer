@@ -170,9 +170,9 @@
         <item quantity="one">dag</item>
         <item quantity="other">dagen</item>
     </plurals>
-    <string name="minutes">Minuten</string>
-    <string name="hours">Uren</string>
-    <string name="days">Dagen</string>
+    <string name="minutes_string">Minuten</string>
+    <string name="hours_string">Uren</string>
+    <string name="days_string">Dagen</string>
     <string name="create_reminder">Herinnering maken</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Starttijd interval</string>

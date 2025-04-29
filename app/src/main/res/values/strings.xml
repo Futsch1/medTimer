@@ -166,17 +166,17 @@
         <item quantity="one">minute</item>
         <item quantity="other">minutes</item>
     </plurals>
-    <string name="minutes">Minutes</string>
+    <string name="minutes_string">Minutes</string>
     <plurals name="hours">
         <item quantity="one">hour</item>
         <item quantity="other">hours</item>
     </plurals>
-    <string name="hours">Hours</string>
+    <string name="hours_string">Hours</string>
     <plurals name="days">
         <item quantity="one">day</item>
         <item quantity="other">days</item>
     </plurals>
-    <string name="days">Days</string>
+    <string name="days_string">Days</string>
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>

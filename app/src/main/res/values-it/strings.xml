@@ -175,9 +175,9 @@
         <item quantity="other">giorni</item>
         <item quantity="many">giorni</item>
     </plurals>
-    <string name="minutes">Minuti</string>
-    <string name="hours">Ora</string>
-    <string name="days">Giorni</string>
+    <string name="minutes_string">Minuti</string>
+    <string name="hours_string">Ora</string>
+    <string name="days_string">Giorni</string>
     <string name="create_reminder">Crea promemoria</string>
     <string name="interval">Intervallo</string>
     <string name="interval_start_time">Ora di inizio dell\'intervallo</string>

@@ -21,7 +21,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)
-        .hint(R.string.minutes)
+        .hint(R.string.minutes_string)
         .initialText("")
         .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
         .textSink { snoozeTime: String? ->
