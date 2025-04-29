@@ -23,7 +23,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         .title(R.string.snooze_duration)
         .hint(R.string.minutes)
         .initialText("")
-        .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED)
+        .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
         .textSink { snoozeTime: String? ->
             val snoozeTimeInt = snoozeTime?.toIntOrNull()
             if (snoozeTimeInt != null) {
