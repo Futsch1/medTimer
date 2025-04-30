@@ -143,7 +143,7 @@
     <string name="unlimited">Nieograniczony</string>
     <string name="app_authentication">Wymagaj uwierzytelnienia, aby otworzyć aplikację</string>
     <string name="login">Odblokuj MedTimer</string>
-    <string name="re_raise_event">Zdarzenie ponownego podbicia</string>
+    <string name="re_raise_event">Ponów zdarzenie</string>
     <string name="minutes_10">10 minut</string>
     <string name="intro_notification_description">Gdy nadejdzie termin przypomnienia, pojawi się powiadomienie, które umożliwi Ci oznaczenie dawki jako przyjętej (poprzez kliknięcie przycisku „PRZYJĘTO”), pominięcie jej (poprzez odrzucenie powiadomienia) lub ponowne wyświetlenie przypomnienia po pewnym czasie („DRZEMKA”).</string>
     <string name="tab_settings">Ustawienia</string>
