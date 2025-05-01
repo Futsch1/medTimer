@@ -48,6 +48,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "")
     @Expose
     public String unit;
+    @ColumnInfo(defaultValue = "0.0")
+    @Expose
+    public float sortOrder;
 
     public Medicine(String name) {
         this.name = name;

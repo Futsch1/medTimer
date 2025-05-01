@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class},
-        version = 16,
+        version = 17,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
                 @AutoMigration(from = 13, to = 14),
                 @AutoMigration(from = 14, to = 15),
                 @AutoMigration(from = 15, to = 16),
+                @AutoMigration(from = 16, to = 17, spec = MedicineRoomDatabase.AutoMigration16To17.class),
         }
 )
 @TypeConverters({Converters.class})
@@ -89,4 +90,27 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
             db.execSQL("UPDATE Reminder SET pauseDays = pauseDays - 1");
         }
     }
+
+    static class AutoMigration16To17 implements AutoMigrationSpec {
+        @Override
+        public void onPostMigrate(@NonNull SupportSQLiteDatabase db) {
+            AutoMigrationSpec.super.onPostMigrate(db);
+
+            db.execSQL("""
+                        CREATE TEMP TABLE IF NOT EXISTS temp_table AS SELECT *, ROW_NUMBER() OVER () as rn FROM Medicine;
+                    """);
+
+            db.execSQL("""
+                        UPDATE Medicine
+                        SET sortOrder = (
+                           SELECT CAST(rn AS REAL)
+                           FROM temp_table
+                           WHERE temp_table.medicineId = Medicine.medicineId
+                       );
+                    """);
+
+            db.execSQL("DROP TABLE temp_table;");
+        }
+    }
+
 }
