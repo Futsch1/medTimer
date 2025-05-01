@@ -34,8 +34,10 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
             )
         )
 
+        var sortOrder = 0.0
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine()
+            medicine.sortOrder = sortOrder++
             val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =

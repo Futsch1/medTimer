@@ -6,6 +6,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -136,8 +137,13 @@ public class MedicinesFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
-                int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(new Medicine(e.toString()));
-                navigateToMedicineId(medicineId);
+                new Handler(thread.getLooper()).post(() -> {
+                    double highestSortOrder = medicineViewModel.medicineRepository.getHighestMedicineSortOrder();
+                    Medicine medicine = new Medicine(e.toString());
+                    medicine.sortOrder = highestSortOrder + 1;
+                    int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(medicine);
+                    requireActivity().runOnUiThread(() -> navigateToMedicineId(medicineId));
+                });
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());

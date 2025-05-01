@@ -103,7 +103,7 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
             db.execSQL("""
                         UPDATE Medicine
                         SET sortOrder = (
-                           SELECT CAST(rn AS REAL)
+                           SELECT CAST(rn AS DOUBLE)
                            FROM temp_table
                            WHERE temp_table.medicineId = Medicine.medicineId
                        );

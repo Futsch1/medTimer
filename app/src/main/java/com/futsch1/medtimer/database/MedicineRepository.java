@@ -201,6 +201,10 @@ public class MedicineRepository {
         return medicineDao.countTags() > 0;
     }
 
+    public double getHighestMedicineSortOrder() {
+        return medicineDao.getHighestMedicineSortOrder();
+    }
+
     interface Insert<T> {
         long insert(T item);
     }

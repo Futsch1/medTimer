@@ -126,4 +126,7 @@ public interface MedicineDao {
 
     @Query("SELECT COUNT(*) FROM Tag")
     int countTags();
+
+    @Query("SELECT MAX(sortOrder) FROM Medicine")
+    double getHighestMedicineSortOrder();
 }
