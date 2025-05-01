@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "6f6fb72e9ac362cd03fc25cac787423b",
+    "identityHash": "00d84d2180413883e37e99a6b4546ae8",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 0.0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0)",
         "fields": [
           {
             "fieldPath": "name",
@@ -84,7 +84,7 @@
             "columnName": "sortOrder",
             "affinity": "REAL",
             "notNull": true,
-            "defaultValue": "0.0"
+            "defaultValue": "1.0"
           }
         ],
         "primaryKey": {
@@ -393,7 +393,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f6fb72e9ac362cd03fc25cac787423b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '00d84d2180413883e37e99a6b4546ae8')"
     ]
   }
 }
