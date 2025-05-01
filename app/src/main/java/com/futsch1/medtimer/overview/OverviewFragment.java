@@ -102,7 +102,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setupSwipeDelete(RecyclerView latestReminders) {
-        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteReminderEvent(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+        SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteReminderEvent(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), null)
                 .attachToRecyclerView(latestReminders);
     }
 
