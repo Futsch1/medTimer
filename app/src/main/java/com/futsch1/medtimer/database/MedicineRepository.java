@@ -37,10 +37,6 @@ public class MedicineRepository {
         return medicineDao.getLiveMedicines();
     }
 
-    public List<FullMedicine> getMedicines() {
-        return medicineDao.getMedicines();
-    }
-
     public Medicine getOnlyMedicine(int medicineId) {
         return medicineDao.getOnlyMedicine(medicineId);
     }
@@ -90,10 +86,6 @@ public class MedicineRepository {
             return -1;
         }
         return 0;
-    }
-
-    public void updateMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
     public void deleteMedicine(int medicineId) {
@@ -203,6 +195,30 @@ public class MedicineRepository {
 
     public double getHighestMedicineSortOrder() {
         return medicineDao.getHighestMedicineSortOrder();
+    }
+
+    public void moveMedicine(int fromPosition, int toPosition) {
+        List<FullMedicine> medicines = getMedicines();
+        FullMedicine moveMedicine = medicines.get(fromPosition);
+        double startSortOrder;
+        double endSortOrder;
+        if (fromPosition > toPosition) {
+            startSortOrder = toPosition > 0 ? medicines.get(toPosition - 1).medicine.sortOrder : 0;
+            endSortOrder = medicines.get(toPosition).medicine.sortOrder;
+        } else {
+            startSortOrder = medicines.get(toPosition).medicine.sortOrder;
+            endSortOrder = toPosition + 1 < medicines.size() ? medicines.get(toPosition + 1).medicine.sortOrder : medicines.get(medicines.size() - 1).medicine.sortOrder + 1.0;
+        }
+        moveMedicine.medicine.sortOrder = (startSortOrder + endSortOrder) / 2;
+        updateMedicine(moveMedicine.medicine);
+    }
+
+    public List<FullMedicine> getMedicines() {
+        return medicineDao.getMedicines();
+    }
+
+    public void updateMedicine(Medicine medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
     interface Insert<T> {

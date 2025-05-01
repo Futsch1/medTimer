@@ -34,7 +34,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
             )
         )
 
-        var sortOrder = 0.0
+        var sortOrder = 1.0
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine()
             medicine.sortOrder = sortOrder++

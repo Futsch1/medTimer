@@ -68,6 +68,9 @@ public class MedicinesFragment extends Fragment {
         // Swipe to delete
         ItemTouchHelper itemTouchHelper = SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()));
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        // Move touch helper
+        ItemTouchHelper moveTouchHelper = createMoveTouchHelper();
+        moveTouchHelper.attachToRecyclerView(recyclerView);
 
         postponeEnterTransition();
 
@@ -110,6 +113,27 @@ public class MedicinesFragment extends Fragment {
             medicineViewModel.medicineRepository.deleteMedicine((int) itemId);
             adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+    }
+
+    private ItemTouchHelper createMoveTouchHelper() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+                int fromPosition = viewHolder.getBindingAdapterPosition();
+                int toPosition = target.getBindingAdapterPosition();
+                new Handler(thread.getLooper()).post(() -> medicineViewModel.medicineRepository.moveMedicine(fromPosition, toPosition)
+                );
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // Swiped not needed
+            }
+        };
+        return new ItemTouchHelper(simpleCallback);
     }
 
     private void setupAddMedicineButton(View fragmentView) {
