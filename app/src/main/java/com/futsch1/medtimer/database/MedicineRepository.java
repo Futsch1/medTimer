@@ -200,16 +200,8 @@ public class MedicineRepository {
     public void moveMedicine(int fromPosition, int toPosition) {
         List<FullMedicine> medicines = getMedicines();
         FullMedicine moveMedicine = medicines.get(fromPosition);
-        double startSortOrder;
-        double endSortOrder;
-        if (fromPosition > toPosition) {
-            startSortOrder = toPosition > 0 ? medicines.get(toPosition - 1).medicine.sortOrder : 0;
-            endSortOrder = medicines.get(toPosition).medicine.sortOrder;
-        } else {
-            startSortOrder = medicines.get(toPosition).medicine.sortOrder;
-            endSortOrder = toPosition + 1 < medicines.size() ? medicines.get(toPosition + 1).medicine.sortOrder : medicines.get(medicines.size() - 1).medicine.sortOrder + 1.0;
-        }
-        moveMedicine.medicine.sortOrder = (startSortOrder + endSortOrder) / 2;
+        SortOrders sortOrders = new SortOrders(fromPosition, toPosition, medicines);
+        moveMedicine.medicine.sortOrder = (sortOrders.start + sortOrders.end) / 2;
         updateMedicine(moveMedicine.medicine);
     }
 
@@ -223,5 +215,20 @@ public class MedicineRepository {
 
     interface Insert<T> {
         long insert(T item);
+    }
+
+    static class SortOrders {
+        public final double start;
+        public final double end;
+
+        SortOrders(int fromPosition, int toPosition, List<FullMedicine> medicines) {
+            if (fromPosition > toPosition) {
+                start = toPosition > 0 ? medicines.get(toPosition - 1).medicine.sortOrder : 0;
+                end = medicines.get(toPosition).medicine.sortOrder;
+            } else {
+                start = medicines.get(toPosition).medicine.sortOrder;
+                end = toPosition + 1 < medicines.size() ? medicines.get(toPosition + 1).medicine.sortOrder : medicines.get(medicines.size() - 1).medicine.sortOrder + 1.0;
+            }
+        }
     }
 }
