@@ -4,13 +4,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.RecyclerViewDragAction.drag
 import org.junit.Test
 
 class MedicineHandlingTest : BaseTestHelper() {
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun medicineMoveTest() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createMedicine("Test2")
@@ -27,7 +26,7 @@ class MedicineHandlingTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine("Test3")
         pressBack()
-        
+
         assertDisplayedAtPosition(R.id.medicineList, 2, R.id.medicineName, "Test3")
     }
 }
