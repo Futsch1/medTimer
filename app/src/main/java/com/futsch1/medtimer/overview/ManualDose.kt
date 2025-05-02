@@ -30,14 +30,14 @@ class ManualDose(
     fun logManualDose() {
         val medicines = medicineRepository.medicines
         val entries = getManualDoseEntries(medicines)
-        val names =
-            entries.stream().map { e: ManualDoseEntry -> e.name }.collect(Collectors.toList())
-                .toTypedArray()
+        val adapter = ManualDoseListEntryAdapter(context, R.layout.manual_dose_list_entry, entries)
 
         // But run the actual dialog on the UI thread again
         activity.runOnUiThread {
             AlertDialog.Builder(context)
-                .setItems(names) { _: DialogInterface?, which: Int -> startLogProcess(entries[which]) }
+                .setAdapter(adapter) { _: DialogInterface?, which: Int ->
+                    startLogProcess(entries[which])
+                }
                 .setTitle(R.string.tab_medicine)
                 .show()
         }
@@ -112,7 +112,7 @@ class ManualDose(
         }
     }
 
-    private class ManualDoseEntry {
+    class ManualDoseEntry {
         val name: String
         val color: Int
         val useColor: Boolean
