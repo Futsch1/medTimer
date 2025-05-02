@@ -25,7 +25,6 @@ import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.SummaryHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
 import java.util.Arrays;
@@ -61,12 +60,12 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(view -> navigateToEditFragment(medicine));
 
         if (medicine.medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicine.medicine.color);
+            ViewColorHelper.setViewBackground(itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicine.medicine.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Arrays.asList(medicineNameView, remindersSummaryView));
+            ViewColorHelper.setDefaultColors(itemView, Arrays.asList(medicineNameView, remindersSummaryView));
         }
 
-        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId);
+        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId);
 
         buildTags(medicine.tags);
     }

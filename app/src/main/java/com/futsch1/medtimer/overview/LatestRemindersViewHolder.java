@@ -19,7 +19,6 @@ import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.ReminderHelperKt;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -80,12 +79,12 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
     private void setupColorAndIcon(ReminderEvent reminderEvent) {
         if (reminderEvent.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
+            ViewColorHelper.setViewBackground(itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
+            ViewColorHelper.setDefaultColors(itemView, Collections.singletonList(reminderEventText));
         }
 
-        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
+        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
     }
 
     private void setupEditEvent(ReminderEvent reminderEvent) {
