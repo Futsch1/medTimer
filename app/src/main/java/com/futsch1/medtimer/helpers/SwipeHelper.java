@@ -46,7 +46,7 @@ public abstract class SwipeHelper extends SimpleCallback {
         intrinsicHeight = swipeIcon.getIntrinsicHeight();
         intrinsicWidth = swipeIcon.getIntrinsicWidth();
 
-        setDefaultSwipeDirs(ItemTouchHelper.LEFT);
+        setDefaultSwipeDirs(SWIPE_DIRS);
     }
 
     public static ItemTouchHelper createSwipeHelper(Context context, SwipedCallback swipedCallback, MovedCallback movedCallback) {
@@ -63,7 +63,7 @@ public abstract class SwipeHelper extends SimpleCallback {
 
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
+                if (direction == SWIPE_DIRS) {
                     swipedCallback.onSwiped(viewHolder);
                 }
             }
