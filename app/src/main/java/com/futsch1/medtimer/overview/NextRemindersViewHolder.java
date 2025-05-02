@@ -21,7 +21,6 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.futsch1.medtimer.reminders.ReminderWork;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
 import java.time.Period;
@@ -62,7 +61,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
             ViewColorHelper.setDefaultColors(itemView, Collections.singletonList(nextReminderText));
         }
 
-        ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().medicine.iconId);
+        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().medicine.iconId);
     }
 
     private void processFutureReminder(ScheduledReminder scheduledReminder, boolean taken, Looper looper, MedicineViewModel medicineViewModel) {
