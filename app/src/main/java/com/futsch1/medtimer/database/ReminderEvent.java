@@ -44,6 +44,9 @@ public class ReminderEvent {
     @ColumnInfo(defaultValue = "[]")
     @Expose
     public List<String> tags;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int lastIntervalReminderTimeInMinutes;
 
     public enum ReminderStatus {
         RAISED,
