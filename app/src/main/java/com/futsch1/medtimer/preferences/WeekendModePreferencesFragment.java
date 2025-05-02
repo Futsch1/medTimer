@@ -19,6 +19,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        Log.d("WeekendModePreferences", "Opened Preferences screen");
         setPreferencesFromResource(R.xml.weekend_mode_preferences, rootKey);
 
         setupWeekendMode();
@@ -27,6 +28,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupWeekendMode() {
+        Log.d("WeekendModePreferences", "Edited weekend mode prefernces");
         Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_MODE);
         if (preference != null) {
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {
@@ -37,6 +39,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupTimePicker() {
+        Log.d("WeekendModePreferences", "Edited time to display notifciations on weekends");
         Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_TIME);
         if (preference != null) {
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
@@ -54,6 +57,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void setupDays() {
+        Log.d("WeekendModePreferences", "Edited which days of weekend to show notifications on");
         Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_DAYS);
         if (preference != null) {
             preference.setSummaryProvider((Preference.SummaryProvider<MultiSelectListPreference>) preference1 -> {
@@ -69,6 +73,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void requestReschedule() {
+        Log.d("WeekendModePreferences", "Request to change schedule preferences");
         ReminderProcessor.requestReschedule(requireContext());
     }
 }

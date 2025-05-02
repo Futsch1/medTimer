@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MainActivity", "MainActivity onCreate: App started successfully."); // <-- Added log
+
 
         // Select theme
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("MainActivity", "MainActivity onResume: App resumed to foreground."); // <-- Added log
         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         // hack for https://issuetracker.google.com/issues/113122354
         // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+         Log.d("MainActivity", "MainActivity onNewIntent: Received a new intent."); // <-- Added log
         ActivityIntentKt.dispatch(this, intent);
     }
 
