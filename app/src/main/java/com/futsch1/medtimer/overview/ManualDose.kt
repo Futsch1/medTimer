@@ -51,7 +51,8 @@ class ManualDose(
             entries.add(ManualDoseEntry(lastCustomDose))
         }
         for (medicine in medicines) {
-            entries.add(ManualDoseEntry(medicine, null))
+            val entry = ManualDoseEntry(medicine, null)
+            entries.add(entry)
             addInactiveReminders(medicine, entries)
         }
         return entries
@@ -144,6 +145,17 @@ class ManualDose(
             this.medicineId = medicine.medicine.medicineId
             this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || javaClass != other.javaClass) return false
+            val that = other as ManualDoseEntry
+            return !(name != that.name || amount != that.amount)
+        }
+
+        override fun hashCode(): Int {
+            return super.hashCode()
+        }
     }
 
     companion object {
@@ -152,8 +164,9 @@ class ManualDose(
             entries: MutableList<ManualDoseEntry>
         ) {
             for (reminder in medicine.reminders) {
-                if (!isReminderActive(reminder)) {
-                    entries.add(ManualDoseEntry(medicine, reminder.amount))
+                val entry = ManualDoseEntry(medicine, reminder.amount)
+                if (!isReminderActive(reminder) && !entries.contains(entry)) {
+                    entries.add(entry)
                 }
             }
         }
