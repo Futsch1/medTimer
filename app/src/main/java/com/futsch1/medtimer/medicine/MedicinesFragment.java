@@ -6,6 +6,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -65,7 +66,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        ItemTouchHelper itemTouchHelper = SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()));
+        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), this::itemMoved);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         postponeEnterTransition();
@@ -111,6 +112,11 @@ public class MedicinesFragment extends Fragment {
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
     }
 
+    private void itemMoved(int fromPosition, int toPosition) {
+        new Handler(thread.getLooper()).post(() -> medicineViewModel.medicineRepository.moveMedicine(fromPosition, toPosition)
+        );
+    }
+
     private void setupAddMedicineButton(View fragmentView) {
         ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
         fab.setOnClickListener(view -> {
@@ -136,8 +142,13 @@ public class MedicinesFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             Editable e = editText.getText();
             if (e != null) {
-                int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(new Medicine(e.toString()));
-                navigateToMedicineId(medicineId);
+                new Handler(thread.getLooper()).post(() -> {
+                    double highestSortOrder = medicineViewModel.medicineRepository.getHighestMedicineSortOrder();
+                    Medicine medicine = new Medicine(e.toString());
+                    medicine.sortOrder = highestSortOrder + 1;
+                    int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(medicine);
+                    requireActivity().runOnUiThread(() -> navigateToMedicineId(medicineId));
+                });
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());

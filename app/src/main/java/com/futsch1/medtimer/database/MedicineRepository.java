@@ -37,10 +37,6 @@ public class MedicineRepository {
         return medicineDao.getLiveMedicines();
     }
 
-    public List<FullMedicine> getMedicines() {
-        return medicineDao.getMedicines();
-    }
-
     public Medicine getOnlyMedicine(int medicineId) {
         return medicineDao.getOnlyMedicine(medicineId);
     }
@@ -90,10 +86,6 @@ public class MedicineRepository {
             return -1;
         }
         return 0;
-    }
-
-    public void updateMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
     }
 
     public void deleteMedicine(int medicineId) {
@@ -201,7 +193,42 @@ public class MedicineRepository {
         return medicineDao.countTags() > 0;
     }
 
+    public double getHighestMedicineSortOrder() {
+        return medicineDao.getHighestMedicineSortOrder();
+    }
+
+    public void moveMedicine(int fromPosition, int toPosition) {
+        List<FullMedicine> medicines = getMedicines();
+        FullMedicine moveMedicine = medicines.get(fromPosition);
+        SortOrders sortOrders = new SortOrders(fromPosition, toPosition, medicines);
+        moveMedicine.medicine.sortOrder = (sortOrders.start + sortOrders.end) / 2;
+        updateMedicine(moveMedicine.medicine);
+    }
+
+    public List<FullMedicine> getMedicines() {
+        return medicineDao.getMedicines();
+    }
+
+    public void updateMedicine(Medicine medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
+    }
+
     interface Insert<T> {
         long insert(T item);
+    }
+
+    static class SortOrders {
+        public final double start;
+        public final double end;
+
+        SortOrders(int fromPosition, int toPosition, List<FullMedicine> medicines) {
+            if (fromPosition > toPosition) {
+                start = toPosition > 0 ? medicines.get(toPosition - 1).medicine.sortOrder : 0;
+                end = medicines.get(toPosition).medicine.sortOrder;
+            } else {
+                start = medicines.get(toPosition).medicine.sortOrder;
+                end = toPosition + 1 < medicines.size() ? medicines.get(toPosition + 1).medicine.sortOrder : medicines.get(medicines.size() - 1).medicine.sortOrder + 1.0;
+            }
+        }
     }
 }

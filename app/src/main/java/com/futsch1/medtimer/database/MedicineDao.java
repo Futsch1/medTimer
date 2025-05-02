@@ -15,11 +15,11 @@ import java.util.List;
 @Dao
 public interface MedicineDao {
     @Transaction
-    @Query("SELECT * FROM Medicine")
+    @Query("SELECT * FROM Medicine ORDER BY sortOrder")
     LiveData<List<FullMedicine>> getLiveMedicines();
 
     @Transaction
-    @Query("SELECT * FROM Medicine")
+    @Query("SELECT * FROM Medicine ORDER BY sortOrder")
     List<FullMedicine> getMedicines();
 
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
@@ -126,4 +126,7 @@ public interface MedicineDao {
 
     @Query("SELECT COUNT(*) FROM Tag")
     int countTags();
+
+    @Query("SELECT MAX(sortOrder) FROM Medicine")
+    double getHighestMedicineSortOrder();
 }

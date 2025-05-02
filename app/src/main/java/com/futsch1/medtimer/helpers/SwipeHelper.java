@@ -21,24 +21,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class SwipeHelper extends SimpleCallback {
 
+    private static final int DRAG_DIRS = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END;
+    private static final int SWIPE_DIRS = ItemTouchHelper.LEFT;
+
     private final int intrinsicWidth;
     private final int intrinsicHeight;
-    private final int swipeColor;
-    private final int swipeDirection;
 
     private final Paint clearPaint;
     private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
 
-    protected SwipeHelper(Context context, int direction, int color, int icon) {
-        super(0, direction);
-
-        swipeDirection = direction;
+    protected SwipeHelper(Context context, int dragDirs, int icon) {
+        super(dragDirs, SWIPE_DIRS);
 
         clearPaint = new Paint();
         clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
-
-        this.swipeColor = color;
 
         this.swipeIcon = ContextCompat.getDrawable(context, icon);
 
@@ -49,24 +46,29 @@ public abstract class SwipeHelper extends SimpleCallback {
         intrinsicHeight = swipeIcon.getIntrinsicHeight();
         intrinsicWidth = swipeIcon.getIntrinsicWidth();
 
-        setDefaultSwipeDirs(swipeDirection);
+        setDefaultSwipeDirs(SWIPE_DIRS);
     }
 
-    public static ItemTouchHelper createLeftSwipeTouchHelper(Context context, SwipedCallback callback) {
-        SwipeHelper swipeHelper = new SwipeHelper(context, ItemTouchHelper.LEFT, 0xFF8B0000, android.R.drawable.ic_menu_delete) {
+    public static ItemTouchHelper createSwipeHelper(Context context, SwipedCallback swipedCallback, MovedCallback movedCallback) {
+        SwipeHelper swipeHelper = new SwipeHelper(context, movedCallback != null ? DRAG_DIRS : 0, android.R.drawable.ic_menu_delete) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                if (movedCallback != null) {
+                    movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), target.getBindingAdapterPosition());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
             @Override
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    callback.onSwiped(viewHolder);
+                if (direction == SWIPE_DIRS) {
+                    swipedCallback.onSwiped(viewHolder);
                 }
             }
         };
         return new ItemTouchHelper(swipeHelper);
-    }
-
-    @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        return false;
     }
 
     @Override
@@ -84,7 +86,7 @@ public abstract class SwipeHelper extends SimpleCallback {
             return;
         }
 
-        if (isSwipeLeft() ? dX < 0 : dX > 0) {
+        if (dX < 0) {
             drawSwipeBar(c, dX, itemView, itemHeight);
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -96,11 +98,8 @@ public abstract class SwipeHelper extends SimpleCallback {
         }
     }
 
-    private boolean isSwipeLeft() {
-        return (swipeDirection & ItemTouchHelper.LEFT) == ItemTouchHelper.LEFT;
-    }
-
     private void drawSwipeBar(@NonNull Canvas c, float dX, View itemView, int itemHeight) {
+        int swipeColor = 0xFF8B0000;
         background.setColor(swipeColor);
         Rect backgroundBounds = getBackgroundBounds(itemView, dX);
         background.setBounds(backgroundBounds);
@@ -120,8 +119,8 @@ public abstract class SwipeHelper extends SimpleCallback {
         Rect bounds = new Rect();
         bounds.top = itemView.getTop();
         bounds.bottom = itemView.getBottom();
-        bounds.left = (int) (isSwipeLeft() ? itemView.getRight() + dX : 0);
-        bounds.right = (int) (isSwipeLeft() ? itemView.getRight() : dX);
+        bounds.left = (int) (itemView.getRight() + dX);
+        bounds.right = itemView.getRight();
 
         return bounds;
     }
@@ -130,21 +129,24 @@ public abstract class SwipeHelper extends SimpleCallback {
         Rect bounds = new Rect();
         bounds.top = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
         int itemMargin = (itemHeight - intrinsicHeight) / 2;
-        bounds.left = isSwipeLeft() ? itemView.getRight() - itemMargin - intrinsicWidth : itemView.getLeft() + itemMargin;
+        bounds.left = itemView.getRight() - itemMargin - intrinsicWidth;
         bounds.right = bounds.left + intrinsicWidth;
         bounds.bottom = bounds.top + intrinsicHeight;
         return bounds;
     }
 
     private int getAlpha(View itemView) {
-        int alpha = ((int) (isSwipeLeft() ?
-                ((-itemView.getTranslationX() / itemView.getWidth()) * 200) :
-                ((itemView.getTranslationX() / itemView.getWidth()) * 200)));
+        int alpha = ((int) (
+                (-itemView.getTranslationX() / itemView.getWidth()) * 200));
         if (alpha > 255) alpha = 255;
         return alpha;
     }
 
     public interface SwipedCallback {
         void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder);
+    }
+
+    public interface MovedCallback {
+        void onMoved(int fromPosition, int toPosition);
     }
 }

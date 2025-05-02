@@ -86,7 +86,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         setupAddReminderButton(fragmentView, entity);
 
         adapter.setMedicine(entity);
-        
+
         this.getMedicineViewModel().medicineRepository.getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), l -> {
                     this.sortAndSubmitList(l);
                     this.setFragmentReady();
@@ -122,7 +122,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     }
 
     private void setupSwiping(RecyclerView recyclerView) {
-        SwipeHelper.createLeftSwipeTouchHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()))
+        SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), null)
                 .attachToRecyclerView(recyclerView);
     }
 

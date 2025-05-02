@@ -48,6 +48,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "")
     @Expose
     public String unit;
+    @ColumnInfo(defaultValue = "1.0")
+    @Expose
+    public double sortOrder;
 
     public Medicine(String name) {
         this.name = name;
@@ -58,6 +61,7 @@ public class Medicine {
         this.outOfStockReminder = OutOfStockReminderType.OFF;
         this.refillSizes = new ArrayList<>();
         this.unit = "";
+        this.sortOrder = 1.0;
     }
 
     public Medicine(String name, int id) {
@@ -70,6 +74,7 @@ public class Medicine {
         this.outOfStockReminder = OutOfStockReminderType.OFF;
         this.refillSizes = new ArrayList<>();
         this.unit = "";
+        this.sortOrder = 1.0;
     }
 
     public boolean isOutOfStock() {

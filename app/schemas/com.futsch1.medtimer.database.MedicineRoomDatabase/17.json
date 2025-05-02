@@ -1,0 +1,399 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 17,
+    "identityHash": "00d84d2180413883e37e99a6b4546ae8",
+    "entities": [
+      {
+        "tableName": "Medicine",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0)",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "medicineName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "medicineId",
+            "columnName": "medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0xFFFF0000"
+          },
+          {
+            "fieldPath": "useColor",
+            "columnName": "useColor",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "notificationImportance",
+            "columnName": "notificationImportance",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "3"
+          },
+          {
+            "fieldPath": "iconId",
+            "columnName": "iconId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "outOfStockReminder",
+            "columnName": "outOfStockReminder",
+            "affinity": "TEXT",
+            "defaultValue": "'OFF'"
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "outOfStockReminderThreshold",
+            "columnName": "outOfStockReminderThreshold",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "refillSizes",
+            "columnName": "refillSizes",
+            "affinity": "TEXT",
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "sortOrder",
+            "columnName": "sortOrder",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "1.0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "medicineId"
+          ]
+        }
+      },
+      {
+        "tableName": "Reminder",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF, `linkedReminderId` INTEGER NOT NULL DEFAULT 0, `intervalStart` INTEGER NOT NULL DEFAULT 0, `intervalStartsFromProcessed` INTEGER NOT NULL DEFAULT false, `variableAmount` INTEGER NOT NULL DEFAULT false)",
+        "fields": [
+          {
+            "fieldPath": "medicineRelId",
+            "columnName": "medicineRelId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderId",
+            "columnName": "reminderId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeInMinutes",
+            "columnName": "timeInMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdTimestamp",
+            "columnName": "createdTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "consecutiveDays",
+            "columnName": "consecutiveDays",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "pauseDays",
+            "columnName": "pauseDays",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "instructions",
+            "columnName": "instructions",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "cycleStartDay",
+            "columnName": "cycleStartDay",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "19823"
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "days",
+            "columnName": "days",
+            "affinity": "TEXT",
+            "defaultValue": "'[true, true, true, true, true, true, true]'"
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "true"
+          },
+          {
+            "fieldPath": "periodStart",
+            "columnName": "periodStart",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "periodEnd",
+            "columnName": "periodEnd",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "activeDaysOfMonth",
+            "columnName": "activeDaysOfMonth",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0xFFFFFFFF"
+          },
+          {
+            "fieldPath": "linkedReminderId",
+            "columnName": "linkedReminderId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "intervalStart",
+            "columnName": "intervalStart",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "intervalStartsFromProcessed",
+            "columnName": "intervalStartsFromProcessed",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "variableAmount",
+            "columnName": "variableAmount",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "reminderId"
+          ]
+        }
+      },
+      {
+        "tableName": "ReminderEvent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT, `amount` TEXT, `color` INTEGER NOT NULL DEFAULT 0, `useColor` INTEGER NOT NULL DEFAULT false, `status` TEXT, `remindedTimestamp` INTEGER NOT NULL, `processedTimestamp` INTEGER NOT NULL, `reminderId` INTEGER NOT NULL, `notificationId` INTEGER NOT NULL DEFAULT 0, `iconId` INTEGER NOT NULL DEFAULT 0, `remainingRepeats` INTEGER NOT NULL DEFAULT 0, `stockHandled` INTEGER NOT NULL DEFAULT false, `askForAmount` INTEGER NOT NULL DEFAULT false, `tags` TEXT DEFAULT '[]')",
+        "fields": [
+          {
+            "fieldPath": "reminderEventId",
+            "columnName": "reminderEventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medicineName",
+            "columnName": "medicineName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "useColor",
+            "columnName": "useColor",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "remindedTimestamp",
+            "columnName": "remindedTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "processedTimestamp",
+            "columnName": "processedTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reminderId",
+            "columnName": "reminderId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationId",
+            "columnName": "notificationId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "iconId",
+            "columnName": "iconId",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "remainingRepeats",
+            "columnName": "remainingRepeats",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "stockHandled",
+            "columnName": "stockHandled",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "askForAmount",
+            "columnName": "askForAmount",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "defaultValue": "'[]'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "reminderEventId"
+          ]
+        }
+      },
+      {
+        "tableName": "Tag",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "tagId",
+            "columnName": "tagId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "tagId"
+          ]
+        }
+      },
+      {
+        "tableName": "MedicineToTag",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineId` INTEGER NOT NULL, `tagId` INTEGER NOT NULL, PRIMARY KEY(`medicineId`, `tagId`))",
+        "fields": [
+          {
+            "fieldPath": "medicineId",
+            "columnName": "medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagId",
+            "columnName": "tagId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "medicineId",
+            "tagId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_MedicineToTag_tagId",
+            "unique": false,
+            "columnNames": [
+              "tagId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_MedicineToTag_tagId` ON `${TABLE_NAME}` (`tagId`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '00d84d2180413883e37e99a6b4546ae8')"
+    ]
+  }
+}
