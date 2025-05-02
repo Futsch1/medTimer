@@ -47,10 +47,10 @@ public class ViewColorHelper {
         }
     }
 
-    public static void setIconToImageView(MaterialCardView cardView, ImageView imageView, int iconId) {
+    public static void setIconToImageView(View view, ImageView imageView, int iconId) {
         if (iconId != 0) {
-            Drawable iconDrawable = new MedicineIcons(cardView.getContext()).getIconDrawable(iconId);
-            setDrawableTint(cardView, iconDrawable);
+            Drawable iconDrawable = new MedicineIcons(view.getContext()).getIconDrawable(iconId);
+            setDrawableTint(view, iconDrawable);
             imageView.setImageDrawable(iconDrawable);
             imageView.setVisibility(View.VISIBLE);
         } else {
