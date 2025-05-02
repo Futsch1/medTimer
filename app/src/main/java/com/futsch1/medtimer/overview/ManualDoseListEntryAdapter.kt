@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.ManualDose.ManualDoseEntry
 
 class ManualDoseListEntryAdapter(context: Context, val resource: Int, entries: List<ManualDoseEntry>) :
@@ -21,12 +22,17 @@ class ManualDoseListEntryAdapter(context: Context, val resource: Int, entries: L
 
         textView.text = currentItem.name
         if (currentItem.useColor) {
-            textView.setBackgroundColor(currentItem.color)
+            ViewColorHelper.setViewBackground(textView, listOf(textView), currentItem.color)
+        } else {
+            ViewColorHelper.setDefaultColors(textView, listOf(textView))
         }
-        if (currentItem.iconId != 0) {
+        val iconDrawable = if (currentItem.iconId != 0) {
             val iconDrawable = MedicineIcons(context).getIconDrawable(currentItem.iconId)
-            textView.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        }
+            ViewColorHelper.setDrawableTint(textView, iconDrawable)
+            iconDrawable
+        } else null
+
+        textView.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
 
         return view
     }

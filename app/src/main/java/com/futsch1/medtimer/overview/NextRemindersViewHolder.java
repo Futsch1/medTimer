@@ -57,9 +57,9 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         skippedNow.setVisibility(isTodayOrTomorrow ? View.VISIBLE : View.GONE);
 
         if (scheduledReminder.medicine().medicine.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(nextReminderText), scheduledReminder.medicine().medicine.color);
+            ViewColorHelper.setViewBackground(itemView, Collections.singletonList(nextReminderText), scheduledReminder.medicine().medicine.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(nextReminderText));
+            ViewColorHelper.setDefaultColors(itemView, Collections.singletonList(nextReminderText));
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.nextReminderIcon), scheduledReminder.medicine().medicine.iconId);

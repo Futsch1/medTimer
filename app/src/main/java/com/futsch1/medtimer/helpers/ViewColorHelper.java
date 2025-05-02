@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.helpers;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
@@ -22,17 +23,21 @@ public class ViewColorHelper {
         // Intentionally empty
     }
 
-    public static void setCardBackground(MaterialCardView cardView, List<TextView> textViews, @ColorInt int backgroundColor) {
-        int defaultTextViewColor = getColorOnSurface(cardView);
+    public static void setViewBackground(View view, List<TextView> textViews, @ColorInt int backgroundColor) {
+        int defaultTextViewColor = getColorOnSurface(view);
         double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor | 0xFF000000);
-        int cardDefaultBackground = SurfaceColors.getColorForElevation(cardView.getContext(), cardView.getElevation());
+        int cardDefaultBackground = SurfaceColors.getColorForElevation(view.getContext(), view.getElevation());
         double contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor | 0xFF000000);
 
         setTextColor(textViews, contrastTextView < contrastBackground ? cardDefaultBackground : defaultTextViewColor);
-        cardView.setCardBackgroundColor(backgroundColor);
+        if (view instanceof MaterialCardView materialCardView) {
+            materialCardView.setCardBackgroundColor(backgroundColor);
+        } else {
+            view.setBackgroundColor(backgroundColor);
+        }
     }
 
-    private static int getColorOnSurface(MaterialCardView cardView) {
+    private static int getColorOnSurface(View cardView) {
         return MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorOnSurface);
     }
 
@@ -45,12 +50,26 @@ public class ViewColorHelper {
     public static void setIconToImageView(MaterialCardView cardView, ImageView imageView, int iconId) {
         if (iconId != 0) {
             Drawable iconDrawable = new MedicineIcons(cardView.getContext()).getIconDrawable(iconId);
-            int backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
-            DrawableCompat.setTint(iconDrawable, getColorOnView(cardView, backgroundColor));
+            setDrawableTint(cardView, iconDrawable);
             imageView.setImageDrawable(iconDrawable);
             imageView.setVisibility(View.VISIBLE);
         } else {
             imageView.setVisibility(View.GONE);
+        }
+    }
+
+    public static void setDrawableTint(View view, Drawable drawable) {
+        int backgroundColor = getBackground(view);
+        DrawableCompat.setTint(drawable, getColorOnView(view, backgroundColor));
+    }
+
+    private static int getBackground(View view) {
+        if (view instanceof MaterialCardView materialCardView) {
+            return materialCardView.getCardBackgroundColor().getDefaultColor();
+        } else if (view.getBackground() instanceof ColorDrawable colorDrawable) {
+            return colorDrawable.getColor();
+        } else {
+            return MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
         }
     }
 
@@ -71,11 +90,16 @@ public class ViewColorHelper {
         button.setTextColor(buttonTextColor);
     }
 
-    public static void setDefaultColors(MaterialCardView cardView, List<TextView> textViews) {
-        int defaultTextViewColor = MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorOnSurface);
-        int cardDefaultBackground = SurfaceColors.getColorForElevation(cardView.getContext(), cardView.getElevation());
+    public static void setDefaultColors(View view, List<TextView> textViews) {
+        int defaultTextViewColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnSurface);
 
-        cardView.setCardBackgroundColor(cardDefaultBackground);
         setTextColor(textViews, defaultTextViewColor);
+        if (view instanceof MaterialCardView materialCardView) {
+            int cardDefaultBackground = SurfaceColors.getColorForElevation(view.getContext(), view.getElevation());
+            materialCardView.setCardBackgroundColor(cardDefaultBackground);
+        } else {
+            int defaultBackground = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
+            view.setBackgroundColor(defaultBackground);
+        }
     }
 }

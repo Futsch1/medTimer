@@ -80,9 +80,9 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
 
     private void setupColorAndIcon(ReminderEvent reminderEvent) {
         if (reminderEvent.useColor) {
-            ViewColorHelper.setCardBackground((MaterialCardView) itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
+            ViewColorHelper.setViewBackground(itemView, Collections.singletonList(reminderEventText), reminderEvent.color);
         } else {
-            ViewColorHelper.setDefaultColors((MaterialCardView) itemView, Collections.singletonList(reminderEventText));
+            ViewColorHelper.setDefaultColors(itemView, Collections.singletonList(reminderEventText));
         }
 
         ViewColorHelper.setIconToImageView((MaterialCardView) itemView, itemView.findViewById(R.id.latestReminderIcon), reminderEvent.iconId);
