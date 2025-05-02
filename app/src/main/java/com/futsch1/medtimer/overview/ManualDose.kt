@@ -38,7 +38,7 @@ class ManualDose(
                 .setAdapter(adapter) { _: DialogInterface?, which: Int ->
                     startLogProcess(entries[which])
                 }
-                .setTitle(R.string.tab_medicine)
+                .setTitle(R.string.log_additional_dose)
                 .show()
         }
     }
