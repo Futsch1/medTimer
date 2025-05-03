@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.InitIdlingResource;
@@ -34,7 +35,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class MedicinesFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class MedicinesFragment extends Fragment implements SwipeHelper.MovedCallback {
     private final InitIdlingResource idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
     @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
@@ -66,7 +71,7 @@ public class MedicinesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), this::itemMoved);
+        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), this);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         postponeEnterTransition();
@@ -110,11 +115,6 @@ public class MedicinesFragment extends Fragment {
             medicineViewModel.medicineRepository.deleteMedicine((int) itemId);
             adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-    }
-
-    private void itemMoved(int fromPosition, int toPosition) {
-        new Handler(thread.getLooper()).post(() -> medicineViewModel.medicineRepository.moveMedicine(fromPosition, toPosition)
-        );
     }
 
     private void setupAddMedicineButton(View fragmentView) {
@@ -161,5 +161,22 @@ public class MedicinesFragment extends Fragment {
                 medicineId
         );
         navController.navigate(action);
+    }
+
+    @Override
+    public boolean onMoved(int fromPosition, int toPosition) {
+        List<FullMedicine> list = new ArrayList<>(adapter.getCurrentList());
+        if (toPosition == -1) {
+            return false;
+        }
+        Collections.swap(list, fromPosition, toPosition);
+        adapter.submitList(list);
+        return true;
+    }
+
+    @Override
+    public void onMoveCompleted(int fromPosition, int toPosition) {
+        new Handler(thread.getLooper()).post(() -> medicineViewModel.medicineRepository.moveMedicine(fromPosition, toPosition)
+        );
     }
 }
