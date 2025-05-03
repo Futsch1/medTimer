@@ -127,9 +127,10 @@ class ManualDose(
                 TimeHelper.instantFromTodayMinutes(minutes).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             medicineRepository.insertReminderEvent(reminderEvent)
-        }
-        if (medicineId != -1) {
-            ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
+
+            if (medicineId != -1) {
+                ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
+            }
         }
     }
 
