@@ -8,12 +8,11 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import org.junit.Test
 
 class ManualDoseTest : BaseTestHelper() {
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun testManualDose() {
         openMenu()
         clickOn(R.string.generate_test_data)
@@ -53,6 +52,17 @@ class ManualDoseTest : BaseTestHelper() {
         clickOn("Test (13)")
         assertContains("13")
         pressBack()
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+
+        openMenu()
+        clickOn(R.string.deactivate_all)
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickOn(R.id.logManualDose)
+        assertContains(R.id.entry_text, "Selen (200 µg) (1)")
+        clickOn("Selen (200 µg) (1)")
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
     }
 
 }

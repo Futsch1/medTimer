@@ -88,6 +88,7 @@ class ManualDose(
             if (entry.amount == null || entry.medicineId == -1) {
                 getAmountAndContinue(reminderEvent, entry)
             } else {
+                reminderEvent.amount = entry.amount
                 getTimeAndLog(reminderEvent, entry.medicineId)
             }
         }
