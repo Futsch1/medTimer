@@ -167,7 +167,7 @@ class ManualDose(
         }
 
         private fun amendName() {
-            if (amount != null) {
+            if (amount != null && !amount.isBlank()) {
                 this.name = this.baseName + " (" + amount + ")"
             } else {
                 this.name = this.baseName
@@ -178,7 +178,7 @@ class ManualDose(
             if (this === other) return true
             if (other == null || javaClass != other.javaClass) return false
             val that = other as ManualDoseEntry
-            return !(name != that.name || amount != that.amount)
+            return name == that.name
         }
 
         override fun hashCode(): Int {
