@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
@@ -30,6 +31,8 @@ public abstract class SwipeHelper extends SimpleCallback {
     private final Paint clearPaint;
     private final Drawable swipeIcon;
     private final ColorDrawable background = new ColorDrawable();
+    int fromPosition = -1;
+    int toPosition;
 
     protected SwipeHelper(Context context, int dragDirs, int icon) {
         super(dragDirs, SWIPE_DIRS);
@@ -54,8 +57,8 @@ public abstract class SwipeHelper extends SimpleCallback {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 if (movedCallback != null) {
-                    movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), target.getBindingAdapterPosition());
-                    return true;
+                    this.toPosition = target.getBindingAdapterPosition();
+                    return movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition);
                 } else {
                     return false;
                 }
@@ -66,6 +69,19 @@ public abstract class SwipeHelper extends SimpleCallback {
                 if (direction == SWIPE_DIRS) {
                     swipedCallback.onSwiped(viewHolder);
                 }
+            }
+
+            @Override
+            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
+                    fromPosition = viewHolder.getBindingAdapterPosition();
+                } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && fromPosition != -1) {
+                    if (movedCallback != null) {
+                        movedCallback.onMoveCompleted(fromPosition, toPosition);
+                    }
+                    fromPosition = -1;
+                }
+                super.onSelectedChanged(viewHolder, actionState);
             }
         };
         return new ItemTouchHelper(swipeHelper);
@@ -147,6 +163,8 @@ public abstract class SwipeHelper extends SimpleCallback {
     }
 
     public interface MovedCallback {
-        void onMoved(int fromPosition, int toPosition);
+        boolean onMoved(int fromPosition, int toPosition);
+
+        void onMoveCompleted(int fromPosition, int toPosition);
     }
 }

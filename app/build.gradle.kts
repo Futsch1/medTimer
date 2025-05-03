@@ -23,7 +23,7 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 115
+        versionCode = 117
         versionName = "1.17.0"
         base.archivesName = "MedTimer"
 

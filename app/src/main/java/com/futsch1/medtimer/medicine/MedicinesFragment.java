@@ -61,12 +61,12 @@ public class MedicinesFragment extends Fragment {
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
 
-        adapter = new MedicineViewAdapter(thread, requireActivity());
+        adapter = new MedicineViewAdapter(thread, requireActivity(), medicineViewModel.medicineRepository);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
         // Swipe to delete
-        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), this::itemMoved);
+        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), adapter);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         postponeEnterTransition();
@@ -110,11 +110,6 @@ public class MedicinesFragment extends Fragment {
             medicineViewModel.medicineRepository.deleteMedicine((int) itemId);
             adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
         }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
-    }
-
-    private void itemMoved(int fromPosition, int toPosition) {
-        new Handler(thread.getLooper()).post(() -> medicineViewModel.medicineRepository.moveMedicine(fromPosition, toPosition)
-        );
     }
 
     private void setupAddMedicineButton(View fragmentView) {

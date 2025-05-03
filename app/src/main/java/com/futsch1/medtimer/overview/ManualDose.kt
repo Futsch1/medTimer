@@ -44,18 +44,27 @@ class ManualDose(
     }
 
     private fun getManualDoseEntries(medicines: List<FullMedicine>): List<ManualDoseEntry> {
-        val lastCustomDose = lastCustomDose!!
         val entries: MutableList<ManualDoseEntry> = ArrayList()
         entries.add(ManualDoseEntry(context.getString(R.string.custom)))
-        if (lastCustomDose.isNotBlank()) {
-            entries.add(ManualDoseEntry(lastCustomDose))
-        }
+        addCustomDoses(entries)
         for (medicine in medicines) {
             val entry = ManualDoseEntry(medicine, null)
             entries.add(entry)
             addInactiveReminders(medicine, entries)
         }
         return entries
+    }
+
+    private fun addCustomDoses(
+        entries: MutableList<ManualDoseEntry>
+    ) {
+        val lastCustomDose = lastCustomDose
+        if (lastCustomDose.first != null && lastCustomDose.first!!.isNotBlank()) {
+            entries.add(ManualDoseEntry(lastCustomDose.first!!))
+            if (lastCustomDose.second != null && lastCustomDose.second!!.isNotBlank()) {
+                entries.add(ManualDoseEntry(lastCustomDose.first!!, lastCustomDose.second))
+            }
+        }
     }
 
     private fun startLogProcess(entry: ManualDoseEntry) {
@@ -71,13 +80,13 @@ class ManualDose(
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
             DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String? ->
-                    lastCustomDose = name
                     reminderEvent.medicineName = name
-                    getAmountAndContinue(reminderEvent, -1)
+                    entry.baseName = name!!
+                    getAmountAndContinue(reminderEvent, entry)
                 }.show()
         } else {
-            if (entry.amount == null) {
-                getAmountAndContinue(reminderEvent, entry.medicineId)
+            if (entry.amount == null || entry.medicineId == -1) {
+                getAmountAndContinue(reminderEvent, entry)
             } else {
                 reminderEvent.amount = entry.amount
                 getTimeAndLog(reminderEvent, entry.medicineId)
@@ -85,18 +94,29 @@ class ManualDose(
         }
     }
 
-    private var lastCustomDose: String?
-        get() = sharedPreferences.getString("lastCustomDose", "")
+    private var lastCustomDose: Pair<String?, String?>
+        get() {
+            val name = sharedPreferences.getString("lastCustomDose", "")
+            val amount = sharedPreferences.getString("lastCustomDoseAmount", "")
+            return Pair(name, amount)
+        }
         set(lastCustomDose) {
-            sharedPreferences.edit { putString("lastCustomDose", lastCustomDose) }
+            sharedPreferences.edit { putString("lastCustomDose", lastCustomDose.first); putString("lastCustomDoseAmount", lastCustomDose.second) }
         }
 
-    private fun getAmountAndContinue(reminderEvent: ReminderEvent, medicineId: Int) {
-        DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
+    private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
+        var dialog = DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
                 reminderEvent.amount = amount
-                getTimeAndLog(reminderEvent, medicineId)
-            }.show()
+                if (entry.medicineId == -1) {
+                    lastCustomDose = Pair(entry.baseName, amount)
+                }
+                getTimeAndLog(reminderEvent, entry.medicineId)
+            }
+        if (entry.amount != null && !entry.amount.isBlank()) {
+            dialog = dialog.initialText(entry.amount)
+        }
+        dialog.show()
     }
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
@@ -107,14 +127,16 @@ class ManualDose(
                 TimeHelper.instantFromTodayMinutes(minutes).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             medicineRepository.insertReminderEvent(reminderEvent)
-        }
-        if (medicineId != -1) {
-            ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
+
+            if (medicineId != -1) {
+                ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
+            }
         }
     }
 
     class ManualDoseEntry {
-        val name: String
+        var baseName: String
+        lateinit var name: String
         val color: Int
         val useColor: Boolean
         val amount: String?
@@ -122,35 +144,41 @@ class ManualDose(
         val medicineId: Int
         val tags: List<String>
 
-        constructor(name: String) {
-            this.name = name
+        constructor(name: String, amount: String? = null) {
+            this.baseName = name
             this.color = 0
             this.useColor = false
-            this.amount = null
+            this.amount = amount
             this.iconId = 0
             this.medicineId = -1
             this.tags = ArrayList()
+            amendName()
         }
 
         constructor(medicine: FullMedicine, amount: String?) {
-            if (amount != null) {
-                this.name = medicine.medicine.name + " (" + amount + ")"
-            } else {
-                this.name = medicine.medicine.name
-            }
+            this.baseName = medicine.medicine.name
             this.color = medicine.medicine.color
             this.useColor = medicine.medicine.useColor
             this.amount = amount
             this.iconId = medicine.medicine.iconId
             this.medicineId = medicine.medicine.medicineId
             this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
+            amendName()
+        }
+
+        private fun amendName() {
+            if (amount != null && !amount.isBlank()) {
+                this.name = this.baseName + " (" + amount + ")"
+            } else {
+                this.name = this.baseName
+            }
         }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || javaClass != other.javaClass) return false
             val that = other as ManualDoseEntry
-            return !(name != that.name || amount != that.amount)
+            return name == that.name
         }
 
         override fun hashCode(): Int {

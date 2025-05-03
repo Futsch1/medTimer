@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine;
 
 
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.ViewGroup;
 
@@ -9,20 +10,29 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.futsch1.medtimer.database.FullMedicine;
+import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.helpers.IdlingListAdapter;
+import com.futsch1.medtimer.helpers.SwipeHelper;
 
-public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, MedicineViewHolder> {
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, MedicineViewHolder> implements SwipeHelper.MovedCallback {
 
     private final HandlerThread thread;
     private final FragmentActivity activity;
+    private final MedicineRepository medicineRepository;
 
-    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity) {
+    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity, @NotNull MedicineRepository medicineRepository) {
         super(new MedicineDiff());
         setHasStableIds(true);
         this.thread = thread;
         this.activity = activity;
+        this.medicineRepository = medicineRepository;
     }
-
 
     // Create new views (invoked by the layout manager)
     @NonNull
@@ -43,6 +53,26 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
         return getItem(position).medicine.medicineId;
     }
 
+    @Override
+    public boolean onMoved(int fromPosition, int toPosition) {
+        List<FullMedicine> list = new ArrayList<>(getCurrentList());
+        if (toPosition == -1) {
+            return false;
+        }
+        Collections.swap(list, fromPosition, toPosition);
+        submitList(list);
+        return true;
+    }
+
+    @Override
+    public void onMoveCompleted(int fromPosition, int toPosition) {
+        new Handler(thread.getLooper()).post(() -> {
+                    medicineRepository.moveMedicine(fromPosition, toPosition);
+                    activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
+                }
+        );
+    }
+
     public static class MedicineDiff extends DiffUtil.ItemCallback<FullMedicine> {
 
         @Override
@@ -55,5 +85,6 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
             return oldItem.medicine.medicineId == newItem.medicine.medicineId;
         }
     }
+
 }
 

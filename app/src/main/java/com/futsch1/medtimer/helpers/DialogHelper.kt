@@ -6,7 +6,9 @@ import android.content.DialogInterface
 import android.content.res.Resources
 import android.util.TypedValue
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import com.futsch1.medtimer.BuildConfig
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.roundToInt
@@ -39,18 +41,15 @@ class DialogHelper(var context: Context) {
     fun show() {
         val textInputLayout = TextInputLayout(context)
         val editText = TextInputEditText(context)
-        editText.layoutParams =
-            LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+        layout(textInputLayout)
         hint?.let(editText::setHint)
         editText.setSingleLine()
         editText.minimumHeight = dpToPx(context.resources, 48)
         editText.id = android.R.id.input
         initialText?.let(editText::setText)
-        textInputLayout.addView(editText)
         inputType?.let(editText::setInputType)
+
+        textInputLayout.addView(editText)
 
         val builder = AlertDialog.Builder(context)
         builder.setView(textInputLayout)
@@ -65,8 +64,27 @@ class DialogHelper(var context: Context) {
             dialog.dismiss()
             cancelCallback?.cancel()
         }
+
+        if (!BuildConfig.DEBUG) {
+            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            editText.postDelayed({
+                editText.requestFocus()
+                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }, 200)
+        }
+
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun layout(textInputLayout: TextInputLayout) {
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        textInputLayout.layoutParams = layoutParams
+        val padding = dpToPx(context.resources, 16)
+        textInputLayout.setPadding(padding, padding, padding, padding)
     }
 
     @Suppress("SameParameterValue")
