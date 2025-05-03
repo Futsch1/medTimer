@@ -50,6 +50,8 @@ class ManualDoseTest : BaseTestHelper() {
 
         clickOn(R.id.logManualDose)
         assertContains(R.id.entry_text, "Test (13)")
+        clickOn("Test (13)")
+        assertContains("13")
         pressBack()
     }
 

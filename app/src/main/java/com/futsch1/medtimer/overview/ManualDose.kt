@@ -81,13 +81,13 @@ class ManualDose(
             DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String? ->
                     reminderEvent.medicineName = name
-                    getAmountAndContinue(reminderEvent, -1)
+                    entry.baseName = name!!
+                    getAmountAndContinue(reminderEvent, entry)
                 }.show()
         } else {
-            if (entry.amount == null) {
-                getAmountAndContinue(reminderEvent, entry.medicineId)
+            if (entry.amount == null || entry.medicineId == -1) {
+                getAmountAndContinue(reminderEvent, entry)
             } else {
-                reminderEvent.amount = entry.amount
                 getTimeAndLog(reminderEvent, entry.medicineId)
             }
         }
@@ -103,15 +103,19 @@ class ManualDose(
             sharedPreferences.edit { putString("lastCustomDose", lastCustomDose.first); putString("lastCustomDoseAmount", lastCustomDose.second) }
         }
 
-    private fun getAmountAndContinue(reminderEvent: ReminderEvent, medicineId: Int) {
-        DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
+    private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
+        var dialog = DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
                 reminderEvent.amount = amount
-                if (medicineId == -1) {
-                    lastCustomDose = Pair(reminderEvent.medicineName, amount)
+                if (entry.medicineId == -1) {
+                    lastCustomDose = Pair(entry.baseName, amount)
                 }
-                getTimeAndLog(reminderEvent, medicineId)
-            }.show()
+                getTimeAndLog(reminderEvent, entry.medicineId)
+            }
+        if (entry.amount != null && !entry.amount.isBlank()) {
+            dialog = dialog.initialText(entry.amount)
+        }
+        dialog.show()
     }
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
@@ -129,7 +133,8 @@ class ManualDose(
     }
 
     class ManualDoseEntry {
-        var name: String
+        var baseName: String
+        lateinit var name: String
         val color: Int
         val useColor: Boolean
         val amount: String?
@@ -138,7 +143,7 @@ class ManualDose(
         val tags: List<String>
 
         constructor(name: String, amount: String? = null) {
-            this.name = name
+            this.baseName = name
             this.color = 0
             this.useColor = false
             this.amount = amount
@@ -149,7 +154,7 @@ class ManualDose(
         }
 
         constructor(medicine: FullMedicine, amount: String?) {
-            this.name = medicine.medicine.name
+            this.baseName = medicine.medicine.name
             this.color = medicine.medicine.color
             this.useColor = medicine.medicine.useColor
             this.amount = amount
@@ -161,9 +166,10 @@ class ManualDose(
 
         private fun amendName() {
             if (amount != null) {
-                this.name = this.name + " (" + amount + ")"
+                this.name = this.baseName + " (" + amount + ")"
+            } else {
+                this.name = this.baseName
             }
-
         }
 
         override fun equals(other: Any?): Boolean {
