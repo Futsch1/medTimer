@@ -33,7 +33,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
         this.activity = activity;
         this.medicineRepository = medicineRepository;
     }
-    
+
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
@@ -66,7 +66,10 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
 
     @Override
     public void onMoveCompleted(int fromPosition, int toPosition) {
-        new Handler(thread.getLooper()).post(() -> medicineRepository.moveMedicine(fromPosition, toPosition)
+        new Handler(thread.getLooper()).post(() -> {
+                    medicineRepository.moveMedicine(fromPosition, toPosition);
+                    activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
+                }
         );
     }
 
