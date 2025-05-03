@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import com.futsch1.medtimer.BuildConfig
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.roundToInt
@@ -63,11 +64,14 @@ class DialogHelper(var context: Context) {
             dialog.dismiss()
             cancelCallback?.cancel()
         }
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        editText.postDelayed({
-            editText.requestFocus()
-            inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-        }, 200)
+
+        if (!BuildConfig.DEBUG) {
+            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            editText.postDelayed({
+                editText.requestFocus()
+                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }, 200)
+        }
 
         val dialog = builder.create()
         dialog.show()
