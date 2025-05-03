@@ -32,6 +32,7 @@ class JSONReminderEventBackupUnitTest {
         reminderEvent.iconId = 4;
         reminderEvent.tags = new ArrayList<>();
         reminderEvent.tags.add("Tag A");
+        reminderEvent.lastIntervalReminderTimeInMinutes = 12;
         reminderEvents.add(reminderEvent);
 
         String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
@@ -55,7 +56,8 @@ class JSONReminderEventBackupUnitTest {
       "iconId": 4,
       "tags": [
         "Tag A"
-      ]
+      ],
+      "lastIntervalReminderTimeInMinutes": 12
     }
   ]
 }""", result);
