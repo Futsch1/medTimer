@@ -58,7 +58,8 @@ public abstract class SwipeHelper extends SimpleCallback {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 if (movedCallback != null) {
                     this.toPosition = target.getBindingAdapterPosition();
-                    return movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition);
+                    movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition);
+                    return true;
                 } else {
                     return false;
                 }
@@ -85,11 +86,6 @@ public abstract class SwipeHelper extends SimpleCallback {
             }
         };
         return new ItemTouchHelper(swipeHelper);
-    }
-
-    @Override
-    public float getMoveThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-        return 0.8f;
     }
 
     @Override
@@ -168,7 +164,7 @@ public abstract class SwipeHelper extends SimpleCallback {
     }
 
     public interface MovedCallback {
-        boolean onMoved(int fromPosition, int toPosition);
+        void onMoved(int fromPosition, int toPosition);
 
         void onMoveCompleted(int fromPosition, int toPosition);
     }
