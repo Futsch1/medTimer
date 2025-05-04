@@ -106,10 +106,10 @@ public class Reminder {
                 createdTimestamp == that.createdTimestamp &&
                 consecutiveDays == that.consecutiveDays &&
                 pauseDays == that.pauseDays &&
-                instructions.equals(that.instructions) &&
+                Objects.equals(instructions, that.instructions) &&
                 cycleStartDay == that.cycleStartDay &&
-                amount.equals(that.amount) &&
-                days.equals(that.days) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(days, that.days) &&
                 active == that.active &&
                 periodStart == that.periodStart &&
                 periodEnd == that.periodEnd &&

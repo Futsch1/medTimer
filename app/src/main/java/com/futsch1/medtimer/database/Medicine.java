@@ -96,7 +96,7 @@ public class Medicine {
         if (o == null || getClass() != o.getClass()) return false;
         Medicine that = (Medicine) o;
         return medicineId == that.medicineId &&
-                name.equals(that.name) &&
+                Objects.equals(name, that.name) &&
                 useColor == that.useColor &&
                 color == that.color &&
                 notificationImportance == that.notificationImportance &&
@@ -104,8 +104,8 @@ public class Medicine {
                 outOfStockReminder == that.outOfStockReminder &&
                 amount == that.amount &&
                 outOfStockReminderThreshold == that.outOfStockReminderThreshold &&
-                refillSizes.equals(that.refillSizes) &&
-                unit.equals(that.unit);
+                Objects.equals(refillSizes, that.refillSizes) &&
+                Objects.equals(unit, that.unit);
     }
 
     public enum OutOfStockReminderType {
