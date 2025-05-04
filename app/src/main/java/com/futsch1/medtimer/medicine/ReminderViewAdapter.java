@@ -53,13 +53,12 @@ public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderVie
 
         @Override
         public boolean areItemsTheSame(@NonNull Reminder oldItem, @NonNull Reminder newItem) {
-            return oldItem == newItem;
+            return oldItem.reminderId == newItem.reminderId;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Reminder oldItem, @NonNull Reminder newItem) {
-            return oldItem.reminderId == newItem.reminderId && oldItem.amount.equals(newItem.amount)
-                    && oldItem.timeInMinutes == newItem.timeInMinutes;
+            return oldItem.equals(newItem);
         }
     }
 }

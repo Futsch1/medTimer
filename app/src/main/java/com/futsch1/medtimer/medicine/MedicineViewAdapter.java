@@ -82,10 +82,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
 
         @Override
         public boolean areContentsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem.medicine.medicineId == newItem.medicine.medicineId &&
-                    oldItem.medicine.name.equals(newItem.medicine.name) &&
-                    oldItem.medicine.color == newItem.medicine.color &&
-                    oldItem.medicine.iconId == newItem.medicine.iconId;
+            return oldItem.equals(newItem);
         }
     }
 
