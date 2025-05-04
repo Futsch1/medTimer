@@ -25,4 +25,19 @@ public class FullMedicine {
     )
     @Expose
     public List<Reminder> reminders;
+
+    @Override
+    public int hashCode() {
+        int result = medicine.hashCode();
+        result += reminders.hashCode();
+        result += tags.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        FullMedicine that = (FullMedicine) o;
+        return medicine.equals(that.medicine) && reminders.equals(that.reminders) && tags.equals(that.tags);
+    }
 }

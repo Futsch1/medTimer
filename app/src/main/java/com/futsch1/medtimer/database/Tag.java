@@ -27,7 +27,10 @@ public class Tag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
+        return membersEqual((Tag) o);
+    }
+
+    private boolean membersEqual(Tag tag) {
         return tagId == tag.tagId && Objects.equals(name, tag.name);
     }
 }

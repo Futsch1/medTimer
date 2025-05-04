@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class ReminderEvent {
@@ -47,6 +48,36 @@ public class ReminderEvent {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int lastIntervalReminderTimeInMinutes;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        return membersEqual((ReminderEvent) o);
+    }
+
+    private boolean membersEqual(ReminderEvent o) {
+        return reminderEventId == o.reminderEventId &&
+                Objects.equals(medicineName, o.medicineName) &&
+                Objects.equals(amount, o.amount) &&
+                color == o.color &&
+                useColor == o.useColor &&
+                status == o.status &&
+                remindedTimestamp == o.remindedTimestamp &&
+                processedTimestamp == o.processedTimestamp &&
+                reminderId == o.reminderId &&
+                notificationId == o.notificationId &&
+                iconId == o.iconId &&
+                remainingRepeats == o.remainingRepeats &&
+                stockHandled == o.stockHandled &&
+                askForAmount == o.askForAmount &&
+                Objects.equals(tags, o.tags) &&
+                lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes;
+    }
 
     public enum ReminderStatus {
         RAISED,

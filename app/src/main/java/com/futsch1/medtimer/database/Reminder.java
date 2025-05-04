@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @SuppressWarnings("java:S1104")
@@ -88,6 +89,38 @@ public class Reminder {
         } else {
             return ReminderType.TIME_BASED;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart, intervalStartsFromProcessed, variableAmount);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        return membersEqual((Reminder) o);
+    }
+
+    private boolean membersEqual(Reminder that) {
+        return reminderId == that.reminderId &&
+                medicineRelId == that.medicineRelId &&
+                timeInMinutes == that.timeInMinutes &&
+                createdTimestamp == that.createdTimestamp &&
+                consecutiveDays == that.consecutiveDays &&
+                pauseDays == that.pauseDays &&
+                Objects.equals(instructions, that.instructions) &&
+                cycleStartDay == that.cycleStartDay &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(days, that.days) &&
+                active == that.active &&
+                periodStart == that.periodStart &&
+                periodEnd == that.periodEnd &&
+                activeDaysOfMonth == that.activeDaysOfMonth &&
+                linkedReminderId == that.linkedReminderId &&
+                intervalStart == that.intervalStart &&
+                intervalStartsFromProcessed == that.intervalStartsFromProcessed &&
+                variableAmount == that.variableAmount;
     }
 
     public enum ReminderType {

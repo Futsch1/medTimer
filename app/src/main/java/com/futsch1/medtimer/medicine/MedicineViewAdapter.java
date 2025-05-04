@@ -54,35 +54,35 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
     }
 
     @Override
-    public boolean onMoved(int fromPosition, int toPosition) {
+    public void onMoved(int fromPosition, int toPosition) {
         List<FullMedicine> list = new ArrayList<>(getCurrentList());
-        if (toPosition == -1) {
-            return false;
+        if (toPosition != -1) {
+            Collections.swap(list, fromPosition, toPosition);
+            submitList(list);
         }
-        Collections.swap(list, fromPosition, toPosition);
-        submitList(list);
-        return true;
     }
 
     @Override
     public void onMoveCompleted(int fromPosition, int toPosition) {
-        new Handler(thread.getLooper()).post(() -> {
-                    medicineRepository.moveMedicine(fromPosition, toPosition);
-                    activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
-                }
-        );
+        if (fromPosition != toPosition) {
+            new Handler(thread.getLooper()).post(() -> {
+                        activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
+                        medicineRepository.moveMedicine(fromPosition, toPosition);
+                    }
+            );
+        }
     }
 
     public static class MedicineDiff extends DiffUtil.ItemCallback<FullMedicine> {
 
         @Override
         public boolean areItemsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem == newItem;
+            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
+            return oldItem.equals(newItem);
         }
     }
 

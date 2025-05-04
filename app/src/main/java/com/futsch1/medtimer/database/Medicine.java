@@ -10,6 +10,7 @@ import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @SuppressWarnings("java:S1319")
 @Entity
@@ -83,6 +84,31 @@ public class Medicine {
 
     public boolean isStockManagementActive() {
         return (amount != 0 || outOfStockReminder != OutOfStockReminderType.OFF || outOfStockReminderThreshold != 0);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        return membersEqual((Medicine) o);
+    }
+
+    private boolean membersEqual(Medicine that) {
+        return medicineId == that.medicineId &&
+                Objects.equals(name, that.name) &&
+                useColor == that.useColor &&
+                color == that.color &&
+                notificationImportance == that.notificationImportance &&
+                iconId == that.iconId &&
+                outOfStockReminder == that.outOfStockReminder &&
+                amount == that.amount &&
+                outOfStockReminderThreshold == that.outOfStockReminderThreshold &&
+                Objects.equals(refillSizes, that.refillSizes) &&
+                Objects.equals(unit, that.unit);
     }
 
     public enum OutOfStockReminderType {
