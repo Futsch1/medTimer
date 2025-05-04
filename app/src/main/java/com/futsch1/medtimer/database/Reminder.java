@@ -99,7 +99,10 @@ public class Reminder {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Reminder that = (Reminder) o;
+        return membersEqual((Reminder) o);
+    }
+
+    private boolean membersEqual(Reminder that) {
         return reminderId == that.reminderId &&
                 medicineRelId == that.medicineRelId &&
                 timeInMinutes == that.timeInMinutes &&

@@ -94,7 +94,10 @@ public class Medicine {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Medicine that = (Medicine) o;
+        return membersEqual((Medicine) o);
+    }
+
+    private boolean membersEqual(Medicine that) {
         return medicineId == that.medicineId &&
                 Objects.equals(name, that.name) &&
                 useColor == that.useColor &&
