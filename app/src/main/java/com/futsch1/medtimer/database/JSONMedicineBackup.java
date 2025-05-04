@@ -25,7 +25,7 @@ public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
     protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
         return builder
                 .registerTypeAdapter(Medicine.class, new FullDeserialize<Medicine>())
-                .registerTypeAdapter(Tag.class, new FullDeserialize<Tag>())
+                .registerTypeAdapter(Tag.class, new FullDeserialize<>())
                 .registerTypeAdapter(Reminder.class, new FullDeserialize<Reminder>());
     }
 
@@ -38,10 +38,15 @@ public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
         medicineRepository.deleteMedicines();
         medicineRepository.deleteTags();
 
-        for (FullMedicine FullMedicine : listOfFullMedicine) {
-            long medicineId = medicineRepository.insertMedicine(FullMedicine.medicine);
-            processReminders(medicineRepository, FullMedicine, (int) medicineId);
-            processTags(medicineRepository, FullMedicine, (int) medicineId);
+        var sortOrder = 1.0;
+
+        for (FullMedicine fullMedicine : listOfFullMedicine) {
+            if (fullMedicine.medicine.sortOrder == 0.0) {
+                fullMedicine.medicine.sortOrder = sortOrder++;
+            }
+            long medicineId = medicineRepository.insertMedicine(fullMedicine.medicine);
+            processReminders(medicineRepository, fullMedicine, (int) medicineId);
+            processTags(medicineRepository, fullMedicine, (int) medicineId);
         }
     }
 
