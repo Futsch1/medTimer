@@ -66,8 +66,8 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
     public void onMoveCompleted(int fromPosition, int toPosition) {
         if (fromPosition != toPosition) {
             new Handler(thread.getLooper()).post(() -> {
-                        medicineRepository.moveMedicine(fromPosition, toPosition);
                         activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
+                        medicineRepository.moveMedicine(fromPosition, toPosition);
                     }
             );
         }
@@ -77,12 +77,15 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
 
         @Override
         public boolean areItemsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem == newItem;
+            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
+            return oldItem.medicine.medicineId == newItem.medicine.medicineId &&
+                    oldItem.medicine.name.equals(newItem.medicine.name) &&
+                    oldItem.medicine.color == newItem.medicine.color &&
+                    oldItem.medicine.iconId == newItem.medicine.iconId;
         }
     }
 
