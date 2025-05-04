@@ -88,6 +88,11 @@ public abstract class SwipeHelper extends SimpleCallback {
     }
 
     @Override
+    public float getMoveThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+        return 0.8f;
+    }
+
+    @Override
     public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
