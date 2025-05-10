@@ -97,7 +97,11 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
             AutoMigrationSpec.super.onPostMigrate(db);
 
             db.execSQL("""
-                        CREATE TEMP TABLE IF NOT EXISTS temp_table AS SELECT *, ROW_NUMBER() OVER () as rn FROM Medicine;
+                        CREATE TEMP TABLE IF NOT EXISTS temp_table AS
+                             SELECT
+                                 m.*,
+                                 (SELECT COUNT(*) FROM Medicine AS m2 WHERE m2.rowid <= m.rowid) AS rn
+                             FROM Medicine AS m;
                     """);
 
             db.execSQL("""
