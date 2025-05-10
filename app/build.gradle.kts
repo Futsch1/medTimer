@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 117
-        versionName = "1.17.0"
+        versionCode = 118
+        versionName = "1.17.1"
         base.archivesName = "MedTimer"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -81,12 +81,12 @@ dependencies {
     val appcompatVersion = "1.7.0"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.8.9"
+    val androidXNavigationVersion = "2.9.0"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.1"
     val coreKtxVersion = "1.16.0"
-    val lifecycleViewmodelKtxVersion = "2.8.7"
+    val lifecycleViewmodelKtxVersion = "2.9.0"
     val roomVersion = "2.7.1"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
