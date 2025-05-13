@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_settings">Configurações</string>
+    <string name="cancel">Cancelar</string>
+    <string name="tab_overview">Visão Geral</string>
+    <string name="tab_medicine">Medicamento</string>
+    <string name="medicine_name">Nome do medicamento</string>
+    <string name="add_reminder">Adicionar lembrete</string>
+    <string name="time">Horário</string>
+    <string name="dosage">Dosagem</string>
+    <string name="ok">Aceitar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="are_you_sure_delete_medicine">Tem certeza de que deseja excluir o medicamento?</string>
+    <string name="add_medicine">Adicionar medicamento</string>
+    <string name="delete">Excluir</string>
+    <string name="yes">Sim</string>
+</resources>
