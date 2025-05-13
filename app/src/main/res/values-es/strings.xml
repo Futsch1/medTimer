@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -114,8 +115,8 @@
     <string name="edit_event">Editar evento</string>
     <string name="intro_welcome">¡Bienvenido a MedTimer!</string>
     <string name="intro_welcome_description">MedTimer es una aplicación de recordatorio de medicación gratuita y de código abierto centrada en la privacidad.\n\nRequiere permiso para mostrar notificaciones de recordatorios de medicación.</string>
-    <string name="intro_medicine_description">Utilice la pestaña \"Medicación\" para crear el medicamento que está tomando y que desea que se le recuerde. Desliza el dedo hacia la izquierda para eliminar un medicamento.</string>
-    <string name="intro_reminder_description">Seleccione un medicamento para editar sus detalles y crear recordatorios para las distintas dosis del medicamento que debe tomar.\n\nLos recordatorios pueden ser tan sencillos como aparecer una vez al día a una hora determinada o complejos horarios con varios días seguidos y varios días de pausa.</string>
+    <string name="intro_medicine_description">Utilice la pestaña \"Medicación\" para crear el medicamento que está tomando y que desea que se le recuerde. Puedes asignar etiquetas a medicamentos y configurar sus existencias.</string>
+    <string name="intro_reminder_description">Seleccione un medicamento para editar sus detalles y crear recordatorios para las distintas dosis del medicamento que debe tomar.\n\nLos recordatorios pueden ser basados en tiempo o en intervalos además de limitarse a días específicos.</string>
     <string name="intro_notification_description">Una vez llegue la hora del recordatorio, aparecerá una notificación que le dará la opción de marcar la dosis como tomada (haciendo clic en el botón \"TOMADA\"), omitida (descartando la notificación) o de que se le recuerde de nuevo pasado un tiempo (\"POSPONER\").</string>
     <string name="intro_overview_description">En la pantalla de resumen, puede ver los próximos recordatorios y los últimos recordatorios. Se pueden editar los recordatorios deslizando hacia la derecha, y se pueden borrar deslizando hacia la izquierda.\n\nAdemás, puede registrar manualmente dosis adicionales de uno de los medicamentos configurados o de uno personalizado.</string>
     <string name="intro_analysis_description">La aplicación almacena todos los recordatorios. Puedes analizar tus dosis anteriores en la pantalla de análisis y exportar tu historial a través del menú kebab (tres puntos). El historial se conservará aunque se eliminen o cambien de nombre los medicamentos o los recordatorios.</string>
