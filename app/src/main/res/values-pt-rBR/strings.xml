@@ -18,7 +18,7 @@
     <plurals name="sum_reminders">
         <item quantity="one">%1$d remédio\n%2$s</item>
         <item quantity="many">%1$d remédios\n%2$s</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="notification_title">Lembrete de medicamento</string>
     <string name="skipped">Ignorado</string>
@@ -92,7 +92,7 @@
     <plurals name="last_n_days">
         <item quantity="one">Últimas 24 horas</item>
         <item quantity="many">Últimos %1$d dias</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="name">Nome</string>
     <string name="event_data">Dados do evento</string>
@@ -133,19 +133,19 @@
     <plurals name="minutes">
         <item quantity="one">minuto</item>
         <item quantity="many">minutos</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="minutes_string">Minutos</string>
     <plurals name="hours">
         <item quantity="one">hora</item>
         <item quantity="many">horas</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="hours_string">Horas</string>
     <plurals name="days">
         <item quantity="one">dia</item>
         <item quantity="many">dias</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="interval">Intervalo</string>
     <string name="interval_start_processed">O intervalo começa quando é tomado ou pulado</string>
@@ -220,4 +220,6 @@
     <string name="off">Desligado</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Insira a dosagem quando tomada</string>
+    <string name="icon">Ícone</string>
+    <string name="tags">Etiquetas</string>
 </resources>
