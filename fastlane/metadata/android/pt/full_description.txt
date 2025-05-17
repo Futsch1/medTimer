@@ -1,0 +1,36 @@
+Lembretes e histórico de medicamentos com total privacidade offline
+
+Mantenha o controle de seus medicamentos com o MedTimer
+
+O MedTimer é um aplicativo de lembrete de medicamentos de código aberto desenvolvido para ajudar você a gerenciar seus medicamentos e pílulas de forma eficaz e com total controle de seus dados confidenciais.
+
+Lembretes Flexíveis e Personalizados:
+
+- Gerencie medicamentos ilimitados com lembretes personalizáveis por medicamento (incluindo padrões simples
+para lembretes diários).
+- Crie lembretes flexíveis com intervalos e dias específicos (por exemplo, para pílulas anticoncepcionais).
+- Modo Fim de Semana: Adie os lembretes para um horário definido em dias selecionados.
+- Adie as notificações para lembretes posteriores ou seja lembrado repetidamente.
+- Adicione doses extras rapidamente.
+- Crie lembretes baseados em intervalos ou lembretes que se sucedem em intervalos.
+
+Gerenciamento de Dados Simples e Seguro:
+
+- Confirme ou descarte lembretes para registrar a adesão à medicação com precisão.
+- Obtenha uma visão geral das doses anteriores em um gráfico e em uma visualização tabular.
+
+ - Exporte seu histórico de medicamentos como um arquivo CSV para facilitar o registro ou o compartilhamento com profissionais de saúde.
+- Faça backup e restaure sua lista de medicamentos como um arquivo JSON.
+- Rastreamento de estoque de medicamentos e lembretes de falta de estoque.
+- Marque e filtre seus medicamentos.
+
+Privacidade e Acessibilidade Offline:
+
+- Todos os dados são armazenados com segurança em seu dispositivo, garantindo total privacidade e acessibilidade offline.
+- Não requer conexão com a internet – seus lembretes de medicamentos estão sempre disponíveis.
+
+O MedTimer é um aplicativo gratuito sem anúncios.
+
+Veja a página do projeto no GitHub: https://github.com/Futsch1/medTimer
+
+O gráfico de destaque foi criado com https://hotpot.ai
