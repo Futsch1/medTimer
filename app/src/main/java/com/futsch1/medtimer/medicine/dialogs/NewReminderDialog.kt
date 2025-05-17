@@ -147,7 +147,7 @@ class NewReminderDialog(
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             setDefaults(reminder)
             reminder.amount =
-                dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
+                dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
 
             val isTimeBased = dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked
 

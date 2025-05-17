@@ -112,7 +112,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     }
 
     public Reminder getReminder() {
-        reminder.amount = Objects.requireNonNull(editAmount.getText()).toString();
+        reminder.amount = Objects.requireNonNull(editAmount.getText()).toString().trim();
         if (timeEditor != null) {
             int minutes = timeEditor.getMinutes();
             if (minutes >= 0) {
