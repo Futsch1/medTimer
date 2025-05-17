@@ -97,7 +97,8 @@ object MedicineHelper {
         val matcher = numberRegex.matcher(amount)
 
         return if (matcher.find() && matcher.group(0) != null) {
-            matcher.group(0)?.replace(',', '.')?.toDoubleOrNull()
+            val numberFormat = NumberFormat.getNumberInstance()
+            numberFormat.parse(matcher.group(0)!!)?.toDouble()
         } else {
             null
         }
