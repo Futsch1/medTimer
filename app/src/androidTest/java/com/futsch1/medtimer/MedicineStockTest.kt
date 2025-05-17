@@ -18,6 +18,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.helpers.MedicineHelper
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 
@@ -143,5 +144,23 @@ class MedicineStockTest : BaseTestHelper() {
         writeTo(R.id.editAmount, "something")
 
         assertErrorDisplayed(R.id.editAmount, R.string.invalid_amount)
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun bigStockAmounts() {
+        AndroidTestHelper.createMedicine("Test")
+
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "10005")
+        writeTo(R.id.stockUnit, "pills")
+
+        pressBack()
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
+
+        pressBack()
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
     }
 }
