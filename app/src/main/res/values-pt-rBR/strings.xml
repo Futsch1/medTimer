@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="tab_settings">Configurações</string>
     <string name="cancel">Cancelar</string>
     <string name="tab_overview">Visão Geral</string>
@@ -18,7 +18,7 @@
     <plurals name="sum_reminders">
         <item quantity="one">%1$d remédio\n%2$s</item>
         <item quantity="many">%1$d remédios\n%2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="notification_title">Lembrete de medicamento</string>
     <string name="skipped">Ignorado</string>
@@ -90,9 +90,9 @@
     <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <plurals name="last_n_days">
-        <item quantity="one">Últimas 24 horas</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
         <item quantity="many">Últimos %1$d dias</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="name">Nome</string>
     <string name="event_data">Dados do evento</string>
@@ -131,21 +131,21 @@
     <string name="linked_reminder_summary">Após o lembrete em %1$s</string>
     <string name="interval_based_reminder">Lembrete baseado em intervalo</string>
     <plurals name="minutes">
-        <item quantity="one">minuto</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">minuto</item>
         <item quantity="many">minutos</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="minutes_string">Minutos</string>
     <plurals name="hours">
-        <item quantity="one">hora</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
         <item quantity="many">horas</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="hours_string">Horas</string>
     <plurals name="days">
-        <item quantity="one">dia</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
         <item quantity="many">dias</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="interval">Intervalo</string>
     <string name="interval_start_processed">O intervalo começa quando é tomado ou pulado</string>

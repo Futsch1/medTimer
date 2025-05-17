@@ -4,6 +4,7 @@ function start_clean_status_bar {
     # Start demo mode
     adb shell settings put global sysui_demo_allowed 1
 
+    adb shell am broadcast -a com.android.systemui.demo -e command enter
     # Display time 12:00
     adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
     # Display full mobile data without type
@@ -19,8 +20,8 @@ function stop_clean_status_bar {
     adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-locales=('en-US' 'es-ES' 'de-DE' 'fr-FR' 'it-IT' 'zh-CN' 'nl-NL' 'ru-RU' 'tr-TR' 'ta-IN' 'pl-PL')
-#locales=('ta-TA')
+locales=('de-DE' 'en-US' 'es-ES' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SV' 'ta-IN' 'tr-TR' 'uk-UK' 'zh-CN')
+#locales=('en-US')
 tests_apk_path="app/build/outputs/apk/debug/MedTimer-debug.apk"
 app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk"
 
@@ -28,7 +29,7 @@ app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest
 
 for i in "${locales[@]}"
 do
-    start_clean_status_bar
+    #start_clean_status_bar
     if [ "$i" == "en-US" ]
     then
       adb shell settings put system time_12_24 12
@@ -44,7 +45,7 @@ do
         --use_adb_root=true \
         --use_tests_in_classes=com.futsch1.medtimer.ScreenshotsTest
       adb shell pm clear com.futsch1.medtimer
-    stop_clean_status_bar
+    #stop_clean_status_bar
 done
 
 ./copyIntroDrawables.sh
