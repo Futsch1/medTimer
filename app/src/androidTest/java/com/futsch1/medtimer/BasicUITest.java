@@ -26,7 +26,7 @@ public class BasicUITest extends BaseTestHelper {
     @Test
     //@AllowFlaky(attempts = 1)
     public void basicUITest() {
-        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createMedicine(" Test ");
         AndroidTestHelper.createReminder("1", null);
 
         clickOn(R.id.openAdvancedSettings);
@@ -48,11 +48,19 @@ public class BasicUITest extends BaseTestHelper {
         assertContains(R.string.before_meal);
         pressBack();
 
-        writeTo(R.id.editAmount, "2");
+        writeTo(R.id.editAmount, " 2 ");
         pressBack();
 
         clickListItem(R.id.medicineList, 0);
         assertDisplayed(R.id.editAmount, "2");
+        pressBack();
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+        assertContains("Test (2)");
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+        clickListItem(R.id.medicineList, 0);
+        writeTo(R.id.editMedicineName, " Test2 ");
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);

@@ -139,7 +139,7 @@ public class MedicinesFragment extends Fragment {
             if (e != null) {
                 new Handler(thread.getLooper()).post(() -> {
                     double highestSortOrder = medicineViewModel.medicineRepository.getHighestMedicineSortOrder();
-                    Medicine medicine = new Medicine(e.toString());
+                    Medicine medicine = new Medicine(e.toString().trim());
                     medicine.sortOrder = highestSortOrder + 1;
                     int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(medicine);
                     requireActivity().runOnUiThread(() -> navigateToMedicineId(medicineId));

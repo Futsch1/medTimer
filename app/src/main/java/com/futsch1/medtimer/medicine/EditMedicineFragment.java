@@ -211,7 +211,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
 
     @Override
     public void fillEntityData(Medicine entity, @NonNull View fragmentView) {
-        entity.name = ((EditText) fragmentView.findViewById(R.id.editMedicineName)).getText().toString();
+        entity.name = ((EditText) fragmentView.findViewById(R.id.editMedicineName)).getText().toString().trim();
         entity.useColor = enableColor.isChecked();
         entity.color = color;
         entity.notificationImportance = NotificationImportanceKt.importanceIndexToValue(notificationImportance.getSelectedItemPosition());
