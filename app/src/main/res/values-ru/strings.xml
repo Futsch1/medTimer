@@ -178,7 +178,7 @@
         <item quantity="few">дня</item>
         <item quantity="many">дней</item>
     </plurals>
-    <string name="minutes_string">Протоколы</string>
+    <string name="minutes_string">Минуты</string>
     <string name="hours_string">Часы</string>
     <string name="days_string">Дни</string>
     <string name="create_reminder">Создать напоминание</string>
