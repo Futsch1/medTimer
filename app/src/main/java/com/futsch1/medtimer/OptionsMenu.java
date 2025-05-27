@@ -105,8 +105,12 @@ public class OptionsMenu implements MenuProvider {
     private void setupSettings() {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
-            Navigation.findNavController(view).navigate(R.id.action_global_preferencesFragment);
-            return true;
+            try {
+                Navigation.findNavController(view).navigate(R.id.action_global_preferencesFragment);
+                return true;
+            } catch (IllegalStateException e) {
+                return false;
+            }
         });
     }
 
