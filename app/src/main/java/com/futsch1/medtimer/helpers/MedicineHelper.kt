@@ -93,12 +93,12 @@ object MedicineHelper {
     }
 
     fun parseAmount(amount: String): Double? {
-        val numberRegex = Pattern.compile("\\d+(?:[.,]\\d+)?")
+        val numberRegex = Pattern.compile("\\d+(?:[.,\\s]\\d+)?")
         val matcher = numberRegex.matcher(amount)
 
         return if (matcher.find() && matcher.group(0) != null) {
             val numberFormat = NumberFormat.getNumberInstance()
-            numberFormat.parse(matcher.group(0)!!)?.toDouble()
+            numberFormat.parse(matcher.group(0)!!.replace(" ", ""))?.toDouble()
         } else {
             null
         }

@@ -23,6 +23,9 @@ class MedicineHelperTest {
     fun testParse() {
         assertEquals(3.5, MedicineHelper.parseAmount("3.5"))
         assertEquals(5.0, MedicineHelper.parseAmount("5"))
+        assertEquals(50000.0, MedicineHelper.parseAmount("50000"))
+        assertEquals(50000.0, MedicineHelper.parseAmount("50,000"))
+        assertEquals(50000.0, MedicineHelper.parseAmount("50 000"))
         assertEquals(3.566, MedicineHelper.parseAmount("3.566 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills at 5 o'clock"))
@@ -36,6 +39,15 @@ class MedicineHelperTest {
     fun testFormat() {
         assertEquals("3.5", MedicineHelper.formatAmount(3.5, ""))
         assertEquals("5 pills", MedicineHelper.formatAmount(5.0, "pills"))
+    }
+
+    @Test
+    fun testFormatParseRoundTrip() {
+        val amount = 123456.0
+        val unit = "pills"
+        val formatted = MedicineHelper.formatAmount(amount, unit)
+        val parsed = MedicineHelper.parseAmount(formatted)
+        assertEquals(amount, parsed)
     }
 
     @Test
