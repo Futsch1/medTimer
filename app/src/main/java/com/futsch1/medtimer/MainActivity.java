@@ -155,8 +155,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = findNavController(this, R.id.navHost);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        try {
+            NavController navController = findNavController(this, R.id.navHost);
+            return NavigationUI.navigateUp(navController, appBarConfiguration)
+                    || super.onSupportNavigateUp();
+        } catch (IllegalStateException e) {
+            return false;
+        }
     }
 }
