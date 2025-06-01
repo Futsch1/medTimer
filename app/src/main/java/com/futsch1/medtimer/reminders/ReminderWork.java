@@ -162,7 +162,7 @@ public class ReminderWork extends Worker {
     private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
         ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
         if (lastReminderEvent != null) {
-            return lastReminderEvent.lastIntervalReminderTimeInMinutes;
+            return (int) (lastReminderEvent.remindedTimestamp / 60);
         } else {
             return 0;
         }

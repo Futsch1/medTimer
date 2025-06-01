@@ -218,4 +218,5 @@
     <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avfärdas från låsskärmen, endast från aviseringsfönstret</string>
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
+    <string name="interval_time">Intervall %s</string>
 </resources>
