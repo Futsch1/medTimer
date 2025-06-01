@@ -73,6 +73,10 @@ public class MedicineRepository {
         return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
     }
 
+    public ReminderEvent getLastReminderEvent(int reminderId) {
+        return medicineDao.getLastReminderEvent(reminderId);
+    }
+
     public long insertMedicine(Medicine medicine) {
         return internalInsert(medicine, medicineDao::insertMedicine);
     }

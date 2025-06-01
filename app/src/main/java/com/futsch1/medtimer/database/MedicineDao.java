@@ -129,4 +129,7 @@ public interface MedicineDao {
 
     @Query("SELECT MAX(sortOrder) FROM Medicine")
     double getHighestMedicineSortOrder();
+
+    @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC LIMIT 1")
+    ReminderEvent getLastReminderEvent(int reminderId);
 }
