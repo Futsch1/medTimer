@@ -30,13 +30,14 @@ public class CSVExport extends Exporter {
             csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {
-                String line = String.format("%s;%s;%s;%s;%s;%s;%s\n",
+                String line = String.format("%s;%s;%s;%s;%s;%s;%s;%s\n",
                         TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
                                 TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "",
                         String.join(", ", reminderEvent.tags),
+                        TimeHelper.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
                         TimeHelper.toISO8601DatetimeString(reminderEvent.remindedTimestamp),
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
                                 TimeHelper.toISO8601DatetimeString(reminderEvent.processedTimestamp) : ""
