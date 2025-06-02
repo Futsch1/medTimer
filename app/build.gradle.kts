@@ -103,7 +103,7 @@ dependencies {
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
 
-    val junitVersion = "5.12.2"
+    val junitVersion = "5.13.0"
     val mockitoCoreVersion = "5.18.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.14.1"
