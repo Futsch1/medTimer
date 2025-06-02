@@ -263,6 +263,22 @@ public class ReminderTest extends BaseTestHelper {
         assertEquals(TimeHelper.toLocalizedDatetimeString(context, newReminded), view.getText());
         view = tableView.get().getCellRecyclerView().findViewWithTag("taken");
         assertEquals(TimeHelper.toLocalizedDatetimeString(context, newTaken), view.getText());
+    }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void intervalReminderTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createIntervalReminder("1", 1);
+        pressBack();
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+
+        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
+        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
+
+        assertContains(context.getString(R.string.interval_time, "1 min"));
     }
 }
