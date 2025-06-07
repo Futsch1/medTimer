@@ -44,13 +44,13 @@ public class NextRemindersViewAdapter extends IdlingListAdapter<ScheduledReminde
 
         @Override
         public boolean areItemsTheSame(@NonNull ScheduledReminder oldItem, @NonNull ScheduledReminder newItem) {
-            return oldItem.reminder().reminderId == newItem.reminder().reminderId && oldItem.timestamp().equals(newItem.timestamp());
+            return oldItem.reminder().reminderId == newItem.reminder().reminderId;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ScheduledReminder oldItem, @NonNull ScheduledReminder newItem) {
-            return oldItem.reminder().reminderId == newItem.reminder().reminderId && oldItem.timestamp().equals(newItem.timestamp()) &&
-                    oldItem.reminder().amount.equals(newItem.reminder().amount) && oldItem.medicine().medicine.iconId == newItem.medicine().medicine.iconId;
+            return oldItem.reminder().equals(newItem.reminder()) && oldItem.timestamp().equals(newItem.timestamp()) &&
+                    oldItem.medicine().equals(newItem.medicine());
         }
     }
 }
