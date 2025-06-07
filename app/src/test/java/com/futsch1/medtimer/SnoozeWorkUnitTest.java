@@ -29,20 +29,13 @@ import com.futsch1.medtimer.reminders.SnoozeWork;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
-
-@ExtendWith(RobolectricExtension.class)
-@Config(sdk = 34)
-@SuppressWarnings("java:S5786") // Required for Robolectric extension
-public class SnoozeWorkUnitTest {
+class SnoozeWorkUnitTest {
 
     @Mock
     private Application mockApplication;
@@ -51,7 +44,7 @@ public class SnoozeWorkUnitTest {
     private SharedPreferences mockSharedPreferences;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
 
         mockApplication = mock(Application.class);
         when(mockApplication.getPackageName()).thenReturn("test");
@@ -67,7 +60,7 @@ public class SnoozeWorkUnitTest {
     }
 
     @Test
-    public void testDoWorkSnooze() {
+    void testDoWorkSnooze() {
         ReminderEvent reminderEvent = new ReminderEvent();
         int notificationId = 14;
         reminderEvent.notificationId = notificationId;
