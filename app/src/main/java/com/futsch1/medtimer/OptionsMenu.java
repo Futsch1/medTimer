@@ -200,7 +200,11 @@ public class OptionsMenu implements MenuProvider {
         if (!hideFilter) {
             new Handler(backgroundThread.getLooper()).post(() -> {
                 if (medicineViewModel.medicineRepository.hasTags()) {
-                    fragment.requireActivity().runOnUiThread(this::setupTagFilter);
+                    try {
+                        fragment.requireActivity().runOnUiThread(this::setupTagFilter);
+                    } catch (IllegalStateException e) {
+                        // Intentionally empty, do nothing
+                    }
                 } else {
                     medicineViewModel.getValidTagIds().postValue(new HashSet<>());
                 }
