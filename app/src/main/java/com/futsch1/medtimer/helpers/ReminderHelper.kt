@@ -86,26 +86,28 @@ private fun getAmountString(scheduledReminder: ScheduledReminder): String =
     if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""
 
 
-private fun getLastIntervalTime(context: Context, reminderEvent: ReminderEvent): String = if (reminderEvent.lastIntervalReminderTimeInMinutes > 0) {
-    " (" + context.getString(
-        R.string.interval_time, formatDuration(
-            reminderEvent.remindedTimestamp * 1000L - reminderEvent.lastIntervalReminderTimeInMinutes * 60_000L
-        ).toString()
-    ) + ")"
-} else {
-    ""
-}
+private fun getLastIntervalTime(context: Context, reminderEvent: ReminderEvent): String =
+    if (reminderEvent.lastIntervalReminderTimeInMinutes > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && calcLastIntervalTime(reminderEvent) >= 0) {
+        " (" + context.getString(
+            R.string.interval_time, formatDuration(
+                calcLastIntervalTime(reminderEvent)
+            ).toString()
+        ) + ")"
+    } else {
+        ""
+    }
+
+private fun calcLastIntervalTime(reminderEvent: ReminderEvent): Long =
+    reminderEvent.processedTimestamp * 1000L - reminderEvent.lastIntervalReminderTimeInMinutes * 60_000L
 
 private fun formatDuration(durationMillis: Long): String? {
     val totalSeconds = durationMillis / 1000
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
-    val seconds = totalSeconds % 60
 
     val measures: MutableList<Measure?> = ArrayList<Measure?>()
     if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
-    if (minutes > 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
-    if (seconds > 0 && hours == 0L) measures.add(Measure(seconds, MeasureUnit.SECOND)) // skip seconds if showing hours
+    if (minutes >= 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
 
     val formatter = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
     return formatter.formatMeasures(*measures.toTypedArray<Measure?>())

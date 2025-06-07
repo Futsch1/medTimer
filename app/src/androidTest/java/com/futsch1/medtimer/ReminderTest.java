@@ -7,6 +7,7 @@ import static com.adevinta.android.barista.assertion.BaristaHintAssertions.asser
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
@@ -15,6 +16,7 @@ import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractio
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
+import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
@@ -271,14 +273,17 @@ public class ReminderTest extends BaseTestHelper {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         AndroidTestHelper.createMedicine("Test");
-        AndroidTestHelper.createIntervalReminder("1", 1);
+        AndroidTestHelper.createIntervalReminder("1", 10);
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
-        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
+        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken);
+        assertNotContains(context.getString(R.string.interval_time, "0 min"));
+
         clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
 
-        assertContains(context.getString(R.string.interval_time, "1 min"));
+        sleep(1000);
+        assertContains(context.getString(R.string.interval_time, "0 min"));
     }
 }
