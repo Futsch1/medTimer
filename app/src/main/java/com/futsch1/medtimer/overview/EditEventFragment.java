@@ -3,6 +3,7 @@ package com.futsch1.medtimer.overview;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -50,11 +51,11 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
 
         editEventTakenTimestamp = fragmentView.findViewById(R.id.editEventTakenTimestamp);
         editEventTakenDate = fragmentView.findViewById(R.id.editEventTakenDate);
+        configureTakenText(fragmentView, entity);
         if (entity.status != ReminderEvent.ReminderStatus.RAISED) {
             setupEditTime(entity.processedTimestamp, editEventTakenTimestamp);
             setupEditDate(entity.processedTimestamp, editEventTakenDate);
         } else {
-            fragmentView.findViewById(R.id.takenText).setVisibility(View.GONE);
             editEventTakenTimestamp.setVisibility(View.GONE);
             editEventTakenDate.setVisibility(View.GONE);
         }
@@ -73,6 +74,17 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
                 timestamp));
         editText.setOnFocusChangeListener((v, hasFocus) -> onFocusEditDate(hasFocus, editText));
         editText.setVisibility(EditEventFragmentArgs.fromBundle(requireArguments()).getEventCanEditDate() ? View.VISIBLE : View.GONE);
+    }
+
+    private void configureTakenText(View fragmentView, ReminderEvent entity) {
+        TextView takenText = fragmentView.findViewById(R.id.takenText);
+        if (entity.status == ReminderEvent.ReminderStatus.TAKEN) {
+            takenText.setText(R.string.taken);
+        } else if (entity.status == ReminderEvent.ReminderStatus.SKIPPED) {
+            takenText.setText(R.string.skipped);
+        } else {
+            takenText.setVisibility(View.GONE);
+        }
     }
 
     private void onFocusEditTime(boolean hasFocus, EditText editText) {
