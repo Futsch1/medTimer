@@ -228,4 +228,5 @@
     <string name="big_notifications">Великі кнопки сповіщень</string>
     <string name="please_wait">Будь ласка, зачекайте…</string>
     <string name="interval_time">Інтервал %s</string>
+    <string name="reminded">Нагадано</string>
 </resources>

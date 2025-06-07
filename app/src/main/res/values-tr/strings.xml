@@ -218,4 +218,5 @@
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
     <string name="please_wait">Lütfen bekleyin…</string>
     <string name="interval_time">Aralık %s</string>
+    <string name="reminded">Hatırlatıldı</string>
 </resources>

@@ -213,4 +213,5 @@
     <string name="big_notifications">大通知按钮</string>
     <string name="please_wait">请稍候…</string>
     <string name="interval_time">间隔 %s</string>
+    <string name="reminded">已提醒</string>
 </resources>

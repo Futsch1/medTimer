@@ -239,4 +239,5 @@
     <string name="invalid_amount">يجب أن تحتوي الكمية على رقم لتمكين تتبع مخزون الدواء لهذا التذكير.</string>
     <string name="time_reminder_type_hint">يذكر في وقت محدد من اليوم.</string>
     <string name="interval_time">فاصل %s</string>
+    <string name="reminded">ذكر</string>
 </resources>

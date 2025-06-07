@@ -26,7 +26,7 @@ public class CSVExport extends Exporter {
     @SuppressWarnings({"java:S6300", "java:S3457"}) // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
     public void exportInternal(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
-            List<String> headerTexts = TableHelper.getTableHeaders(context, true);
+            List<String> headerTexts = TableHelper.getTableHeadersForExport(context);
             csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {

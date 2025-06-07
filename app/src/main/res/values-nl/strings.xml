@@ -218,4 +218,5 @@
     <string name="big_notifications">Grote meldingsknoppen</string>
     <string name="please_wait">Even geduld…</string>
     <string name="interval_time">Interval %s</string>
+    <string name="reminded">Herinnerd</string>
 </resources>

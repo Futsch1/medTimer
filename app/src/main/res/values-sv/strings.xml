@@ -219,4 +219,5 @@
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
     <string name="interval_time">Intervall %s</string>
+    <string name="reminded">Påmind</string>
 </resources>

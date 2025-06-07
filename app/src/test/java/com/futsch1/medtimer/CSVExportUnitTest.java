@@ -59,7 +59,7 @@ class CSVExportUnitTest {
 
         // Create a mock Context
         Context context = mock(Context.class);
-        when(context.getString(R.string.time)).thenReturn("Time");
+        when(context.getString(R.string.reminded)).thenReturn("Reminded");
         when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
@@ -90,7 +90,7 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken;Tags;Interval;Time (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Time (ISO 8601);Taken (ISO 8601)\n");
                 verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2:14;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
                 verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;0:00;2021-05-03T00:30:00Z;\n");
             } catch (Exporter.ExporterException | IOException e) {
@@ -108,7 +108,7 @@ class CSVExportUnitTest {
 
         // Create a mock Context
         Context context = mock(Context.class);
-        when(context.getString(R.string.time)).thenReturn("Time");
+        when(context.getString(R.string.reminded)).thenReturn("Reminded");
         when(context.getString(R.string.name)).thenReturn("Name");
         when(context.getString(R.string.dosage)).thenReturn("Amount");
         when(context.getString(R.string.taken)).thenReturn("Taken");
@@ -130,7 +130,7 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Time;Name;Amount;Taken;Tags;Interval;Time (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Time (ISO 8601);Taken (ISO 8601)\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }

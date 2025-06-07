@@ -218,4 +218,5 @@
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
     <string name="please_wait">Bitte warten…</string>
     <string name="interval_time">Intervall %s</string>
+    <string name="reminded">Erinnert</string>
 </resources>
