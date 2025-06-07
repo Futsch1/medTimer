@@ -201,8 +201,8 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         threadHandler.post(() -> {
             Reminder reminder = this.getMedicineViewModel().medicineRepository.getReminder((int) itemId);
             if (reminder != null) {
-                new LinkedReminderHandling(reminder, this.getMedicineViewModel()).deleteReminder(requireContext(), getThread(), () -> {
-                    adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+                new LinkedReminderHandling(reminder, this.getMedicineViewModel()).deleteReminder(requireContext(), getThread(), () -> Unit.INSTANCE, () -> {
+                    adapter.notifyItemChanged(adapterPosition);
                     return Unit.INSTANCE;
                 });
             }

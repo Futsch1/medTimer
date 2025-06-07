@@ -1,4 +1,4 @@
-name: Test
+name: MonkeyTest
 
 on:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run Android tests
+      - name: Run Android monkey test
         uses: reactivecircus/android-emulator-runner@1dcd0090116d15e7c562f8db72807de5e036a4ed # v2.34.0
         with:
           api-level: ${{ env.target_api_level }}
@@ -68,28 +68,6 @@ jobs:
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
-            EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+            adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
+            adb shell monkey -p com.futsch1.medtimer -v 10000 --throttle 20
           cores: 4
-
-      - name: Run fuzzing tests
-        run: ./gradlew testDebug -Dfuzzing=true
-      - name: Android lint
-        run: ./gradlew lint
-
-      - name: SonarQube
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ env.SONAR_TOKEN != '' }}
-        run: ./gradlew sonar
-
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: always()
-        with:
-          name: TestReports
-          path: |
-            app/build/reports/jacoco/JacocoDebugCodeCoverage/html
-            app/build/reports/tests/testDebugUnitTest
-            app/build/reports/androidTest/connected/debug
-            app/build/reports/lint-results-debug.html
-            app/build/outputs/androidTest-results

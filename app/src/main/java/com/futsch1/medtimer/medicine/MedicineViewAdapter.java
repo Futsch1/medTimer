@@ -65,10 +65,7 @@ public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, Medicin
     @Override
     public void onMoveCompleted(int fromPosition, int toPosition) {
         if (fromPosition != toPosition) {
-            new Handler(thread.getLooper()).post(() -> {
-                        activity.runOnUiThread(() -> notifyItemMoved(fromPosition, toPosition));
-                        medicineRepository.moveMedicine(fromPosition, toPosition);
-                    }
+            new Handler(thread.getLooper()).post(() -> medicineRepository.moveMedicine(fromPosition, toPosition)
             );
         }
     }

@@ -7,7 +7,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -144,11 +143,9 @@ public class OverviewFragment extends Fragment {
                 if (reminderEvent != null) {
                     reminderEvent.status = ReminderEvent.ReminderStatus.DELETED;
                     medicineViewModel.medicineRepository.updateReminderEvent(reminderEvent);
-                    final Handler mainHandler = new Handler(Looper.getMainLooper());
-                    mainHandler.post(() -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
                 }
             });
-        }, () -> adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1));
+        }, () -> adapter.notifyItemChanged(adapterPosition));
     }
 
     private void updateFilter() {

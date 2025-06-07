@@ -9,15 +9,10 @@ import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
-import org.robolectric.annotation.Config
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 
-@ExtendWith(RobolectricExtension::class)
-@Config(sdk = [34])
 class MedicineHelperTest {
     @Test
     fun testParse() {

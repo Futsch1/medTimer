@@ -49,17 +49,17 @@ class LinkedReminderHandling(
         }
     }
 
-    fun deleteReminder(context: Context, thread: HandlerThread, postMainAction: () -> Unit) {
+    fun deleteReminder(context: Context, thread: HandlerThread, postYesAction: () -> Unit, postNoAction: () -> Unit) {
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
             IdlingRegistry.getInstance().registerLooperAsIdlingResource(thread.looper)
             val threadHandler = Handler(thread.looper)
             threadHandler.post {
                 internalDelete(reminder)
-                Handler(Looper.getMainLooper()).post(postMainAction)
+                Handler(Looper.getMainLooper()).post(postYesAction)
                 IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
             }
-        }, { Handler(Looper.getMainLooper()).post(postMainAction) })
+        }, { Handler(Looper.getMainLooper()).post(postNoAction) })
     }
 
     private fun internalDelete(

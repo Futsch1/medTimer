@@ -36,6 +36,10 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
                 recyclerView.scrollToPosition(0)
             }
+
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                recyclerView.scrollToPosition(0)
+            }
         })
 
         medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner) { scheduledReminders: List<ScheduledReminder>? ->

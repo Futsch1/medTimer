@@ -25,8 +25,8 @@ class AdvancedReminderSettingsMenuProvider(
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
             LinkedReminderHandling(reminder, medicineViewModel).deleteReminder(
                 advancedReminderView.context,
-                thread
-            ) { findNavController(advancedReminderView).navigateUp() }
+                thread, { findNavController(advancedReminderView).navigateUp() }, { }
+            )
             true
         }
     }

@@ -64,7 +64,7 @@ public class BasicUITest extends BaseTestHelper {
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertContains("Test (2)");
+        assertContains("Test2 (2)");
     }
 
     @Test
