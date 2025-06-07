@@ -5,8 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    //noinspection GradleDependency: Version 6 crashes with an error in apache.commons.compress
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "6.2.0.5505"
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
@@ -103,7 +102,7 @@ dependencies {
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
 
-    val junitVersion = "5.13.0"
+    val junitVersion = "5.13.1"
     val mockitoCoreVersion = "5.18.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.14.1"
