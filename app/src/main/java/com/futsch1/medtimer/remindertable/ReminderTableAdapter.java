@@ -118,13 +118,12 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, "time"));
+            cell.add(new ReminderTableCellModel(reminderEvent.status,
+                    getStatusString(reminderEvent),
+                    reminderEvent.reminderEventId, "taken"));
             cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderEventId, "medicineName"));
             cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderEventId, null));
-            cell.add(new ReminderTableCellModel(reminderEvent.status,
-                    reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                            TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.processedTimestamp) : " ",
-                    reminderEvent.reminderEventId, "taken"));
+            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, "time"));
             cells.add(cell);
             rows.add(new ReminderTableCellModel(reminderEvent.reminderEventId, Integer.toString(reminderEvent.reminderEventId), reminderEvent.reminderEventId, null));
         }
@@ -132,5 +131,14 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
         setCellItems(cells);
         // This is not used in the table, but required for the filter to work
         setRowHeaderItems(rows);
+    }
+
+    @NonNull
+    private String getStatusString(ReminderEvent reminderEvent) {
+        return switch (reminderEvent.status) {
+            case TAKEN -> TimeHelper.toLocalizedDatetimeString(tableView.getContext(), reminderEvent.processedTimestamp);
+            case RAISED -> " ";
+            default -> "-";
+        };
     }
 }

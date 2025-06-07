@@ -224,4 +224,5 @@
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="please_wait">Por favor, espere…</string>
     <string name="interval_time">Intervalo %s</string>
+    <string name="reminded">Recordado</string>
 </resources>

@@ -226,4 +226,5 @@
     <string name="big_notifications">Большие кнопки уведомлений</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="interval_time">Интервал %s</string>
+    <string name="reminded">Напомнили</string>
 </resources>

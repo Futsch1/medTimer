@@ -222,4 +222,5 @@
     <string name="big_notifications">Big notification buttons</string>
     <string name="please_wait">Please wait…</string>
     <string name="interval_time">Interval %s</string>
+    <string name="reminded">Reminded</string>
 </resources>

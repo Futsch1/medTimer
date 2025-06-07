@@ -229,4 +229,5 @@
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="interval_time">Interwał %s</string>
+    <string name="reminded">Przypomniano</string>
 </resources>

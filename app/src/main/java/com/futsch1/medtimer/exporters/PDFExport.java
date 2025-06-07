@@ -82,7 +82,10 @@ public class PDFExport extends Exporter {
         TextProperties headerProperties = getHeaderProperties();
         LinkedList<Cell> header = new LinkedList<>();
         int colIndex = 0;
-        for (String headerText : TableHelper.getTableHeaders(context, false)) {
+        for (String headerText : TableHelper.getTableHeadersForExport(context)) {
+            if (colIndex >= columnWidths.length) {
+                break;
+            }
             header.add(new TextCell(headerText, headerProperties, columnWidths[colIndex++]));
         }
         return header;
