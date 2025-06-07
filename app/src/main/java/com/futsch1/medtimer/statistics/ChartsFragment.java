@@ -79,14 +79,18 @@ public class ChartsFragment extends Fragment {
         StatisticsProvider statisticsProvider;
         statisticsProvider = new StatisticsProvider(medicineRepository);
 
-        List<SimpleXYSeries> series = statisticsProvider.getLastDaysReminders(days);
-        requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
+        try {
+            List<SimpleXYSeries> series = statisticsProvider.getLastDaysReminders(days);
+            requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
 
-        StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
-        requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
+            StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
+            requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
 
-        StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
-        requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
+            StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
+            requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
+        } catch (IllegalStateException e) {
+            // Intentionally empty - just don't do anything
+        }
     }
 
     @Override
