@@ -212,4 +212,5 @@
     <string name="sticky_on_lockscreen_summary">不能从锁屏解除提醒，只能从通知抽屉解除提醒</string>
     <string name="big_notifications">大通知按钮</string>
     <string name="please_wait">请稍候…</string>
+    <string name="interval_time">间隔 %s</string>
 </resources>

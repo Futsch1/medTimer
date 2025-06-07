@@ -68,7 +68,7 @@ public class NextRemindersViewHolder extends RecyclerView.ViewHolder {
         Handler handler = new Handler(looper);
         handler.post(() -> {
             ReminderEvent reminderEvent = ReminderWork.buildReminderEvent(scheduledReminder.timestamp().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                    scheduledReminder.medicine(), scheduledReminder.reminder());
+                    scheduledReminder.medicine(), scheduledReminder.reminder(), medicineViewModel.medicineRepository);
             if (reminderEvent != null) {
                 long reminderEventId = medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent);
                 itemView.getContext().sendBroadcast(taken ?

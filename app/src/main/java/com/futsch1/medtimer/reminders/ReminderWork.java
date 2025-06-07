@@ -89,7 +89,7 @@ public class ReminderWork extends Worker {
     }
 
     private ReminderEvent buildAndInsertReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder) {
-        ReminderEvent reminderEvent = buildReminderEvent(remindedDateTime, medicine, reminder);
+        ReminderEvent reminderEvent = buildReminderEvent(remindedDateTime, medicine, reminder, medicineRepository);
         if (reminderEvent != null) {
             reminderEvent.remainingRepeats = getNumberOfRepeats();
             reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
@@ -109,7 +109,7 @@ public class ReminderWork extends Worker {
         Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
     }
 
-    public static ReminderEvent buildReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder) {
+    public static ReminderEvent buildReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder, MedicineRepository medicineRepository) {
         if (medicine != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
@@ -122,6 +122,11 @@ public class ReminderWork extends Worker {
             reminderEvent.iconId = medicine.medicine.iconId;
             reminderEvent.askForAmount = reminder.variableAmount;
             reminderEvent.tags = medicine.tags.stream().map(t -> t.name).collect((Collectors.toList()));
+            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+                reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(medicineRepository, reminderEvent);
+            } else {
+                reminderEvent.lastIntervalReminderTimeInMinutes = 0;
+            }
 
             return reminderEvent;
         } else {
@@ -152,6 +157,15 @@ public class ReminderWork extends Worker {
     private int getRepeatTimeSeconds() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
+    }
+
+    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
+        ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
+        if (lastReminderEvent != null) {
+            return (int) (lastReminderEvent.remindedTimestamp / 60);
+        } else {
+            return 0;
+        }
     }
 
     private boolean canShowNotifications() {

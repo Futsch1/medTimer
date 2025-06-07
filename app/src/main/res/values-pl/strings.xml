@@ -228,4 +228,5 @@
     <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
+    <string name="interval_time">Interwał %s</string>
 </resources>

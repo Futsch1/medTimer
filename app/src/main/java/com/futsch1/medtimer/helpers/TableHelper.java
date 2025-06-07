@@ -19,11 +19,12 @@ public class TableHelper {
                 context.getString(R.string.dosage),
                 context.getString(R.string.taken),
                 context.getString(R.string.tags),
+                context.getString(R.string.interval),
                 context.getString(R.string.time) + " (ISO 8601)",
                 context.getString(R.string.taken) + " (ISO 8601)"};
         List<String> names = Arrays.asList(headerTexts);
         if (!forCSV) {
-            return names.subList(0, names.size() - 3);
+            return names.subList(0, names.size() - 4);
         } else {
             return names;
         }
