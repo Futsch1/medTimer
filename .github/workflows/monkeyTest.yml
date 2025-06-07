@@ -1,4 +1,4 @@
-name: Test
+name: MonkeyTest
 
 on:
   workflow_dispatch:
