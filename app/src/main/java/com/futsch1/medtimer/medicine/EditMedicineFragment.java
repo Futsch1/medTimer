@@ -202,7 +202,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
             Reminder reminder = this.getMedicineViewModel().medicineRepository.getReminder((int) itemId);
             if (reminder != null) {
                 new LinkedReminderHandling(reminder, this.getMedicineViewModel()).deleteReminder(requireContext(), getThread(), () -> {
-                    adapter.notifyItemRangeChanged(adapterPosition, adapterPosition + 1);
+                    adapter.notifyItemChanged(adapterPosition);
                     return Unit.INSTANCE;
                 });
             }
