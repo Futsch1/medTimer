@@ -7,35 +7,35 @@ import deepl
 
 
 def get_language_from_directory(directory_name: str) -> str:
-    return os.path.split(directory_name)[-1].replace('values-', '')
+    return os.path.split(directory_name)[-1].replace("values-", "")
 
 
 def map_language(l: str) -> str:
-    return l if l != 'zh-rCN' else 'zh-hans'
+    return l if l != "zh-rCN" else "zh-hans"
 
 
 def escape(str_xml: str):
     str_xml = str_xml.replace("&", "&amp;")
     str_xml = str_xml.replace("<", "&lt;")
     str_xml = str_xml.replace(">", "&gt;")
-    str_xml = str_xml.replace("\"", "&quot;")
+    str_xml = str_xml.replace('"', "&quot;")
     str_xml = str_xml.replace("'", "&apos;")
     return str_xml
 
 
 # Open English strings.xml file
-tree = ET.parse('app/src/main/res/values/strings.xml')
+tree = ET.parse("app/src/main/res/values/strings.xml")
 resources = tree.getroot()
-strings = resources.findall('string')
+strings = resources.findall("string")
 english_strings = {}
 translated_strings = {}
 language_tree = {}
 translate_list = []
 
 for string_name in strings:
-    if string_name.attrib.get('translatable') == 'false':
+    if string_name.attrib.get("translatable") == "false":
         continue
-    english_strings[string_name.attrib['name']] = string_name.text
+    english_strings[string_name.attrib["name"]] = string_name.text
 
 if len(sys.argv) > 2:
     translate_args = sys.argv[2:]
@@ -43,22 +43,27 @@ else:
     translate_args = []
 
 # Search for strings in other languages and build the list of strings to be translated
-for directory in glob.glob('app/src/main/res/*'):
-    if directory == 'app/src/main/res/values' or not os.path.exists(directory + '/strings.xml'):
+for directory in glob.glob("app/src/main/res/*"):
+    if directory == "app/src/main/res/values" or not os.path.exists(
+        directory + "/strings.xml"
+    ):
         continue
 
     language = get_language_from_directory(directory)
-    if language == 'ta':
+    if language == "ta":
         continue
 
-    language_tree[language] = ET.parse(directory + '/strings.xml')
+    language_tree[language] = ET.parse(directory + "/strings.xml")
     resources = language_tree[language].getroot()
     language_strings = []
-    for string_name in resources.findall('string'):
-        language_strings.append(string_name.attrib['name'])
+    for string_name in resources.findall("string"):
+        language_strings.append(string_name.attrib["name"])
     for english_string_name in english_strings.keys():
-        if english_string_name not in language_strings or not language_strings[
-            language_strings.index(english_string_name)] or english_string_name in translate_args:
+        if (
+            english_string_name not in language_strings
+            or not language_strings[language_strings.index(english_string_name)]
+            or english_string_name in translate_args
+        ):
             translate_list.append((english_string_name, language))
 auth_key = sys.argv[1]
 
@@ -67,11 +72,19 @@ new_elements = {}
 translator = deepl.Translator(auth_key)
 
 for string_name, language in translate_list:
-    print('Translating ' + string_name + ' to ' + language)
-    translated_string = translator.translate_text(english_strings[string_name], target_lang=map_language(language), preserve_formatting=True)
-    new_elements[language] = language_tree[language].find('string[@name="' + string_name + '"]')
+    print("Translating " + string_name + " to " + language)
+    translated_string = translator.translate_text(
+        english_strings[string_name],
+        target_lang=map_language(language),
+        preserve_formatting=True,
+    )
+    new_elements[language] = language_tree[language].find(
+        'string[@name="' + string_name + '"]'
+    )
     if new_elements[language] is None:
-        new_elements[language] = ET.SubElement(language_tree[language].getroot(), 'string', name=string_name)
+        new_elements[language] = ET.SubElement(
+            language_tree[language].getroot(), "string", name=string_name
+        )
     new_elements[language].text = escape(translated_string.text)
 
 # Collect all languages where a translation string was found
@@ -79,10 +92,10 @@ languages = set([tl[1] for tl in translate_list])
 
 # Update the existing strings.xml files
 for language in languages:
-    with open(f'app/src/main/res/values-{language}/strings.xml', 'r') as f:
+    with open(f"app/src/main/res/values-{language}/strings.xml", "r") as f:
         line = f.readlines()[3]
-        indentation = ' ' * (len(line) - len(line.lstrip()))
+        indentation = " " * (len(line) - len(line.lstrip()))
 
-    with open(f'app/src/main/res/values-{language}/strings.xml', 'wb') as f:
+    with open(f"app/src/main/res/values-{language}/strings.xml", "wb") as f:
         ET.indent(language_tree[language], indentation)
-        language_tree[language].write(f, encoding='utf-8')
+        language_tree[language].write(f, encoding="utf-8")

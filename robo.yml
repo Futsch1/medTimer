@@ -5,5 +5,5 @@ medium-phone-arm:
   device:
     - model: MediumPhone.arm
       version: 34
-      locale: 'en'
+      locale: "en"
       orientation: portrait

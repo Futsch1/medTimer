@@ -21,5 +21,4 @@ platform(:android) do
     gradle(task: "assembleDebug assembleAndroidTest")
     capture_android_screenshots
   end
-
 end

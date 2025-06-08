@@ -130,7 +130,7 @@ feature can be enabled via the settings menu via `Repeat reminders`.
 
 If you have a medicine that requires a dose to be taken at a specific time after the previous
 dose, you can create a reminder to notify at a specific time after the previous dose was marked
-taken or skipped. This can be done in the `Advanced settings` of the medicine. Use the button `Add 
+taken or skipped. This can be done in the `Advanced settings` of the medicine. Use the button `Add
 reminder for following dose` to add a reminder for the following dose. Set the dosage and the delay.
 
 Following doses can overlap into the next day, but are constrained to a maximum delay of 24 hours.
