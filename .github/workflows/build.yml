@@ -3,6 +3,8 @@ name: Build
 on:
   workflow_dispatch:
   push:
+  pull_request:
+    branches: [ "main" ]
 
 env:
   APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
