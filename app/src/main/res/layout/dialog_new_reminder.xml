@@ -1,105 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editAmountLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:hint="@string/dosage">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editAmount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp" />
-
-    <RadioGroup
-        android:id="@+id/reminderType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checkedButton="@id/timeBased">
-
-        <RadioButton
-            android:id="@+id/timeBased"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/time_based_reminder" />
-
-        <RadioButton
-            android:id="@+id/intervalBased"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/interval_based_reminder" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/reminderTypeHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:drawablePadding="5dp"
-        android:text="@string/time_reminder_type_hint"
-        app:drawableStartCompat="@drawable/info_circle" />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editReminderTimeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:hint="@string/time">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editReminderTime"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="time" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <include layout="@layout/include_interval_settings" />
+    android:orientation="vertical">
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <Button
-            android:id="@+id/cancelCreateReminder"
-            style="?android:attr/buttonBarButtonStyle"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editAmountLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="2"
-            android:text="@string/cancel" />
+            android:layout_margin="4dp"
+            android:hint="@string/dosage">
 
-        <Button
-            android:id="@+id/createReminder"
-            style="?android:attr/buttonBarButtonStyle"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editAmount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:text="@string/create_reminder" />
+            android:layout_marginVertical="4dp" />
+
+        <RadioGroup
+            android:id="@+id/reminderType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/timeBased">
+
+            <RadioButton
+                android:id="@+id/timeBased"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/time_based_reminder" />
+
+            <RadioButton
+                android:id="@+id/intervalBased"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_based_reminder" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/reminderTypeHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:drawablePadding="5dp"
+            android:text="@string/time_reminder_type_hint"
+            app:drawableStartCompat="@drawable/info_circle" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editReminderTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/time">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editReminderTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="time" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <include layout="@layout/include_interval_settings" />
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancelCreateReminder"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/createReminder"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/create_reminder" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
