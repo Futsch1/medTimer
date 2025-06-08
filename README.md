@@ -33,7 +33,7 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
 <p float="left">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="150" />
   &nbsp;
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" /> 
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" />
   &nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="150" />
   &nbsp;
