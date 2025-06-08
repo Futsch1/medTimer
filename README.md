@@ -1,6 +1,6 @@
 [![Build](https://github.com/Futsch1/medTimer/actions/workflows/build.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/build.yml)
 [![Unit test](https://github.com/Futsch1/medTimer/actions/workflows/test.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/test.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7239138d83361232bba9/maintainability)](https://codeclimate.com/github/Futsch1/medTimer/maintainability)
+[![Maintainability](https://qlty.sh/badges/f4b5a014-c24a-47d9-9ca8-89b806c98943/maintainability.svg)](https://qlty.sh/gh/Futsch1/projects/medTimer)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Futsch1/medTimer/badge)](https://scorecard.dev/viewer/?uri=github.com/Futsch1/medTimer)

@@ -79,6 +79,11 @@ jobs:
       - name: Android lint
         run: ./gradlew lint
 
+      - uses: qltysh/qlty-action/coverage@v1
+        with:
+          token: {{secrets.QLTY_COVERAGE_TOKEN}}
+          files: build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
+
       - name: SonarQube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
