@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-    branches: ["main"]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           java-version: "17"
-          distribution: "temurin"
+          distribution: temurin
           cache: gradle
       - uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4.4.0
 
