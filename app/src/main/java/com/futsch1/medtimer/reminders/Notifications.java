@@ -15,6 +15,7 @@ import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory;
+import com.futsch1.medtimer.reminders.notificationFactory.ReminderNotificationData;
 import com.futsch1.medtimer.reminders.notificationFactory.ReminderNotificationFactory;
 import com.futsch1.medtimer.reminders.notificationFactory.ReminderNotificationFactoryKt;
 
@@ -33,7 +34,7 @@ public class Notifications {
     public int showNotification(String remindTime, FullMedicine medicine, Reminder reminder, ReminderEvent reminderEvent, boolean hasSameTimeReminders) {
         int notificationId = getNextNotificationId();
 
-        ReminderNotificationFactory factory = ReminderNotificationFactoryKt.getReminderNotificationFactory(context, notificationId, remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders);
+        ReminderNotificationFactory factory = ReminderNotificationFactoryKt.getReminderNotificationFactory(context, notificationId, new ReminderNotificationData(remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders));
 
         notify(notificationId, factory.create());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));

@@ -4,26 +4,15 @@ import android.content.Context
 import android.view.View
 import android.widget.RemoteViews
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 
 class BigReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    remindTime: String,
-    medicine: FullMedicine,
-    reminder: Reminder,
-    reminderEvent: ReminderEvent,
-    hasSameTimeReminders: Boolean
+    reminderNotificationData: ReminderNotificationData
 ) : ReminderNotificationFactory(
     context,
     notificationId,
-    remindTime,
-    medicine,
-    reminder,
-    reminderEvent,
-    hasSameTimeReminders
+    reminderNotificationData
 ) {
     val views: RemoteViews = RemoteViews(context.packageName, R.layout.notification)
 

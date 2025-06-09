@@ -19,23 +19,27 @@ import com.futsch1.medtimer.reminders.ReminderProcessor
 import java.util.stream.Collectors
 
 
+data class ReminderNotificationData(
+    val remindTime: String,
+    val medicine: FullMedicine,
+    val reminder: Reminder,
+    val reminderEvent: ReminderEvent,
+    val hasSameTimeReminders: Boolean
+)
+
 fun getReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    remindTime: String,
-    medicine: FullMedicine,
-    reminder: Reminder,
-    reminderEvent: ReminderEvent,
-    hasSameTimeReminders: Boolean
+    reminderNotificationData: ReminderNotificationData
 ): ReminderNotificationFactory {
     val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return if (defaultPreferences.getBoolean("big_notifications", false)) {
         BigReminderNotificationFactory(
-            context, notificationId, remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders
+            context, notificationId, reminderNotificationData
         )
     } else {
         SimpleReminderNotificationFactory(
-            context, notificationId, remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders
+            context, notificationId, reminderNotificationData
         )
     }
 }
@@ -43,12 +47,8 @@ fun getReminderNotificationFactory(
 abstract class ReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    val remindTime: String,
-    val medicine: FullMedicine,
-    val reminder: Reminder,
-    val reminderEvent: ReminderEvent,
-    val hasSameTimeReminders: Boolean
-) : NotificationFactory(context, notificationId, medicine.medicine) {
+    reminderNotificationData: ReminderNotificationData
+) : NotificationFactory(context, notificationId, reminderNotificationData.medicine.medicine) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val baseString: SpannableStringBuilder
 
@@ -56,6 +56,12 @@ abstract class ReminderNotificationFactory(
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
     val pendingAllTaken = getAllTakenPendingIntent()
+
+    val remindTime = reminderNotificationData.remindTime
+    val medicine = reminderNotificationData.medicine
+    val reminder = reminderNotificationData.reminder
+    val reminderEvent = reminderNotificationData.reminderEvent
+    val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
 
     val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
