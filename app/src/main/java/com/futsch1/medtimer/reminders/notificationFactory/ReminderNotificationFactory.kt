@@ -52,16 +52,16 @@ abstract class ReminderNotificationFactory(
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val baseString: SpannableStringBuilder
 
-    val pendingSnooze = getSnoozePendingIntent()
-    val pendingSkipped = getSkippedPendingIntent()
-    val pendingTaken = getTakenPendingIntent()
-    val pendingAllTaken = getAllTakenPendingIntent()
-
     val remindTime = reminderNotificationData.remindTime
     val medicine = reminderNotificationData.medicine
     val reminder = reminderNotificationData.reminder
     val reminderEvent = reminderNotificationData.reminderEvent
     val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
+
+    val pendingSnooze = getSnoozePendingIntent()
+    val pendingSkipped = getSkippedPendingIntent()
+    val pendingTaken = getTakenPendingIntent()
+    val pendingAllTaken = getAllTakenPendingIntent()
 
     val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
