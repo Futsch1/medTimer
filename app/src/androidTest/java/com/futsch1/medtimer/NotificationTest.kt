@@ -27,6 +27,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.helpers.TimeHelper
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -204,6 +205,7 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         sleep(2_000)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
         button = device.findObject(By.text(getNotificationText(R.string.taken)))
         internalAssert(button != null)
         button.click()
@@ -250,6 +252,9 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
     }
 
     @Test
@@ -291,23 +296,26 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
-        assert(
+        internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "takenButton")),
                 2000
             )
         )
-        assert(
+        internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "skippedButton")),
                 2000
             )
         )
-        assert(
+        internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "snoozeButton")),
                 2000
             )
+        )
+        internalAssert(
+            device.findObject(By.text(getNotificationText(R.string.all_taken, "$$").replace("($$)", ""))) == null
         )
     }
 
@@ -318,6 +326,8 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
+        val notificationTimeString =
+            TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, notificationTime.hour * 60L + notificationTime.minute)
 
         AndroidTestHelper.createReminder(
             "1",
@@ -332,12 +342,12 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         assertNotNull(notification)
-        var button = device.findObject(By.text(getNotificationText(R.string.all_taken)))
+        var button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
         if (button == null) {
             dismissNotification(notification, device)
             val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 60_000)
             assertNotNull(notification)
-            button = device.findObject(By.text(getNotificationText(R.string.all_taken)))
+            button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
         }
 
         internalAssert(button != null)
@@ -359,8 +369,8 @@ class NotificationTest : BaseTestHelper() {
         )
     }
 
-    private fun getNotificationText(stringId: Int): String {
-        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId)
+    private fun getNotificationText(stringId: Int, vararg args: Any): String {
+        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             s.uppercase()
         } else {

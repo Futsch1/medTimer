@@ -220,5 +220,5 @@
     <string name="please_wait">Var god vänta…</string>
     <string name="interval_time">Intervall %s</string>
     <string name="reminded">Påmind</string>
-    <string name="all_taken">Allt intaget</string>
+    <string name="all_taken">Allt intaget (%s)</string>
 </resources>

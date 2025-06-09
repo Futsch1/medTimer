@@ -219,5 +219,5 @@
     <string name="please_wait">Even geduld…</string>
     <string name="interval_time">Interval %s</string>
     <string name="reminded">Herinnerd</string>
-    <string name="all_taken">Alles ingenomen</string>
+    <string name="all_taken">Alles ingenomen (%s)</string>
 </resources>
