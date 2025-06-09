@@ -19,33 +19,27 @@ import com.futsch1.medtimer.reminders.ReminderProcessor
 import java.util.stream.Collectors
 
 
+data class ReminderNotificationData(
+    val remindTime: String,
+    val medicine: FullMedicine,
+    val reminder: Reminder,
+    val reminderEvent: ReminderEvent,
+    val hasSameTimeReminders: Boolean
+)
+
 fun getReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    remindTime: String,
-    medicine: FullMedicine,
-    reminder: Reminder,
-    reminderEvent: ReminderEvent
+    reminderNotificationData: ReminderNotificationData
 ): ReminderNotificationFactory {
-    val defaultPreferences: SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return if (defaultPreferences.getBoolean("big_notifications", false)) {
         BigReminderNotificationFactory(
-            context,
-            notificationId,
-            remindTime,
-            medicine,
-            reminder,
-            reminderEvent
+            context, notificationId, reminderNotificationData
         )
     } else {
         SimpleReminderNotificationFactory(
-            context,
-            notificationId,
-            remindTime,
-            medicine,
-            reminder,
-            reminderEvent
+            context, notificationId, reminderNotificationData
         )
     }
 }
@@ -53,42 +47,38 @@ fun getReminderNotificationFactory(
 abstract class ReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    val remindTime: String,
-    val medicine: FullMedicine,
-    val reminder: Reminder,
-    val reminderEvent: ReminderEvent
-) : NotificationFactory(context, notificationId, medicine.medicine) {
-    val defaultSharedPreferences: SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    reminderNotificationData: ReminderNotificationData
+) : NotificationFactory(context, notificationId, reminderNotificationData.medicine.medicine) {
+    val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val baseString: SpannableStringBuilder
+
+    val remindTime = reminderNotificationData.remindTime
+    val medicine = reminderNotificationData.medicine
+    val reminder = reminderNotificationData.reminder
+    val reminderEvent = reminderNotificationData.reminderEvent
+    val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
 
     val pendingSnooze = getSnoozePendingIntent()
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
+    val pendingAllTaken = getAllTakenPendingIntent()
 
-    val dismissNotificationAction: String? =
-        defaultSharedPreferences.getString("dismiss_notification_action", "0")
+    val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
     init {
         val contentIntent: PendingIntent? = getStartAppIntent()
 
-        builder.setSmallIcon(R.drawable.capsule)
-            .setContentTitle(context.getString(R.string.notification_title))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setCategory(Notification.CATEGORY_REMINDER)
-            .setContentIntent(contentIntent)
+        builder.setSmallIcon(R.drawable.capsule).setContentTitle(context.getString(R.string.notification_title))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
 
-        val medicineNameString =
-            MedicineHelper.getMedicineName(context, medicine.medicine, true)
-        baseString = SpannableStringBuilder().bold { append(medicineNameString) }
-            .append(if (reminder.amount.isNotEmpty()) " (${reminder.amount})" else "")
+        val medicineNameString = MedicineHelper.getMedicineName(context, medicine.medicine, true)
+        baseString = SpannableStringBuilder().bold { append(medicineNameString) }.append(if (reminder.amount.isNotEmpty()) " (${reminder.amount})" else "")
 
         addDismissNotification()
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
-                "sticky_on_lockscreen",
-                false
+                "sticky_on_lockscreen", false
             )
         ) {
             builder.setOngoing(true)
@@ -117,26 +107,24 @@ abstract class ReminderNotificationFactory(
     ): PendingIntent? {
         return if (reminder.variableAmount) {
             val notifyTaken = ReminderProcessor.getVariableAmountActionIntent(
-                context,
-                reminderEvent.reminderEventId,
-                reminder.amount
+                context, reminderEvent.reminderEventId, reminder.amount
             )
             PendingIntent.getActivity(
-                context,
-                notificationId,
-                notifyTaken,
-                PendingIntent.FLAG_IMMUTABLE
+                context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE
             )
         } else {
-            val notifyTaken =
-                ReminderProcessor.getTakenActionIntent(context, reminderEvent.reminderEventId)
+            val notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEvent.reminderEventId)
             PendingIntent.getBroadcast(
-                context,
-                notificationId,
-                notifyTaken,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
+    }
+
+    fun getAllTakenPendingIntent(): PendingIntent {
+        val notifyTaken = ReminderProcessor.getAllTakenActionIntent(context, reminderEvent.reminderEventId)
+        return PendingIntent.getBroadcast(
+            context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     fun getInstructions(): String {
@@ -174,19 +162,14 @@ abstract class ReminderNotificationFactory(
     }
 
     fun getTagNames(): String {
-        val tagNames = medicine.tags.stream().map<String?> { t: Tag? -> t!!.name }
-            .collect(Collectors.toList())
+        val tagNames = medicine.tags.stream().map<String?> { t: Tag? -> t!!.name }.collect(Collectors.toList())
         return java.lang.String.join(", ", tagNames)
     }
 
     fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped =
-            ReminderProcessor.getSkippedActionIntent(context, reminderEvent.reminderEventId)
+        val notifySkipped = ReminderProcessor.getSkippedActionIntent(context, reminderEvent.reminderEventId)
         return PendingIntent.getBroadcast(
-            context,
-            notificationId,
-            notifySkipped,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context, notificationId, notifySkipped, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
@@ -195,32 +178,19 @@ abstract class ReminderNotificationFactory(
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
-                context,
-                reminder.reminderId,
-                reminderEvent.reminderEventId,
-                notificationId
+                context, reminder.reminderId, reminderEvent.reminderEventId, notificationId
             )
             return PendingIntent.getActivity(
-                context,
-                notificationId,
-                snooze,
-                PendingIntent.FLAG_IMMUTABLE
+                context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
         }
 
         fun getStandardSnoozeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getSnoozeIntent(
-                context,
-                reminder.reminderId,
-                reminderEvent.reminderEventId,
-                notificationId,
-                snoozeTime
+                context, reminder.reminderId, reminderEvent.reminderEventId, notificationId, snoozeTime
             )
             return PendingIntent.getBroadcast(
-                context,
-                notificationId,
-                snooze,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
 
@@ -234,8 +204,7 @@ abstract class ReminderNotificationFactory(
 
     fun buildActions(
     ) {
-        val dismissNotificationAction: String? =
-            defaultSharedPreferences.getString("dismiss_notification_action", "0")
+        val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
         if (dismissNotificationAction == "0") {
             addTakenAction()
@@ -247,29 +216,28 @@ abstract class ReminderNotificationFactory(
             addSkippedAction()
             addSnoozeAction()
         }
+        if (hasSameTimeReminders) {
+            builder.addAction(
+                R.drawable.check2_all, context.getString(R.string.all_taken), pendingAllTaken
+            )
+        }
     }
 
     private fun addSkippedAction() {
         builder.addAction(
-            R.drawable.x_circle,
-            context.getString(R.string.skipped),
-            pendingSkipped
+            R.drawable.x_circle, context.getString(R.string.skipped), pendingSkipped
         )
     }
 
     private fun addSnoozeAction() {
         builder.addAction(
-            R.drawable.hourglass_split,
-            context.getString(R.string.snooze),
-            pendingSnooze
+            R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze
         )
     }
 
     private fun addTakenAction() {
         builder.addAction(
-            R.drawable.check2_circle,
-            context.getString(R.string.taken),
-            pendingTaken
+            R.drawable.check2_circle, context.getString(R.string.taken), pendingTaken
         )
     }
 

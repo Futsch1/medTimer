@@ -16,6 +16,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
@@ -31,11 +32,13 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 
+private const val TEST_MED = "Test med"
+
 class NotificationTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
     fun notificationTest() {
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
 
         // Set color and icon
         clickOn(R.id.enableColor)
@@ -91,7 +94,7 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.MEDICINES)
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         // Interval reminder (amount 1) 2 hours from now
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
@@ -162,18 +165,18 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.MEDICINES)
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
 
         device.openNotification()
-        val notification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
         assertNotNull(notification)
         val text = notification.text
 
         device.wait(Until.gone(By.text(text)), 240_000)
 
-        val nextNotification = device.wait(Until.findObject(By.textContains("Test med")), 2000)
+        val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
         assertNotNull(nextNotification)
         device.pressBack()
     }
@@ -183,7 +186,7 @@ class NotificationTest : BaseTestHelper() {
     fun variableAmount() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 2)
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.id.variableAmount)
@@ -191,8 +194,8 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains("Test med")), 2_000)
-        var button = device.findObject(By.text(getNotificationText()))
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        var button = device.findObject(By.text(getNotificationText(R.string.taken)))
         internalAssert(button != null)
         button.click()
 
@@ -200,8 +203,8 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains("Test med")), 240_000)
-        button = device.findObject(By.text(getNotificationText()))
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        button = device.findObject(By.text(getNotificationText(R.string.taken)))
         internalAssert(button != null)
         button.click()
 
@@ -233,7 +236,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         pressBack()
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 120)
 
         navigateTo(MainMenu.ANALYSIS)
@@ -245,7 +248,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains("Test med")), 240_000)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
     }
 
@@ -261,10 +264,10 @@ class NotificationTest : BaseTestHelper() {
 
         pressBack()
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
-        assertContains("Test med")
+        assertContains(TEST_MED)
 
         device.openNotification()
         val notification = device.wait(Until.findObject(By.textContains("T*******")), 2000)
@@ -283,7 +286,7 @@ class NotificationTest : BaseTestHelper() {
 
         pressBack()
 
-        AndroidTestHelper.createMedicine("Test med")
+        AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
 
@@ -306,11 +309,58 @@ class NotificationTest : BaseTestHelper() {
                 2000
             )
         )
-
     }
 
-    private fun getNotificationText(): String {
-        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun sameTimeReminders() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
+
+        AndroidTestHelper.createReminder(
+            "1",
+            notificationTime
+        )
+        AndroidTestHelper.createReminder(
+            "2",
+            notificationTime
+        )
+
+        device.openNotification()
+        sleep(2_000)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        assertNotNull(notification)
+        var button = device.findObject(By.text(getNotificationText(R.string.all_taken)))
+        if (button == null) {
+            dismissNotification(notification, device)
+            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 60_000)
+            assertNotNull(notification)
+            button = device.findObject(By.text(getNotificationText(R.string.all_taken)))
+        }
+
+        internalAssert(button != null)
+        button.click()
+        device.pressBack()
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertCustomAssertionAtPosition(
+            R.id.latestReminders,
+            0,
+            R.id.chipTaken,
+            matches(isChecked())
+        )
+        assertCustomAssertionAtPosition(
+            R.id.latestReminders,
+            1,
+            R.id.chipTaken,
+            matches(isChecked())
+        )
+    }
+
+    private fun getNotificationText(stringId: Int): String {
+        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             s.uppercase()
         } else {
@@ -320,12 +370,16 @@ class NotificationTest : BaseTestHelper() {
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
-        var notification = device.wait(Until.findObject(By.textContains("Test med")), timeout)
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
         assertNotNull(notification)
-        notification.fling(Direction.RIGHT)
-        notification = device.wait(Until.findObject(By.textContains("Test med")), 500)
-        notification?.fling(Direction.RIGHT)
+        dismissNotification(notification, device)
 
         device.pressBack()
+    }
+
+    private fun dismissNotification(notification: UiObject2, device: UiDevice) {
+        notification.fling(Direction.RIGHT)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 500)
+        notification?.fling(Direction.RIGHT)
     }
 }

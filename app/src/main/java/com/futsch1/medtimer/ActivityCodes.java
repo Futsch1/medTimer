@@ -16,6 +16,7 @@ public class ActivityCodes {
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";
     public static final String TAKEN_ACTION = "com.futsch1.medTimer.TAKEN_ACTION";
     public static final String SNOOZE_ACTION = "com.futsch1.medTimer.SNOOZE_ACTION";
+    public static final String ALL_TAKEN_ACTION = "com.futsch1.medTimer.ALL_TAKEN_ACTION";
 
     private ActivityCodes() {
         // Intended empty

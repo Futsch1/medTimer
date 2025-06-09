@@ -111,6 +111,10 @@ public class MedicineRepository {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(medicineDao.getReminder(reminderId)));
     }
 
+    public List<Reminder> getSameTimeReminders(int reminderId) {
+        return medicineDao.getSameTimeReminders(reminderId);
+    }
+
     public long insertReminderEvent(ReminderEvent reminderEvent) {
         return internalInsert(reminderEvent, medicineDao::insertReminderEvent);
     }

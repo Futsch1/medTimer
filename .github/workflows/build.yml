@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-    branches: ["main"]
+    branches: [main]
 
 env:
   APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           java-version: "17"
-          distribution: "temurin"
+          distribution: temurin
           cache: gradle
       - uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4.4.0
         with:
@@ -75,5 +75,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@440c8c1cb0ed28b9f43e4d1d670870f059653174 # v1.16.0
         with:
-          artifacts: "app/build/outputs/bundle/release/*.aab,app/build/outputs/apk/release/*.apk"
+          artifacts: app/build/outputs/bundle/release/*.aab,app/build/outputs/apk/release/*.apk
           generateReleaseNotes: true
