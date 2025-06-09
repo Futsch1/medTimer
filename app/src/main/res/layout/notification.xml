@@ -32,7 +32,7 @@
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/all_taken"
         android:drawableStart="@drawable/check2_all"
-        android:text="@string/taken"
+        android:text="@string/all_taken"
         android:textAllCaps="false"
         android:visibility="gone" />
 
