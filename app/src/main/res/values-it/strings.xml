@@ -225,4 +225,5 @@
     <string name="please_wait">Attendere prego…</string>
     <string name="interval_time">Intervallo %s</string>
     <string name="reminded">Ricordato</string>
+    <string name="all_taken">Tutte assunte</string>
 </resources>

@@ -30,10 +30,10 @@ public class Notifications {
     }
 
     @SuppressWarnings("java:S107")
-    public int showNotification(String remindTime, FullMedicine medicine, Reminder reminder, ReminderEvent reminderEvent) {
+    public int showNotification(String remindTime, FullMedicine medicine, Reminder reminder, ReminderEvent reminderEvent, boolean hasSameTimeReminders) {
         int notificationId = getNextNotificationId();
 
-        ReminderNotificationFactory factory = ReminderNotificationFactoryKt.getReminderNotificationFactory(context, notificationId, remindTime, medicine, reminder, reminderEvent);
+        ReminderNotificationFactory factory = ReminderNotificationFactoryKt.getReminderNotificationFactory(context, notificationId, remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders);
 
         notify(notificationId, factory.create());
         Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));

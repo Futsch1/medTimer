@@ -141,10 +141,11 @@ public class ReminderWork extends Worker {
 
     private void showNotification(FullMedicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
         if (canShowNotifications()) {
+            boolean hasSameTimeReminders = !medicineRepository.getSameTimeReminders(reminder.reminderId).isEmpty();
             Notifications notifications = new Notifications(context);
             reminderEvent.notificationId =
                     notifications.showNotification(minutesToTimeString(context, reminderDateTime.getHour() * 60L + reminderDateTime.getMinute()),
-                            medicine, reminder, reminderEvent);
+                            medicine, reminder, reminderEvent, hasSameTimeReminders);
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }

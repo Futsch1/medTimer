@@ -214,4 +214,5 @@
     <string name="please_wait">请稍候…</string>
     <string name="interval_time">间隔 %s</string>
     <string name="reminded">已提醒</string>
+    <string name="all_taken">都服用了</string>
 </resources>

@@ -240,4 +240,5 @@
     <string name="time_reminder_type_hint">يذكر في وقت محدد من اليوم.</string>
     <string name="interval_time">فاصل %s</string>
     <string name="reminded">ذكر</string>
+    <string name="all_taken">تم تناول الجميع</string>
 </resources>

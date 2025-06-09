@@ -12,14 +12,16 @@ class SimpleReminderNotificationFactory(
     remindTime: String,
     medicine: FullMedicine,
     reminder: Reminder,
-    reminderEvent: ReminderEvent
+    reminderEvent: ReminderEvent,
+    hasSameTimeReminders: Boolean
 ) : ReminderNotificationFactory(
     context,
     notificationId,
     remindTime,
     medicine,
     reminder,
-    reminderEvent
+    reminderEvent,
+    hasSameTimeReminders
 ) {
     override fun build() {
         val notificationMessage = getNotificationString()

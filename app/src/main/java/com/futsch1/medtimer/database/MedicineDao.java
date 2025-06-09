@@ -132,4 +132,7 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC LIMIT 1")
     ReminderEvent getLastReminderEvent(int reminderId);
+
+    @Query("SELECT * FROM Reminder WHERE timeInMinutes = (SELECT timeInMinutes FROM Reminder WHERE reminderId = :reminderId) AND reminderId != :reminderId")
+    List<Reminder> getSameTimeReminders(int reminderId);
 }

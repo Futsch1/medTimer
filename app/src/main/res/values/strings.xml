@@ -223,4 +223,5 @@
     <string name="please_wait">Please wait…</string>
     <string name="interval_time">Interval %s</string>
     <string name="reminded">Reminded</string>
+    <string name="all_taken">All taken</string>
 </resources>

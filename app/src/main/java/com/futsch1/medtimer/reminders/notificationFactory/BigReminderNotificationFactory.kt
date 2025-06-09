@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.content.Context
+import android.view.View
 import android.widget.RemoteViews
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -13,14 +14,16 @@ class BigReminderNotificationFactory(
     remindTime: String,
     medicine: FullMedicine,
     reminder: Reminder,
-    reminderEvent: ReminderEvent
+    reminderEvent: ReminderEvent,
+    hasSameTimeReminders: Boolean
 ) : ReminderNotificationFactory(
     context,
     notificationId,
     remindTime,
     medicine,
     reminder,
-    reminderEvent
+    reminderEvent,
+    hasSameTimeReminders
 ) {
     val views: RemoteViews = RemoteViews(context.packageName, R.layout.notification)
 
@@ -33,6 +36,10 @@ class BigReminderNotificationFactory(
         views.setOnClickPendingIntent(R.id.takenButton, pendingTaken)
         views.setOnClickPendingIntent(R.id.skippedButton, pendingSkipped)
         views.setOnClickPendingIntent(R.id.snoozeButton, pendingSnooze)
+        if (hasSameTimeReminders) {
+            views.setViewVisibility(R.id.allTakenButton, View.VISIBLE)
+            views.setOnClickPendingIntent(R.id.allTakenButton, pendingAllTaken)
+        }
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,
             if (medicine.medicine.isOutOfStock) R.drawable.exclamation_triangle_fill else 0,

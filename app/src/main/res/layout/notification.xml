@@ -25,6 +25,17 @@
         android:text="@string/taken"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/allTakenButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/all_taken"
+        android:drawableStart="@drawable/check2_all"
+        android:text="@string/taken"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

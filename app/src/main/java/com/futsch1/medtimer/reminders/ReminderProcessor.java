@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.futsch1.medtimer.ActivityCodes.ALL_TAKEN_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
@@ -121,6 +122,10 @@ public class ReminderProcessor extends BroadcastReceiver {
         return actionIntent;
     }
 
+    public static Intent getAllTakenActionIntent(@NonNull Context context, int reminderEventId) {
+        return buildActionIntent(context, reminderEventId, ALL_TAKEN_ACTION);
+    }
+
     public static Intent getVariableAmountActionIntent(Context context, int reminderEventId, String amount) {
         Intent actionIntent = new Intent(context, MainActivity.class);
         actionIntent.setAction("VARIABLE_AMOUNT");
@@ -147,6 +152,8 @@ public class ReminderProcessor extends BroadcastReceiver {
             workManager.enqueue(buildActionWorkRequest(intent, SkippedWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
+        } else if (ALL_TAKEN_ACTION.equals(intent.getAction())) {
+            workManager.enqueue(buildActionWorkRequest(intent, AllTakenWork.class));
         } else if (SNOOZE_ACTION.equals(intent.getAction())) {
             WorkRequest snoozeWork =
                     new OneTimeWorkRequest.Builder(SnoozeWork.class)
