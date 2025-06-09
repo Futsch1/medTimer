@@ -28,6 +28,7 @@ class BigReminderNotificationFactory(
         if (hasSameTimeReminders) {
             views.setViewVisibility(R.id.allTakenButton, View.VISIBLE)
             views.setOnClickPendingIntent(R.id.allTakenButton, pendingAllTaken)
+            views.setTextViewText(R.id.allTakenButton, context.getString(R.string.all_taken, remindTime))
         }
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,

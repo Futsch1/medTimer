@@ -218,7 +218,7 @@ abstract class ReminderNotificationFactory(
         }
         if (hasSameTimeReminders) {
             builder.addAction(
-                R.drawable.check2_all, context.getString(R.string.all_taken), pendingAllTaken
+                R.drawable.check2_all, context.getString(R.string.all_taken, remindTime), pendingAllTaken
             )
         }
     }

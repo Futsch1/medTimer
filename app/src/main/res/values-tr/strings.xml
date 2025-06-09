@@ -219,5 +219,5 @@
     <string name="please_wait">Lütfen bekleyin…</string>
     <string name="interval_time">Aralık %s</string>
     <string name="reminded">Hatırlatıldı</string>
-    <string name="all_taken">Hepsi alındı</string>
+    <string name="all_taken">Hepsi alındı (%s)</string>
 </resources>

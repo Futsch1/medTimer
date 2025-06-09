@@ -229,5 +229,5 @@
     <string name="please_wait">Будь ласка, зачекайте…</string>
     <string name="interval_time">Інтервал %s</string>
     <string name="reminded">Нагадано</string>
-    <string name="all_taken">Усе прийнято</string>
+    <string name="all_taken">Усе прийнято (%s)</string>
 </resources>
