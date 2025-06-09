@@ -73,7 +73,7 @@ name = "checkov"
 
 [[plugin]]
 name = "markdownlint"
-mode = "comment"
+mode = "disabled"
 
 [[plugin]]
 name = "prettier"
