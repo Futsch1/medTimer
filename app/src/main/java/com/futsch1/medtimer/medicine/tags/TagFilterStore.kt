@@ -3,6 +3,7 @@ package com.futsch1.medtimer.medicine.tags
 import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
+import com.futsch1.medtimer.database.Tag
 import java.util.stream.Collectors
 
 class TagFilterStore(
@@ -21,6 +22,16 @@ class TagFilterStore(
             field = value
             validTagIds.value = value
         }
+
+    fun filterForDeletedTags(allTags: List<Tag>) {
+        if (validTagIds.value != null) {
+            selectedTags = validTagIds.value!!
+        }
+        selectedTags = selectedTags.stream().filter { tagId ->
+            allTags.stream().filter { tag -> tag.tagId == tagId }.count() > 0
+        }.collect(Collectors.toSet())
+        validTagIds.value = selectedTags
+    }
 
     init {
         validTagIds.value = selectedTags
