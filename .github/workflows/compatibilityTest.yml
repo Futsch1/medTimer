@@ -68,6 +68,7 @@ jobs:
           script: |
             adb shell settings put global auto_time 0
             adb shell su 0 date 01012100
+            adb uninstall com.futsch1.medtimer || true
             ./gradlew packageDebug
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500

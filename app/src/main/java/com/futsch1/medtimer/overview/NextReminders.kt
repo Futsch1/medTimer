@@ -42,23 +42,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             }
         })
 
-        medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner) { scheduledReminders: List<ScheduledReminder>? ->
-            this.updatedNextReminders(
-                scheduledReminders
-            )
-        }
+        medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner, nextRemindersViewAdapter::submitList)
 
         setupScheduleObservers(parentFragment)
-    }
-
-    private fun updatedNextReminders(scheduledReminders: List<ScheduledReminder>?) {
-        if (scheduledReminders.isNullOrEmpty()) {
-            nextRemindersViewAdapter.submitList(ArrayList())
-        } else {
-            nextRemindersViewAdapter.submitList(
-                scheduledReminders
-            )
-        }
     }
 
     private fun setupScheduleObservers(parentFragment: Fragment) {

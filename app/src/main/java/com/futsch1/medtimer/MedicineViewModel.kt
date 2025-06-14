@@ -40,6 +40,10 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
             medicineToTags = it
         }
 
+        medicineRepository.liveTags.observeForever {
+            tagFilterStore.filterForDeletedTags(it)
+        }
+
         filteredMedicine.addSource(liveMedicines) {
             if (validTagIds.value != null) {
                 filteredMedicine.value = getFiltered(it, validTagIds.value!!)

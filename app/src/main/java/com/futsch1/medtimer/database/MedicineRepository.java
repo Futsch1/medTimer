@@ -11,6 +11,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class MedicineRepository {
@@ -219,6 +221,22 @@ public class MedicineRepository {
 
     public void updateMedicine(Medicine medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
+    }
+
+    public void flushDatabase() {
+        if (MedicineRoomDatabase.databaseWriteExecutor.isShutdown()) {
+            return;
+        }
+        try {
+            // Submit an empty task and wait for its completion.
+            // This guarantees all prior submitted tasks have completed.
+            Future<?> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> { /* No operation */ });
+            future.get(10, TimeUnit.SECONDS); // Wait with a timeout
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupt status
+        } catch (java.util.concurrent.ExecutionException | java.util.concurrent.TimeoutException e) {
+            // Intentionally left blank
+        }
     }
 
     interface Insert<T> {
