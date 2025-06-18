@@ -220,5 +220,5 @@
     <string name="please_wait">தயவுசெய்து காத்திருக்கவும்…</string>
     <string name="interval_time">இடைவெளி %s</string>
     <string name="reminded">நினைவூட்டப்பட்டது</string>
-    <string name="all_taken">அனைத்தும் எடுத்துக்கொள்ளப்பட்டது (%s)</string>
+    <string name="all_taken">அனைத்தும் எடு (%s)</string>
 </resources>
