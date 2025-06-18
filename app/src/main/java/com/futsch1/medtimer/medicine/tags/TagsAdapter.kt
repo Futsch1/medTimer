@@ -36,7 +36,7 @@ class TagsAdapter(
         }
 
         override fun areContentsTheSame(oldItem: TagWithState, newItem: TagWithState): Boolean {
-            return oldItem.tag.name == newItem.tag.name && oldItem.isSelected == newItem.isSelected
+            return oldItem.tag == newItem.tag && oldItem.isSelected == newItem.isSelected
         }
     }
 }

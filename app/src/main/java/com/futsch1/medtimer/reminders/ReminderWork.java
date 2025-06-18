@@ -54,6 +54,8 @@ public class ReminderWork extends Worker {
 
         Result r = (reminder != null) ? processReminder(inputData, reminder) : Result.failure();
 
+        medicineRepository.flushDatabase();
+
         // Reminder shown, now schedule next reminder
         ReminderProcessor.requestReschedule(context);
 
