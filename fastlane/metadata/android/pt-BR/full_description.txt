@@ -7,7 +7,7 @@ O MedTimer é um aplicativo de lembrete de medicamentos de código aberto desenv
 Lembretes Flexíveis e Personalizados:
 
 - Gerencie medicamentos ilimitados com lembretes personalizáveis por medicamento (incluindo padrões simples
-para lembretes diários).
+  para lembretes diários).
 - Crie lembretes flexíveis com intervalos e dias específicos (por exemplo, para pílulas anticoncepcionais).
 - Modo Fim de Semana: Adie os lembretes para um horário definido em dias selecionados.
 - Adie as notificações para lembretes posteriores ou seja lembrado repetidamente.
@@ -16,21 +16,20 @@ para lembretes diários).
 
 Gerenciamento de Dados Simples e Seguro:
 
-- Confirme ou descarte lembretes para registrar a adesão à medicação com precisão.
+- Confirme ou descarte lembretes para registrar o uso da medicação com precisão.
 - Obtenha uma visão geral das doses anteriores em um gráfico e em uma visualização tabular.
-
- - Exporte seu histórico de medicamentos como um arquivo CSV para facilitar o registro ou o compartilhamento com profissionais de saúde.
+- Exporte seu histórico de medicamentos como um arquivo CSV para facilitar o registro ou o compartilhamento com profissionais de saúde.
 - Faça backup e restaure sua lista de medicamentos como um arquivo JSON.
-- Rastreamento de estoque de medicamentos e lembretes de falta de estoque.
-- Marque e filtre seus medicamentos.
+- Acompanhamento do estoque de medicamentos e avisos de baixas no estoque.
+- Categorize e filtre seus medicamentos.
 
-Privacidade e Acessibilidade Offline:
+Privacidade e Acesso Offline:
 
-- Todos os dados são armazenados com segurança em seu dispositivo, garantindo total privacidade e acessibilidade offline.
+- Todos os dados são armazenados com segurança em seu dispositivo, garantindo total privacidade e acesso mesmo sem conexão à rede.
 - Não requer conexão com a internet – seus lembretes de medicamentos estão sempre disponíveis.
 
 O MedTimer é um aplicativo gratuito sem anúncios.
 
 Veja a página do projeto no GitHub: https://github.com/Futsch1/medTimer
 
-O gráfico de destaque foi criado com https://hotpot.ai
+O gráfico em destaque foi criado com https://hotpot.ai
