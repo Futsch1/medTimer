@@ -60,7 +60,7 @@ class DialogHelper(var context: Context) {
                 textSink?.consumeText(e.toString())
             }
         }
-        builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+        builder.setNegativeButton(com.futsch1.medtimer.R.string.cancel) { dialog: DialogInterface, _: Int ->
             dialog.dismiss()
             cancelCallback?.cancel()
         }
