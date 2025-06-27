@@ -77,6 +77,7 @@ android {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
+        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency") else listOf())
     }
 }
 

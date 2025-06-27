@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -76,8 +76,14 @@ jobs:
 
       - name: Run fuzzing tests
         run: ./gradlew testDebug -Dfuzzing=true
+
+      - name: Android lint
+        run: ./gradlew lint -PnoGradleDeps
+        if: github.ref != 'refs/heads/main'
+
       - name: Android lint
         run: ./gradlew lint
+        if: github.ref == 'refs/heads/main'
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
