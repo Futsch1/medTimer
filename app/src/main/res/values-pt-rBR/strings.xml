@@ -90,7 +90,7 @@
     <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <plurals name="last_n_days">
-        <item quantity="one">Últimas 24 horas</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
         <item quantity="many">Últimos %1$d dias</item>
         <item quantity="other">Últimos %1$d dias</item>
     </plurals>
@@ -130,20 +130,20 @@
     <string name="delay">Atraso</string>
     <string name="linked_reminder_summary">Após o lembrete em %1$s</string>
     <string name="interval_based_reminder">Lembrete baseado em intervalo</string>
-    <plurals name="minutes">
+    <plurals name="minutes" tools:ignore="ImpliedQuantity">
         <item quantity="one">minuto</item>
         <item quantity="many">minutos</item>
         <item quantity="other">minutos</item>
     </plurals>
     <string name="minutes_string">Minutos</string>
     <plurals name="hours">
-        <item quantity="one">hora</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
         <item quantity="many">horas</item>
         <item quantity="other">horas</item>
     </plurals>
     <string name="hours_string">Horas</string>
     <plurals name="days">
-        <item quantity="one">dia</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
         <item quantity="many">dias</item>
         <item quantity="other">dias</item>
     </plurals>
