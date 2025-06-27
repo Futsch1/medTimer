@@ -5,7 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    //noinspection GradleDependency: Version 6 crashes with an error in apache.commons.compress
+    //noinspection NewerVersionAvailable,GradleDependency: Version 6 crashes with an error in apache.commons.compress
     id("org.sonarqube") version "5.1.0.4882"
 }
 
