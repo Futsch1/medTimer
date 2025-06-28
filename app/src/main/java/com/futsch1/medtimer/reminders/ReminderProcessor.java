@@ -32,7 +32,9 @@ import androidx.work.WorkRequest;
 import com.futsch1.medtimer.MainActivity;
 import com.futsch1.medtimer.WorkManagerAccess;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class ReminderProcessor extends BroadcastReceiver {
 
@@ -40,6 +42,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         OneTimeWorkRequest rescheduleWork =
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
+                        .setInitialDelay(Duration.of(1, ChronoUnit.SECONDS))
                         .build();
         workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
     }

@@ -380,7 +380,7 @@ class NotificationTest : BaseTestHelper() {
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
-        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
         assertNotNull(notification)
         dismissNotification(notification, device)
 
