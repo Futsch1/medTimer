@@ -106,7 +106,7 @@ dependencies {
     val junitVersion = "5.13.1"
     val mockitoCoreVersion = "5.18.0"
     val mockitoInlineVersion = "5.2.0"
-    val robolectricVersion = "4.14.1"
+    val robolectricVersion = "4.15.1"
     val jazzerVersion = "0.24.0"
 
     val androidTestJunitVersion = "1.2.1"
