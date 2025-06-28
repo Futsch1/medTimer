@@ -334,19 +334,14 @@ class NotificationTest : BaseTestHelper() {
             notificationTime
         )
         AndroidTestHelper.createReminder(
-            "2",
+            "second one",
             notificationTime
         )
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
-        device.pressBack()
-
-        // We need to wait until all notifications have appeared
-        sleep(2_000)
-        device.openNotification()
 
         val button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
         internalAssert(button != null)
