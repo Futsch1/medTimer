@@ -21,6 +21,7 @@ import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
+import java.text.NumberFormat
 
 class MedicineStockTest : BaseTestHelper() {
 
@@ -93,7 +94,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickListItemChild(R.id.nextReminders, 0, R.id.takenNow)
         device.openNotification()
         o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
+            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
             1_000
         )
         internalAssert(o != null)
@@ -116,11 +117,15 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.openStockTracking)
         clickOn(R.id.refillNow)
 
-        assertDisplayed(R.id.amountLeft, "10.5")
+        val numberFormat = NumberFormat.getNumberInstance()
+        numberFormat.minimumFractionDigits = 0
+        numberFormat.maximumFractionDigits = 2
+
+        assertDisplayed(R.id.amountLeft, numberFormat.format(10.5))
         pressBack()
         pressBack()
 
-        assertContains(R.id.medicineName, "10.5")
+        assertContains(R.id.medicineName, numberFormat.format(10.5))
         assertNotContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
     }

@@ -5,7 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    //noinspection GradleDependency: Version 6 crashes with an error in apache.commons.compress
+    //noinspection NewerVersionAvailable,GradleDependency: Version 6 crashes with an error in apache.commons.compress
     id("org.sonarqube") version "5.1.0.4882"
 }
 
@@ -15,7 +15,7 @@ room {
 
 android {
     namespace = "com.futsch1.medtimer"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
@@ -77,6 +77,7 @@ android {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
+        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency") else listOf())
     }
 }
 

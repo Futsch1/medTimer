@@ -342,14 +342,13 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         assertNotNull(notification)
-        var button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
-        if (button == null) {
-            dismissNotification(notification, device)
-            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 60_000)
-            assertNotNull(notification)
-            button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
-        }
+        device.pressBack()
 
+        // We need to wait until all notifications have appeared
+        sleep(2_000)
+        device.openNotification()
+
+        val button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
         internalAssert(button != null)
         button.click()
         device.pressBack()
@@ -380,7 +379,7 @@ class NotificationTest : BaseTestHelper() {
 
     private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
         device.openNotification()
-        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
         assertNotNull(notification)
         dismissNotification(notification, device)
 

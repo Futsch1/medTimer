@@ -14,7 +14,7 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)
     runs-on: ubuntu-latest
     env:
-      target_api_level: 35
+      target_api_level: 36
       profile: medium_phone
 
     steps:
@@ -76,8 +76,14 @@ jobs:
 
       - name: Run fuzzing tests
         run: ./gradlew testDebug -Dfuzzing=true
+
+      - name: Android lint
+        run: ./gradlew lint -PnoGradleDeps
+        if: github.ref != 'refs/heads/main'
+
       - name: Android lint
         run: ./gradlew lint
+        if: github.ref == 'refs/heads/main'
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
