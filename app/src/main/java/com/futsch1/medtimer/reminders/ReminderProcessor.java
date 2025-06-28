@@ -42,7 +42,7 @@ public class ReminderProcessor extends BroadcastReceiver {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         OneTimeWorkRequest rescheduleWork =
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                        .setInitialDelay(Duration.of(1, ChronoUnit.SECONDS))
+                        .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
                         .build();
         workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
     }
