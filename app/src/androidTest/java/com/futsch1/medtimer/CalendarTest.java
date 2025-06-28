@@ -8,6 +8,7 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
+import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
 import org.junit.Test;
 
@@ -34,6 +35,7 @@ public class CalendarTest extends BaseTestHelper {
                 break;
             }
             takenReminders++;
+            sleep(1_000);
         }
         assertListItemCount(R.id.latestReminders, 0);
 
