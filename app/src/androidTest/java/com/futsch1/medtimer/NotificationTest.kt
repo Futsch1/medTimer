@@ -25,7 +25,6 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -321,7 +320,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -335,25 +334,14 @@ class NotificationTest : BaseTestHelper() {
             notificationTime
         )
         AndroidTestHelper.createReminder(
-            "2",
+            "second one",
             notificationTime
         )
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
-
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            device.pressBack()
-        }
-        // We need to wait until all notifications have appeared
-        sleep(2_000)
-
-        // Only do this if SDK > 28
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            device.openNotification()
-        }
 
         val button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
         internalAssert(button != null)
