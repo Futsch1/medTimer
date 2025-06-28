@@ -143,7 +143,7 @@ public class MedicinesFragment extends Fragment {
                 });
             }
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         return builder;
     }
 
