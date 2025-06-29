@@ -196,9 +196,7 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         sleep(2_000)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        var button = device.findObject(By.text(getNotificationText(R.string.taken)))
-        internalAssert(button != null)
-        button.click()
+        clickNotificationButton(device, getNotificationText(R.string.taken))
 
         device.pressBack()
 
@@ -206,9 +204,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-        button = device.findObject(By.text(getNotificationText(R.string.taken)))
-        internalAssert(button != null)
-        button.click()
+        clickNotificationButton(device, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
@@ -221,6 +217,23 @@ class NotificationTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         assertContains("Test variable amount again")
+    }
+
+    private fun clickNotificationButton(device: UiDevice, notificationText: String) {
+        assertNotificationExpanded(device)
+        val button = device.findObject(By.text(notificationText))
+        internalAssert(button != null)
+        button.click()
+    }
+
+    private fun assertNotificationExpanded(device: UiDevice) {
+        val button = device.findObject(By.text(getNotificationText(R.string.taken)))
+        if (button == null) {
+            val clearAll = device.findObject(By.res("com.android.systemui:id/btn_clear_all"))
+            clearAll?.click()
+            val expand = device.findObject(By.res("android:id/expand_button"))
+            expand?.click()
+        }
     }
 
     @Test
@@ -252,6 +265,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
+        assertNotificationExpanded(device)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
@@ -343,9 +357,7 @@ class NotificationTest : BaseTestHelper() {
         val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
 
-        val button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
-        internalAssert(button != null)
-        button.click()
+        clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
