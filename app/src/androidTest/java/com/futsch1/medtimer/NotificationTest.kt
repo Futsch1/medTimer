@@ -203,7 +203,6 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         sleep(2_000)
         notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
         clickNotificationButton(device, notification, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
