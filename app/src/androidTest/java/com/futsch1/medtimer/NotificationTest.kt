@@ -308,6 +308,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
+        makeNotificationExpanded(device, device.wait(Until.findObject(By.textContains(TEST_MED)), 2000))
         internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "takenButton")),
