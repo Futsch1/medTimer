@@ -195,16 +195,16 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        clickNotificationButton(device, getNotificationText(R.string.taken))
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
 
         device.pressBack()
 
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-        clickNotificationButton(device, getNotificationText(R.string.taken))
+        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
@@ -219,20 +219,18 @@ class NotificationTest : BaseTestHelper() {
         assertContains("Test variable amount again")
     }
 
-    private fun clickNotificationButton(device: UiDevice, notificationText: String) {
-        assertNotificationExpanded(device)
+    private fun clickNotificationButton(device: UiDevice, notification: UiObject2, notificationText: String) {
+        makeNotificationExpanded(device, notification)
         val button = device.findObject(By.text(notificationText))
         internalAssert(button != null)
         button.click()
     }
 
-    private fun assertNotificationExpanded(device: UiDevice) {
-        val button = device.findObject(By.text(getNotificationText(R.string.taken)))
-        if (button == null) {
-            val clearAll = device.findObject(By.res("com.android.systemui:id/btn_clear_all"))
-            clearAll?.click()
-            val expand = device.findObject(By.res("android:id/expand_button"))
-            expand?.click()
+    private fun makeNotificationExpanded(device: UiDevice, notification: UiObject2) {
+        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.text(notification.text)))
+        val expand = notificationRow.findObject(By.res("android:id/expand_button"))
+        if (expand?.contentDescription == "Expand") {
+            expand.click()
         }
     }
 
@@ -265,7 +263,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
-        assertNotificationExpanded(device)
+        makeNotificationExpanded(device, notification)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
@@ -357,7 +355,7 @@ class NotificationTest : BaseTestHelper() {
         val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
 
-        clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString))
+        clickNotificationButton(device, notification, getNotificationText(R.string.all_taken, notificationTimeString))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
