@@ -32,7 +32,7 @@ public abstract class BaseTestHelper {
     @Rule
     public TestName testName = new TestName();
 
-    protected MyFailureHandler failureHandler = new MyFailureHandler(this.getClass().getName() + "." + testName.getMethodName(),
+    protected MyFailureHandler failureHandler = new MyFailureHandler(this.getClass().getName(), testName,
             getInstrumentation().getTargetContext());
 
     @BeforeClass

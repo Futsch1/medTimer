@@ -12,6 +12,7 @@ import androidx.test.espresso.internal.inject.TargetContext;
 import androidx.test.internal.platform.util.TestOutputEmitter;
 
 import org.hamcrest.Matcher;
+import org.junit.rules.TestName;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,11 +25,13 @@ public final class MyFailureHandler implements FailureHandler {
     private static final AtomicInteger failureCount = new AtomicInteger(0);
     private final DefaultFailureHandler defaultFailureHandler;
     private final String testName;
+    private final TestName testFunctionName;
 
     public MyFailureHandler(
             String testName,
-            @TargetContext Context appContext) {
+            TestName testFunctionName, @TargetContext Context appContext) {
         this.testName = testName;
+        this.testFunctionName = testFunctionName;
         // Use the default handler, but manage screenshots ourselves
         defaultFailureHandler = new DefaultFailureHandler(appContext, false);
     }
@@ -38,7 +41,7 @@ public final class MyFailureHandler implements FailureHandler {
         int count = failureCount.incrementAndGet();
         try {
             TestOutputEmitter.captureWindowHierarchy("explore-window-hierarchy-" + count + ".xml");
-            takeScreenshot("view-op-error-" + this.testName + "_" + count);
+            takeScreenshot("view-op-error-" + this.testName + "." + this.testFunctionName.getMethodName() + "_" + count);
         } catch (RuntimeException screenshotException) {
             // Ensure that the root cause exception is surfaced, not an auxiliary exception that may occur
             // during the capture/screenshot process.
