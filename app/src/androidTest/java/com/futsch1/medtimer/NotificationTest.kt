@@ -226,7 +226,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     private fun makeNotificationExpanded(device: UiDevice, notification: UiObject2) {
-        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.text(notification.text)))
+        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.textContains(notification.text)))
         if (notificationRow != null) {
             val expand = notificationRow.findObject(By.res("android:id/expand_button"))
             if (expand?.contentDescription == "Expand") {
@@ -297,6 +297,12 @@ class NotificationTest : BaseTestHelper() {
     fun bigButtons() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
+
+        device.openNotification()
+        val notification = device.wait(Until.findObject(By.textContains("SD card")), 2000)
+        assertNotNull(notification)
+        makeNotificationExpanded(device, notification)
+
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
