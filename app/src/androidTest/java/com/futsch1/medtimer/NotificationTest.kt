@@ -227,9 +227,11 @@ class NotificationTest : BaseTestHelper() {
 
     private fun makeNotificationExpanded(device: UiDevice, notification: UiObject2) {
         val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.text(notification.text)))
-        val expand = notificationRow.findObject(By.res("android:id/expand_button"))
-        if (expand?.contentDescription == "Expand") {
-            expand.click()
+        if (notificationRow != null) {
+            val expand = notificationRow.findObject(By.res("android:id/expand_button"))
+            if (expand?.contentDescription == "Expand") {
+                expand.click()
+            }
         }
     }
 
