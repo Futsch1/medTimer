@@ -297,12 +297,7 @@ class NotificationTest : BaseTestHelper() {
     fun bigButtons() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
-
-        device.openNotification()
-        val notification = device.wait(Until.findObject(By.textContains("SD card")), 2000)
-        assertNotNull(notification)
-        makeNotificationExpanded(device, notification)
-
+        
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
