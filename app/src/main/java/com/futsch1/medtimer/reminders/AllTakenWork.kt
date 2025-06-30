@@ -9,6 +9,8 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import java.time.Instant
+import java.time.ZoneId
 
 class AllTakenWork(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
@@ -17,9 +19,14 @@ class AllTakenWork(context: Context, workerParams: WorkerParameters) : Worker(co
         val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
         if (reminderEvent != null) {
             val allReminders = medicineRepository.getSameTimeReminders(reminderEvent.reminderId)
-            val allReminderEventIds: List<Int?> = allReminders.map { medicineRepository.getLastReminderEvent(it.reminderId)?.reminderEventId } + reminderEventId
+            val dayOfYear = Instant.ofEpochSecond(reminderEvent.remindedTimestamp).atZone(ZoneId.systemDefault()).dayOfYear
+            val allReminderEventIds: List<ReminderEvent?> = allReminders.map { medicineRepository.getLastReminderEvent(it.reminderId) } + reminderEvent
             allReminderEventIds.forEach {
-                it?.let { it1 -> NotificationAction.processNotification(applicationContext, it1, ReminderEvent.ReminderStatus.TAKEN) }
+                it?.let { it1 ->
+                    if (Instant.ofEpochSecond(it1.remindedTimestamp).atZone(ZoneId.systemDefault()).dayOfYear == dayOfYear) {
+                        NotificationAction.processNotification(applicationContext, it1.reminderEventId, ReminderEvent.ReminderStatus.TAKEN)
+                    }
+                }
             }
             Log.d(LogTags.REMINDER, "All taken: {$allReminderEventIds}")
             medicineRepository.flushDatabase()
