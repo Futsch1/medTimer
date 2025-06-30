@@ -195,15 +195,15 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         sleep(2_000)
-        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
 
         device.pressBack()
 
         device.openNotification()
         sleep(2_000)
-        notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
-        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
@@ -218,15 +218,15 @@ class NotificationTest : BaseTestHelper() {
         assertContains("Test variable amount again")
     }
 
-    private fun clickNotificationButton(device: UiDevice, notification: UiObject2, notificationText: String) {
-        makeNotificationExpanded(device, notification)
-        val button = device.findObject(By.text(notificationText))
+    private fun clickNotificationButton(device: UiDevice, notificationText: String, buttonText: String) {
+        makeNotificationExpanded(device, notificationText)
+        val button = device.findObject(By.text(buttonText))
         internalAssert(button != null)
         button.click()
     }
 
-    private fun makeNotificationExpanded(device: UiDevice, notification: UiObject2) {
-        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.textContains(notification.text)))
+    private fun makeNotificationExpanded(device: UiDevice, notificationText: String) {
+        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.textContains(notificationText)))
         if (notificationRow != null) {
             val expand = notificationRow.findObject(By.res("android:id/expand_button"))
             if (expand?.contentDescription == "Expand") {
@@ -264,7 +264,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
-        makeNotificationExpanded(device, notification)
+        makeNotificationExpanded(device, TEST_MED)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
@@ -297,7 +297,7 @@ class NotificationTest : BaseTestHelper() {
     fun bigButtons() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
-        
+
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
@@ -310,7 +310,8 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
-        makeNotificationExpanded(device, device.wait(Until.findObject(By.textContains(TEST_MED)), 2000))
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        makeNotificationExpanded(device, TEST_MED)
         internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "takenButton")),
@@ -358,7 +359,7 @@ class NotificationTest : BaseTestHelper() {
         val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
 
-        clickNotificationButton(device, notification, getNotificationText(R.string.all_taken, notificationTimeString))
+        clickNotificationButton(device, "second one", getNotificationText(R.string.all_taken, notificationTimeString))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
