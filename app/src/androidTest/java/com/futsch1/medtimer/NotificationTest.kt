@@ -310,6 +310,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         makeNotificationExpanded(device, TEST_MED)
         internalAssert(
             device.wait(
