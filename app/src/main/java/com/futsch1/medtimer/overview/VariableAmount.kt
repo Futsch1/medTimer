@@ -28,12 +28,14 @@ fun variableAmountDialog(
             .hint(R.string.dosage)
             .initialText(amount)
             .textSink { amountLocal: String? ->
-                updateReminderEvent(
-                    activity,
-                    reminderEventId,
-                    amountLocal!!,
-                    dispatcher
-                )
+                amountLocal?.let {
+                    updateReminderEvent(
+                        activity,
+                        reminderEventId,
+                        it,
+                        dispatcher
+                    )
+                }
             }
             .cancelCallback { touchReminderEvent(activity, reminderEventId, dispatcher) }
             .show()

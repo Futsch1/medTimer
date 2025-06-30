@@ -19,6 +19,7 @@ import com.adevinta.android.barista.rule.BaristaRule;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.junit.rules.TestName;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -28,8 +29,10 @@ public abstract class BaseTestHelper {
     public BaristaRule<MainActivity> baristaRule = BaristaRule.create(MainActivity.class);
     @Rule
     public GrantPermissionRule mGrantPermissionRule = getPermissionRule();
+    @Rule
+    public TestName testName = new TestName();
 
-    protected MyFailureHandler failureHandler = new MyFailureHandler(this.getClass().getName(),
+    protected MyFailureHandler failureHandler = new MyFailureHandler(this.getClass().getName(), testName,
             getInstrumentation().getTargetContext());
 
     @BeforeClass

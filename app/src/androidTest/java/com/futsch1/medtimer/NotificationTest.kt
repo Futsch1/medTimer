@@ -195,20 +195,15 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        var button = device.findObject(By.text(getNotificationText(R.string.taken)))
-        internalAssert(button != null)
-        button.click()
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
 
         device.pressBack()
 
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-        button = device.findObject(By.text(getNotificationText(R.string.taken)))
-        internalAssert(button != null)
-        button.click()
+        notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        clickNotificationButton(device, notification, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
@@ -221,6 +216,23 @@ class NotificationTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         assertContains("Test variable amount again")
+    }
+
+    private fun clickNotificationButton(device: UiDevice, notification: UiObject2, notificationText: String) {
+        makeNotificationExpanded(device, notification)
+        val button = device.findObject(By.text(notificationText))
+        internalAssert(button != null)
+        button.click()
+    }
+
+    private fun makeNotificationExpanded(device: UiDevice, notification: UiObject2) {
+        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.textContains(notification.text)))
+        if (notificationRow != null) {
+            val expand = notificationRow.findObject(By.res("android:id/expand_button"))
+            if (expand?.contentDescription == "Expand") {
+                expand.click()
+            }
+        }
     }
 
     @Test
@@ -252,6 +264,7 @@ class NotificationTest : BaseTestHelper() {
         sleep(2_000)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
         internalAssert(notification != null)
+        makeNotificationExpanded(device, notification)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
@@ -284,6 +297,7 @@ class NotificationTest : BaseTestHelper() {
     fun bigButtons() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
+        
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
@@ -296,6 +310,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
+        makeNotificationExpanded(device, device.wait(Until.findObject(By.textContains(TEST_MED)), 2000))
         internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "takenButton")),
@@ -343,9 +358,7 @@ class NotificationTest : BaseTestHelper() {
         val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
         assertNotNull(notification)
 
-        val button = device.findObject(By.text(getNotificationText(R.string.all_taken, notificationTimeString)))
-        internalAssert(button != null)
-        button.click()
+        clickNotificationButton(device, notification, getNotificationText(R.string.all_taken, notificationTimeString))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
