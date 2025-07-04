@@ -224,4 +224,6 @@
     <string name="interval_time">Interval %s</string>
     <string name="reminded">Reminded</string>
     <string name="all_taken">All taken (%s)</string>
+    <string name="override_surface">Enable Surface Access</string>
+    <string name="override_surface_summary">Enable Surface Access Summary (extra permission required)</string>
 </resources>

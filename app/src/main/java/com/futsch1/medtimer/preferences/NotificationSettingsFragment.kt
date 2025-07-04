@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.preferences
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -13,6 +15,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
+import androidx.core.net.toUri
+
 
 class NotificationSettingsFragment : PreferencesFragment() {
     private var rootKey: String? = null
@@ -56,6 +60,30 @@ class NotificationSettingsFragment : PreferencesFragment() {
                 }
                 true
             }
+        preference =
+            preferenceScreen.findPreference<Preference?>("override_surface")
+        preference?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, value: Any? ->
+                if (true == value) {
+                    showSurfacePermissions()
+                }
+                true
+            }
+    }
+
+    @SuppressLint("UseKtx")
+    private fun showSurfacePermissions() {
+        if (!Settings.canDrawOverlays(this.context)) {
+            // If not, form up an Intent to launch the permission request
+
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + this.context!!.getPackageName())
+            )
+            this.startActivityForResult(intent, 10101);
+
+        }
+
     }
 
 
