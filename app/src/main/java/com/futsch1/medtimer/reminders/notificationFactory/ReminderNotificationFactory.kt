@@ -43,6 +43,15 @@ fun getReminderNotificationFactory(
         )
     }
 }
+fun getBigReminderNotificationFactory(
+    context: Context,
+    notificationId: Int,
+    reminderNotificationData: ReminderNotificationData
+): BigReminderNotificationFactory {
+    return  BigReminderNotificationFactory(
+            context, notificationId, reminderNotificationData
+        );
+}
 
 abstract class ReminderNotificationFactory(
     context: Context,

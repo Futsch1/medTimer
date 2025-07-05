@@ -75,6 +75,7 @@
                 <action android:name="com.futsch1.medTimer.RESCHEDULE_ACTION" />
                 <action android:name="com.futsch1.medTimer.DISMISSED_ACTION" />
                 <action android:name="com.futsch1.medTimer.TAKEN_ACTION" />
+                <action android:name="com.futsch1.medTimer.SHOW_SURFACE" />
             </intent-filter>
         </receiver>
 
