@@ -87,5 +87,30 @@
             android:inputType="datetime" />
 
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editStartHourLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:hint="@string/interval_start_hour">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editStartHourTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editEndHourLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:hint="@string/interval_end_hour">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editEndHourTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time" />
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

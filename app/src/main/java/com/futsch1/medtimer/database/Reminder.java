@@ -63,6 +63,12 @@ public class Reminder {
     @ColumnInfo(defaultValue = "false")
     @Expose
     public boolean variableAmount;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int startHour;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public int endHour;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -79,6 +85,8 @@ public class Reminder {
         intervalStart = 0;
         intervalStartsFromProcessed = false;
         variableAmount = false;
+        startHour = 0;
+        endHour = 0;
     }
 
     public ReminderType getReminderType() {
@@ -93,7 +101,7 @@ public class Reminder {
 
     @Override
     public int hashCode() {
-        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart, intervalStartsFromProcessed, variableAmount);
+        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart,startHour,endHour, intervalStartsFromProcessed, variableAmount);
     }
 
     @Override
@@ -119,6 +127,8 @@ public class Reminder {
                 activeDaysOfMonth == that.activeDaysOfMonth &&
                 linkedReminderId == that.linkedReminderId &&
                 intervalStart == that.intervalStart &&
+                startHour == that.startHour &&
+                endHour == that.endHour &&
                 intervalStartsFromProcessed == that.intervalStartsFromProcessed &&
                 variableAmount == that.variableAmount;
     }

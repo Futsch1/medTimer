@@ -18,6 +18,7 @@ import com.futsch1.medtimer.helpers.TimeHelper;
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor;
 import com.futsch1.medtimer.medicine.editors.IntervalEditor;
 import com.futsch1.medtimer.medicine.editors.RemindOnDays;
+import com.futsch1.medtimer.medicine.editors.TimeEditor;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,6 +36,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private TextInputLayout instructionSuggestions;
     private PeriodSettings periodSettings;
     private DateTimeEditor intervalStartDateTimeEditor;
+    private TimeEditor startHourEditor;
+    private TimeEditor endHourEditor;
     private IntervalEditor intervalEditor;
     private MaterialSwitch variableAmount;
     private RemindOnDays remindOnDaysOfWeek;
@@ -95,6 +98,8 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         putPauseDaysIntoReminder(entity);
         putStartDateIntoReminder(entity);
         putIntervalIntoReminder(entity, fragmentView);
+        putStartHourIntoReminder(entity, fragmentView);
+        putEndHourIntoReminder(entity, fragmentView);
         putRemindOnDaysIntoReminder(entity);
     }
 
@@ -135,6 +140,22 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
                 entity.intervalStart = intervalStartDateTime;
             }
             entity.intervalStartsFromProcessed = ((RadioButton) fragmentView.findViewById(R.id.intervalStarsFromProcessed)).isChecked();
+        }
+    }
+    private void putStartHourIntoReminder(Reminder entity, View fragmentView) {
+        if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            int minutes = startHourEditor.getMinutes();
+            if (minutes > 0) {
+                entity.startHour = minutes;
+            }
+        }
+    }
+    private void putEndHourIntoReminder(Reminder entity, View fragmentView) {
+        if (entity.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            int minutes = endHourEditor.getMinutes();
+            if (minutes > 0) {
+                entity.endHour = minutes;
+            }
         }
     }
 
@@ -211,6 +232,23 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
                 requireActivity(),
                 fragmentView.findViewById(R.id.editIntervalStartDateTime),
                 entity.intervalStart
+        );
+
+        startHourEditor = new TimeEditor(
+                requireActivity(),
+                fragmentView.findViewById(R.id.editStartHourTime),
+                (int)entity.startHour,
+                s -> {return null;},
+                0
+        );
+
+
+        endHourEditor = new TimeEditor(
+                requireActivity(),
+                fragmentView.findViewById(R.id.editEndHourTime),
+                (int)entity.endHour,
+                s -> {return null;},
+                0
         );
 
         RadioGroup intervalBasedGroup = fragmentView.findViewById(R.id.intervalStartType);

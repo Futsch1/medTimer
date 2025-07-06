@@ -2,6 +2,7 @@ package com.futsch1.medtimer.medicine.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
@@ -88,6 +89,8 @@ class NewReminderDialog(
         setVisibilities(
             dialog.findViewById<RadioGroup>(R.id.reminderType).checkedRadioButtonId
         )
+        dialog.findViewById<TextInputLayout>(R.id.editStartHourLayout).visibility = View.INVISIBLE;
+        dialog.findViewById<TextInputLayout>(R.id.editEndHourLayout).visibility = View.INVISIBLE;
     }
 
     private fun setVisibilities(checkedId: Int) {

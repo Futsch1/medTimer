@@ -1,9 +1,12 @@
 package com.futsch1.medtimer.reminders.scheduling
 
+import android.util.Log
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import kotlin.math.ceil
 
 class IntervalScheduling(
@@ -40,7 +43,15 @@ class IntervalScheduling(
                 Instant.ofEpochSecond(
                     lastReminderEvent.remindedTimestamp
                 )
-        return instant?.plusSeconds(reminder.timeInMinutes * 60L)
+        val plusSeconds = instant!!.plusSeconds(reminder.timeInMinutes * 60L)
+        val limitEndHourLocalTime = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusMinutes(reminder.endHour.toLong());
+        val limitEndHourInstant= limitEndHourLocalTime.toInstant(timeAccess.systemZone().rules.getOffset(limitEndHourLocalTime));
+        val limitStartHourLocalTime = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusDays(1).plusMinutes(reminder.startHour.toLong());
+        val limitStartHourInstant= limitStartHourLocalTime.toInstant(timeAccess.systemZone().rules.getOffset(limitEndHourLocalTime));
+        if (plusSeconds.isAfter(limitEndHourInstant) && plusSeconds.isBefore(limitStartHourInstant)) {
+            return limitStartHourInstant;
+        }
+        return plusSeconds
     }
 
     private fun adjustToToday(instant: Instant?): Instant? {

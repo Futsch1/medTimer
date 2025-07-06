@@ -226,4 +226,6 @@
     <string name="all_taken">All taken (%s)</string>
     <string name="override_surface">Enable Surface Access</string>
     <string name="override_surface_summary">Enable Surface Access Summary (extra permission required)</string>
+    <string name="interval_start_hour">Start Hour</string>
+    <string name="interval_end_hour">End Hour</string>
 </resources>
