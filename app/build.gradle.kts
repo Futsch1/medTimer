@@ -70,14 +70,11 @@ android {
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     lint {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
-        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency") else listOf())
+        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
     }
 }
 
@@ -85,7 +82,7 @@ dependencies {
     val appcompatVersion = "1.7.1"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.9.0"
+    val androidXNavigationVersion = "2.9.1"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.2"
@@ -103,7 +100,7 @@ dependencies {
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
 
-    val junitVersion = "5.13.2"
+    val junitVersion = "5.13.3"
     val mockitoCoreVersion = "5.18.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.15.1"
