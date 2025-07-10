@@ -14,7 +14,7 @@
             android:layout_height="35dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/app_url"
-            android:src="@mipmap/logo_round" />
+            android:src="@mipmap/ic_launcher_round" />
 
         <TextView
             android:id="@+id/widgetCaption"

@@ -19,7 +19,7 @@ class MedTimerAppIntro : AppIntro() {
         addSlide(
             getString(R.string.intro_welcome),
             getString(R.string.intro_welcome_description),
-            R.mipmap.logo
+            R.mipmap.ic_launcher
         )
 
         addSlide(
