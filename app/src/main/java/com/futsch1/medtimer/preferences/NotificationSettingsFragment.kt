@@ -139,21 +139,18 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
 
     private fun showDndPermissions() {
-        if (!requireContext().getSystemService<NotificationManager?>(NotificationManager::class.java)
-                .isNotificationPolicyAccessGranted()
+        if (!requireContext().getSystemService(NotificationManager::class.java)
+                .isNotificationPolicyAccessGranted
         ) {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(R.string.enable_dnd_dialog)
             builder.setPositiveButton(R.string.ok) { _, _ ->
-                {
-                    val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                    safeStartActivity(intent)
-                }
+                val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                startActivity(intent)
             }
 
             builder.setNegativeButton(R.string.cancel) { _, _ -> cancelOverrideDnd() }
-            val d = builder.create()
-            d.show()
+            builder.show()
         }
     }
 
