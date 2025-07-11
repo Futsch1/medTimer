@@ -93,8 +93,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
         ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
         if (reminderEvent != null) {
             StatisticsFragmentDirections.ActionStatisticsFragmentToEditEventFragment action = StatisticsFragmentDirections.actionStatisticsFragmentToEditEventFragment(
-                    reminderEvent.reminderEventId,
-                    reminderEvent.reminderId <= 0
+                    reminderEvent.reminderEventId
             );
             activity.runOnUiThread(() -> {
                 try {
