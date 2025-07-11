@@ -91,8 +91,7 @@ public class LatestRemindersViewHolder extends RecyclerView.ViewHolder {
         this.itemView.setOnClickListener((View v) -> {
             NavController navController = Navigation.findNavController(this.itemView);
             OverviewFragmentDirections.ActionOverviewFragmentToEditEventFragment action = OverviewFragmentDirections.actionOverviewFragmentToEditEventFragment(
-                    reminderEvent.reminderEventId,
-                    reminderEvent.reminderId <= 0
+                    reminderEvent.reminderEventId
             );
             try {
                 navController.navigate(action);
