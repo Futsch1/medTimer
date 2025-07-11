@@ -94,9 +94,9 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
     private fun resumeOverrideDnd() {
         val preference =
             preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.OVERRIDE_DND)
-        if (preference != null && !requireContext().getSystemService<NotificationManager?>(
+        if (preference != null && !requireContext().getSystemService(
                 NotificationManager::class.java
-            ).isNotificationPolicyAccessGranted()
+            ).isNotificationPolicyAccessGranted
         ) {
             preference.setChecked(false)
         }
