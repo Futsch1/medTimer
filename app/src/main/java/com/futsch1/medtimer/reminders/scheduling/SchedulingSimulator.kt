@@ -10,14 +10,14 @@ import java.time.ZoneId
 
 data class SchedulingItem(val medicine: FullMedicine, val reminder: Reminder)
 
-class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>, startDay: LocalDate) {
+class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>, timeAccess: ReminderScheduler.TimeAccess) {
     var totalEvents = mutableListOf(*recentReminders.toTypedArray())
     var schedulingItems = medicines.map { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.flatten().filter { it.reminder.active }
     val schedulingFactory = SchedulingFactory()
-    var currentDay: LocalDate = startDay
+    var currentDay: LocalDate = timeAccess.localDate()
     val timeAccess = object : ReminderScheduler.TimeAccess {
         override fun systemZone(): ZoneId {
-            return ZoneId.systemDefault()
+            return timeAccess.systemZone()
         }
 
         override fun localDate(): LocalDate {
@@ -34,14 +34,14 @@ class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<R
     private fun simulateDay(scheduledReminderConsumer: (ScheduledReminder) -> Boolean): Boolean {
         var continueSimulating = true
         for (schedulingItem in schedulingItems) {
-            val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess)
-            val nextScheduledTime = scheduler.getNextScheduledTime()
-            if (nextScheduledTime != null) {
-                continueSimulating = scheduledReminderConsumer(ScheduledReminder(schedulingItem.medicine, schedulingItem.reminder, nextScheduledTime))
-                totalEvents.add(createReminderEvent(schedulingItem.reminder, nextScheduledTime))
-            } else {
-                continueSimulating = false
-            }
+            do {
+                val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess)
+                val nextScheduledTime = scheduler.getNextScheduledTime()
+                if (nextScheduledTime != null) {
+                    continueSimulating = scheduledReminderConsumer(ScheduledReminder(schedulingItem.medicine, schedulingItem.reminder, nextScheduledTime))
+                    totalEvents.add(createReminderEvent(schedulingItem.reminder, nextScheduledTime))
+                }
+            } while (nextScheduledTime != null && continueSimulating)
             if (!continueSimulating) {
                 break
             }
