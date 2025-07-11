@@ -7,6 +7,7 @@ plugins {
     id("jacoco")
     //noinspection NewerVersionAvailable,GradleDependency: Version 6 crashes with an error in apache.commons.compress
     id("org.sonarqube") version "5.1.0.4882"
+    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
 room {
