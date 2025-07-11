@@ -31,14 +31,21 @@ import com.futsch1.medtimer.reminders.RepeatReminderWork;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 
-class RepeatReminderWorkUnitTest {
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
+@Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
+public class RepeatReminderWorkUnitTest {
 
     @Mock
     private Application mockApplication;
@@ -46,7 +53,7 @@ class RepeatReminderWorkUnitTest {
     private SharedPreferences mockSharedPreferences;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
 
         mockApplication = mock(Application.class);
         when(mockApplication.getPackageName()).thenReturn("test");
@@ -59,7 +66,7 @@ class RepeatReminderWorkUnitTest {
     }
 
     @Test
-    void testDoWorkRepeatReminder() {
+    public void testDoWorkRepeatReminder() {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.notificationId = 14;
         int reminderId = 11;

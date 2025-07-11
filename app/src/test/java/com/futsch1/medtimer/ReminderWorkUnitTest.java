@@ -43,10 +43,12 @@ import com.futsch1.medtimer.reminders.ReminderWork;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.robolectric.annotation.Config;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +56,12 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
-class ReminderWorkUnitTest {
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
+@Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
+public class ReminderWorkUnitTest {
 
     private final int reminderId = 11;
     private final int reminderEventId = 12;
@@ -68,7 +75,7 @@ class ReminderWorkUnitTest {
     private WorkerParameters workerParams;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         workerParams = mock(WorkerParameters.class);
 
         Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, reminderId).putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId).
@@ -97,7 +104,7 @@ class ReminderWorkUnitTest {
     }
 
     @Test
-    void testDoWorkNullHandling() {
+    public void testDoWorkNullHandling() {
         // Reminder is null
         try (MockedConstruction<MedicineRepository> ignored = mockConstruction(MedicineRepository.class, (mock, context) -> when(mock.getReminder(11)).thenReturn(null));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
@@ -132,7 +139,7 @@ class ReminderWorkUnitTest {
     }
 
     @Test
-    void testDoWorkNotifications() {
+    public void testDoWorkNotifications() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
             when(mock.getReminder(reminderId)).thenReturn(new Reminder(medicineId));
             FullMedicine medicine = new FullMedicine();
@@ -184,7 +191,7 @@ class ReminderWorkUnitTest {
     }
 
     @Test
-    void testDoWorkNewReminder() {
+    public void testDoWorkNewReminder() {
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
             Reminder reminder = new Reminder(medicineId);
             reminder.reminderId = reminderId;
