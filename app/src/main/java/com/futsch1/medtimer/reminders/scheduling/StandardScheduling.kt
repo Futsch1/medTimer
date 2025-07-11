@@ -145,7 +145,6 @@ class StandardScheduling(
             )
     }
 
-
     override fun getNextScheduledTime(): Instant? {
         val nextScheduledDate = nextScheduledDate
         return if (nextScheduledDate != null) {
