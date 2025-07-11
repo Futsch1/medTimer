@@ -73,7 +73,7 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
         editText.setText(TimeHelper.toLocalizedDateString(editEventRemindedTimestamp.getContext(),
                 timestamp));
         editText.setOnFocusChangeListener((v, hasFocus) -> onFocusEditDate(hasFocus, editText));
-        editText.setVisibility(EditEventFragmentArgs.fromBundle(requireArguments()).getEventCanEditDate() ? View.VISIBLE : View.GONE);
+        editText.setVisibility(View.VISIBLE);
     }
 
     private void configureTakenText(View fragmentView, ReminderEvent entity) {

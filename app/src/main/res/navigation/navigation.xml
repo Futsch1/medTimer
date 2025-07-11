@@ -101,9 +101,6 @@
         <argument
             android:name="eventId"
             app:argType="integer" />
-        <argument
-            android:name="eventCanEditDate"
-            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
