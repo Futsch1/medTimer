@@ -17,7 +17,6 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -167,7 +166,6 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         clickOn(R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
-        sleep(1000)
         assertDisplayed(R.id.runOut, "---")
 
         pressBack()
@@ -185,11 +183,9 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickOn(R.id.openStockTracking)
         writeTo(R.id.amountLeft, "10")
-        sleep(1000)
         assertDisplayed(R.id.runOut, TimeHelper.localDateToDateString(context, LocalDate.now().plusDays(4)))
 
         writeTo(R.id.amountLeft, "13")
-        sleep(1000)
         assertDisplayed(R.id.runOut, TimeHelper.localDateToDateString(context, LocalDate.now().plusDays(5)))
     }
 }
