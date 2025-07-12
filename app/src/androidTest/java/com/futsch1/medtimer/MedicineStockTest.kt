@@ -167,6 +167,7 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         clickOn(R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
+        sleep(1000)
         assertDisplayed(R.id.runOut, "---")
 
         pressBack()
