@@ -39,6 +39,8 @@ class CalendarEventsViewModel(
     fun getEventForDays(
         medicineId: Int, pastDays: Long, futureDays: Long
     ): LiveData<Map<LocalDate, String>> {
+        eventListByDay.clear()
+
         viewModelScope.launch(dispatcher) {
             reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
             allMedicines = medicineRepository.medicines

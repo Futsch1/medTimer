@@ -103,9 +103,18 @@ public class TimeHelper {
         LocalDate date = Instant.ofEpochSecond(daysSinceEpoch * 24 * 60 * 60)
                 .atZone(ZoneOffset.UTC)
                 .toLocalDate();
+        return localDateToDateString(context, date);
+    }
+
+    /**
+     * @param context   Context to extract date format
+     * @param localDate Local date
+     * @return Date string in local format
+     */
+    public static String localDateToDateString(Context context, LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                 .withLocale(context.getResources().getConfiguration().getLocales().get(0));
-        return date.format(formatter);
+        return localDate.format(formatter);
     }
 
     /**

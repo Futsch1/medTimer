@@ -17,11 +17,15 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TimeHelper
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import java.text.NumberFormat
+import java.time.LocalDate
+import java.time.LocalTime
 
 class MedicineStockTest : BaseTestHelper() {
 
@@ -163,9 +167,28 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         clickOn(R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
+        assertDisplayed(R.id.runOut, "---")
 
         pressBack()
         clickOn(R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun runOutDate() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("3", LocalTime.of(1, 0))
+
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "10")
+        sleep(1000)
+        assertDisplayed(R.id.runOut, TimeHelper.localDateToDateString(context, LocalDate.now().plusDays(4)))
+
+        writeTo(R.id.amountLeft, "13")
+        sleep(1000)
+        assertDisplayed(R.id.runOut, TimeHelper.localDateToDateString(context, LocalDate.now().plusDays(5)))
     }
 }
