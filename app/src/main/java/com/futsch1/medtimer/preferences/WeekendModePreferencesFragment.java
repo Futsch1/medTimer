@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -69,6 +70,9 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     }
 
     private void requestReschedule() {
-        ReminderProcessor.requestReschedule(requireContext());
+        Context context = getContext();
+        if (context != null) {
+            ReminderProcessor.requestReschedule(context);
+        }
     }
 }
