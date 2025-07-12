@@ -15,11 +15,10 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -27,130 +26,118 @@ import java.time.format.FormatStyle
 
 class CalendarEventsViewModel(
     application: Application
-) :
-    AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     val medicineRepository = MedicineRepository(application)
     private var dispatcher = Dispatchers.IO
-    private var liveReminderEvents: List<ReminderEvent> = listOf()
-    private var FullMedicine: List<FullMedicine> = listOf()
+    private var reminderEvents: List<ReminderEvent> = listOf()
+    private var allMedicines: List<FullMedicine> = listOf()
     private var medicine: Medicine? = null
-    private val liveData: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
+    private val eventsByDay: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
+    private var eventListByDay: MutableMap<LocalDate, MutableList<String>> = mutableMapOf()
 
     fun getEventForDays(
-        medicineId: Int,
-        pastDays: Long,
-        futureDays: Long
+        medicineId: Int, pastDays: Long, futureDays: Long
     ): LiveData<Map<LocalDate, String>> {
         viewModelScope.launch(dispatcher) {
-            liveReminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
-            FullMedicine = medicineRepository.medicines
+            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
+            allMedicines = medicineRepository.medicines
             if (medicineId > 0) {
                 medicine = medicineRepository.getOnlyMedicine(medicineId)
+                allMedicines = allMedicines.filter { medicine -> medicine.medicine.medicineId == medicineId }
             }
-            val dayStrings: MutableMap<LocalDate, String> = mutableMapOf()
-            for (deltaDay in -pastDays..futureDays) {
-                val day = LocalDate.now().plusDays(deltaDay)
-                val eventStrings: MutableList<String> = mutableListOf()
-                if (deltaDay <= 0 && pastDays > 0) {
-                    eventStrings += getPastEvents(day)
-                }
-                if (deltaDay > 0) {
-                    eventStrings += getUpcomingEvents(day, medicineId)
-                }
-                dayStrings[day] = buildDayString(day, eventStrings)
-            }
-            viewModelScope.launch { liveData.setValue(dayStrings) }
+            addPastEvents(pastDays)
+            addFutureEvents(futureDays)
+            viewModelScope.launch { eventsByDay.value = buildEventsByDay() }
         }
-        return liveData
+        return eventsByDay
     }
 
-    private fun buildDayString(day: LocalDate, eventStrings: MutableList<String>): String {
+    private fun buildEventsByDay(): Map<LocalDate, String> {
+        val eventsByDayStrings: MutableMap<LocalDate, String> = mutableMapOf()
+        for (day in eventListByDay.keys) {
+            eventListByDay[day]?.let { eventsByDayStrings[day] = buildDayEvents(day, it) }
+        }
+        return eventsByDayStrings
+    }
+
+    private fun buildDayEvents(day: LocalDate, eventStrings: MutableList<String>): String {
         if (eventStrings.isNotEmpty()) {
             eventStrings.addAll(
-                0,
-                listOf(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)), "\n")
+                0, listOf(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)), "\n")
             )
         }
 
         return eventStrings.joinToString(separator = "\n")
     }
 
-    private fun getUpcomingEvents(day: LocalDate, medicineId: Int): List<String> {
-        val scheduler = ReminderScheduler(object : TimeAccess {
+    private fun addFutureEvents(futureDays: Long) {
+        val timeProvider = object : TimeAccess {
             override fun systemZone(): ZoneId {
                 return ZoneId.systemDefault()
             }
 
             override fun localDate(): LocalDate {
-                return day
+                return LocalDate.now()
             }
         }
-        )
-        return scheduler.schedule(FullMedicine, liveReminderEvents)
-            .filter {
-                (medicineId <= 0 || it.medicine.medicine.medicineId == medicineId) && isOnDay(
-                    day,
-                    it.timestamp
-                )
+        val endDay = LocalDate.now().plusDays(futureDays)
+
+        val schedulingSimulator = SchedulingSimulator(allMedicines, reminderEvents, timeProvider)
+
+        schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
+            if (scheduledDate < endDay) {
+                if (!eventListByDay.containsKey(scheduledDate)) {
+                    eventListByDay[scheduledDate] = mutableListOf()
+                }
+                eventListByDay[scheduledDate]?.add(scheduledReminderToString(scheduledReminder))
             }
-            .map { scheduledReminderToString(it) }
-    }
-
-    private fun isOnDay(day: LocalDate, timestamp: Instant): Boolean {
-        return day == secondsSinceEpochToLocalDate(
-            timestamp.toEpochMilli() / 1000,
-            ZoneId.systemDefault()
-        )
-
+            scheduledDate < endDay
+        }
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): String {
         return TimeHelper.toLocalizedTimeString(
-            getApplication<Application>().applicationContext,
-            scheduledReminder.timestamp.epochSecond
-        ) +
-                ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
+            getApplication<Application>().applicationContext, scheduledReminder.timestamp.epochSecond
+        ) + ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
     }
 
-    private fun getPastEvents(day: LocalDate): List<String> {
-        return liveReminderEvents.filter {
-            secondsSinceEpochToLocalDate(it.remindedTimestamp, ZoneId.systemDefault()) == day
-                    && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(
-                it.medicineName
-            ))
+    private fun addPastEvents(pastDays: Long) {
+        val startDay = LocalDate.now().minusDays(pastDays)
+        for (reminderEvent: ReminderEvent in reminderEvents) {
+            val day = secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
+            if ((day >= startDay) && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))) {
+                if (!eventListByDay.containsKey(day)) {
+                    eventListByDay[day] = mutableListOf()
+                }
+                eventListByDay[day]?.add(reminderEventToString(reminderEvent, day))
+            }
         }
-            .map { reminderEventToString(it, day) }
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent, day: LocalDate): String {
         val timeString = getTimeString(reminderEvent, day)
-        var eventString =
-            timeString + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
+        var reminderEventFormatted = timeString + ": " + reminderEvent.amount + " " + reminderEvent.medicineName
         if (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED) {
-            eventString += " (" + getApplication<Application>().getString(R.string.skipped) + ")"
+            reminderEventFormatted += " (" + getApplication<Application>().getString(R.string.skipped) + ")"
         }
         if (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED) {
-            eventString += " (?)"
+            reminderEventFormatted += " (?)"
         }
-        return eventString
+        return reminderEventFormatted
     }
 
     private fun getTimeString(
-        reminderEvent: ReminderEvent,
-        day: LocalDate
+        reminderEvent: ReminderEvent, day: LocalDate
     ): String {
-        val timeStamp =
-            if (reminderEvent.processedTimestamp != 0L) reminderEvent.processedTimestamp else reminderEvent.remindedTimestamp
-        val timeFunc: (Context, Long) -> String =
-            if (isSameDay(timeStamp, day)) {
-                TimeHelper::toLocalizedTimeString
-            } else {
-                TimeHelper::toLocalizedDatetimeString
-            }
-        return timeFunc(
-            getApplication<Application>().applicationContext,
-            timeStamp
+        val timeStamp = if (reminderEvent.processedTimestamp != 0L) reminderEvent.processedTimestamp else reminderEvent.remindedTimestamp
+        val formatTimestamp: (Context, Long) -> String = if (isSameDay(timeStamp, day)) {
+            TimeHelper::toLocalizedTimeString
+        } else {
+            TimeHelper::toLocalizedDatetimeString
+        }
+        return formatTimestamp(
+            getApplication<Application>().applicationContext, timeStamp
         )
     }
 
