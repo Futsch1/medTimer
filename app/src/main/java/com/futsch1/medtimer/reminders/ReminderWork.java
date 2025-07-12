@@ -20,7 +20,9 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.CoroutineCallback;
 import com.futsch1.medtimer.LogTags;
+import com.futsch1.medtimer.PhoneWearModule;
 import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
@@ -37,10 +39,12 @@ import java.util.stream.Collectors;
 public class ReminderWork extends Worker {
     private final Context context;
     private MedicineRepository medicineRepository;
+    private PhoneWearModule phoneWearModule;
 
     public ReminderWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
+        this.phoneWearModule = new PhoneWearModule(context);
     }
 
     @NonNull
@@ -148,6 +152,11 @@ public class ReminderWork extends Worker {
             reminderEvent.notificationId =
                     notifications.showNotification(minutesToTimeString(context, reminderDateTime.getHour() * 60L + reminderDateTime.getMinute()),
                             medicine, reminder, reminderEvent, hasSameTimeReminders);
+            if (!reminder.variableAmount) {
+                phoneWearModule.startCompanion(reminderEvent.reminderEventId, medicine.medicine.name, reminderEvent.notificationId, CoroutineCallback.Companion.call((fooBar, error) -> {
+                    Log.i(LogTags.SCHEDULER, "startCompanion ");
+                }));
+            }
             medicineRepository.updateReminderEvent(reminderEvent);
         }
     }

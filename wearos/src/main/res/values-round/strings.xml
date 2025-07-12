@@ -1,0 +1,3 @@
+<resources>
+    <string name="hello_world">Reminder: %1$s!</string>
+</resources>

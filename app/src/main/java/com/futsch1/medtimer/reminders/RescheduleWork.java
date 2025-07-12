@@ -21,7 +21,9 @@ import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.CoroutineCallback;
 import com.futsch1.medtimer.LogTags;
+import com.futsch1.medtimer.PhoneWearModule;
 import com.futsch1.medtimer.ScheduledReminder;
 import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.FullMedicine;
@@ -43,31 +45,42 @@ public class RescheduleWork extends Worker {
     protected final Context context;
     private final AlarmManager alarmManager;
     private final WeekendMode weekendMode;
+    private final PhoneWearModule phoneWearModule;
 
     public RescheduleWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
         this.weekendMode = new WeekendMode(PreferenceManager.getDefaultSharedPreferences(context));
         alarmManager = context.getSystemService(AlarmManager.class);
+        phoneWearModule = new PhoneWearModule(context);
     }
 
     @NonNull
     @Override
     public Result doWork() {
         Log.i(LogTags.REMINDER, "Received scheduler request");
-
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = getReminderScheduler();
         List<FullMedicine> fullMedicines = medicineRepository.getMedicines();
         List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(33));
         if (!scheduledReminders.isEmpty()) {
             ScheduledReminder scheduledReminder = scheduledReminders.get(0);
+            ReminderNotificationData reminderNotificationData = new ReminderNotificationData(
+                    scheduledReminder.timestamp(),
+                    scheduledReminder.reminder().reminderId,
+                    scheduledReminder.medicine().medicine.name);
+            phoneWearModule.addReminderNotificationData(reminderNotificationData,
+                    CoroutineCallback.Companion.call((wearData, error) -> {
+                        //do something with result or error
+                        Log.i(LogTags.SCHEDULER, "addReminderData " + wearData);
+                    }));
             this.enqueueNotification(
-                    new ReminderNotificationData(
-                            scheduledReminder.timestamp(),
-                            scheduledReminder.reminder().reminderId,
-                            scheduledReminder.medicine().medicine.name));
+                    reminderNotificationData);
         } else {
+            phoneWearModule.addReminderNotificationData(null,
+                    CoroutineCallback.Companion.call((wearData, error) -> {
+                        Log.i(LogTags.SCHEDULER, "addReminderData " + wearData);
+                    }));
             this.cancelNextReminder();
         }
 

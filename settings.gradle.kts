@@ -1,5 +1,11 @@
 import java.net.URI
 
+include(":shared")
+
+
+include(":wearos")
+
+
 pluginManagement {
     repositories {
         google()

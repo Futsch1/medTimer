@@ -118,6 +118,7 @@ dependencies {
 
     val desugarJdkVersion = "2.1.5"
 
+    implementation(project(":shared"))
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("com.google.android.material:material:$materialVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -141,6 +142,10 @@ dependencies {
     implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
     implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
     implementation("androidx.biometric:biometric:$biometricVersion")
+
+    implementation("com.google.android.horologist:horologist-datalayer-phone-ui:0.6.17")
+    implementation("com.google.android.horologist:horologist-datalayer-phone:0.6.17")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
