@@ -88,14 +88,15 @@ class MedicineStockFragment :
 
     private fun calculateRunOutDate() {
         if (::runOutDateField.isInitialized) {
-            IdlingRegistry.getInstance().registerLooperAsIdlingResource(thread.looper)
+            val looper = thread.looper
+            IdlingRegistry.getInstance().registerLooperAsIdlingResource(looper)
             Handler(thread.looper).post {
                 val runOutDate = estimateStockRunOutDate(medicineViewModel, medicineId, getCurrentAmount())
                 val runOutString = if (runOutDate != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)
-                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
+                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(looper)
                 }
             }
         }

@@ -31,6 +31,10 @@ class EditEventMenuProvider(
         menu.findItem(R.id.delete_event).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(fragmentEditEvent.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
+                @Suppress("kotlin:S6619", "SENSELESS_COMPARISON") // This actually happens due to a race condition
+                if (thread.looper.queue == null) {
+                    return@deleteItem
+                }
                 val threadHandler = Handler(thread.looper)
                 threadHandler.post {
                     val reminderEvent =
