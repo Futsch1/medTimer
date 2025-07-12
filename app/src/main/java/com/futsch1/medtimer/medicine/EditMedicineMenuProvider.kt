@@ -48,7 +48,11 @@ class EditMedicineMenuProvider(
     }
 
     private fun setRemindersActive(active: Boolean) {
-        val handler = Handler(thread.getLooper())
+        @Suppress("kotlin:S6619", "SENSELESS_COMPARISON") // This actually happens due to a race condition
+        if (thread.looper.queue == null) {
+            return
+        }
+        val handler = Handler(thread.looper)
         handler.post {
             val reminders: List<Reminder> =
                 medicineViewModel.medicineRepository.getReminders(medicineId)

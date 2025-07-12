@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
@@ -23,6 +22,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel
 ) {
+
     private val nextRemindersViewAdapter =
         NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
     private lateinit var reminderEvents: List<ReminderEvent>
@@ -32,15 +32,6 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.nextReminders)
         recyclerView.adapter = nextRemindersViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
-        nextRemindersViewAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
-            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                recyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                recyclerView.scrollToPosition(0)
-            }
-        })
 
         medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner, nextRemindersViewAdapter::submitList)
 

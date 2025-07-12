@@ -95,8 +95,12 @@ public class EditEventFragment extends DatabaseEntityEditFragment<ReminderEvent>
                 startMinutes = Reminder.DEFAULT_TIME;
             }
             new TimeHelper.TimePickerWrapper(requireActivity()).show(startMinutes / 60, startMinutes % 60, minutes -> {
-                String selectedTime = TimeHelper.minutesToTimeString(requireContext(), minutes);
-                editText.setText(selectedTime);
+                try {
+                    String selectedTime = TimeHelper.minutesToTimeString(requireContext(), minutes);
+                    editText.setText(selectedTime);
+                } catch (IllegalStateException e) {
+                    // Intentionally empty
+                }
             });
         }
     }
