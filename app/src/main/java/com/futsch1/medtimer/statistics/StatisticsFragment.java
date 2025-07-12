@@ -104,10 +104,13 @@ public class StatisticsFragment extends Fragment {
         };
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
-        transaction.commit();
-
-        activeStatisticsFragment.setActiveFragment(fragmentType);
-        checkTimeSpinnerVisibility();
+        try {
+            transaction.commit();
+            activeStatisticsFragment.setActiveFragment(fragmentType);
+            checkTimeSpinnerVisibility();
+        } catch (IllegalStateException e) {
+            // Intentionally empty
+        }
     }
 
     private void checkTimeSpinnerVisibility() {
