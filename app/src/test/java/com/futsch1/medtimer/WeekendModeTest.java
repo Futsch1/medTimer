@@ -16,7 +16,9 @@ import com.futsch1.medtimer.preferences.PreferencesNames;
 import com.futsch1.medtimer.reminders.WeekendMode;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.robolectric.annotation.Config;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -25,9 +27,14 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-class WeekendModeTest {
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
+@Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
+public class WeekendModeTest {
     @Test
-    void test_adjustInstant_ReturnsSameInstant_WeekendModeDisabled() {
+    public void test_adjustInstant_ReturnsSameInstant_WeekendModeDisabled() {
         SharedPreferences preferences = Mockito.mock(SharedPreferences.class);
         WeekendMode weekendMode = new WeekendMode(preferences);
         Instant instant = Instant.now();
@@ -40,7 +47,7 @@ class WeekendModeTest {
     }
 
     @Test
-    void test_adjustInstant_ReturnsSameInstant_WeekendDaysEmpty() {
+    public void test_adjustInstant_ReturnsSameInstant_WeekendDaysEmpty() {
         SharedPreferences preferences = Mockito.mock(SharedPreferences.class);
         WeekendMode weekendMode = new WeekendMode(preferences);
         Instant instant = Instant.now();
@@ -54,7 +61,7 @@ class WeekendModeTest {
     }
 
     @Test
-    void test_adjustInstant_ReturnsSameInstant_CurrentDayIsNotWeekend() {
+    public void test_adjustInstant_ReturnsSameInstant_CurrentDayIsNotWeekend() {
         SharedPreferences preferences = Mockito.mock(SharedPreferences.class);
         Instant instant = Mockito.mock(Instant.class);
         WeekendMode weekendMode = new WeekendMode(preferences);
@@ -74,7 +81,7 @@ class WeekendModeTest {
     }
 
     @Test
-    void test_adjustInstant_ReturnsAdjustedInstant_WeekendModeEnabled_CurrentDayIsWeekend() {
+    public void test_adjustInstant_ReturnsAdjustedInstant_WeekendModeEnabled_CurrentDayIsWeekend() {
         SharedPreferences preferences = Mockito.mock(SharedPreferences.class);
         Instant instant = Mockito.mock(Instant.class);
         WeekendMode weekendMode = new WeekendMode(preferences);
@@ -94,7 +101,7 @@ class WeekendModeTest {
     }
 
     @Test
-    void test_adjustInstant_ReturnsAdjustedInstant_WeekendModeEnabled_CurrentDayIsWeekendReminderIsLater() {
+    public void test_adjustInstant_ReturnsAdjustedInstant_WeekendModeEnabled_CurrentDayIsWeekendReminderIsLater() {
         SharedPreferences preferences = Mockito.mock(SharedPreferences.class);
         Instant instant = Mockito.mock(Instant.class);
         WeekendMode weekendMode = new WeekendMode(preferences);

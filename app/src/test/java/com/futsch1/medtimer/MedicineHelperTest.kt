@@ -9,10 +9,15 @@ import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.robolectric.annotation.Config
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 
+@ExtendWith(RobolectricExtension::class)
+@Config(sdk = [34])
 class MedicineHelperTest {
     @Test
     fun testParse() {
@@ -54,17 +59,17 @@ class MedicineHelperTest {
 
     @Test
     fun testMedicineNameWithStockText() {
-        var contextMock = mock(Context::class.java)
-        var preferencesMock = mock(SharedPreferences::class.java)
+        val contextMock = mock(Context::class.java)
+        val preferencesMock = mock(SharedPreferences::class.java)
         Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(false)
-        var preferencesManager = mockStatic(PreferenceManager::class.java)
+        val preferencesManager = mockStatic(PreferenceManager::class.java)
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
 
         Mockito.`when`(contextMock.getString(R.string.medicine_stock_string, "12 pills"))
             .thenReturn("12 pills left")
 
         // Standard case without stock
-        var medicine = Medicine("test")
+        val medicine = Medicine("test")
         medicine.unit = "pills"
         assertEquals(
             "test",
@@ -91,19 +96,19 @@ class MedicineHelperTest {
 
     @Test
     fun testGetMedicineName() {
-        var contextMock = mock(Context::class.java)
-        var preferencesMock = mock(SharedPreferences::class.java)
+        val contextMock = mock(Context::class.java)
+        val preferencesMock = mock(SharedPreferences::class.java)
         Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(true)
-        var preferencesManager = mockStatic(PreferenceManager::class.java)
+        val preferencesManager = mockStatic(PreferenceManager::class.java)
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
 
-        var medicine = Medicine("test")
+        val medicine = Medicine("test")
         medicine.outOfStockReminder = Medicine.OutOfStockReminderType.OFF
         medicine.outOfStockReminderThreshold = 0.0
         medicine.amount = 0.0
         assertEquals(
             "t***",
-            MedicineHelper.getMedicineName(contextMock, medicine, true).toString()
+            MedicineHelper.getMedicineName(contextMock, medicine, true)
         )
 
         preferencesManager.close()

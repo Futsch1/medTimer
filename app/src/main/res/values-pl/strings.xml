@@ -231,4 +231,5 @@
     <string name="interval_time">Interwał %s</string>
     <string name="reminded">Przypomniano</string>
     <string name="all_taken">Wszystko zażyte (%s)</string>
+    <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
 </resources>

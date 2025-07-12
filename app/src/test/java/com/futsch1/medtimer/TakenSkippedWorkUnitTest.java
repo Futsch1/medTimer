@@ -33,14 +33,21 @@ import com.futsch1.medtimer.reminders.TakenWork;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.robolectric.annotation.Config;
 
 import java.time.Instant;
 
-class TakenSkippedWorkUnitTest {
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
+
+@ExtendWith(RobolectricExtension.class)
+@Config(sdk = 34)
+@SuppressWarnings("java:S5786") // Required for Robolectric extension
+public class TakenSkippedWorkUnitTest {
     private final int reminderEventId = 12;
 
     @Mock
@@ -49,7 +56,7 @@ class TakenSkippedWorkUnitTest {
     private AlarmManager mockAlarmManager;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
 
         mockApplication = mock(Application.class);
 
@@ -61,7 +68,7 @@ class TakenSkippedWorkUnitTest {
     }
 
     @Test
-    void testDoWorkTaken() {
+    public void testDoWorkTaken() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
                 .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
@@ -119,7 +126,7 @@ class TakenSkippedWorkUnitTest {
     }
 
     @Test
-    void testDoWorkSkipped() {
+    public void testDoWorkSkipped() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
                 .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)

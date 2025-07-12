@@ -220,4 +220,5 @@
     <string name="interval_time">Intervall %s</string>
     <string name="reminded">Erinnert</string>
     <string name="all_taken">Alle eingenommen (%s)</string>
+    <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
 </resources>

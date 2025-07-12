@@ -1,17 +1,21 @@
 package com.futsch1.medtimer.medicine
 
 import android.annotation.SuppressLint
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.core.widget.doAfterTextChanged
+import androidx.test.espresso.IdlingRegistry
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment
 import com.futsch1.medtimer.helpers.MedicineEntityInterface
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderStringToValue
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderValueToString
 import com.google.android.material.textfield.TextInputEditText
@@ -24,14 +28,16 @@ class MedicineStockFragment :
         MedicineStockFragment::class.java.name
     ) {
 
+    private lateinit var amountLeft: TextInputEditText
+    private var medicineId: Int = -1
+    private lateinit var runOutDateField: TextInputEditText
+
     override fun getEntityId(): Int {
         return MedicineStockFragmentArgs.fromBundle(requireArguments()).medicineId
     }
 
     override fun fillEntityData(entity: Medicine, fragmentView: View) {
-        entity.amount =
-            MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
-                ?: entity.amount
+        entity.amount = getCurrentAmount() ?: entity.amount
 
         entity.unit =
             fragmentView.findViewById<TextInputEditText>(R.id.stockUnit).text.toString()
@@ -50,6 +56,7 @@ class MedicineStockFragment :
     }
 
     override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
+        amountLeft = fragmentView.findViewById(R.id.amountLeft)
         amountToView(fragmentView, R.id.amountLeft, entity.amount)
 
         fragmentView.findViewById<TextInputEditText>(R.id.stockUnit).setText(entity.unit)
@@ -60,7 +67,7 @@ class MedicineStockFragment :
         val stockReminder: AutoCompleteTextView = fragmentView.findViewById(R.id.medicineStockReminder)
         val importanceTexts = this.resources.getStringArray(R.array.stock_reminder)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
-        stockReminder.setAdapter<ArrayAdapter<String>>(arrayAdapter)
+        stockReminder.setAdapter(arrayAdapter)
         stockReminder.setText(
             stockReminderValueToString(entity.outOfStockReminder, this.resources), false
         )
@@ -69,7 +76,29 @@ class MedicineStockFragment :
             onRefillClick(fragmentView)
         }
 
+        medicineId = entity.medicineId
+        runOutDateField = fragmentView.findViewById(R.id.runOut)
+
+        calculateRunOutDate()
+
+        amountLeft.doAfterTextChanged { calculateRunOutDate() }
+
         return true
+    }
+
+    private fun calculateRunOutDate() {
+        if (::runOutDateField.isInitialized) {
+            IdlingRegistry.getInstance().registerLooperAsIdlingResource(thread.looper)
+            Handler(thread.looper).post {
+                val runOutDate = estimateStockRunOutDate(medicineViewModel, medicineId, getCurrentAmount())
+                val runOutString = if (runOutDate != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
+
+                this.activity?.runOnUiThread {
+                    runOutDateField.setText(runOutString)
+                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
+                }
+            }
+        }
     }
 
     private fun amountToView(fragmentView: View, i: Int, d: Double) {
@@ -79,8 +108,7 @@ class MedicineStockFragment :
 
     @SuppressLint("SetTextI18n")
     private fun onRefillClick(fragmentView: View) {
-        var amount: Double? =
-            MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.amountLeft).text.toString())
+        var amount: Double? = getCurrentAmount()
         val refillSize: Double? =
             MedicineHelper.parseAmount(fragmentView.findViewById<TextInputEditText>(R.id.refillSize).text.toString())
 
@@ -89,6 +117,10 @@ class MedicineStockFragment :
             fragmentView.findViewById<TextInputEditText>(R.id.amountLeft)
                 .setText(MedicineHelper.formatAmount(amount, ""))
         }
+    }
+
+    private fun getCurrentAmount(): Double? {
+        return MedicineHelper.parseAmount(amountLeft.text.toString())
     }
 }
 

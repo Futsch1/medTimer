@@ -14,19 +14,24 @@ import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.robolectric.annotation.Config
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 import java.time.Instant
 import java.util.Locale
 import java.util.TimeZone
 
+@ExtendWith(RobolectricExtension::class)
+@Config(sdk = [34])
 class ReminderHelperTest {
 
     @Test
     fun testFormatScheduledReminderString() {
-        var contextMock = mock(Context::class.java)
-        var preferencesMock = mock(SharedPreferences::class.java)
+        val contextMock = mock(Context::class.java)
+        val preferencesMock = mock(SharedPreferences::class.java)
         Mockito.`when`(preferencesMock.getBoolean(USE_RELATIVE_DATE_TIME, false)).thenReturn(false)
 
         val utc = TimeZone.getTimeZone("WET")
@@ -41,13 +46,13 @@ class ReminderHelperTest {
         timeZoneMock.`when`<Any> { TimeZone.getDefault() }.thenReturn(utc)
 
         // Standard case
-        var medicine = FullMedicine()
+        val medicine = FullMedicine()
         medicine.medicine = Medicine("Test")
         val reminder = Reminder(1)
         reminder.amount = "5"
         var instant = Instant.ofEpochSecond(0)
         var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
-        var reminderEvent = ReminderEvent()
+        val reminderEvent = ReminderEvent()
         reminderEvent.remindedTimestamp = instant.toEpochMilli() / 1000
         reminderEvent.medicineName = "Test"
         reminderEvent.amount = "5"

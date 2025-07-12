@@ -221,4 +221,5 @@
     <string name="interval_time">Intervall %s</string>
     <string name="reminded">Påmind</string>
     <string name="all_taken">Allt intaget (%s)</string>
+    <string name="estimated_run_out_date">Beräknat slutdatum</string>
 </resources>
