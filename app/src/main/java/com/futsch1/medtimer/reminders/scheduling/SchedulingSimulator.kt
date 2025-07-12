@@ -14,6 +14,8 @@ data class SchedulingItem(val medicine: FullMedicine, val reminder: Reminder)
 typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double) -> Boolean
 
 class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>, timeAccess: ReminderScheduler.TimeAccess) {
+    val maxSimulationDays = 400
+
     var totalEvents = mutableListOf(*recentReminders.toTypedArray())
     var schedulingItems = medicines.map { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.flatten().filter { it.reminder.active }
     val schedulingFactory = SchedulingFactory()
@@ -29,7 +31,8 @@ class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<R
     }
 
     fun simulate(scheduledReminderConsumer: scheduledReminderConsumerType) {
-        while (simulateDay(scheduledReminderConsumer)) {
+        val maxSimulationDay = currentDay.plusDays(maxSimulationDays.toLong())
+        while (simulateDay(scheduledReminderConsumer) && currentDay < maxSimulationDay) {
             currentDay = currentDay.plusDays(1)
         }
     }

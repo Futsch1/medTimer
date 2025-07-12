@@ -116,4 +116,20 @@ class SchedulingSimulatorTest {
             scheduledReminders.size < 4
         }
     }
+
+    @Test
+    fun testNoReminders() {
+        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val medicines = listOf(medicineWithReminders)
+
+        val simulator = SchedulingSimulator(medicines, emptyList(), mockTimeAccess)
+
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+            localDate == LocalDate.EPOCH.plusDays(30)
+        }
+    }
 }
