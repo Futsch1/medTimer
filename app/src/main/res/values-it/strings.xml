@@ -226,4 +226,5 @@
     <string name="interval_time">Intervallo %s</string>
     <string name="reminded">Ricordato</string>
     <string name="all_taken">Tutte assunte (%s)</string>
+    <string name="estimated_run_out_date">Data di scadenza stimata</string>
 </resources>

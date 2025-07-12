@@ -105,5 +105,32 @@
                 android:maxWidth="320dp"
                 android:text="@string/refill_now" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="4dp"
+            android:background="?android:attr/listDivider" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/runOutLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_weight="3"
+            android:hint="@string/estimated_run_out_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/runOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="date"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
+
 </ScrollView>

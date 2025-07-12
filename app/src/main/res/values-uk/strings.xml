@@ -230,4 +230,5 @@
     <string name="interval_time">Інтервал %s</string>
     <string name="reminded">Нагадано</string>
     <string name="all_taken">Усе прийнято (%s)</string>
+    <string name="estimated_run_out_date">Орієнтовна дата закінчення</string>
 </resources>

@@ -241,4 +241,5 @@
     <string name="interval_time">فاصل %s</string>
     <string name="reminded">ذكر</string>
     <string name="all_taken">تم تناول الجميع (%s)</string>
+    <string name="estimated_run_out_date">تاريخ النفاد التقديري</string>
 </resources>
