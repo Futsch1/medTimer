@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.DigitsKeyListener
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -19,6 +20,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderStringToValue
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderValueToString
 import com.google.android.material.textfield.TextInputEditText
+import java.text.DecimalFormatSymbols
 
 
 class MedicineStockFragment :
@@ -104,6 +106,8 @@ class MedicineStockFragment :
 
     private fun amountToView(fragmentView: View, i: Int, d: Double) {
         fragmentView.findViewById<TextInputEditText>(i).setText(MedicineHelper.formatAmount(d, ""))
+        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+        fragmentView.findViewById<TextInputEditText>(i).setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
         fragmentView.findViewById<TextInputEditText>(i).addDoubleValidator()
     }
 
