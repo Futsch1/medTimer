@@ -28,7 +28,7 @@ Privacy & Offline Accessibility:
 - All data is stored securely on your device, ensuring complete privacy and offline accessibility.
 - No internet connection required – your medication reminders are always available.
 
-MedTimer is a free app without adds.
+MedTimer is a free app without ads.
 
 See the project page on GitHub: https://github.com/Futsch1/medTimer
 
