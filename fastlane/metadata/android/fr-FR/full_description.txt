@@ -6,7 +6,8 @@ MedTimer est une application open source de rappel de médicaments conçue pour 
 
 Flexible et flexible rappels personnalisés :
 
-- Gestion d'un nombre illimité de médicaments avec des rappels personnalisables par médicament (avec des valeurs par défaut simples) pour les rappels quotidiens.
+- Gestion d'un nombre illimité de médicaments avec des rappels personnalisables par médicament (avec des valeurs par défaut simples
+  pour les rappels quotidiens).
 - Création de rappels flexibles avec des pauses et des jours spécifiques (idéal pour les pilules contraceptives).
 - Mode week-end : Retardez les rappels à une heure définie les jours choisis.
 - Répétition des notifications pour les rappels ultérieurs.
