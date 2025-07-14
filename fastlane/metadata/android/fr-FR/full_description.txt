@@ -31,4 +31,4 @@ MedTimer est une application gratuite sans publicités.
 
 Voir la page du projet sur GitHub : https://github.com/Futsch1/medTimer
 
-Le visuel a été créé à l'aide de https://hotpot.ai
+Visuel créé à l'aide de https://hotpot.ai
