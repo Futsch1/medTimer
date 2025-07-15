@@ -103,7 +103,7 @@
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
     <plurals name="last_n_days">
-        <item quantity="one">Dernières 24 heures</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">Dernières 24 heures</item>
         <item quantity="many">Derniers %1$d jours</item>
         <item quantity="other">Derniers %1$d jours</item>
     </plurals>
