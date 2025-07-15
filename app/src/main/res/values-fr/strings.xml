@@ -103,7 +103,7 @@
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
     <plurals name="last_n_days">
-        <item quantity="one">Dernières 24 heures</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">Dernières 24 heures</item>
         <item quantity="many">Derniers %1$d jours</item>
         <item quantity="other">Derniers %1$d jours</item>
     </plurals>
@@ -227,4 +227,5 @@
     <string name="reminded">Rappelé</string>
     <string name="all_taken">Toutes prises (%s)</string>
     <string name="estimated_run_out_date">Date d\'épuisement estimée</string>
+    <string name="create_calendar_entry">Créer une entrée de calendrier</string>
 </resources>

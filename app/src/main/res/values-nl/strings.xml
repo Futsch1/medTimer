@@ -221,4 +221,5 @@
     <string name="reminded">Herinnerd</string>
     <string name="all_taken">Alles ingenomen (%s)</string>
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
+    <string name="create_calendar_entry">Agenda-item maken</string>
 </resources>

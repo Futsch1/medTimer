@@ -216,4 +216,5 @@
     <string name="reminded">已提醒</string>
     <string name="all_taken">都服用了 (%s)</string>
     <string name="estimated_run_out_date">预计用完日期</string>
+    <string name="create_calendar_entry">创建日历条目</string>
 </resources>

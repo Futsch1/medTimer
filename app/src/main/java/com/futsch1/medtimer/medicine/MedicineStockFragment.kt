@@ -17,6 +17,7 @@ import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment
 import com.futsch1.medtimer.helpers.MedicineEntityInterface
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderStringToValue
 import com.futsch1.medtimer.medicine.editMedicine.stockReminderValueToString
 import com.google.android.material.textfield.TextInputEditText
@@ -85,7 +86,20 @@ class MedicineStockFragment :
 
         amountLeft.doAfterTextChanged { calculateRunOutDate() }
 
+        setupToCalendarButton(fragmentView, entity)
+
         return true
+    }
+
+    private fun setupToCalendarButton(fragmentView: View, medicine: Medicine) {
+        fragmentView.findViewById<View>(R.id.runOutToCalendar).setOnClickListener {
+            val date = TimeHelper.dateStringToDate(context, runOutDateField.text.toString())
+            if (date != null) {
+                val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + medicine.name, date)
+                startActivity(intent)
+            }
+
+        }
     }
 
     private fun calculateRunOutDate() {
