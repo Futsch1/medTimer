@@ -227,4 +227,5 @@
     <string name="reminded">Recordado</string>
     <string name="all_taken">Todas tomadas (%s)</string>
     <string name="estimated_run_out_date">Fecha estimada de agotamiento</string>
+    <string name="create_calendar_entry">Crear entrada de calendario</string>
 </resources>

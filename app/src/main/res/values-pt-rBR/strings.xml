@@ -227,4 +227,5 @@
     <string name="all_taken">Todos tomados (%s)</string>
     <string name="total">Total</string>
     <string name="estimated_run_out_date">Data estimada de término</string>
+    <string name="create_calendar_entry">Criar entrada na agenda</string>
 </resources>

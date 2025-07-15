@@ -222,4 +222,5 @@
     <string name="reminded">Påmind</string>
     <string name="all_taken">Allt intaget (%s)</string>
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
+    <string name="create_calendar_entry">Skapa kalenderpost</string>
 </resources>

@@ -229,4 +229,5 @@
     <string name="reminded">Напомнили</string>
     <string name="all_taken">Все принято (%s)</string>
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
+    <string name="create_calendar_entry">Создать запись в календаре</string>
 </resources>
