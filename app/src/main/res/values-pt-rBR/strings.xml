@@ -187,7 +187,7 @@
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>
     <string name="period_end">Fim do período</string>
-    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou pulado</string>
+    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou dispensado</string>
     <string name="minutes_1">1 minuto</string>
     <string name="create_reminder">Criar lembrete</string>
     <string name="interval_start_reminded">O intervalo começa quando lembrado</string>
