@@ -148,7 +148,7 @@
         <item quantity="other">dias</item>
     </plurals>
     <string name="interval">Intervalo</string>
-    <string name="interval_start_processed">O intervalo começa quando tomado ou pulado</string>
+    <string name="interval_start_processed">O intervalo começa ao marcar como tomado ou pulado</string>
     <string name="every_interval">Cada %s</string>
     <string name="always_below_threshold">Sempre quando abaixo do limite</string>
     <string name="out_of_stock_notification">Restam apenas %2$s de %1$s!\nConsidere repor o medicamento em breve.</string>
