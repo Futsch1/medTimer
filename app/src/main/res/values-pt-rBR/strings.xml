@@ -148,7 +148,7 @@
         <item quantity="other">dias</item>
     </plurals>
     <string name="interval">Intervalo</string>
-    <string name="interval_start_processed">O intervalo começa quando se for tomado ou dispensado</string>
+    <string name="interval_start_processed">O intervalo começa ao marcar como tomado ou pulado</string>
     <string name="every_interval">Cada %s</string>
     <string name="always_below_threshold">Sempre quando abaixo do limite</string>
     <string name="out_of_stock_notification">Restam apenas %2$s de %1$s!\nConsidere repor o medicamento em breve.</string>
@@ -187,7 +187,7 @@
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>
     <string name="period_end">Fim do período</string>
-    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou dispensado</string>
+    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou pulado</string>
     <string name="minutes_1">1 minuto</string>
     <string name="create_reminder">Criar lembrete</string>
     <string name="interval_start_reminded">O intervalo começa quando lembrado</string>
