@@ -22,7 +22,7 @@
     </plurals>
     <string name="notification_title">Lembrete de medicamento</string>
     <string name="skipped">Pulado</string>
-    <string name="taken">Tomei</string>
+    <string name="taken">Tomado</string>
     <string name="next_reminders">Próximos lembretes</string>
     <string name="version">Versão%s</string>
     <string name="are_you_sure_delete_reminder">Tem certeza de que deseja excluir o lembrete?</string>
@@ -97,7 +97,7 @@
     <string name="name">Nome</string>
     <string name="event_data">Dados do evento</string>
     <string name="backup">Backup</string>
-    <string name="taken_now">Tomei agora</string>
+    <string name="taken_now">Tomado agora</string>
     <string name="event_name">Nome do evento</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
     <string name="intro_analysis_description">O aplicativo armazena todos os eventos de lembrete. Você pode analisar suas doses anteriores na tela de análise e exportar seu histórico através do menu kebab (três pontos). O histórico permanecerá mesmo que medicamentos ou lembretes sejam excluídos ou renomeados.</string>
@@ -187,7 +187,7 @@
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>
     <string name="period_end">Fim do período</string>
-    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou dispensado</string>
+    <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou pulado</string>
     <string name="minutes_1">1 minuto</string>
     <string name="create_reminder">Criar lembrete</string>
     <string name="interval_start_reminded">O intervalo começa quando lembrado</string>
