@@ -164,7 +164,7 @@
     <string name="hide_med_name">Ocultar nome do medicamento na notificação</string>
     <string name="display_settings">Configurações de exibição</string>
     <string name="use_relative_date_time">Data/hora relativa</string>
-    <string name="time_reminder_type_hint">Lembra em um horário específico do dia.</string>
+    <string name="time_reminder_type_hint">Lembrar em um horário específico do dia.</string>
     <string name="sticky_on_lockscreen">Lembretes persistentes na tela de bloqueio</string>
     <string name="big_notifications">Botões de notificação grandes</string>
     <string name="please_wait">Por favor, aguarde…</string>
@@ -216,7 +216,7 @@
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
     <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
-    <string name="interval_reminder_type_hint">Lembra após um tempo específico ter passado após o último lembrete.</string>
+    <string name="interval_reminder_type_hint">Lembrar após um tempo específico ter passado após o último lembrete.</string>
     <string name="off">Desligado</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>
