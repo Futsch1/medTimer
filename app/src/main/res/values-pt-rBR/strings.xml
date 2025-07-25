@@ -209,7 +209,7 @@
     <string name="days_string">Dias</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
     <string name="number_of_repetitions">Número de repetições</string>
-    <string name="intro_notification_description">Quando chegar a hora de um lembrete , uma notificação aparecerá oferecendo a você a opção de marcar a dose como tomada (clicando no botão \"TOMADA\"), pulada (descartando a notificação) ou ser lembrado novamente após algum tempo (\"SONECA\").</string>
+    <string name="intro_notification_description">Quando chegar a hora de um lembrete , uma notificação aparecerá oferecendo a você a opção de marcar a dose como tomada (clicando no botão \"TOMADA\"), pulada (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
     <string name="enable_dnd_dialog">Para permitir que os sons de notificação sejam sempre reproduzidos, ative o acesso ao Não perturbe pelo MedTimer no menu a seguir</string>
     <string name="intro_overview_description">Na tela de visão geral, você pode ver os próximos lembretes e os últimos eventos de lembrete. Os eventos de lembrete podem ser editados deslizando para a direita e excluídos deslizando para a esquerda.\n\nAlém disso, você pode registrar manualmente doses adicionais de um dos medicamentos configurados ou de um personalizado.</string>
     <string name="invalid_input">Entrada inválida</string>
