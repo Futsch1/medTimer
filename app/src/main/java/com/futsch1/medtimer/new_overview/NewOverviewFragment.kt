@@ -22,9 +22,13 @@ class NewOverviewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentOverview = inflater.inflate(R.layout.fragment_new_overview, container, false)
+
         val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
+        NextReminders(this, medicineViewModel)
+
         daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
+
         optionsMenu = OptionsMenu(
             this,
             medicineViewModel,
@@ -47,6 +51,6 @@ class NewOverviewFragment : Fragment() {
     }
 
     fun daySelected(date: LocalDate) {
-
+        overviewViewModel.day = date
     }
 }

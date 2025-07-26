@@ -5,9 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderString
+import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import java.time.Instant
+import java.time.LocalDate
 
 class OverviewViewModel(application: Application, medicineViewModel: MedicineViewModel) : AndroidViewModel(application) {
     val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
@@ -16,6 +19,12 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     private val scheduledReminders = medicineViewModel.scheduledReminders
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+
+    var day: LocalDate = LocalDate.now()
+        set(value) {
+            field = value
+            overviewEvents.value = getFiltered()
+        }
 
     init {
         overviewEvents.addSource(reminderEvents) {
@@ -31,11 +40,46 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
         if (reminderEvents.value != null) {
             for (reminderEvent in reminderEvents.value!!) {
-                filteredOverviewEvents.add(convertReminderEvent(reminderEvent))
+                if (isReminderEventVisible(reminderEvent)) {
+                    filteredOverviewEvents.add(convertReminderEvent(reminderEvent))
+                }
+            }
+        }
+
+        if (scheduledReminders.value != null) {
+            for (scheduledReminder in scheduledReminders.value!!) {
+                if (isScheduledReminderVisible(scheduledReminder)) {
+                    filteredOverviewEvents.add(convertScheduledReminder(scheduledReminder))
+                }
             }
         }
 
         return filteredOverviewEvents.sortedBy { it.timestamp }
+    }
+
+    private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder): Boolean {
+        return isSameDayOrNull(scheduledReminder.timestamp.epochSecond, day)
+    }
+
+    private fun isReminderEventVisible(reminderEvent: ReminderEvent): Boolean {
+        return isSameDayOrNull(reminderEvent.remindedTimestamp, day)
+    }
+
+    private fun isSameDayOrNull(timestamp: Long, day: LocalDate): Boolean {
+        val reminderDate = Instant.ofEpochSecond(timestamp).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+        return reminderDate.isEqual(day)
+    }
+
+    private fun convertScheduledReminder(scheduledReminder: ScheduledReminder): OverviewEvent {
+        val text = formatScheduledReminderString(getApplication(), scheduledReminder, sharedPreferences)
+        return OverviewEvent(
+            scheduledReminder.reminder.reminderId + 1_000_000,
+            scheduledReminder.timestamp.epochSecond,
+            text,
+            scheduledReminder.medicine.medicine.iconId,
+            if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null,
+            OverviewState.PENDING
+        )
     }
 
     private fun convertReminderEvent(reminderEvent: ReminderEvent): OverviewEvent {
