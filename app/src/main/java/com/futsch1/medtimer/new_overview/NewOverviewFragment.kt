@@ -16,13 +16,14 @@ import java.time.LocalDate
 class NewOverviewFragment : Fragment() {
 
     private lateinit var optionsMenu: OptionsMenu
-    private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var daySelector: DaySelector
+    private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentOverview = inflater.inflate(R.layout.fragment_new_overview, container, false)
-        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
         optionsMenu = OptionsMenu(
             this,
@@ -42,14 +43,7 @@ class NewOverviewFragment : Fragment() {
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
 
-        val reminderList: MutableList<OverviewEvent> = ArrayList()
-
-        reminderList.add(OverviewEvent("Test", 0, 0, false))
-        reminderList.add(OverviewEvent("Test 2", 0, 0, false))
-        reminderList.add(OverviewEvent("Test 3", 0, 0, false))
-
-        adapter.setData(reminderList)
-        adapter.filter.filter("")
+        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner(), adapter::submitList)
     }
 
     fun daySelected(date: LocalDate) {

@@ -116,15 +116,6 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
             val textView: TextView = view.findViewById(R.id.calendarHeaderText)
             val prevButton: MaterialButton = view.findViewById(R.id.prevCalendar)
             val nextButton: MaterialButton = view.findViewById(R.id.nextCalendar)
-
-            init {
-                prevButton.setOnClickListener {
-                    daySelected(WeekDay(currentDay.date.minusDays(1), WeekDayPosition.RangeDate))
-                }
-                nextButton.setOnClickListener {
-                    daySelected(WeekDay(currentDay.date.plusDays(1), WeekDayPosition.RangeDate))
-                }
-            }
         }
 
         calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<WeekViewContainer> {
@@ -132,8 +123,8 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
             override fun bind(container: WeekViewContainer, data: Week) {
                 container.textView.text = TimeHelper.localDateToFullDateString(context, currentDay.date)
 
-                container.prevButton.visibility = if (currentDay.date == startDate) View.GONE else View.VISIBLE
-                container.nextButton.visibility = if (currentDay.date == endDate) View.GONE else View.VISIBLE
+                container.prevButton.visibility = View.GONE
+                container.nextButton.visibility = View.GONE
             }
         }
     }

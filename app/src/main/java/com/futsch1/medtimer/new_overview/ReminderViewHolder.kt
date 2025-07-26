@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.ViewColorHelper
 
 enum class EventPosition {
     FIRST,
@@ -35,9 +36,28 @@ class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: OverviewEvent, position: EventPosition) {
         reminderText.text = event.text
-        reminderIcon.setImageResource(event.icon)
-        this.itemView.setBackgroundColor(event.color)
+        if (event.color != null) {
+            ViewColorHelper.setViewBackground(itemView, mutableListOf<TextView?>(reminderText), event.color)
+        } else {
+            ViewColorHelper.setDefaultColors(itemView, mutableListOf<TextView?>(reminderText))
+        }
+        ViewColorHelper.setIconToImageView(itemView, reminderIcon, event.icon)
 
+        setBarsVisibility(position)
+        setStateButton(event.state)
+    }
+
+    private fun setStateButton(state: OverviewState) {
+        val imageResource = when (state) {
+            OverviewState.PENDING -> R.drawable.alarm
+            OverviewState.TAKEN -> R.drawable.check2_circle
+            OverviewState.SKIPPED -> R.drawable.x_circle
+            OverviewState.RAISED -> R.drawable.bell
+        }
+        stateButton.setImageResource(imageResource)
+    }
+
+    private fun setBarsVisibility(position: EventPosition) {
         if (position == EventPosition.FIRST) {
             topBar.visibility = View.GONE
         } else {

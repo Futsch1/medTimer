@@ -5,15 +5,11 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
-import java.util.Locale
 
 class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder?>(diffCallback), Filterable {
-    private val filter: Filter = OverviewEventFilter()
-    private var data: MutableList<OverviewEvent>? = null
-
     init {
-        setHasStableIds(false)
+        setHasStableIds(true)
     }
 
     // Create new views (invoked by the layout manager)
@@ -33,15 +29,11 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>) :
     }
 
     override fun getItemId(position: Int): Long {
-        return 0
+        return getItem(position).id.toLong()
     }
 
     override fun getFilter(): Filter {
         return filter
-    }
-
-    fun setData(data: MutableList<OverviewEvent>?) {
-        this.data = data
     }
 
     class OverviewEventDiff : DiffUtil.ItemCallback<OverviewEvent>() {
@@ -51,35 +43,6 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>) :
 
         override fun areContentsTheSame(oldItem: OverviewEvent, newItem: OverviewEvent): Boolean {
             return oldItem == newItem
-        }
-    }
-
-    private inner class OverviewEventFilter : Filter() {
-        override fun performFiltering(constraint: CharSequence): FilterResults {
-            val filteredList: MutableList<OverviewEvent> = ArrayList()
-            val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' }
-            val showOnlyOpen = filterPattern.contains("o")
-            if (data != null) {
-                for (item in data) {
-                    if (isVisible(item, showOnlyOpen)) {
-                        filteredList.add(item)
-                    }
-                }
-            }
-
-            val results = FilterResults()
-            results.values = filteredList
-            results.count = filteredList.size
-            return results
-        }
-
-        override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-            @Suppress("UNCHECKED_CAST")
-            submitList(results.values as List<OverviewEvent>?)
-        }
-
-        private fun isVisible(item: OverviewEvent, showOnlyOpen: Boolean): Boolean {
-            return !showOnlyOpen
         }
     }
 }
