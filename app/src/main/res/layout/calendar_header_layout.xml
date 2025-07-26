@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/prevMonth"
+        android:id="@+id/prevCalendar"
         style="?attr/materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/monthHeaderText"
+        android:id="@+id/calendarHeaderText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal|center_vertical"
@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/nextMonth"
+        android:id="@+id/nextCalendar"
         style="?attr/materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         setSupportActionBar(findViewById(R.id.toolbar));
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
+                R.id.newOverviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);

@@ -110,9 +110,9 @@ class CalendarFragment : Fragment() {
 
     private fun setupMonthBinder() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
-            val textView: TextView = view.findViewById(R.id.monthHeaderText)
-            val prevButton: MaterialButton = view.findViewById(R.id.prevMonth)
-            val nextButton: MaterialButton = view.findViewById(R.id.nextMonth)
+            val textView: TextView = view.findViewById(R.id.calendarHeaderText)
+            val prevButton: MaterialButton = view.findViewById(R.id.prevCalendar)
+            val nextButton: MaterialButton = view.findViewById(R.id.nextCalendar)
 
             init {
                 prevButton.setOnClickListener {

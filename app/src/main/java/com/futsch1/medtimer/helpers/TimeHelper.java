@@ -118,6 +118,17 @@ public class TimeHelper {
     }
 
     /**
+     * @param context   Context to extract date format
+     * @param localDate Local date
+     * @return Date string in local format
+     */
+    public static String localDateToFullDateString(Context context, LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+                .withLocale(context.getResources().getConfiguration().getLocales().get(0));
+        return localDate.format(formatter);
+    }
+
+    /**
      * @param context        Context to extract date format
      * @param dateTimeString String containing date and time
      * @return Seconds since epoch of date/time

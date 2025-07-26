@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     android:label="@string/tabular_view"
-    app:startDestination="@id/overviewFragment">
+    app:startDestination="@id/newOverviewFragment">
 
     <fragment
         android:id="@+id/medicinesFragment"
@@ -141,4 +141,8 @@
         android:id="@+id/displaySettingsFragment"
         android:name="com.futsch1.medtimer.preferences.DisplaySettingsFragment"
         android:label="@string/display_settings" />
+    <fragment
+        android:id="@+id/newOverviewFragment"
+        android:name="com.futsch1.medtimer.new_overview.NewOverviewFragment"
+        android:label="@string/tab_overview" />
 </navigation>
