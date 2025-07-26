@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mewOverviewFragment"
+        android:id="@+id/newOverviewFragment"
         android:name="com.futsch1.medtimer.new_overview.NewOverviewFragment"
         android:contentDescription="@string/overview_tab_description"
         android:icon="@drawable/calendar2_event"

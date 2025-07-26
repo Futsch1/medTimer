@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:minHeight="48dp">
+    android:layout_height="wrap_content"
+    android:minHeight="64dp">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_half_height"
@@ -14,7 +14,7 @@
 
     <View
         android:id="@+id/topBar"
-        android:layout_width="48dp"
+        android:layout_width="24dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
@@ -25,7 +25,7 @@
 
     <View
         android:id="@+id/bottomBar"
-        android:layout_width="48dp"
+        android:layout_width="24dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
@@ -36,8 +36,8 @@
 
     <View
         android:id="@+id/buttonBackground"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/shape_round_primary"
         android:foregroundGravity="center"
@@ -46,12 +46,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:id="@+id/stateButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/shape_round_bg"
         android:cropToPadding="true"
-        android:padding="4dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@id/buttonBackground"
         app:layout_constraintEnd_toEndOf="@id/buttonBackground"
         app:layout_constraintHorizontal_bias="0.5"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="bla"
+        android:text="@string/reminders"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/reminderIcon"
         app:layout_constraintHorizontal_bias="0"
