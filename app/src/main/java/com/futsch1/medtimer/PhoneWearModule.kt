@@ -16,7 +16,10 @@ import com.futsch1.medtimer.shared.wear.WearDataSerializer
 import com.futsch1.medtimer.wear.createRemoteReminderNotificationData
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.CapabilityInfo
+import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.ActivityConfig
 import com.google.android.horologist.data.AppHelperResult
@@ -66,16 +69,40 @@ class PhoneWearModule(val context: Context) {
         }
     }
     init {
-        wearDataLayerRegistry = WearDataLayerRegistry.fromContext(
-            context ,
-            serviceScope,
-        ).apply {
-            registerSerializer(WearDataSerializer)
-            registerSerializer(TakenDataSerializer)
-            registerSerializer(NotifyTakenDataSerializer)
+        if (isInstalled()) {
+            wearDataLayerRegistry = WearDataLayerRegistry.fromContext(
+                context,
+                serviceScope,
+            )
+            wearDataLayerRegistry.apply {
+                registerSerializer(WearDataSerializer)
+                registerSerializer(TakenDataSerializer)
+                registerSerializer(NotifyTakenDataSerializer)
+            }
+            appHelper = PhoneDataLayerAppHelper(context, wearDataLayerRegistry)
         }
-        appHelper = PhoneDataLayerAppHelper(context, wearDataLayerRegistry)
     }
+    private fun isInstalled() : Boolean{
+          try {
+              val capabilityInfo: CapabilityInfo = Tasks.await(
+                  Wearable.getCapabilityClient(context)
+                      .getCapability(
+                          "horologist_watch",
+                          CapabilityClient.FILTER_REACHABLE
+                      )
+              )
+              return true;
+          } catch (e: Exception) {
+              e.message?.run {
+                  if (contains("API_UNAVAILABLE")) {
+                      Log.e("WEAR", "wear app is not installed")
+                      //TODO make User install wear app
+                      return false
+                  }
+              }
+          }
+          return false
+      }
 
     suspend fun connectedNodes(): List<AppHelperNodeStatus> {
         val connectedNodes = appHelper.connectedNodes()
@@ -86,6 +113,7 @@ class PhoneWearModule(val context: Context) {
     }
 
     suspend fun startCompanion(reminderEventId:Int, name:String, notificationId:Int) {
+        if (!isInstalled()) return ;
         if (!this::takenDataStore.isInitialized) {
             takenDataStore = wearDataLayerRegistry.protoDataStore(
                 serviceScope
@@ -119,6 +147,7 @@ class PhoneWearModule(val context: Context) {
     }
 
     suspend fun checkNotifications() {
+        if (!isInstalled()) return ;
         serviceScope.launch {
             try {
                 notifyTakenData().collect { notifyTakenData ->
@@ -142,6 +171,7 @@ class PhoneWearModule(val context: Context) {
     }
 
     suspend fun addReminderNotificationData(reminderNotificationData: RescheduleWork.ReminderNotificationData?): Unit {
+        if (!isInstalled()) return ;
         if (!this::wearDataStore.isInitialized) {
             wearDataStore = wearDataLayerRegistry.protoDataStore(
                 serviceScope
