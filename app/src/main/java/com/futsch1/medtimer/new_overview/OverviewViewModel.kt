@@ -12,6 +12,10 @@ import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import java.time.Instant
 import java.time.LocalDate
 
+enum class OverviewFilterToggles {
+    TAKEN, SKIPPED, SCHEDULED, RAISED
+}
+
 class OverviewViewModel(application: Application, medicineViewModel: MedicineViewModel) : AndroidViewModel(application) {
     val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
 
@@ -20,10 +24,12 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
+    val activeFilters = mutableSetOf<OverviewFilterToggles>()
+
     var day: LocalDate = LocalDate.now()
         set(value) {
             field = value
-            overviewEvents.value = getFiltered()
+            update()
         }
 
     init {
@@ -35,7 +41,11 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
         }
     }
 
-    fun getFiltered(): List<OverviewEvent> {
+    fun update() {
+        overviewEvents.value = getFiltered()
+    }
+
+    private fun getFiltered(): List<OverviewEvent> {
         val filteredOverviewEvents = mutableListOf<OverviewEvent>()
 
         if (reminderEvents.value != null) {
@@ -58,11 +68,16 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     }
 
     private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder): Boolean {
-        return isSameDayOrNull(scheduledReminder.timestamp.epochSecond, day)
+        val scheduledRemindersVisible = activeFilters.isEmpty() || activeFilters.contains(OverviewFilterToggles.SCHEDULED)
+        return isSameDayOrNull(scheduledReminder.timestamp.epochSecond, day) && scheduledRemindersVisible
     }
 
     private fun isReminderEventVisible(reminderEvent: ReminderEvent): Boolean {
-        return isSameDayOrNull(reminderEvent.remindedTimestamp, day)
+        val reminderEventVisible = activeFilters.isEmpty() ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && activeFilters.contains(OverviewFilterToggles.TAKEN)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && activeFilters.contains(OverviewFilterToggles.SKIPPED)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && activeFilters.contains(OverviewFilterToggles.RAISED))
+        return isSameDayOrNull(reminderEvent.remindedTimestamp, day) && reminderEventVisible
     }
 
     private fun isSameDayOrNull(timestamp: Long, day: LocalDate): Boolean {

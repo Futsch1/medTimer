@@ -24,7 +24,7 @@ class NewOverviewFragment : Fragment() {
     private lateinit var daySelector: DaySelector
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: View
-    private var thread = HandlerThread("LogManualDose")
+    private lateinit var thread: HandlerThread
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentOverview = inflater.inflate(R.layout.fragment_new_overview, container, false)
@@ -44,8 +44,10 @@ class NewOverviewFragment : Fragment() {
 
         setupReminders()
 
+        thread = HandlerThread("LogManualDose")
         thread.start()
         setupLogManualDose()
+        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel)
 
         return fragmentOverview
     }
@@ -62,7 +64,7 @@ class NewOverviewFragment : Fragment() {
     private fun setupLogManualDose() {
         val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
-            val handler: Handler = Handler(thread.getLooper())
+            val handler = Handler(thread.getLooper())
             // Run the setup of the drop down in a separate thread to access the database
             handler.post {
                 ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity()).logManualDose()
