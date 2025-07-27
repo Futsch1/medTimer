@@ -260,6 +260,19 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
+    /**
+     * @param context   Context to extract date and time formats
+     * @param timeStamp Time stamp in seconds since epoch
+     * @return Date and time string in local format as relative date time string
+     */
+    public static String toConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+        if (preferences.getBoolean(USE_RELATIVE_DATE_TIME, false)) {
+            return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+        } else {
+            return toLocalizedTimeString(context, timeStamp);
+        }
+    }
+
     public static Object toISO8601DatetimeString(long remindedTimestamp) {
         return Instant.ofEpochSecond(remindedTimestamp).toString();
     }

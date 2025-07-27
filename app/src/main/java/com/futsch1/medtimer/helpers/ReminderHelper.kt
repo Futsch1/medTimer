@@ -30,14 +30,14 @@ fun isReminderActive(reminder: Reminder): Boolean {
 fun formatReminderString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
-    val takenTime = TimeHelper.toConfigurableDateTimeString(
+    val takenTime = TimeHelper.toConfigurableTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp
     )
 
     val intervalTime = getLastIntervalTime(context, reminderEvent)
 
-    return SpannableStringBuilder().bold { append(reminderEvent.medicineName) }
-        .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "").append("\n").append(takenTime).append(intervalTime)
+    return SpannableStringBuilder().append(takenTime).append(intervalTime).append("\n").bold { append(reminderEvent.medicineName) }
+        .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
 }
 
 fun formatReminderStringForWidget(
@@ -64,12 +64,13 @@ private fun statusToString(context: Context, status: ReminderEvent.ReminderStatu
 fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
-    val scheduledTime = TimeHelper.toConfigurableDateTimeString(
+    val scheduledTime = TimeHelper.toConfigurableTimeString(
         context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
     )
 
-    return SpannableStringBuilder().bold { append(scheduledReminder.medicine().medicine.name) }.append(getAmountString(scheduledReminder)).append("\n")
-        .append(scheduledTime)
+    return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
+        append(scheduledReminder.medicine().medicine.name)
+    }.append(getAmountString(scheduledReminder))
 }
 
 fun formatScheduledReminderStringForWidget(
