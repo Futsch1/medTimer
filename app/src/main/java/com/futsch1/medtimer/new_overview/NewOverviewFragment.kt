@@ -1,9 +1,12 @@
 package com.futsch1.medtimer.new_overview
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,19 +14,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.overview.ManualDose
 import java.time.LocalDate
 
 class NewOverviewFragment : Fragment() {
 
+    private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: View
+    private var thread = HandlerThread("LogManualDose")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentOverview = inflater.inflate(R.layout.fragment_new_overview, container, false)
 
-        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         NextReminders(this, medicineViewModel)
 
@@ -38,6 +44,9 @@ class NewOverviewFragment : Fragment() {
 
         setupReminders()
 
+        thread.start()
+        setupLogManualDose()
+
         return fragmentOverview
     }
 
@@ -48,6 +57,17 @@ class NewOverviewFragment : Fragment() {
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
 
         overviewViewModel.overviewEvents.observe(getViewLifecycleOwner(), adapter::submitList)
+    }
+
+    private fun setupLogManualDose() {
+        val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
+        logManualDose.setOnClickListener { _: View? ->
+            val handler: Handler = Handler(thread.getLooper())
+            // Run the setup of the drop down in a separate thread to access the database
+            handler.post(Runnable {
+                ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity()).logManualDose()
+            })
+        }
     }
 
     fun daySelected(date: LocalDate) {
