@@ -17,40 +17,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/filterButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginHorizontal="8dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/overviewWeek">
 
-        <ImageButton
+        <Button
             android:id="@+id/filterTaken"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="@string/taken"
-            android:src="@drawable/check2_circle" />
+            android:layout_height="wrap_content"
+            app:icon="@drawable/check2_circle" />
 
-        <ImageButton
+        <Button
             android:id="@+id/filterSkipped"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="@string/skipped"
-            android:src="@drawable/x_circle" />
+            android:layout_height="wrap_content"
+            app:icon="@drawable/x_circle" />
 
-        <ImageButton
-            android:id="@+id/filterRaised"
+        <Button
+            android:id="@+id/filterScheduled"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="@string/re_raise_event"
-            android:src="@drawable/bell" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            app:icon="@drawable/alarm" />
+
+        <Button
+            android:id="@+id/filterRaised"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/bell" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reminders"

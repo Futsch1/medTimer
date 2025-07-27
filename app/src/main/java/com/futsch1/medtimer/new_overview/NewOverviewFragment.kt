@@ -64,13 +64,20 @@ class NewOverviewFragment : Fragment() {
         logManualDose.setOnClickListener { _: View? ->
             val handler: Handler = Handler(thread.getLooper())
             // Run the setup of the drop down in a separate thread to access the database
-            handler.post(Runnable {
+            handler.post {
                 ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity()).logManualDose()
-            })
+            }
         }
     }
 
     fun daySelected(date: LocalDate) {
         overviewViewModel.day = date
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        thread.quit()
+        optionsMenu.onDestroy()
     }
 }
