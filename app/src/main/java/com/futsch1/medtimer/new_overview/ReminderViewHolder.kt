@@ -1,13 +1,19 @@
 package com.futsch1.medtimer.new_overview
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.new_overview.actions.createActions
+import kotlinx.coroutines.CoroutineScope
+
 
 enum class EventPosition {
     FIRST,
@@ -18,7 +24,7 @@ enum class EventPosition {
     ONLY
 }
 
-class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineScope: CoroutineScope) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
@@ -26,19 +32,21 @@ class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val topBar: View = itemView.findViewById(R.id.topBar)
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
     val contentContainer: View = itemView.findViewById(R.id.overviewContentContainer)
+    lateinit var event: OverviewEvent
 
     companion object {
-        fun create(parent: ViewGroup): ReminderViewHolder {
+        fun create(parent: ViewGroup, coroutineScope: CoroutineScope): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view)
+            return ReminderViewHolder(view, parent, coroutineScope)
         }
     }
 
     fun bind(event: OverviewEvent, position: EventPosition) {
+        this.event = event
         reminderText.text = event.text
         if (event.color != null) {
-            ViewColorHelper.setViewBackground(contentContainer, mutableListOf<TextView?>(reminderText), event.color)
+            ViewColorHelper.setViewBackground(contentContainer, mutableListOf<TextView?>(reminderText), event.color!!)
         } else {
             ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
         }
@@ -46,6 +54,29 @@ class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         setBarsVisibility(position)
         setStateButton(event.state)
+        setupStateMenu()
+    }
+
+    private fun setupStateMenu() {
+        stateButton.setOnClickListener { view ->
+            val popupView: View = LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_reminder_event, null)
+            val popupWindow = PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            popupWindow.isFocusable = true
+            popupWindow.isOutsideTouchable = true
+
+            createActions(event, popupView, popupWindow, coroutineScope)
+
+            // Position the view at the vertical center of the button
+            val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            popupView.measure(widthMeasureSpec, heightMeasureSpec)
+
+            val location = IntArray(2)
+            view.getLocationInWindow(location)
+
+            val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, view.left, popupTop)
+        }
     }
 
     private fun setStateButton(state: OverviewState) {

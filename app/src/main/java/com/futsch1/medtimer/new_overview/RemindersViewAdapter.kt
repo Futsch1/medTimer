@@ -5,8 +5,9 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
+import kotlinx.coroutines.CoroutineScope
 
-class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>) :
+class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, val coroutineScope: CoroutineScope) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder?>(diffCallback), Filterable {
     init {
         setHasStableIds(true)
@@ -14,7 +15,7 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>) :
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        return ReminderViewHolder.create(parent)
+        return ReminderViewHolder.create(parent, coroutineScope)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
