@@ -25,6 +25,7 @@ class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val stateButton: ImageView = itemView.findViewById(R.id.stateButton)
     val topBar: View = itemView.findViewById(R.id.topBar)
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
+    val contentContainer: View = itemView.findViewById(R.id.overviewContentContainer)
 
     companion object {
         fun create(parent: ViewGroup): ReminderViewHolder {
@@ -37,11 +38,11 @@ class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(event: OverviewEvent, position: EventPosition) {
         reminderText.text = event.text
         if (event.color != null) {
-            ViewColorHelper.setViewBackground(itemView, mutableListOf<TextView?>(reminderText), event.color)
+            ViewColorHelper.setViewBackground(contentContainer, mutableListOf<TextView?>(reminderText), event.color)
         } else {
-            ViewColorHelper.setDefaultColors(itemView, mutableListOf<TextView?>(reminderText))
+            ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
         }
-        ViewColorHelper.setIconToImageView(itemView, reminderIcon, event.icon)
+        ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
 
         setBarsVisibility(position)
         setStateButton(event.state)
