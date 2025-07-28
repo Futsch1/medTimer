@@ -14,7 +14,7 @@
 
     <View
         android:id="@+id/topBar"
-        android:layout_width="24dp"
+        android:layout_width="16dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
@@ -25,7 +25,7 @@
 
     <View
         android:id="@+id/bottomBar"
-        android:layout_width="24dp"
+        android:layout_width="16dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
