@@ -29,9 +29,6 @@
     <string name="app_version">Uygulama versiyonu</string>
     <string name="are_you_sure_delete_events">Tüm etkinlikleri silmek istediğinizden emin misiniz?</string>
     <string name="show_notifications">Bildirimleri göster</string>
-    <string name="overview_events">Genel Bakış etkinliklerini göster</string>
-    <string name="four_hours">4 saat</string>
-    <string name="twelve_hours">12 saat</string>
     <string name="twenty_four_hours">24 saat</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
@@ -107,7 +104,6 @@
     <string name="name">Ad</string>
     <string name="event_data">Etkinlik verisi</string>
     <string name="backup">Yedekle</string>
-    <string name="taken_now">Şimdi alındı</string>
     <string name="event_name">Etkinlik adı</string>
     <string name="edit_event">Etkinliği düzenle</string>
     <string name="intro_welcome">MedTimer\'a hoş geldiniz!</string>
@@ -124,7 +120,6 @@
     <string name="notification_settings_default">Bildirim ayarları varsayılan öncelik</string>
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
     <string name="calendar">Takvim</string>
-    <string name="show_only_open">Sadece açıkları göster</string>
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
     <string name="inactive">Aktif değil</string>

@@ -43,9 +43,6 @@
     <string name="clear_events">Rensa händelser</string>
     <string name="are_you_sure_delete_events">Är du säker på att du vill ta bort alla händelser?</string>
     <string name="show_notifications">Visa aviseringar</string>
-    <string name="overview_events">Översikt visa händelser</string>
-    <string name="four_hours">4 timmar</string>
-    <string name="twelve_hours">12 timmar</string>
     <string name="twenty_four_hours">24 timmar</string>
     <string name="two_days">2 dagar</string>
     <string name="three_days">3 dagar</string>
@@ -113,7 +110,6 @@
     <string name="name">Namn</string>
     <string name="event_data">Händelsedata</string>
     <string name="backup">Backup</string>
-    <string name="taken_now">Tagen nu</string>
     <string name="event_name">Händelsenamn</string>
     <string name="edit_event">Ändra händelse</string>
     <string name="intro_welcome">Välkommen till MedTimer!</string>
@@ -130,7 +126,6 @@
     <string name="notification_settings_default">Standardprioritet för aviseringsinställningar</string>
     <string name="notification_settings_high">Aviseringsinställningar med hög prioritet</string>
     <string name="calendar">Kalender</string>
-    <string name="show_only_open">Visa endast öppna</string>
     <string name="date">Datum</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>

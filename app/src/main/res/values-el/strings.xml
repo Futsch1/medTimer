@@ -30,9 +30,6 @@
     <string name="app_version">Έκδοση εφαρμογής</string>
     <string name="are_you_sure_delete_events">Σίγουρα θέλετε να διαγράψετε όλα τα συμβάντα;</string>
     <string name="show_notifications">Εμφάνιση ειδοποιήσεων</string>
-    <string name="overview_events">Επισκόπηση εμφανιζόμενων συμβάντων</string>
-    <string name="four_hours">4 ώρες</string>
-    <string name="twelve_hours">12 ώρες</string>
     <string name="twenty_four_hours">24 ώρες</string>
     <string name="two_days">2 ημέρες</string>
     <string name="three_days">3 ημέρες</string>
@@ -108,7 +105,6 @@
     <string name="name">Όνομα</string>
     <string name="event_data">Δεδομένα συμβάντων</string>
     <string name="backup">Αντίγραφο ασφαλείας</string>
-    <string name="taken_now">Λήφθηκε τώρα</string>
     <string name="event_name">Ονομασία συμβάντος</string>
     <string name="edit_event">Επεξεργασία συμβάντος</string>
     <string name="intro_welcome">Καλοσήρθατε στο MedTimer!</string>
@@ -125,7 +121,6 @@
     <string name="notification_settings_default">Ρύθμιση προεπιλεγμένης προτεραιότητας ειδοποιήσεων</string>
     <string name="notification_settings_high">Ρύθμιση υψηλής προτεραιότητας ειδοποιήσεων</string>
     <string name="calendar">Ημερολόγιο</string>
-    <string name="show_only_open">Εμφάνιση μόνο ενεργών</string>
     <string name="date">Ημερομηνία</string>
     <string name="active">Ενεργή</string>
     <string name="inactive">Μη ενεργή</string>

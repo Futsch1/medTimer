@@ -79,11 +79,7 @@
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"
         android:label="@string/analysis"
-        tools:layout="@layout/fragment_statistics">
-        <action
-            android:id="@+id/action_statisticsFragment_to_editEventFragment"
-            app:destination="@id/editEventFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.futsch1.medtimer.statistics.CalendarFragment"

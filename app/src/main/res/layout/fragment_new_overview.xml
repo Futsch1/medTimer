@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".overview.NewOverviewFragment">
+    tools:context=".new_overview.NewOverviewFragment">
 
     <com.kizitonwose.calendar.view.WeekCalendarView
         android:id="@+id/overviewWeek"

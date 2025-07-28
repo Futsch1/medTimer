@@ -29,9 +29,6 @@
     <string name="clear_events">Limpar eventos</string>
     <string name="app_version">Versão do aplicativo</string>
     <string name="show_notifications">Mostrar notificações</string>
-    <string name="overview_events">Eventos a exibir na visão geral</string>
-    <string name="four_hours">4 horas</string>
-    <string name="twelve_hours">12 horas</string>
     <string name="twenty_four_hours">24 horas</string>
     <string name="three_days">3 dias</string>
     <string name="app_url">MedTimer no GitHub</string>
@@ -97,7 +94,6 @@
     <string name="name">Nome</string>
     <string name="event_data">Dados do evento</string>
     <string name="backup">Backup</string>
-    <string name="taken_now">Tomado agora</string>
     <string name="event_name">Nome do evento</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
     <string name="intro_analysis_description">O aplicativo armazena todos os eventos de lembrete. Você pode analisar suas doses anteriores na tela de análise e exportar seu histórico através do menu kebab (três pontos). O histórico permanecerá mesmo que medicamentos ou lembretes sejam excluídos ou renomeados.</string>
@@ -107,7 +103,6 @@
     <string name="notification_settings_default">Prioridade padrão das configurações de notificação</string>
     <string name="notification_settings_high">Configurações de notificação de alta prioridade</string>
     <string name="calendar">Calendário</string>
-    <string name="show_only_open">Mostrar apenas abertos</string>
     <string name="date">Data</string>
     <string name="active">Ativo</string>
     <string name="inactive">Inativo</string>

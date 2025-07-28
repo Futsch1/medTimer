@@ -20,9 +20,6 @@
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
     <string name="show_notifications">Показувати сповіщення</string>
-    <string name="overview_events">Огляд відображених подій</string>
-    <string name="four_hours">4 години</string>
-    <string name="twelve_hours">12 годин</string>
     <string name="twenty_four_hours">24 години</string>
     <string name="exact_reminders">Точні нагадування</string>
     <string name="exact_reminders_summary">Нагадування заплановано на точний час (збільшує використання батареї)</string>
@@ -105,7 +102,6 @@
     <string name="name">Ім&amp;apos;я</string>
     <string name="event_data">Дані про подію</string>
     <string name="backup">Підкріплення</string>
-    <string name="taken_now">Знято зараз</string>
     <string name="event_name">Назва події</string>
     <string name="edit_event">Редагувати подію</string>
     <string name="intro_welcome">Ласкаво просимо до MedTimer!</string>
@@ -122,7 +118,6 @@
     <string name="notification_settings_default">Налаштування сповіщень за замовчуванням Пріоритет за замовчуванням</string>
     <string name="notification_settings_high">Налаштування сповіщень з високим пріоритетом</string>
     <string name="calendar">Календар</string>
-    <string name="show_only_open">Показати тільки відкриті</string>
     <string name="date">Дата</string>
     <string name="active">Активний</string>
     <string name="inactive">Неактивний</string>

@@ -31,9 +31,6 @@
     <string name="app_version">Versión de la aplicación</string>
     <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
     <string name="show_notifications">Enviar notificaciones</string>
-    <string name="overview_events">Mostrar eventos en el resumen</string>
-    <string name="four_hours">4 horas</string>
-    <string name="twelve_hours">12 horas</string>
     <string name="twenty_four_hours">24 horas</string>
     <string name="two_days">2 días</string>
     <string name="three_days">3 días</string>
@@ -110,7 +107,6 @@
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Copia de seguridad</string>
-    <string name="taken_now">Tomado ahora</string>
     <string name="event_name">Nombre del evento</string>
     <string name="edit_event">Editar evento</string>
     <string name="intro_welcome">¡Bienvenido a MedTimer!</string>
@@ -127,7 +123,6 @@
     <string name="notification_settings_default">Ajustes de notificación de prioridad predeterminada</string>
     <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
     <string name="calendar">Calendario</string>
-    <string name="show_only_open">Mostrar solo abiertas</string>
     <string name="date">Fecha</string>
     <string name="active">Activo</string>
     <string name="inactive">Inactivo</string>
