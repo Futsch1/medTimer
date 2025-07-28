@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.new_overview
 
 import android.content.Intent
 import android.text.InputType

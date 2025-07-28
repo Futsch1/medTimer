@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.new_overview
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.ViewColorHelper
-import com.futsch1.medtimer.overview.ManualDose.ManualDoseEntry
+import com.futsch1.medtimer.new_overview.ManualDose.ManualDoseEntry
 
 class ManualDoseListEntryAdapter(context: Context, val resource: Int, entries: List<ManualDoseEntry>) :
     ArrayAdapter<ManualDoseEntry>(context, resource, entries) {

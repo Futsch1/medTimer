@@ -8,7 +8,6 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DeleteHelper
-import com.futsch1.medtimer.helpers.DeleteHelper.ButtonCallback
 import com.futsch1.medtimer.new_overview.OverviewReminderEvent
 import com.futsch1.medtimer.new_overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderProcessor
@@ -59,7 +58,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
 
     private fun processDeleteReminderEvent(context: Context?, reminderEvent: ReminderEvent) {
         val deleteHelper = DeleteHelper(context)
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, ButtonCallback {
+        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
             medicineRepository.deleteReminderEvent(reminderEvent)
         }, {})

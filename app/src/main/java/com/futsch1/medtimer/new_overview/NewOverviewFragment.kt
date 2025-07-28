@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.overview.ManualDose
 import java.time.LocalDate
 
 class NewOverviewFragment : Fragment() {

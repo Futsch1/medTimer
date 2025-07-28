@@ -30,6 +30,7 @@ import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.DeleteHelper;
 import com.futsch1.medtimer.helpers.SwipeHelper;
+import com.futsch1.medtimer.new_overview.ManualDose;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.color.MaterialColors;
