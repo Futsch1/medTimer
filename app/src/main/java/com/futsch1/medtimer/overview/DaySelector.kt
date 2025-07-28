@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview
+package com.futsch1.medtimer.overview
 
 import android.content.Context
 import android.content.res.ColorStateList

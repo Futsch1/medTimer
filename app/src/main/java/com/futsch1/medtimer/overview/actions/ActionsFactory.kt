@@ -1,10 +1,10 @@
-package com.futsch1.medtimer.new_overview.actions
+package com.futsch1.medtimer.overview.actions
 
 import android.view.View
 import android.widget.PopupWindow
-import com.futsch1.medtimer.new_overview.OverviewEvent
-import com.futsch1.medtimer.new_overview.OverviewReminderEvent
-import com.futsch1.medtimer.new_overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.OverviewEvent
+import com.futsch1.medtimer.overview.OverviewReminderEvent
+import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import kotlinx.coroutines.CoroutineScope
 
 fun createActions(event: OverviewEvent, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope) {

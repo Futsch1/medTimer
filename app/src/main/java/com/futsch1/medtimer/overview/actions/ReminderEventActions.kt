@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview.actions
+package com.futsch1.medtimer.overview.actions
 
 import android.app.Application
 import android.content.Context
@@ -8,8 +8,8 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DeleteHelper
-import com.futsch1.medtimer.new_overview.OverviewReminderEvent
-import com.futsch1.medtimer.new_overview.OverviewState
+import com.futsch1.medtimer.overview.OverviewReminderEvent
+import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderProcessor
 
 class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {

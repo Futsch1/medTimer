@@ -1,11 +1,11 @@
-package com.futsch1.medtimer.new_overview.actions
+package com.futsch1.medtimer.overview.actions
 
 import android.app.Application
 import android.view.View
 import android.widget.PopupWindow
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.new_overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.ReminderWork
 import kotlinx.coroutines.CoroutineDispatcher

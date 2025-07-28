@@ -16,7 +16,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.new_overview.EditEventSideSheetDialog;
+import com.futsch1.medtimer.overview.EditEventSideSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;

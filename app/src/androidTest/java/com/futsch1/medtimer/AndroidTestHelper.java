@@ -80,7 +80,7 @@ public class AndroidTestHelper {
     }
 
     public static void navigateTo(MainMenu mainMenu) {
-        int[] menuIds = {R.id.newOverviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
         clickOn(menuIds[mainMenu.ordinal()]);
         clickOn(menuIds[mainMenu.ordinal()]);
     }

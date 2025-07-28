@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview
+package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
 import android.view.Gravity
@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
-import com.futsch1.medtimer.new_overview.actions.createActions
+import com.futsch1.medtimer.overview.actions.createActions
 
 
 enum class EventPosition {

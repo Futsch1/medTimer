@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview.actions
+package com.futsch1.medtimer.overview.actions
 
 import android.view.View
 import android.widget.PopupWindow

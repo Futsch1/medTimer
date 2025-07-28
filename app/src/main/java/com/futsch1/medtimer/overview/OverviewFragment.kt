@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview
+package com.futsch1.medtimer.overview
 
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +16,7 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import java.time.LocalDate
 
-class NewOverviewFragment : Fragment() {
+class OverviewFragment : Fragment() {
 
     private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var optionsMenu: OptionsMenu
@@ -26,7 +26,7 @@ class NewOverviewFragment : Fragment() {
     private lateinit var thread: HandlerThread
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentOverview = inflater.inflate(R.layout.fragment_new_overview, container, false)
+        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false)
 
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]

@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview
+package com.futsch1.medtimer.overview
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

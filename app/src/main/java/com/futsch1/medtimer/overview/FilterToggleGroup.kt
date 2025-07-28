@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.new_overview
+package com.futsch1.medtimer.overview
 
 import com.futsch1.medtimer.R
 import com.google.android.material.button.MaterialButtonToggleGroup
