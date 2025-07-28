@@ -26,7 +26,7 @@ class ManualDoseTest : BaseTestHelper() {
         BaristaDialogInteractions.clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
-        assertContains(R.id.reminderEventText, "Ginseng (200mg) (12)")
+        assertContains(R.id.reminderText, "Ginseng (200mg) (12)")
 
         clickOn(R.id.logManualDose)
         clickOn(R.string.custom)
@@ -34,18 +34,18 @@ class ManualDoseTest : BaseTestHelper() {
         BaristaDialogInteractions.clickDialogPositiveButton()
         BaristaDialogInteractions.clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
-        assertContains(R.id.reminderEventText, "Test")
-        assertNotContains(R.id.reminderEventText, "Test (")
+        assertContains(R.id.reminderText, "Test")
+        assertNotContains(R.id.reminderText, "Test (")
 
         clickOn(R.id.logManualDose)
         assertContains(R.id.entry_text, "Test")
-        assertNotContains(R.id.reminderEventText, "Test (")
+        assertNotContains(R.id.reminderText, "Test (")
         clickOn("Test")
         writeTo(android.R.id.input, "13")
         BaristaDialogInteractions.clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
-        assertContains(R.id.reminderEventText, "Test (13)")
+        assertContains(R.id.reminderText, "Test (13)")
 
         clickOn(R.id.logManualDose)
         assertContains(R.id.entry_text, "Test (13)")
