@@ -16,8 +16,6 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
-
 import org.junit.Test;
 
 import java.time.LocalTime;
@@ -26,7 +24,7 @@ import java.util.Calendar;
 public class BasicUITest extends BaseTestHelper {
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void basicUITest() {
         AndroidTestHelper.createMedicine(" Test ");
         AndroidTestHelper.createReminder("1", LocalTime.of(18, 0));
