@@ -125,7 +125,7 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(com.github.appintro.R.id.skip);
 
-        assertDisplayed(R.string.next_reminders);
+        assertDisplayed(R.string.tab_overview);
     }
 
 }
