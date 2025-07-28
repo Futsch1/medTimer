@@ -51,7 +51,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper(view.context).deleteItem(R.string.delete_re_raise_event, {
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
-            medicineRepository.deleteReminderEvent(reminderEvent.reminderEventId)
+            medicineRepository.deleteReminderEvent(reminderEvent)
             ReminderProcessor.requestReschedule(view.context)
         }, {})
     }
@@ -60,7 +60,8 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
-            medicineRepository.deleteReminderEvent(reminderEvent)
+            reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
+            medicineRepository.updateReminderEvent(reminderEvent)
         }, {})
     }
 
