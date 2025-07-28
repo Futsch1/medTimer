@@ -66,8 +66,7 @@ jobs:
           disable-animations: true
           script: |
             adb shell settings put global auto_time 0
-            adb shell su 0 toybox date -s 2025-08-01
-            adb shell su 0 toybox date -s 16:00
+            adb shell su 0 toybox date 0801160025
             ./gradlew packageDebug
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500

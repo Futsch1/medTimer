@@ -12,9 +12,10 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
@@ -108,7 +109,7 @@ class TagTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun activateAndOverviewVisibility() {
         createMedicine("Test")
         clickOn(R.id.openTags)
@@ -152,27 +153,25 @@ class TagTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
-        clickListItemChild(R.id.latestReminders, 1, R.id.chipTaken)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 1, R.id.stateButton)
+        clickOn(R.id.takenButton)
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
         clickOn(R.id.ok)
 
-        assertContains(R.id.nextReminderText, "Amount1")
-        assertNotContains(R.id.nextReminderText, "Amount2")
-        assertContains(R.id.reminderEventText, "Amount1")
-        assertNotContains(R.id.reminderEventText, "Amount2")
+        assertContains(R.id.reminderText, "Amount1")
+        assertNotContains(R.id.reminderText, "Amount2")
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
         clickOn("Tag2")
         clickOn(R.id.ok)
 
-        assertNotContains(R.id.nextReminderText, "Amount1")
-        assertContains(R.id.nextReminderText, "Amount2")
-        assertNotContains(R.id.reminderEventText, "Amount1")
-        assertContains(R.id.reminderEventText, "Amount2")
+        assertNotContains(R.id.reminderText, "Amount1")
+        assertContains(R.id.reminderText, "Amount2")
     }
 
     private fun addTag(tagName: String) {

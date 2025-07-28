@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -251,7 +250,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void deleteReminderTest() {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
