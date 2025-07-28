@@ -99,6 +99,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             OverviewState.RAISED -> R.drawable.bell
         }
         stateButton.setImageResource(imageResource)
+        stateButton.tag = imageResource
     }
 
     private fun setBarsVisibility(position: EventPosition) {

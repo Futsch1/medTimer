@@ -2,13 +2,11 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
@@ -26,10 +24,6 @@ import android.content.Context;
 import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.Until;
 
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
@@ -52,7 +46,7 @@ public class ReminderTest extends BaseTestHelper {
         pastTime.set(year - 1, 1, 1);
 
         AndroidTestHelper.createMedicine("Test");
-        AndroidTestHelper.createReminder("1", null);
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
 
         clickOn(R.id.openAdvancedSettings);
         clickOn(R.id.inactive);
@@ -60,7 +54,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertNotDisplayed(R.id.nextReminders);
+        assertListItemCount(R.id.reminders, 0);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
@@ -70,7 +64,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertListItemCount(R.id.nextReminders, 1);
+        assertListItemCount(R.id.reminders, 1);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
@@ -82,7 +76,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertNotDisplayed(R.id.nextReminders);
+        assertListItemCount(R.id.reminders, 0);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
@@ -94,7 +88,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertNotDisplayed(R.id.nextReminders);
+        assertListItemCount(R.id.reminders, 0);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
@@ -106,7 +100,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertListItemCount(R.id.nextReminders, 1);
+        assertListItemCount(R.id.reminders, 1);
     }
 
     @Test
@@ -141,15 +135,6 @@ public class ReminderTest extends BaseTestHelper {
     //@AllowFlaky(attempts = 1)
     public void reminderTypeTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
-        if (device.getDisplayWidth() < device.getDisplayHeight()) {
-            UiObject2 divider = device.wait(Until.findObject(By.res(device.getCurrentPackageName(), "overviewDivider")), 2_000);
-            int startX = divider.getVisibleBounds().centerX();
-            int startY = divider.getVisibleBounds().top;
-            int endY = device.getDisplayHeight() / 2;
-            device.swipe(startX, startY, startX, endY, 100);
-        }
 
         AndroidTestHelper.createMedicine("Test");
 
@@ -204,18 +189,15 @@ public class ReminderTest extends BaseTestHelper {
         // Check overview and next reminders
         navigateTo(OVERVIEW);
 
-        assertContains(R.id.nextReminderText, "Test (1)");
+        assertContains(R.id.reminderText, "Test (1)");
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
-        assertContains(R.id.nextReminderText, expectedString);
+        assertContains(R.id.reminderText, expectedString);
 
-        assertContains(R.id.nextReminderText, "Test (3)");
+        assertContains(R.id.reminderText, "Test (3)");
 
         // If possible, take reminder 1 now and see if reminder 2 appears
-        if (reminder1Time.isAfter(LocalTime.of(0, 30))) {
-            clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
-
-            assertContains(R.id.nextReminderText, "Test (2)");
-        }
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
     }
 
     @Test
@@ -278,10 +260,13 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken);
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
+
         assertNotContains(context.getString(R.string.interval_time, "0 min"));
 
-        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow);
+        clickListItemChild(R.id.reminders, 1, R.id.stateButton);
+        clickOn(R.id.takenButton);
 
         sleep(1000);
         assertContains(context.getString(R.string.interval_time, "0 min"));
