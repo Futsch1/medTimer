@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
@@ -55,7 +54,7 @@ class NewOverviewFragment : Fragment() {
 
     private fun setupReminders() {
         val reminders: RecyclerView = fragmentOverview.findViewById(R.id.reminders)
-        val adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), viewLifecycleOwner.lifecycleScope)
+        val adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
 

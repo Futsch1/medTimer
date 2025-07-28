@@ -5,7 +5,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RadioGroup
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -14,7 +14,7 @@ import java.time.LocalDate
 
 class PeriodSettings(
     private val advancedReminderSettingsView: View,
-    private val fragmentManager: FragmentManager,
+    private val activity: FragmentActivity,
     val reminder: Reminder
 ) {
     private val activeState: RadioGroup =
@@ -85,7 +85,7 @@ class PeriodSettings(
             if (hasFocus) {
                 val startDate: LocalDate? =
                     TimeHelper.dateStringToDate(textField.context, textField.getText().toString())
-                val datePickerWrapper = DatePickerWrapper(fragmentManager, textId)
+                val datePickerWrapper = DatePickerWrapper(activity, textId)
                 datePickerWrapper.show(startDate) { selectedDate ->
                     textField.setText(
                         TimeHelper.daysSinceEpochToDateString(

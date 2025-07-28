@@ -10,7 +10,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -321,16 +320,16 @@ public class TimeHelper {
     }
 
     public static class DatePickerWrapper {
-        final FragmentManager fragmentManager;
+        final FragmentActivity activity;
         private final Integer titleText;
 
-        public DatePickerWrapper(FragmentManager fragmentManager) {
-            this.fragmentManager = fragmentManager;
+        public DatePickerWrapper(FragmentActivity activity) {
+            this.activity = activity;
             this.titleText = null;
         }
 
-        public DatePickerWrapper(FragmentManager fragmentManager, @StringRes int titleText) {
-            this.fragmentManager = fragmentManager;
+        public DatePickerWrapper(FragmentActivity activity, @StringRes int titleText) {
+            this.activity = activity;
             this.titleText = titleText;
         }
 
@@ -348,7 +347,7 @@ public class TimeHelper {
             MaterialDatePicker<Long> datePickerDialog = builder.build();
             datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> datePickerResult.onDateSelected(selectedDate / DateUtils.DAY_IN_MILLIS));
 
-            datePickerDialog.show(fragmentManager, "date_picker");
+            datePickerDialog.show(activity.getSupportFragmentManager(), "date_picker");
         }
     }
 }

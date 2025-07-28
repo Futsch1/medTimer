@@ -97,7 +97,7 @@
         android:id="@+id/editEventFragment"
         android:name="com.futsch1.medtimer.overview.EditEventFragment"
         android:label="@string/edit_event"
-        tools:layout="@layout/fragment_edit_event">
+        tools:layout="@layout/sidesheet_edit_event">
         <argument
             android:name="eventId"
             app:argType="integer" />

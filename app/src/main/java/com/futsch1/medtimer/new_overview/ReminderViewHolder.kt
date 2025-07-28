@@ -9,11 +9,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.new_overview.actions.createActions
-import kotlinx.coroutines.CoroutineScope
 
 
 enum class EventPosition {
@@ -25,7 +26,7 @@ enum class EventPosition {
     ONLY
 }
 
-class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineScope: CoroutineScope) : RecyclerView.ViewHolder(itemView) {
+class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
@@ -36,10 +37,10 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineSco
     lateinit var event: OverviewEvent
 
     companion object {
-        fun create(parent: ViewGroup, coroutineScope: CoroutineScope): ReminderViewHolder {
+        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, coroutineScope)
+            return ReminderViewHolder(view, parent, fragmentActivity)
         }
     }
 
@@ -56,6 +57,15 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineSco
         setBarsVisibility(position)
         setStateButton(event.state)
         setupStateMenu()
+        setupEditEvent()
+    }
+
+    private fun setupEditEvent() {
+        if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
+            this.contentContainer.setOnClickListener { _ ->
+                EditEventSideSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
+            }
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -66,7 +76,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineSco
             popupWindow.isFocusable = true
             popupWindow.isOutsideTouchable = true
 
-            createActions(event, popupView, popupWindow, coroutineScope)
+            createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
             // Position the view at the vertical center of the button
             val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

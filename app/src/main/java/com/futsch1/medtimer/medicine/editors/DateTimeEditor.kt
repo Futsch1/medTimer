@@ -33,7 +33,7 @@ class DateTimeEditor(
             val startInstant = Instant.ofEpochSecond(getDateTimeSecondsSinceEpoch())
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-            TimeHelper.DatePickerWrapper(fragmentActivity.supportFragmentManager)
+            TimeHelper.DatePickerWrapper(fragmentActivity)
                 .show(
                     dateTime.toLocalDate()
                 ) { selectedDate ->
