@@ -26,7 +26,8 @@ class ScheduledReminderActions(
     init {
         takenButton.visibility = View.VISIBLE
         skippedButton.visibility = View.VISIBLE
-        reRaiseButton.visibility = View.GONE
+        reRaiseButton.visibility = View.INVISIBLE
+        deleteButton.visibility = View.INVISIBLE
 
         takenButton.setOnClickListener {
             // Launch a coroutine in the provided scope

@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.new_overview
 
+import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +58,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineSco
         setupStateMenu()
     }
 
+    @SuppressLint("InflateParams")
     private fun setupStateMenu() {
         stateButton.setOnClickListener { view ->
             val popupView: View = LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_overview_event, null)

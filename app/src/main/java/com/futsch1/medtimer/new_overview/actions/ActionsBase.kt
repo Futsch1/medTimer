@@ -9,6 +9,7 @@ open class ActionsBase(view: View, popupWindow: PopupWindow) {
     val takenButton: ExtendedFloatingActionButton = view.findViewById(R.id.takenButton)
     val skippedButton: ExtendedFloatingActionButton = view.findViewById(R.id.skippedButton)
     val reRaiseButton: ExtendedFloatingActionButton = view.findViewById(R.id.reraiseButton)
+    val deleteButton: ExtendedFloatingActionButton = view.findViewById(R.id.deleteButton)
 
     init {
         view.setOnClickListener {
