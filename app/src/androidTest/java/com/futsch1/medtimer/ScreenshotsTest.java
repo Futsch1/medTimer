@@ -2,24 +2,18 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
-import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 import static junit.framework.TestCase.assertEquals;
 
-import android.content.Context;
 import android.widget.TextView;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -28,14 +22,12 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
-import com.futsch1.medtimer.helpers.TimeHelper;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -47,17 +39,13 @@ public class ScreenshotsTest extends BaseTestHelper {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     public void screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());
 
         openMenu();
         clickOn(R.string.generate_test_data);
-
-        if (isNotTimeBetween9And23()) {
-            AndroidTestHelper.setAllRemindersTo12AM();
-        }
 
         device.openNotification();
         UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
@@ -70,10 +58,15 @@ public class ScreenshotsTest extends BaseTestHelper {
         Screengrab.screenshot("5");
         device.pressBack();
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken);
-        clickListItemChild(R.id.latestReminders, 1, R.id.chipTaken);
-        clickListItemChild(R.id.latestReminders, 2, R.id.chipTaken);
-        clickListItemChild(R.id.latestReminders, 3, R.id.chipTaken);
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 1, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 2, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 3, R.id.stateButton);
+        clickOn(R.id.takenButton);
+
         Screengrab.screenshot("1");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
@@ -116,22 +109,5 @@ public class ScreenshotsTest extends BaseTestHelper {
         Screengrab.screenshot("8");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-
-        // Edit most recent reminder event
-        AndroidTestHelper.editLatestEvent();
-        writeTo(R.id.editEventName, "TestMedicine");
-        writeTo(R.id.editEventAmount, "Much");
-        pressBack();
-
-        Context targetContext = getInstrumentation().getTargetContext();
-        String dateString = TimeHelper.toLocalizedDateString(targetContext, LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000);
-        assertContains(R.id.reminderEventText, "TestMedicine (Much)");
-        assertContains(R.id.reminderEventText, dateString);
-
-        // And now delete it
-        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
-        clickDialogPositiveButton();
-
-        assertNotContains(R.id.reminderEventText, "TestMedicine (Much)");
     }
 }

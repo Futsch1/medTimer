@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -218,7 +219,7 @@ public class ReminderTest extends BaseTestHelper {
         long now = Instant.now().getEpochSecond();
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
 
-        AndroidTestHelper.editLatestEvent();
+        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer);
         assertContains(R.id.editEventName, "Test");
         assertContains(R.id.editEventAmount, "12");
         assertContains(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, now));
@@ -247,6 +248,24 @@ public class ReminderTest extends BaseTestHelper {
         assertEquals(TimeHelper.toLocalizedDatetimeString(context, newReminded), view.getText());
         view = tableView.get().getCellRecyclerView().findViewWithTag("taken");
         assertEquals(TimeHelper.toLocalizedDatetimeString(context, newTaken), view.getText());
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    public void deleteReminderTest() {
+        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.deleteButton);
+        clickDialogPositiveButton();
+
+        assertListItemCount(R.id.reminders, 0);
     }
 
     @Test

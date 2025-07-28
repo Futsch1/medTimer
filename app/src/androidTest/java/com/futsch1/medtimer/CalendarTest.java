@@ -18,17 +18,14 @@ public class CalendarTest extends BaseTestHelper {
         openMenu();
         clickOn(R.string.generate_test_data);
 
-        int takenReminders = 0;
-
-        while (takenReminders < 5) {
-            try {
-                clickListItemChild(R.id.reminders, takenReminders, R.id.stateButton);
-                clickOn(R.id.takenButton);
-            } catch (Exception e) {
-                break;
-            }
-            takenReminders++;
-        }
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 1, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 2, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 3, R.id.stateButton);
+        clickOn(R.id.takenButton);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
