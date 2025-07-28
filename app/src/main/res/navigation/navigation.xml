@@ -16,15 +16,6 @@
             app:destination="@id/editMedicineFragment" />
     </fragment>
     <fragment
-        android:id="@+id/overviewFragment"
-        android:name="com.futsch1.medtimer.overview.OverviewFragment"
-        android:label="@string/tab_overview"
-        tools:layout="@layout/fragment_overview">
-        <action
-            android:id="@+id/action_overviewFragment_to_editEventFragment"
-            app:destination="@id/editEventFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/preferencesFragment"
         android:name="com.futsch1.medtimer.preferences.PreferencesFragment"
         android:label="@string/tab_settings">
@@ -92,15 +83,6 @@
         <action
             android:id="@+id/action_statisticsFragment_to_editEventFragment"
             app:destination="@id/editEventFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/editEventFragment"
-        android:name="com.futsch1.medtimer.overview.EditEventFragment"
-        android:label="@string/edit_event"
-        tools:layout="@layout/sidesheet_edit_event">
-        <argument
-            android:name="eventId"
-            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
