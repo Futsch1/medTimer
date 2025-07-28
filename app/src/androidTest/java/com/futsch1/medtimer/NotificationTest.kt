@@ -9,8 +9,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
+import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -23,12 +23,14 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
@@ -106,10 +108,10 @@ class NotificationTest : BaseTestHelper() {
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(
-            R.id.latestReminders,
+            R.id.reminders,
             0,
-            R.id.chipSkipped,
-            matches(isChecked())
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.x_circle)))
         )
 
         // Now change to action taken on dismiss
@@ -135,10 +137,10 @@ class NotificationTest : BaseTestHelper() {
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(
-            R.id.latestReminders,
+            R.id.reminders,
             0,
-            R.id.chipTaken,
-            matches(isChecked())
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
     }
 
@@ -211,7 +213,8 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
 
-        clickOn(R.id.takenNow)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        clickOn(R.id.takenButton)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
 
@@ -364,16 +367,16 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(
-            R.id.latestReminders,
+            R.id.reminders,
             0,
-            R.id.chipTaken,
-            matches(isChecked())
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
         assertCustomAssertionAtPosition(
-            R.id.latestReminders,
+            R.id.reminders,
             1,
-            R.id.chipTaken,
-            matches(isChecked())
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
     }
 
