@@ -35,7 +35,7 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
         )
     }
 
-    private fun daySelected(data: WeekDay) {
+    private fun notifyDaySelected(data: WeekDay) {
         calendarView.notifyCalendarChanged()
         currentDay = data
         daySelected(currentDay.date)
@@ -48,7 +48,7 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
 
             init {
                 textView.setOnClickListener {
-                    daySelected(day)
+                    notifyDaySelected(day)
                     calendarView.notifyDayChanged(day)
                 }
             }
@@ -126,6 +126,18 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
                 container.prevButton.visibility = View.GONE
                 container.nextButton.visibility = View.GONE
             }
+        }
+    }
+
+    fun selectPreviousDay() {
+        if (currentDay.date.minusDays(1) >= startDate) {
+            notifyDaySelected(WeekDay(currentDay.date.minusDays(1), WeekDayPosition.RangeDate))
+        }
+    }
+
+    fun selectNextDay() {
+        if (currentDay.date.plusDays(1) <= endDate) {
+            notifyDaySelected(WeekDay(currentDay.date.plusDays(1), WeekDayPosition.RangeDate))
         }
     }
 }

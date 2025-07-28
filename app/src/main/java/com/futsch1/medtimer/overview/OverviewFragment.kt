@@ -22,11 +22,11 @@ class OverviewFragment : Fragment() {
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
     private lateinit var overviewViewModel: OverviewViewModel
-    private lateinit var fragmentOverview: View
+    private lateinit var fragmentOverview: FragmentSwipeLayout
     private lateinit var thread: HandlerThread
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false)
+        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
 
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
@@ -48,7 +48,27 @@ class OverviewFragment : Fragment() {
         setupLogManualDose()
         FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel)
 
+        fragmentOverview.onSwipeListener = OverviewOnSwipeListener()
+
         return fragmentOverview
+    }
+
+    inner class OverviewOnSwipeListener : OnSwipeListener {
+        override fun onSwipeLeft() {
+            daySelector.selectPreviousDay()
+        }
+
+        override fun onSwipeRight() {
+            daySelector.selectNextDay()
+        }
+
+        override fun onSwipeUp() {
+            // Not required
+        }
+
+        override fun onSwipeDown() {
+            // Not required
+        }
     }
 
     private fun setupReminders() {
