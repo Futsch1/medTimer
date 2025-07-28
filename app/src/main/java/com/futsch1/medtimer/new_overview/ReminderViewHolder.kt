@@ -59,7 +59,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val coroutineSco
 
     private fun setupStateMenu() {
         stateButton.setOnClickListener { view ->
-            val popupView: View = LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_reminder_event, null)
+            val popupView: View = LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_overview_event, null)
             val popupWindow = PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             popupWindow.isFocusable = true
             popupWindow.isOutsideTouchable = true

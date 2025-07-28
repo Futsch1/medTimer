@@ -50,6 +50,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/shape_round_bg"
+        android:clickable="true"
         android:contentDescription="@string/taken"
         android:cropToPadding="true"
         android:padding="8dp"
