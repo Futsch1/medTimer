@@ -60,11 +60,11 @@ class OverviewFragment : Fragment() {
 
     inner class OverviewOnSwipeListener : OnSwipeListener {
         override fun onSwipeLeft() {
-            daySelector.selectPreviousDay()
+            daySelector.selectNextDay()
         }
 
         override fun onSwipeRight() {
-            daySelector.selectNextDay()
+            daySelector.selectPreviousDay()
         }
 
         override fun onSwipeUp() {
