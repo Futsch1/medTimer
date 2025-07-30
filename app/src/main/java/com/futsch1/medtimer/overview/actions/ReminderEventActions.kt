@@ -14,14 +14,8 @@ import com.futsch1.medtimer.reminders.ReminderProcessor
 
 class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
     init {
-        takenButton.visibility = View.VISIBLE
-        skippedButton.visibility = View.VISIBLE
         if (event.state == OverviewState.RAISED) {
-            deleteButton.visibility = View.INVISIBLE
-            reRaiseButton.visibility = View.INVISIBLE
-        } else {
-            deleteButton.visibility = View.VISIBLE
-            reRaiseButton.visibility = View.VISIBLE
+            hideDeleteAndReraise()
         }
         takenButton.setOnClickListener {
             processTakenOrSkipped(event.reminderEvent, true)

@@ -24,10 +24,7 @@ class ScheduledReminderActions(
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ActionsBase(view, popupWindow) {
     init {
-        takenButton.visibility = View.VISIBLE
-        skippedButton.visibility = View.VISIBLE
-        reRaiseButton.visibility = View.INVISIBLE
-        deleteButton.visibility = View.INVISIBLE
+        hideDeleteAndReraise()
 
         takenButton.setOnClickListener {
             // Launch a coroutine in the provided scope
