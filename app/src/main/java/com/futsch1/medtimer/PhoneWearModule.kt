@@ -46,7 +46,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 
 @OptIn(ExperimentalHorologistApi::class, DelicateCoroutinesApi::class)
-class PhoneWearModule(val context: Context) {
+class PhoneWearModule(val context: Context, val watch: Boolean ) {
     private lateinit var wearDataLayerRegistry: WearDataLayerRegistry
     private lateinit var appHelper: PhoneDataLayerAppHelper
 
@@ -69,17 +69,22 @@ class PhoneWearModule(val context: Context) {
         }
     }
     init {
-        if (isInstalled()) {
-            wearDataLayerRegistry = WearDataLayerRegistry.fromContext(
-                context,
-                serviceScope,
-            )
-            wearDataLayerRegistry.apply {
-                registerSerializer(WearDataSerializer)
-                registerSerializer(TakenDataSerializer)
-                registerSerializer(NotifyTakenDataSerializer)
+        serviceScope.launch {
+            if (isInstalled()) {
+                wearDataLayerRegistry = WearDataLayerRegistry.fromContext(
+                    context,
+                    serviceScope,
+                )
+                wearDataLayerRegistry.apply {
+                    registerSerializer(WearDataSerializer)
+                    registerSerializer(TakenDataSerializer)
+                    registerSerializer(NotifyTakenDataSerializer)
+                }
+                appHelper = PhoneDataLayerAppHelper(context, wearDataLayerRegistry)
+                if (watch) {
+                    checkNotifications()
+                }
             }
-            appHelper = PhoneDataLayerAppHelper(context, wearDataLayerRegistry)
         }
     }
     private fun isInstalled() : Boolean{
@@ -147,26 +152,23 @@ class PhoneWearModule(val context: Context) {
     }
 
     suspend fun checkNotifications() {
-        if (!isInstalled()) return ;
-        serviceScope.launch {
-            try {
-                notifyTakenData().collect { notifyTakenData ->
-                    Log.i("WEAR", "notifyTakenData: ${notifyTakenData}")
-                    val notifyTaken = ReminderProcessor.getTakenActionIntent(
-                        context,
-                        notifyTakenData.reminderEventId
-                    )
-                    val notificatuion = PendingIntent.getBroadcast(
-                        context,
-                        notifyTakenData.notificationId,
-                        notifyTaken,
-                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                    notificatuion.send()
-                }
-            } catch (e: Exception) {
-                Log.e("WEAR", "error on notifyTakenData: ${e}")
+        try {
+            notifyTakenData().collect { notifyTakenData ->
+                Log.i("WEAR", "notifyTakenData: ${notifyTakenData}")
+                val notifyTaken = ReminderProcessor.getTakenActionIntent(
+                    context,
+                    notifyTakenData.reminderEventId
+                )
+                val notificatuion = PendingIntent.getBroadcast(
+                    context,
+                    notifyTakenData.notificationId,
+                    notifyTaken,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                notificatuion.send()
             }
+        } catch (e: Exception) {
+            Log.e("WEAR", "error on notifyTakenData: ${e}")
         }
     }
 

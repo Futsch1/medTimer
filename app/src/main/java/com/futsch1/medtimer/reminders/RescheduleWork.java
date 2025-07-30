@@ -52,7 +52,7 @@ public class RescheduleWork extends Worker {
         this.context = context;
         this.weekendMode = new WeekendMode(PreferenceManager.getDefaultSharedPreferences(context));
         alarmManager = context.getSystemService(AlarmManager.class);
-        phoneWearModule = new PhoneWearModule(context);
+        phoneWearModule = new PhoneWearModule(context, false);
     }
 
     @NonNull

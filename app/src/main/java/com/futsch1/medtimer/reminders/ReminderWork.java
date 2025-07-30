@@ -44,7 +44,7 @@ public class ReminderWork extends Worker {
     public ReminderWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
-        this.phoneWearModule = new PhoneWearModule(context);
+        this.phoneWearModule = new PhoneWearModule(context, false);
     }
 
     @NonNull

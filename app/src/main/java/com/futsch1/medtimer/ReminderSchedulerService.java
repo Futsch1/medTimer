@@ -39,11 +39,11 @@ public class ReminderSchedulerService extends LifecycleService {
 
         medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
 
-        phoneWearModule = new PhoneWearModule(this );
-        phoneWearModule.checkNotifications(CoroutineCallback.Companion.call((fooBar, error) -> {
-            //do something with result or error
-            Log.i(LogTags.SCHEDULER, "sss"+ fooBar);
-        }));
+        phoneWearModule = new PhoneWearModule(this , true );
+//        phoneWearModule.checkNotifications(CoroutineCallback.Companion.call((fooBar, error) -> {
+//            //do something with result or error
+//            Log.i(LogTags.SCHEDULER, "sss"+ fooBar);
+//        }));
 
         Log.i(LogTags.SCHEDULER, "Service created");
     }
