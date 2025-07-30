@@ -28,7 +28,7 @@ abstract class OverviewEvent() {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as OverviewEvent
-        return id == other.id && timestamp == other.timestamp && text == other.text && icon == other.icon && color == other.color && state == other.state
+        return id == other.id && timestamp == other.timestamp && text.toString() == other.text.toString() && icon == other.icon && color == other.color && state == other.state
     }
 
     override fun hashCode(): Int {
