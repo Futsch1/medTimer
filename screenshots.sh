@@ -34,6 +34,7 @@ for i in "${locales[@]}"; do
 	else
 		adb shell settings put system time_12_24 24
 	fi
+	adb shell su 0 toybox date 0801160025
 	fastlane screengrab \
 		--locales="$i" \
 		--tests_apk_path="$tests_apk_path" \

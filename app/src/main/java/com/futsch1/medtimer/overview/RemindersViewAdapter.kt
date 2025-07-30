@@ -43,7 +43,7 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
         }
 
         override fun areContentsTheSame(oldItem: OverviewEvent, newItem: OverviewEvent): Boolean {
-            return oldItem.equals(newItem)
+            return oldItem == newItem
         }
     }
 }
