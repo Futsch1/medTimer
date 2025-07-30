@@ -15,6 +15,7 @@ enum class OverviewFilterToggles {
 }
 
 class OverviewViewModel(application: Application, medicineViewModel: MedicineViewModel) : AndroidViewModel(application) {
+    var initialized = false
     val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
 
     private val reminderEvents = medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), false)
@@ -61,6 +62,8 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
                 }
             }
         }
+
+        initialized = reminderEvents.value != null && scheduledReminders.value != null
 
         return filteredOverviewEvents.sortedBy { it.timestamp }
     }

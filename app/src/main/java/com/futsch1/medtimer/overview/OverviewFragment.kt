@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 
 class OverviewFragment : Fragment() {
 
@@ -24,6 +27,7 @@ class OverviewFragment : Fragment() {
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: FragmentSwipeLayout
     private lateinit var thread: HandlerThread
+    private var onceStable = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
@@ -77,7 +81,26 @@ class OverviewFragment : Fragment() {
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
 
-        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner(), adapter::submitList)
+        fun scrollToCurrentTimeItem(
+        ) {
+            adapter.currentList.forEachIndexed { index, listItem ->
+                if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault()).toLocalTime() >= LocalTime.now()) {
+                    reminders.post { reminders.scrollToPosition(index) }
+                    return
+                }
+            }
+
+        }
+
+        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
+            adapter.submitList(list) {
+                if (!onceStable && overviewViewModel.initialized) {
+                    onceStable = true
+                    scrollToCurrentTimeItem()
+                }
+            }
+        }
+
     }
 
     private fun setupLogManualDose() {
