@@ -13,6 +13,9 @@ public class DeleteHelper {
     }
 
     public void deleteItem(int messageStringId, ButtonCallback yesClicked, ButtonCallback noClicked) {
+        if (context == null) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.confirm);
         builder.setMessage(messageStringId);
