@@ -196,8 +196,10 @@ public class ReminderTest extends BaseTestHelper {
         assertContains(R.id.reminderText, "Test (3)");
 
         // If possible, take reminder 1 now and see if reminder 2 appears
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickListItemChild(R.id.reminders, 1, R.id.stateButton);
         clickOn(R.id.takenButton);
+
+        assertContains("Test (2)");
     }
 
     @Test
@@ -207,7 +209,7 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.createMedicine("Test");
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+        navigateTo(OVERVIEW);
 
         clickOn(R.id.logManualDose);
 

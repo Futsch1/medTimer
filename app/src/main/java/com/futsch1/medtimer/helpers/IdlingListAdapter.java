@@ -30,6 +30,12 @@ public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         idlingResource.setInitialized();
     }
 
+    @Override
+    public void submitList(@Nullable List<T> list, Runnable commitCallback) {
+        super.submitList(list, commitCallback);
+        idlingResource.setInitialized();
+    }
+
     public void resetInitialized() {
         idlingResource.resetInitialized();
     }

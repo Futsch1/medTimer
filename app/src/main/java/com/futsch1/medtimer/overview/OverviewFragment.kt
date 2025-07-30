@@ -90,7 +90,6 @@ class OverviewFragment : Fragment() {
                     return
                 }
             }
-
         }
 
         overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
@@ -101,7 +100,6 @@ class OverviewFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun setupLogManualDose() {
