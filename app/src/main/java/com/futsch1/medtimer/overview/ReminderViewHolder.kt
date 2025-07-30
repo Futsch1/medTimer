@@ -44,7 +44,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         }
     }
 
-    fun bind(event: OverviewEvent, position: EventPosition) {
+    fun bind(event: OverviewEvent) {
         this.event = event
         reminderText.text = event.text
         if (event.color != null) {
@@ -54,7 +54,6 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         }
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
 
-        setBarsVisibility(position)
         setStateButton(event.state)
         setupStateMenu()
         setupEditEvent()
@@ -102,7 +101,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         stateButton.tag = imageResource
     }
 
-    private fun setBarsVisibility(position: EventPosition) {
+    fun setBarsVisibility(position: EventPosition) {
         if (position == EventPosition.FIRST) {
             topBar.visibility = View.GONE
         } else {

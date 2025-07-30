@@ -19,9 +19,12 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.stream.IntStream.range
 
 class OverviewFragment : Fragment() {
 
+    private lateinit var adapter: RemindersViewAdapter
+    private lateinit var reminders: RecyclerView
     private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
@@ -77,28 +80,42 @@ class OverviewFragment : Fragment() {
     }
 
     private fun setupReminders() {
-        val reminders: RecyclerView = fragmentOverview.findViewById(R.id.reminders)
-        val adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
+        reminders = fragmentOverview.findViewById(R.id.reminders)
+        adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
 
-        fun scrollToCurrentTimeItem(
-        ) {
-            adapter.currentList.forEachIndexed { index, listItem ->
-                if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault()).toLocalTime() >= LocalTime.now()) {
-                    reminders.post { reminders.scrollToPosition(index) }
-                    return
+        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
+            adapter.submitList(list) {
+                reminders.post {
+                    if (!onceStable && overviewViewModel.initialized) {
+                        onceStable = true
+                        scrollToCurrentTimeItem()
+                    }
+                    updatePositions()
                 }
             }
         }
+    }
 
-        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
-            adapter.submitList(list) {
-                if (!onceStable && overviewViewModel.initialized) {
-                    onceStable = true
-                    scrollToCurrentTimeItem()
-                }
+    private fun scrollToCurrentTimeItem() {
+        adapter.currentList.forEachIndexed { index, listItem ->
+            if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault()).toLocalTime() >= LocalTime.now()) {
+                reminders.scrollToPosition(index)
+                return
             }
+        }
+    }
+
+    private fun updatePositions() {
+        for (position in range(0, adapter.itemCount)) {
+            val positionEnum = when (position) {
+                0 -> if (adapter.itemCount > 1) EventPosition.FIRST else EventPosition.ONLY
+                adapter.itemCount - 1 -> EventPosition.LAST
+                else -> EventPosition.MIDDLE
+            }
+            val viewAdapter = reminders.findViewHolderForAdapterPosition(position)
+            viewAdapter?.let { (it as ReminderViewHolder).setBarsVisibility(positionEnum) }
         }
     }
 
