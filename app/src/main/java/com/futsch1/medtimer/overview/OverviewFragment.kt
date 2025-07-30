@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.overview
 
+import FilterToggleGroup
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -50,7 +51,7 @@ class OverviewFragment : Fragment() {
         thread = HandlerThread("LogManualDose")
         thread.start()
         setupLogManualDose()
-        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel)
+        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel, requireContext().getSharedPreferences("medtimer.data", 0))
 
         fragmentOverview.onSwipeListener = OverviewOnSwipeListener()
 
