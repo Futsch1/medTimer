@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         setupNavigation();
 
         ActivityIntentKt.dispatch(this, this.getIntent());
+        this.setIntent(new Intent());
     }
 
     private void handleBackPressed() {
