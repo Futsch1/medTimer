@@ -137,7 +137,11 @@ class OverviewFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        thread.quit()
-        optionsMenu.onDestroy()
+        if (this::thread.isInitialized) {
+            thread.quit()
+        }
+        if (this::optionsMenu.isInitialized) {
+            optionsMenu.onDestroy()
+        }
     }
 }
