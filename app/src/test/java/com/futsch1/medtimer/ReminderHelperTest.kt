@@ -59,7 +59,7 @@ class ReminderHelperTest {
 
         var result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
         var resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
-        assertEquals("Test (5)\n1/1/70 1:00 AM", result.toString())
+        assertEquals("1:00 AM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result =
             formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
@@ -72,7 +72,7 @@ class ReminderHelperTest {
         reminderEvent.amount = ""
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
         resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
-        assertEquals("Test\n1/1/70 1:00 AM", result.toString())
+        assertEquals("1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
         resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
@@ -86,7 +86,7 @@ class ReminderHelperTest {
         reminderEvent.remindedTimestamp = instant.toEpochMilli() / 1000
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
         resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
-        assertEquals("Test\nIn 1 hour, 1:00 AM", result.toString())
+        assertEquals("In 1 hour, 1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
         resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)

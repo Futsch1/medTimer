@@ -35,9 +35,6 @@
     <string name="app_version">Wersja aplikacji</string>
     <string name="are_you_sure_delete_events">Czy na pewno chcesz usunąć wszystkie zdarzenia?</string>
     <string name="show_notifications">Pokaż powiadomienia</string>
-    <string name="overview_events">Czas wyświetlania zdarzeń w przeglądzie</string>
-    <string name="four_hours">4 godziny</string>
-    <string name="twelve_hours">12 godzin</string>
     <string name="twenty_four_hours">24 godziny</string>
     <string name="two_days">2 dni</string>
     <string name="three_days">3 dni</string>
@@ -99,7 +96,6 @@
     <string name="name">Nazwa</string>
     <string name="event_data">Dane zdarzeń</string>
     <string name="backup">Kopia zapasowa</string>
-    <string name="taken_now">Przyjęto teraz</string>
     <string name="event_name">Nazwa zdarzenia</string>
     <string name="intro_medicine_description">Użyj zakładki „Lekarstwa”, aby utworzyć lek, który przyjmujesz i chcesz otrzymać przypomnienie. Możesz przypisać tagi do leków i skonfigurować ich zapasy.</string>
     <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia o różnych dawkach leku, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub interwałach i można je ograniczyć do konkretnych dni.</string>
@@ -108,7 +104,6 @@
     <string name="high">Wysoki</string>
     <string name="notification_importance">Priorytet powiadomień</string>
     <string name="calendar">Kalendarz</string>
-    <string name="show_only_open">Pokaż tylko otwarte</string>
     <string name="active_in_time_period">Aktywne w okresie czasu</string>
     <string name="deactivate_all">Dezaktywuj wszystkie przypomnienia</string>
     <string name="block_screen_capture">Zablokuj zrzuty ekranu</string>

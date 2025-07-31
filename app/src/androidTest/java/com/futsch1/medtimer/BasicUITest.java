@@ -6,11 +6,16 @@ import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.as
 import static com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
+import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.MEDICINES;
+import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
+import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
@@ -27,7 +32,7 @@ public class BasicUITest extends BaseTestHelper {
     //@AllowFlaky(attempts = 1)
     public void basicUITest() {
         AndroidTestHelper.createMedicine(" Test ");
-        AndroidTestHelper.createReminder("1", null);
+        AndroidTestHelper.createReminder("1", LocalTime.of(18, 0));
 
         clickOn(R.id.openAdvancedSettings);
 
@@ -125,7 +130,62 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(com.github.appintro.R.id.skip);
 
-        assertDisplayed(R.string.next_reminders);
+        assertDisplayed(R.string.tab_overview);
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void overviewFilters() {
+        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createIntervalReminder("2", 1000);
+
+        pressBack();
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+        assertContains("Test (2)");
+
+        clickOn(R.id.filterRaised);
+        assertContains("Test (2)");
+        clickOn(R.id.filterRaised);
+
+        assertContains("Test (2)");
+
+        clickOn(R.id.filterTaken);
+        assertNotContains("Test (2)");
+        clickOn(R.id.filterTaken);
+
+        assertContains("Test (2)");
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
+        clickOn(R.id.takenButton);
+
+        clickOn(R.id.filterTaken);
+        assertContains("Test (2)");
+        clickOn(R.id.filterTaken);
+
+        assertContains("Test (2)");
+
+        clickOn(R.id.filterRaised);
+        assertNotContains("Test (2)");
+        clickOn(R.id.filterRaised);
+
+        clickOn(R.id.filterSkipped);
+        assertNotContains("Test (2)");
+        clickOn(R.id.filterSkipped);
+
+        clickOn(R.id.filterScheduled);
+        assertNotContains("Test (2)");
+        clickOn(R.id.filterScheduled);
+
+        navigateTo(MEDICINES);
+        clickOn("Test");
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
+
+        navigateTo(OVERVIEW);
+
+        assertContains("Test (1)");
+
+        clickOn(R.id.filterScheduled);
+        assertContains("Test (1)");
+    }
 }

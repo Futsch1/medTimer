@@ -35,7 +35,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
-    private final InitIdlingResource idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
+    private InitIdlingResource idlingResource;
     @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
     @SuppressWarnings("java:S1450")
@@ -53,6 +53,7 @@ public class MedicinesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
         idlingResource.resetInitialized();
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
@@ -98,7 +99,9 @@ public class MedicinesFragment extends Fragment {
         if (thread != null) {
             thread.quit();
         }
-        idlingResource.destroy();
+        if (idlingResource != null) {
+            idlingResource.destroy();
+        }
         if (optionsMenu != null) {
             optionsMenu.onDestroy();
         }

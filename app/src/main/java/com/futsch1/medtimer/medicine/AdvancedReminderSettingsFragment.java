@@ -54,7 +54,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     public boolean onEntityLoaded(Reminder entity, @NonNull View fragmentView) {
         daysArray = getResources().getStringArray(R.array.days);
 
-        periodSettings = new PeriodSettings(fragmentView, getParentFragmentManager(), entity);
+        periodSettings = new PeriodSettings(fragmentView, requireActivity(), entity);
         editInstructions = fragmentView.findViewById(R.id.editInstructions);
         editPauseDays = fragmentView.findViewById(R.id.pauseDays);
         editConsecutiveDays = fragmentView.findViewById(R.id.consecutiveDays);
@@ -141,7 +141,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private void putRemindOnDaysIntoReminder(Reminder entity) {
         remindOnDaysOfWeek.getIndices().forEach(p -> entity.days.set(p.getFirst(), p.getSecond()));
         remindOnDaysOfMonth.getIndices().forEach(p -> {
-            if (Boolean.TRUE.equals(p.getSecond())) {
+            if (p.getSecond()) {
                 entity.activeDaysOfMonth |= (1 << p.getFirst());
             } else {
                 entity.activeDaysOfMonth &= ~(1 << p.getFirst());
@@ -185,7 +185,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         setCycleStartDate(entity.cycleStartDay);
         editCycleStartDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity().getSupportFragmentManager(), R.string.cycle_start_date);
+                TimeHelper.DatePickerWrapper datePickerWrapper = new TimeHelper.DatePickerWrapper(requireActivity(), R.string.cycle_start_date);
                 datePickerWrapper.show(getCycleStartDate(), this::setCycleStartDate);
             }
         });

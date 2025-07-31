@@ -56,7 +56,9 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
+        // Mark reminder as taken, no out of stock reminder expected
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.openNotification()
         var o = device.wait(
@@ -66,16 +68,13 @@ class MedicineStockTest : BaseTestHelper() {
         internalAssert(o == null)
         device.pressBack()
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipSkipped)
-        device.openNotification()
-        o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
-            1_000
-        )
-        internalAssert(o == null)
-        device.pressBack()
+        // Mark reminder as skipped
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.skippedButton)
 
-        clickListItemChild(R.id.latestReminders, 0, R.id.chipTaken)
+        // Mark reminder as taken again, out of stock reminder expected
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
         device.openNotification()
         o = device.wait(
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
@@ -94,7 +93,9 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        clickListItemChild(R.id.nextReminders, 0, R.id.takenNow)
+        // Mark next instance as taken, out of stock reminder expected
+        clickListItemChild(R.id.reminders, 1, R.id.stateButton)
+        clickOn(R.id.takenButton)
         device.openNotification()
         o = device.wait(
             Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),

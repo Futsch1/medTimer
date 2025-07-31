@@ -67,7 +67,7 @@ jobs:
           disable-animations: true
           script: |
             adb shell settings put global auto_time 0
-            adb shell su 0 date 01012100
+            adb shell su 0 toybox date 0801160025
             adb uninstall com.futsch1.medtimer || true
             ./gradlew packageDebug
             adb shell input keyevent 3

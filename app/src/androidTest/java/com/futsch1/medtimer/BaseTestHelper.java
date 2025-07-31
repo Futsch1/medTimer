@@ -3,7 +3,6 @@ package com.futsch1.medtimer;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
-import android.icu.util.Calendar;
 import android.os.Build;
 
 import androidx.test.espresso.Espresso;
@@ -22,7 +21,7 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public abstract class BaseTestHelper {
     @Rule
@@ -67,12 +66,10 @@ public abstract class BaseTestHelper {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.pressHome();
         baristaRule.launchActivity();
-    }
 
-    protected boolean isNotTimeBetween9And23() {
-        Calendar rightNow = Calendar.getInstance();
-        LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        return (dateTime.getHour() < 9 || dateTime.getHour() > 23);
+        if (!LocalDate.now().isEqual(LocalDate.of(2025, 8, 1))) {
+            failureHandler.handle(new AssertionError("Wrong date - tests require the date/time to be set to 01.08.2025, 16:00\nUse 'adb su 0 toybox date' to set it."), withId(0));
+        }
     }
 
     protected void internalAssert(boolean b) {

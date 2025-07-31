@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
@@ -18,10 +16,12 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.statistics.StatisticsFragmentDirections;
+import com.futsch1.medtimer.overview.EditEventSideSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kotlinx.coroutines.Dispatchers;
 
 public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderTableCellModel, ReminderTableCellModel> {
     private final TableView tableView;
@@ -89,19 +89,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     }
 
     private void navigateToEditEvent(long eventId) {
-        NavController navController = Navigation.findNavController(tableView);
         ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
         if (reminderEvent != null) {
-            StatisticsFragmentDirections.ActionStatisticsFragmentToEditEventFragment action = StatisticsFragmentDirections.actionStatisticsFragmentToEditEventFragment(
-                    reminderEvent.reminderEventId
-            );
-            activity.runOnUiThread(() -> {
-                try {
-                    navController.navigate(action);
-                } catch (IllegalArgumentException e) {
-                    // Intentionally empty, avoids race conditions
-                }
-            });
+            activity.runOnUiThread(() -> new EditEventSideSheetDialog(activity, reminderEvent, Dispatchers.getIO()));
         }
     }
 

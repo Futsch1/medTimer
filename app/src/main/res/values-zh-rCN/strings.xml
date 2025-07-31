@@ -28,9 +28,6 @@
     <string name="app_version">应用程序版本</string>
     <string name="are_you_sure_delete_events">您确定要删除所有服药记录吗？</string>
     <string name="show_notifications">显示通知</string>
-    <string name="overview_events">主页服药记录展示范围</string>
-    <string name="four_hours">4 小时</string>
-    <string name="twelve_hours">12 小时</string>
     <string name="twenty_four_hours">24 小时</string>
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
@@ -105,7 +102,6 @@
     <string name="name">药品名称</string>
     <string name="event_data">服药记录数据</string>
     <string name="backup">备份</string>
-    <string name="taken_now">现在服药</string>
     <string name="event_name">药品名称</string>
     <string name="edit_event">编辑服药记录</string>
     <string name="intro_welcome">欢迎使用 MedTimer!</string>
@@ -122,7 +118,6 @@
     <string name="notification_settings_default">默认优先级通知设置</string>
     <string name="notification_settings_high">高优先级通知设置</string>
     <string name="calendar">日历</string>
-    <string name="show_only_open">仅显示未操作的记录</string>
     <string name="date">日期</string>
     <string name="active">启用提醒</string>
     <string name="inactive">关闭提醒</string>

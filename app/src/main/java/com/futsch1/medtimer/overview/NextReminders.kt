@@ -1,16 +1,11 @@
 package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
-import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.overview.NextRemindersViewAdapter.ScheduledReminderDiff
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
@@ -18,23 +13,14 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 class NextReminders @SuppressLint("WrongViewCast") constructor(
-    fragmentView: View,
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel
 ) {
 
-    private val nextRemindersViewAdapter =
-        NextRemindersViewAdapter(ScheduledReminderDiff(), medicineViewModel)
     private lateinit var reminderEvents: List<ReminderEvent>
     private lateinit var fullMedicines: List<FullMedicine>
 
     init {
-        val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.nextReminders)
-        recyclerView.adapter = nextRemindersViewAdapter
-        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
-
-        medicineViewModel.scheduledReminders.observe(parentFragment.viewLifecycleOwner, nextRemindersViewAdapter::submitList)
-
         setupScheduleObservers(parentFragment)
     }
 

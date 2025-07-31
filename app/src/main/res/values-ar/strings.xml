@@ -34,9 +34,6 @@
         <item quantity="other">%1$d تذكير\n%2$s</item>
     </plurals>
     <string name="notification_title">تذكير دواء</string>
-    <string name="overview_events">عرض الأحداث في النظرة العامة</string>
-    <string name="four_hours">4 ساعات</string>
-    <string name="twelve_hours">12 ساعة</string>
     <string name="twenty_four_hours">24 ساعة</string>
     <string name="two_days">يومان</string>
     <string name="instructions_label">تعليمات إضافية (مثل: قبل الوجبات)</string>
@@ -117,7 +114,6 @@
     <string name="thirty_days">30 يومًا</string>
     <string name="event_data">بيانات الحدث</string>
     <string name="backup">نسخ احتياطي</string>
-    <string name="taken_now">تم أخذه الآن</string>
     <string name="event_name">اسم الحدث</string>
     <string name="edit_event">تعديل الحدث</string>
     <string name="intro_welcome">مرحباً بك في منبه الدواء!</string>
@@ -134,7 +130,6 @@
     <string name="notification_settings_default">إعدادات الإشعار الأولوية الافتراضية</string>
     <string name="notification_settings_high">إعدادات الإشعار الأولوية المرتفعة</string>
     <string name="calendar">التقويم</string>
-    <string name="show_only_open">عرض المفتوحة فقط</string>
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
     <string name="inactive">غير نشط</string>

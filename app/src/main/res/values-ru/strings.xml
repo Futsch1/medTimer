@@ -32,9 +32,6 @@
     <string name="app_version">Версия приложения</string>
     <string name="are_you_sure_delete_events">Вы точно хотите удалить все события?</string>
     <string name="show_notifications">Показать уведомления</string>
-    <string name="overview_events">Обзор отображаемых событий</string>
-    <string name="four_hours">4 часа</string>
-    <string name="twelve_hours">12 часов</string>
     <string name="twenty_four_hours">24 часа</string>
     <string name="two_days">2 дня</string>
     <string name="three_days">3 дня</string>
@@ -112,7 +109,6 @@
     <string name="name">Название</string>
     <string name="event_data">Данные события</string>
     <string name="backup">Резервное копирование</string>
-    <string name="taken_now">Принято сейчас</string>
     <string name="event_name">Название события</string>
     <string name="edit_event">Изменить событие</string>
     <string name="intro_welcome">Добро пожаловать в MedTimer!</string>
@@ -129,7 +125,6 @@
     <string name="notification_settings_default">Настройки уведомлений стандартного приоритета</string>
     <string name="notification_settings_high">Настройки уведомлений высокого приоритета</string>
     <string name="calendar">Календарь</string>
-    <string name="show_only_open">Только открытые</string>
     <string name="date">Дата</string>
     <string name="active">Активный</string>
     <string name="inactive">Неактивный</string>

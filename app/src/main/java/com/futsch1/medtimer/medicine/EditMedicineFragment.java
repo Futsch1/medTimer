@@ -183,7 +183,11 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
                             30,
                             30
                     );
-            navController.navigate(action);
+            try {
+                navController.navigate(action);
+            } catch (IllegalArgumentException e) {
+                // Intentionally empty
+            }
         });
     }
 

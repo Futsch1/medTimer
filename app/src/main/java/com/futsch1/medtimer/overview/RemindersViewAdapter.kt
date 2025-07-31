@@ -1,0 +1,44 @@
+package com.futsch1.medtimer.overview
+
+import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
+import com.futsch1.medtimer.helpers.IdlingListAdapter
+
+class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, val fragmentActivity: FragmentActivity) :
+    IdlingListAdapter<OverviewEvent, ReminderViewHolder?>(diffCallback), Filterable {
+    init {
+        setHasStableIds(true)
+    }
+
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
+        return ReminderViewHolder.create(parent, fragmentActivity)
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
+        val current = getItem(position)
+        holder.bind(current)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
+    }
+
+    override fun getFilter(): Filter {
+        return filter
+    }
+
+    class OverviewEventDiff : DiffUtil.ItemCallback<OverviewEvent>() {
+        override fun areItemsTheSame(oldItem: OverviewEvent, newItem: OverviewEvent): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: OverviewEvent, newItem: OverviewEvent): Boolean {
+            return oldItem == newItem
+        }
+    }
+}

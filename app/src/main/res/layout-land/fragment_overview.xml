@@ -1,123 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.futsch1.medtimer.overview.FragmentSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".overview.OverviewFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <com.kizitonwose.calendar.view.WeekCalendarView
+        android:id="@+id/overviewWeek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:cv_dayViewResource="@layout/calendar_day_layout"
+        app:cv_weekHeaderResource="@layout/calendar_header_layout"
+        app:layout_constraintEnd_toStartOf="@id/separator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/filterButtons"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
-        tools:context=".overview.OverviewFragment">
+        app:layout_constraintEnd_toEndOf="@id/separator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overviewWeek">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <Button
+            android:id="@+id/filterTaken"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/check2_circle" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/nextRemindersCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp"
-                app:contentPadding="10dp">
+        <Button
+            android:id="@+id/filterSkipped"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/x_circle" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+        <Button
+            android:id="@+id/filterRaised"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/bell" />
 
-                    <TextView
-                        android:id="@+id/nextRemindersText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/next_reminders"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/nextReminders"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/filterScheduled"
+            style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/alarm" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/nextReminders"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="vertical" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/latestRemindersCard"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="2dp"
-            app:contentPadding="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="4dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recent_events"
-                        android:textStyle="bold" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/recentFilters"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/showOnlyOpen"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="false"
-                            android:minHeight="32dp"
-                            android:text="@string/show_only_open"
-                            app:checkedIcon="@drawable/funnel"
-                            app:checkedIconVisible="true" />
-
-                    </com.google.android.material.chip.ChipGroup>
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/latestReminders"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:contentDescription="@string/recent_events"
-                    android:paddingBottom="60dp"
-                    android:scrollbars="vertical" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reminders"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="4dp"
+        android:clipToPadding="false"
+        android:paddingBottom="60dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/separator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/logManualDose"
@@ -127,7 +90,10 @@
         android:layout_margin="8dp"
         android:clickable="true"
         android:contentDescription="@string/log_additional_dose"
+        android:maxLines="2"
         android:text="@string/log_additional_dose"
-        app:icon="@drawable/capsule" />
+        app:icon="@drawable/capsule"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</FrameLayout>
+</com.futsch1.medtimer.overview.FragmentSwipeLayout>

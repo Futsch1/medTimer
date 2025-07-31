@@ -10,7 +10,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -113,6 +112,17 @@ public class TimeHelper {
      */
     public static String localDateToDateString(Context context, LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+                .withLocale(context.getResources().getConfiguration().getLocales().get(0));
+        return localDate.format(formatter);
+    }
+
+    /**
+     * @param context   Context to extract date format
+     * @param localDate Local date
+     * @return Date string in local format
+     */
+    public static String localDateToFullDateString(Context context, LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
                 .withLocale(context.getResources().getConfiguration().getLocales().get(0));
         return localDate.format(formatter);
     }
@@ -249,6 +259,19 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
+    /**
+     * @param context   Context to extract date and time formats
+     * @param timeStamp Time stamp in seconds since epoch
+     * @return Date and time string in local format as relative date time string
+     */
+    public static String toConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+        if (preferences.getBoolean(USE_RELATIVE_DATE_TIME, false)) {
+            return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+        } else {
+            return toLocalizedTimeString(context, timeStamp);
+        }
+    }
+
     public static Object toISO8601DatetimeString(long remindedTimestamp) {
         return Instant.ofEpochSecond(remindedTimestamp).toString();
     }
@@ -297,16 +320,16 @@ public class TimeHelper {
     }
 
     public static class DatePickerWrapper {
-        final FragmentManager fragmentManager;
+        final FragmentActivity activity;
         private final Integer titleText;
 
-        public DatePickerWrapper(FragmentManager fragmentManager) {
-            this.fragmentManager = fragmentManager;
+        public DatePickerWrapper(FragmentActivity activity) {
+            this.activity = activity;
             this.titleText = null;
         }
 
-        public DatePickerWrapper(FragmentManager fragmentManager, @StringRes int titleText) {
-            this.fragmentManager = fragmentManager;
+        public DatePickerWrapper(FragmentActivity activity, @StringRes int titleText) {
+            this.activity = activity;
             this.titleText = titleText;
         }
 
@@ -324,7 +347,7 @@ public class TimeHelper {
             MaterialDatePicker<Long> datePickerDialog = builder.build();
             datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> datePickerResult.onDateSelected(selectedDate / DateUtils.DAY_IN_MILLIS));
 
-            datePickerDialog.show(fragmentManager, "date_picker");
+            datePickerDialog.show(activity.getSupportFragmentManager(), "date_picker");
         }
     }
 }

@@ -1,30 +1,18 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.icu.util.Calendar;
-import android.view.InputDevice;
-import android.view.MotionEvent;
-
-import androidx.test.espresso.action.GeneralClickAction;
-import androidx.test.espresso.action.GeneralLocation;
-import androidx.test.espresso.action.Press;
-import androidx.test.espresso.action.Tap;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -35,29 +23,16 @@ import java.util.Date;
 
 @SuppressWarnings("java:S2925")
 public class AndroidTestHelper {
-    static void setAllRemindersTo12AM() {
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+    public static void createReminder(String amount, LocalTime time) {
+        clickOn(R.id.addReminder);
+        writeTo(R.id.editAmount, amount);
 
-        setReminderTo12AM(0);
-        setReminderTo12AM(1);
-        setReminderTo12AM(2);
-        setReminderTo12AM(3);
+        if (time != null) {
+            clickOn(R.id.editReminderTime);
+            setTime(time.getHour(), time.getMinute(), false);
+        }
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-    }
-
-    public static void navigateTo(MainMenu mainMenu) {
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        clickOn(menuIds[mainMenu.ordinal()]);
-        clickOn(menuIds[mainMenu.ordinal()]);
-    }
-
-    private static void setReminderTo12AM(int position) {
-        clickListItem(R.id.medicineList, position);
-        clickListItemChild(R.id.reminderList, 0, R.id.editReminderTime);
-
-        setTime(0, 0, false);
-        pressBack();
+        clickOn(R.id.createReminder);
     }
 
     public static void setTime(int hour, int minute, boolean isDeltaTime) {
@@ -83,27 +58,6 @@ public class AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
     }
 
-    public static void editLatestEvent() {
-        onView(withId(R.id.latestReminders)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new GeneralClickAction(
-                Tap.SINGLE,
-                GeneralLocation.TOP_RIGHT,
-                Press.FINGER,
-                InputDevice.SOURCE_UNKNOWN,
-                MotionEvent.BUTTON_PRIMARY)));
-    }
-
-    public static void createReminder(String amount, LocalTime time) {
-        clickOn(R.id.addReminder);
-        writeTo(R.id.editAmount, amount);
-
-        if (time != null) {
-            clickOn(R.id.editReminderTime);
-            setTime(time.getHour(), time.getMinute(), false);
-        }
-
-        clickOn(R.id.createReminder);
-    }
-
     public static void createIntervalReminder(String amount, int intervalMinutes) {
         clickOn(R.id.addReminder);
         writeTo(R.id.editAmount, amount);
@@ -123,6 +77,12 @@ public class AndroidTestHelper {
         writeTo(R.id.medicineName, name);
 
         clickDialogPositiveButton();
+    }
+
+    public static void navigateTo(MainMenu mainMenu) {
+        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
+        clickOn(menuIds[mainMenu.ordinal()]);
+        clickOn(menuIds[mainMenu.ordinal()]);
     }
 
     public static String dateToString(Date date) {

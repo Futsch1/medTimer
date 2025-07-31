@@ -29,9 +29,6 @@
     <string name="app_version">App versie</string>
     <string name="are_you_sure_delete_events">Weet je zeker dat je alle herinneringen wilt verwijderen?</string>
     <string name="show_notifications">Meldingen weergeven</string>
-    <string name="overview_events">Overzicht herinneringen tonen</string>
-    <string name="four_hours">4 uur</string>
-    <string name="twelve_hours">12 uren</string>
     <string name="twenty_four_hours">24 uur</string>
     <string name="two_days">2 dagen</string>
     <string name="three_days">3 dagen</string>
@@ -107,7 +104,6 @@
     <string name="name">Naam</string>
     <string name="event_data">Herinneringen gegevens</string>
     <string name="backup">Backup</string>
-    <string name="taken_now">Ingenomen</string>
     <string name="event_name">Herinneringennaam</string>
     <string name="edit_event">Herinnering bewerken</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
@@ -124,7 +120,6 @@
     <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
     <string name="calendar">Kalender</string>
-    <string name="show_only_open">Toon alleen openstaande</string>
     <string name="date">Datum</string>
     <string name="active">Actief</string>
     <string name="inactive">Inactief</string>

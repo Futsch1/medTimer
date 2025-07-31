@@ -1,7 +1,9 @@
 package com.futsch1.medtimer.helpers;
 
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +34,8 @@ public class ViewColorHelper {
         setTextColor(textViews, contrastTextView < contrastBackground ? cardDefaultBackground : defaultTextViewColor);
         if (view instanceof MaterialCardView materialCardView) {
             materialCardView.setCardBackgroundColor(backgroundColor);
+        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
+            shapeDrawable.setColor(backgroundColor);
         } else {
             view.setBackgroundColor(backgroundColor);
         }
@@ -64,12 +68,16 @@ public class ViewColorHelper {
     }
 
     private static int getBackground(View view) {
+        int defaultColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
         if (view instanceof MaterialCardView materialCardView) {
             return materialCardView.getCardBackgroundColor().getDefaultColor();
         } else if (view.getBackground() instanceof ColorDrawable colorDrawable) {
             return colorDrawable.getColor();
+        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
+            ColorStateList colorStateList = shapeDrawable.getColor();
+            return colorStateList != null ? colorStateList.getDefaultColor() : defaultColor;
         } else {
-            return MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
+            return defaultColor;
         }
     }
 
@@ -97,6 +105,9 @@ public class ViewColorHelper {
         if (view instanceof MaterialCardView materialCardView) {
             int cardDefaultBackground = SurfaceColors.getColorForElevation(view.getContext(), view.getElevation());
             materialCardView.setCardBackgroundColor(cardDefaultBackground);
+        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
+            int defaultBackground = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
+            shapeDrawable.setColor(defaultBackground);
         } else {
             int defaultBackground = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
             view.setBackgroundColor(defaultBackground);

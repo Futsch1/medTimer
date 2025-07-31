@@ -23,12 +23,12 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 125
-        versionName = "1.17.8"
+        versionCode = 126
+        versionName = "1.17.9"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,de,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
+        resConfigs("en,ar,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -62,7 +62,7 @@ android {
     @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
-        localeFilters += listOf("en", "ar", "de", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
+        localeFilters += listOf("en", "ar", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
     }
     testOptions {
         unitTests {
@@ -83,12 +83,12 @@ dependencies {
     val appcompatVersion = "1.7.1"
     val materialVersion = "1.12.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.9.1"
+    val androidXNavigationVersion = "2.9.3"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
-    val workRuntimeVersion = "2.10.2"
+    val workRuntimeVersion = "2.10.3"
     val coreKtxVersion = "1.16.0"
-    val lifecycleViewmodelKtxVersion = "2.9.1"
+    val lifecycleViewmodelKtxVersion = "2.9.2"
     val roomVersion = "2.7.2"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
@@ -96,12 +96,12 @@ dependencies {
     val tableViewVersion = "0.8.9.4"
     val androidPlotVersion = "1.5.11"
     val appIntroVersion = "6.3.1"
-    val calendarVersion = "2.7.0"
+    val calendarVersion = "2.8.0"
     val iconDialogVersion = "3.3.0"
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
 
-    val junitVersion = "5.13.3"
+    val junitVersion = "5.13.4"
     val mockitoCoreVersion = "5.18.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.15.1"
