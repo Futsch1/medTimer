@@ -110,7 +110,7 @@ dependencies {
 
     val androidTestJunitVersion = "1.2.1"
     val androidTestEspressoVersion = "3.6.1"
-    val androidTestRulesVersion = "1.6.1"
+    val androidTestRulesVersion = "1.7.0"
     val screengrabVersion = "2.1.1"
     val uiautomatorVersion = "2.3.0"
     val androidTestRunnerVersion = "1.6.2"
