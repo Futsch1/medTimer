@@ -112,7 +112,6 @@ class MedicineStockFragment :
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)
-                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(looper)
                 }
             }
         }

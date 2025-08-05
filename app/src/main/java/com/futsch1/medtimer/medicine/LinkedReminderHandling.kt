@@ -57,7 +57,6 @@ class LinkedReminderHandling(
             threadHandler.post {
                 internalDelete(reminder)
                 Handler(Looper.getMainLooper()).post(postYesAction)
-                IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(thread.looper)
             }
         }, { Handler(Looper.getMainLooper()).post(postNoAction) })
     }
