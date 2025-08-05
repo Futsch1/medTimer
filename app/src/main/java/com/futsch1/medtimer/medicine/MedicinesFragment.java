@@ -48,13 +48,13 @@ public class MedicinesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.thread = new HandlerThread("GetSummary");
         this.thread.start();
+        idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
+        idlingResource.resetInitialized();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
-        idlingResource.resetInitialized();
         View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
         // Medicine recycler
         RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
@@ -92,6 +92,14 @@ public class MedicinesFragment extends Fragment {
 
         return fragmentView;
     }
+    
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -101,9 +109,6 @@ public class MedicinesFragment extends Fragment {
         }
         if (idlingResource != null) {
             idlingResource.destroy();
-        }
-        if (optionsMenu != null) {
-            optionsMenu.onDestroy();
         }
     }
 
