@@ -12,7 +12,6 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.google.gson.Gson
 
 
@@ -36,16 +35,6 @@ class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Remin
     }
 }
 
-class ReminderEventEntityInterface : DatabaseEntityEditFragment.EntityInterface<ReminderEvent> {
-    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): ReminderEvent? {
-        return medicineViewModel.medicineRepository.getReminderEvent(id)
-    }
-
-    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: ReminderEvent) {
-        medicineViewModel.medicineRepository.updateReminderEvent(entity)
-    }
-}
-
 abstract class DatabaseEntityEditFragment<T>(
     private val entityInterface: EntityInterface<T>,
     private val layoutId: Int,
@@ -58,7 +47,7 @@ abstract class DatabaseEntityEditFragment<T>(
         fun updateEntity(medicineViewModel: MedicineViewModel, entity: T)
     }
 
-    protected val thread = HandlerThread("DatabaseEntityEditFragment")
+    protected val thread = HandlerThread("DatabaseEntityEditFragment_$name")
     private var entity: T? = null
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel

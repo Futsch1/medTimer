@@ -175,6 +175,7 @@ public class OptionsMenu implements MenuProvider {
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
                     ReminderProcessor.requestReschedule(context);
+                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(backgroundThread.getLooper());
                 });
                 return true;
             });
