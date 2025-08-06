@@ -164,9 +164,9 @@ public class OptionsMenu implements MenuProvider {
     void setupGenerateTestData() {
         MenuItem item = menu.findItem(R.id.generate_test_data);
         if (BuildConfig.DEBUG) {
-            IdlingRegistry.getInstance().registerLooperAsIdlingResource(backgroundThread.getLooper());
             item.setVisible(true);
             item.setOnMenuItemClickListener(menuItem -> {
+                IdlingRegistry.getInstance().registerLooperAsIdlingResource(backgroundThread.getLooper());
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
                     Log.i("GenerateTestData", "Delete all data");
@@ -175,6 +175,7 @@ public class OptionsMenu implements MenuProvider {
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
                     ReminderProcessor.requestReschedule(context);
+                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(backgroundThread.getLooper());
                 });
                 return true;
             });

@@ -60,8 +60,8 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     }
 
     private fun setupEditEvent() {
-        if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
-            this.contentContainer.setOnClickListener { _ ->
+        this.contentContainer.setOnClickListener { _ ->
+            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
                 EditEventSideSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
             }
         }

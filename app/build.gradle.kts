@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 127
-        versionName = "1.17.10"
+        versionCode = 128
+        versionName = "1.17.11"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -114,7 +114,7 @@ dependencies {
     val screengrabVersion = "2.1.1"
     val uiautomatorVersion = "2.3.0"
     val androidTestRunnerVersion = "1.7.0"
-    val androidTestOrchestratorVersion = "1.5.1"
+    val androidTestOrchestratorVersion = "1.6.1"
     val baristaVersion = "4.3.0"
 
     val desugarJdkVersion = "2.1.5"
@@ -152,7 +152,9 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
+    //noinspection GradleDependency Issues with IdlingResource
     androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
+    //noinspection GradleDependency Issues with IdlingResource
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$androidTestEspressoVersion")
     androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
     androidTestImplementation("tools.fastlane:screengrab:$screengrabVersion")
