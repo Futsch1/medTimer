@@ -109,7 +109,7 @@ dependencies {
     val jazzerVersion = "0.24.0"
 
     val androidTestJunitVersion = "1.3.0"
-    val androidTestEspressoVersion = "3.6.1"
+    val androidTestEspressoVersion = "3.7.0"
     val androidTestRulesVersion = "1.7.0"
     val screengrabVersion = "2.1.1"
     val uiautomatorVersion = "2.3.0"
