@@ -13,11 +13,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class CSVExport extends Exporter {
+public class CSVEventExport extends Export {
     private final List<ReminderEvent> reminderEvents;
     private final Context context;
 
-    public CSVExport(List<ReminderEvent> reminderEvents, FragmentManager fragmentManager, Context context) {
+    public CSVEventExport(List<ReminderEvent> reminderEvents, FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
         this.reminderEvents = reminderEvents;
         this.context = context;
@@ -26,7 +26,7 @@ public class CSVExport extends Exporter {
     @SuppressWarnings({"java:S6300", "java:S3457"}) // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
     public void exportInternal(File file) throws ExporterException {
         try (FileWriter csvFile = new FileWriter(file)) {
-            List<String> headerTexts = TableHelper.getTableHeadersForExport(context);
+            List<String> headerTexts = TableHelper.getTableHeadersForEventExport(context);
             csvFile.write(String.join(";", headerTexts) + "\n");
 
             for (ReminderEvent reminderEvent : reminderEvents) {
@@ -53,5 +53,10 @@ public class CSVExport extends Exporter {
     @Override
     public String getExtension() {
         return "csv";
+    }
+
+    @Override
+    public String getType() {
+        return "Events";
     }
 }

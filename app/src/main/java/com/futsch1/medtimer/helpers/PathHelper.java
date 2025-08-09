@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.helpers;
 
-import com.futsch1.medtimer.exporters.Exporter;
+import com.futsch1.medtimer.exporters.Export;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,8 +12,8 @@ public class PathHelper {
         // Intentionally empty
     }
 
-    public static String getExportFilename(Exporter exporter) {
-        String fileName = String.format("MedTimer_Export_%s.%s", ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")), exporter.getExtension());
+    public static String getExportFilename(Export export) {
+        String fileName = String.format("MedTimer_%sExport_%s.%s", export.getType(), ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")), export.getExtension());
         return fileName.replaceAll(RESERVED_CHARS, "_");
     }
 

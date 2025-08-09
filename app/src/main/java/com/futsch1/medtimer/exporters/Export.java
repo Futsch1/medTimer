@@ -6,10 +6,10 @@ import com.futsch1.medtimer.helpers.ProgressDialogFragment;
 
 import java.io.File;
 
-public abstract class Exporter {
+public abstract class Export {
     private final FragmentManager fragmentManager;
 
-    Exporter(FragmentManager fragmentManager) {
+    Export(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 
@@ -23,6 +23,8 @@ public abstract class Exporter {
     protected abstract void exportInternal(File file) throws ExporterException;
 
     public abstract String getExtension();
+
+    public abstract String getType();
 
     public static class ExporterException extends Exception {
     }
