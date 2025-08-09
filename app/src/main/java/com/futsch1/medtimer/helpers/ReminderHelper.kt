@@ -10,6 +10,7 @@ import android.text.Spanned
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import java.time.LocalDate
@@ -25,6 +26,21 @@ fun isReminderActive(reminder: Reminder): Boolean {
         active = active && LocalDate.now().toEpochDay() <= reminder.periodEnd
     }
     return active
+}
+
+fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {
+    for (reminder in reminders) {
+        setReminderActive(reminder, active)
+        medicineRepository.updateReminder(reminder)
+    }
+}
+
+fun setReminderActive(reminder: Reminder, active: Boolean) {
+    if (!reminder.active && active && reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED) {
+        // If reminder is activated again and an interval reminder, reset the interval start date to the current day in seconds since epoch
+        reminder.intervalStart = TimeHelper.changeTimeStampDate(reminder.intervalStart, LocalDate.now())
+    }
+    reminder.active = active
 }
 
 fun formatReminderString(

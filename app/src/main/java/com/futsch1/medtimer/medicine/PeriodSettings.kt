@@ -10,6 +10,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
+import com.futsch1.medtimer.helpers.setReminderActive
 import java.time.LocalDate
 
 class PeriodSettings(
@@ -110,7 +111,7 @@ class PeriodSettings(
     }
 
     fun updateReminder() {
-        reminder.active = activeState.checkedRadioButtonId != R.id.inactive
+        setReminderActive(reminder, activeState.checkedRadioButtonId != R.id.inactive)
         reminder.periodStart =
             getPeriodDaysSinceEpoch(periodStartActive, editPeriodStartDate)
         reminder.periodEnd =
