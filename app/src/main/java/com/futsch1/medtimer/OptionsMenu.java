@@ -24,13 +24,13 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.test.espresso.IdlingRegistry;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
+import com.futsch1.medtimer.helpers.SimpleIdlingResource;
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
 import com.futsch1.medtimer.reminders.ReminderProcessor;
@@ -48,6 +48,7 @@ public class OptionsMenu implements MenuProvider {
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final boolean hideFilter;
+    private final SimpleIdlingResource idlingResource = new SimpleIdlingResource("OptionsMenu");
     private Menu menu;
     private BackupManager backupManager;
 
@@ -64,6 +65,7 @@ public class OptionsMenu implements MenuProvider {
         });
         backgroundThread = new HandlerThread("Export");
         backgroundThread.start();
+        idlingResource.setIdle();
     }
 
     public void fileSelected(Uri data) {
@@ -166,7 +168,7 @@ public class OptionsMenu implements MenuProvider {
         if (BuildConfig.DEBUG) {
             item.setVisible(true);
             item.setOnMenuItemClickListener(menuItem -> {
-                IdlingRegistry.getInstance().registerLooperAsIdlingResource(backgroundThread.getLooper());
+                idlingResource.setBusy();
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
                     Log.i("GenerateTestData", "Delete all data");
@@ -175,7 +177,7 @@ public class OptionsMenu implements MenuProvider {
                     Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
                     ReminderProcessor.requestReschedule(context);
-                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(backgroundThread.getLooper());
+                    idlingResource.setIdle();
                 });
                 return true;
             });
@@ -252,5 +254,6 @@ public class OptionsMenu implements MenuProvider {
 
     public void onDestroy() {
         backgroundThread.quit();
+        idlingResource.destroy();
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends ListAdapter<T, VH> {
 
-    private final InitIdlingResource idlingResource;
+    private final SimpleIdlingResource idlingResource;
 
     protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
         this(diffCallback, "IdlingListAdapter");
@@ -21,22 +21,22 @@ public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
     protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, String idlingResourceName) {
         super(diffCallback);
         idlingResource = IdlingResourcesPool.getInstance().getResource(idlingResourceName);
-        idlingResource.resetInitialized();
+        idlingResource.setBusy();
     }
 
     @Override
     public void submitList(@Nullable List<T> list) {
         super.submitList(list);
-        idlingResource.setInitialized();
+        idlingResource.setIdle();
     }
 
     @Override
     public void submitList(@Nullable List<T> list, Runnable commitCallback) {
         super.submitList(list, commitCallback);
-        idlingResource.setInitialized();
+        idlingResource.setIdle();
     }
 
     public void resetInitialized() {
-        idlingResource.resetInitialized();
+        idlingResource.setBusy();
     }
 }

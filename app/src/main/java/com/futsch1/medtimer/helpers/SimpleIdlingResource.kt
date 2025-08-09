@@ -7,10 +7,10 @@ import androidx.test.espresso.IdlingResource.ResourceCallback
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.Volatile
 
-class InitIdlingResource(private val resourceName: String) : IdlingResource {
+class SimpleIdlingResource(private val resourceName: String) : IdlingResource {
     init {
         IdlingRegistry.getInstance().register(this)
-        Log.d("InitIdlingResource", "Registered resource: $resourceName")
+        Log.d("SimpleIdlingResource", "Registered resource: $resourceName")
     }
 
     @Volatile
@@ -31,21 +31,21 @@ class InitIdlingResource(private val resourceName: String) : IdlingResource {
         mCallback = callback
     }
 
-    fun resetInitialized() {
-        Log.d("InitIdlingResource", "Reset initialized: $resourceName")
+    fun setBusy() {
+        Log.d("SimpleIdlingResource", "Set busy: $resourceName")
         mIsIdleNow.set(false)
     }
 
-    fun setInitialized() {
+    fun setIdle() {
         if (!mIsIdleNow.get()) {
-            Log.d("InitIdlingResource", "Set initialized: $resourceName")
+            Log.d("SimpleIdlingResource", "Set idle: $resourceName")
             mIsIdleNow.set(true)
             mCallback?.onTransitionToIdle()
         }
     }
 
     fun destroy() {
-        Log.d("InitIdlingResource", "Unregister: $resourceName")
+        Log.d("SimpleIdlingResource", "Unregister: $resourceName")
         IdlingRegistry.getInstance().unregister(this)
     }
 }

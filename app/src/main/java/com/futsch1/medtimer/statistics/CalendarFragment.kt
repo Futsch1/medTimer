@@ -12,7 +12,7 @@ import androidx.core.text.util.LocalePreferences
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.InitIdlingResource
+import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class CalendarFragment : Fragment() {
-    private var idlingResource = InitIdlingResource(CalendarFragment::class.java.name)
+    private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private var calendarView: CalendarView? = null
     private var currentDayEvents: EditText? = null
     private var calendarEventsViewModel: CalendarEventsViewModel? = null
@@ -53,7 +53,7 @@ class CalendarFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        idlingResource.resetInitialized()
+        idlingResource.setBusy()
         val fragmentView: View =
             inflater.inflate(R.layout.fragment_calendar, container, false)
 
@@ -77,7 +77,7 @@ class CalendarFragment : Fragment() {
                 this.dayStrings = dayStrings
                 calendarView?.notifyCalendarChanged()
                 updateCurrentDay()
-                idlingResource.setInitialized()
+                idlingResource.setIdle()
             }
 
         return fragmentView
