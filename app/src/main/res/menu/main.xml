@@ -36,6 +36,21 @@
         </menu>
     </item>
     <item
+        android:id="@+id/medicine_data"
+        android:icon="@drawable/capsule"
+        android:title="@string/tab_medicine">
+        <menu>
+            <item
+                android:id="@+id/export_medicine_pdf"
+                android:icon="@drawable/filetype_pdf"
+                android:title="@string/export_pdf" />
+            <item
+                android:id="@+id/export_medicine_csv"
+                android:icon="@drawable/filetype_csv"
+                android:title="@string/export_csv" />
+        </menu>
+    </item>
+    <item
         android:id="@+id/backup"
         android:icon="@drawable/box_arrow_down"
         android:title="@string/backup">
