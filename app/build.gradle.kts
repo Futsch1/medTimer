@@ -152,9 +152,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
-    //noinspection GradleDependency Issues with IdlingResource
     androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
-    //noinspection GradleDependency Issues with IdlingResource
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$androidTestEspressoVersion")
     androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
     androidTestImplementation("tools.fastlane:screengrab:$screengrabVersion")

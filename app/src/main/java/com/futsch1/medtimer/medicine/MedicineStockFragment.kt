@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
-import androidx.test.espresso.IdlingRegistry
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment
@@ -104,15 +103,14 @@ class MedicineStockFragment :
 
     private fun calculateRunOutDate() {
         if (::runOutDateField.isInitialized) {
-            val looper = thread.looper
-            IdlingRegistry.getInstance().registerLooperAsIdlingResource(looper)
             Handler(thread.looper).post {
+                idlingResource.setBusy()
                 val runOutDate = estimateStockRunOutDate(medicineViewModel, medicineId, getCurrentAmount())
                 val runOutString = if (runOutDate != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)
-                    IdlingRegistry.getInstance().unregisterLooperAsIdlingResource(looper)
+                    idlingResource.setIdle()
                 }
             }
         }

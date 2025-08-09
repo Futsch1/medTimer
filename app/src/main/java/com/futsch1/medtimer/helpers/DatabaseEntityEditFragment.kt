@@ -52,8 +52,9 @@ abstract class DatabaseEntityEditFragment<T>(
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
     private var fragmentReady = false
+    private lateinit var optionsMenu: OptionsMenu
 
-    private val idlingResource = InitIdlingResource(name)
+    protected val idlingResource = SimpleIdlingResource(name)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,7 @@ abstract class DatabaseEntityEditFragment<T>(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        idlingResource.resetInitialized()
+        idlingResource.setBusy()
         fragmentView = inflater.inflate(layoutId, container, false)
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
@@ -92,13 +93,13 @@ abstract class DatabaseEntityEditFragment<T>(
     protected fun setFragmentReady() {
         // Only now allow getting data from fragment UI when it is closed
         fragmentReady = true
-        idlingResource.setInitialized()
+        idlingResource.setIdle()
         // Now enter fragment
         startPostponedEnterTransition()
     }
 
     protected open fun setupMenu(fragmentView: View) {
-        val optionsMenu = OptionsMenu(
+        optionsMenu = OptionsMenu(
             this,
             ViewModelProvider(this)[MedicineViewModel::class.java],
             fragmentView,
@@ -111,6 +112,9 @@ abstract class DatabaseEntityEditFragment<T>(
         super.onDestroy()
         thread.quit()
         idlingResource.destroy()
+        if (::optionsMenu.isInitialized) {
+            optionsMenu.onDestroy()
+        }
     }
 
     override fun onStop() {

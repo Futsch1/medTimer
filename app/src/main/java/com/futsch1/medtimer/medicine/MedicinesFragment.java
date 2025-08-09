@@ -28,14 +28,14 @@ import com.futsch1.medtimer.OptionsMenu;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.helpers.DeleteHelper;
-import com.futsch1.medtimer.helpers.InitIdlingResource;
+import com.futsch1.medtimer.helpers.SimpleIdlingResource;
 import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MedicinesFragment extends Fragment {
-    private InitIdlingResource idlingResource;
+    private SimpleIdlingResource idlingResource;
     @SuppressWarnings("java:S1450")
     private MedicineViewModel medicineViewModel;
     @SuppressWarnings("java:S1450")
@@ -48,8 +48,8 @@ public class MedicinesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.thread = new HandlerThread("GetSummary");
         this.thread.start();
-        idlingResource = new InitIdlingResource(MedicinesFragment.class.getName());
-        idlingResource.resetInitialized();
+        idlingResource = new SimpleIdlingResource(MedicinesFragment.class.getName());
+        idlingResource.setBusy();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class MedicinesFragment extends Fragment {
             adapter.submitList(l);
             medicinesMenu.medicinesList = l;
             startPostponedEnterTransition();
-            idlingResource.setInitialized();
+            idlingResource.setIdle();
         });
 
         optionsMenu = new OptionsMenu(this,
