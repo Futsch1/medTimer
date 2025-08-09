@@ -5,20 +5,19 @@ import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import androidx.core.view.MenuProvider
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.NavController
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DeleteHelper
+import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
 
 class EditMedicineMenuProvider(
     private val medicineId: Int,
     private val thread: HandlerThread,
     private val medicineViewModel: MedicineViewModel,
-    private val fragmentEditMedicine: View
-) : MenuProvider {
+    private val navController: NavController
+) : EntityEditOptionsMenu {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_medicine, menu)
@@ -35,10 +34,9 @@ class EditMedicineMenuProvider(
 
     private fun setupDeleteMenu(menu: Menu) {
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
-            val deleteHelper = DeleteHelper(fragmentEditMedicine.context)
+            val deleteHelper = DeleteHelper(navController.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
                 medicineViewModel.medicineRepository.deleteMedicine(medicineId)
-                val navController = findNavController(fragmentEditMedicine)
                 navController.navigateUp()
             }, {
                 // do nothing
@@ -65,6 +63,10 @@ class EditMedicineMenuProvider(
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return false
+    }
+
+    override fun onDestroy() {
+        // Nothing to do
     }
 
 }

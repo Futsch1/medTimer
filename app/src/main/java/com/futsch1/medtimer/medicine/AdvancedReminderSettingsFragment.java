@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.Reminder;
@@ -45,7 +46,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     }
 
     @Override
-    protected void setupMenu(@NonNull View fragmentView) {
+    protected void setupMenu(@NonNull NavController navController) {
         // Intentionally empty
     }
 

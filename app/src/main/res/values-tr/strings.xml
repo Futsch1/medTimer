@@ -217,4 +217,5 @@
     <string name="all_taken">Hepsi alındı (%s)</string>
     <string name="estimated_run_out_date">Tahmini Bitiş Tarihi</string>
     <string name="create_calendar_entry">Takvim girişi oluştur</string>
+    <string name="notes">Notlar</string>
 </resources>

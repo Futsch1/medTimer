@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
@@ -33,26 +34,32 @@ class OverviewFragment : Fragment() {
     private lateinit var thread: HandlerThread
     private var onceStable = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
-        NextReminders(this, medicineViewModel)
-
-        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
 
         optionsMenu = OptionsMenu(
             this,
             medicineViewModel,
-            fragmentOverview, false
+            this.findNavController(), false
         )
+
+        thread = HandlerThread("LogManualDose")
+        thread.start()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        NextReminders(this, medicineViewModel)
+
+        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
+
+        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
+
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
         setupReminders()
 
-        thread = HandlerThread("LogManualDose")
-        thread.start()
         setupLogManualDose()
         FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel, requireContext().getSharedPreferences("medtimer.data", 0))
 

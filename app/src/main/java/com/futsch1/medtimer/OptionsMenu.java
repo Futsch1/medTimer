@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,14 +19,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuCompat;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
+import com.futsch1.medtimer.helpers.EntityEditOptionsMenu;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.helpers.SimpleIdlingResource;
@@ -40,24 +39,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 
-public class OptionsMenu implements MenuProvider {
+public class OptionsMenu implements EntityEditOptionsMenu {
     private final Context context;
     private final Fragment fragment;
     private final MedicineViewModel medicineViewModel;
-    private final View view;
+    private final NavController navController;
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final boolean hideFilter;
-    private final SimpleIdlingResource idlingResource = new SimpleIdlingResource("OptionsMenu");
+    private final SimpleIdlingResource idlingResource;
     private Menu menu;
     private BackupManager backupManager;
 
-    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, View view, boolean hideFilter) {
+    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, NavController navController, boolean hideFilter) {
         this.fragment = fragment;
         this.context = fragment.requireContext();
         this.medicineViewModel = medicineViewModel;
-        this.view = view;
+        this.navController = navController;
         this.hideFilter = hideFilter;
+        this.idlingResource = new SimpleIdlingResource("OptionsMenu_" + fragment.getClass().getName());
         this.openFileLauncher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 this.fileSelected(result.getData().getData());
@@ -108,7 +108,7 @@ public class OptionsMenu implements MenuProvider {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
             try {
-                Navigation.findNavController(view).navigate(R.id.action_global_preferencesFragment);
+                navController.navigate(R.id.action_global_preferencesFragment);
                 return true;
             } catch (IllegalStateException e) {
                 return false;

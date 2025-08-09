@@ -228,4 +228,5 @@
     <string name="all_taken">Wszystko zażyte (%s)</string>
     <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
     <string name="create_calendar_entry">Utwórz wpis w kalendarzu</string>
+    <string name="notes">Notatki</string>
 </resources>

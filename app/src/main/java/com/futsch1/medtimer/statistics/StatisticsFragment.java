@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.OptionsMenu;
@@ -28,15 +29,26 @@ public class StatisticsFragment extends Fragment {
     private OptionsMenu optionsMenu = null;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        analysisDays = new AnalysisDays(requireContext());
+        activeStatisticsFragment = new ActiveStatisticsFragment(requireContext());
+
+        chartsFragment = new ChartsFragment();
+        chartsFragment.setDays(analysisDays.getDays());
+
+        optionsMenu = new OptionsMenu(this,
+                new ViewModelProvider(this).get(MedicineViewModel.class),
+                NavHostFragment.findNavController(this), true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View statisticsView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        analysisDays = new AnalysisDays(requireContext());
-        activeStatisticsFragment = new ActiveStatisticsFragment(requireContext());
         timeSpinner = statisticsView.findViewById(R.id.timeSpinner);
-        chartsFragment = new ChartsFragment();
-        chartsFragment.setDays(analysisDays.getDays());
 
         setupTimeSpinner();
 
@@ -44,9 +56,6 @@ public class StatisticsFragment extends Fragment {
 
         loadActiveFragment(activeStatisticsFragment.getActiveFragment());
 
-        optionsMenu = new OptionsMenu(this,
-                new ViewModelProvider(this).get(MedicineViewModel.class),
-                statisticsView, true);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return statisticsView;

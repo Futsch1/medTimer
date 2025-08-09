@@ -227,4 +227,5 @@
     <string name="all_taken">Усе прийнято (%s)</string>
     <string name="estimated_run_out_date">Орієнтовна дата закінчення</string>
     <string name="create_calendar_entry">Створити запис у календарі</string>
+    <string name="notes">Нотатки</string>
 </resources>
