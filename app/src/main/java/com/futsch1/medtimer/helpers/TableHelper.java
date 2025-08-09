@@ -20,6 +20,7 @@ public class TableHelper {
                 context.getString(R.string.taken),
                 context.getString(R.string.tags),
                 context.getString(R.string.interval),
+                context.getString(R.string.notes),
                 context.getString(R.string.reminded) + " (ISO 8601)",
                 context.getString(R.string.taken) + " (ISO 8601)"};
         return Arrays.asList(headerTexts);

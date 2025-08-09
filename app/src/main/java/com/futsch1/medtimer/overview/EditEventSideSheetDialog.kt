@@ -30,6 +30,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
     private val editEventRemindedTimestamp: EditText
     private val editEventAmount: EditText
     private val editEventName: EditText
+    private val editEventNotes: EditText
 
     init {
         val editEventSideSheet = SideSheetDialog(activity)
@@ -40,6 +41,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
         editEventRemindedDate = editEventView.findViewById(R.id.editEventRemindedDate)
         editEventTakenTimestamp = editEventView.findViewById(R.id.editEventTakenTimestamp)
         editEventTakenDate = editEventView.findViewById(R.id.editEventTakenDate)
+        editEventNotes = editEventView.findViewById(R.id.editEventNotes)
 
         editEventSideSheet.setContentView(editEventView)
         setupData(editEventView)
@@ -60,6 +62,8 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
 
         reminderEvent.remindedTimestamp = processDateTimeEdits(reminderEvent.remindedTimestamp, editEventRemindedTimestamp, editEventRemindedDate)
         reminderEvent.processedTimestamp = processDateTimeEdits(reminderEvent.processedTimestamp, editEventTakenTimestamp, editEventTakenDate)
+
+        reminderEvent.notes = editEventNotes.getText().toString()
 
         activity.lifecycleScope.launch {
             withContext(ioDispatcher) {
@@ -99,6 +103,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
             editEventTakenDate.visibility = View.GONE
         }
 
+        editEventNotes.setText(reminderEvent.notes)
     }
 
     private fun setupEditTime(timestamp: Long, editText: EditText) {

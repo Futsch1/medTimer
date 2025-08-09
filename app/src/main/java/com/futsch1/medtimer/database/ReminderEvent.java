@@ -50,7 +50,7 @@ public class ReminderEvent {
     public int lastIntervalReminderTimeInMinutes;
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String notes;
+    public String notes = "";
 
     @Override
     public boolean equals(Object o) {

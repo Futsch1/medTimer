@@ -46,6 +46,7 @@ class CSVExportUnitTest {
         reminderEvent1.status = ReminderEvent.ReminderStatus.TAKEN;
         reminderEvent1.lastIntervalReminderTimeInMinutes = 134;
         reminderEvent1.tags = Arrays.asList("Tag1", "Tag2");
+        reminderEvent1.notes = "Notes";
         reminderEvents.add(reminderEvent1);
 
         ReminderEvent reminderEvent2 = new ReminderEvent();
@@ -65,6 +66,7 @@ class CSVExportUnitTest {
         when(context.getString(R.string.taken)).thenReturn("Taken");
         when(context.getString(R.string.tags)).thenReturn("Tags");
         when(context.getString(R.string.interval)).thenReturn("Interval");
+        when(context.getString(R.string.notes)).thenReturn("Notes");
 
         // Create a mock File
         File file = mock(File.class);
@@ -90,9 +92,9 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Reminded (ISO 8601);Taken (ISO 8601)\n");
-                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2:14;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
-                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;0:00;2021-05-03T00:30:00Z;\n");
+                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
+                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
@@ -114,6 +116,7 @@ class CSVExportUnitTest {
         when(context.getString(R.string.taken)).thenReturn("Taken");
         when(context.getString(R.string.tags)).thenReturn("Tags");
         when(context.getString(R.string.interval)).thenReturn("Interval");
+        when(context.getString(R.string.notes)).thenReturn("Notes");
 
         // Create a mock File
         File file = mock(File.class);
@@ -130,7 +133,7 @@ class CSVExportUnitTest {
                 FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
 
                 // Verify that the FileWriter wrote the correct data to the file
-                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Reminded (ISO 8601);Taken (ISO 8601)\n");
+                verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n");
             } catch (Exporter.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
