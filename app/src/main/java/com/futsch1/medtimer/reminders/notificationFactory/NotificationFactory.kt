@@ -38,7 +38,7 @@ abstract class NotificationFactory(
         if (color != null) {
             builder.setColor(color.toArgb()).setColorized(true)
         }
-        builder.setSilent(!shouldPlaySound())
+        builder.setSilent(shouldBeSilent())
     }
 
     fun getStartAppIntent(): PendingIntent? {
@@ -56,12 +56,12 @@ abstract class NotificationFactory(
     companion object {
         var lastNotificationTime: Instant = Instant.fromEpochMilliseconds(0)
 
-        fun shouldPlaySound(): Boolean {
+        fun shouldBeSilent(): Boolean {
             val now = Clock.System.now()
-            val shouldPlaySound = now - lastNotificationTime > 10.seconds
+            val shouldBeSilent = now - lastNotificationTime <= 10.seconds
             lastNotificationTime = now
 
-            return shouldPlaySound
+            return shouldBeSilent
         }
     }
 
