@@ -54,10 +54,7 @@ class EditMedicineMenuProvider(
         handler.post {
             val reminders: List<Reminder> =
                 medicineViewModel.medicineRepository.getReminders(medicineId)
-            for (reminder in reminders) {
-                reminder.active = active
-                medicineViewModel.medicineRepository.updateReminder(reminder)
-            }
+            com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineViewModel.medicineRepository, active)
         }
     }
 

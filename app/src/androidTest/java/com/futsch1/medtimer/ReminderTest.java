@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -101,6 +102,32 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         assertListItemCount(R.id.reminders, 1);
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    public void activeIntervalReminderTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        String futureTime = TimeHelper.toLocalizedDatetimeString(context, (Instant.now().toEpochMilli() / 1000) + (24 * 60 * 60));
+        String nowTime = TimeHelper.toLocalizedDatetimeString(context, (Instant.now().toEpochMilli() / 1000));
+
+        AndroidTestHelper.createMedicine("Test");
+        AndroidTestHelper.createIntervalReminder("1", 180);
+
+        clickOn(R.id.openAdvancedSettings);
+        writeTo(R.id.editIntervalStartDateTime, futureTime);
+        clickOn(R.id.inactive);
+
+        pressBack();
+        pressBack();
+
+        clickListItem(R.id.medicineList, 0);
+        openMenu();
+        clickOn(R.string.activate_all);
+        clickOn(R.id.openAdvancedSettings);
+
+        assertContains(R.id.editIntervalStartDateTime, nowTime);
     }
 
     @Test
