@@ -41,7 +41,8 @@ fun intervalBasedReminderString(
     context: Context
 ): String {
     val interval = Interval(reminder.timeInMinutes)
-    return context.getString(R.string.every_interval, interval.toTranslatedString(context))
+    val startInterval = context.getString(R.string.interval_start_time) + " " + TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
+    return context.getString(R.string.every_interval, interval.toTranslatedString(context)) + ", " + startInterval
 }
 
 fun linkedReminderString(reminder: Reminder, context: Context): String {
@@ -131,7 +132,7 @@ fun remindersSummary(context: Context, reminders: List<Reminder>): String {
         R.plurals.sum_reminders,
         len,
         len,
-        java.lang.String.join(", ", reminderTimes)
+        java.lang.String.join("; ", reminderTimes)
     )
 }
 
