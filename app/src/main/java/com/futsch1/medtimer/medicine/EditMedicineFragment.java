@@ -1,10 +1,7 @@
 package com.futsch1.medtimer.medicine;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -58,23 +55,14 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private int color;
     private Spinner notificationImportance;
     private MaterialButton selectIconButton;
-    private EditMedicineMenuProvider menuProvider;
 
     public EditMedicineFragment() {
         super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment.class.getName());
     }
 
-    @NonNull
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner());
-        return view;
-    }
-
     @Override
     protected void setupMenu(@NonNull NavController navController) {
-        menuProvider = new EditMedicineMenuProvider(getEntityId(), this.getThread(), this.getMedicineViewModel(), navController);
+        optionsMenu = new EditMedicineMenuProvider(getEntityId(), this.getThread(), this.getMedicineViewModel(), navController);
     }
 
     @Override

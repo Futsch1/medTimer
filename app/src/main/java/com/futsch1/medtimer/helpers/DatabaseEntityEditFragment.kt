@@ -6,6 +6,7 @@ import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -38,6 +39,10 @@ class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Remin
     }
 }
 
+interface EntityEditOptionsMenu : MenuProvider {
+    fun onDestroy()
+}
+
 abstract class DatabaseEntityEditFragment<T>(
     private val entityInterface: EntityInterface<T>,
     private val layoutId: Int,
@@ -55,7 +60,7 @@ abstract class DatabaseEntityEditFragment<T>(
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
     private var fragmentReady = false
-    private lateinit var optionsMenu: OptionsMenu
+    protected lateinit var optionsMenu: EntityEditOptionsMenu
 
     protected val idlingResource = SimpleIdlingResource(name)
 
@@ -73,6 +78,10 @@ abstract class DatabaseEntityEditFragment<T>(
     ): View {
         idlingResource.setBusy()
         fragmentView = inflater.inflate(layoutId, container, false)
+
+        if (::optionsMenu.isInitialized) {
+            requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
+        }
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
@@ -108,7 +117,6 @@ abstract class DatabaseEntityEditFragment<T>(
             navController,
             true
         )
-        requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
     }
 
     override fun onDestroy() {

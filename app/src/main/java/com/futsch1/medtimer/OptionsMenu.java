@@ -19,7 +19,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.MenuCompat;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -27,6 +26,7 @@ import androidx.navigation.NavController;
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
 import com.futsch1.medtimer.exporters.PDFExport;
+import com.futsch1.medtimer.helpers.EntityEditOptionsMenu;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.helpers.SimpleIdlingResource;
@@ -39,7 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 
-public class OptionsMenu implements MenuProvider {
+public class OptionsMenu implements EntityEditOptionsMenu {
     private final Context context;
     private final Fragment fragment;
     private final MedicineViewModel medicineViewModel;
