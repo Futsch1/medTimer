@@ -48,7 +48,7 @@ public class OptionsMenu implements MenuProvider {
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final boolean hideFilter;
-    private final SimpleIdlingResource idlingResource = new SimpleIdlingResource("OptionsMenu");
+    private final SimpleIdlingResource idlingResource;
     private Menu menu;
     private BackupManager backupManager;
 
@@ -58,6 +58,7 @@ public class OptionsMenu implements MenuProvider {
         this.medicineViewModel = medicineViewModel;
         this.view = view;
         this.hideFilter = hideFilter;
+        this.idlingResource = new SimpleIdlingResource("OptionsMenu_" + fragment.getClass().getName());
         this.openFileLauncher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 this.fileSelected(result.getData().getData());
