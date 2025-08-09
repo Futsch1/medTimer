@@ -227,6 +227,13 @@ public class ReminderTest extends BaseTestHelper {
         assertContains(R.id.editEventRemindedDate, TimeHelper.toLocalizedDateString(context, now));
         assertContains(R.id.editEventTakenTimestamp, TimeHelper.toLocalizedTimeString(context, now));
         assertContains(R.id.editEventTakenDate, TimeHelper.toLocalizedDateString(context, now));
+        assertContains(R.id.editEventNotes, "");
+
+        writeTo(R.id.editEventNotes, "Test notes");
+        pressBack();
+
+        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer);
+        assertContains(R.id.editEventNotes, "Test notes");
 
         long newReminded = now + 60 * 60 * 24 + 120;
         writeTo(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, newReminded));

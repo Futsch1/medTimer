@@ -217,4 +217,5 @@
     <string name="all_taken">Alle eingenommen (%s)</string>
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>
+    <string name="notes">Notizen</string>
 </resources>

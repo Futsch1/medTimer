@@ -218,4 +218,5 @@
     <string name="estimated_run_out_date">Εκτιμώμενη ημερομηνία εξάντλησης αποθέματος</string>
     <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>
     <string name="variable_amount">Να κάνετε καταχώρηση της δόσης που λήφθηκε</string>
+    <string name="notes">Σημειώσεις</string>
 </resources>

@@ -218,4 +218,5 @@
     <string name="all_taken">அனைத்தும் எடு (%s)</string>
     <string name="estimated_run_out_date">மதிப்பிடப்பட்ட தீர்ந்துபோகும் தேதி</string>
     <string name="create_calendar_entry">காலண்டர் உள்ளீட்டை உருவாக்கவும்</string>
+    <string name="notes">குறிப்புகள்</string>
 </resources>

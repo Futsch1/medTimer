@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,7 +22,7 @@ import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 
 import com.futsch1.medtimer.exporters.CSVExport;
 import com.futsch1.medtimer.exporters.Exporter;
@@ -44,7 +43,7 @@ public class OptionsMenu implements MenuProvider {
     private final Context context;
     private final Fragment fragment;
     private final MedicineViewModel medicineViewModel;
-    private final View view;
+    private final NavController navController;
     private final HandlerThread backgroundThread;
     private final ActivityResultLauncher<Intent> openFileLauncher;
     private final boolean hideFilter;
@@ -52,11 +51,11 @@ public class OptionsMenu implements MenuProvider {
     private Menu menu;
     private BackupManager backupManager;
 
-    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, View view, boolean hideFilter) {
+    public OptionsMenu(Fragment fragment, MedicineViewModel medicineViewModel, NavController navController, boolean hideFilter) {
         this.fragment = fragment;
         this.context = fragment.requireContext();
         this.medicineViewModel = medicineViewModel;
-        this.view = view;
+        this.navController = navController;
         this.hideFilter = hideFilter;
         this.idlingResource = new SimpleIdlingResource("OptionsMenu_" + fragment.getClass().getName());
         this.openFileLauncher = fragment.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -109,7 +108,7 @@ public class OptionsMenu implements MenuProvider {
         MenuItem item = menu.findItem(R.id.settings);
         item.setOnMenuItemClickListener(menuItem -> {
             try {
-                Navigation.findNavController(view).navigate(R.id.action_global_preferencesFragment);
+                navController.navigate(R.id.action_global_preferencesFragment);
                 return true;
             } catch (IllegalStateException e) {
                 return false;

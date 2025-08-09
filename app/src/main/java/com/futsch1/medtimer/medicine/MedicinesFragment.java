@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,15 @@ public class MedicinesFragment extends Fragment {
         this.thread.start();
         idlingResource = new SimpleIdlingResource(MedicinesFragment.class.getName());
         idlingResource.setBusy();
+
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+
+        optionsMenu = new OptionsMenu(this,
+                medicineViewModel,
+                NavHostFragment.findNavController(this), false);
+
+        adapter = new MedicineViewAdapter(thread, requireActivity(), medicineViewModel.medicineRepository);
     }
 
     @Override
@@ -59,10 +69,6 @@ public class MedicinesFragment extends Fragment {
         // Medicine recycler
         RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
 
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-
-        adapter = new MedicineViewAdapter(thread, requireActivity(), medicineViewModel.medicineRepository);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
 
@@ -85,14 +91,11 @@ public class MedicinesFragment extends Fragment {
             idlingResource.setIdle();
         });
 
-        optionsMenu = new OptionsMenu(this,
-                new ViewModelProvider(this).get(MedicineViewModel.class),
-                fragmentView, false);
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
 
         return fragmentView;
     }
-    
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -238,4 +238,5 @@
     <string name="all_taken">تم تناول الجميع (%s)</string>
     <string name="estimated_run_out_date">تاريخ النفاد التقديري</string>
     <string name="create_calendar_entry">إنشاء إدخال تقويم</string>
+    <string name="notes">ملاحظات</string>
 </resources>
