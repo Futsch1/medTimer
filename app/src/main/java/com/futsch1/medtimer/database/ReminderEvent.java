@@ -48,16 +48,19 @@ public class ReminderEvent {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int lastIntervalReminderTimeInMinutes;
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes);
-    }
+    @ColumnInfo(defaultValue = "")
+    @Expose
+    public String notes;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         return membersEqual((ReminderEvent) o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes, notes);
     }
 
     private boolean membersEqual(ReminderEvent o) {
@@ -76,7 +79,8 @@ public class ReminderEvent {
                 stockHandled == o.stockHandled &&
                 askForAmount == o.askForAmount &&
                 Objects.equals(tags, o.tags) &&
-                lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes;
+                lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
+                notes.equals(o.notes);
     }
 
     public enum ReminderStatus {
