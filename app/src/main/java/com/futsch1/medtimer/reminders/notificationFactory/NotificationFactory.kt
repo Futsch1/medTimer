@@ -11,6 +11,10 @@ import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.getNoti
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.helpers.MedicineIcons
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 
 abstract class NotificationFactory(
@@ -34,7 +38,7 @@ abstract class NotificationFactory(
         if (color != null) {
             builder.setColor(color.toArgb()).setColorized(true)
         }
-
+        builder.setSilent(!shouldPlaySound())
     }
 
     fun getStartAppIntent(): PendingIntent? {
@@ -46,6 +50,19 @@ abstract class NotificationFactory(
             startApp,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
+    }
+
+    @OptIn(ExperimentalTime::class)
+    companion object {
+        var lastNotificationTime: Instant = Instant.fromEpochMilliseconds(0)
+
+        fun shouldPlaySound(): Boolean {
+            val now = Clock.System.now()
+            val shouldPlaySound = now - lastNotificationTime > 10.seconds
+            lastNotificationTime = now
+
+            return shouldPlaySound
+        }
     }
 
     abstract fun create(): Notification
