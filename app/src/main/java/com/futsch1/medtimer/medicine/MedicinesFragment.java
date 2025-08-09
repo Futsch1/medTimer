@@ -97,14 +97,6 @@ public class MedicinesFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (optionsMenu != null) {
-            optionsMenu.onDestroy();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (thread != null) {
@@ -112,6 +104,9 @@ public class MedicinesFragment extends Fragment {
         }
         if (idlingResource != null) {
             idlingResource.destroy();
+        }
+        if (optionsMenu != null) {
+            optionsMenu.onDestroy();
         }
     }
 
