@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument
 import kotlinx.coroutines.CoroutineScope
@@ -22,8 +24,11 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         simplyPdfDocument.text.write(TimeHelper.toLocalizedDatetimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
 
         for (medicine in medicines) {
-            simplyPdfDocument.text.write(medicine.medicine.name, biggestBoldProperties)
-            exportMedicine(simplyPdfDocument, medicine)
+            val activeReminders = getActiveReminders(medicine)
+            if (activeReminders.isNotEmpty()) {
+                simplyPdfDocument.text.write(medicine.medicine.name, biggestBoldProperties)
+                exportMedicine(simplyPdfDocument, activeReminders)
+            }
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -31,8 +36,8 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         }
     }
 
-    private fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, medicine: FullMedicine) {
-        val reminders = LinkedReminderAlgorithms().sortRemindersList(medicine.reminders)
+    private fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
+        val reminders = LinkedReminderAlgorithms().sortRemindersList(activeReminders)
         for (reminder in reminders) {
             val firstLine =
                 context.getString(R.string.dosage) + ": " + if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount
