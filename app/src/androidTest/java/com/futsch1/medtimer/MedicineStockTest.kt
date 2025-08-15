@@ -17,6 +17,7 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -132,6 +133,42 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, numberFormat.format(10.5))
         assertNotContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun hiddenMedicineNameInStockReminder() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.privacy_settings)
+        clickOn(R.string.hide_med_name)
+
+        AndroidTestHelper.createMedicine("TestMed")
+
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "120")
+        writeTo(R.id.stockUnit, "pills")
+        clickOn(R.id.medicineStockReminder)
+        onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
+        pressBack()
+
+        AndroidTestHelper.createIntervalReminder("So many pills - 130", 10)
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.openNotification()
+        device.wait(
+            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
+            1_000
+        )
+        internalAssert(device.findObject(By.textContains("T******")) != null)
+        internalAssert(device.findObject(By.textContains("TestMed")) == null)
     }
 
     @Test
