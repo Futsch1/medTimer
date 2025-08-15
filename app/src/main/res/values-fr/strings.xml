@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -224,4 +223,5 @@
     <string name="estimated_run_out_date">Date d\'épuisement estimée</string>
     <string name="create_calendar_entry">Créer une entrée de calendrier</string>
     <string name="notes">Remarques</string>
+    <string name="sort">Trier</string>
 </resources>

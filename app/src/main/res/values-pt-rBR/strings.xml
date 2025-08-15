@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Configurações</string>
     <string name="cancel">Cancelar</string>
     <string name="tab_overview">Visão Geral</string>
@@ -87,7 +86,7 @@
     <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <plurals name="last_n_days">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">Últimas 24 horas</item>
         <item quantity="many">Últimos %1$d dias</item>
         <item quantity="other">Últimos %1$d dias</item>
     </plurals>
@@ -125,20 +124,20 @@
     <string name="delay">Atraso</string>
     <string name="linked_reminder_summary">Após o lembrete em %1$s</string>
     <string name="interval_based_reminder">Lembrete baseado em intervalo</string>
-    <plurals name="minutes" tools:ignore="ImpliedQuantity">
+    <plurals name="minutes" ns0:ignore="ImpliedQuantity">
         <item quantity="one">minuto</item>
         <item quantity="many">minutos</item>
         <item quantity="other">minutos</item>
     </plurals>
     <string name="minutes_string">Minutos</string>
     <plurals name="hours">
-        <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">hora</item>
         <item quantity="many">horas</item>
         <item quantity="other">horas</item>
     </plurals>
     <string name="hours_string">Horas</string>
     <plurals name="days">
-        <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
+        <item quantity="one" ns0:ignore="ImpliedQuantity">dia</item>
         <item quantity="many">dias</item>
         <item quantity="other">dias</item>
     </plurals>
@@ -223,5 +222,6 @@
     <string name="total">Total</string>
     <string name="estimated_run_out_date">Data estimada de término</string>
     <string name="create_calendar_entry">Criar entrada na agenda</string>
+    <string name="sort">Classificar</string>
     <string name="notes">Anotações</string>
 </resources>
