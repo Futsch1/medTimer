@@ -1,35 +1,35 @@
-Med reminders and history with full offline privacy
+Υπενθυμίσεις και τήρηση ιστορικού φαρμακευτικών αγωγών με πλήρη ιδιωτικότητα χωρίς πρόσβαση στο διαδίκτυο
 
-Stay In Control of Your Medications with MedTimer
+Διατηρήστε τον έλεγχο των φαρμακευτικών αγωγών σας με το MedTimer
 
-MedTimer is an open-source medication reminder app designed to help you manage your medications and pills effectively and with full control of your sensitive data.
+Το MedTimer είναι μια ανοιχτού κώδικα εφαρμογή υπενθύμισης φαρμακευτικών αγωγών που σχεδιάστηκε για να σας βοηθήσει να διαχειριστείτε τις φαρμακευτικές αγωγές σας αποτελεσματικά, διατηρώντας παράλληλα τον πλήρη έλεγχο των προσωπικών σας δεδομένων.
 
-Flexible & Personalized Reminders:
+Ευέλικτες & εξατομικευμένες υπενθυμίσεις:
 
-- Manage unlimited medications with customizable reminders per medication (including simple defaults
-  for daily reminders).
-- Create flexible reminders with breaks and specific days (e.g. for birth control pills).
-- Weekend mode: Delay reminders to a defined time on chosen days.
-- Snooze notifications for later reminders or be reminded repeatedly.
-- Add extra doses on the fly.
-- Create interval based reminders or reminders following each other in intervals.
+‐  Διαχειριστείτε απεριόριστες φαρμακευτικές αγωγές με παραμετροποιήσιμες υπενθυμίσεις ανά αγωγή (συμπεριλαμβανομένων απλών προεπιλογών
+   για καθημερινές υπενθυμίσεις).
+- Δημιουργήστε ευέλικτες υπενθυμίσεις με παύσεις και συγκεκριμένες ημέρες (π.χ. για αντισυλληπτικά χάπια).
+- Λειτουργία Σαββατοκύριακου: Καθυστερήστε τις υπενθυμίσεις σε μια καθορισμένη ώρα σε επιλεγμένες ημέρες.
+- Αναβάλετε τις ειδοποιήσεις για μεταγενέστερες υπενθυμίσεις ή ορίστε να σας υπενθυμίζονται επανειλημμένα.
+- Καταχωρήστε επιπλέον δόσεις, εκτός του καθορισμένου προγράμματος της αγωγής, εν κινήσει.
+- Δημιουργήστε υπενθυμίσεις βασισμένες σε χρονικά διαστήματα, ή υπενθυμίσεις για δόσεις και αγωγές που ακολουθούν η μία την άλλη με σταθερά χρονικά διαστήματα μεταξύ τους.
 
-Simple & Secure Data Management:
+Απλή και ασφαλής διαχείριση δεδομένων:
 
-- Confirm or dismiss reminders to record medication adherence accurately.
-- Get an overview of past doses in a chart and a tabular view.
-- Export your medication history as a CSV file for easy record-keeping or sharing with healthcare professionals.
-- Backup and restore your medication list as JSON file.
-- Medication stock tracking and out of stock reminders.
-- Tag and filter your medication.
+- Επιβεβαιώστε ή απορρίψτε τις υπενθυμίσεις για την ακριβή καταγραφή της τήρησης της φαρμακευτικής αγωγής.
+- Αποκτήστε μια επισκόπηση των προηγούμενων δόσεων σε διάγραμμα και σε μορφή πίνακα.
+- Εξάγετε το ιστορικό της φαρμακευτικής σας αγωγής ως αρχείο CSV για εύκολη τήρηση αρχείων ή κοινή χρήση με επαγγελματίες υγείας.
+- Δημιουργήστε αντίγραφα ασφαλείας και επαναφέρετε τη λίστα φαρμάκων σας ως αρχείο JSON.
+- Παρακολούθηση του αποθέματος φαρμάκων και υπενθυμίσεις για εξάντληση αποθεμάτων.
+- Επισήμανση και φιλτράρισμα της φαρμακευτικής σας αγωγής.
 
-Privacy & Offline Accessibility:
+Απόρρητο και προσβασιμότητα χωρίς σύνδεση:
 
-- All data is stored securely on your device, ensuring complete privacy and offline accessibility.
-- No internet connection required – your medication reminders are always available.
+- Όλα τα δεδομένα αποθηκεύονται με ασφάλεια στη συσκευή σας, εξασφαλίζοντας πλήρη ιδιωτικότητα και προσβασιμότητα εκτός δικτύου.
+- Δεν απαιτείται σύνδεση στο διαδίκτυο - οι υπενθυμίσεις των φαρμάκων σας είναι πάντα διαθέσιμες.
 
-MedTimer is a free app without ads.
+Το MedTimer είναι μια δωρεάν και ελεύθερη εφαρμογή χωρίς διαφημίσεις.
 
-See the project page on GitHub: https://github.com/Futsch1/medTimer
+Δείτε τη σελίδα του έργου στο GitHub: https://github.com/Futsch1/medTimer
 
-Feature graphic was created with https://hotpot.ai
+Το γραφικό χαρακτηριστικό δημιουργήθηκε με το https://hotpot.ai
