@@ -29,7 +29,6 @@ import com.google.android.material.chip.Chip;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MedicineViewHolder extends RecyclerView.ViewHolder {
     private final TextView medicineNameView;
@@ -71,7 +70,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupSummary(FullMedicine medicine) {
-        List<Reminder> activeReminders = medicine.reminders.stream().filter(ReminderHelperKt::isReminderActive).collect(Collectors.toList());
+        List<Reminder> activeReminders = ReminderHelperKt.getActiveReminders(medicine);
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
                 remindersSummaryView.setText(R.string.no_reminders);
