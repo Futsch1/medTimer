@@ -21,7 +21,7 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
     override fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
-        simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.tab_medicine), biggestBoldProperties)
+        simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
         simplyPdfDocument.text.write(TimeHelper.toLocalizedDatetimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
 
         for (medicine in medicines) {
