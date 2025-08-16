@@ -147,7 +147,7 @@ class SummaryHelperTest {
         val context = mock(Context::class.java)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
-        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "0:02, 1:03"))
+        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "0:02; 1:03"))
             .thenReturn("ok")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)

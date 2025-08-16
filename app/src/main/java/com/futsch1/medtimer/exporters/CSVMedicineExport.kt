@@ -11,7 +11,8 @@ import java.io.FileWriter
 import java.io.IOException
 
 class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: FragmentManager, val context: Context) : Export(fragmentManager) {
-    override fun exportInternal(file: File) {
+    @Throws(ExporterException::class)
+    public override fun exportInternal(file: File) {
         try {
             FileWriter(file).use { csvFile ->
                 val headerTexts = TableHelper.getTableHeadersForMedicationExport(context)
