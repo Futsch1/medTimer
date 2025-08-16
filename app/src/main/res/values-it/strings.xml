@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -224,4 +224,4 @@
     <string name="estimated_run_out_date">Data di scadenza stimata</string>
     <string name="create_calendar_entry">Crea voce di calendario</string>
     <string name="notes">Note</string>
-</resources>
+<string name="automatically_taken">Contrassegnare automaticamente come scattato</string></resources>

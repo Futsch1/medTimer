@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
@@ -219,4 +219,4 @@
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
     <string name="create_calendar_entry">Skapa kalenderpost</string>
     <string name="notes">Anteckningar</string>
-</resources>
+<string name="automatically_taken">Markera automatiskt som tagen</string></resources>

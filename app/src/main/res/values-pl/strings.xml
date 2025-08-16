@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="period_end">Koniec okresu</string>
     <string name="tab_overview">Przegląd</string>
@@ -229,4 +229,4 @@
     <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
     <string name="create_calendar_entry">Utwórz wpis w kalendarzu</string>
     <string name="notes">Notatki</string>
-</resources>
+<string name="automatically_taken">Automatycznie oznacz jako pobrane</string></resources>

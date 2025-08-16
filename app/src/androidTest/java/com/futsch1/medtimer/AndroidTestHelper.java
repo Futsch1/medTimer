@@ -92,7 +92,7 @@ public class AndroidTestHelper {
     public static LocalDateTime getNextNotificationTime() {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        return dateTime.plusMinutes(2);
+        return dateTime.getSecond() < 30 ? dateTime.plusMinutes(1) : dateTime.plusMinutes(2);
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}

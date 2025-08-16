@@ -63,6 +63,9 @@ public class Reminder {
     @ColumnInfo(defaultValue = "false")
     @Expose
     public boolean variableAmount;
+    @ColumnInfo(defaultValue = "false")
+    @Expose
+    public boolean automaticallyTaken;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -92,14 +95,14 @@ public class Reminder {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart, intervalStartsFromProcessed, variableAmount);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         return membersEqual((Reminder) o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart, intervalStartsFromProcessed, variableAmount);
     }
 
     private boolean membersEqual(Reminder that) {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
@@ -226,4 +226,4 @@
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
     <string name="create_calendar_entry">Создать запись в календаре</string>
     <string name="notes">Заметки</string>
-</resources>
+<string name="automatically_taken">Автоматически помечайте как принятые</string></resources>

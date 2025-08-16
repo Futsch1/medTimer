@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Ρυθμίσεις</string>
     <string name="tab_overview">Επισκόπηση</string>
@@ -219,4 +219,4 @@
     <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>
     <string name="variable_amount">Να κάνετε καταχώρηση της δόσης που λήφθηκε</string>
     <string name="notes">Σημειώσεις</string>
-</resources>
+<string name="automatically_taken">Αυτόματη σήμανση ως ληφθείσα</string></resources>
