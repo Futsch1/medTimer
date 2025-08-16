@@ -38,7 +38,7 @@
     <item
         android:id="@+id/medicine_data"
         android:icon="@drawable/capsule"
-        android:title="@string/tab_medicine">
+        android:title="@string/medicine_data">
         <menu>
             <item
                 android:id="@+id/export_medicine_pdf"
