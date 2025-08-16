@@ -380,6 +380,31 @@ class NotificationTest : BaseTestHelper() {
         )
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun automaticallyTakenTest() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
+
+        AndroidTestHelper.createReminder("1", notificationTime)
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.id.automaticallyTaken)
+        pressBack()
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.alarm)))
+        )
+
+        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 180_000)
+    }
+
+
     private fun getNotificationText(stringId: Int, vararg args: Any): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
         return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {

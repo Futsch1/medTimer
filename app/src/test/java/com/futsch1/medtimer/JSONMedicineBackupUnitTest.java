@@ -41,6 +41,9 @@ class JSONMedicineBackupUnitTest {
         reminder.days.set(0, false);
         reminder.activeDaysOfMonth = 7;
         reminder.linkedReminderId = 15;
+        reminder.automaticallyTaken = true;
+        reminder.intervalStartTimeOfDay = 1;
+        reminder.intervalEndTimeOfDay = 2;
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -105,7 +108,10 @@ class JSONMedicineBackupUnitTest {
           "linkedReminderId": 15,
           "intervalStart": 0,
           "intervalStartsFromProcessed": false,
-          "variableAmount": false
+          "variableAmount": false,
+          "automaticallyTaken": true,
+          "intervalStartTimeOfDay": 1,
+          "intervalEndTimeOfDay": 2
         }
       ]
     }
@@ -241,7 +247,10 @@ class JSONMedicineBackupUnitTest {
           "linkedReminderId": 0,
           "intervalStart": 0,
           "intervalStartsFromProcessed": false,
-          "variableAmount": false
+          "variableAmount": false,
+          "automaticallyTaken": false,
+          "intervalStartTimeOfDay": 0,
+          "intervalEndTimeOfDay": 0
         }
       ]
     },
@@ -284,7 +293,10 @@ class JSONMedicineBackupUnitTest {
           "linkedReminderId": 0,
           "intervalStart": 0,
           "intervalStartsFromProcessed": false,
-          "variableAmount": false
+          "variableAmount": false,
+          "automaticallyTaken": false,
+          "intervalStartTimeOfDay": 0,
+          "intervalEndTimeOfDay": 0
         },
         {
           "reminderId": 2,
@@ -310,7 +322,10 @@ class JSONMedicineBackupUnitTest {
           "linkedReminderId": 234,
           "intervalStart": 256,
           "intervalStartsFromProcessed": true,
-          "variableAmount": true
+          "variableAmount": true,
+          "automaticallyTaken": false,
+          "intervalStartTimeOfDay": 0,
+          "intervalEndTimeOfDay": 0
         }
       ]
     }

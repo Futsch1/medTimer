@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="taken">أخذته</string>
     <string name="skipped">تخطيته</string>
@@ -239,4 +239,4 @@
     <string name="estimated_run_out_date">تاريخ النفاد التقديري</string>
     <string name="create_calendar_entry">أنشئ إدخال تقويم</string>
     <string name="notes">ملاحظات</string>
-</resources>
+<string name="automatically_taken">وضع علامة &amp;quot;مأخوذة&amp;quot; تلقائياً</string></resources>

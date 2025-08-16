@@ -99,6 +99,12 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         }
         stateButton.setImageResource(imageResource)
         stateButton.tag = imageResource
+        stateButton.contentDescription = when (state) {
+            OverviewState.PENDING -> fragmentActivity.getString(R.string.please_wait)
+            OverviewState.TAKEN -> fragmentActivity.getString(R.string.taken)
+            OverviewState.SKIPPED -> fragmentActivity.getString(R.string.skipped)
+            OverviewState.RAISED -> fragmentActivity.getString(R.string.reminded)
+        }
     }
 
     fun setBarsVisibility(position: EventPosition) {

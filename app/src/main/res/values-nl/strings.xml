@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -218,4 +219,4 @@
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
     <string name="create_calendar_entry">Agenda-item maken</string>
     <string name="notes">Notities</string>
-</resources>
+<string name="automatically_taken">Automatisch markeren als bezet</string></resources>

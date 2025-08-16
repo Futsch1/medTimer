@@ -214,7 +214,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <View
-                android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="4dp"
@@ -250,6 +249,13 @@
                     android:hint="@string/every_day_of_month"
                     android:text="@string/every_day_of_month" />
             </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/automaticallyTaken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/variable_amount" />
+
 
         </LinearLayout>
     </ScrollView>

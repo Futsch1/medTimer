@@ -100,15 +100,13 @@ public class ReminderWork extends Worker {
     }
 
     private void performActionsOfReminder(Reminder reminder, ReminderEvent reminderEvent, FullMedicine medicine, LocalDateTime reminderDateTime) {
-        NotificationAction.cancelNotification(context, reminderEvent.notificationId);
+        if (reminder.automaticallyTaken) {
+            NotificationAction.processReminderEvent(context, ReminderEvent.ReminderStatus.TAKEN, reminderEvent, medicineRepository);
 
-        showNotification(medicine, reminderEvent, reminder, reminderDateTime);
-
-        if (reminderEvent.remainingRepeats != 0 && isRepeatReminders()) {
-            ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
+            Log.i(LogTags.REMINDER, String.format("Mark reminder %d as automatically taken for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+        } else {
+            notificationAction(reminder, reminderEvent, medicine, reminderDateTime);
         }
-
-        Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
     }
 
     public static ReminderEvent buildReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder, MedicineRepository medicineRepository) {
@@ -141,6 +139,27 @@ public class ReminderWork extends Worker {
         return Integer.parseInt(sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3"));
     }
 
+    private void notificationAction(Reminder reminder, ReminderEvent reminderEvent, FullMedicine medicine, LocalDateTime reminderDateTime) {
+        NotificationAction.cancelNotification(context, reminderEvent.notificationId);
+
+        showNotification(medicine, reminderEvent, reminder, reminderDateTime);
+
+        if (reminderEvent.remainingRepeats != 0 && isRepeatReminders()) {
+            ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
+        }
+
+        Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+    }
+
+    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
+        ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
+        if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
+            return (int) (lastReminderEvent.processedTimestamp / 60);
+        } else {
+            return 0;
+        }
+    }
+
     private void showNotification(FullMedicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
         if (canShowNotifications()) {
             boolean hasSameTimeReminders = !medicineRepository.getSameTimeReminders(reminder.reminderId).isEmpty();
@@ -160,15 +179,6 @@ public class ReminderWork extends Worker {
     private int getRepeatTimeSeconds() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
-    }
-
-    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
-        ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
-        if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
-            return (int) (lastReminderEvent.processedTimestamp / 60);
-        } else {
-            return 0;
-        }
     }
 
     private boolean canShowNotifications() {

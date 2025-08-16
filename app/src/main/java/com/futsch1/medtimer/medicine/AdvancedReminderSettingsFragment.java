@@ -38,6 +38,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     private DateTimeEditor intervalStartDateTimeEditor;
     private IntervalEditor intervalEditor;
     private MaterialSwitch variableAmount;
+    private MaterialSwitch automaticallyTaken;
     private RemindOnDays remindOnDaysOfWeek;
     private RemindOnDays remindOnDaysOfMonth;
 
@@ -62,11 +63,13 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
         editCycleStartDate = fragmentView.findViewById(R.id.cycleStartDate);
         instructionSuggestions = fragmentView.findViewById(R.id.editInstructionsLayout);
         variableAmount = fragmentView.findViewById(R.id.variableAmount);
+        automaticallyTaken = fragmentView.findViewById(R.id.automaticallyTaken);
 
         editConsecutiveDays.setText(Integer.toString(entity.consecutiveDays));
         editPauseDays.setText(Integer.toString(entity.pauseDays));
         editInstructions.setText(entity.instructions);
         variableAmount.setChecked(entity.variableAmount);
+        automaticallyTaken.setChecked(entity.automaticallyTaken);
 
         setupInstructionSuggestions();
 
@@ -90,6 +93,7 @@ public class AdvancedReminderSettingsFragment extends DatabaseEntityEditFragment
     public void fillEntityData(Reminder entity, @NonNull View fragmentView) {
         entity.instructions = editInstructions.getText() != null ? editInstructions.getText().toString() : "";
         entity.variableAmount = variableAmount.isChecked();
+        entity.automaticallyTaken = automaticallyTaken.isChecked();
 
         periodSettings.updateReminder();
         putConsecutiveDaysIntoReminder(entity);
