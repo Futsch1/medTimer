@@ -99,7 +99,7 @@ for string_name, language in translate_list:
     new_elements[language].text = escape(translated_string.text)
 
 # Collect all languages where a translation string was found
-languages = {[tl[1] for tl in translate_list])}
+languages = {[tl[1] for tl in translate_list]}
 
 # Update the existing strings.xml files
 for language in languages:
