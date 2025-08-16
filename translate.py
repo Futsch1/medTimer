@@ -11,6 +11,8 @@ def get_language_from_directory(directory_name: str) -> str:
 
 
 def map_language(l: str) -> str:
+    if l == "pt-rBR":
+        return "pt-BR"
     return l if l != "zh-rCN" else "zh-hans"
 
 
@@ -50,8 +52,6 @@ for directory in glob.glob("app/src/main/res/*"):
         continue
 
     language = get_language_from_directory(directory)
-    if language == "ta":
-        continue
 
     language_tree[language] = ET.parse(directory + "/strings.xml")
     resources = language_tree[language].getroot()
@@ -73,11 +73,16 @@ translator = deepl.Translator(auth_key)
 
 for string_name, language in translate_list:
     print("Translating " + string_name + " to " + language)
-    translated_string = translator.translate_text(
-        english_strings[string_name],
-        target_lang=map_language(language),
-        preserve_formatting=True,
-    )
+    try:
+        translated_string = translator.translate_text(
+            english_strings[string_name],
+            target_lang=map_language(language),
+            preserve_formatting=True,
+        )
+    except Exception:
+        print("Translation failed")
+        continue
+
     new_elements[language] = language_tree[language].find(
         'string[@name="' + string_name + '"]'
     )

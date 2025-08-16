@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.pressBack;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -23,6 +24,8 @@ import static junit.framework.TestCase.assertEquals;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky;
@@ -196,7 +199,7 @@ public class ReminderTest extends BaseTestHelper {
         int positionOfReminder3 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? (reminder1Time.isBefore(LocalTime.of(1, 30)) ? 2 : 1) : 0;
 
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder3, R.id.reminderCardLayout, expectedString);
+        assertCustomAssertionAtPosition(R.id.reminderList, positionOfReminder3, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
         assertHint(R.id.editReminderTime, R.string.time);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);

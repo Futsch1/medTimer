@@ -23,9 +23,11 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 
-import com.futsch1.medtimer.exporters.CSVExport;
-import com.futsch1.medtimer.exporters.Exporter;
-import com.futsch1.medtimer.exporters.PDFExport;
+import com.futsch1.medtimer.exporters.CSVEventExport;
+import com.futsch1.medtimer.exporters.CSVMedicineExport;
+import com.futsch1.medtimer.exporters.Export;
+import com.futsch1.medtimer.exporters.PDFEventExport;
+import com.futsch1.medtimer.exporters.PDFMedicineExport;
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu;
 import com.futsch1.medtimer.helpers.FileHelper;
 import com.futsch1.medtimer.helpers.PathHelper;
@@ -153,12 +155,22 @@ public class OptionsMenu implements EntityEditOptionsMenu {
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> export(new CSVEventExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> export(new PDFEventExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
+            return true;
+        });
+        item = menu.findItem(R.id.export_medicine_csv);
+        item.setOnMenuItemClickListener(menuItem -> {
+            handler.post(() -> export(new CSVMedicineExport(medicineViewModel.medicineRepository.getMedicines(), fragment.getParentFragmentManager(), context)));
+            return true;
+        });
+        item = menu.findItem(R.id.export_medicine_pdf);
+        item.setOnMenuItemClickListener(menuItem -> {
+            handler.post(() -> export(new PDFMedicineExport(medicineViewModel.medicineRepository.getMedicines(), fragment.getParentFragmentManager(), context)));
             return true;
         });
     }
@@ -215,12 +227,12 @@ public class OptionsMenu implements EntityEditOptionsMenu {
         }
     }
 
-    private void export(Exporter exporter) {
-        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(exporter));
+    private void export(Export export) {
+        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(export));
         try {
-            exporter.export(csvFile);
+            export.export(csvFile);
             FileHelper.shareFile(context, csvFile);
-        } catch (Exporter.ExporterException e) {
+        } catch (Export.ExporterException e) {
             Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
         }
     }
