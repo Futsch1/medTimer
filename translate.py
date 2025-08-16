@@ -50,7 +50,7 @@ else:
 # Search for strings in other languages and build the list of strings to be translated
 for directory in glob.glob("app/src/main/res/*"):
     if directory == "app/src/main/res/values" or not os.path.exists(
-            directory + "/strings.xml"
+        directory + "/strings.xml"
     ):
         continue
 
@@ -65,9 +65,9 @@ for directory in glob.glob("app/src/main/res/*"):
         language_strings.append(string_name.attrib["name"])
     for english_string_name in english_strings.keys():
         if (
-                english_string_name not in language_strings
-                or not language_strings[language_strings.index(english_string_name)]
-                or english_string_name in translate_args
+            english_string_name not in language_strings
+            or not language_strings[language_strings.index(english_string_name)]
+            or english_string_name in translate_args
         ):
             translate_list.append((english_string_name, language))
 auth_key = sys.argv[1]
@@ -104,4 +104,6 @@ languages = {[tl[1] for tl in translate_list]}
 # Update the existing strings.xml files
 for language in languages:
     with open(f"app/src/main/res/values-{language}/strings.xml", "wb") as f:
-        language_tree[language].write(f, encoding="utf-8", xml_declaration=True, pretty_print=True)
+        language_tree[language].write(
+            f, encoding="utf-8", xml_declaration=True, pretty_print=True
+        )
