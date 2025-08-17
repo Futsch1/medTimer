@@ -27,6 +27,7 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +73,7 @@ class CSVExportUnitTest {
 
         // Create a mock File
         File file = mock(File.class);
-        TimeZone utc = TimeZone.getTimeZone("WET");
+        TimeZone utc = TimeZone.getTimeZone("UTC");
         java.text.DateFormat usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US);
         java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
         usTimeFormat.setTimeZone(utc);
@@ -140,14 +141,16 @@ class CSVExportUnitTest {
         // Create a mock File
         File file = mock(File.class);
         TimeZone utc = TimeZone.getTimeZone("UTC");
+        ZoneId utcId = ZoneId.of("UTC");
         java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
         usTimeFormat.setTimeZone(utc);
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class);
-             MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
+             MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
+             MockedStatic<ZoneId> zoneIdMockedStatic = mockStatic(ZoneId.class)) {
             FragmentManager fragmentManager = mock(FragmentManager.class);
-
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(context)).thenReturn(usTimeFormat);
+            zoneIdMockedStatic.when(ZoneId::systemDefault).thenReturn(utcId);
 
             // Create the CSVCreator object
             CSVMedicineExport csvExport = new CSVMedicineExport(medicines, fragmentManager, context);
@@ -160,9 +163,9 @@ class CSVExportUnitTest {
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Medicine;Amount;Time\n");
-                verify(fileWriter).write("Medicine 1;1;12:00 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;2;12:01 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;three;12:02 AM, Every day\n");
+                verify(fileWriter).write("Medicine 1;1;1:00 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;2;1:01 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;three;1:02 AM, Every day\n");
             } catch (Export.ExporterException | IOException e) {
                 fail("Exception occurred");
             }
