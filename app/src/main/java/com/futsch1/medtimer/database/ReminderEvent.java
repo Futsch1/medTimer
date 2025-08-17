@@ -80,7 +80,7 @@ public class ReminderEvent {
                 askForAmount == o.askForAmount &&
                 Objects.equals(tags, o.tags) &&
                 lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
-                notes.equals(o.notes);
+                Objects.equals(notes, o.notes);
     }
 
     public enum ReminderStatus {
