@@ -87,7 +87,7 @@ public class SnoozeWorkUnitTest {
                 .build();
         when(workerParams.getInputData()).thenReturn(inputData);
         Instant zero = Instant.ofEpochSecond(0);
-        Instant snooze = Instant.ofEpochSecond(15 * 60);
+        Instant snooze = Instant.ofEpochSecond(15L * 60);
 
         try (MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<Instant> mockedInstant = mockStatic(Instant.class)) {

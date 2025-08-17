@@ -37,6 +37,8 @@ import org.junit.Test
 
 private const val TEST_MED = "Test med"
 
+private const val SECOND_ONE = "second one"
+
 class NotificationTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
@@ -353,16 +355,16 @@ class NotificationTest : BaseTestHelper() {
             notificationTime
         )
         AndroidTestHelper.createReminder(
-            "second one",
+            SECOND_ONE,
             notificationTime
         )
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains("second one")), 240_000)
+        val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 240_000)
         assertNotNull(notification)
 
-        clickNotificationButton(device, "second one", getNotificationText(R.string.all_taken, notificationTimeString))
+        clickNotificationButton(device, SECOND_ONE, getNotificationText(R.string.all_taken, notificationTimeString))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)

@@ -25,7 +25,7 @@ class JSONMedicineBackupUnitTest {
 
     // creates a backup object with a version number and a medicines array
     @Test
-    void test_creates_backup_with_version_and_medicines_array() {
+    void testCreatesBackupWithVersionAndMedicinesArray() {
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         List<FullMedicine> medicinesWithReminders = new ArrayList<>();
         FullMedicine medicineWithReminders = new FullMedicine();
@@ -150,7 +150,7 @@ class JSONMedicineBackupUnitTest {
 
     // iterates over the list of FullMedicine and adds each one to the medicines array as a JSONObject
     @Test
-    void test_iterates_over_medicinesWithReminders_and_adds_to_medicines_array() {
+    void testIteratesOverMedicinesWithRemindersAndAddsToMedicinesArray() {
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         List<FullMedicine> medicinesWithReminders = new ArrayList<>();
         FullMedicine medicineWithReminders1 = new FullMedicine();
@@ -339,7 +339,7 @@ class JSONMedicineBackupUnitTest {
     }
 
     @Test
-    void test_parse_json_backup_missing_fields() {
+    void testParseJsonBackupMissingFields() {
         // Arrange
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         String validJsonBackup = "{\"version\": 1, \"medicinesWithReminders\": [{\"reminders\": [], \"medicine\": {}}]}";
@@ -352,7 +352,7 @@ class JSONMedicineBackupUnitTest {
     }
 
     @Test
-    void test_parse_invalid_json_backup() {
+    void testParseInvalidJsonBackup() {
         // Arrange
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         String invalidJsonBackup = "invalid_json";
@@ -365,7 +365,7 @@ class JSONMedicineBackupUnitTest {
     }
 
     @Test
-    void test_parse_json_backup_with_missing_fields() {
+    void testParseJsonBackupWithMissingFields() {
         // Arrange
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         String jsonBackupWithMissingFields = "{\"version\": 1}";

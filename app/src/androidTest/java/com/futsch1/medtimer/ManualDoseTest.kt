@@ -10,6 +10,8 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import org.junit.Test
 
+private const val TEST_13_ = "Test (13)"
+
 class ManualDoseTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
@@ -45,11 +47,11 @@ class ManualDoseTest : BaseTestHelper() {
         BaristaDialogInteractions.clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
-        assertContains(R.id.reminderText, "Test (13)")
+        assertContains(R.id.reminderText, TEST_13_)
 
         clickOn(R.id.logManualDose)
-        assertContains(R.id.entry_text, "Test (13)")
-        clickOn("Test (13)")
+        assertContains(R.id.entry_text, TEST_13_)
+        clickOn(TEST_13_)
         assertContains("13")
         pressBack()
 

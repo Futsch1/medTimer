@@ -48,7 +48,7 @@ public abstract class BaseTestHelper {
                     .executeShellCommand(
                             "am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS");
         } catch (IOException e) {
-            System.out.println("Exception: " + e);
+            // Intentionally empty
         }
     }
 

@@ -224,4 +224,4 @@
     <string name="estimated_run_out_date">Data estimada de término</string>
     <string name="create_calendar_entry">Criar entrada na agenda</string>
     <string name="notes">Anotações</string>
-<string name="automatically_taken">Marcar automaticamente como realizado</string></resources>
+<string name="automatically_taken">Marcar automaticamente como realizado</string><string name="sort">Classificar</string></resources>

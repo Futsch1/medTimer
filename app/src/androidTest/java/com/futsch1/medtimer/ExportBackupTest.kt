@@ -28,6 +28,18 @@ class ExportBackupTest : BaseTestHelper() {
         clickOn(R.string.export_pdf)
         device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
         device.pressBack()
+
+        openMenu()
+        clickOn(R.string.medicine_data)
+        clickOn(R.string.export_csv)
+        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.pressBack()
+
+        openMenu()
+        clickOn(R.string.medicine_data)
+        clickOn(R.string.export_pdf)
+        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.pressBack()
     }
 
     @Test
@@ -37,7 +49,7 @@ class ExportBackupTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.backup)
-        
+
         clickListItem(-1, 1)
         clickDialogPositiveButton()
 

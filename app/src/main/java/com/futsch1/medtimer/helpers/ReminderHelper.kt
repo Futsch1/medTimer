@@ -10,11 +10,13 @@ import android.text.Spanned
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import java.time.LocalDate
 import java.util.Locale
+import java.util.stream.Collectors
 
 
 fun isReminderActive(reminder: Reminder): Boolean {
@@ -26,6 +28,10 @@ fun isReminderActive(reminder: Reminder): Boolean {
         active = active && LocalDate.now().toEpochDay() <= reminder.periodEnd
     }
     return active
+}
+
+fun getActiveReminders(medicine: FullMedicine): List<Reminder> {
+    return medicine.reminders.stream().filter { isReminderActive(it) }.collect(Collectors.toList())
 }
 
 fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {

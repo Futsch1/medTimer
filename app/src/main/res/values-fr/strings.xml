@@ -224,4 +224,4 @@
     <string name="estimated_run_out_date">Date d\'épuisement estimée</string>
     <string name="create_calendar_entry">Créer une entrée de calendrier</string>
     <string name="notes">Remarques</string>
-<string name="automatically_taken">Marquer automatiquement comme pris</string></resources>
+<string name="automatically_taken">Marquer automatiquement comme pris</string><string name="sort">Trier</string></resources>

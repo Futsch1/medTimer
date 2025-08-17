@@ -3,6 +3,7 @@ package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.pressBack;
 import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -23,9 +24,10 @@ import static junit.framework.TestCase.assertEquals;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -105,7 +107,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void activeIntervalReminderTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -190,27 +192,22 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.id.openCalendar);
         pressBack();
 
-        // Check reminder list
-        int positionOfReminder1 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? 0 : 1;
-        int positionOfReminder2 = reminder1Time.isBefore(LocalTime.of(1, 30)) ? 1 : 2;
-        int positionOfReminder3 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? (reminder1Time.isBefore(LocalTime.of(1, 30)) ? 2 : 1) : 0;
-
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder3, R.id.reminderCardLayout, expectedString);
+        assertCustomAssertionAtPosition(R.id.reminderList, 0, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
         assertHint(R.id.editReminderTime, R.string.time);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder1, R.id.editReminderTime, expectedString);
+        assertDisplayedAtPosition(R.id.reminderList, 1, R.id.editReminderTime, expectedString);
 
         assertHint(R.id.editReminderTime, R.string.delay);
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder2, R.id.reminderCardLayout, expectedString);
+        assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString);
 
-        clickListItemChild(R.id.reminderList, positionOfReminder1, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder2, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder3, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 2, R.id.openAdvancedSettings);
         pressBack();
 
         // Check overview and next reminders

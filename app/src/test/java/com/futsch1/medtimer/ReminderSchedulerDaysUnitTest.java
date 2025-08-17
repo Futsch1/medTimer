@@ -19,7 +19,7 @@ import java.util.List;
 
 class ReminderSchedulerDaysUnitTest {
     @Test
-    void test_scheduleSkipWeekdays() {
+    void testScheduleSkipWeekdays() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));

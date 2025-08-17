@@ -220,4 +220,4 @@
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>
     <string name="notes">Notizen</string>
     <string name="automatically_taken">Automatisch als eingenommen markieren</string>
-</resources>
+<string name="sort">Sort</string></resources>

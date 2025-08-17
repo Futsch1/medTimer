@@ -21,7 +21,7 @@ import java.util.List;
 class ReminderSchedulerTimezoneUnitTest {
 
     @Test
-    void test_scheduleWithEvents() {
+    void testScheduleWithEvents() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 

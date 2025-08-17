@@ -88,7 +88,7 @@ dependencies {
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val workRuntimeVersion = "2.10.3"
-    val coreKtxVersion = "1.16.0"
+    val coreKtxVersion = "1.17.0"
     val lifecycleViewmodelKtxVersion = "2.9.2"
     val roomVersion = "2.7.2"
     val colorPickerViewVersion = "3.1.0"
@@ -103,7 +103,7 @@ dependencies {
     val biometricVersion = "1.1.0"
 
     val junitVersion = "5.13.4"
-    val mockitoCoreVersion = "5.18.0"
+    val mockitoCoreVersion = "5.19.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.15.1"
     val jazzerVersion = "0.24.0"
