@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 18,
-    "identityHash": "0b9b5f79f486f7ca83d5303ffe1fbbfd",
+    "identityHash": "7d6776266325b9efb6a8efcf71c3a1c9",
     "entities": [
       {
         "tableName": "Medicine",
@@ -96,7 +96,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF, `linkedReminderId` INTEGER NOT NULL DEFAULT 0, `intervalStart` INTEGER NOT NULL DEFAULT 0, `intervalStartsFromProcessed` INTEGER NOT NULL DEFAULT false, `variableAmount` INTEGER NOT NULL DEFAULT false)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF, `linkedReminderId` INTEGER NOT NULL DEFAULT 0, `intervalStart` INTEGER NOT NULL DEFAULT 0, `intervalStartsFromProcessed` INTEGER NOT NULL DEFAULT false, `variableAmount` INTEGER NOT NULL DEFAULT false, `automaticallyTaken` INTEGER NOT NULL DEFAULT false, `intervalStartTimeOfDay` INTEGER NOT NULL DEFAULT 0, `intervalEndTimeOfDay` INTEGER NOT NULL DEFAULT 1439)",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -216,6 +216,27 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
+          },
+          {
+            "fieldPath": "automaticallyTaken",
+            "columnName": "automaticallyTaken",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "intervalStartTimeOfDay",
+            "columnName": "intervalStartTimeOfDay",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "intervalEndTimeOfDay",
+            "columnName": "intervalEndTimeOfDay",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1439"
           }
         ],
         "primaryKey": {
@@ -406,7 +427,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b9b5f79f486f7ca83d5303ffe1fbbfd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d6776266325b9efb6a8efcf71c3a1c9')"
     ]
   }
 }

@@ -1,9 +1,12 @@
 import glob
 import os.path
 import sys
-import xml.etree.ElementTree as ET
+import typing
 
 import deepl
+import lxml.etree
+from deepl import DeepLException
+from lxml import etree as ET
 
 
 def get_language_from_directory(directory_name: str) -> str:
@@ -11,6 +14,8 @@ def get_language_from_directory(directory_name: str) -> str:
 
 
 def map_language(l: str) -> str:
+    if l == "pt-rBR":
+        return "pt-BR"
     return l if l != "zh-rCN" else "zh-hans"
 
 
@@ -27,10 +32,10 @@ def escape(str_xml: str):
 tree = ET.parse("app/src/main/res/values/strings.xml")
 resources = tree.getroot()
 strings = resources.findall("string")
-english_strings = {}
+english_strings: typing.Dict[str, str] = {}
 translated_strings = {}
-language_tree = {}
-translate_list = []
+language_tree: typing.Dict[str, lxml.etree.ElementTree] = {}
+translate_list: typing.List[typing.Tuple[str, str]] = []
 
 for string_name in strings:
     if string_name.attrib.get("translatable") == "false":
@@ -73,11 +78,17 @@ translator = deepl.Translator(auth_key)
 
 for string_name, language in translate_list:
     print("Translating " + string_name + " to " + language)
-    translated_string = translator.translate_text(
-        english_strings[string_name],
-        target_lang=map_language(language),
-        preserve_formatting=True,
-    )
+
+    try:
+        translated_string = translator.translate_text(
+            english_strings[string_name],
+            target_lang=map_language(language),
+            preserve_formatting=True,
+        )
+    except DeepLException:
+        print("Translation failed")
+        continue
+
     new_elements[language] = language_tree[language].find(
         'string[@name="' + string_name + '"]'
     )
@@ -88,14 +99,11 @@ for string_name, language in translate_list:
     new_elements[language].text = escape(translated_string.text)
 
 # Collect all languages where a translation string was found
-languages = set([tl[1] for tl in translate_list])
+languages = set([tl[1] for tl in translate_list])  # NOSONAR
 
 # Update the existing strings.xml files
 for language in languages:
-    with open(f"app/src/main/res/values-{language}/strings.xml", "r") as f:
-        line = f.readlines()[3]
-        indentation = " " * (len(line) - len(line.lstrip()))
-
     with open(f"app/src/main/res/values-{language}/strings.xml", "wb") as f:
-        ET.indent(language_tree[language], indentation)
-        language_tree[language].write(f, encoding="utf-8")
+        language_tree[language].write(
+            f, encoding="utf-8", xml_declaration=True, pretty_print=True
+        )

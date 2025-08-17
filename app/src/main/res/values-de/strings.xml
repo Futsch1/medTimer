@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Einstellungen</string>
     <string name="tab_overview">Übersicht</string>
@@ -218,4 +219,5 @@
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>
     <string name="notes">Notizen</string>
+    <string name="automatically_taken">Automatisch als eingenommen markieren</string>
 </resources>
