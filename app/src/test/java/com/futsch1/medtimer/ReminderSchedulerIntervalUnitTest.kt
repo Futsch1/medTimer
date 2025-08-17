@@ -13,7 +13,7 @@ import java.time.ZoneId
 
 class ReminderSchedulerIntervalUnitTest {
     @Test
-    fun test_scheduleIntervalReminder() {
+    fun testScheduleIntervalReminder() {
         val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)

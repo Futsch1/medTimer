@@ -17,7 +17,7 @@ class JSONReminderEventBackupUnitTest {
 
     // creates a backup object with a version number and a medicines array
     @Test
-    void test_backup() {
+    void testBackup() {
         JSONReminderEventBackup jsonReminderEventBackup = new JSONReminderEventBackup();
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent = new ReminderEvent();

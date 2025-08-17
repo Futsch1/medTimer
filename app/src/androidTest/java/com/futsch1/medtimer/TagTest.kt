@@ -20,6 +20,10 @@ import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.junit.Test
 
+private const val NEW_TAG = "New tag"
+
+private const val ANOTHER_TAG = "Another tag"
+
 class TagTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
@@ -28,34 +32,34 @@ class TagTest : BaseTestHelper() {
 
         clickOn(R.id.openTags)
 
-        addTag("New tag")
-        assertContains("New tag")
-        assertChecked("New tag")
+        addTag(NEW_TAG)
+        assertContains(NEW_TAG)
+        assertChecked(NEW_TAG)
 
         clickOn(R.id.ok)
 
         clickOn(R.id.openTags)
-        assertContains("New tag")
-        assertChecked("New tag")
+        assertContains(NEW_TAG)
+        assertChecked(NEW_TAG)
 
-        addTag("Another tag")
-        assertContains("Another tag")
-        assertChecked("Another tag")
+        addTag(ANOTHER_TAG)
+        assertContains(ANOTHER_TAG)
+        assertChecked(ANOTHER_TAG)
 
-        clickOn("Another tag")
-        assertUnchecked("Another tag")
+        clickOn(ANOTHER_TAG)
+        assertUnchecked(ANOTHER_TAG)
         clickOn(R.id.ok)
 
         pressBack()
 
-        assertContains("New tag")
-        assertNotContains("Another tag")
+        assertContains(NEW_TAG)
+        assertNotContains(ANOTHER_TAG)
 
         createMedicine("Test 2")
 
         clickOn(R.id.openTags)
-        assertUnchecked("New tag")
-        assertUnchecked("Another tag")
+        assertUnchecked(NEW_TAG)
+        assertUnchecked(ANOTHER_TAG)
         onView(withId(R.id.tags)).perform(
             actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 1,
@@ -66,7 +70,7 @@ class TagTest : BaseTestHelper() {
         clickOn(R.id.ok)
 
         clickOn(R.id.openTags)
-        assertNotContains("Another tag")
+        assertNotContains(ANOTHER_TAG)
     }
 
     @Test

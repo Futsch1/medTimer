@@ -64,7 +64,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate, _: Double ->
             scheduledReminders.add(scheduledReminder)
             scheduledReminders.size < 3
         }
@@ -128,7 +128,7 @@ class SchedulingSimulatorTest {
 
         val simulator = SchedulingSimulator(medicines, emptyList(), mockTimeAccess)
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { _: ScheduledReminder, localDate: LocalDate, _: Double ->
             localDate == LocalDate.EPOCH.plusDays(30)
         }
     }

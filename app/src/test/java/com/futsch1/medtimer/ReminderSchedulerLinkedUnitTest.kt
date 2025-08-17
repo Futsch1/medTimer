@@ -14,7 +14,7 @@ import java.time.ZoneId
 
 class ReminderSchedulerLinkedUnitTest {
     @Test
-    fun test_sourceReminderNotRemindedYet() {
+    fun testSourceReminderNotRemindedYet() {
         val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))

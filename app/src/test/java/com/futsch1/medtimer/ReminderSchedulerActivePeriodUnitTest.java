@@ -19,7 +19,7 @@ import java.util.List;
 
 class ReminderSchedulerActivePeriodUnitTest {
     @Test
-    void test_scheduleInactive() {
+    void testScheduleInactive() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));

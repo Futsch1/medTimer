@@ -193,27 +193,22 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.id.openCalendar);
         pressBack();
 
-        // Check reminder list
-        int positionOfReminder1 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? 0 : 1;
-        int positionOfReminder2 = reminder1Time.isBefore(LocalTime.of(1, 30)) ? 1 : 2;
-        int positionOfReminder3 = reminder1Time.isBefore(LocalTime.of(2, 0)) ? (reminder1Time.isBefore(LocalTime.of(1, 30)) ? 2 : 1) : 0;
-
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
-        assertCustomAssertionAtPosition(R.id.reminderList, positionOfReminder3, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
+        assertCustomAssertionAtPosition(R.id.reminderList, 3, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
         assertHint(R.id.editReminderTime, R.string.time);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder1, R.id.editReminderTime, expectedString);
+        assertDisplayedAtPosition(R.id.reminderList, 1, R.id.editReminderTime, expectedString);
 
         assertHint(R.id.editReminderTime, R.string.delay);
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
-        assertDisplayedAtPosition(R.id.reminderList, positionOfReminder2, R.id.reminderCardLayout, expectedString);
+        assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString);
 
-        clickListItemChild(R.id.reminderList, positionOfReminder1, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder2, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 2, R.id.openAdvancedSettings);
         pressBack();
-        clickListItemChild(R.id.reminderList, positionOfReminder3, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 3, R.id.openAdvancedSettings);
         pressBack();
 
         // Check overview and next reminders

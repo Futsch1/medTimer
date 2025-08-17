@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestHelper {
+    private TestHelper() {
+        // Hide implicit public constructor
+    }
+
     public static Reminder buildReminder(int medicineId, int reminderId, String amount, int timeInMinutes, int daysBetweenReminders) {
         Reminder reminder = new Reminder(medicineId);
         reminder.reminderId = reminderId;

@@ -219,4 +219,4 @@
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
     <string name="create_calendar_entry">Agenda-item maken</string>
     <string name="notes">Notities</string>
-<string name="automatically_taken">Automatisch markeren als bezet</string></resources>
+<string name="automatically_taken">Automatisch markeren als bezet</string><string name="sort">Sorteer</string></resources>

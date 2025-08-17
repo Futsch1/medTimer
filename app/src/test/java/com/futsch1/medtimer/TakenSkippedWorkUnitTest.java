@@ -48,7 +48,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 @Config(sdk = 34)
 @SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class TakenSkippedWorkUnitTest {
-    private final int reminderEventId = 12;
+    private static final int REMINDER_EVENT_ID = 12;
 
     @Mock
     private Application mockApplication;
@@ -71,7 +71,7 @@ public class TakenSkippedWorkUnitTest {
     public void testDoWorkTaken() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
                 .build();
         when(workerParams.getInputData()).thenReturn(inputData);
         TakenWork takenWork = new TakenWork(mockApplication, workerParams);
@@ -85,14 +85,14 @@ public class TakenSkippedWorkUnitTest {
         reminderEvent.notificationId = notificationId;
         int reminderId = 11;
         reminderEvent.reminderId = reminderId;
-        reminderEvent.reminderEventId = reminderEventId;
+        reminderEvent.reminderEventId = REMINDER_EVENT_ID;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
         Reminder reminder = new Reminder(5);
         reminder.amount = "4";
 
         try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminderEvent(reminderEventId)).thenReturn(reminderEvent);
+            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
             when(mock.getReminder(reminderId)).thenReturn(reminder);
         });
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
@@ -108,7 +108,7 @@ public class TakenSkippedWorkUnitTest {
             verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
             assertEquals(notificationId, captor.getValue().notificationId);
             assertEquals(reminderId, captor.getValue().reminderId);
-            assertEquals(reminderEventId, captor.getValue().reminderEventId);
+            assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
             assertEquals(status, captor.getValue().status);
             verify(mockNotificationManager, times(1)).cancel(notificationId);
 
@@ -129,7 +129,7 @@ public class TakenSkippedWorkUnitTest {
     public void testDoWorkSkipped() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
                 .build();
         when(workerParams.getInputData()).thenReturn(inputData);
         SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);

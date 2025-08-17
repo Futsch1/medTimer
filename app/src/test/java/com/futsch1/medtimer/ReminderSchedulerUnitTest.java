@@ -22,8 +22,12 @@ import java.util.List;
 
 class ReminderSchedulerUnitTest {
 
+    public static final String TEST_1 = "Test1";
+    public static final String TEST = "Test";
+    public static final String TEST_2 = "Test2";
+
     @Test
-    void test_scheduleEmptyLists() {
+    void testScheduleEmptyLists() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
@@ -35,7 +39,7 @@ class ReminderSchedulerUnitTest {
         assertTrue(scheduledReminders.isEmpty());
 
         // One medicine without reminders, no reminder events
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         scheduledReminders = scheduler.schedule(new ArrayList<>() {{
             add(medicineWithReminders);
         }}, new ArrayList<>());
@@ -53,14 +57,14 @@ class ReminderSchedulerUnitTest {
     }
 
     @Test
-    void test_scheduleReminders() {
+    void testScheduleReminders() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
         Reminder reminder2 = TestHelper.buildReminder(1, 1, "2", 12, 1);
         medicineWithReminders1.reminders.add(reminder1);
@@ -72,7 +76,7 @@ class ReminderSchedulerUnitTest {
         assertRemindedAtIndex(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1, 1);
 
         // Now add a second medicine with an earlier reminder
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, "Test2");
+        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
         Reminder reminder3 = TestHelper.buildReminder(2, 1, "1", 3, 1);
         medicineWithReminders2.reminders.add(reminder3);
         scheduledReminders = scheduler.schedule(new ArrayList<>() {{
@@ -83,19 +87,19 @@ class ReminderSchedulerUnitTest {
     }
 
     @Test
-    void test_scheduleWithEvents() {
+    void testScheduleWithEvents() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
         Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 12, 1);
         medicineWithReminders1.reminders.add(reminder1);
         medicineWithReminders1.reminders.add(reminder2);
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, "Test2");
+        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
         Reminder reminder3 = TestHelper.buildReminder(2, 3, "1", 3, 1);
         medicineWithReminders2.reminders.add(reminder3);
         ArrayList<FullMedicine> medicineWithReminders = new ArrayList<>() {{
@@ -154,7 +158,7 @@ class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         reminder.createdTimestamp = on(1, 500).getEpochSecond();
         medicineWithReminders.reminders.add(reminder);
@@ -171,18 +175,18 @@ class ReminderSchedulerUnitTest {
 
     // schedules a reminder for a different medicine
     @Test
-    void test_scheduleDifferentMedicineReminder() {
+    void testScheduleDifferentMedicineReminder() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 480, 1);
         medicineWithReminders1.reminders.add(reminder1);
 
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, "Test2");
+        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
         Reminder reminder2 = TestHelper.buildReminder(2, 2, "2", 480, 1);
         medicineWithReminders2.reminders.add(reminder2);
 
@@ -199,14 +203,14 @@ class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    void test_scheduleReminderWithOneDayPause() {
+    void testScheduleReminderWithOneDayPause() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
 
@@ -227,14 +231,14 @@ class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    void test_scheduleTwoDayReminderVsOneDay() {
+    void testScheduleTwoDayReminderVsOneDay() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
         Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 1);
@@ -253,14 +257,14 @@ class ReminderSchedulerUnitTest {
     }
 
     @Test
-    void test_scheduleReminderWithOneDayPauseVsThreeDaysPause() {
+    void testScheduleReminderWithOneDayPauseVsThreeDaysPause() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
         medicineWithReminders.reminders.add(reminder);
         Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 4);
@@ -301,14 +305,14 @@ class ReminderSchedulerUnitTest {
     }
 
     @Test
-    void test_scheduleCycleInFuture() {
+    void testScheduleCycleInFuture() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH);
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 3);
         reminder.cycleStartDay = 4;
         medicineWithReminders.reminders.add(reminder);
@@ -341,14 +345,14 @@ class ReminderSchedulerUnitTest {
 
 
     @Test
-    void test_reminderOverMidnight() {
+    void testReminderOverMidnight() {
         ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
         when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
         when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60 + 45, 1);
         medicineWithReminders.reminders.add(reminder);
 
@@ -372,7 +376,7 @@ class ReminderSchedulerUnitTest {
 
         ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");
+        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
         medicineWithReminders1.reminders.add(reminder1);
 

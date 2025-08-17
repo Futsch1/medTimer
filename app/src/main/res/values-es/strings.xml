@@ -224,4 +224,4 @@
     <string name="estimated_run_out_date">Fecha estimada de agotamiento</string>
     <string name="create_calendar_entry">Crear entrada de calendario</string>
     <string name="notes">Notas</string>
-<string name="automatically_taken">Marcar automáticamente como tomada</string></resources>
+<string name="automatically_taken">Marcar automáticamente como tomada</string><string name="sort">Ordenar</string></resources>

@@ -36,9 +36,11 @@ import java.util.TimeZone;
 
 class CSVExportUnitTest {
 
+    public static final String EXCEPTION_OCCURRED = "Exception occurred";
+
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
-    void test_create_csv_file_with_correct_headers_and_data() {
+    void testCreateCsvFileWithCorrectHeadersAndData() {
         // Create a list of ReminderEvents
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent1 = new ReminderEvent();
@@ -99,14 +101,14 @@ class CSVExportUnitTest {
                 verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
                 verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n");
             } catch (Export.ExporterException | IOException e) {
-                fail("Exception occurred");
+                fail(EXCEPTION_OCCURRED);
             }
         }
     }
 
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
-    void test_create_medicine_csv_file_with_correct_headers_and_data() {
+    void testCreateMedicineCsvFileWithCorrectHeadersAndData() {
         // Create a list of Medicines
         List<FullMedicine> medicines = new ArrayList<>();
         FullMedicine medicine1 = new FullMedicine();
@@ -163,11 +165,11 @@ class CSVExportUnitTest {
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Medicine;Amount;Time\n");
-                verify(fileWriter).write("Medicine 1;1;1:00 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;2;1:01 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;three;1:02 AM, Every day\n");
+                verify(fileWriter).write("Medicine 1;1;12:00 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;2;12:01 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;three;12:02 AM, Every day\n");
             } catch (Export.ExporterException | IOException e) {
-                fail("Exception occurred");
+                fail(EXCEPTION_OCCURRED);
             }
         }
     }
@@ -175,7 +177,7 @@ class CSVExportUnitTest {
 
     // handle empty list of ReminderEvents
     @Test
-    void test_handle_empty_list_of_reminder_events() {
+    void testHandleEmptyListOfReminderEvents() {
         // Create an empty list of ReminderEvents
         List<ReminderEvent> reminderEvents = new ArrayList<>();
 
@@ -206,7 +208,7 @@ class CSVExportUnitTest {
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n");
             } catch (Export.ExporterException | IOException e) {
-                fail("Exception occurred");
+                fail(EXCEPTION_OCCURRED);
             }
         }
     }

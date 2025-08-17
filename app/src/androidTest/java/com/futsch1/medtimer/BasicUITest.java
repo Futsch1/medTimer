@@ -28,6 +28,8 @@ import java.util.Calendar;
 
 public class BasicUITest extends BaseTestHelper {
 
+    public static final String TEST_2 = "Test (2)";
+
     @Test
     //@AllowFlaky(attempts = 1)
     public void basicUITest() {
@@ -41,7 +43,7 @@ public class BasicUITest extends BaseTestHelper {
         try {
             appViews.scrollForward();
         } catch (UiObjectNotFoundException e) {
-            throw new RuntimeException(e);
+            internalAssert(false);
         }
 
         clickOn(com.google.android.material.R.id.text_input_end_icon);
@@ -61,7 +63,7 @@ public class BasicUITest extends BaseTestHelper {
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertContains("Test (2)");
+        assertContains(TEST_2);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
@@ -142,39 +144,39 @@ public class BasicUITest extends BaseTestHelper {
         pressBack();
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
-        assertContains("Test (2)");
+        assertContains(TEST_2);
 
         clickOn(R.id.filterRaised);
-        assertContains("Test (2)");
+        assertContains(TEST_2);
         clickOn(R.id.filterRaised);
 
-        assertContains("Test (2)");
+        assertContains(TEST_2);
 
         clickOn(R.id.filterTaken);
-        assertNotContains("Test (2)");
+        assertNotContains(TEST_2);
         clickOn(R.id.filterTaken);
 
-        assertContains("Test (2)");
+        assertContains(TEST_2);
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);
 
         clickOn(R.id.filterTaken);
-        assertContains("Test (2)");
+        assertContains(TEST_2);
         clickOn(R.id.filterTaken);
 
-        assertContains("Test (2)");
+        assertContains(TEST_2);
 
         clickOn(R.id.filterRaised);
-        assertNotContains("Test (2)");
+        assertNotContains(TEST_2);
         clickOn(R.id.filterRaised);
 
         clickOn(R.id.filterSkipped);
-        assertNotContains("Test (2)");
+        assertNotContains(TEST_2);
         clickOn(R.id.filterSkipped);
 
         clickOn(R.id.filterScheduled);
-        assertNotContains("Test (2)");
+        assertNotContains(TEST_2);
         clickOn(R.id.filterScheduled);
 
         navigateTo(MEDICINES);

@@ -29,7 +29,7 @@ import java.util.Locale
 class SummaryHelperTest {
 
     @Test
-    fun test_reminderSummary_inactive() {
+    fun testReminderSummaryInactive() {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
@@ -73,7 +73,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_reminderSummary_cyclic() {
+    fun testReminderSummaryCyclic() {
         val localeList = mock(LocaleList::class.java)
         Mockito.`when`(localeList.get(0)).thenReturn(Locale.US)
         val configuration = mock(android.content.res.Configuration::class.java)
@@ -93,7 +93,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_reminderSummary_instructions() {
+    fun testReminderSummaryInstructions() {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
@@ -104,7 +104,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_reminderSummary_linked() {
+    fun testReminderSummaryLinked() {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(eq(R.string.linked_reminder_summary), anyString()))
             .thenReturn("1")
@@ -143,7 +143,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_remindersSummary_simple() {
+    fun testRemindersSummarySimple() {
         val context = mock(Context::class.java)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
@@ -168,7 +168,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_remindersSummary_linked() {
+    fun testRemindersSummaryLinked() {
         val context = mock(Context::class.java)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
@@ -220,7 +220,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_remindersSummary_interval() {
+    fun testRemindersSummaryInterval() {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
             .thenReturn("ok")
