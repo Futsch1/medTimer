@@ -28,7 +28,6 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -108,7 +107,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void activeIntervalReminderTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -194,7 +193,7 @@ public class ReminderTest extends BaseTestHelper {
         pressBack();
 
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
-        assertCustomAssertionAtPosition(R.id.reminderList, 3, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
+        assertCustomAssertionAtPosition(R.id.reminderList, 0, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
         assertHint(R.id.editReminderTime, R.string.time);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
@@ -204,11 +203,11 @@ public class ReminderTest extends BaseTestHelper {
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString);
 
+        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
+        pressBack();
         clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
         pressBack();
         clickListItemChild(R.id.reminderList, 2, R.id.openAdvancedSettings);
-        pressBack();
-        clickListItemChild(R.id.reminderList, 3, R.id.openAdvancedSettings);
         pressBack();
 
         // Check overview and next reminders
