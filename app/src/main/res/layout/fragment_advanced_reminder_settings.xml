@@ -254,7 +254,7 @@
                 android:id="@+id/automaticallyTaken"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/variable_amount" />
+                android:text="@string/automatically_taken" />
 
 
         </LinearLayout>

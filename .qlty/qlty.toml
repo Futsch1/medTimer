@@ -80,11 +80,11 @@ name = "prettier"
 
 [[plugin]]
 name = "radarlint-java"
-mode = "disabled"
+mode = "comment"
 
 [[plugin]]
 name = "radarlint-kotlin"
-mode = "disabled"
+mode = "comment"
 
 [[plugin]]
 name = "radarlint-python"

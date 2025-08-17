@@ -32,10 +32,10 @@ def escape(str_xml: str):
 tree = ET.parse("app/src/main/res/values/strings.xml")
 resources = tree.getroot()
 strings = resources.findall("string")
-english_strings = {}
+english_strings: typing.Dict[str, str] = {}
 translated_strings = {}
 language_tree: typing.Dict[str, lxml.etree.ElementTree] = {}
-translate_list = []
+translate_list: typing.List[typing.Tuple[str, str]] = []
 
 for string_name in strings:
     if string_name.attrib.get("translatable") == "false":
@@ -99,7 +99,7 @@ for string_name, language in translate_list:
     new_elements[language].text = escape(translated_string.text)
 
 # Collect all languages where a translation string was found
-languages = {[tl[1] for tl in translate_list]}
+languages = set([tl[1] for tl in translate_list]) # NOSONAR
 
 # Update the existing strings.xml files
 for language in languages:
