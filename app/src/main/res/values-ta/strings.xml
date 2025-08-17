@@ -220,5 +220,5 @@
     <string name="create_calendar_entry">காலண்டர் உள்ளீட்டை உருவாக்கவும்</string>
     <string name="notes">குறிப்புகள்</string>
     <string name="automatically_taken">தானாகவே எடுத்ததாகக் குறிக்கவும்</string>
-    <string name="sort">Sort</string>
+    <string name="sort">வகை</string>
 </resources>
