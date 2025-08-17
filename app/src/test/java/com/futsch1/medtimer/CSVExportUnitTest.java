@@ -165,9 +165,9 @@ class CSVExportUnitTest {
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Medicine;Amount;Time\n");
-                verify(fileWriter).write("Medicine 1;1;12:00 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;2;12:01 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;three;12:02 AM, Every day\n");
+                verify(fileWriter).write("Medicine 1;1;1:00 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;2;1:01 AM, Every day\n");
+                verify(fileWriter).write("Medicine 2;three;1:02 AM, Every day\n");
             } catch (Export.ExporterException | IOException e) {
                 fail(EXCEPTION_OCCURRED);
             }
