@@ -73,7 +73,7 @@ class CSVExportUnitTest {
 
         // Create a mock File
         File file = mock(File.class);
-        TimeZone utc = TimeZone.getTimeZone("UTC");
+        TimeZone utc = TimeZone.getTimeZone("WET");
         java.text.DateFormat usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US);
         java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
         usTimeFormat.setTimeZone(utc);
