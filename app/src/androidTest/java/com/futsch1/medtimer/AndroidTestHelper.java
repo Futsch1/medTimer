@@ -82,6 +82,7 @@ public class AndroidTestHelper {
     public static void navigateTo(MainMenu mainMenu) {
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
         clickOn(menuIds[mainMenu.ordinal()]);
+        clickOn(menuIds[mainMenu.ordinal()]);
     }
 
     public static String dateToString(Date date) {

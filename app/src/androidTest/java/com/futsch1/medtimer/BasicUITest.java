@@ -203,7 +203,7 @@ public class BasicUITest extends BaseTestHelper {
 
         navigateTo(MEDICINES);
 
-        navigateTo(OVERVIEW);
+        clickOn(R.id.overviewFragment);
 
         AtomicReference<View> view = new AtomicReference<>();
         view.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.overviewWeek));
