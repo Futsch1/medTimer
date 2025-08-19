@@ -97,7 +97,9 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
                 if (data == currentDay) {
                     container.textView.setTextColor(selectedTextColor)
                     container.textView.background = selectedBackground
+                    container.textView.tag = "selected"
                 } else {
+                    container.textView.tag = null
                     if (data.date == LocalDate.now()) {
                         container.textView.setTextColor(todayTextColor)
                         container.textView.background = todayBackground

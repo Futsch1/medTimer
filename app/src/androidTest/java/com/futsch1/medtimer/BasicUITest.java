@@ -17,14 +17,20 @@ import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.MEDICINES;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
+
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 
 import org.junit.Test;
 
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BasicUITest extends BaseTestHelper {
 
@@ -189,5 +195,22 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.filterScheduled);
         assertContains("Test (1)");
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    @SuppressWarnings("java:S2699") // Using internal assert
+    public void overviewDaySelection() {
+        clickOn("2");
+
+        navigateTo(MEDICINES);
+
+        navigateTo(OVERVIEW);
+
+        AtomicReference<View> view = new AtomicReference<>();
+        view.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.overviewWeek));
+
+        TextView currentDay = view.get().findViewWithTag("selected");
+        internalAssert(currentDay.getText().equals("2"));
     }
 }
