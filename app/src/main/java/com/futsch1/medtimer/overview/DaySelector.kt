@@ -20,8 +20,8 @@ import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import java.time.LocalDate
 import java.util.Locale
 
-class DaySelector(val context: Context, val calendarView: WeekCalendarView, val daySelected: (LocalDate) -> Unit) {
-    private var currentDay: WeekDay = WeekDay(LocalDate.now(), WeekDayPosition.RangeDate)
+class DaySelector(val context: Context, val calendarView: WeekCalendarView, startDay: LocalDate, val daySelected: (LocalDate) -> Unit) {
+    private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
     val startDate: LocalDate = LocalDate.now().minusDays(5)
     val endDate: LocalDate = LocalDate.now().plusDays(1)
 
@@ -33,6 +33,10 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
             endDate,
             startDate.dayOfWeek
         )
+    }
+
+    fun setDay(date: LocalDate) {
+        notifyDaySelected(WeekDay(date, WeekDayPosition.RangeDate))
     }
 
     private fun notifyDaySelected(data: WeekDay) {
@@ -97,7 +101,9 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, val 
                 if (data == currentDay) {
                     container.textView.setTextColor(selectedTextColor)
                     container.textView.background = selectedBackground
+                    container.textView.tag = "selected"
                 } else {
+                    container.textView.tag = null
                     if (data.date == LocalDate.now()) {
                         container.textView.setTextColor(todayTextColor)
                         container.textView.background = todayBackground

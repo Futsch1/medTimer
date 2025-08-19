@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import java.time.Instant
@@ -22,7 +23,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.util.stream.IntStream.range
 
-class OverviewFragment : Fragment() {
+class OverviewFragment : Fragment(), OnFragmentReselectedListener {
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -38,6 +39,7 @@ class OverviewFragment : Fragment() {
         super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
+        overviewViewModel.day = LocalDate.now()
 
         optionsMenu = OptionsMenu(
             this,
@@ -54,7 +56,7 @@ class OverviewFragment : Fragment() {
 
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
 
-        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
+        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek), overviewViewModel.day) { day -> daySelected(day) }
 
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
@@ -150,5 +152,9 @@ class OverviewFragment : Fragment() {
         if (this::optionsMenu.isInitialized) {
             optionsMenu.onDestroy()
         }
+    }
+
+    override fun onFragmentReselected() {
+        daySelector.setDay(LocalDate.now())
     }
 }
