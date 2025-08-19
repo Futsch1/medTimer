@@ -38,6 +38,7 @@ class OverviewFragment : Fragment() {
         super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
+        overviewViewModel.day = LocalDate.now()
 
         optionsMenu = OptionsMenu(
             this,
@@ -54,7 +55,7 @@ class OverviewFragment : Fragment() {
 
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
 
-        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek)) { day -> daySelected(day) }
+        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek), overviewViewModel.day) { day -> daySelected(day) }
 
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 

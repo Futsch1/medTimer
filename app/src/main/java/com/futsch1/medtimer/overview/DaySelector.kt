@@ -20,8 +20,8 @@ import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import java.time.LocalDate
 import java.util.Locale
 
-class DaySelector(val context: Context, val calendarView: WeekCalendarView, val daySelected: (LocalDate) -> Unit) {
-    private var currentDay: WeekDay = WeekDay(LocalDate.now(), WeekDayPosition.RangeDate)
+class DaySelector(val context: Context, val calendarView: WeekCalendarView, startDay: LocalDate, val daySelected: (LocalDate) -> Unit) {
+    private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
     val startDate: LocalDate = LocalDate.now().minusDays(5)
     val endDate: LocalDate = LocalDate.now().plusDays(1)
 
