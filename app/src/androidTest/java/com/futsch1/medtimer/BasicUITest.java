@@ -24,8 +24,6 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
-
 import org.junit.Test;
 
 import java.time.LocalTime;
@@ -198,7 +196,7 @@ public class BasicUITest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     @SuppressWarnings("java:S2699") // Using internal assert
     public void overviewDaySelection() {
         clickOn("2");
@@ -212,5 +210,10 @@ public class BasicUITest extends BaseTestHelper {
 
         TextView currentDay = view.get().findViewWithTag("selected");
         internalAssert(currentDay.getText().equals("2"));
+
+        navigateTo(OVERVIEW);
+        view.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.overviewWeek));
+        currentDay = view.get().findViewWithTag("selected");
+        internalAssert(currentDay.getText().equals("1"));
     }
 }

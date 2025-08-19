@@ -17,6 +17,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -125,7 +126,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        bottomNavigationView.setOnItemReselectedListener(item -> navController.popBackStack(item.getItemId(), false));
+        bottomNavigationView.setOnItemReselectedListener(item -> {
+            navController.popBackStack(item.getItemId(), false);
+            List<Fragment> currentFragments = navHostFragment.getChildFragmentManager().getFragments();
+
+            if (!currentFragments.isEmpty() && currentFragments.get(0) instanceof OnFragmentReselectedListener) {
+                // Forward the reselection event to the current fragment
+                ((OnFragmentReselectedListener) currentFragments.get(0)).onFragmentReselected();
+            }
+        });
         bottomNavigationView.setOnItemSelectedListener(item -> {
             NavigationUI.onNavDestinationSelected(item, navController);
             return true;

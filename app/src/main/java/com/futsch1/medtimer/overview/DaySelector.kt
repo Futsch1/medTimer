@@ -35,6 +35,10 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, star
         )
     }
 
+    fun setDay(date: LocalDate) {
+        notifyDaySelected(WeekDay(date, WeekDayPosition.RangeDate))
+    }
+
     private fun notifyDaySelected(data: WeekDay) {
         calendarView.notifyCalendarChanged()
         currentDay = data
