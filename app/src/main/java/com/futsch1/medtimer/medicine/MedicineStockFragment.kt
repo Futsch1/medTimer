@@ -106,7 +106,14 @@ class MedicineStockFragment :
             Handler(thread.looper).post {
                 idlingResource.setBusy()
                 val runOutDate = estimateStockRunOutDate(medicineViewModel, medicineId, getCurrentAmount())
-                val runOutString = if (runOutDate != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
+
+                // When the fragment is destroyed, context is null. Therefore, when the user
+                // closes the medicine stock fragment on a medicine that takes a long time to
+                // compute its run out date, the following function will be called, and the
+                // null context will be used, causing a null pointer exception. Therefore, we
+                // add a null check for it here to make sure that this doesn't happen.
+                // https://github.com/Futsch1/medTimer/issues/798
+                val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)
