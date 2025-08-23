@@ -26,6 +26,8 @@ class MedicineHelperTest {
         assertEquals(50000.0, MedicineHelper.parseAmount("50000"))
         assertEquals(50000.0, MedicineHelper.parseAmount("50,000"))
         assertEquals(50000.0, MedicineHelper.parseAmount("50 000"))
+        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5"))
+        assertEquals(1000000.42, MedicineHelper.parseAmount("1 000 000.42"))
         assertEquals(3.566, MedicineHelper.parseAmount("3.566 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills at 5 o'clock"))
