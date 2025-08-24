@@ -74,7 +74,7 @@ public abstract class BaseTestHelper {
 
     protected void internalAssert(boolean b) {
         if (!b) {
-            failureHandler.handle(new AssertionError("Internal assert"), withId(0));
+            failureHandler.handle(new AssertionError("MedTimer test assert"), withId(0));
         }
     }
 }

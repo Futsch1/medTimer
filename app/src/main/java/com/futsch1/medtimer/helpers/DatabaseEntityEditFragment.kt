@@ -68,8 +68,6 @@ abstract class DatabaseEntityEditFragment<T>(
         super.onCreate(savedInstanceState)
         this.thread.start()
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-
-        setupMenu(requireActivity().findNavController(R.id.navHost))
     }
 
     override fun onCreateView(
@@ -78,6 +76,8 @@ abstract class DatabaseEntityEditFragment<T>(
     ): View {
         idlingResource.setBusy()
         fragmentView = inflater.inflate(layoutId, container, false)
+
+        setupMenu(requireActivity().findNavController(R.id.navHost))
 
         if (::optionsMenu.isInitialized) {
             requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
