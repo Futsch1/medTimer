@@ -12,6 +12,7 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
+import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 import static junit.framework.TestCase.assertEquals;
 
 import android.widget.TextView;
@@ -74,7 +75,8 @@ public class ScreenshotsTest extends BaseTestHelper {
         onView(withId(R.id.medicineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         Screengrab.screenshot("3");
 
-        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
+        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
+        sleep(500);
         assertContains(R.string.active_in_time_period);
         Screengrab.screenshot("4");
 
