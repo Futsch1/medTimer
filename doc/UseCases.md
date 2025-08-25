@@ -55,7 +55,7 @@ notifications. They can be re-activated the same way.
 Especially when using cyclic reminders, it can be tricky to make sure that all reminders of a
 medicine are setup correctly and will trigger the desired notification behavior. To validate if
 the setup was correct, the calendar view of the medicine can be used. It is opened from the
-calendar icon in the `Medicine` screen next to `Notification priority`.
+calendar icon <img src="calendar-week.svg" width=40 /> in the `Medicine` screen.
 
 On this screen, you can see both past and future doses of a medicine. Days where a reminder will
 be scheduled are marked with an underline. Select them to see the reminders that would notify on
@@ -137,22 +137,13 @@ Following doses can overlap into the next day, but are constrained to a maximum 
 It is also possible to chain following doses by entering the `Advanced settings` of a following dose
 and adding another following dose from there.
 
-However, these chained following doses need one dose at a specific time to start the chain. It is
-still possible to implement a continuous interval scheme by using one dummy timed reminder that
-starts the dosing scheme for the day. This reminder can then be marked taken when the last dose of
-the past day's chain was taken.
+This way, you can for example configure a medication where you always take the first dose at around 8:00
+and then another one every 4 hours until 20:00 (so 4 doses in total). So you would set up the doses like this:
 
-So consider the following setup:
-
-1. Dummy reminder at like 08:00, dose 0
-2. Reminder following 1. 8:00 later
-3. Reminder following 2. 8:00 later
-4. Reminder following 3. 8:00 later
-
-So imagine you would mark the dummy reminder as taken at 08:30, the first following reminder will
-be active at 16:30, the second following reminder will be active at 00:30 and the third following
-reminder will be active at 08:30 on the next day. As soon as you took this last dose, mark the dummy
-reminder as taken, which will restart the chain.
+1. Reminder at 08:00
+2. Reminder following 1. 4:00 later
+3. Reminder following 2. 4:00 later
+4. Reminder following 3. 4:00 later
 
 ## Interval reminders
 
@@ -167,6 +158,9 @@ skipped, keeping a fixed interval between taken times.
 Additionally, it is required to set a start time of the interval. This time will mark the first
 dose and is used to calculate subsequent doses. If the interval shall be changed, this interval
 start time should be set to the next reminder time.
+
+If a reminder is deactivated and activated again, the interval start time will be set to the time
+of the reminder activation automatically.
 
 ## Medicine stock tracking
 
@@ -184,3 +178,23 @@ the amount is below threshold, a warning icon `⚠` will be shown.
 The amount to be deducted comes from the amount indicated for the reminders. The amount can also
 contain text, MedTimer will search for the first number in the amount and use this (e.g. `75 mg` or
 `Take 1 pill` will work fine).
+
+## Stock tracking for another person
+
+If you want to keep track of the stock of another person who is not using your MedTimer app, you can
+setup notifications to be automatically marked as taken. This way, you will not receive a notification
+and the stock tracking will be automatically triggered. Once the configured threshold is reached,
+you will receive a notification.
+
+To enable this for a reminder, go to `Advanced settings`, scroll to the bottom and enable the
+switch `mark as taken`.
+
+<img src='mark_as_taken.png' width="200" />
+
+## Using MedTimer for several people
+
+To keep track of medication for several people at the same time, the "tags" feature can be used. Each
+medication can be assigned to one or more of configurable tags. These tags are shown in the notifications,
+the overview and the medication list. Using the tag icon <img src="tag.svg" width=40 />
+in the app title bar, you can filter certain tags to only show reminders and medication assigned to the
+selected tags.

@@ -225,6 +225,9 @@ class NotificationTest : BaseTestHelper() {
 
     private fun clickNotificationButton(device: UiDevice, notificationText: String, buttonText: String) {
         makeNotificationExpanded(device, notificationText)
+        // Do this twice since sometimes several notifications are collapsed inside one group and we need to
+        // then expand the notification again
+        makeNotificationExpanded(device, notificationText)
         val button = device.findObject(By.text(buttonText))
         internalAssert(button != null)
         button.click()
