@@ -55,7 +55,7 @@ notifications. They can be re-activated the same way.
 Especially when using cyclic reminders, it can be tricky to make sure that all reminders of a
 medicine are setup correctly and will trigger the desired notification behavior. To validate if
 the setup was correct, the calendar view of the medicine can be used. It is opened from the
-calendar icon ![calendar](calendar-week.svg) in the `Medicine` screen.
+calendar icon <img src="calendar-week.svg" width=40 /> in the `Medicine` screen.
 
 On this screen, you can see both past and future doses of a medicine. Days where a reminder will
 be scheduled are marked with an underline. Select them to see the reminders that would notify on
@@ -195,6 +195,6 @@ switch `mark as taken`.
 
 To keep track of medication for several people at the same time, the "tags" feature can be used. Each
 medication can be assigned to one or more of configurable tags. These tags are shown in the notifications,
-the overview and the medication list. Using the tag icon (![tag icon](tag.svg))
+the overview and the medication list. Using the tag icon <img src="tag.svg" width=40 />
 in the app title bar, you can filter certain tags to only show reminders and medication assigned to the
 selected tags.
