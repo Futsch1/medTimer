@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="taken">أخذته</string>
-    <string name="skipped">تخطيته</string>
+    <string name="taken">تم التناول</string>
+    <string name="skipped">تم التخطي</string>
     <string name="recent_events">الأحداث الأخيرة</string>
     <string name="next_reminders">التذكيرات القادمة</string>
     <string name="version">الإصدار %s</string>
@@ -11,23 +11,23 @@
     <string name="are_you_sure_delete_events">هل أنت متأكد من حذف جميع الأحداث؟</string>
     <string name="show_notifications">اعرض الإشعارات</string>
     <string name="tab_settings">الإعدادات</string>
-    <string name="tab_overview">نظرة العامة</string>
+    <string name="tab_overview">نظرة عامة</string>
     <string name="tab_medicine">الأدوية</string>
-    <string name="add_medicine">أضف دواء</string>
+    <string name="add_medicine">إضافة دواء</string>
     <string name="medicine_name">اسم الدواء</string>
-    <string name="add_reminder">أضف تذكير</string>
-    <string name="delete">احذف</string>
+    <string name="add_reminder">إضافة تذكير</string>
+    <string name="delete">حذف</string>
     <string name="time">الوقت</string>
     <string name="dosage">الجرعة</string>
     <string name="yes">نعم</string>
     <string name="ok">موافق</string>
     <string name="cancel">ألغِ</string>
-    <string name="confirm">أكّد</string>
+    <string name="confirm">تأكيد</string>
     <string name="are_you_sure_delete_medicine">هل أنت متأكد من حذف الدواء؟</string>
     <string name="no_reminders">لم يتم تعيين تذكيرات</string>
     <plurals name="sum_reminders">
-        <item quantity="zero">صفر تذكير\n%2$s</item>
-        <item quantity="one">تذكير واحد\n%2$s</item>
+        <item quantity="zero">%1$d تذكير\n%2$s</item>
+        <item quantity="one">%1$d تذكير\n%2$s</item>
         <item quantity="two">تذكيران\n%2$s</item>
         <item quantity="few">%1$d تذكيرات\n%2$s</item>
         <item quantity="many">%1$d تذكيرا\n%2$s</item>
@@ -43,11 +43,11 @@
     <string name="restore">استعادة</string>
     <string name="total">الإجمالي</string>
     <plurals name="last_n_days">
-        <item quantity="zero">صفر</item>
+        <item quantity="zero">آخر 24 ساعة</item>
         <item quantity="one">آخر 24 ساعة</item>
         <item quantity="two">آخر يومين</item>
         <item quantity="few">آخر %1$d أيام</item>
-        <item quantity="many">آخر %1$d يومًا</item>
+        <item quantity="many">آخر %1$d يوما</item>
         <item quantity="other">آخر %1$d يوم</item>
     </plurals>
     <string name="name">الاسم</string>
@@ -75,7 +75,7 @@
     <string name="default_">افتراضي</string>
     <string name="backup_failed">فشل النسخ الاحتياطي</string>
     <string name="export_failed">فشل التصدير</string>
-    <string name="restore_successful">نجح الاستعادة</string>
+    <string name="restore_successful">تمت الاستعادة بنجاح</string>
     <string name="restore_start">سيؤدي هذا إلى استبدال جميع إعدادات الأدوية و/أو أحداث التذكير.\n\nهل تريد المتابعة؟</string>
     <string name="weekend_mode_days">الأيام</string>
     <string name="monday">الاثنين</string>
@@ -164,7 +164,7 @@
     <string name="time_based_reminder">تذكير قائم على الوقت</string>
     <string name="interval_based_reminder">تذكير قائم على الفاصل الزمني</string>
     <plurals name="minutes">
-        <item quantity="zero">صفر دقيقة</item>
+        <item quantity="zero">دقيقة</item>
         <item quantity="one">دقيقة</item>
         <item quantity="two">دقيقتين</item>
         <item quantity="few">دقائق</item>
@@ -173,21 +173,21 @@
     </plurals>
     <string name="minutes_string">دقائق</string>
     <plurals name="hours">
-        <item quantity="zero">صفر ساعة</item>
+        <item quantity="zero">ساعة</item>
         <item quantity="one">ساعة</item>
-        <item quantity="two">ساعتين</item>
+        <item quantity="two">ساعتان</item>
         <item quantity="few">ساعات</item>
         <item quantity="many">ساعة</item>
         <item quantity="other">ساعة</item>
     </plurals>
     <string name="hours_string">ساعات</string>
     <plurals name="days">
-        <item quantity="zero">صفر يوم</item>
+        <item quantity="zero">يوم</item>
         <item quantity="one">يوم</item>
         <item quantity="two">يومان</item>
         <item quantity="few">أيام</item>
-        <item quantity="many">يومًا</item>
-        <item quantity="other">أيام</item>
+        <item quantity="many">يوما</item>
+        <item quantity="other">يوم</item>
     </plurals>
     <string name="days_string">أيام</string>
     <string name="create_reminder">أنشئ تذكير</string>
@@ -223,7 +223,7 @@
     <string name="override_dnd_summary">يشغل صوت الإشعارات إذا كان الاهتزاز فقط مفعلاً أو وضع عدم الإزعاج بدون اهتزاز أو كتم الصوت</string>
     <string name="enable_dnd_dialog">للسماح بتشغيل أصوات الإشعارات دائمًا، فعّل الوصول إلى وضع عدم الإزعاج لتطبيق منبه الدواء في القائمة التالية</string>
     <string name="app_authentication">اطلب الاستيثاق لفتح التطبيق</string>
-    <string name="login">لِج إلى منبه الدواء باستخدام الاستيثاق البيومترية</string>
+    <string name="login">تسجيل الدخول إلى منبه الدواء باستخدام المصادقة البيومترية</string>
     <string name="privacy_settings">إعدادات الخصوصية</string>
     <string name="hide_med_name">أخفِ اسم الدواء في الإشعار</string>
     <string name="re_raise_event">أعد إظهار الحدث</string>
@@ -239,4 +239,6 @@
     <string name="estimated_run_out_date">تاريخ النفاد التقديري</string>
     <string name="create_calendar_entry">أنشئ إدخال تقويم</string>
     <string name="notes">ملاحظات</string>
-<string name="automatically_taken">وضع علامة &amp;quot;مأخوذة&amp;quot; تلقائياً</string><string name="sort">فرز</string></resources>
+    <string name="automatically_taken">تمييزها تلقائياً على أنها مأخوذة</string>
+    <string name="sort">فرز</string>
+</resources>
