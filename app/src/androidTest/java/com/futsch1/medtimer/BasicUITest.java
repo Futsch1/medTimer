@@ -9,7 +9,9 @@ import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
@@ -122,6 +124,33 @@ public class BasicUITest extends BaseTestHelper {
         assertChecked("2");
         assertUnchecked("3");
         clickDialogPositiveButton();
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void notesTest() {
+        AndroidTestHelper.createMedicine("Test");
+
+        // Test saving notes
+        String notes = "Contains catnip\n\nmeow :3";
+
+        clickOn(R.id.openNotes);
+        writeTo(R.id.notes, notes);
+        closeKeyboard();
+        clickOn(R.id.confirmSaveNotes);
+
+        // Check if the note is saved
+        clickOn(R.id.openNotes);
+        assertDisplayed(R.id.notes, notes);
+
+        // Test cancelling saving notes
+        clearText(R.id.notes);
+        closeKeyboard();
+        clickOn(R.id.cancelSaveNotes);
+
+        // Check that the note is unmodified
+        clickOn(R.id.openNotes);
+        assertDisplayed(R.id.notes, notes);
     }
 
     @Test
