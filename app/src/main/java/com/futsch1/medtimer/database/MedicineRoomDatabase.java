@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class},
-        version = 18,
+        version = 19,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit;
                 @AutoMigration(from = 15, to = 16),
                 @AutoMigration(from = 16, to = 17, spec = MedicineRoomDatabase.AutoMigration16To17.class),
                 @AutoMigration(from = 17, to = 18),
+                @AutoMigration(from = 18, to = 19),
         }
 )
 @TypeConverters({Converters.class})
