@@ -52,6 +52,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "1.0")
     @Expose
     public double sortOrder;
+    @ColumnInfo(defaultValue = "")
+    @Expose
+    public String notes;
 
     public Medicine(String name) {
         this.name = name;
@@ -63,6 +66,7 @@ public class Medicine {
         this.refillSizes = new ArrayList<>();
         this.unit = "";
         this.sortOrder = 1.0;
+        this.notes = "";
     }
 
     public Medicine(String name, int id) {
@@ -76,6 +80,7 @@ public class Medicine {
         this.refillSizes = new ArrayList<>();
         this.unit = "";
         this.sortOrder = 1.0;
+        this.notes = "";
     }
 
     public boolean isOutOfStock() {
@@ -88,7 +93,7 @@ public class Medicine {
 
     @Override
     public int hashCode() {
-        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit);
+        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit, notes);
     }
 
     @Override
@@ -108,7 +113,8 @@ public class Medicine {
                 amount == that.amount &&
                 outOfStockReminderThreshold == that.outOfStockReminderThreshold &&
                 Objects.equals(refillSizes, that.refillSizes) &&
-                Objects.equals(unit, that.unit);
+                Objects.equals(unit, that.unit) &&
+                Objects.equals(notes, that.notes);
     }
 
     public enum OutOfStockReminderType {

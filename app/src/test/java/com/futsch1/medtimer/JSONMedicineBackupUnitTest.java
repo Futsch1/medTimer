@@ -51,6 +51,7 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine.iconId = 5;
         medicineWithReminders.medicine.unit = "pills";
         medicineWithReminders.medicine.sortOrder = 4.5;
+        medicineWithReminders.medicine.notes = "Generic ingredient: Dihydrogen monoxide";
         medicineWithReminders.tags = new ArrayList<>();
         medicineWithReminders.tags.add(new Tag("Tag A"));
         medicinesWithReminders.add(medicineWithReminders);
@@ -76,7 +77,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminderThreshold": 0.0,
         "refillSizes": [],
         "unit": "pills",
-        "sortOrder": 4.5
+        "sortOrder": 4.5,
+        "notes": "Generic ingredient: Dihydrogen monoxide"
       },
       "tags": [
         {
@@ -220,7 +222,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminderThreshold": 0.0,
         "refillSizes": [],
         "unit": "",
-        "sortOrder": 3.44
+        "sortOrder": 3.44,
+        "notes": ""
       },
       "reminders": [
         {
@@ -266,7 +269,8 @@ class JSONMedicineBackupUnitTest {
         "outOfStockReminderThreshold": 17.5,
         "refillSizes": [],
         "unit": "",
-        "sortOrder": 1.0
+        "sortOrder": 1.0,
+        "notes": ""
       },
       "reminders": [
         {

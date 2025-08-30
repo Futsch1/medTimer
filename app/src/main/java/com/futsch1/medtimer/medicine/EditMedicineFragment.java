@@ -27,6 +27,7 @@ import com.futsch1.medtimer.helpers.SwipeHelper;
 import com.futsch1.medtimer.helpers.ViewColorHelper;
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog;
 import com.futsch1.medtimer.medicine.dialogs.NewReminderDialog;
+import com.futsch1.medtimer.medicine.dialogs.NotesDialog;
 import com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt;
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
@@ -55,6 +56,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     private int color;
     private Spinner notificationImportance;
     private MaterialButton selectIconButton;
+    private String notes;
 
     public EditMedicineFragment() {
         super(new MedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment.class.getName());
@@ -69,11 +71,13 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
     public boolean onEntityLoaded(Medicine entity, @NonNull View fragmentView) {
         color = entity.color;
         iconId = entity.iconId;
+        notes = entity.notes;
 
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(entity.name);
 
         setupEnableColor(fragmentView, entity.useColor);
         setupColorButton(fragmentView, entity.useColor);
+        setupNotesButton(fragmentView);
         ((EditText) fragmentView.findViewById(R.id.editMedicineName)).setText(entity.name);
         RecyclerView recyclerView = setupMedicineList(fragmentView);
         setupSwiping(recyclerView);
@@ -111,6 +115,14 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
             return Unit.INSTANCE;
         }));
         colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupNotesButton(View fragmentView) {
+        MaterialButton openNotes = fragmentView.findViewById(R.id.openNotes);
+        openNotes.setOnClickListener(v -> new NotesDialog(requireContext(), notes, newNote -> {
+            notes = newNote;
+            return Unit.INSTANCE;
+        }));
     }
 
     private @NonNull RecyclerView setupMedicineList(View fragmentView) {
@@ -220,6 +232,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         entity.color = color;
         entity.notificationImportance = NotificationImportanceKt.importanceIndexToValue(notificationImportance.getSelectedItemPosition());
         entity.iconId = iconId;
+        entity.notes = notes;
 
         updateReminders(fragmentView);
     }
