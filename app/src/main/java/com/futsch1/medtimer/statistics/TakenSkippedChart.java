@@ -25,7 +25,7 @@ public class TakenSkippedChart {
         this.context = context;
         this.segmentTaken = new Segment(context.getString(R.string.taken), 0);
         this.segmentSkipped = new Segment(context.getString(R.string.skipped), 0);
-        pieChart.addSegment(segmentTaken, getFormatter(com.google.android.material.R.attr.colorPrimary, com.google.android.material.R.attr.colorOnPrimary));
+        pieChart.addSegment(segmentTaken, getFormatter(androidx.appcompat.R.attr.colorPrimary, com.google.android.material.R.attr.colorOnPrimary));
         pieChart.addSegment(segmentSkipped, getFormatter(com.google.android.material.R.attr.colorSecondary, com.google.android.material.R.attr.colorOnSecondary));
         pieChart.setPlotPaddingTop(chartHelper.dpToPx(5.0f));
         PieRenderer renderer = pieChart.getRenderer(PieRenderer.class);

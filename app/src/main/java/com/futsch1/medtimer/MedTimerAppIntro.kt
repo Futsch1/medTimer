@@ -81,7 +81,7 @@ class MedTimerAppIntro : AppIntro() {
         this.setBarColor(
             MaterialColors.getColor(
                 this,
-                com.google.android.material.R.attr.colorPrimary,
+                androidx.appcompat.R.attr.colorPrimary,
                 Color.WHITE
             )
         )

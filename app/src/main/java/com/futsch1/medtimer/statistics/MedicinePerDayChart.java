@@ -117,7 +117,7 @@ public class MedicinePerDayChart {
     private MedicinePerDayChartFormatter getFormatter(String title) {
         MedicinePerDayChartFormatter formatter = new MedicinePerDayChartFormatter();
         formatter.getFillPaint().setColor(getColor(title));
-        formatter.getBorderPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorPrimary));
+        formatter.getBorderPaint().setColor(chartHelper.getColor(androidx.appcompat.R.attr.colorPrimary));
         return formatter;
     }
 
