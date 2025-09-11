@@ -223,4 +223,5 @@
     <string name="create_calendar_entry">Create calendar entry</string>
     <string name="notes">Notes</string>
     <string name="automatically_taken">Automatically mark as taken</string>
+    <string name="high_and_alarm">High + Alarm</string>
 </resources>

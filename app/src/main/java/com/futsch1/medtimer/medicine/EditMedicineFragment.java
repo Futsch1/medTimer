@@ -82,7 +82,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         RecyclerView recyclerView = setupMedicineList(fragmentView);
         setupSwiping(recyclerView);
         setupSelectIcon(fragmentView);
-        setupNotificationImportance(fragmentView, entity.notificationImportance);
+        setupNotificationImportance(fragmentView, entity);
         setupStockButton(fragmentView);
         setupTagsButton(fragmentView, entity.medicineId);
 
@@ -157,13 +157,13 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         );
     }
 
-    private void setupNotificationImportance(View fragmentView, int notificationImportanceValue) {
+    private void setupNotificationImportance(View fragmentView, Medicine medicine) {
         notificationImportance = fragmentView.findViewById(R.id.notificationImportance);
 
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setSelection(NotificationImportanceKt.importanceValueToIndex(notificationImportanceValue));
+        notificationImportance.setSelection(NotificationImportanceKt.importanceValueToIndex(medicine));
     }
 
     private void setupStockButton(View fragmentView) {
@@ -230,7 +230,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         entity.name = ((EditText) fragmentView.findViewById(R.id.editMedicineName)).getText().toString().trim();
         entity.useColor = enableColor.isChecked();
         entity.color = color;
-        entity.notificationImportance = NotificationImportanceKt.importanceIndexToValue(notificationImportance.getSelectedItemPosition());
+        NotificationImportanceKt.importanceIndexToMedicine(notificationImportance.getSelectedItemPosition(), entity);
         entity.iconId = iconId;
         entity.notes = notes;
 

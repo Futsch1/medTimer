@@ -1,8 +1,10 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.text.SpannableStringBuilder
@@ -10,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.text.bold
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.ReminderAlarmActivity
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
@@ -83,15 +86,36 @@ abstract class ReminderNotificationFactory(
         ) {
             builder.setOngoing(true)
         }
+        // If shown as alarm, add a full screen intent
+        if (medicine.medicine.showNotificationAsAlarm) {
+            addFullScreenIntent()
+        }
+    }
+
+    @SuppressLint("FullScreenIntentPolicy")
+    private fun addFullScreenIntent() {
+        val intent = Intent(context, ReminderAlarmActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        builder.setCategory(Notification.CATEGORY_ALARM)
+        builder.setPriority(NotificationCompat.PRIORITY_HIGH)
+        builder.setFullScreenIntent(pendingIntent, true)
     }
 
     private fun addDismissNotification() {
-        if (dismissNotificationAction == "0") {
-            builder.setDeleteIntent(pendingSkipped)
-        } else if (dismissNotificationAction == "1") {
-            builder.setDeleteIntent(pendingSnooze)
-        } else {
-            builder.setDeleteIntent(pendingTaken)
+        when (dismissNotificationAction) {
+            "0" -> {
+                builder.setDeleteIntent(pendingSkipped)
+            }
+
+            "1" -> {
+                builder.setDeleteIntent(pendingSnooze)
+            }
+
+            else -> {
+                builder.setDeleteIntent(pendingTaken)
+            }
         }
 
     }
@@ -144,7 +168,7 @@ abstract class ReminderNotificationFactory(
     }
 
     fun getNotificationString(): SpannableStringBuilder {
-        var builder = SpannableStringBuilder(baseString).append("\n${getInstructions()}")
+        val builder = SpannableStringBuilder(baseString).append("\n${getInstructions()}")
         if (medicine.medicine.isStockManagementActive) {
             builder.append(MedicineHelper.getStockText(context, medicine.medicine))
             if (showOutOfStockIcon()) {
@@ -162,7 +186,7 @@ abstract class ReminderNotificationFactory(
     }
 
     fun getTagNames(): String {
-        val tagNames = medicine.tags.stream().map<String?> { t: Tag? -> t!!.name }.collect(Collectors.toList())
+        val tagNames = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect(Collectors.toList())
         return java.lang.String.join(", ", tagNames)
     }
 
@@ -206,15 +230,21 @@ abstract class ReminderNotificationFactory(
     ) {
         val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
-        if (dismissNotificationAction == "0") {
-            addTakenAction()
-            addSnoozeAction()
-        } else if (dismissNotificationAction == "1") {
-            addTakenAction()
-            addSkippedAction()
-        } else {
-            addSkippedAction()
-            addSnoozeAction()
+        when (dismissNotificationAction) {
+            "0" -> {
+                addTakenAction()
+                addSnoozeAction()
+            }
+
+            "1" -> {
+                addTakenAction()
+                addSkippedAction()
+            }
+
+            else -> {
+                addSkippedAction()
+                addSnoozeAction()
+            }
         }
         if (hasSameTimeReminders) {
             builder.addAction(
