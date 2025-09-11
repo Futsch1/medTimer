@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="tab_settings">Configurações</string>
     <string name="cancel">Cancelar</string>
@@ -24,7 +24,7 @@
     <string name="skipped">Pulado</string>
     <string name="taken">Tomado</string>
     <string name="next_reminders">Próximos lembretes</string>
-    <string name="version">Versão%s</string>
+    <string name="version">Versão %s</string>
     <string name="are_you_sure_delete_reminder">Tem certeza de que deseja excluir o lembrete?</string>
     <string name="clear_events">Limpar eventos</string>
     <string name="app_version">Versão do aplicativo</string>
@@ -47,7 +47,7 @@
     <string name="time_after">x horas após o medicamento y</string>
     <string name="instruction_templates">Modelos de instruções</string>
     <string name="instructions_label">Instruções adicionais (por exemplo, antes das refeições)</string>
-    <string name="medicine_data">Dados de medicamentos</string>
+    <string name="medicine_data">Dados dos medicamentos</string>
     <string name="export_csv">Exportar como CSV</string>
     <string name="export_pdf">Exportar como PDF</string>
     <string name="restore">Restaurar</string>
@@ -92,7 +92,7 @@
         <item quantity="other">Últimos %1$d dias</item>
     </plurals>
     <string name="name">Nome</string>
-    <string name="event_data">Dados do evento</string>
+    <string name="event_data">Registro dos eventos</string>
     <string name="backup">Backup</string>
     <string name="event_name">Nome do evento</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
@@ -185,7 +185,7 @@
     <string name="repeat_reminders_summary">Repete automaticamente um lembrete até que ele seja marcado como tomado ou pulado</string>
     <string name="minutes_1">1 minuto</string>
     <string name="create_reminder">Criar lembrete</string>
-    <string name="interval_start_reminded">O intervalo começa quando lembrado</string>
+    <string name="interval_start_reminded">O intervalo começa quando notificado</string>
     <string name="out_of_stock_notification_title">Lembrete de medicamento sem estoque</string>
     <string name="reminder_threshold">Limite de lembrete</string>
     <string name="override_dnd">Sempre tocar som de notificação</string>
@@ -204,7 +204,7 @@
     <string name="days_string">Dias</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
     <string name="number_of_repetitions">Número de repetições</string>
-    <string name="intro_notification_description">Quando chegar a hora de um lembrete, uma notificação aparecerá oferecendo a você a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
+    <string name="intro_notification_description">Quando o horário de um lembrete chegar, uma notificação aparecerá oferecendo-lhe a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
     <string name="enable_dnd_dialog">Para permitir que os sons de notificação sejam sempre reproduzidos, ative o acesso ao Não perturbe pelo MedTimer no menu a seguir</string>
     <string name="intro_overview_description">Na tela de visão geral, você pode ver os próximos lembretes e os últimos eventos de lembrete. Os eventos de lembrete podem ser editados deslizando para a direita e excluídos deslizando para a esquerda.\n\nAlém disso, você pode registrar manualmente doses adicionais de um dos medicamentos configurados ou de um personalizado.</string>
     <string name="invalid_input">Entrada inválida</string>
@@ -218,10 +218,12 @@
     <string name="icon">Ícone</string>
     <string name="tags">Etiquetas</string>
     <string name="interval_time">Intervalo %s</string>
-    <string name="reminded">Lembrado</string>
+    <string name="reminded">Notificado</string>
     <string name="all_taken">Todos tomados (%s)</string>
     <string name="total">Total</string>
-    <string name="estimated_run_out_date">Data estimada de término</string>
+    <string name="estimated_run_out_date">Data prevista para o fim do estoque</string>
     <string name="create_calendar_entry">Criar entrada na agenda</string>
     <string name="notes">Anotações</string>
-<string name="automatically_taken">Marcar automaticamente como realizado</string><string name="sort">Classificar</string></resources>
+    <string name="automatically_taken">Marcar automaticamente como tomado</string>
+    <string name="sort">Classificar</string>
+</resources>
