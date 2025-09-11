@@ -10,7 +10,7 @@ class ReminderAlarmActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.notification)
+        setContentView(R.layout.alarm)
 
         setShowWhenLocked(true)
         setTurnScreenOn(true)

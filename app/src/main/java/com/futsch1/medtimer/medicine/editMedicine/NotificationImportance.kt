@@ -1,7 +1,16 @@
 package com.futsch1.medtimer.medicine.editMedicine
 
+import android.app.AlertDialog
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import androidx.core.net.toUri
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.helpers.safeStartActivity
 
 fun importanceValueToIndex(medicine: Medicine): Int {
     if (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.DEFAULT.value) {
@@ -29,5 +38,36 @@ fun importanceIndexToMedicine(index: Int, medicine: Medicine) {
             medicine.notificationImportance = ReminderNotificationChannelManager.Importance.HIGH.value
             medicine.showNotificationAsAlarm = true
         }
+    }
+}
+
+fun showEnablePermissionsDialog(context: Context) {
+    fun hasPermissions(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.canUseFullScreenIntent()
+        } else {
+            true
+        }
+    }
+
+    if (!hasPermissions()) {
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage(R.string.enable_alarm_dialog)
+        builder.setPositiveButton(R.string.ok) { _, _ ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
+                    data = "package:${context.packageName}".toUri()
+                }
+                safeStartActivity(context, intent)
+            } else {
+                // Intentionally empty
+            }
+        }
+        builder.setNegativeButton(R.string.cancel) { _, _ ->
+            // Intentionally empty
+        }
+        val d = builder.create()
+        d.show()
     }
 }

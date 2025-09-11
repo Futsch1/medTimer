@@ -219,4 +219,6 @@
     <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>
     <string name="variable_amount">Να κάνετε καταχώρηση της δόσης που λήφθηκε</string>
     <string name="notes">Σημειώσεις</string>
-<string name="automatically_taken">Αυτόματη σήμανση ως ληφθείσα</string><string name="sort">Ταξινόμηση</string></resources>
+    <string name="automatically_taken">Αυτόματη σήμανση ως ληφθείσα</string>
+    <string name="sort">Ταξινόμηση</string>
+</resources>

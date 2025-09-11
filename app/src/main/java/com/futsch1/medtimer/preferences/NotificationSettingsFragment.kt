@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
+import com.futsch1.medtimer.helpers.safeStartActivity
 
 class NotificationSettingsFragment : PreferencesFragment() {
     private var rootKey: String? = null
@@ -43,12 +44,12 @@ class NotificationSettingsFragment : PreferencesFragment() {
             setupNotificationSettingsPreference(preference, Importance.HIGH)
         }
         preference =
-            preferenceScreen.findPreference<Preference?>("notification_settings_default")
+            preferenceScreen.findPreference("notification_settings_default")
         if (preference != null) {
             setupNotificationSettingsPreference(preference, Importance.DEFAULT)
         }
         preference =
-            preferenceScreen.findPreference<Preference?>(PreferencesNames.OVERRIDE_DND)
+            preferenceScreen.findPreference(PreferencesNames.OVERRIDE_DND)
         preference?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, value: Any? ->
                 if (true == value) {
@@ -93,13 +94,13 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     private fun showExactReminderDialog() {
-        val alarmManager = requireContext().getSystemService<AlarmManager>(AlarmManager::class.java)
+        val alarmManager = requireContext().getSystemService(AlarmManager::class.java)
         if (!alarmManager.canScheduleExactAlarms()) {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(R.string.enable_alarm_dialog)
             builder.setPositiveButton(R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-                safeStartActivity(intent)
+                safeStartActivity(context, intent)
             }
             builder.setNegativeButton(R.string.cancel) { _, _ ->
                 try {
@@ -120,14 +121,6 @@ class NotificationSettingsFragment : PreferencesFragment() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 
-
-    private fun safeStartActivity(intent: Intent) {
-        try {
-            startActivity(intent)
-        } catch (_: IllegalStateException) {
-            // Intentionally empty
-        }
-    }
 
     private fun cancelOverrideDnd() {
         try {

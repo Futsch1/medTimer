@@ -229,4 +229,6 @@
     <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
     <string name="create_calendar_entry">Utwórz wpis w kalendarzu</string>
     <string name="notes">Notatki</string>
-<string name="automatically_taken">Automatycznie oznacz jako pobrane</string><string name="sort">Sortuj</string></resources>
+    <string name="automatically_taken">Automatycznie oznacz jako pobrane</string>
+    <string name="sort">Sortuj</string>
+</resources>

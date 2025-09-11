@@ -224,4 +224,6 @@
     <string name="estimated_run_out_date">Data di scadenza stimata</string>
     <string name="create_calendar_entry">Crea voce di calendario</string>
     <string name="notes">Note</string>
-<string name="automatically_taken">Contrassegnare automaticamente come scattato</string><string name="sort">Ordinamento</string></resources>
+    <string name="automatically_taken">Contrassegnare automaticamente come scattato</string>
+    <string name="sort">Ordinamento</string>
+</resources>
