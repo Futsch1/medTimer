@@ -42,28 +42,18 @@ fun importanceIndexToMedicine(index: Int, medicine: Medicine) {
 }
 
 fun showEnablePermissionsDialog(context: Context) {
-    fun hasPermissions(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.canUseFullScreenIntent()
-        } else {
-            true
-        }
-    }
-
-    if (!hasPermissions()) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+        !(context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).canUseFullScreenIntent()
+    ) {
         val builder = AlertDialog.Builder(context)
-        builder.setMessage(R.string.enable_alarm_dialog)
+        builder.setMessage(R.string.enable_notification_alarm_dialog)
         builder.setPositiveButton(R.string.ok) { _, _ ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
-                    data = "package:${context.packageName}".toUri()
-                }
-                safeStartActivity(context, intent)
-            } else {
-                // Intentionally empty
+            val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
+                data = "package:${context.packageName}".toUri()
             }
+            safeStartActivity(context, intent)
         }
+
         builder.setNegativeButton(R.string.cancel) { _, _ ->
             // Intentionally empty
         }
