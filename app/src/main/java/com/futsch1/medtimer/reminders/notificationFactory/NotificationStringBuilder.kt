@@ -16,10 +16,10 @@ class NotificationStringBuilder(
     val remindTime: String,
     val showOutOfStockIcon: Boolean = true
 ) {
-    val baseString = getBaseString()
-    val notificationString = getNotificationString()
+    val baseString = buildBaseString()
+    val notificationString = buildNotificationString()
 
-    private fun getNotificationString(): SpannableStringBuilder {
+    private fun buildNotificationString(): SpannableStringBuilder {
         val builder = SpannableStringBuilder(baseString).append("\n${getInstructions(reminder)}")
         if (fullMedicine.medicine.isStockManagementActive) {
             builder.append(MedicineHelper.getStockText(context, fullMedicine.medicine))
@@ -33,7 +33,7 @@ class NotificationStringBuilder(
         return builder
     }
 
-    private fun getBaseString(): SpannableStringBuilder {
+    private fun buildBaseString(): SpannableStringBuilder {
         val medicineNameString = MedicineHelper.getMedicineName(context, fullMedicine.medicine, true)
         return SpannableStringBuilder().bold { append(medicineNameString) }.append(if (reminder.amount.isNotEmpty()) " (${reminder.amount})" else "")
     }

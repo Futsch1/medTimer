@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
@@ -91,6 +92,7 @@ abstract class ReminderNotificationFactory(
 
         val bundle = Bundle()
         bundle.putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
+        bundle.putInt(EXTRA_NOTIFICATION_ID, notificationId)
         bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, remindTime)
         intent.putExtras(bundle)
 

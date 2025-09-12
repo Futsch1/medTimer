@@ -16,8 +16,7 @@ class NotificationIntentBuilder(val context: Context, val notificationId: Int, v
     val pendingTaken = getTakenPendingIntent()
     val pendingAllTaken = getAllTakenPendingIntent()
 
-    private fun getTakenPendingIntent(
-    ): PendingIntent? {
+    private fun getTakenPendingIntent(): PendingIntent {
         return if (reminder.variableAmount) {
             val notifyTaken = ReminderProcessor.getVariableAmountActionIntent(
                 context, reminderEvent.reminderEventId, reminder.amount

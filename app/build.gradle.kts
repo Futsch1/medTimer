@@ -87,9 +87,9 @@ dependencies {
     val androidXNavigationVersion = "2.9.4"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
+    val lifecycleKtxVersion = "2.9.3"
     val workRuntimeVersion = "2.10.4"
     val coreKtxVersion = "1.17.0"
-    val lifecycleViewmodelKtxVersion = "2.9.3"
     val roomVersion = "2.8.0"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
@@ -126,9 +126,10 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$androidXNavigationVersion")
     implementation("androidx.preference:preference-ktx:$preferenceKtxVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleKtxVersion}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleKtxVersion}")
     implementation("androidx.work:work-runtime:$workRuntimeVersion")
     implementation("androidx.core:core-ktx:$coreKtxVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleViewmodelKtxVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("com.github.martin-stone:hsv-alpha-color-picker-android:$colorPickerViewVersion")
     implementation("com.github.wwdablu:SimplyPDF:$simplyPDFVersion")
@@ -142,7 +143,6 @@ dependencies {
     implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
     implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
     implementation("androidx.biometric:biometric:$biometricVersion")
-
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
