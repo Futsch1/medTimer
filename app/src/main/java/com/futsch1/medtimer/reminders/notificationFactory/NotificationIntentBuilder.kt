@@ -15,6 +15,7 @@ class NotificationIntentBuilder(val context: Context, val notificationId: Int, v
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
     val pendingAllTaken = getAllTakenPendingIntent()
+    val pendingDismiss = getDismissPendingIntent()
 
     private fun getTakenPendingIntent(): PendingIntent {
         return if (reminder.variableAmount) {
@@ -71,6 +72,22 @@ class NotificationIntentBuilder(val context: Context, val notificationId: Int, v
             getSnoozeCustomTimeIntent()
         } else {
             getStandardSnoozeIntent()
+        }
+    }
+
+    private fun getDismissPendingIntent(): PendingIntent {
+        return when (defaultSharedPreferences.getString("dismiss_notification_action", "0")) {
+            "0" -> {
+                pendingSkipped
+            }
+
+            "1" -> {
+                pendingSnooze
+            }
+
+            else -> {
+                pendingTaken
+            }
         }
     }
 

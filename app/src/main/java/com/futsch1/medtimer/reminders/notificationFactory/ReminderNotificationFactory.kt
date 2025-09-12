@@ -14,7 +14,7 @@ import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ReminderAlarmActivity
+import com.futsch1.medtimer.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
@@ -62,15 +62,13 @@ abstract class ReminderNotificationFactory(
     val reminderEvent = reminderNotificationData.reminderEvent
     val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
 
-    val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
-
     init {
         val contentIntent: PendingIntent? = getStartAppIntent()
 
         builder.setSmallIcon(R.drawable.capsule).setContentTitle(context.getString(R.string.notification_title))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
 
-        addDismissNotification()
+        builder.setDeleteIntent(intents.pendingDismiss)
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
@@ -101,23 +99,6 @@ abstract class ReminderNotificationFactory(
         builder.setCategory(Notification.CATEGORY_ALARM)
         builder.setPriority(NotificationCompat.PRIORITY_HIGH)
         builder.setFullScreenIntent(pendingIntent, true)
-    }
-
-    private fun addDismissNotification() {
-        when (dismissNotificationAction) {
-            "0" -> {
-                builder.setDeleteIntent(intents.pendingSkipped)
-            }
-
-            "1" -> {
-                builder.setDeleteIntent(intents.pendingSnooze)
-            }
-
-            else -> {
-                builder.setDeleteIntent(intents.pendingTaken)
-            }
-        }
-
     }
 
     abstract fun build()
