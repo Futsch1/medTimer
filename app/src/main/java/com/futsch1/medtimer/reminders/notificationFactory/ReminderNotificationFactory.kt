@@ -7,19 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import android.text.SpannableStringBuilder
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
-import androidx.core.text.bold
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
+import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderAlarmActivity
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.Tag
-import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderProcessor
-import java.util.stream.Collectors
 
 
 data class ReminderNotificationData(
@@ -53,18 +50,16 @@ abstract class ReminderNotificationFactory(
     reminderNotificationData: ReminderNotificationData
 ) : NotificationFactory(context, notificationId, reminderNotificationData.medicine.medicine) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    val baseString: SpannableStringBuilder
+
+    val intents = NotificationIntentBuilder(context, notificationId, reminderNotificationData.reminderEvent, reminderNotificationData.reminder)
+    val notificationStrings =
+        NotificationStringBuilder(context, reminderNotificationData.medicine, reminderNotificationData.reminder, reminderNotificationData.remindTime)
 
     val remindTime = reminderNotificationData.remindTime
     val medicine = reminderNotificationData.medicine
     val reminder = reminderNotificationData.reminder
     val reminderEvent = reminderNotificationData.reminderEvent
     val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
-
-    val pendingSnooze = getSnoozePendingIntent()
-    val pendingSkipped = getSkippedPendingIntent()
-    val pendingTaken = getTakenPendingIntent()
-    val pendingAllTaken = getAllTakenPendingIntent()
 
     val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
 
@@ -73,9 +68,6 @@ abstract class ReminderNotificationFactory(
 
         builder.setSmallIcon(R.drawable.capsule).setContentTitle(context.getString(R.string.notification_title))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
-
-        val medicineNameString = MedicineHelper.getMedicineName(context, medicine.medicine, true)
-        baseString = SpannableStringBuilder().bold { append(medicineNameString) }.append(if (reminder.amount.isNotEmpty()) " (${reminder.amount})" else "")
 
         addDismissNotification()
 
@@ -96,6 +88,12 @@ abstract class ReminderNotificationFactory(
     private fun addFullScreenIntent() {
         val intent = Intent(context, ReminderAlarmActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        val bundle = Bundle()
+        bundle.putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
+        bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, remindTime)
+        intent.putExtras(bundle)
+
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         builder.setCategory(Notification.CATEGORY_ALARM)
@@ -106,15 +104,15 @@ abstract class ReminderNotificationFactory(
     private fun addDismissNotification() {
         when (dismissNotificationAction) {
             "0" -> {
-                builder.setDeleteIntent(pendingSkipped)
+                builder.setDeleteIntent(intents.pendingSkipped)
             }
 
             "1" -> {
-                builder.setDeleteIntent(pendingSnooze)
+                builder.setDeleteIntent(intents.pendingSnooze)
             }
 
             else -> {
-                builder.setDeleteIntent(pendingTaken)
+                builder.setDeleteIntent(intents.pendingTaken)
             }
         }
 
@@ -125,104 +123,6 @@ abstract class ReminderNotificationFactory(
     override fun create(): Notification {
         build()
         return builder.build()
-    }
-
-    fun getTakenPendingIntent(
-    ): PendingIntent? {
-        return if (reminder.variableAmount) {
-            val notifyTaken = ReminderProcessor.getVariableAmountActionIntent(
-                context, reminderEvent.reminderEventId, reminder.amount
-            )
-            PendingIntent.getActivity(
-                context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE
-            )
-        } else {
-            val notifyTaken = ReminderProcessor.getTakenActionIntent(context, reminderEvent.reminderEventId)
-            PendingIntent.getBroadcast(
-                context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-    }
-
-    fun getAllTakenPendingIntent(): PendingIntent {
-        val notifyTaken = ReminderProcessor.getAllTakenActionIntent(context, reminderEvent.reminderEventId)
-        return PendingIntent.getBroadcast(
-            context, notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    fun getInstructions(): String {
-        var instructions = reminder.instructions
-        if (instructions == null) {
-            instructions = ""
-        }
-        return addLineBreakIfNotEmpty(instructions)
-    }
-
-    fun addLineBreakIfNotEmpty(string: String): String {
-        return if (string.isEmpty()) {
-            string
-        } else {
-            "$string\n"
-        }
-    }
-
-    fun getNotificationString(): SpannableStringBuilder {
-        val builder = SpannableStringBuilder(baseString).append("\n${getInstructions()}")
-        if (medicine.medicine.isStockManagementActive) {
-            builder.append(MedicineHelper.getStockText(context, medicine.medicine))
-            if (showOutOfStockIcon()) {
-                builder.append(MedicineHelper.getOutOfStockText(context, medicine.medicine))
-            }
-            builder.append("\n")
-        }
-
-        builder.append("$remindTime\n${getTagNames()}")
-        return builder
-    }
-
-    open fun showOutOfStockIcon(): Boolean {
-        return true
-    }
-
-    fun getTagNames(): String {
-        val tagNames = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect(Collectors.toList())
-        return java.lang.String.join(", ", tagNames)
-    }
-
-    fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped = ReminderProcessor.getSkippedActionIntent(context, reminderEvent.reminderEventId)
-        return PendingIntent.getBroadcast(
-            context, notificationId, notifySkipped, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
-
-        fun getSnoozeCustomTimeIntent(): PendingIntent {
-            val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
-                context, reminder.reminderId, reminderEvent.reminderEventId, notificationId
-            )
-            return PendingIntent.getActivity(
-                context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
-            )
-        }
-
-        fun getStandardSnoozeIntent(): PendingIntent {
-            val snooze = ReminderProcessor.getSnoozeIntent(
-                context, reminder.reminderId, reminderEvent.reminderEventId, notificationId, snoozeTime
-            )
-            return PendingIntent.getBroadcast(
-                context, notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-
-        return if (snoozeTime == -1) {
-            getSnoozeCustomTimeIntent()
-        } else {
-            getStandardSnoozeIntent()
-        }
     }
 
 
@@ -248,26 +148,26 @@ abstract class ReminderNotificationFactory(
         }
         if (hasSameTimeReminders) {
             builder.addAction(
-                R.drawable.check2_all, context.getString(R.string.all_taken, remindTime), pendingAllTaken
+                R.drawable.check2_all, context.getString(R.string.all_taken, remindTime), intents.pendingAllTaken
             )
         }
     }
 
     private fun addSkippedAction() {
         builder.addAction(
-            R.drawable.x_circle, context.getString(R.string.skipped), pendingSkipped
+            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
         )
     }
 
     private fun addSnoozeAction() {
         builder.addAction(
-            R.drawable.hourglass_split, context.getString(R.string.snooze), pendingSnooze
+            R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
         )
     }
 
     private fun addTakenAction() {
         builder.addAction(
-            R.drawable.check2_circle, context.getString(R.string.taken), pendingTaken
+            R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
         )
     }
 

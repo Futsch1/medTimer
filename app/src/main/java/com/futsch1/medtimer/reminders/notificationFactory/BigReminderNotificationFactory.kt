@@ -19,15 +19,15 @@ class BigReminderNotificationFactory(
     override fun build() {
         views.setTextViewText(
             R.id.notificationTitle,
-            getNotificationString()
+            notificationStrings.notificationString
         )
 
-        views.setOnClickPendingIntent(R.id.takenButton, pendingTaken)
-        views.setOnClickPendingIntent(R.id.skippedButton, pendingSkipped)
-        views.setOnClickPendingIntent(R.id.snoozeButton, pendingSnooze)
+        views.setOnClickPendingIntent(R.id.takenButton, intents.pendingTaken)
+        views.setOnClickPendingIntent(R.id.skippedButton, intents.pendingSkipped)
+        views.setOnClickPendingIntent(R.id.snoozeButton, intents.pendingSnooze)
         if (hasSameTimeReminders) {
             views.setViewVisibility(R.id.allTakenButton, View.VISIBLE)
-            views.setOnClickPendingIntent(R.id.allTakenButton, pendingAllTaken)
+            views.setOnClickPendingIntent(R.id.allTakenButton, intents.pendingAllTaken)
             views.setTextViewText(R.id.allTakenButton, context.getString(R.string.all_taken, remindTime))
         }
         views.setTextViewCompoundDrawablesRelative(
@@ -39,13 +39,8 @@ class BigReminderNotificationFactory(
         )
 
         builder.setCustomBigContentView(views)
-        builder.setContentText(baseString)
+        builder.setContentText(notificationStrings.baseString)
 
         buildActions()
     }
-
-    override fun showOutOfStockIcon(): Boolean {
-        return false
-    }
-
 }
