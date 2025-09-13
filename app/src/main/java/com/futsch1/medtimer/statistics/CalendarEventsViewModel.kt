@@ -107,6 +107,10 @@ class CalendarEventsViewModel(
     private fun addPastEvents(pastDays: Long) {
         val startDay = LocalDate.now().minusDays(pastDays)
         for (reminderEvent: ReminderEvent in reminderEvents) {
+            if (reminderEvent.status == ReminderEvent.ReminderStatus.DELETED) {
+                continue
+            }
+
             val day = secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
             if ((day >= startDay) && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))) {
                 if (!eventListByDay.containsKey(day)) {
