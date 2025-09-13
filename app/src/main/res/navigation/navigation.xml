@@ -123,6 +123,4 @@
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.overview.OverviewFragment"
         android:label="@string/tab_overview" />
-
-    <include app:graph="@navigation/alarm" />
 </navigation>

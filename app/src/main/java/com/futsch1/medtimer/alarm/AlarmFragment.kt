@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
+import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -26,15 +29,14 @@ class AlarmFragment(
     var reminderEventId: Int = -1
     var notificationId: Int = -1
     lateinit var remindTime: String
-    var closedWithIntent = false
-    lateinit var destroyIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        reminderEventId = AlarmFragmentArgs.fromBundle(requireArguments()).reminderEventId
-        notificationId = AlarmFragmentArgs.fromBundle(requireArguments()).notificationId
-        remindTime = AlarmFragmentArgs.fromBundle(requireArguments()).remindTime
+        val bundle = requireArguments()
+        reminderEventId = bundle.getInt(EXTRA_REMINDER_EVENT_ID, -1)
+        notificationId = bundle.getInt(EXTRA_NOTIFICATION_ID, -1)
+        remindTime = bundle.getString(EXTRA_NOTIFICATION_TIME_STRING, "?")
     }
 
     override fun onCreateView(
@@ -57,7 +59,6 @@ class AlarmFragment(
 
                     val notificationStrings = NotificationStringBuilder(requireContext(), medicine, reminder, remindTime, false)
                     val intents = NotificationIntentBuilder(requireContext(), notificationId, reminderEvent, reminder)
-                    destroyIntent = intents.pendingDismiss
 
                     withContext(mainDispatcher) {
                         setupTexts(view, notificationStrings, medicine)
@@ -102,16 +103,14 @@ class AlarmFragment(
     }
 
     private fun closeWithIntent(pendingIntent: PendingIntent) {
-        val fragmentManager = requireActivity().supportFragmentManager
         pendingIntent.send()
-        closedWithIntent = true
-        fragmentManager.beginTransaction().remove(this).commit()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (!closedWithIntent) {
-            destroyIntent.send()
+        if (requireActivity().supportFragmentManager.fragments.isEmpty()) {
+            requireActivity().finish()
         }
     }
 }

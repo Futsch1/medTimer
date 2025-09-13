@@ -4,15 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.database.FullMedicine
@@ -85,16 +80,11 @@ abstract class ReminderNotificationFactory(
 
     @SuppressLint("FullScreenIntentPolicy")
     private fun addFullScreenIntent() {
-        val intent = Intent(context, ReminderAlarmActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-
-        val bundle = Bundle()
-        bundle.putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
-        bundle.putInt(EXTRA_NOTIFICATION_ID, notificationId)
-        bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, remindTime)
-        intent.putExtras(bundle)
-
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getActivity(
+            context, 0,
+            ReminderAlarmActivity.getIntent(context, reminderEvent, remindTime, notificationId),
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         builder.setCategory(Notification.CATEGORY_ALARM)
         builder.setPriority(NotificationCompat.PRIORITY_HIGH)

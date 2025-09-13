@@ -1,20 +1,20 @@
 package com.futsch1.medtimer.alarm
 
 import android.app.KeyguardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.futsch1.medtimer.AlarmNavigationDirections
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
+import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
+import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.ReminderEvent
 
 class ReminderAlarmActivity() : AppCompatActivity() {
-    private lateinit var navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,19 +29,7 @@ class ReminderAlarmActivity() : AppCompatActivity() {
             WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
-        val navHost = NavHostFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.alarmNavHost, navHost)
-            .commit()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val navHost: NavHostFragment = supportFragmentManager.findFragmentById(R.id.alarmNavHost) as NavHostFragment
-        val graph = navHost.navController.navInflater.inflate(R.navigation.navigation)
-        graph.setStartDestination(R.id.action_global_alarmFragment)
-        navHost.navController.graph = graph
-        navController = navHost.navController
+        addAlarmFragment(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -52,16 +40,22 @@ class ReminderAlarmActivity() : AppCompatActivity() {
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
             Log.d("ReminderAlarmActivity", "Adding alarm fragment")
-            navController.navigate(
-                getRoute(intent)
-            )
+            supportFragmentManager.beginTransaction().add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
     }
 
-    private fun getRoute(intent: Intent): AlarmNavigationDirections.ActionGlobalAlarmFragment = AlarmNavigationDirections.actionGlobalAlarmFragment(
-        intent.getIntExtra("reminderEventId", 0),
-        intent.getStringExtra("remindTime") ?: "?",
-        intent.getIntExtra("notificationId", 0)
-    )
+    companion object {
+        fun getIntent(context: Context, reminderEvent: ReminderEvent, remindTime: String, notificationId: Int): Intent {
+            val intent = Intent(context, ReminderAlarmActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
+            val bundle = Bundle()
+            bundle.putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
+            bundle.putInt(EXTRA_NOTIFICATION_ID, notificationId)
+            bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, remindTime)
+            intent.putExtras(bundle)
+
+            return intent
+        }
+    }
 }
