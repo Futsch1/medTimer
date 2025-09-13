@@ -44,7 +44,7 @@ public class ReminderProcessor extends BroadcastReceiver {
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
                         .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
                         .build();
-        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, rescheduleWork);
+        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
     }
 
     public static void requestRepeat(@NonNull Context context, int reminderId, int reminderEventId, int repeatTimeSeconds, int remainingRepeats) {
