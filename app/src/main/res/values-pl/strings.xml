@@ -231,4 +231,6 @@
     <string name="notes">Notatki</string>
     <string name="automatically_taken">Automatycznie oznacz jako pobrane</string>
     <string name="sort">Sortuj</string>
+    <string name="high_and_alarm">Wysoki + Alarm</string>
+    <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
 </resources>

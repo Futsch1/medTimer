@@ -226,4 +226,6 @@
     <string name="notes">Notas</string>
     <string name="automatically_taken">Marcar automáticamente como tomada</string>
     <string name="sort">Ordenar</string>
+    <string name="high_and_alarm">Alta + Alarma</string>
+    <string name="enable_notification_alarm_dialog">Para poder mostrar los recordatorios como alarmas, active esta opción para MedTimer en el siguiente menú</string>
 </resources>

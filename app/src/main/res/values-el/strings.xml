@@ -221,4 +221,6 @@
     <string name="notes">Σημειώσεις</string>
     <string name="automatically_taken">Αυτόματη σήμανση ως ληφθείσα</string>
     <string name="sort">Ταξινόμηση</string>
+    <string name="high_and_alarm">Υψηλό + Συναγερμός</string>
+    <string name="enable_notification_alarm_dialog">Για να επιτρέψετε την εμφάνιση υπενθυμίσεων ως συναγερμών, ενεργοποιήστε το για το MedTimer στο ακόλουθο μενού</string>
 </resources>

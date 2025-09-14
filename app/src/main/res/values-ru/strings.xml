@@ -228,4 +228,6 @@
     <string name="notes">Заметки</string>
     <string name="automatically_taken">Автоматически помечайте как принятые</string>
     <string name="sort">Сортировать</string>
+    <string name="high_and_alarm">Высокий + тревога</string>
+    <string name="enable_notification_alarm_dialog">Чтобы разрешить отображение напоминаний в качестве будильников, включите эту функцию для MedTimer в следующем меню</string>
 </resources>

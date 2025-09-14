@@ -216,4 +216,6 @@
     <string name="notes">笔记</string>
     <string name="automatically_taken">自动标记为已拍摄</string>
     <string name="sort">分类</string>
+    <string name="high_and_alarm">高电平 + 警报</string>
+    <string name="enable_notification_alarm_dialog">为了允许将提醒显示为闹钟，请在以下菜单中为 MedTimer 启用此功能</string>
 </resources>

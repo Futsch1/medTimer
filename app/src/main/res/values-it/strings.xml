@@ -226,4 +226,6 @@
     <string name="notes">Note</string>
     <string name="automatically_taken">Contrassegnare automaticamente come scattato</string>
     <string name="sort">Ordinamento</string>
+    <string name="high_and_alarm">Alto + Allarme</string>
+    <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attivare questa opzione per MedTimer nel seguente menu</string>
 </resources>

@@ -221,4 +221,6 @@
     <string name="notes">Notities</string>
     <string name="automatically_taken">Automatisch markeren als bezet</string>
     <string name="sort">Sorteer</string>
+    <string name="high_and_alarm">Hoog + Alarm</string>
+    <string name="enable_notification_alarm_dialog">Om herinneringen als alarmen weer te geven, schakelt u dit in voor MedTimer in het volgende menu</string>
 </resources>

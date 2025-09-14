@@ -226,4 +226,6 @@
     <string name="notes">Anotações</string>
     <string name="automatically_taken">Marcar automaticamente como realizado</string>
     <string name="sort">Classificar</string>
+    <string name="high_and_alarm">Alto + Alarme</string>
+    <string name="enable_notification_alarm_dialog">Para permitir a exibição de lembretes como alarmes, ative essa opção para o MedTimer no seguinte menu</string>
 </resources>

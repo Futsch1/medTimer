@@ -231,4 +231,6 @@
     <string name="notes">Нотатки</string>
     <string name="automatically_taken">Автоматично позначити як знято</string>
     <string name="sort">Сортування</string>
+    <string name="high_and_alarm">Високий + Тривога</string>
+    <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
 </resources>

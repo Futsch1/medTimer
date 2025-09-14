@@ -221,4 +221,6 @@
     <string name="notes">Anteckningar</string>
     <string name="automatically_taken">Markera automatiskt som tagen</string>
     <string name="sort">Sortera</string>
+    <string name="high_and_alarm">Hög + Larm</string>
+    <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
 </resources>

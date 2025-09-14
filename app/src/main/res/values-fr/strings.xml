@@ -226,4 +226,6 @@
     <string name="notes">Remarques</string>
     <string name="automatically_taken">Marquer automatiquement comme pris</string>
     <string name="sort">Trier</string>
+    <string name="high_and_alarm">Haut + Alarme</string>
+    <string name="enable_notification_alarm_dialog">Pour que les rappels soient affichés comme des alarmes, activez cette option pour MedTimer dans le menu suivant</string>
 </resources>
