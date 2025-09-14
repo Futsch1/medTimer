@@ -12,6 +12,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.SNOOZE_ACTION;
@@ -43,6 +44,15 @@ public class ReminderProcessor extends BroadcastReceiver {
         OneTimeWorkRequest rescheduleWork =
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
                         .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
+                        .build();
+        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
+    }
+
+    public static void requestRescheduleNowForTests(@NonNull Context context, long delay) {
+        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
+        OneTimeWorkRequest rescheduleWork =
+                new OneTimeWorkRequest.Builder(RescheduleWork.class)
+                        .setInputData(new Data.Builder().putLong(EXTRA_SCHEDULE_FOR_TESTS, delay).build())
                         .build();
         workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
     }

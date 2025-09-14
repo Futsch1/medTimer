@@ -29,6 +29,7 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderProcessor
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
@@ -79,8 +80,10 @@ class NotificationTest : BaseTestHelper() {
         baristaRule.activityTestRule.finishActivity()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        waitAndDismissNotification(device, 240_000)
-        waitAndDismissNotification(device, 180_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        waitAndDismissNotification(device, 2_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        waitAndDismissNotification(device, 2_000)
     }
 
     @Test
@@ -179,7 +182,8 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
         val text = notification.text
 
-        device.wait(Until.gone(By.text(text)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.gone(By.text(text)), 2_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
         assertNotNull(nextNotification)
@@ -206,7 +210,8 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
@@ -270,7 +275,8 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
@@ -364,7 +370,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
         assertNotNull(notification)
 
         clickNotificationButton(device, SECOND_ONE, getNotificationText(R.string.all_taken, notificationTimeString))
@@ -406,9 +415,69 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
 
-        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 180_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun alarmTest() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        clickOn(R.id.notificationImportance)
+        clickOn(R.string.high_and_alarm)
+        AndroidTestHelper.createIntervalReminder("1", 2)
+
+        navigateTo(MainMenu.OVERVIEW)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        device.sleep()
+
+        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+
+        device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        clickOn(R.string.taken)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            1,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+        )
+
+        device.sleep()
+
+        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+
+        device.wait(Until.findObject(By.text(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze))), 60_000)
+        pressBack()
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            2,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        device.sleep()
+        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+        device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 0)
+        sleep(2_000)
+        clickOn(R.id.takenButton)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            3,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+        )
+    }
 
     private fun getNotificationText(stringId: Int, vararg args: Any): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
