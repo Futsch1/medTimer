@@ -83,7 +83,7 @@ abstract class ReminderNotificationFactory(
         val pendingIntent = PendingIntent.getActivity(
             context, 0,
             ReminderAlarmActivity.getIntent(context, reminderEvent, remindTime, notificationId),
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         builder.setCategory(Notification.CATEGORY_ALARM)
