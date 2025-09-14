@@ -28,8 +28,6 @@ class ReminderAlarmActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_alarm)
-
         setShowWhenLocked(true)
         setTurnScreenOn(true)
         val keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
@@ -38,6 +36,8 @@ class ReminderAlarmActivity() : AppCompatActivity() {
         val windowInsetsController =
             WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
+        setContentView(R.layout.activity_alarm)
 
         addAlarmFragment(intent)
     }
@@ -84,7 +84,7 @@ class ReminderAlarmActivity() : AppCompatActivity() {
     companion object {
         fun getIntent(context: Context, reminderEvent: ReminderEvent, remindTime: String, notificationId: Int): Intent {
             val intent = Intent(context, ReminderAlarmActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             val bundle = Bundle()
             bundle.putInt(EXTRA_REMINDER_EVENT_ID, reminderEvent.reminderEventId)
