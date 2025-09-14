@@ -39,12 +39,6 @@ class ReminderAlarmActivity() : AppCompatActivity() {
             WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
-        val bundle = Bundle()
-        bundle.putInt(EXTRA_REMINDER_EVENT_ID, 1)
-        bundle.putInt(EXTRA_NOTIFICATION_ID, 2)
-        bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, "12")
-        intent.putExtras(bundle)
-
         addAlarmFragment(intent)
     }
 

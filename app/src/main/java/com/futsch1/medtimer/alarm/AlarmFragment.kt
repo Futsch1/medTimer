@@ -53,7 +53,7 @@ class AlarmFragment(
                 val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
 
                 if (reminderEvent != null) {
-                    Log.d("AlarmFragment", "Creating fragment for reminder ID $reminderEventId and notification ID $notificationId")
+                    Log.d("AlarmFragment", "Creating fragment for reminder event ID $reminderEventId and notification ID $notificationId")
                     val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
                     val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
 
