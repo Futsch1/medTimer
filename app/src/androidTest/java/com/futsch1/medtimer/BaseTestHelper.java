@@ -61,7 +61,8 @@ public abstract class BaseTestHelper {
     public static GrantPermissionRule getPermissionRule() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
+                    "android.permission.POST_NOTIFICATIONS",
+                    "android.permission.USE_FULL_SCREEN_INTENT");
         }
         return null;
     }

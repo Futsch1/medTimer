@@ -438,7 +438,11 @@ class NotificationTest : BaseTestHelper() {
 
         ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
 
-        device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 30_000)
+        if (o == null) {
+            // This is a workaround for the CLI emulator, which does not seem to wake up properly
+            device.wakeUp()
+        }
         clickOn(R.string.taken)
 
         assertCustomAssertionAtPosition(
@@ -452,7 +456,11 @@ class NotificationTest : BaseTestHelper() {
 
         ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
 
-        device.wait(Until.findObject(By.text(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze))), 60_000)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 30_000)
+        if (o == null) {
+            // This is a workaround for the CLI emulator, which does not seem to wake up properly
+            device.wakeUp()
+        }
         pressBack()
 
         assertCustomAssertionAtPosition(
