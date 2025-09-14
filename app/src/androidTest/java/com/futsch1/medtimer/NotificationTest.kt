@@ -26,6 +26,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -420,7 +421,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun alarmTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -436,13 +437,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 5_000)
 
-        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 30_000)
-        if (o == null) {
-            // This is a workaround for the CLI emulator, which does not seem to wake up properly
-            device.wakeUp()
-        }
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 20_000)
+        internalAssert(o != null)
         clickOn(R.string.taken)
 
         assertCustomAssertionAtPosition(
@@ -454,13 +452,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 5_000)
 
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 30_000)
-        if (o == null) {
-            // This is a workaround for the CLI emulator, which does not seem to wake up properly
-            device.wakeUp()
-        }
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 20_000)
+        internalAssert(o != null)
         pressBack()
 
         assertCustomAssertionAtPosition(
