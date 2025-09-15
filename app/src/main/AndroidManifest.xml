@@ -60,7 +60,6 @@
             android:name=".alarm.ReminderAlarmActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true" />
 

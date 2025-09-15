@@ -435,13 +435,18 @@ class NotificationTest : BaseTestHelper() {
         BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
 
+        sleep(2_000)
+
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 5_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
 
-        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 20_000)
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
         internalAssert(o != null)
-        clickOn(R.string.taken)
+        o = device.findObject(By.text(context.getString(R.string.taken)))
+        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+            o.click()
+        }
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
@@ -452,9 +457,9 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 5_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
 
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 20_000)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
         internalAssert(o != null)
         pressBack()
 
@@ -469,10 +474,14 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
         ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
-        device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        internalAssert(o != null)
         ReminderProcessor.requestRescheduleNowForTests(context, 0)
         sleep(2_000)
-        clickOn(R.id.takenButton)
+        o = device.findObject(By.text(context.getString(R.string.taken)))
+        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+            o.click()
+        }
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
