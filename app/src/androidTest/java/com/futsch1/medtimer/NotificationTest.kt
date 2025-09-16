@@ -357,6 +357,8 @@ class NotificationTest : BaseTestHelper() {
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
+        AndroidTestHelper.clearNotifications(device)
+
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
         val notificationTimeString =
@@ -460,7 +462,7 @@ class NotificationTest : BaseTestHelper() {
 
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 120_000)
         internalAssert(o != null)
-        pressBack()
+        device.pressBack()
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
