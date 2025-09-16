@@ -77,7 +77,7 @@ class ReminderAlarmActivity() : AppCompatActivity() {
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
             Log.d("ReminderAlarmActivity", "Adding alarm fragment")
-            supportFragmentManager.beginTransaction().add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
     }
 
