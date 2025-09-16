@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.content.Context
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
@@ -15,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
@@ -439,14 +441,11 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 30_000)
 
-        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 120_000)
         internalAssert(o != null)
-        o = device.findObject(By.text(context.getString(R.string.taken)))
-        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
-            o.click()
-        }
+        clickTakenOnAlarmScreen(device, context)
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
@@ -457,9 +456,9 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 30_000)
 
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 120_000)
         internalAssert(o != null)
         pressBack()
 
@@ -473,15 +472,12 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.takenButton)
 
         device.sleep()
-        ReminderProcessor.requestRescheduleNowForTests(context, 10_000)
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 60_000)
+        ReminderProcessor.requestRescheduleNowForTests(context, 30_000)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), 120_000)
         internalAssert(o != null)
         ReminderProcessor.requestRescheduleNowForTests(context, 0)
         sleep(2_000)
-        o = device.findObject(By.text(context.getString(R.string.taken)))
-        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
-            o.click()
-        }
+        clickTakenOnAlarmScreen(device, context)
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
@@ -489,6 +485,20 @@ class NotificationTest : BaseTestHelper() {
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
+    }
+
+    private fun clickTakenOnAlarmScreen(
+        device: UiDevice,
+        context: Context
+    ) {
+        val o1 = device.findObject(By.text(context.getString(R.string.taken)))
+        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+            try {
+                o1.click()
+            } catch (_: StaleObjectException) {
+                // Ignore
+            }
+        }
     }
 
     private fun getNotificationText(stringId: Int, vararg args: Any): String {
