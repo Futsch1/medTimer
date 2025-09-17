@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -424,9 +425,9 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun alarmTest() {
-        val time_to_notify = 20_000L
+        val timeToNotify = 20_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -443,9 +444,9 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, time_to_notify)
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
 
-        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), time_to_notify * 4)
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         clickTakenOnAlarmScreen(device, context)
 
@@ -458,9 +459,9 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, time_to_notify)
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
 
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), time_to_notify * 4)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         device.pressBack()
 
@@ -474,8 +475,8 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.takenButton)
 
         device.sleep()
-        ReminderProcessor.requestRescheduleNowForTests(context, time_to_notify)
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), time_to_notify * 4)
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         ReminderProcessor.requestRescheduleNowForTests(context, 0)
         sleep(2_000)
@@ -493,7 +494,7 @@ class NotificationTest : BaseTestHelper() {
         device: UiDevice,
         context: Context
     ) {
-        val o1 = device.findObject(By.text(context.getString(R.string.taken)))
+        val o1 = device.findObject(By.desc(context.getString(R.string.taken)))
         while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
             try {
                 o1.click()
