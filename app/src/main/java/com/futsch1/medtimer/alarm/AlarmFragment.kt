@@ -109,9 +109,7 @@ class AlarmFragment(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (requireActivity().supportFragmentManager.fragments.isEmpty()) {
-            Log.d("AlarmFragment", "Closing activity")
-            requireActivity().finish()
-        }
+        Log.d("AlarmFragment", "Closing activity")
+        requireActivity().finish()
     }
 }

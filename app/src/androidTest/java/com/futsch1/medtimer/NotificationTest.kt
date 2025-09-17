@@ -429,6 +429,7 @@ class NotificationTest : BaseTestHelper() {
         val timeToNotify = 20_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
+        device.wakeUp()
 
         AndroidTestHelper.createMedicine(TEST_MED)
         clickOn(R.id.notificationImportance)
@@ -462,7 +463,9 @@ class NotificationTest : BaseTestHelper() {
 
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
-        device.pressBack()
+        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+            device.pressBack()
+        }
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
