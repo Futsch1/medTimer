@@ -480,6 +480,7 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.bell)))
         )
 
+        // For some reason, this last test does not work with the latest Android version
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
             device.sleep()
             ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
