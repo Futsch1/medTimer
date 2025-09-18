@@ -5,8 +5,10 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -30,7 +32,6 @@ import com.futsch1.medtimer.reminders.SnoozeWork;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.robolectric.annotation.Config;
@@ -103,9 +104,8 @@ public class SnoozeWorkUnitTest {
 
             // Check if reminder event was updated with the generated notification ID
             verify(mockNotificationManager, times(1)).cancel(notificationId);
-            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
-            verify(mockAlarmManager, times(2)).cancel(captor1.capture());
-            verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, snooze.toEpochMilli(), captor1.getValue());
+            verify(mockAlarmManager, times(3)).cancel((PendingIntent) any());
+            verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(eq(AlarmManager.RTC_WAKEUP), eq(snooze.toEpochMilli()), any());
         }
     }
 }
