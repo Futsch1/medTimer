@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
@@ -99,15 +100,16 @@ public class RescheduleWork extends Worker {
             timestamp = Instant.now().plusMillis(getInputData().getLong(EXTRA_SCHEDULE_FOR_TESTS, 0));
         }
 
+        // Cancel potentially already running alarm and set new
+        alarmManager.cancel(PendingIntent.getBroadcast(context, 0, new Intent(), FLAG_IMMUTABLE));
+        alarmManager.cancel(PendingIntent.getBroadcast(context, reminderNotificationData.reminderEventId, new Intent(), FLAG_IMMUTABLE));
+
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
             PendingIntent pendingIntent = new PendingIntentBuilder(context).
                     setReminderId(reminderNotificationData.reminderId).
                     setReminderEventId(reminderNotificationData.reminderEventId).
                     setReminderDateTime(timestamp.atZone(ZoneId.systemDefault()).toLocalDateTime()).build();
-
-            // Cancel potentially already running alarm and set new
-            alarmManager.cancel(pendingIntent);
 
             if (canScheduleExactAlarms(alarmManager)) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
@@ -146,7 +148,7 @@ public class RescheduleWork extends Worker {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
         Intent intent = ReminderProcessor.getReminderAction(context, 0, 0, null);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }
 

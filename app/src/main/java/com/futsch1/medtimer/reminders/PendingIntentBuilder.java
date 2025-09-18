@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 public class PendingIntentBuilder {
     private final Context context;
-    private int reminderId;
-    private int reminderEventId;
+    private int reminderId = 0;
+    private int reminderEventId = 0;
     private LocalDateTime reminderDateTime = null;
 
     public PendingIntentBuilder(Context context) {
