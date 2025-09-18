@@ -464,7 +464,6 @@ class NotificationTest : BaseTestHelper() {
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         ReminderProcessor.requestRescheduleNowForTests(context, 0)
-        sleep(2_000)
         clickTakenOnAlarmScreen(device, context)
 
         assertCustomAssertionAtPosition(
