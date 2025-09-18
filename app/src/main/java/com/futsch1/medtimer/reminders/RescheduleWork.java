@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -93,6 +94,11 @@ public class RescheduleWork extends Worker {
     protected void enqueueNotification(ReminderNotificationData reminderNotificationData) {
         // Apply weekend mode shift
         Instant timestamp = weekendMode.adjustInstant(reminderNotificationData.timestamp());
+        // Apply test setting
+        if (getInputData().hasKeyWithValueOfType(EXTRA_SCHEDULE_FOR_TESTS, Long.class)) {
+            timestamp = Instant.now().plusMillis(getInputData().getLong(EXTRA_SCHEDULE_FOR_TESTS, 0));
+        }
+
         // If the alarm is in the future, schedule with alarm manager
         if (timestamp.isAfter(Instant.now())) {
             PendingIntent pendingIntent = new PendingIntentBuilder(context).
@@ -119,6 +125,10 @@ public class RescheduleWork extends Worker {
 
         } else {
             // Immediately remind
+            Log.i(LogTags.SCHEDULER,
+                    String.format("Scheduling reminder for %s/%d now",
+                            reminderNotificationData.medicineName,
+                            reminderNotificationData.reminderId));
             ZonedDateTime reminderDateTime = timestamp.atZone(ZoneId.systemDefault());
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)

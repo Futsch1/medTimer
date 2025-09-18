@@ -221,4 +221,6 @@
     <string name="notes">குறிப்புகள்</string>
     <string name="automatically_taken">தானாகவே எடுத்ததாகக் குறிக்கவும்</string>
     <string name="sort">வகை</string>
+    <string name="high_and_alarm">அதிகம் + அலாரம்</string>
+    <string name="enable_notification_alarm_dialog">நினைவூட்டல்களை அலாரங்களாகக் காட்ட அனுமதிக்க, பின்வரும் மெனுவில் MedTimer-க்கு இதை இயக்கவும்</string>
 </resources>

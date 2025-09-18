@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.content.Context
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
@@ -15,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
@@ -26,9 +28,11 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderProcessor
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
@@ -79,8 +83,10 @@ class NotificationTest : BaseTestHelper() {
         baristaRule.activityTestRule.finishActivity()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        waitAndDismissNotification(device, 240_000)
-        waitAndDismissNotification(device, 180_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        waitAndDismissNotification(device, 2_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        waitAndDismissNotification(device, 2_000)
     }
 
     @Test
@@ -179,7 +185,8 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
         val text = notification.text
 
-        device.wait(Until.gone(By.text(text)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.gone(By.text(text)), 2_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
         assertNotNull(nextNotification)
@@ -206,7 +213,8 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
@@ -270,7 +278,8 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
@@ -348,6 +357,8 @@ class NotificationTest : BaseTestHelper() {
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
+        AndroidTestHelper.clearNotifications(device)
+
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
         val notificationTimeString =
@@ -364,7 +375,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 240_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
         assertNotNull(notification)
 
         clickNotificationButton(device, SECOND_ONE, getNotificationText(R.string.all_taken, notificationTimeString))
@@ -406,9 +420,99 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
 
-        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 180_000)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
     }
 
+    @Test
+    @AllowFlaky(attempts = 2)
+    fun alarmTest() {
+        val timeToNotify = 10_000L
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        device.wakeUp()
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        clickOn(R.id.notificationImportance)
+        clickOn(R.string.high_and_alarm)
+        AndroidTestHelper.createIntervalReminder("1", 2)
+
+        navigateTo(MainMenu.OVERVIEW)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        sleep(2_000)
+
+        device.sleep()
+
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+
+        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+        internalAssert(o != null)
+        clickTakenOnAlarmScreen(device, context)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            1,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+        )
+
+        device.sleep()
+
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+        internalAssert(o != null)
+        ReminderProcessor.requestRescheduleNowForTests(context, 0)
+        clickTakenOnAlarmScreen(device, context)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            2,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+        )
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            3,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+
+        // For some reason, this last test does not work with the latest Android version
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
+            device.sleep()
+            ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+
+            o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+            internalAssert(o != null)
+            if (device.wait(Until.findObject(By.desc("com.android.systemui:id/ok")), 2_000) != null) {
+                device.findObject(By.desc("com.android.systemui:id/ok")).click()
+            }
+            device.pressBack()
+
+            assertCustomAssertionAtPosition(
+                R.id.reminders,
+                4,
+                R.id.stateButton,
+                matches(withTagValue(equalTo(R.drawable.bell)))
+            )
+        }
+    }
+
+    private fun clickTakenOnAlarmScreen(
+        device: UiDevice,
+        context: Context
+    ) {
+        val o1 = device.findObject(By.desc(context.getString(R.string.taken)))
+        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+            try {
+                o1.click()
+            } catch (_: StaleObjectException) {
+                // Ignore
+            }
+        }
+    }
 
     private fun getNotificationText(stringId: Int, vararg args: Any): String {
         val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)

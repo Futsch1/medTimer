@@ -4,6 +4,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import android.os.Build;
+import android.os.RemoteException;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,6 +38,11 @@ public abstract class BaseTestHelper {
     @BeforeClass
     public static void dismissANRSystemDialog() throws UiObjectNotFoundException {
         UiDevice device = UiDevice.getInstance(getInstrumentation());
+        try {
+            device.wakeUp();
+        } catch (RemoteException e) {
+            // Ignore
+        }
         // If the device is running in English Locale
         UiObject waitButton = device.findObject(new UiSelector().textContains("wait"));
         if (waitButton.exists()) {
@@ -55,7 +61,8 @@ public abstract class BaseTestHelper {
     public static GrantPermissionRule getPermissionRule() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return GrantPermissionRule.grant(
-                    "android.permission.POST_NOTIFICATIONS");
+                    "android.permission.POST_NOTIFICATIONS",
+                    "android.permission.USE_FULL_SCREEN_INTENT");
         }
         return null;
     }

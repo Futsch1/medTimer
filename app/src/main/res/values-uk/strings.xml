@@ -16,7 +16,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few"/>
+        <item quantity="few" />
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -229,4 +229,8 @@
     <string name="estimated_run_out_date">Орієнтовна дата закінчення</string>
     <string name="create_calendar_entry">Створити запис у календарі</string>
     <string name="notes">Нотатки</string>
-<string name="automatically_taken">Автоматично позначити як знято</string><string name="sort">Сортування</string></resources>
+    <string name="automatically_taken">Автоматично позначити як знято</string>
+    <string name="sort">Сортування</string>
+    <string name="high_and_alarm">Високий + Тривога</string>
+    <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
+</resources>

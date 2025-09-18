@@ -17,6 +17,10 @@
         tools:node="remove" />
     <uses-permission android:name="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission
+        android:name="android.permission.USE_FULL_SCREEN_INTENT"
+        tools:ignore="FullScreenIntentPolicy" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="false"
@@ -52,6 +56,12 @@
         <activity
             android:name=".MedTimerAppIntro"
             android:theme="@style/Theme.MedTimer" />
+        <activity
+            android:name=".alarm.ReminderAlarmActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true" />
 
         <receiver
             android:name=".Autostart"

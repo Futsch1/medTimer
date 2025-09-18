@@ -55,6 +55,8 @@ public class Medicine {
     @ColumnInfo(defaultValue = "")
     @Expose
     public String notes;
+    @ColumnInfo(defaultValue = "false")
+    public boolean showNotificationAsAlarm;
 
     public Medicine(String name) {
         this.name = name;
@@ -67,6 +69,7 @@ public class Medicine {
         this.unit = "";
         this.sortOrder = 1.0;
         this.notes = "";
+        this.showNotificationAsAlarm = false;
     }
 
     public Medicine(String name, int id) {
@@ -81,6 +84,7 @@ public class Medicine {
         this.unit = "";
         this.sortOrder = 1.0;
         this.notes = "";
+        this.showNotificationAsAlarm = false;
     }
 
     public boolean isOutOfStock() {
@@ -92,14 +96,14 @@ public class Medicine {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit, notes);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         return membersEqual((Medicine) o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit, notes, showNotificationAsAlarm);
     }
 
     private boolean membersEqual(Medicine that) {
@@ -114,7 +118,8 @@ public class Medicine {
                 outOfStockReminderThreshold == that.outOfStockReminderThreshold &&
                 Objects.equals(refillSizes, that.refillSizes) &&
                 Objects.equals(unit, that.unit) &&
-                Objects.equals(notes, that.notes);
+                Objects.equals(notes, that.notes) &&
+                showNotificationAsAlarm == that.showNotificationAsAlarm;
     }
 
     public enum OutOfStockReminderType {

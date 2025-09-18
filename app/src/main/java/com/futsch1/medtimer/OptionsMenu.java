@@ -1,5 +1,7 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.helpers.SafeHelperKt.safeStartActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -127,7 +129,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
         MenuItem item = menu.findItem(R.id.app_url);
         item.setOnMenuItemClickListener(menuItem -> {
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Futsch1/medTimer"));
-            context.startActivity(myIntent);
+            safeStartActivity(context, myIntent);
             return true;
         });
     }
