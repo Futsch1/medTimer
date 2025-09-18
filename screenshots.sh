@@ -20,8 +20,8 @@ function stop_clean_status_bar {
 	adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-locales=('en-US' 'ar' 'de-DE' 'el-GR' 'es-ES' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN')
-#locales=('ar-AE')
+#locales=('en-US' 'ar' 'bg' 'de-DE' 'el-GR' 'es-ES' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN')
+locales=('bg')
 tests_apk_path="app/build/outputs/apk/debug/MedTimer-debug.apk"
 app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk"
 
@@ -34,6 +34,7 @@ for i in "${locales[@]}"; do
 	else
 		adb shell settings put system time_12_24 24
 	fi
+	adb shell settings put global auto_time 0
 	adb shell su 0 toybox date 0801160025
 	fastlane screengrab \
 		--locales="$i" \

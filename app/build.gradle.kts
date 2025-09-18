@@ -28,7 +28,7 @@ android {
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
+        resConfigs("en,ar,bg,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -63,7 +63,7 @@ android {
     @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
-        localeFilters += listOf("en", "ar", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
+        localeFilters += listOf("en", "ar", "bg", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
     }
     testOptions {
         unitTests {
@@ -87,7 +87,7 @@ dependencies {
     val androidXNavigationVersion = "2.9.4"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
-    val lifecycleKtxVersion = "2.9.3"
+    val lifecycleKtxVersion = "2.9.4"
     val workRuntimeVersion = "2.10.4"
     val coreKtxVersion = "1.17.0"
     val roomVersion = "2.8.0"

@@ -28,6 +28,7 @@ import com.evrencoskun.tableview.TableView;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -47,23 +48,22 @@ public class ScreenshotsTest extends BaseTestHelper {
         openMenu();
         clickOn(R.string.generate_test_data);
 
-        device.openNotification();
-        UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
-        int startX = medTimerNotifications.getVisibleBounds().centerX();
-        int startY = medTimerNotifications.getVisibleBounds().top;
-        int endY = medTimerNotifications.getVisibleBounds().bottom;
-        device.swipe(startX, startY, startX, endY, 100);
-        device.swipe(startX, startY + 100, startX, startY + 200, 100);
-        device.waitForIdle();
-        Screengrab.screenshot("5");
-        device.pressBack();
-
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);
         clickListItemChild(R.id.reminders, 1, R.id.stateButton);
         clickOn(R.id.takenButton);
         clickListItemChild(R.id.reminders, 2, R.id.stateButton);
-        clickOn(R.id.takenButton);
+        clickOn(R.id.skippedButton);
+
+        device.openNotification();
+        UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
+        UiObject2 expand = medTimerNotifications.findObject(By.res("android:id/expand_button"));
+        if (expand != null && Objects.equals(expand.getContentDescription(), "Expand")) {
+            expand.click();
+        }
+        Screengrab.screenshot("5");
+        device.pressBack();
+
         clickListItemChild(R.id.reminders, 3, R.id.stateButton);
         clickOn(R.id.takenButton);
 
