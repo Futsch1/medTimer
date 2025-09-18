@@ -1,0 +1,35 @@
+Lääkemuistutukset ja -historia täysin yhteydettömällä yksityisyydellä
+
+Pysy lääkkeidesi hallinnassa MedTimerin avulla
+
+MedTimer on avoimen lähdekoodin lääkemuistutussovellus, joka on suunniteltu auttamaan sinua hallitsemaan lääkkeitäsi ja pillereitäsi tehokkaasti ja täydellä herkän datasi hallinnalla.
+
+Joustavat ja yksilölliset muistutukset:
+
+- Hallitse rajoittamattomasti lääkkeitä mukautettavilla lääkekohtaisilla muistutuksilla (sisältää yksinkertaiset oletusarvot
+  päivittäisille muistutuksille).
+- Luo joustavia muistutuksia tauoilla ja tietyille päiville (esim. ehkäisypillereille).
+- Viikonlopputila: Viivästytä muistutuksia määritettyyn aikaan valittuina päivinä.
+- Torkkumuistutukset myöhemmille muistutuksille tai muistutettavaksi toistuvasti.
+- Lisää ylimääräisiä annoksia lennossa.
+- Luo väliaikapohjaisia muistutuksia tai toisiaan väliajoin seuraavia muistutuksia.
+
+Yksinkertainen ja turvallinen tiedonhallinta:
+
+- Vahvista tai hylkää muistutukset tallentaaksesi lääkityksen noudattamisen tarkasti.
+- Näe yleiskuva menneistä annoksista kaaviosta ja taulukkonäkymästä.
+- Vie lääkityshistoriasi CSV-tiedostona helppoon kirjanpitoon tai jaettavaksi terveydenhuollon ammattilaisten kanssa.
+- Varmuuskopioi ja palauta lääkelistasi JSON-tiedostona.
+- Lääkevaraston seuranta ja varaston loppumisen muistutukset.
+- Merkitse ja suodata lääkkeitäsi.
+
+Yksityisyys ja yhteydetön käytettävyys:
+
+- Kaikki tiedot tallennetaan turvallisesti laitteellesi, mikä takaa täydellisen yksityisyyden ja yhteydettömän käytettävyyden.
+- Internet-yhteyttä ei tarvita – lääkemuistutuksesi ovat aina saatavilla.
+
+MedTimer on ilmainen sovellus ilman mainoksia.
+
+Katso projektisivu GitHubissa: https://github.com/Futsch1/medTimer
+
+Esittelykuva on luotu osoitteessa https://hotpot.ai
