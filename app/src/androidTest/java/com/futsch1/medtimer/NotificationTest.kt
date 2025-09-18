@@ -461,25 +461,6 @@ class NotificationTest : BaseTestHelper() {
         device.sleep()
 
         ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
-
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
-        internalAssert(o != null)
-        if (device.findObject(By.desc("com.android.systemui:id/ok")) != null) {
-            device.findObject(By.desc("com.android.systemui:id/ok")).click()
-        }
-        device.pressBack()
-
-        assertCustomAssertionAtPosition(
-            R.id.reminders,
-            2,
-            R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
-        )
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 2, R.id.stateButton)
-        clickOn(R.id.takenButton)
-
-        device.sleep()
-        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         ReminderProcessor.requestRescheduleNowForTests(context, 0)
@@ -488,10 +469,35 @@ class NotificationTest : BaseTestHelper() {
 
         assertCustomAssertionAtPosition(
             R.id.reminders,
-            3,
+            2,
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            3,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
+            device.sleep()
+            ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+
+            o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+            internalAssert(o != null)
+            if (device.wait(Until.findObject(By.desc("com.android.systemui:id/ok")), 2_000) != null) {
+                device.findObject(By.desc("com.android.systemui:id/ok")).click()
+            }
+            device.pressBack()
+
+            assertCustomAssertionAtPosition(
+                R.id.reminders,
+                4,
+                R.id.stateButton,
+                matches(withTagValue(equalTo(R.drawable.bell)))
+            )
+        }
     }
 
     private fun clickTakenOnAlarmScreen(
