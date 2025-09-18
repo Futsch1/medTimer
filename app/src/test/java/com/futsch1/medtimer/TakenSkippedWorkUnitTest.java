@@ -5,6 +5,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.mockStatic;
@@ -112,8 +113,7 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(status, captor.getValue().status);
             verify(mockNotificationManager, times(1)).cancel(notificationId);
 
-            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
-            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
+            verify(mockAlarmManager, times(1)).cancel((PendingIntent) any());
 
             if (status == ReminderEvent.ReminderStatus.TAKEN) {
                 ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);

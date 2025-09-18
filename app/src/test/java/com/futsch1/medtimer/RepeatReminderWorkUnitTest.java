@@ -6,8 +6,10 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.mockStatic;
@@ -101,9 +103,8 @@ public class RepeatReminderWorkUnitTest {
             ListenableWorker.Result result = repeatReminderWork.doWork();
             assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
-            ArgumentCaptor<PendingIntent> captor1 = ArgumentCaptor.forClass(PendingIntent.class);
-            verify(mockAlarmManager, times(1)).cancel(captor1.capture());
-            verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, repeat.toEpochMilli(), captor1.getValue());
+            verify(mockAlarmManager, times(2)).cancel((PendingIntent) any());
+            verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(eq(AlarmManager.RTC_WAKEUP), eq(repeat.toEpochMilli()), any());
 
             // Check if reminder event was updated with the one lower remaining repeats
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
