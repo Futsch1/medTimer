@@ -219,4 +219,8 @@
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
     <string name="create_calendar_entry">Skapa kalenderpost</string>
     <string name="notes">Anteckningar</string>
-<string name="automatically_taken">Markera automatiskt som tagen</string><string name="sort">Sortera</string></resources>
+    <string name="automatically_taken">Markera automatiskt som tagen</string>
+    <string name="sort">Sortera</string>
+    <string name="high_and_alarm">Hög + Larm</string>
+    <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
+</resources>

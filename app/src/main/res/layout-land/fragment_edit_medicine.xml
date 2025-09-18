@@ -17,7 +17,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,12 +80,26 @@
                         android:text="@string/select_color" />
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/priorityAndIcons"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:id="@+id/flow_helper"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:constraint_referenced_ids="notificationImportanceLayout, openNotes, openTags, openStockTracking, openCalendar"
+                        app:flow_horizontalAlign="start"
+                        app:flow_horizontalStyle="spread_inside"
+                        app:flow_wrapMode="chain"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
+                        android:id="@+id/notificationImportanceLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -104,67 +118,72 @@
                             android:minHeight="48dp" />
                     </LinearLayout>
 
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/openNotes"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:contentDescription="@string/notes"
                         android:minWidth="48dp"
                         android:minHeight="48dp"
                         app:icon="@drawable/journal_text"
-                        app:iconPadding="0dp" />
+                        app:iconPadding="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/openTags" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/openTags"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:contentDescription="@string/tags"
                         android:minWidth="48dp"
                         android:minHeight="48dp"
                         app:icon="@drawable/tag"
-                        app:iconPadding="0dp" />
+                        app:iconPadding="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/openStockTracking" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/openStockTracking"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:contentDescription="@string/medicine_stock"
                         android:minWidth="48dp"
                         android:minHeight="48dp"
                         app:icon="@drawable/box_seam"
-                        app:iconPadding="0dp" />
+                        app:iconPadding="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/openCalendar" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/openCalendar"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:contentDescription="@string/calendar"
                         android:minWidth="48dp"
                         android:minHeight="48dp"
                         app:icon="@drawable/calendar_week"
-                        app:iconPadding="0dp" />
-                </LinearLayout>
+                        app:iconPadding="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </ScrollView>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/listDivider" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reminderList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:clipToPadding="false"
             android:contentDescription="@string/reminders"
             android:paddingBottom="60dp"

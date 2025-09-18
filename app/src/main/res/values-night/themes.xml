@@ -1,6 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Dark.NoActionBar" />
+    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Dark.NoActionBar">
+        <item name="preferenceTheme">@style/MaterialPreferenceThemeOverlay</item>
+    </style>
 
     <style name="Theme.MedTimer2" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:windowLightStatusBar">false</item>
@@ -24,4 +26,11 @@
         <item name="medtimerWidgetPadding">6dp</item>
     </style>
 
+    <style name="MaterialPreferenceThemeOverlay" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+    </style>
+
+    <style name="Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_switch</item>
+    </style>
 </resources>

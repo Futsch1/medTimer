@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
+import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.Biometrics
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW
@@ -17,7 +17,7 @@ class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupBlockScreenCapture() {
-        val preference = preferenceScreen.findPreference<SwitchPreference>(SECURE_WINDOW)
+        val preference = preferenceScreen.findPreference<SwitchPreferenceCompat>(SECURE_WINDOW)
         if (preference != null) {
             preference.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any ->

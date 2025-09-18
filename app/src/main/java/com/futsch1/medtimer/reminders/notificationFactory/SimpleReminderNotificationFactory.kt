@@ -13,7 +13,7 @@ class SimpleReminderNotificationFactory(
     reminderNotificationData
 ) {
     override fun build() {
-        val notificationMessage = getNotificationString()
+        val notificationMessage = notificationStrings.notificationString
 
         builder.setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)

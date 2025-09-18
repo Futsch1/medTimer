@@ -219,4 +219,8 @@
     <string name="estimated_run_out_date">Tahmini Bitiş Tarihi</string>
     <string name="create_calendar_entry">Takvim girişi oluştur</string>
     <string name="notes">Notlar</string>
-<string name="automatically_taken">Otomatik olarak alındı olarak işaretle</string><string name="sort">Sırala</string></resources>
+    <string name="automatically_taken">Otomatik olarak alındı olarak işaretle</string>
+    <string name="sort">Sırala</string>
+    <string name="high_and_alarm">Yüksek + Alarm</string>
+    <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
+</resources>

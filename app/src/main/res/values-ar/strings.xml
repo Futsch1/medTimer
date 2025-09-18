@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="taken">تم التناول</string>
     <string name="skipped">تم التخطي</string>
@@ -241,4 +241,6 @@
     <string name="notes">ملاحظات</string>
     <string name="automatically_taken">تمييزها تلقائياً على أنها مأخوذة</string>
     <string name="sort">فرز</string>
+    <string name="high_and_alarm">إنذار عالي + إنذار</string>
+    <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
 </resources>

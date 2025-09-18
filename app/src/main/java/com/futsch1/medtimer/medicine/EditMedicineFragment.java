@@ -1,7 +1,10 @@
 package com.futsch1.medtimer.medicine;
 
+import static com.futsch1.medtimer.medicine.editMedicine.NotificationImportanceKt.showEnablePermissionsDialog;
+
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -74,19 +77,21 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         notes = entity.notes;
 
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(entity.name);
+        ((EditText) fragmentView.findViewById(R.id.editMedicineName)).setText(entity.name);
 
+        setupSelectIcon(fragmentView);
         setupEnableColor(fragmentView, entity.useColor);
         setupColorButton(fragmentView, entity.useColor);
+
+        setupNotificationImportance(fragmentView, entity);
         setupNotesButton(fragmentView);
-        ((EditText) fragmentView.findViewById(R.id.editMedicineName)).setText(entity.name);
-        RecyclerView recyclerView = setupMedicineList(fragmentView);
-        setupSwiping(recyclerView);
-        setupSelectIcon(fragmentView);
-        setupNotificationImportance(fragmentView, entity.notificationImportance);
+        setupOpenCalendarButton(fragmentView);
         setupStockButton(fragmentView);
         setupTagsButton(fragmentView, entity.medicineId);
 
-        setupOpenCalendarButton(fragmentView);
+        RecyclerView recyclerView = setupMedicineList(fragmentView);
+        setupSwiping(recyclerView);
+
         setupAddReminderButton(fragmentView, entity);
 
         adapter.setMedicine(entity);
@@ -97,45 +102,6 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
                 }
         );
         return false;
-    }
-
-    private void setupEnableColor(View fragmentView, boolean useColor) {
-        enableColor = fragmentView.findViewById(R.id.enableColor);
-        enableColor.setChecked(useColor);
-        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-    }
-
-    private void setupColorButton(View fragmentView, boolean useColor) {
-        colorButton = fragmentView.findViewById(R.id.selectColor);
-        ViewColorHelper.setButtonBackground(colorButton, color);
-        colorButton.setOnClickListener(v -> new ColorPickerDialog(requireContext(), requireActivity(), color, newColor -> {
-            color = newColor;
-            ViewColorHelper.setButtonBackground(colorButton, color);
-            Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show();
-            return Unit.INSTANCE;
-        }));
-        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
-    }
-
-    private void setupNotesButton(View fragmentView) {
-        MaterialButton openNotes = fragmentView.findViewById(R.id.openNotes);
-        openNotes.setOnClickListener(v -> new NotesDialog(requireContext(), notes, newNote -> {
-            notes = newNote;
-            return Unit.INSTANCE;
-        }));
-    }
-
-    private @NonNull RecyclerView setupMedicineList(View fragmentView) {
-        RecyclerView recyclerView = fragmentView.findViewById(R.id.reminderList);
-        adapter = new ReminderViewAdapter(requireActivity(), getThread());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        return recyclerView;
-    }
-
-    private void setupSwiping(RecyclerView recyclerView) {
-        SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), null)
-                .attachToRecyclerView(recyclerView);
     }
 
     private void setupSelectIcon(View fragmentView) {
@@ -157,13 +123,70 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         );
     }
 
-    private void setupNotificationImportance(View fragmentView, int notificationImportanceValue) {
+    private void setupEnableColor(View fragmentView, boolean useColor) {
+        enableColor = fragmentView.findViewById(R.id.enableColor);
+        enableColor.setChecked(useColor);
+        enableColor.setOnCheckedChangeListener((buttonView, isChecked) -> colorButton.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+    }
+
+    private void setupColorButton(View fragmentView, boolean useColor) {
+        colorButton = fragmentView.findViewById(R.id.selectColor);
+        ViewColorHelper.setButtonBackground(colorButton, color);
+        colorButton.setOnClickListener(v -> new ColorPickerDialog(requireContext(), requireActivity(), color, newColor -> {
+            color = newColor;
+            ViewColorHelper.setButtonBackground(colorButton, color);
+            Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show();
+            return Unit.INSTANCE;
+        }));
+        colorButton.setVisibility(useColor ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupNotificationImportance(View fragmentView, Medicine medicine) {
         notificationImportance = fragmentView.findViewById(R.id.notificationImportance);
 
         String[] importanceTexts = this.getResources().getStringArray(R.array.notification_importance);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.dropdown_item, importanceTexts);
         notificationImportance.setAdapter(arrayAdapter);
-        notificationImportance.setSelection(NotificationImportanceKt.importanceValueToIndex(notificationImportanceValue));
+        notificationImportance.setSelection(NotificationImportanceKt.importanceValueToIndex(medicine));
+        notificationImportance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 2) {
+                    showEnablePermissionsDialog(requireContext());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Intentionally empty
+            }
+        });
+    }
+
+    private void setupNotesButton(View fragmentView) {
+        MaterialButton openNotes = fragmentView.findViewById(R.id.openNotes);
+        openNotes.setOnClickListener(v -> new NotesDialog(requireContext(), notes, newNote -> {
+            notes = newNote;
+            return Unit.INSTANCE;
+        }));
+    }
+
+    private void setupOpenCalendarButton(View fragmentView) {
+        MaterialButton openCalendar = fragmentView.findViewById(R.id.openCalendar);
+        openCalendar.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(openCalendar);
+            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action =
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
+                            getEntityId(),
+                            30,
+                            30
+                    );
+            try {
+                navController.navigate(action);
+            } catch (IllegalArgumentException e) {
+                // Intentionally empty
+            }
+        });
     }
 
     private void setupStockButton(View fragmentView) {
@@ -185,22 +208,17 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         });
     }
 
-    private void setupOpenCalendarButton(View fragmentView) {
-        MaterialButton openCalendar = fragmentView.findViewById(R.id.openCalendar);
-        openCalendar.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(openCalendar);
-            EditMedicineFragmentDirections.ActionEditMedicineFragmentToMedicineCalendarFragment action =
-                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
-                            getEntityId(),
-                            30,
-                            30
-                    );
-            try {
-                navController.navigate(action);
-            } catch (IllegalArgumentException e) {
-                // Intentionally empty
-            }
-        });
+    private @NonNull RecyclerView setupMedicineList(View fragmentView) {
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.reminderList);
+        adapter = new ReminderViewAdapter(requireActivity(), getThread());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        return recyclerView;
+    }
+
+    private void setupSwiping(RecyclerView recyclerView) {
+        SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), null)
+                .attachToRecyclerView(recyclerView);
     }
 
     private void setupAddReminderButton(View fragmentView, Medicine medicine) {
@@ -230,7 +248,7 @@ public class EditMedicineFragment extends DatabaseEntityEditFragment<Medicine>
         entity.name = ((EditText) fragmentView.findViewById(R.id.editMedicineName)).getText().toString().trim();
         entity.useColor = enableColor.isChecked();
         entity.color = color;
-        entity.notificationImportance = NotificationImportanceKt.importanceIndexToValue(notificationImportance.getSelectedItemPosition());
+        NotificationImportanceKt.importanceIndexToMedicine(notificationImportance.getSelectedItemPosition(), entity);
         entity.iconId = iconId;
         entity.notes = notes;
 

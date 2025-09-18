@@ -1,6 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Light.NoActionBar" />
+    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Light.NoActionBar">
+        <item name="preferenceTheme">@style/MaterialPreferenceThemeOverlay</item>
+    </style>
 
     <style name="Theme.MedTimer2" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
@@ -20,5 +22,13 @@
     <style name="Theme.MedTimer.WidgetContainer" parent="Theme.MedTimer.WidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
         <item name="medtimerWidgetPadding">6dp</item>
+    </style>
+
+    <style name="MaterialPreferenceThemeOverlay" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+    </style>
+
+    <style name="Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_switch</item>
     </style>
 </resources>
