@@ -10,7 +10,7 @@ done
 cp fastlane/metadata/android/ar-AE/ fastlane/metadata/android/ar -R
 rm -r fastlane/metadata/android/ar-AE
 
-locales=('ar' 'de-DE' 'es-ES' 'el-GR' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN')
+locales=('ar' 'bg-BG' 'de-DE' 'es-ES' 'el-GR' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN')
 
 for l in "${locales[@]}"; do
 	mkdir ./app/src/main/res/drawable-"${l:0:2}" 2>/dev/null
