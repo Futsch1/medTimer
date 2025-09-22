@@ -103,7 +103,7 @@ dependencies {
     val biometricVersion = "1.1.0"
 
     val junitVersion = "5.13.4"
-    val mockitoCoreVersion = "5.19.0"
+    val mockitoCoreVersion = "5.20.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.16"
     val jazzerVersion = "0.25.0"
