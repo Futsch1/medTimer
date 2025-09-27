@@ -67,4 +67,28 @@ class ManualDoseTest : BaseTestHelper() {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
     }
 
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun testManualDoseOfDisabledReminder() {
+        // Create medication + reminder
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("1 pill", null)
+
+        // Disable reminder
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.id.inactive)
+
+        // Create manual dose of the disabled reminder
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickOn(R.id.logManualDose)
+        clickListItem(position = 2)
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+
+        // Check if the event is created properly
+        clickOn(R.id.overviewContentContainer)
+        assertNotContains(R.id.editEventName, "Test (1 pill)")
+        assertContains(R.id.editEventName, "Test")
+        assertContains(R.id.editEventAmount, "1 pill")
+    }
+
 }

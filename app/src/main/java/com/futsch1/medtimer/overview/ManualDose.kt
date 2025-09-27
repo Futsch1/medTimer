@@ -72,7 +72,7 @@ class ManualDose(
         // Manual dose is not assigned to an existing reminder
         reminderEvent.reminderId = -1
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
-        reminderEvent.medicineName = entry.name
+        reminderEvent.medicineName = entry.baseName
         reminderEvent.color = entry.color
         reminderEvent.useColor = entry.useColor
         reminderEvent.iconId = entry.iconId
