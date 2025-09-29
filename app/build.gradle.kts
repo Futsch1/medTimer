@@ -84,7 +84,7 @@ dependencies {
     val appcompatVersion = "1.7.1"
     val materialVersion = "1.13.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.9.4"
+    val androidXNavigationVersion = "2.9.5"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val lifecycleKtxVersion = "2.9.4"
