@@ -90,7 +90,7 @@ dependencies {
     val lifecycleKtxVersion = "2.9.4"
     val workRuntimeVersion = "2.10.5"
     val coreKtxVersion = "1.17.0"
-    val roomVersion = "2.8.0"
+    val roomVersion = "2.8.1"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.13.2"
@@ -102,7 +102,7 @@ dependencies {
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
 
-    val junitVersion = "5.13.4"
+    val junitVersion = "6.0.0"
     val mockitoCoreVersion = "5.20.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.16"
