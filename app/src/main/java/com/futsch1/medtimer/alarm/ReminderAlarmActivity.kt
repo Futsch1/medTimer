@@ -15,13 +15,20 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ReminderAlarmActivity() : AppCompatActivity() {
+class ReminderAlarmActivity(
+    private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var vibrator: Vibrator
 
@@ -49,24 +56,31 @@ class ReminderAlarmActivity() : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
-        mediaPlayer.release()
+        if (this::mediaPlayer.isInitialized) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
         vibrator.cancel()
     }
 
     private fun startAlarmTone() {
-        val alarmURI = Settings.System.DEFAULT_ALARM_ALERT_URI
-        mediaPlayer = MediaPlayer.create(this, alarmURI, null, AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(), 0)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
+        lifecycleScope.launch {
+            withContext(ioCoroutineDispatcher) {
+                val alarmURI = Settings.System.DEFAULT_ALARM_ALERT_URI
+                mediaPlayer =
+                    MediaPlayer.create(this@ReminderAlarmActivity, alarmURI, null, AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(), 0)
+                mediaPlayer.isLooping = true
+                mediaPlayer.start()
 
-        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-        } else {
-            @Suppress("DEPRECATION")
-            getSystemService(VIBRATOR_SERVICE) as Vibrator
+                vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+                } else {
+                    @Suppress("DEPRECATION")
+                    getSystemService(VIBRATOR_SERVICE) as Vibrator
+                }
+                vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
+            }
         }
-        vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
     }
 
     private fun addAlarmFragment(intent: Intent?) {
