@@ -67,11 +67,14 @@ public class Reminder {
     @Expose
     public boolean automaticallyTaken;
     @Expose
-    @ColumnInfo(defaultValue = "0")
+    @ColumnInfo(defaultValue = "480")
     public int intervalStartTimeOfDay;
     @Expose
-    @ColumnInfo(defaultValue = "1439")
+    @ColumnInfo(defaultValue = "1320")
     public int intervalEndTimeOfDay;
+    @Expose
+    @ColumnInfo(defaultValue = "false")
+    public boolean dailyInterval;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -88,6 +91,9 @@ public class Reminder {
         intervalStart = 0;
         intervalStartsFromProcessed = false;
         variableAmount = false;
+        intervalStartTimeOfDay = 480;
+        intervalEndTimeOfDay = 1320;
+        dailyInterval = false;
     }
 
     public ReminderType getReminderType() {
@@ -129,7 +135,10 @@ public class Reminder {
                 linkedReminderId == that.linkedReminderId &&
                 intervalStart == that.intervalStart &&
                 intervalStartsFromProcessed == that.intervalStartsFromProcessed &&
-                variableAmount == that.variableAmount;
+                variableAmount == that.variableAmount &&
+                intervalStartTimeOfDay == that.intervalStartTimeOfDay &&
+                intervalEndTimeOfDay == that.intervalEndTimeOfDay &&
+                dailyInterval == that.dailyInterval;
     }
 
     public enum ReminderType {

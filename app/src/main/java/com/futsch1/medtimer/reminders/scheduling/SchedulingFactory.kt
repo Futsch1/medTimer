@@ -15,7 +15,11 @@ class SchedulingFactory {
             }
 
             Reminder.ReminderType.INTERVAL_BASED -> {
-                IntervalScheduling(reminder, filteredEvents, timeAccess)
+                if (reminder.dailyInterval) {
+                    DailyIntervalScheduling(reminder, filteredEvents, timeAccess)
+                } else {
+                    IntervalScheduling(reminder, filteredEvents, timeAccess)
+                }
             }
 
             else -> {

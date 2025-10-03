@@ -4,13 +4,12 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
-import kotlin.math.ceil
 
-open class IntervalScheduling(
+class DailyIntervalScheduling(
     private val reminder: Reminder,
     private val reminderEventList: List<ReminderEvent>,
     private val timeAccess: TimeAccess
-) : Scheduling {
+) : IntervalScheduling(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
         val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.reminderId, reminderEventList)
@@ -18,16 +17,26 @@ open class IntervalScheduling(
             return if (lastReminderEvent != null) {
                 getNextIntervalTimeFromReminderEvent(lastReminderEvent)
             } else {
-                Instant.ofEpochSecond(reminder.intervalStart)
+                getStartInstant(0)
             }
         }
         val instant =
-            if (lastReminderEvent != null && lastReminderEvent.remindedTimestamp >= reminder.intervalStart) {
+            if (lastReminderEvent != null) {
                 getNextIntervalTimeFromReminderEvent(lastReminderEvent)
             } else {
-                Instant.ofEpochSecond(reminder.intervalStart)
+                getStartInstant(0)
             }
         return adjustToToday(instant)
+    }
+
+    private fun getStartInstant(deltaDay: Long = 0): Instant {
+        val nextDateTime = timeAccess.localDate().plusDays(deltaDay).atTime(reminder.intervalStartTimeOfDay / 60, reminder.intervalStartTimeOfDay % 60)
+        return nextDateTime.toInstant(timeAccess.systemZone().rules.getOffset(nextDateTime))
+    }
+
+    private fun getEndInstant(nextTime: Instant): Instant {
+        val endDateTime = nextTime.atZone(timeAccess.systemZone()).withHour(reminder.intervalEndTimeOfDay / 60).withMinute(reminder.intervalEndTimeOfDay % 60)
+        return endDateTime.toInstant()
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
@@ -40,23 +49,11 @@ open class IntervalScheduling(
                 Instant.ofEpochSecond(
                     lastReminderEvent.remindedTimestamp
                 )
-        return instant?.plusSeconds(reminder.timeInMinutes * 60L)
-    }
-
-    protected fun adjustToToday(instant: Instant?): Instant? {
-        var adjustedInstant = instant
-        if (instant != null) {
-            // If the interval has been missed several times, do not re-raise the interval for all the past,
-            // limit to the first interval today.
-            val today = timeAccess.localDate().atStartOfDay()
-            val todayInstant = today.toInstant(timeAccess.systemZone().rules.getOffset(today))
-            if (instant.isBefore(todayInstant)) {
-                // First interval that is triggered today
-                val deltaMinutes: Long = (todayInstant.epochSecond - instant.epochSecond) / 60L
-                val numIntervals = ceil(deltaMinutes.toDouble() / reminder.timeInMinutes).toLong()
-                adjustedInstant = instant.plusSeconds(numIntervals * reminder.timeInMinutes * 60L)
-            }
+        val nextTime = instant?.plusSeconds(reminder.timeInMinutes * 60L)
+        return if (nextTime != null && nextTime.isAfter(getEndInstant(nextTime))) {
+            getStartInstant(1)
+        } else {
+            nextTime
         }
-        return adjustedInstant
     }
 }
