@@ -12,6 +12,8 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import kotlinx.coroutines.flow.Flow;
+
 @Dao
 public interface MedicineDao {
     @Transaction
@@ -41,6 +43,9 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Reminder getReminder(int reminderId);
+
+    @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
+    Flow<Reminder> getReminderFlow(int reminderId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
     LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);

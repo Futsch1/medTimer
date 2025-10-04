@@ -3,14 +3,17 @@
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="window_flag_secure"
-        android:title="@string/block_screen_capture" />
+        android:title="@string/block_screen_capture"
+        android:singleLineTitle="false"/>
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:enabled="false"
         android:key="app_authentication"
-        android:title="@string/app_authentication" />
+        android:title="@string/app_authentication"
+        android:singleLineTitle="false"/>
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="hide_med_name"
-        android:title="@string/hide_med_name" />
+        android:title="@string/hide_med_name"
+        android:singleLineTitle="false"/>
 </androidx.preference.PreferenceScreen>

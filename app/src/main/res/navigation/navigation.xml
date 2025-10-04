@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_editMedicineFragment_to_medicineStockFragment"
             app:destination="@id/medicineStockFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesRootFragment"
+            app:destination="@id/advancedReminderPreferencesRootFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -123,4 +126,23 @@
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.overview.OverviewFragment"
         android:label="@string/tab_overview" />
+    <fragment
+        android:id="@+id/advancedReminderPreferencesRootFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesRootFragment"
+        android:label="@string/advanced_settings">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesInstructionsFragment"
+            app:destination="@id/advancedReminderPreferencesInstructionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesInstructionsFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesInstructionsFragment"
+        android:label="@string/instructions_label">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

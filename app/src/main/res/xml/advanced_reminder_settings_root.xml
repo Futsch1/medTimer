@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:title="Reminder status"
+        app:key="reminder_status" />
+    <Preference
+        android:title="@string/instructions_label"
+        app:key="instructions" />
+    <PreferenceCategory app:title="@string/interval_based_reminder" app:key="interval_category">
+        <Preference
+            android:title="@string/interval"
+            app:key="interval" />
+        <ListPreference
+            android:title="Interval start"
+            app:key="interval_start_type" />
+        <Preference
+            android:title="Interval type"
+            app:key="interval_type" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/cycle_reminders" app:key="cycle_category">
+        <EditTextPreference
+            app:key="cycle_start_date"
+            app:title="@string/cycle_start_date" />
+        <EditTextPreference
+            app:key="cycle_consecutive_days"
+            app:title="@string/cycle_consecutive_days" />
+        <EditTextPreference
+            app:key="cycle_pause_days"
+            app:title="@string/cycle_pause_days" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Further settings">
+        <SwitchPreferenceCompat
+            android:title="@string/automatically_taken"
+            app:key="automatically_taken" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:title="@string/override_dnd"
+            app:key="override_dnd" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>
