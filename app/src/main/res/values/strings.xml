@@ -225,4 +225,6 @@
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
+    <string name="continuous">Continuous</string>
+    <string name="daily">Daily</string>
 </resources>
