@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine.advancedSettings
 
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 abstract class AdvancedReminderPreferencesFragment(
     val preferencesResId: Int,
     val links: Map<String, (Int) -> NavDirections>,
+    val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
+    val simpleSummaryKeys: List<String>,
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : PreferenceFragmentCompat() {
@@ -25,14 +28,20 @@ abstract class AdvancedReminderPreferencesFragment(
         val reminderViewModel = ViewModelProvider(this)[ReminderViewModel::class.java]
 
         this.lifecycleScope.launch(ioDispatcher) {
-            preferenceManager.preferenceDataStore = ReminderDataStore(reminderId, reminderViewModel.medicineRepository)
+            preferenceManager.preferenceDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
             this.launch(mainDispatcher) {
                 setPreferencesFromResource(preferencesResId, rootKey)
                 setupLinks()
+                setupOnClick()
+                customSetup()
             }
         }
 
         observeUserData(reminderViewModel, reminderId)
+    }
+
+    open fun customSetup() {
+        // Intentionally empty
     }
 
     private fun observeUserData(reminderViewModel: ReminderViewModel, reminderId: Int) {
@@ -59,7 +68,20 @@ abstract class AdvancedReminderPreferencesFragment(
         }
     }
 
+    private fun setupOnClick() {
+        for (onClick in customOnClick) {
+            val preference = findPreference<Preference?>(onClick.key)
+            preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                onClick.value(requireActivity(), preference)
+                true
+            }
+        }
+    }
+
     open fun onReminderUpdated(reminder: Reminder) {
-        // Intentionally empty
+        for (simpleSummaryKey in simpleSummaryKeys) {
+            val preference = findPreference<Preference?>(simpleSummaryKey)
+            preference?.summary = preferenceManager.preferenceDataStore?.getString(simpleSummaryKey, "?")
+        }
     }
 }

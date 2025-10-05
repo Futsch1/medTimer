@@ -7,7 +7,9 @@
     <Preference
         android:title="@string/instructions_label"
         app:key="instructions" />
-    <PreferenceCategory app:title="@string/interval_based_reminder" app:key="interval_category">
+    <PreferenceCategory
+        app:key="interval_category"
+        app:title="@string/interval_based_reminder">
         <Preference
             android:title="@string/interval"
             app:key="interval" />
@@ -18,8 +20,10 @@
             android:title="Interval type"
             app:key="interval_type" />
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/cycle_reminders" app:key="cycle_category">
-        <EditTextPreference
+    <PreferenceCategory
+        app:key="cycle_category"
+        app:title="@string/cycle_reminders">
+        <Preference
             app:key="cycle_start_date"
             app:title="@string/cycle_start_date" />
         <EditTextPreference
