@@ -6,6 +6,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 
@@ -43,13 +44,24 @@ class AdvancedReminderPreferencesRootFragment(
 
         findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
         findPreference<Preference>("cycle_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
+        findPreference<Preference>("interval")?.summary = Interval(reminder.timeInMinutes).toTranslatedString(requireContext())
     }
 
-    override fun customSetup() {
+    override fun customSetup(reminder: Reminder) {
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
             editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
         }
         findPreference<EditTextPreference>("cycle_pause_days")?.setOnBindEditTextListener { editText -> editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED }
+
+        findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            EditIntervalDialog(requireContext(), reminder.timeInMinutes) { newIntervalMinutes ->
+                preferenceManager.preferenceDataStore?.putInt(
+                    "interval",
+                    newIntervalMinutes
+                )
+            }
+            true
+        }
     }
 
 }

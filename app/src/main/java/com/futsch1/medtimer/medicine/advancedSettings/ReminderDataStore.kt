@@ -11,10 +11,6 @@ class ReminderDataStore(
 ) : PreferenceDataStore() {
     var reminder: Reminder = medicineRepository.getReminder(reminderId)
 
-    init {
-        reminder
-    }
-
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {
             "automatically_taken" -> reminder.automaticallyTaken
@@ -54,6 +50,20 @@ class ReminderDataStore(
                 reminder.pauseDays = value!!.toInt()
             } catch (_: NumberFormatException) { /* Intentionally empty */
             }
+        }
+        medicineRepository.updateReminder(reminder)
+    }
+
+    override fun getInt(key: String?, defValue: Int): Int {
+        return when (key) {
+            "interval" -> return reminder.timeInMinutes
+            else -> defValue
+        }
+    }
+
+    override fun putInt(key: String?, value: Int) {
+        when (key) {
+            "interval" -> reminder.timeInMinutes = value
         }
         medicineRepository.updateReminder(reminder)
     }

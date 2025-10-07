@@ -27,20 +27,25 @@ abstract class AdvancedReminderPreferencesFragment(
         reminderId = AdvancedReminderPreferencesRootFragmentArgs.fromBundle(requireArguments()).getReminderId()
         val reminderViewModel = ViewModelProvider(this)[ReminderViewModel::class.java]
 
+        postponeEnterTransition()
+
         this.lifecycleScope.launch(ioDispatcher) {
-            preferenceManager.preferenceDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
+            val reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
+            preferenceManager.preferenceDataStore = reminderDataStore
             this.launch(mainDispatcher) {
                 setPreferencesFromResource(preferencesResId, rootKey)
                 setupLinks()
                 setupOnClick()
-                customSetup()
+                customSetup(reminderDataStore.reminder)
+
+                startPostponedEnterTransition()
             }
         }
 
         observeUserData(reminderViewModel, reminderId)
     }
 
-    open fun customSetup() {
+    open fun customSetup(reminder: Reminder) {
         // Intentionally empty
     }
 
