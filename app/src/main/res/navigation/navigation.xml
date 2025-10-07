@@ -136,11 +136,22 @@
         <action
             android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesInstructionsFragment"
             app:destination="@id/advancedReminderPreferencesInstructionsFragment" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesStatusFragment"
+            app:destination="@id/advancedReminderPreferencesStatusFragment" />
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesInstructionsFragment"
         android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesInstructionsFragment"
         android:label="@string/instructions_label">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesStatusFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesStatusFragment"
+        android:label="active">
         <argument
             android:name="reminderId"
             app:argType="integer" />

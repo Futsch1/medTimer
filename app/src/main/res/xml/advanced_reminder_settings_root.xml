@@ -35,11 +35,10 @@
     </PreferenceCategory>
     <PreferenceCategory app:title="Further settings">
         <SwitchPreferenceCompat
+            android:title="@string/variable_amount"
+            app:key="variable_amount" />
+        <SwitchPreferenceCompat
             android:title="@string/automatically_taken"
             app:key="automatically_taken" />
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:title="@string/override_dnd"
-            app:key="override_dnd" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

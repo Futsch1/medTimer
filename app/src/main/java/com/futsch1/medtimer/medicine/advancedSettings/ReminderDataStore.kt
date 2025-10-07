@@ -5,6 +5,7 @@ import androidx.preference.PreferenceDataStore
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
+import java.time.LocalDate
 
 class ReminderDataStore(
     val reminderId: Int, val context: Context, val medicineRepository: MedicineRepository,
@@ -14,7 +15,11 @@ class ReminderDataStore(
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {
             "automatically_taken" -> reminder.automaticallyTaken
-            "override_dnd" -> reminder.active
+            "variable_amount" -> reminder.variableAmount
+            "reminder_active" -> reminder.active
+            "active_in_time_period" -> reminder.periodStart != 0L || reminder.periodEnd != 0L
+            "period_start_switch" -> reminder.periodStart != 0L
+            "period_end_switch" -> reminder.periodEnd != 0L
             else -> defValue
         }
     }
@@ -22,7 +27,30 @@ class ReminderDataStore(
     override fun putBoolean(key: String?, value: Boolean) {
         when (key) {
             "automatically_taken" -> reminder.automaticallyTaken = value
-            "override_dnd" -> reminder.active = value
+            "variable_amount" -> reminder.variableAmount = value
+            "reminder_active" -> reminder.active = value
+            "active_in_time_period" -> {
+                if (!value) {
+                    reminder.periodStart = 0
+                    reminder.periodEnd = 0
+                }
+            }
+
+            "period_start_switch" -> {
+                if (value) {
+                    reminder.periodStart = LocalDate.now().toEpochDay()
+                } else {
+                    reminder.periodStart = 0
+                }
+            }
+
+            "period_end_switch" -> {
+                if (value) {
+                    reminder.periodEnd = LocalDate.now().toEpochDay()
+                } else {
+                    reminder.periodEnd = 0
+                }
+            }
         }
         medicineRepository.updateReminder(reminder)
     }
@@ -33,6 +61,8 @@ class ReminderDataStore(
             "cycle_start_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.cycleStartDay)
             "cycle_consecutive_days" -> reminder.consecutiveDays.toString()
             "cycle_pause_days" -> reminder.pauseDays.toString()
+            "period_start_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodStart)
+            "period_end_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodEnd)
             else -> defValue
         }
     }
@@ -50,6 +80,9 @@ class ReminderDataStore(
                 reminder.pauseDays = value!!.toInt()
             } catch (_: NumberFormatException) { /* Intentionally empty */
             }
+
+            "period_start_date" -> reminder.periodStart = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
+            "period_end_date" -> reminder.periodEnd = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
         }
         medicineRepository.updateReminder(reminder)
     }

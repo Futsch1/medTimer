@@ -9,6 +9,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
+import com.futsch1.medtimer.helpers.isReminderActive
 
 
 fun showDateEdit(activity: FragmentActivity, preference: Preference) {
@@ -32,6 +33,11 @@ class AdvancedReminderPreferencesRootFragment(
             AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesInstructionsFragment(
                 id
             )
+        },
+        "reminder_status" to { id ->
+            AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesStatusFragment(
+                id
+            )
         }
     ),
     mapOf(
@@ -44,6 +50,8 @@ class AdvancedReminderPreferencesRootFragment(
 
         findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
         findPreference<Preference>("cycle_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
+        findPreference<Preference>("reminder_status")?.summary =
+            requireContext().getString(if (isReminderActive(reminder)) R.string.active else R.string.inactive)
         findPreference<Preference>("interval")?.summary = Interval(reminder.timeInMinutes).toTranslatedString(requireContext())
     }
 
