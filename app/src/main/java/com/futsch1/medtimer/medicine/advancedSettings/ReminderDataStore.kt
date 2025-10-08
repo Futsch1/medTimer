@@ -17,7 +17,6 @@ class ReminderDataStore(
             "automatically_taken" -> reminder.automaticallyTaken
             "variable_amount" -> reminder.variableAmount
             "reminder_active" -> reminder.active
-            "active_in_time_period" -> reminder.periodStart != 0L || reminder.periodEnd != 0L
             "period_start_switch" -> reminder.periodStart != 0L
             "period_end_switch" -> reminder.periodEnd != 0L
             else -> defValue
@@ -29,12 +28,6 @@ class ReminderDataStore(
             "automatically_taken" -> reminder.automaticallyTaken = value
             "variable_amount" -> reminder.variableAmount = value
             "reminder_active" -> reminder.active = value
-            "active_in_time_period" -> {
-                if (!value) {
-                    reminder.periodStart = 0
-                    reminder.periodEnd = 0
-                }
-            }
 
             "period_start_switch" -> {
                 if (value) {
