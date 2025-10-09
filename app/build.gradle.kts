@@ -23,12 +23,12 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 132
-        versionName = "1.19.0"
+        versionCode = 133
+        versionName = "1.19.1"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
+        resConfigs("en,ar,bg,da,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -63,7 +63,7 @@ android {
     @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
-        localeFilters += listOf("en", "ar", "bg", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
+        localeFilters += listOf("en", "ar", "bg", "da", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN", "zh-rTW")
     }
     testOptions {
         unitTests {
@@ -90,7 +90,7 @@ dependencies {
     val lifecycleKtxVersion = "2.9.4"
     val workRuntimeVersion = "2.10.5"
     val coreKtxVersion = "1.17.0"
-    val roomVersion = "2.8.1"
+    val roomVersion = "2.8.2"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.13.2"
