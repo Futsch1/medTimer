@@ -14,7 +14,7 @@ public class CyclesHelper {
 
     @SuppressLint("DefaultLocale")
     public static String getCycleCountString(Reminder reminder) {
-        if (reminder.pauseDays != 0) {
+        if (reminder.pauseDays != 0 && reminder.consecutiveDays != 1) {
             long cycleStartDay = reminder.cycleStartDay;
             long dayInCycle = LocalDate.now().toEpochDay() - cycleStartDay;
             int cycleLength = reminder.consecutiveDays + reminder.pauseDays;
