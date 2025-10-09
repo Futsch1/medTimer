@@ -49,9 +49,6 @@ class AdvancedReminderPreferencesRootFragment(
     override fun onReminderUpdated(reminder: Reminder) {
         super.onReminderUpdated(reminder)
 
-        findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
-        findPreference<Preference>("cycle_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
-        findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
         findPreference<Preference>("reminder_status")?.summary =
             requireContext().getString(if (isReminderActive(reminder)) R.string.active else R.string.inactive)
         findPreference<Preference>("interval")?.summary = Interval(reminder.timeInMinutes).toTranslatedString(requireContext())
@@ -92,6 +89,10 @@ class AdvancedReminderPreferencesRootFragment(
     }
 
     override fun customSetup(reminder: Reminder) {
+        findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
+        findPreference<Preference>("cycle_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
+        findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
+
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
             editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
         }
