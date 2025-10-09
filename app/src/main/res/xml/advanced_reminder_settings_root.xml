@@ -33,6 +33,21 @@
             app:key="cycle_pause_days"
             app:title="@string/cycle_pause_days" />
     </PreferenceCategory>
+    <PreferenceCategory
+        app:key="time_based_category"
+        app:title="@string/time_based_reminder">
+        <MultiSelectListPreference
+            app:key="remind_on_weekdays"
+            app:title="@string/remind_on"
+            app:entries="@array/days"
+            app:entryValues="@array/one_to_seven" />
+        <MultiSelectListPreference
+            app:key="remind_on_days"
+            app:title="@string/remind_on"
+            app:entries="@array/days_of_month"
+            app:entryValues="@array/days_of_month"/>
+            />
+    </PreferenceCategory>
     <PreferenceCategory app:title="Further settings">
         <SwitchPreferenceCompat
             android:title="@string/variable_amount"

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.medicine.advancedSettings
 
 import android.content.Context
 import androidx.preference.PreferenceDataStore
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -82,7 +83,7 @@ class ReminderDataStore(
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {
-            "interval" -> return reminder.timeInMinutes
+            "interval" -> reminder.timeInMinutes
             else -> defValue
         }
     }
@@ -91,6 +92,57 @@ class ReminderDataStore(
         when (key) {
             "interval" -> reminder.timeInMinutes = value
         }
+        medicineRepository.updateReminder(reminder)
+    }
+
+    override fun getStringSet(key: String?, defValues: Set<String?>?): Set<String?>? {
+        return when (key) {
+            "remind_on_weekdays" -> {
+                val values: MutableSet<String> = mutableSetOf()
+                val days = context.resources.getStringArray(R.array.one_to_seven)
+                for (i in reminder.days.indices) {
+                    if (reminder.days[i]) {
+                        values += days[i]
+                    }
+                }
+                values
+            }
+
+            "remind_on_days" -> {
+                val values: MutableSet<String> = mutableSetOf()
+                val days = context.resources.getStringArray(R.array.days_of_month)
+                for (i in days.indices) {
+                    if ((reminder.activeDaysOfMonth and (1 shl i)) > 0) {
+                        values += days[i]
+                    }
+                }
+                values
+            }
+
+            else -> defValues
+        }
+    }
+
+    override fun putStringSet(key: String?, values: Set<String?>?) {
+        when (key) {
+            "remind_on_weekdays" -> {
+                val days = context.resources.getStringArray(R.array.one_to_seven)
+                for (i in reminder.days.indices) {
+                    reminder.days[i] = values?.contains(days[i]) == true || values?.isEmpty() == true
+                }
+            }
+
+            "remind_on_days" -> {
+                val days = context.resources.getStringArray(R.array.days_of_month)
+                reminder.activeDaysOfMonth = 0
+                for (i in days.indices) {
+                    if (values?.contains(days[i]) == true) {
+                        reminder.activeDaysOfMonth = reminder.activeDaysOfMonth or (1 shl i)
+                    }
+                }
+            }
+        }
+
         medicineRepository.updateReminder(reminder)
     }
 }
