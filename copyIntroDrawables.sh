@@ -15,10 +15,10 @@ locales=('ar' 'bg' 'da-DK' 'de-DE' 'es-ES' 'el-GR' 'fr-FR' 'it-IT' 'nl-NL' 'pl-P
 for l in "${locales[@]}"; do
 	mkdir ./app/src/main/res/drawable-"${l:0:2}" 2>/dev/null
 	for i in $(seq 0 4); do
-	  if [ -d ./app/src/main/res/drawable-"${l}" ]; then
-      cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l}"/intro_"${names[$i]}".png
-	  else
-		  cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l:0:2}"/intro_"${names[$i]}".png
+		if [ -d ./app/src/main/res/drawable-"${l}" ]; then
+			cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l}"/intro_"${names[$i]}".png
+		else
+			cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l:0:2}"/intro_"${names[$i]}".png
 		fi
 	done
 done
