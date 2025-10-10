@@ -111,9 +111,11 @@ class ReminderDataStore(
             "remind_on_days" -> {
                 val values: MutableSet<String> = mutableSetOf()
                 val days = context.resources.getStringArray(R.array.days_of_month)
-                for (i in days.indices) {
-                    if ((reminder.activeDaysOfMonth and (1 shl i)) > 0) {
-                        values += days[i]
+                if ((reminder.activeDaysOfMonth and 0x7FFF_FFFF) != 0x7FFF_FFFF) {
+                    for (i in days.indices) {
+                        if ((reminder.activeDaysOfMonth and (1 shl i)) > 0) {
+                            values += days[i]
+                        }
                     }
                 }
                 values
@@ -134,10 +136,14 @@ class ReminderDataStore(
 
             "remind_on_days" -> {
                 val days = context.resources.getStringArray(R.array.days_of_month)
-                reminder.activeDaysOfMonth = 0
-                for (i in days.indices) {
-                    if (values?.contains(days[i]) == true) {
-                        reminder.activeDaysOfMonth = reminder.activeDaysOfMonth or (1 shl i)
+                if (values?.isEmpty() == true) {
+                    reminder.activeDaysOfMonth = 0x7FFF_FFFF
+                } else {
+                    reminder.activeDaysOfMonth = 0
+                    for (i in days.indices) {
+                        if (values?.contains(days[i]) == true) {
+                            reminder.activeDaysOfMonth = reminder.activeDaysOfMonth or (1 shl i)
+                        }
                     }
                 }
             }

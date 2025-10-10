@@ -57,9 +57,7 @@ class AdvancedReminderPreferencesRootFragment(
     }
 
     private fun getDaysSummary(reminder: Reminder): String {
-        return if (reminder.activeDaysOfMonth == 0) {
-            requireContext().getString(R.string.never)
-        } else if ((reminder.activeDaysOfMonth and 0x7FFF_FFFF) == 0x7FFF_FFFF) {
+        return if ((reminder.activeDaysOfMonth and 0x7FFF_FFFF) == 0x7FFF_FFFF) {
             requireContext().getString(R.string.every_day_of_month)
         } else {
             val days: MutableList<String> = mutableListOf()
