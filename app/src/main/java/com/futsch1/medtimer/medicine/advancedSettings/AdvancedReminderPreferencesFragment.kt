@@ -34,6 +34,7 @@ abstract class AdvancedReminderPreferencesFragment(
             preferenceManager.preferenceDataStore = reminderDataStore
             this.launch(mainDispatcher) {
                 setPreferencesFromResource(preferencesResId, rootKey)
+                observeUserData(reminderViewModel, reminderId)
                 setupLinks()
                 setupOnClick()
                 customSetup(reminderDataStore.reminder)
@@ -42,7 +43,6 @@ abstract class AdvancedReminderPreferencesFragment(
             }
         }
 
-        observeUserData(reminderViewModel, reminderId)
     }
 
     open fun customSetup(reminder: Reminder) {
