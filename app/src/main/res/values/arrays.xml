@@ -8,7 +8,7 @@
         <item>@string/default_</item>
         <item>@string/alternative</item>
     </string-array>
-    <string-array name="theme_entries_values">
+    <string-array name="values_0_and_1">
         <item>0</item>
         <item>1</item>
     </string-array>
@@ -156,5 +156,9 @@
         <item>29</item>
         <item>30</item>
         <item>31</item>
+    </string-array>
+    <string-array name="interval_start">
+        <item>@string/interval_start_reminded</item>
+        <item>@string/interval_start_processed</item>
     </string-array>
 </resources>

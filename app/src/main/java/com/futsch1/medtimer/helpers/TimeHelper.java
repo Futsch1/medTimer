@@ -259,6 +259,11 @@ public class TimeHelper {
         return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
+    public static String toLocalizedDatetimeString(Context context, LocalDateTime localDateTime) {
+        long epochSecond = localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
+        return toLocalizedDatetimeString(context, epochSecond);
+    }
+
     /**
      * @param context   Context to extract date and time formats
      * @param timeStamp Time stamp in seconds since epoch

@@ -13,12 +13,14 @@
         <Preference
             android:title="@string/interval"
             app:key="interval" />
-        <ListPreference
-            android:title="Interval start"
-            app:key="interval_start_type" />
         <Preference
             android:title="Interval type"
             app:key="interval_type" />
+        <ListPreference
+            android:title="Interval start"
+            app:key="interval_start"
+            android:entries="@array/interval_start"
+            android:entryValues="@array/values_0_and_1"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:key="cycle_category"

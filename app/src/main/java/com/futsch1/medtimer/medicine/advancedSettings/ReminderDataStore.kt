@@ -20,6 +20,7 @@ class ReminderDataStore(
             "reminder_active" -> reminder.active
             "period_start_switch" -> reminder.periodStart != 0L
             "period_end_switch" -> reminder.periodEnd != 0L
+            "daily_interval" -> reminder.dailyInterval
             else -> defValue
         }
     }
@@ -45,6 +46,8 @@ class ReminderDataStore(
                     reminder.periodEnd = 0
                 }
             }
+
+            "daily_interval" -> reminder.dailyInterval = value
         }
         medicineRepository.updateReminder(reminder)
     }
@@ -57,6 +60,10 @@ class ReminderDataStore(
             "cycle_pause_days" -> reminder.pauseDays.toString()
             "period_start_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodStart)
             "period_end_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodEnd)
+            "interval_start" -> if (reminder.intervalStartsFromProcessed) "1" else "0"
+            "interval_start_time" -> TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
+            "interval_daily_start_time" -> TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong())
+            "interval_daily_end_time" -> TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
             else -> defValue
         }
     }
@@ -77,6 +84,10 @@ class ReminderDataStore(
 
             "period_start_date" -> reminder.periodStart = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
             "period_end_date" -> reminder.periodEnd = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
+            "interval_start" -> reminder.intervalStartsFromProcessed = value == "1"
+            "interval_start_time" -> reminder.intervalStart = TimeHelper.dateTimeStringToSecondsSinceEpoch(context, value!!)
+            "interval_daily_start_time" -> reminder.intervalStartTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
+            "interval_daily_end_time" -> reminder.intervalEndTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
         }
         medicineRepository.updateReminder(reminder)
     }

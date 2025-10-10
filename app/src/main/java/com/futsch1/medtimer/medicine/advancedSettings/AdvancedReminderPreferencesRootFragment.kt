@@ -3,7 +3,6 @@ package com.futsch1.medtimer.medicine.advancedSettings
 import android.text.InputType
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.EditTextPreference
-import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
@@ -11,10 +10,15 @@ import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 
 fun showDateEdit(activity: FragmentActivity, preference: Preference) {
-    val datePickerWrapper = DatePickerWrapper(activity, R.string.cycle_start_date)
+    val datePickerWrapper = DatePickerWrapper(activity)
     val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
     if (currentDateString != null) {
         val currentDate = TimeHelper.dateStringToDate(activity, currentDateString)
@@ -22,7 +26,39 @@ fun showDateEdit(activity: FragmentActivity, preference: Preference) {
             val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
             preference.preferenceDataStore?.putString(preference.key, newDateString)
         }
+    }
+}
 
+fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
+    val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
+    val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)
+    if (currentTimeString != null) {
+        val currentTime = TimeHelper.timeStringToMinutes(activity, currentTimeString)
+        timePickerWrapper.show(currentTime / 60, currentTime % 60) { minutes: Int ->
+            val newTimeString = TimeHelper.minutesToTimeString(activity, minutes.toLong())
+            preference.preferenceDataStore?.putString(preference.key, newTimeString)
+        }
+    }
+}
+
+fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
+    val datePickerWrapper = DatePickerWrapper(activity)
+    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
+    if (currentDateString != null) {
+        val currentDateTime = TimeHelper.dateTimeStringToSecondsSinceEpoch(activity, currentDateString)
+        val startInstant = Instant.ofEpochSecond(currentDateTime)
+        val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+        datePickerWrapper.show(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
+            val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
+            timePickerWrapper.show(dateTime.hour, dateTime.minute) { minutes: Int ->
+                val selectedLocalDateTime = LocalDateTime.of(
+                    LocalDate.ofEpochDay(daysSinceEpoch),
+                    LocalTime.of(minutes / 60, minutes % 60)
+                )
+                val timeString = TimeHelper.toLocalizedDatetimeString(activity, selectedLocalDateTime)
+                preference.preferenceDataStore?.putString(preference.key, timeString)
+            }
+        }
     }
 }
 
@@ -39,6 +75,12 @@ class AdvancedReminderPreferencesRootFragment(
             AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesStatusFragment(
                 id
             )
+        },
+        "interval_type" to { id ->
+            AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesIntervalType(
+                id
+            )
+
         }
     ),
     mapOf(
@@ -52,8 +94,26 @@ class AdvancedReminderPreferencesRootFragment(
         findPreference<Preference>("reminder_status")?.summary =
             requireContext().getString(if (isReminderActive(reminder)) R.string.active else R.string.inactive)
         findPreference<Preference>("interval")?.summary = Interval(reminder.timeInMinutes).toTranslatedString(requireContext())
-        findPreference<MultiSelectListPreference>("remind_on_weekdays")?.summary = getWeekdaysSummary(reminder)
-        findPreference<MultiSelectListPreference>("remind_on_days")?.summary = getDaysSummary(reminder)
+        findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(reminder)
+        findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(reminder)
+        findPreference<Preference>("interval_start")?.summary =
+            requireContext().getString(if (reminder.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
+        findPreference<Preference>("interval_type")?.summary = getIntervalTypeSummary(reminder)
+    }
+
+    private fun getIntervalTypeSummary(reminder: Reminder): String {
+        return if (reminder.dailyInterval) {
+            requireContext().getString(
+                R.string.daily_from_to,
+                TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong()),
+                TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
+            )
+        } else {
+            requireContext().getString(
+                R.string.continuous_from,
+                TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
+            )
+        }
     }
 
     private fun getDaysSummary(reminder: Reminder): String {
