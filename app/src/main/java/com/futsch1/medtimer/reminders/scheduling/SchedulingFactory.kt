@@ -28,6 +28,6 @@ class SchedulingFactory {
                 StandardScheduling(reminder, filteredEvents, timeAccess)
             }
         }
-        return WeekendModeSchedulingFacade(scheduler, timeAccess, sharedPreferences)
+        return WeekendModeSchedulingDecorator(scheduler, timeAccess, sharedPreferences)
     }
 }

@@ -5,13 +5,13 @@ import android.util.ArraySet
 import com.futsch1.medtimer.preferences.PreferencesNames
 import java.time.Instant
 
-class WeekendModeSchedulingFacade(val scheduler: Scheduling, val timeAccess: ReminderScheduler.TimeAccess, private val preferences: SharedPreferences) :
+class WeekendModeSchedulingDecorator(val scheduler: Scheduling, val timeAccess: ReminderScheduler.TimeAccess, private val preferences: SharedPreferences) :
     Scheduling {
     fun adjustInstant(instant: Instant): Instant {
         var instant = instant
         if (this.isWeekendModeEnabled) {
             val weekendTime = preferences.getInt(PreferencesNames.WEEKEND_TIME, 540)
-            val weekendDays: MutableSet<String?> = preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, ArraySet())!!
+            val weekendDays: Set<String?> = preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, ArraySet())!!
             val localDateTime = instant.atZone(timeAccess.systemZone())
             val dayOfWeek = localDateTime.dayOfWeek
             val minutes = localDateTime.minute + localDateTime.hour * 60
