@@ -5,7 +5,9 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
@@ -85,7 +87,7 @@ class CalendarEventsViewModel(
         }
         val endDay = LocalDate.now().plusDays(futureDays)
 
-        val schedulingSimulator = SchedulingSimulator(allMedicines, reminderEvents, timeProvider)
+        val schedulingSimulator = SchedulingSimulator(allMedicines, reminderEvents, timeProvider, PreferenceManager.getDefaultSharedPreferences(application))
 
         schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
             if (scheduledDate < endDay) {

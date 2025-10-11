@@ -4,22 +4,13 @@ import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import java.time.LocalDate
-import java.time.ZoneId
 
 class ReminderSchedulerLinkedUnitTest {
     @Test
     fun testSourceReminderNotRemindedYet() {
-        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
-        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
-        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
-
-        val scheduler = ReminderScheduler(mockTimeAccess)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler()
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -40,11 +31,7 @@ class ReminderSchedulerLinkedUnitTest {
 
     @Test
     fun test_scheduleLinkedReminder() {
-        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
-        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
-        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
-
-        val scheduler = ReminderScheduler(mockTimeAccess)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler()
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -110,11 +97,7 @@ class ReminderSchedulerLinkedUnitTest {
 
     @Test
     fun test_scheduleTwoLinkedReminders() {
-        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
-        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
-        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
-
-        val scheduler = ReminderScheduler(mockTimeAccess)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)

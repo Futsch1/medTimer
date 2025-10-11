@@ -1,73 +1,57 @@
-package com.futsch1.medtimer.reminders.scheduling;
+package com.futsch1.medtimer.reminders.scheduling
 
-import androidx.annotation.NonNull;
+import android.content.SharedPreferences
+import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.stream.Collectors
 
-import com.futsch1.medtimer.ScheduledReminder;
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
+class ReminderScheduler(val timeAccess: TimeAccess, val sharedPreferences: SharedPreferences) {
+    fun schedule(fullMedicineWithTagsAndReminders: List<FullMedicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {
+        val reminders = getReminders(fullMedicineWithTagsAndReminders)
+        val scheduledReminders = ArrayList<ScheduledReminder>()
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-public class ReminderScheduler {
-    private final TimeAccess timeAccess;
-
-    public ReminderScheduler(TimeAccess timeAccess) {
-        this.timeAccess = timeAccess;
-    }
-
-    public List<ScheduledReminder> schedule(@NonNull List<FullMedicine> fullMedicineWithTagsAndReminders, @NonNull List<ReminderEvent> reminderEvents) {
-        ArrayList<Reminder> reminders = getReminders(fullMedicineWithTagsAndReminders);
-        ArrayList<ScheduledReminder> scheduledReminders = new ArrayList<>();
-
-        for (Reminder reminder : reminders) {
-            Scheduling scheduling = new SchedulingFactory().create(reminder, reminderEvents, this.timeAccess);
-            Instant reminderScheduledTime = scheduling.getNextScheduledTime();
+        for (reminder in reminders) {
+            val scheduling = SchedulingFactory().create(reminder, reminderEvents, this.timeAccess, sharedPreferences)
+            val reminderScheduledTime = scheduling.getNextScheduledTime()
 
             if (reminderScheduledTime != null) {
-                scheduledReminders.add(new ScheduledReminder(getMedicine(reminder, fullMedicineWithTagsAndReminders), reminder, reminderScheduledTime));
+                scheduledReminders.add(ScheduledReminder(getMedicine(reminder, fullMedicineWithTagsAndReminders), reminder, reminderScheduledTime))
             }
         }
 
-        scheduledReminders.sort(Comparator.comparing(ScheduledReminder::timestamp));
+        scheduledReminders.sortWith(Comparator.comparing(ScheduledReminder::timestamp))
 
-        return scheduledReminders;
+        return scheduledReminders
     }
 
-    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
-    private ArrayList<Reminder> getReminders(List<FullMedicine> fullMedicineWithTagsAndReminders) {
-        ArrayList<Reminder> reminders = new ArrayList<>();
-        for (FullMedicine medicineWithReminder : fullMedicineWithTagsAndReminders
+    // Stream.toList() not available in SDK version selected
+    private fun getReminders(fullMedicineWithTagsAndReminders: List<FullMedicine>): ArrayList<Reminder> {
+        val reminders = ArrayList<Reminder>()
+        for (medicineWithReminder in fullMedicineWithTagsAndReminders
         ) {
-            //noinspection SimplifyStreamApiCallChains
-            reminders.addAll(medicineWithReminder.reminders.stream().filter(r -> r.active).collect(Collectors.toList()));
+            reminders.addAll(medicineWithReminder.reminders.stream().filter { r: Reminder? -> r!!.active }.collect(Collectors.toList()))
         }
-        return reminders;
+        return reminders
     }
 
-    private FullMedicine getMedicine(Reminder reminder, List<FullMedicine> fullMedicineWithTagsAndReminders) {
-        int medicineId = reminder.medicineRelId;
+    private fun getMedicine(reminder: Reminder, fullMedicineWithTagsAndReminders: List<FullMedicine>): FullMedicine {
+        val medicineId = reminder.medicineRelId
 
-        Optional<FullMedicine> medicineOptional = fullMedicineWithTagsAndReminders.stream().filter(mwr -> mwr.medicine.medicineId == medicineId).findFirst();
-        if (medicineOptional.isPresent()) {
-            return medicineOptional.get();
+        val medicineOptional = fullMedicineWithTagsAndReminders.stream().filter { mwr: FullMedicine? -> mwr!!.medicine.medicineId == medicineId }.findFirst()
+        if (medicineOptional.isPresent) {
+            return medicineOptional.get()
         } else {
-            throw new NoSuchElementException();
+            throw NoSuchElementException()
         }
     }
 
-    public interface TimeAccess {
-        ZoneId systemZone();
+    interface TimeAccess {
+        fun systemZone(): ZoneId
 
-        LocalDate localDate();
+        fun localDate(): LocalDate
     }
-
 }
