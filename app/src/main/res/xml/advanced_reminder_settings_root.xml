@@ -42,12 +42,12 @@
             app:entries="@array/days"
             app:entryValues="@array/one_to_seven"
             app:key="remind_on_weekdays"
-            app:title="@string/remind_on" />
+            app:title="@string/remind_on_weekdays" />
         <MultiSelectListPreference
             app:entries="@array/days_of_month"
             app:entryValues="@array/days_of_month"
             app:key="remind_on_days"
-            app:title="@string/remind_on" />
+            app:title="@string/remind_on_days_of_month" />
         />
     </PreferenceCategory>
     <Preference

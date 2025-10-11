@@ -18,6 +18,7 @@ import static com.adevinta.android.barista.interaction.BaristaMenuClickInteracti
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
+import static com.futsch1.medtimer.AndroidTestHelper.setDate;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
 import static junit.framework.TestCase.assertEquals;
 
@@ -52,7 +53,8 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.inactive);
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.active);
 
         pressBack();
         pressBack();
@@ -61,8 +63,8 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
-        clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.active);
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.active);
 
         pressBack();
         pressBack();
@@ -72,9 +74,10 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.timePeriod);
-        clickOn(R.id.periodStart);
-        writeTo(R.id.periodStartDate, AndroidTestHelper.dateToString(futureTime.getTime()));
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.period_start);
+        clickOn(R.string.start_date);
+        setDate(futureTime.getTime());
 
         pressBack();
         pressBack();
@@ -84,9 +87,10 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.periodStart);
-        clickOn(R.id.periodEnd);
-        writeTo(R.id.periodEndDate, AndroidTestHelper.dateToString(pastTime.getTime()));
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.period_end);
+        clickOn(R.string.end_date);
+        setDate(pastTime.getTime());
 
         pressBack();
         pressBack();
@@ -96,9 +100,11 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.periodStart);
-        writeTo(R.id.periodStartDate, AndroidTestHelper.dateToString(pastTime.getTime()));
-        writeTo(R.id.periodEndDate, AndroidTestHelper.dateToString(futureTime.getTime()));
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.start_date);
+        setDate(pastTime.getTime());
+        clickOn(R.string.end_date);
+        setDate(futureTime.getTime());
 
         pressBack();
         pressBack();
@@ -109,17 +115,20 @@ public class ReminderTest extends BaseTestHelper {
     @Test
     //@AllowFlaky(attempts = 1)
     public void activeIntervalReminderTest() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        String futureTime = TimeHelper.toLocalizedDatetimeString(context, (Instant.now().toEpochMilli() / 1000) + (24 * 60 * 60));
-        String nowTime = TimeHelper.toLocalizedDatetimeString(context, (Instant.now().toEpochMilli() / 1000));
+        Calendar futureTime = Calendar.getInstance();
+        int year = futureTime.get(Calendar.YEAR);
+        futureTime.set(year + 1, 1, 1);
+        Calendar nowTime = Calendar.getInstance();
 
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createIntervalReminder("1", 180);
 
         clickOn(R.id.openAdvancedSettings);
-        writeTo(R.id.editIntervalStartDateTime, futureTime);
-        clickOn(R.id.inactive);
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.period_start);
+        clickOn(R.string.start_date);
+        setDate(futureTime.getTime());
+        clickOn(R.string.active);
 
         pressBack();
         pressBack();
@@ -129,7 +138,9 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.string.activate_all);
         clickOn(R.id.openAdvancedSettings);
 
-        assertContains(R.id.editIntervalStartDateTime, nowTime);
+        clickOn(R.string.reminder_status);
+        clickOn(R.string.period_start);
+        assertContains(AndroidTestHelper.dateToString(nowTime.getTime()));
     }
 
     @Test
@@ -140,13 +151,13 @@ public class ReminderTest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
-        clickOn(R.id.addLinkedReminder);
+        clickOn(R.string.add_linked_reminder);
         clickDialogPositiveButton();
         setTime(0, 1, true);
 
         clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
 
-        clickOn(R.id.addLinkedReminder);
+        clickOn(R.string.add_linked_reminder);
         clickDialogPositiveButton();
         setTime(0, 2, true);
 
@@ -173,7 +184,7 @@ public class ReminderTest extends BaseTestHelper {
 
         // Linked reminder (amount 2) 30 minutes later
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.id.addLinkedReminder);
+        clickOn(R.string.add_linked_reminder);
         writeTo(android.R.id.input, "2");
         clickDialogPositiveButton();
 

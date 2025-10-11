@@ -63,6 +63,16 @@ public class AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
     }
 
+    public static void setDate(Date date) {
+        String dateString = dateToString(date);
+        clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle);
+        writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString);
+    }
+
+    public static String dateToString(Date date) {
+        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+    }
+
     public static void createIntervalReminder(String amount, int intervalMinutes) {
         clickOn(R.id.addReminder);
         writeTo(R.id.editAmount, amount);
@@ -88,10 +98,6 @@ public class AndroidTestHelper {
         int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
         clickOn(menuIds[mainMenu.ordinal()]);
         clickOn(menuIds[mainMenu.ordinal()]);
-    }
-
-    public static String dateToString(Date date) {
-        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 
     public static LocalDateTime getNextNotificationTime() {

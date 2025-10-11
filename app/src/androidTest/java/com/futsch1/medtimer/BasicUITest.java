@@ -18,13 +18,12 @@ import static com.adevinta.android.barista.interaction.BaristaMenuClickInteracti
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.MEDICINES;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
+import static com.futsch1.medtimer.AndroidTestHelper.setDate;
 
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
-import androidx.test.uiautomator.UiSelector;
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 
 import org.junit.Test;
 
@@ -44,17 +43,11 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
-        UiScrollable appViews = new UiScrollable(
-                new UiSelector().scrollable(true));
-        try {
-            appViews.scrollForward();
-        } catch (UiObjectNotFoundException e) {
-            internalAssert(false);
-        }
+        clickOn(R.string.dosing_instructions);
+        clickOn(R.string.sample_instructions);
+        clickListItem(0);
 
-        clickOn(com.google.android.material.R.id.text_input_end_icon);
-        clickListItem(1);
-
+        pressBack();
         pressBack();
 
         clickOn(R.id.openAdvancedSettings);
@@ -81,7 +74,7 @@ public class BasicUITest extends BaseTestHelper {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     public void menuHandlingTest() {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", LocalTime.of(12, 0));
@@ -91,16 +84,17 @@ public class BasicUITest extends BaseTestHelper {
         Calendar cycleStart = Calendar.getInstance();
         cycleStart.set(2025, 1, 1);
         String cycleStartString = AndroidTestHelper.dateToString(cycleStart.getTime());
-        writeTo(R.id.cycleStartDate, cycleStartString);
-        writeTo(R.id.consecutiveDays, "5");
-        writeTo(R.id.pauseDays, "6");
+        clickOn(R.string.cycle_start_date);
+        setDate(cycleStart.getTime());
+        writeTo(R.string.cycle_consecutive_days, "5");
+        writeTo(R.string.cycle_pause_days, "6");
 
-        clickOn(R.id.remindOnWeekdays);
+        clickOn(R.string.remind_on_weekdays);
         clickOn(R.string.monday);
         clickOn(R.string.tuesday);
         clickDialogPositiveButton();
 
-        clickOn(R.id.remindOnDaysOfMonth);
+        clickOn(R.string.remind_on_days_of_month);
         clickOn("1");
         clickOn("3");
         clickDialogPositiveButton();
@@ -109,20 +103,20 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
-        assertContains(R.id.cycleStartDate, cycleStartString);
-        assertContains(R.id.consecutiveDays, "5");
-        assertContains(R.id.pauseDays, "6");
+        assertContains(cycleStartString);
+        assertContains("5");
+        assertContains("6");
 
-        clickOn(R.id.remindOnWeekdays);
+        clickOn(R.string.remind_on_weekdays);
         assertUnchecked(R.string.monday);
         assertUnchecked(R.string.tuesday);
         assertChecked(R.string.wednesday);
         clickDialogPositiveButton();
 
-        clickOn(R.id.remindOnDaysOfMonth);
-        assertUnchecked("1");
-        assertChecked("2");
-        assertUnchecked("3");
+        clickOn(R.string.remind_on_days_of_month);
+        assertChecked("1");
+        assertUnchecked("2");
+        assertChecked("3");
         clickDialogPositiveButton();
     }
 

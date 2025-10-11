@@ -237,4 +237,8 @@
     <string name="daily_interval">Daily interval</string>
     <string name="daily_start_time">Daily start time</string>
     <string name="daily_end_time">Daily end time</string>
+    <string name="remind_on_weekdays">Remind on weekdays</string>
+    <string name="remind_on_days_of_month">Remind on days of month</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>
