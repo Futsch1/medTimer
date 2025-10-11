@@ -22,6 +22,7 @@ abstract class AdvancedReminderPreferencesFragment(
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : PreferenceFragmentCompat() {
     var reminderId: Int = 0
+    lateinit var reminderDataStore: ReminderDataStore
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         reminderId = AdvancedReminderPreferencesRootFragmentArgs.fromBundle(requireArguments()).getReminderId()
@@ -30,7 +31,7 @@ abstract class AdvancedReminderPreferencesFragment(
         postponeEnterTransition()
 
         this.lifecycleScope.launch(ioDispatcher) {
-            val reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
+            reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
             preferenceManager.preferenceDataStore = reminderDataStore
             this.launch(mainDispatcher) {
                 setPreferencesFromResource(preferencesResId, rootKey)
@@ -42,7 +43,6 @@ abstract class AdvancedReminderPreferencesFragment(
                 startPostponedEnterTransition()
             }
         }
-
     }
 
     open fun customSetup(reminder: Reminder) {
@@ -52,6 +52,7 @@ abstract class AdvancedReminderPreferencesFragment(
     private fun observeUserData(reminderViewModel: ReminderViewModel, reminderId: Int) {
         lifecycleScope.launch {
             reminderViewModel.getReminderFlow(reminderId).collect { reminder ->
+                reminderDataStore.reminder = reminder
                 onReminderUpdated(reminder)
             }
         }

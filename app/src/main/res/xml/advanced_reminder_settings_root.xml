@@ -5,7 +5,7 @@
         android:title="Reminder status"
         app:key="reminder_status" />
     <Preference
-        android:title="@string/instructions_label"
+        android:title="Dosing instructions"
         app:key="instructions" />
     <PreferenceCategory
         app:key="interval_category"

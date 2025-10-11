@@ -1,21 +1,20 @@
 package com.futsch1.medtimer.medicine
 
-import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.core.view.MenuProvider
-import androidx.navigation.Navigation.findNavController
-import com.futsch1.medtimer.MedicineViewModel
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 
 class AdvancedReminderSettingsMenuProvider(
     private val reminder: Reminder,
-    private val thread: HandlerThread,
-    private val medicineViewModel: MedicineViewModel,
-    private val advancedReminderView: View
+    private val medicineRepository: MedicineRepository,
+    private val fragment: Fragment
 ) : MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -23,9 +22,9 @@ class AdvancedReminderSettingsMenuProvider(
         menu.setGroupDividerEnabled(true)
 
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
-            LinkedReminderHandling(reminder, medicineViewModel).deleteReminder(
-                advancedReminderView.context,
-                thread, { findNavController(advancedReminderView).navigateUp() }, { }
+            LinkedReminderHandling(reminder, medicineRepository, fragment.lifecycleScope).deleteReminder(
+                fragment.requireContext(),
+                { findNavController(fragment).navigateUp() }, { }
             )
             true
         }

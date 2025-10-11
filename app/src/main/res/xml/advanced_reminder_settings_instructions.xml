@@ -2,9 +2,11 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
-        android:title="Instructions"
+        android:title="Dosing instructions"
         app:key="instructions" />
-    <Preference
+    <ListPreference
         android:title="Fill with sample instructions"
-        app:key="sample_instructions" />
+        app:key="sample_instructions"
+        android:entries="@array/instructions_suggestions"
+        android:entryValues="@array/instructions_suggestions"/>
 </androidx.preference.PreferenceScreen>

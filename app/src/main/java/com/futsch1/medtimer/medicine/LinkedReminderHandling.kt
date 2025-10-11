@@ -2,22 +2,27 @@ package com.futsch1.medtimer.medicine
 
 import android.content.Context
 import android.os.Handler
-import android.os.HandlerThread
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 
 class LinkedReminderHandling(
     val reminder: Reminder,
-    val medicineViewModel: MedicineViewModel
+    val medicineRepository: MedicineRepository,
+    val coroutineScope: CoroutineScope,
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
         DialogHelper(fragmentActivity).title(R.string.add_linked_reminder)
@@ -43,16 +48,15 @@ class LinkedReminderHandling(
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
             linkedReminder.timeInMinutes = minutes
-            medicineViewModel.medicineRepository.insertReminder(linkedReminder)
+            medicineRepository.insertReminder(linkedReminder)
             fragmentActivity.supportFragmentManager.popBackStack()
         }
     }
 
-    fun deleteReminder(context: Context, thread: HandlerThread, postYesAction: () -> Unit, postNoAction: () -> Unit) {
+    fun deleteReminder(context: Context, postYesAction: () -> Unit, postNoAction: () -> Unit) {
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
-            val threadHandler = Handler(thread.looper)
-            threadHandler.post {
+            coroutineScope.launch(dispatcher) {
                 internalDelete(reminder)
                 Handler(Looper.getMainLooper()).post(postYesAction)
             }
@@ -63,12 +67,12 @@ class LinkedReminderHandling(
         reminder: Reminder
     ) {
         val reminders: List<Reminder> =
-            medicineViewModel.medicineRepository.getLinkedReminders(reminder.reminderId)
+            medicineRepository.getLinkedReminders(reminder.reminderId)
         for (r in reminders) {
             internalDelete(r)
         }
 
-        medicineViewModel.medicineRepository.deleteReminder(reminder.reminderId)
+        medicineRepository.deleteReminder(reminder.reminderId)
     }
 }
 

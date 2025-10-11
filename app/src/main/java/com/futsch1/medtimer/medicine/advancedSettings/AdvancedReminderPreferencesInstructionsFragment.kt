@@ -7,7 +7,7 @@ class AdvancedReminderPreferencesInstructionsFragment(
     R.xml.advanced_reminder_settings_instructions,
     mapOf(),
     mapOf(),
-    listOf()
+    listOf("instructions")
 ) {
 
 }

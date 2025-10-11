@@ -71,6 +71,7 @@ class ReminderDataStore(
     override fun putString(key: String?, value: String?) {
         when (key) {
             "instructions" -> reminder.instructions = value!!
+            "sample_instructions" -> reminder.instructions = value!!
             "cycle_start_date" -> reminder.cycleStartDay = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
             "cycle_consecutive_days" -> try {
                 reminder.consecutiveDays = value!!.toInt()

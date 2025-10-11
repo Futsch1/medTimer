@@ -10,6 +10,7 @@ import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
+import com.futsch1.medtimer.medicine.AdvancedReminderSettingsMenuProvider
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -165,6 +166,11 @@ class AdvancedReminderPreferencesRootFragment(
             }
             true
         }
+
+        requireActivity().addMenuProvider(
+            AdvancedReminderSettingsMenuProvider(reminder, (preferenceManager.preferenceDataStore as ReminderDataStore).medicineRepository, this),
+            getViewLifecycleOwner()
+        )
     }
 
 }
