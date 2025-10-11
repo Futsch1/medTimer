@@ -229,4 +229,12 @@
     <string name="daily">Daily</string>
     <string name="daily_from_to">Daily interval from %1s to %2s</string>
     <string name="continuous_from">Continuous interval starting from %1s</string>
+    <string name="reminder_status">Reminder status</string>
+    <string name="dosing_instructions">Dosing instructions</string>
+    <string name="interval_type">Interval type</string>
+    <string name="interval_start">Interval start</string>
+    <string name="sample_instructions">Fill with sample instructions</string>
+    <string name="daily_interval">Daily interval</string>
+    <string name="daily_start_time">Daily start time</string>
+    <string name="daily_end_time">Daily end time</string>
 </resources>

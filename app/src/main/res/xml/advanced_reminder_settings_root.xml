@@ -2,10 +2,10 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        android:title="Reminder status"
+        android:title="@string/reminder_status"
         app:key="reminder_status" />
     <Preference
-        android:title="Dosing instructions"
+        android:title="@string/dosing_instructions"
         app:key="instructions" />
     <PreferenceCategory
         app:key="interval_category"
@@ -17,10 +17,10 @@
             android:title="Interval type"
             app:key="interval_type" />
         <ListPreference
-            android:title="Interval start"
-            app:key="interval_start"
             android:entries="@array/interval_start"
-            android:entryValues="@array/values_0_and_1"/>
+            android:entryValues="@array/values_0_and_1"
+            android:title="Interval start"
+            app:key="interval_start" />
     </PreferenceCategory>
     <PreferenceCategory
         app:key="cycle_category"
@@ -39,17 +39,20 @@
         app:key="time_based_category"
         app:title="@string/time_based_reminder">
         <MultiSelectListPreference
-            app:key="remind_on_weekdays"
-            app:title="@string/remind_on"
             app:entries="@array/days"
-            app:entryValues="@array/one_to_seven" />
+            app:entryValues="@array/one_to_seven"
+            app:key="remind_on_weekdays"
+            app:title="@string/remind_on" />
         <MultiSelectListPreference
-            app:key="remind_on_days"
-            app:title="@string/remind_on"
             app:entries="@array/days_of_month"
-            app:entryValues="@array/days_of_month"/>
-            />
+            app:entryValues="@array/days_of_month"
+            app:key="remind_on_days"
+            app:title="@string/remind_on" />
+        />
     </PreferenceCategory>
+    <Preference
+        app:key="add_linked_reminder"
+        app:title="@string/add_linked_reminder" />
     <PreferenceCategory app:title="Further settings">
         <SwitchPreferenceCompat
             android:title="@string/variable_amount"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SwitchPreferenceCompat app:key="daily_interval" app:title="Daily interval"/>
+    <SwitchPreferenceCompat app:key="daily_interval" app:title="@string/daily_interval"/>
     <Preference app:title="@string/interval_start_time" app:key="interval_start_time"/>
     <PreferenceCategory>
-    <Preference app:dependency="daily_interval" app:key="interval_daily_start_time" app:title="Daily start time" />
-    <Preference app:dependency="daily_interval"  app:key="interval_daily_end_time" app:title="Daily end time" />
+    <Preference app:dependency="daily_interval" app:key="interval_daily_start_time" app:title="@string/daily_start_time" />
+    <Preference app:dependency="daily_interval"  app:key="interval_daily_end_time" app:title="@string/daily_end_time" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
