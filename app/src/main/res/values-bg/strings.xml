@@ -88,7 +88,7 @@
     <string name="every_day">Всеки ден</string>
     <string name="cycle_pause_days">Дни за пауза</string>
     <string name="cycle_start_date">Начало на първия цикъл</string>
-    <string name="cycle_reminders">Циклични напомняния</string>
+    <string name="cycle_reminder">Циклични напомняния</string>
     <string name="weekday_limited">Ограничено до определени дни</string>
     <string name="reminders">Напомняния</string>
     <string name="sort">Сортиране</string>

@@ -88,7 +88,7 @@
     <string name="every_day">Jeden Tag</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
-    <string name="cycle_reminders">Zyklische Erinnerungen</string>
+    <string name="cycle_reminder">Zyklische Erinnerung</string>
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>

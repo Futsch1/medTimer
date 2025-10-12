@@ -88,7 +88,7 @@
     <string name="every_day">Καθημερινά</string>
     <string name="cycle_pause_days">Ημέρες παύσης της αγωγής</string>
     <string name="cycle_start_date">Έναρξη πρώτου κύκλου</string>
-    <string name="cycle_reminders">Κυκλικές υπενθυμίσεις</string>
+    <string name="cycle_reminder">Κυκλικές υπενθυμίσεις</string>
     <string name="weekday_limited">Ισχύει μόνο για ορισμένες εργάσιμες ημέρες</string>
     <string name="reminders">Υπενθυμίσεις</string>
     <string name="filter">Κριτήρια αναζήτησης</string>

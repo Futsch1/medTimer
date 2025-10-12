@@ -103,7 +103,7 @@
     <string name="every_day">كل يوم</string>
     <string name="cycle_pause_days">أيام التوقف</string>
     <string name="cycle_start_date">بداية الدورة الأولى</string>
-    <string name="cycle_reminders">تذكيرات دورية</string>
+    <string name="cycle_reminder">تذكيرات دورية</string>
     <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
     <string name="reminders">التذكيرات</string>
     <string name="filter">تصفية</string>

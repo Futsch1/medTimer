@@ -90,7 +90,7 @@
     <string name="every_day">Каждый день</string>
     <string name="cycle_pause_days">Дни паузы</string>
     <string name="cycle_start_date">Дата начала цикла</string>
-    <string name="cycle_reminders">Цикличные напоминания</string>
+    <string name="cycle_reminder">Цикличные напоминания</string>
     <string name="weekday_limited">Ограничено до некоторых дней недели</string>
     <string name="reminders">Напоминания</string>
     <string name="filter">Фильтр</string>

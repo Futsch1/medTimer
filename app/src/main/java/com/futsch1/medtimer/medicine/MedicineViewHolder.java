@@ -79,7 +79,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder {
             }
         } else {
             new Handler(thread.getLooper()).post(() -> {
-                String summary = SummaryHelperKt.remindersSummary(itemView.getContext(), activeReminders);
+                String summary = SummaryHelperKt.remindersSummary(activeReminders, itemView.getContext());
                 this.activity.runOnUiThread(() ->
                         remindersSummaryView.setText(summary));
             });

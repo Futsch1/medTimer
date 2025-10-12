@@ -101,7 +101,7 @@
     <string name="every_day">Varje dag</string>
     <string name="cycle_pause_days">Pausdagar</string>
     <string name="cycle_start_date">Första cykelstart</string>
-    <string name="cycle_reminders">Återkommande påminnelser</string>
+    <string name="cycle_reminder">Återkommande påminnelser</string>
     <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="reminders">Påminnelser</string>
     <string name="filter">Filter</string>

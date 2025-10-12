@@ -90,7 +90,7 @@
     <string name="every_day">தினமும்</string>
     <string name="cycle_pause_days">இடைநிறுத்த நாட்கள்</string>
     <string name="cycle_start_date">முதல் சுழற்சி தொடக்க</string>
-    <string name="cycle_reminders">சுழற்சி நினைவூட்டல்கள்</string>
+    <string name="cycle_reminder">சுழற்சி நினைவூட்டல்கள்</string>
     <string name="weekday_limited">சில வார நாட்களுக்கு மட்டுமே</string>
     <string name="reminders">நினைவூட்டல்கள்</string>
     <string name="filter">வடிப்பி</string>

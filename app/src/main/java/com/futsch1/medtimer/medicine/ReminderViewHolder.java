@@ -69,7 +69,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editAmount.setText(reminder.amount);
 
         new Handler(thread.getLooper()).post(() -> {
-            String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
+            String summary = SummaryHelperKt.reminderSummary(reminder, itemView.getContext());
             this.fragmentActivity.runOnUiThread(() ->
                     advancedSettingsSummary.setText(summary));
         });

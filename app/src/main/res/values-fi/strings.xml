@@ -88,7 +88,7 @@
     <string name="every_day">Joka päivä</string>
     <string name="cycle_pause_days">Taukopäivät</string>
     <string name="cycle_start_date">Ensimmäisen kierroksen alku</string>
-    <string name="cycle_reminders">Kiertävät muistutukset</string>
+    <string name="cycle_reminder">Kiertävät muistutukset</string>
     <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="reminders">Muistutukset</string>
     <string name="sort">Lajittelu</string>

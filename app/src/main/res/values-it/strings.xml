@@ -89,7 +89,7 @@
     <string name="every_day">Ogni giorno</string>
     <string name="cycle_pause_days">Giorni di pausa</string>
     <string name="cycle_start_date">Avvio del primo ciclo</string>
-    <string name="cycle_reminders">Promemoria ciclici</string>
+    <string name="cycle_reminder">Promemoria ciclici</string>
     <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="reminders">Promemoria</string>
     <string name="filter">Filtro</string>

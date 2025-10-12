@@ -16,9 +16,9 @@
         app:key="interval_category"
         app:title="@string/interval_based_reminder">
         <Preference
+            android:icon="@drawable/interval"
             android:title="@string/interval"
-            app:key="interval"
-            android:icon="@drawable/interval"/>
+            app:key="interval" />
         <Preference
             android:title="Interval type"
             app:icon="@drawable/calendar2_event"
@@ -26,17 +26,17 @@
         <ListPreference
             android:entries="@array/interval_start"
             android:entryValues="@array/values_0_and_1"
+            android:icon="@drawable/align_start"
             android:title="Interval start"
-            app:key="interval_start"
-            android:icon="@drawable/align_start"/>
+            app:key="interval_start" />
     </PreferenceCategory>
     <PreferenceCategory
         app:key="time_based_category"
         app:title="@string/time_based_reminder">
         <Preference
+            android:icon="@drawable/repeat"
             app:key="cyclic_reminder"
-            app:title="@string/cycle_reminders"
-            android:icon="@drawable/repeat"/>
+            app:title="@string/cycle_reminder" />
         <MultiSelectListPreference
             app:entries="@array/days"
             app:entryValues="@array/one_to_seven"

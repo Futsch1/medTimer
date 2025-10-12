@@ -88,7 +88,7 @@
     <string name="every_day">Her gün</string>
     <string name="cycle_pause_days">Ara günleri</string>
     <string name="cycle_start_date">İlk döngü başlangıcı</string>
-    <string name="cycle_reminders">Döngüsel hatırlatıcılar</string>
+    <string name="cycle_reminder">Döngüsel hatırlatıcılar</string>
     <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
     <string name="reminders">Hatırlatıcılar</string>
     <string name="filter">Filtre</string>

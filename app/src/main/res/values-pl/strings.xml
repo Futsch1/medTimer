@@ -183,7 +183,7 @@
     <string name="advanced_settings">Zaawansowane</string>
     <string name="days_string">Dni</string>
     <string name="every_day">Codziennie</string>
-    <string name="cycle_reminders">Przypomnienia cykliczne</string>
+    <string name="cycle_reminder">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
     <string name="notification_settings_high">Ustawienia powiadomień o wysokim priorytecie</string>
     <string name="notification_settings_default">Domyślny priorytet ustawień powiadomień</string>

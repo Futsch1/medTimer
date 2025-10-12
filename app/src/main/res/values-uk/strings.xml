@@ -90,7 +90,7 @@
     <string name="every_day">Щодня</string>
     <string name="cycle_pause_days">Призупинити дні</string>
     <string name="cycle_start_date">Початок першого циклу</string>
-    <string name="cycle_reminders">Циклічні нагадування</string>
+    <string name="cycle_reminder">Циклічні нагадування</string>
     <string name="reminders">Нагадування</string>
     <string name="weekday_limited">Обмежується деякими будніми днями</string>
     <string name="filter">Фільтр</string>

@@ -161,7 +161,7 @@
     <fragment
         android:id="@+id/advancedReminderPreferencesCyclicFragment"
         android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesCyclicFragment"
-        android:label="AdvancedReminderPreferencesCyclicFragment">
+        android:label="@string/cycle_reminder">
         <argument
             android:name="reminderId"
             app:argType="integer" />

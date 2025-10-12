@@ -8,6 +8,8 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
+import com.futsch1.medtimer.helpers.getCyclicReminderString
+import com.futsch1.medtimer.helpers.getIntervalTypeSummary
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import java.time.Instant
@@ -105,22 +107,8 @@ class AdvancedReminderPreferencesRootFragment(
         findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(reminder)
         findPreference<Preference>("interval_start")?.summary =
             requireContext().getString(if (reminder.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
-        findPreference<Preference>("interval_type")?.summary = getIntervalTypeSummary(reminder)
-    }
-
-    private fun getIntervalTypeSummary(reminder: Reminder): String {
-        return if (reminder.dailyInterval) {
-            requireContext().getString(
-                R.string.daily_from_to,
-                TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong()),
-                TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
-            )
-        } else {
-            requireContext().getString(
-                R.string.continuous_from,
-                TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
-            )
-        }
+        findPreference<Preference>("interval_type")?.summary = getIntervalTypeSummary(reminder, requireContext())
+        findPreference<Preference>("cyclic_reminder")?.summary = getCyclicReminderString(reminder, requireContext())
     }
 
     private fun getDaysSummary(reminder: Reminder): String {

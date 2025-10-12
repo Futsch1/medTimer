@@ -87,7 +87,7 @@
     <string name="every_day">每天（按周设置）</string>
     <string name="cycle_pause_days">暂停服药提醒天数</string>
     <string name="cycle_start_date">周期提醒开始日期</string>
-    <string name="cycle_reminders">循环提醒</string>
+    <string name="cycle_reminder">循环提醒</string>
     <string name="weekday_limited">一周中的某几天</string>
     <string name="reminders">提醒</string>
     <string name="filter">查找</string>

@@ -60,5 +60,5 @@ fun getExportReminderSummary(context: Context, reminder: Reminder): String {
     if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
         summary = TimeHelper.minutesToTimeString(context, reminder.timeInMinutes.toLong()) + ", "
     }
-    return summary + reminderSummary(context, reminder)
+    return summary + reminderSummary(reminder, context)
 }
