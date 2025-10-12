@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
         android:title="@string/reminder_status"
-        app:key="reminder_status" />
+        app:key="reminder_status"
+        android:icon="@drawable/calendar_check"/>
     <Preference
         android:title="@string/dosing_instructions"
         app:icon="@drawable/clipboard_plus"
@@ -41,10 +42,12 @@
             app:entries="@array/days"
             app:entryValues="@array/one_to_seven"
             app:key="remind_on_weekdays"
-            app:title="@string/remind_on_weekdays" />
+            app:title="@string/remind_on_weekdays"
+            android:icon="@drawable/calendar_day"/>
         <MultiSelectListPreference
             app:entries="@array/days_of_month"
             app:entryValues="@array/days_of_month"
+            app:icon="@drawable/calendar_week"
             app:key="remind_on_days"
             app:title="@string/remind_on_days_of_month" />
         />
