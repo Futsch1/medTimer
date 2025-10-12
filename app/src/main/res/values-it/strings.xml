@@ -47,12 +47,10 @@
     <string name="theme">Tema</string>
     <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>
-    <string name="no_instructions">nessuna istruzione</string>
     <string name="before_meal">prima del pasto</string>
     <string name="after_meal">dopo il pasto</string>
     <string name="time_before_meal">x minuti prima del pasto</string>
     <string name="time_after">x ore dopo il medicinale y</string>
-    <string name="instruction_templates">Modelli di istruzioni</string>
     <string name="instructions_label">Istruzioni aggiuntive (ad es. prima dei pasti)</string>
     <string name="medicine_data">Dati medicinali</string>
     <string name="export_csv">Esporta come CSV</string>
@@ -85,7 +83,6 @@
     <string name="weekend_mode_summary">Ritarda le notifiche in determinati giorni della settimana ad un orario prestabilito</string>
     <string name="custom">Personalizzato…</string>
     <string name="advanced_settings">Impostazioni avanzate</string>
-    <string name="remind_on">Ricorda</string>
     <string name="every_day">Ogni giorno</string>
     <string name="cycle_pause_days">Giorni di pausa</string>
     <string name="cycle_start_date">Avvio del primo ciclo</string>
@@ -135,8 +132,6 @@
     <string name="icon">Icona</string>
     <string name="every_day_of_month">Ogni giorno del mese</string>
     <string name="on_day_of_month">Il %s del mese</string>
-    <string name="clear_all">Pulisci tutto</string>
-    <string name="select_all">Seleziona tutto</string>
     <string name="never">Mai</string>
     <string name="day_of_month_limited">Limitato ad alcuni giorni del mese</string>
     <string name="medicines_tab_description">Scheda Medicinali</string>
@@ -228,4 +223,19 @@
     <string name="sort">Ordinamento</string>
     <string name="high_and_alarm">Alto + Allarme</string>
     <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attivare questa opzione per MedTimer nel seguente menu</string>
+    <string name="continuous">Continuo</string>
+    <string name="daily">Quotidiano</string>
+    <string name="daily_from_to">Intervallo giornaliero da %1s a %2s</string>
+    <string name="continuous_from">Intervallo continuo a partire da %1s</string>
+    <string name="reminder_status">Stato promemoria</string>
+    <string name="dosing_instructions">Istruzioni di dosaggio</string>
+    <string name="interval_type">Tipo di intervallo</string>
+    <string name="sample_instructions">Compila con istruzioni di esempio</string>
+    <string name="daily_interval">Intervallo giornaliero</string>
+    <string name="daily_start_time">Orario di inizio giornaliero</string>
+    <string name="daily_end_time">Orario di fine giornaliero</string>
+    <string name="remind_on_weekdays">Promemoria nei giorni feriali</string>
+    <string name="remind_on_days_of_month">Promemoria nei giorni del mese</string>
+    <string name="start_date">Data d\'inizio</string>
+    <string name="end_date">Data di fine</string>
 </resources>

@@ -46,12 +46,10 @@
     <string name="theme">Thema</string>
     <string name="default_">Standaard</string>
     <string name="alternative">Alternatief</string>
-    <string name="no_instructions">geen instructies</string>
     <string name="before_meal">vóór de maaltijd</string>
     <string name="after_meal">na de maaltijd</string>
     <string name="time_before_meal">x minuten voor de maaltijd</string>
     <string name="time_after">x uur na medicijn y</string>
-    <string name="instruction_templates">Referentiesjablonen</string>
     <string name="instructions_label">Aanvullende instructies (bijvoorbeeld vóór de maaltijd)</string>
     <string name="medicine_data">Behandeling gegevens</string>
     <string name="export_csv">Exporteren als CSV</string>
@@ -84,7 +82,6 @@
     <string name="weekend_mode_summary">Meldingen op bepaalde dagen van de week uitstellen tot een bepaald tijdstip</string>
     <string name="custom">Aangepast…</string>
     <string name="advanced_settings">Geavanceerde instellingen</string>
-    <string name="remind_on">Herinner</string>
     <string name="every_day">Elke dag</string>
     <string name="cycle_pause_days">Pauzedagen</string>
     <string name="cycle_start_date">Start eerste cyclus</string>
@@ -133,8 +130,6 @@
     <string name="icon">Pictogram</string>
     <string name="every_day_of_month">Elke dag van de maand</string>
     <string name="on_day_of_month">Op de %s van de maand</string>
-    <string name="clear_all">Alles wissen</string>
-    <string name="select_all">Alles selecteren</string>
     <string name="never">Nooit</string>
     <string name="day_of_month_limited">Beperkt tot sommige dagen van de maand</string>
     <string name="medicines_tab_description">Tabblad Geneesmiddelen</string>
@@ -223,4 +218,19 @@
     <string name="sort">Sorteer</string>
     <string name="high_and_alarm">Hoog + Alarm</string>
     <string name="enable_notification_alarm_dialog">Om herinneringen als alarmen weer te geven, schakelt u dit in voor MedTimer in het volgende menu</string>
+    <string name="continuous">Continu</string>
+    <string name="daily">Dagelijks</string>
+    <string name="daily_from_to">Dagelijks interval van %1s tot %2s</string>
+    <string name="continuous_from">Continu interval vanaf %1s</string>
+    <string name="reminder_status">Herinneringsstatus</string>
+    <string name="dosing_instructions">Doseringsinstructies</string>
+    <string name="interval_type">Intervaltype</string>
+    <string name="sample_instructions">Vullen met voorbeeldsinstructies</string>
+    <string name="daily_interval">Dagelijks interval</string>
+    <string name="daily_start_time">Dagelijkse starttijd</string>
+    <string name="daily_end_time">Dagelijkse eindtijd</string>
+    <string name="remind_on_weekdays">Herinneren op weekdagen</string>
+    <string name="remind_on_days_of_month">Herinneren op dagen van de maand</string>
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Einddatum</string>
 </resources>

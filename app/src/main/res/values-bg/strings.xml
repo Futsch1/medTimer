@@ -46,12 +46,10 @@
     <string name="theme">Тема</string>
     <string name="default_">По подразбиране</string>
     <string name="alternative">Алтернатива</string>
-    <string name="no_instructions">няма инструкции</string>
     <string name="before_meal">преди ядене</string>
     <string name="after_meal">след ядене</string>
     <string name="time_before_meal">x минути преди ядене</string>
     <string name="time_after">x часа след лекарство y</string>
-    <string name="instruction_templates">Шаблон за инструкции</string>
     <string name="instructions_label">Допълнителни инструкции(пр. преди ядене)</string>
     <string name="medicine_data">Данни за лекарството</string>
     <string name="export_csv">Експортиране в CSV</string>
@@ -84,7 +82,6 @@
     <string name="weekend_mode_summary">Отлагане на напомняне в определени дни от седмицата за зададеното време</string>
     <string name="custom">Ръчно…</string>
     <string name="advanced_settings">Разширени настройки</string>
-    <string name="remind_on">Напомни</string>
     <string name="every_day">Всеки ден</string>
     <string name="cycle_pause_days">Дни за пауза</string>
     <string name="cycle_start_date">Начало на първия цикъл</string>
@@ -132,8 +129,6 @@
     <string name="icon">Икона</string>
     <string name="every_day_of_month">Всеки ден от месеца</string>
     <string name="on_day_of_month">На %s число от месеца</string>
-    <string name="clear_all">Изчисти всичко</string>
-    <string name="select_all">Избиране на всичко</string>
     <string name="never">Никога</string>
     <string name="day_of_month_limited">Ограничаване до определени дни в месеца</string>
     <string name="medicines_tab_description">Раздел „Лекарства</string>
@@ -220,4 +215,21 @@
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>
     <string name="display_settings">НАстройки на екрана</string>
+    <string name="high_and_alarm">Висок + Аларма</string>
+    <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следното меню</string>
+    <string name="continuous">Непрекъснат</string>
+    <string name="daily">Ежедневно</string>
+    <string name="daily_from_to">Дневен интервал от %1s до %2s</string>
+    <string name="continuous_from">Непрекъснат интервал, започващ от %1s</string>
+    <string name="reminder_status">Статус на напомнянето</string>
+    <string name="dosing_instructions">Инструкции за дозиране</string>
+    <string name="interval_type">Тип интервал</string>
+    <string name="sample_instructions">Попълнете с примерни инструкции</string>
+    <string name="daily_interval">Дневен интервал</string>
+    <string name="daily_start_time">Ежедневно начално време</string>
+    <string name="daily_end_time">Ежедневно крайно време</string>
+    <string name="remind_on_weekdays">Напомняне в делнични дни</string>
+    <string name="remind_on_days_of_month">Напомняне в дни от месеца</string>
+    <string name="start_date">Начална дата</string>
+    <string name="end_date">Крайна дата</string>
 </resources>

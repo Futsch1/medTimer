@@ -47,12 +47,10 @@
     <string name="theme">Thème</string>
     <string name="default_">Défaut</string>
     <string name="alternative">Alternative</string>
-    <string name="no_instructions">aucune instruction</string>
     <string name="before_meal">avant le repas</string>
     <string name="after_meal">après le repas</string>
     <string name="time_before_meal">x minutes avant le repas</string>
     <string name="time_after">x heures après le médicament y</string>
-    <string name="instruction_templates">Modèles d\'instructions</string>
     <string name="instructions_label">Instructions supplémentaires (par exemple avant les repas)</string>
     <string name="medicine_data">Données sur les médicaments</string>
     <string name="export_csv">Exporter en CSV</string>
@@ -85,7 +83,6 @@
     <string name="weekend_mode_summary">Retarder les notifications certains jours de la semaine jusqu\'à une heure donnée</string>
     <string name="custom">Personnaliser…</string>
     <string name="advanced_settings">Configuration avancée</string>
-    <string name="remind_on">Rappel</string>
     <string name="every_day">Tous les jours</string>
     <string name="cycle_pause_days">Jours de pause</string>
     <string name="cycle_start_date">Début du premier cycle</string>
@@ -135,8 +132,6 @@
     <string name="icon">Icône</string>
     <string name="every_day_of_month">Tous les jours du mois</string>
     <string name="on_day_of_month">Le %s du mois</string>
-    <string name="clear_all">Tout effacer</string>
-    <string name="select_all">Tout sélectionner</string>
     <string name="never">Jamais</string>
     <string name="day_of_month_limited">Limité à certains jours du mois</string>
     <string name="medicines_tab_description">Onglet Médicaments</string>
@@ -228,4 +223,19 @@
     <string name="sort">Trier</string>
     <string name="high_and_alarm">Haut + Alarme</string>
     <string name="enable_notification_alarm_dialog">Pour que les rappels soient affichés comme des alarmes, activez cette option pour MedTimer dans le menu suivant</string>
+    <string name="continuous">Continu</string>
+    <string name="daily">Quotidien</string>
+    <string name="daily_from_to">Intervalle journalier de %1s à %2s</string>
+    <string name="continuous_from">Intervalle continu à partir de %1s</string>
+    <string name="reminder_status">Statut du rappel</string>
+    <string name="dosing_instructions">Instructions de dosage</string>
+    <string name="interval_type">Type d\'intervalle</string>
+    <string name="sample_instructions">Remplir avec des exemples d\'instructions</string>
+    <string name="daily_interval">Intervalle journalier</string>
+    <string name="daily_start_time">Heure de début journalière</string>
+    <string name="daily_end_time">Heure de fin journalière</string>
+    <string name="remind_on_weekdays">Rappel les jours de semaine</string>
+    <string name="remind_on_days_of_month">Rappel les jours du mois</string>
+    <string name="start_date">Date de début</string>
+    <string name="end_date">Date de fin</string>
 </resources>

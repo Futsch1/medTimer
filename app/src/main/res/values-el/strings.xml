@@ -46,12 +46,10 @@
     <string name="theme">Θέμα</string>
     <string name="default_">Προεπιλεγμένο</string>
     <string name="alternative">Εναλλακτικό</string>
-    <string name="no_instructions">δεν υπάρχουν οδηγίες</string>
     <string name="before_meal">πρίν το γεύμα</string>
     <string name="after_meal">μετά το γεύμα</string>
     <string name="time_before_meal">x λεπτά πριν το γεύμα</string>
     <string name="time_after">x ώρες μετά το φάρμακο y</string>
-    <string name="instruction_templates">Πρότυπα οδηγιών αγωγής</string>
     <string name="instructions_label">Πρόσθετες οδηγίες (π.χ. πριν από τα γεύματα)</string>
     <string name="medicine_data">Δεδομένα φαρμ. αγωγών</string>
     <string name="export_csv">Εξαγωγή ως CSV</string>
@@ -84,7 +82,6 @@
     <string name="weekend_mode_summary">Καθυστέρηση των ειδοποιήσεων σε συγκεκριμένες ημέρες της εβδομάδας έως μια ορισμένη ώρα</string>
     <string name="custom">Προσαρμοσμένη…</string>
     <string name="advanced_settings">Σύνθετες ρυθμίσεις</string>
-    <string name="remind_on">Υπενθύμιση</string>
     <string name="every_day">Καθημερινά</string>
     <string name="cycle_pause_days">Ημέρες παύσης της αγωγής</string>
     <string name="cycle_start_date">Έναρξη πρώτου κύκλου</string>
@@ -133,8 +130,6 @@
     <string name="icon">Εικονίδιο</string>
     <string name="every_day_of_month">Όλες τις ημέρες του μήνα</string>
     <string name="on_day_of_month">Στις %s του μήνα</string>
-    <string name="clear_all">Εκκαθάριση όλων</string>
-    <string name="select_all">Επιλογή όλων</string>
     <string name="never">Ποτέ</string>
     <string name="day_of_month_limited">Περιορισμένο σε ορισμένες ημέρες του μήνα</string>
     <string name="medicines_tab_description">Καρτέλα φαρμακευτικών αγωγών</string>
@@ -223,4 +218,19 @@
     <string name="sort">Ταξινόμηση</string>
     <string name="high_and_alarm">Υψηλό + Συναγερμός</string>
     <string name="enable_notification_alarm_dialog">Για να επιτρέψετε την εμφάνιση υπενθυμίσεων ως συναγερμών, ενεργοποιήστε το για το MedTimer στο ακόλουθο μενού</string>
+    <string name="continuous">Συνεχές</string>
+    <string name="daily">Καθημερινά</string>
+    <string name="daily_from_to">Ημερήσιο διάστημα από %1s έως %2s</string>
+    <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1s</string>
+    <string name="reminder_status">Κατάσταση υπενθύμισης</string>
+    <string name="dosing_instructions">Οδηγίες δοσολογίας</string>
+    <string name="interval_type">Τύπος διαστήματος</string>
+    <string name="sample_instructions">Συμπληρώστε με δείγματα οδηγιών</string>
+    <string name="daily_interval">Ημερήσιο διάστημα</string>
+    <string name="daily_start_time">Ημερήσια ώρα έναρξης</string>
+    <string name="daily_end_time">Ημερήσια ώρα λήξης</string>
+    <string name="remind_on_weekdays">Υπενθύμιση τις καθημερινές</string>
+    <string name="remind_on_days_of_month">Υπενθύμιση για τις ημέρες του μήνα</string>
+    <string name="start_date">Ημερομηνία έναρξης</string>
+    <string name="end_date">Ημερομηνία λήξης</string>
 </resources>

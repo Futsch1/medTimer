@@ -48,12 +48,10 @@
     <string name="theme">Тема</string>
     <string name="default_">По умолчанию</string>
     <string name="alternative">Альтернативная</string>
-    <string name="no_instructions">нет инструкций</string>
     <string name="before_meal">перед едой</string>
     <string name="after_meal">после еды</string>
     <string name="time_before_meal">x минут перед едой</string>
     <string name="time_after">x часов после лекарства y</string>
-    <string name="instruction_templates">Шаблоны инструкций</string>
     <string name="instructions_label">Дополнительные инструкции (пр. перед едой)</string>
     <string name="medicine_data">Данные лекарства</string>
     <string name="export_csv">Экспортировать как CSV</string>
@@ -86,7 +84,6 @@
     <string name="weekend_mode_summary">Откладывать уведомления в конкретные дни недели до заданного времени</string>
     <string name="custom">Пользовательский…</string>
     <string name="advanced_settings">Продвинутые настройки</string>
-    <string name="remind_on">Напоминать</string>
     <string name="every_day">Каждый день</string>
     <string name="cycle_pause_days">Дни паузы</string>
     <string name="cycle_start_date">Дата начала цикла</string>
@@ -137,8 +134,6 @@
     <string name="icon">Икона</string>
     <string name="every_day_of_month">Каждый день месяца</string>
     <string name="on_day_of_month">В %s числа месяца</string>
-    <string name="clear_all">Очистить все</string>
-    <string name="select_all">Выбрать все</string>
     <string name="never">Никогда</string>
     <string name="day_of_month_limited">Ограничено некоторыми днями месяца</string>
     <string name="medicines_tab_description">Вкладка "Лекарства</string>
@@ -230,4 +225,19 @@
     <string name="sort">Сортировать</string>
     <string name="high_and_alarm">Высокий + тревога</string>
     <string name="enable_notification_alarm_dialog">Чтобы разрешить отображение напоминаний в качестве будильников, включите эту функцию для MedTimer в следующем меню</string>
+    <string name="continuous">Непрерывный</string>
+    <string name="daily">Ежедневно</string>
+    <string name="daily_from_to">Ежедневный интервал от %1s до %2s</string>
+    <string name="continuous_from">Непрерывный интервал, начиная с %1s</string>
+    <string name="reminder_status">Статус напоминания</string>
+    <string name="dosing_instructions">Инструкции по дозированию</string>
+    <string name="interval_type">Тип интервала</string>
+    <string name="sample_instructions">Заполнить примерными инструкциями</string>
+    <string name="daily_interval">Ежедневный интервал</string>
+    <string name="daily_start_time">Ежедневное время начала</string>
+    <string name="daily_end_time">Ежедневное время окончания</string>
+    <string name="remind_on_weekdays">Напоминать в будние дни</string>
+    <string name="remind_on_days_of_month">Напоминать в дни месяца</string>
+    <string name="start_date">Дата начала</string>
+    <string name="end_date">Дата окончания</string>
 </resources>

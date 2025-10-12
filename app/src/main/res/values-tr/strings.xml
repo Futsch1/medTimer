@@ -46,12 +46,10 @@
     <string name="theme">Tema</string>
     <string name="default_">Varsayılan</string>
     <string name="alternative">Alternatif</string>
-    <string name="no_instructions">talimat yok</string>
     <string name="before_meal">yemekten önce</string>
     <string name="after_meal">yemekten sonra</string>
     <string name="time_before_meal">yemekten x dakika önce</string>
     <string name="time_after">ilacın y alınmasından x saat sonra</string>
-    <string name="instruction_templates">Talimat şablonları</string>
     <string name="instructions_label">Ek talimatlar (örn. yemeklerden önce)</string>
     <string name="medicine_data">İlaç verisi</string>
     <string name="export_csv">CSV olarak dışa aktar</string>
@@ -84,7 +82,6 @@
     <string name="weekend_mode_summary">Haftanın belirli günlerinde bildirimleri belirli bir zamana kadar ertele</string>
     <string name="custom">Özel…</string>
     <string name="advanced_settings">Gelişmiş ayarlar</string>
-    <string name="remind_on">Hatırlatıcıyı</string>
     <string name="every_day">Her gün</string>
     <string name="cycle_pause_days">Ara günleri</string>
     <string name="cycle_start_date">İlk döngü başlangıcı</string>
@@ -133,8 +130,6 @@
     <string name="icon">Simge</string>
     <string name="every_day_of_month">Ayın her günü</string>
     <string name="on_day_of_month">Ayın %s inde</string>
-    <string name="clear_all">Tümünü temizle</string>
-    <string name="select_all">Tümünü seçin</string>
     <string name="never">Asla</string>
     <string name="day_of_month_limited">Ayın bazı günleri ile sınırlıdır</string>
     <string name="medicines_tab_description">İlaçlar sekmesi</string>
@@ -223,4 +218,19 @@
     <string name="sort">Sırala</string>
     <string name="high_and_alarm">Yüksek + Alarm</string>
     <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
+    <string name="continuous">Sürekli</string>
+    <string name="daily">Günlük</string>
+    <string name="daily_from_to">Günlük aralık %1s ile %2s arası</string>
+    <string name="continuous_from">Sürekli aralık başlangıcı %1s</string>
+    <string name="reminder_status">Hatırlatıcı durumu</string>
+    <string name="dosing_instructions">Dozaj talimatları</string>
+    <string name="interval_type">Aralık türü</string>
+    <string name="sample_instructions">Örnek talimatlarla doldurun</string>
+    <string name="daily_interval">Günlük aralık</string>
+    <string name="daily_start_time">Günlük başlangıç zamanı</string>
+    <string name="daily_end_time">Günlük bitiş zamanı</string>
+    <string name="remind_on_weekdays">Hafta içi hatırlat</string>
+    <string name="remind_on_days_of_month">Ayın günlerinde hatırlat</string>
+    <string name="start_date">Başlangıç tarihi</string>
+    <string name="end_date">Bitiş tarihi</string>
 </resources>
