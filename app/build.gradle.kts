@@ -90,7 +90,7 @@ dependencies {
     val lifecycleKtxVersion = "2.9.4"
     val workRuntimeVersion = "2.10.5"
     val coreKtxVersion = "1.17.0"
-    val roomVersion = "2.8.1"
+    val roomVersion = "2.8.2"
     val colorPickerViewVersion = "3.1.0"
     val simplyPDFVersion = "2.1.1"
     val gsonVersion = "2.13.2"
