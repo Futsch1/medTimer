@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <Preference
+            app:key="cycle_start_date"
+            app:title="@string/cycle_start_date" />
+        <EditTextPreference
+            app:key="cycle_consecutive_days"
+            app:title="@string/cycle_consecutive_days" />
+        <EditTextPreference
+            app:key="cycle_pause_days"
+            app:title="@string/cycle_pause_days" />
+</androidx.preference.PreferenceScreen>

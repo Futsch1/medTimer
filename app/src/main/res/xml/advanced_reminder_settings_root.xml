@@ -6,38 +6,37 @@
         app:key="reminder_status" />
     <Preference
         android:title="@string/dosing_instructions"
+        app:icon="@drawable/clipboard_plus"
         app:key="instructions" />
+    <Preference
+        app:icon="@drawable/link"
+        app:key="add_linked_reminder"
+        app:title="@string/add_linked_reminder" />
     <PreferenceCategory
         app:key="interval_category"
         app:title="@string/interval_based_reminder">
         <Preference
             android:title="@string/interval"
-            app:key="interval" />
+            app:key="interval"
+            android:icon="@drawable/interval"/>
         <Preference
             android:title="Interval type"
+            app:icon="@drawable/calendar2_event"
             app:key="interval_type" />
         <ListPreference
             android:entries="@array/interval_start"
             android:entryValues="@array/values_0_and_1"
             android:title="Interval start"
-            app:key="interval_start" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        app:key="cycle_category"
-        app:title="@string/cycle_reminders">
-        <Preference
-            app:key="cycle_start_date"
-            app:title="@string/cycle_start_date" />
-        <EditTextPreference
-            app:key="cycle_consecutive_days"
-            app:title="@string/cycle_consecutive_days" />
-        <EditTextPreference
-            app:key="cycle_pause_days"
-            app:title="@string/cycle_pause_days" />
+            app:key="interval_start"
+            android:icon="@drawable/align_start"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:key="time_based_category"
         app:title="@string/time_based_reminder">
+        <Preference
+            app:key="cyclic_reminder"
+            app:title="@string/cycle_reminders"
+            android:icon="@drawable/repeat"/>
         <MultiSelectListPreference
             app:entries="@array/days"
             app:entryValues="@array/one_to_seven"
@@ -50,9 +49,6 @@
             app:title="@string/remind_on_days_of_month" />
         />
     </PreferenceCategory>
-    <Preference
-        app:key="add_linked_reminder"
-        app:title="@string/add_linked_reminder" />
     <PreferenceCategory app:title="Further settings">
         <SwitchPreferenceCompat
             android:title="@string/variable_amount"

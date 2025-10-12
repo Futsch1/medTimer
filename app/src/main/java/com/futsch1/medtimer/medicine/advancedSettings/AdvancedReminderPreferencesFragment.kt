@@ -52,6 +52,9 @@ abstract class AdvancedReminderPreferencesFragment(
     private fun observeUserData(reminderViewModel: ReminderViewModel, reminderId: Int) {
         lifecycleScope.launch {
             reminderViewModel.getReminderFlow(reminderId).collect { reminder ->
+                if (reminder == null) {
+                    return@collect
+                }
                 reminderDataStore.reminder = reminder
                 onReminderUpdated(reminder)
             }

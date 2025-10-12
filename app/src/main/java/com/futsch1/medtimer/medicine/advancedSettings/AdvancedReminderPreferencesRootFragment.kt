@@ -1,9 +1,7 @@
 package com.futsch1.medtimer.medicine.advancedSettings
 
-import android.text.InputType
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
@@ -82,17 +80,20 @@ class AdvancedReminderPreferencesRootFragment(
             AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesIntervalType(
                 id
             )
-
+        },
+        "cyclic_reminder" to { id ->
+            AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesCyclicFragment(
+                id
+            )
         }
     ),
     mapOf(
-        "cycle_start_date" to { activity, preference -> showDateEdit(activity, preference) },
         "add_linked_reminder" to { activity, preference ->
             val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
             LinkedReminderHandling(reminderDataStore.reminder, reminderDataStore.medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
         }
     ),
-    listOf("instructions", "cycle_start_date", "cycle_consecutive_days", "cycle_pause_days")
+    listOf("instructions")
 ) {
     override fun onReminderUpdated(reminder: Reminder) {
         super.onReminderUpdated(reminder)
@@ -154,13 +155,7 @@ class AdvancedReminderPreferencesRootFragment(
 
     override fun customSetup(reminder: Reminder) {
         findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
-        findPreference<Preference>("cycle_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
         findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
-
-        findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
-            editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
-        }
-        findPreference<EditTextPreference>("cycle_pause_days")?.setOnBindEditTextListener { editText -> editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED }
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
             EditIntervalDialog(requireContext(), reminder.timeInMinutes) { newIntervalMinutes ->

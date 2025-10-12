@@ -83,12 +83,14 @@ public class BasicUITest extends BaseTestHelper {
         Calendar cycleStart = Calendar.getInstance();
         cycleStart.set(2025, 1, 1);
         String cycleStartString = AndroidTestHelper.dateToString(cycleStart.getTime());
+        clickOn(R.string.cycle_reminders);
         clickOn(R.string.cycle_start_date);
         setDate(cycleStart.getTime());
         clickOn(R.string.cycle_consecutive_days);
         setValue("5");
         clickOn(R.string.cycle_pause_days);
         setValue("6");
+        pressBack();
 
         clickOn(R.string.remind_on_weekdays);
         clickOn(R.string.monday);
@@ -104,9 +106,11 @@ public class BasicUITest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
 
+        clickOn(R.string.cycle_reminders);
         assertContains(cycleStartString);
         assertContains("5");
         assertContains("6");
+        pressBack();
 
         clickOn(R.string.remind_on_weekdays);
         assertUnchecked(R.string.monday);

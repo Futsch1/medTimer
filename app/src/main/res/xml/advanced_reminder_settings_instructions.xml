@@ -5,8 +5,9 @@
         android:title="@string/dosing_instructions"
         app:key="instructions" />
     <ListPreference
-        android:title="@string/sample_instructions"
-        app:key="sample_instructions"
         android:entries="@array/instructions_suggestions"
-        android:entryValues="@array/instructions_suggestions"/>
+        android:entryValues="@array/instructions_suggestions"
+        android:title="@string/sample_instructions"
+        app:icon="@drawable/clipboard_plus"
+        app:key="sample_instructions" />
 </androidx.preference.PreferenceScreen>

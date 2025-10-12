@@ -10,5 +10,5 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     @JvmField
     val medicineRepository = MedicineRepository(application)
 
-    fun getReminderFlow(reminderId: Int): Flow<Reminder> = medicineRepository.getReminderFlow(reminderId)
+    fun getReminderFlow(reminderId: Int): Flow<Reminder?> = medicineRepository.getReminderFlow(reminderId)
 }
