@@ -101,7 +101,7 @@ class EditMedicineFragment :
         builder.showSelectBtn = false
         val iconDialog = dialog ?: IconDialog.newInstance(builder.build())
 
-        selectIconButton!!.setOnClickListener { v: View? ->
+        selectIconButton!!.setOnClickListener { _: View? ->
             iconDialog.selectedIconIds = listOf(iconId)
             iconDialog.show(fragmentManager, ICON_DIALOG_TAG)
         }
@@ -110,7 +110,7 @@ class EditMedicineFragment :
     private fun setupEnableColor(fragmentView: View, useColor: Boolean) {
         enableColor = fragmentView.findViewById(R.id.enableColor)
         enableColor!!.setChecked(useColor)
-        enableColor!!.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+        enableColor!!.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             colorButton!!.visibility =
                 if (isChecked) View.VISIBLE else View.GONE
 
@@ -120,7 +120,7 @@ class EditMedicineFragment :
     private fun setupColorButton(fragmentView: View, useColor: Boolean) {
         colorButton = fragmentView.findViewById(R.id.selectColor)
         ViewColorHelper.setButtonBackground(colorButton, color)
-        colorButton!!.setOnClickListener { v: View? ->
+        colorButton!!.setOnClickListener { _: View? ->
             ColorPickerDialog(requireContext(), requireActivity(), color) { newColor: Int? ->
                 color = newColor!!
                 ViewColorHelper.setButtonBackground(colorButton, color)
@@ -152,7 +152,7 @@ class EditMedicineFragment :
 
     private fun setupNotesButton(fragmentView: View) {
         val openNotes = fragmentView.findViewById<MaterialButton>(R.id.openNotes)
-        openNotes.setOnClickListener { v: View? ->
+        openNotes.setOnClickListener { _: View? ->
             NotesDialog(requireContext(), notes!!) { newNote: String ->
                 notes = newNote
             }
@@ -161,7 +161,7 @@ class EditMedicineFragment :
 
     private fun setupOpenCalendarButton(fragmentView: View) {
         val openCalendar = fragmentView.findViewById<MaterialButton>(R.id.openCalendar)
-        openCalendar.setOnClickListener { v: View? ->
+        openCalendar.setOnClickListener { _: View? ->
             val navController = findNavController(openCalendar)
             val action =
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
@@ -179,7 +179,7 @@ class EditMedicineFragment :
 
     private fun setupStockButton(fragmentView: View) {
         val openStockTracking = fragmentView.findViewById<MaterialButton>(R.id.openStockTracking)
-        openStockTracking.setOnClickListener { v: View? ->
+        openStockTracking.setOnClickListener { _: View? ->
             val navController = findNavController(openStockTracking)
             val action =
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineStockFragment(getEntityId())
@@ -189,7 +189,7 @@ class EditMedicineFragment :
 
     private fun setupTagsButton(fragmentView: View, medicineId: Int) {
         val openTags = fragmentView.findViewById<MaterialButton>(R.id.openTags)
-        openTags.setOnClickListener { v: View? ->
+        openTags.setOnClickListener { _: View? ->
             val tagDataFromMedicine = TagDataFromMedicine(this, medicineId)
             val dialog: DialogFragment = TagsFragment(tagDataFromMedicine)
             dialog.show(getParentFragmentManager(), "tags")
@@ -215,7 +215,7 @@ class EditMedicineFragment :
 
     private fun setupAddReminderButton(fragmentView: View, medicine: Medicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { view: View? -> NewReminderDialog(requireContext(), requireActivity(), medicine, this.medicineViewModel) }
+        fab.setOnClickListener { _: View? -> NewReminderDialog(requireContext(), requireActivity(), medicine, this.medicineViewModel) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {

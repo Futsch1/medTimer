@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -128,6 +129,41 @@ class SchedulingSimulatorTest {
 
         simulator.simulate { _: ScheduledReminder, localDate: LocalDate, _: Double ->
             localDate == LocalDate.EPOCH.plusDays(30)
+        }
+    }
+
+    @Test
+    fun testDailyReminders() {
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
+        reminder.intervalStart = 1
+        reminder.dailyInterval = true
+        reminder.intervalStartsFromProcessed = false
+        reminder.intervalStartTimeOfDay = 120
+        reminder.intervalEndTimeOfDay = 700
+        medicineWithReminders.reminders.add(reminder)
+
+        val medicines = listOf(medicineWithReminders)
+
+        val simulator = buildSchedulingSimulator(medicines, emptyList())
+
+        val scheduledReminders = mutableListOf<ScheduledReminder>()
+
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+            scheduledReminders.add(scheduledReminder)
+            if (scheduledReminders.size == 1) {
+                assertEquals(LocalDate.EPOCH, localDate)
+                assertEquals(scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60))
+            }
+            if (scheduledReminders.size == 2) {
+                assertEquals(LocalDate.EPOCH, localDate)
+                assertEquals(scheduledReminder.timestamp, Instant.ofEpochSecond(600 * 60))
+            }
+            if (scheduledReminders.size == 3) {
+                assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
+                assertEquals(scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60))
+            }
+            scheduledReminders.size < 3
         }
     }
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    android:label="@string/tabular_view"
+    android:label="@string/dosing_instructions"
     app:startDestination="@id/overviewFragment">
 
     <fragment
@@ -48,9 +48,6 @@
             android:name="medicineId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_editMedicine_to_advancedReminderSettings"
-            app:destination="@id/advancedReminderSettingsFragment" />
-        <action
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
             app:destination="@id/calendarFragment" />
         <action
@@ -66,15 +63,6 @@
     <argument
         android:name="medicineName"
         app:argType="string" />
-    <fragment
-        android:id="@+id/advancedReminderSettingsFragment"
-        android:name="com.futsch1.medtimer.medicine.AdvancedReminderSettingsFragment"
-        android:label="@string/advanced_settings"
-        tools:layout="@layout/fragment_advanced_reminder_settings">
-        <argument
-            android:name="reminderId"
-            app:argType="integer" />
-    </fragment>
     <action
         android:id="@+id/action_global_preferencesFragment"
         app:destination="@id/preferencesFragment" />
@@ -154,7 +142,7 @@
     <fragment
         android:id="@+id/advancedReminderPreferencesStatusFragment"
         android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesStatusFragment"
-        android:label="active">
+        android:label="@string/reminder_status">
         <argument
             android:name="reminderId"
             app:argType="integer" />
@@ -162,7 +150,7 @@
     <fragment
         android:id="@+id/advancedReminderPreferencesIntervalType"
         android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesIntervalType"
-        android:label="AdvancedReminderPreferencesIntervalType">
+        android:label="@string/interval_type">
         <argument
             android:name="reminderId"
             app:argType="integer" />

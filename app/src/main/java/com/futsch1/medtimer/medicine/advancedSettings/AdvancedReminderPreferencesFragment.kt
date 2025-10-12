@@ -63,7 +63,7 @@ abstract class AdvancedReminderPreferencesFragment(
 
         for (link in links) {
             val preference = findPreference<Preference?>(link.key)
-            preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 try {
                     navController.navigate(link.value(reminderId))
                 } catch (_: IllegalArgumentException) {
@@ -77,7 +77,7 @@ abstract class AdvancedReminderPreferencesFragment(
     private fun setupOnClick() {
         for (onClick in customOnClick) {
             val preference = findPreference<Preference?>(onClick.key)
-            preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 onClick.value(requireActivity(), preference)
                 true
             }
@@ -87,7 +87,7 @@ abstract class AdvancedReminderPreferencesFragment(
     open fun onReminderUpdated(reminder: Reminder) {
         for (simpleSummaryKey in simpleSummaryKeys) {
             val preference = findPreference<Preference?>(simpleSummaryKey)
-            preference?.summary = preferenceManager.preferenceDataStore?.getString(simpleSummaryKey, "?")
+            preference!!.summary = preferenceManager.preferenceDataStore?.getString(simpleSummaryKey, "?")
         }
     }
 }

@@ -15,7 +15,7 @@ public abstract class IdlingListAdapter<T, VH extends RecyclerView.ViewHolder>
     private final SimpleIdlingResource idlingResource;
 
     protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        this(diffCallback, "IdlingListAdapter");
+        this(diffCallback, "IdlingListAdapter_" + diffCallback);
     }
 
     protected IdlingListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, String idlingResourceName) {

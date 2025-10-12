@@ -41,7 +41,15 @@ fun intervalBasedReminderString(
     context: Context
 ): String {
     val interval = Interval(reminder.timeInMinutes)
-    val startInterval = context.getString(R.string.interval_start_time) + " " + TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
+    val startInterval = if (reminder.dailyInterval) {
+        context.getString(
+            R.string.daily_from_to,
+            TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong()),
+            TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
+        )
+    } else {
+        context.getString(R.string.continuous_from, TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart))
+    }
     return context.getString(R.string.every_interval, interval.toTranslatedString(context)) + ", " + startInterval
 }
 

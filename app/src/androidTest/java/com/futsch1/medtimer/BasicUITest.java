@@ -19,11 +19,10 @@ import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.MEDICINES;
 import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.setDate;
+import static com.futsch1.medtimer.AndroidTestHelper.setValue;
 
 import android.view.View;
 import android.widget.TextView;
-
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 
 import org.junit.Test;
 
@@ -74,7 +73,7 @@ public class BasicUITest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void menuHandlingTest() {
         AndroidTestHelper.createMedicine("Test");
         AndroidTestHelper.createReminder("1", LocalTime.of(12, 0));
@@ -86,8 +85,10 @@ public class BasicUITest extends BaseTestHelper {
         String cycleStartString = AndroidTestHelper.dateToString(cycleStart.getTime());
         clickOn(R.string.cycle_start_date);
         setDate(cycleStart.getTime());
-        writeTo(R.string.cycle_consecutive_days, "5");
-        writeTo(R.string.cycle_pause_days, "6");
+        clickOn(R.string.cycle_consecutive_days);
+        setValue("5");
+        clickOn(R.string.cycle_pause_days);
+        setValue("6");
 
         clickOn(R.string.remind_on_weekdays);
         clickOn(R.string.monday);

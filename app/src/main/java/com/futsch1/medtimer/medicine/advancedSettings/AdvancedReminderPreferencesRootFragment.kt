@@ -11,7 +11,6 @@ import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
-import com.futsch1.medtimer.medicine.AdvancedReminderSettingsMenuProvider
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import java.time.Instant
 import java.time.LocalDate
@@ -89,10 +88,8 @@ class AdvancedReminderPreferencesRootFragment(
     mapOf(
         "cycle_start_date" to { activity, preference -> showDateEdit(activity, preference) },
         "add_linked_reminder" to { activity, preference ->
-            {
-                val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
-                LinkedReminderHandling(reminderDataStore.reminder, reminderDataStore.medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
-            }
+            val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
+            LinkedReminderHandling(reminderDataStore.reminder, reminderDataStore.medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
         }
     ),
     listOf("instructions", "cycle_start_date", "cycle_consecutive_days", "cycle_pause_days")

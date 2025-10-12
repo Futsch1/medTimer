@@ -61,16 +61,23 @@ public class AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_minute_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
+        closeKeyboard();
     }
 
     public static void setDate(Date date) {
         String dateString = dateToString(date);
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle);
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString);
+        clickOn(com.google.android.material.R.id.confirm_button);
     }
 
     public static String dateToString(Date date) {
         return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+    }
+
+    public static void setValue(String value) {
+        writeTo(android.R.id.edit, value);
+        clickDialogPositiveButton();
     }
 
     public static void createIntervalReminder(String amount, int intervalMinutes) {

@@ -29,6 +29,7 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -58,14 +59,18 @@ public class ReminderTest extends BaseTestHelper {
 
         pressBack();
         pressBack();
+        pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         assertListItemCount(R.id.reminders, 0);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
+
+        clickOn(R.id.openAdvancedSettings);
         clickOn(R.string.reminder_status);
         clickOn(R.string.active);
 
+        pressBack();
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
@@ -73,12 +78,14 @@ public class ReminderTest extends BaseTestHelper {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
         clickListItem(R.id.medicineList, 0);
+
         clickOn(R.id.openAdvancedSettings);
         clickOn(R.string.reminder_status);
         clickOn(R.string.period_start);
         clickOn(R.string.start_date);
         setDate(futureTime.getTime());
 
+        pressBack();
         pressBack();
         pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
@@ -94,6 +101,7 @@ public class ReminderTest extends BaseTestHelper {
 
         pressBack();
         pressBack();
+        pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         assertListItemCount(R.id.reminders, 0);
 
@@ -108,12 +116,13 @@ public class ReminderTest extends BaseTestHelper {
 
         pressBack();
         pressBack();
+        pressBack();
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         assertListItemCount(R.id.reminders, 1);
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     public void activeIntervalReminderTest() {
         Calendar futureTime = Calendar.getInstance();
         int year = futureTime.get(Calendar.YEAR);
@@ -124,22 +133,24 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createIntervalReminder("1", 180);
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.string.reminder_status);
-        clickOn(R.string.period_start);
-        clickOn(R.string.start_date);
+        clickOn(R.string.interval_type);
+        clickOn(R.string.interval_start_time);
         setDate(futureTime.getTime());
+        setTime(futureTime.get(Calendar.HOUR_OF_DAY), futureTime.get(Calendar.MINUTE), false);
+        pressBack();
+        clickOn(R.string.reminder_status);
         clickOn(R.string.active);
 
+        pressBack();
         pressBack();
         pressBack();
 
         clickListItem(R.id.medicineList, 0);
         openMenu();
         clickOn(R.string.activate_all);
-        clickOn(R.id.openAdvancedSettings);
 
-        clickOn(R.string.reminder_status);
-        clickOn(R.string.period_start);
+        clickOn(R.id.openAdvancedSettings);
+        clickOn(R.string.interval_type);
         assertContains(AndroidTestHelper.dateToString(nowTime.getTime()));
     }
 
