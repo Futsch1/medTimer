@@ -224,7 +224,7 @@ class SummaryHelperTest {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
             .thenReturn("ok")
-        Mockito.`when`(context.getString(R.string.interval_start_time))
+        Mockito.`when`(context.getString(R.string.continuous_from, "0 1"))
             .thenReturn("start time")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
@@ -243,7 +243,7 @@ class SummaryHelperTest {
             .thenReturn("ok")
         Mockito.`when`(resources.getQuantityString(R.plurals.minutes, 2))
             .thenReturn("ok")
-        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "ok, start time 0 1; ok, start time 0 1"))
+        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "ok, start time; ok, start time"))
             .thenReturn("ok")
 
         val reminder = Reminder(1)
@@ -253,7 +253,7 @@ class SummaryHelperTest {
         reminder2.timeInMinutes = 120
         reminder2.intervalStart = 1
 
-        assertEquals("ok, start time 0 1", reminderSummary(reminder, context))
+        assertEquals("ok, start time", reminderSummary(reminder, context))
         assertEquals("ok", remindersSummary(listOf(reminder2, reminder), context))
 
         mockedDateFormat.close()

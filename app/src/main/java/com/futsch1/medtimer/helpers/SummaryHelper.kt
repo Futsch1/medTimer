@@ -11,7 +11,7 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 
 fun reminderSummary(reminder: Reminder, context: Context): String {
-    val strings: MutableList<String> = LinkedList()
+    var strings: MutableList<String> = LinkedList()
 
     if (!isReminderActive(reminder)) {
         strings.add(context.getString(R.string.inactive))
@@ -32,6 +32,7 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
     }
+    strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
     return java.lang.String.join(", ", strings)
 }
@@ -114,6 +115,7 @@ private fun buildReminderStrings(
     if (properties.dayOfMonthLimited) {
         strings.add(context.getString(R.string.day_of_month_limited))
     }
+    strings.add(getCyclicReminderString(reminder, context))
     if (!properties.weekdayLimited && reminder.pauseDays == 0) {
         strings.add(context.getString(R.string.every_day))
     }
