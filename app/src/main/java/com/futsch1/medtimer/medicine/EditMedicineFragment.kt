@@ -235,7 +235,7 @@ class EditMedicineFragment :
     }
 
     override fun fillEntityData(entity: Medicine, fragmentView: View) {
-        entity.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim { it <= ' ' }
+        entity.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim()
         entity.useColor = enableColor!!.isChecked
         entity.color = color
         importanceIndexToMedicine(notificationImportance!!.selectedItemPosition, entity)
