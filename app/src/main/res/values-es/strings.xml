@@ -224,8 +224,8 @@
     <string name="enable_notification_alarm_dialog">Para poder mostrar los recordatorios como alarmas, active esta opción para MedTimer en el siguiente menú</string>
     <string name="continuous">Continuo</string>
     <string name="daily">Diario</string>
-    <string name="daily_from_to">Intervalo diario de %1s a %2s</string>
-    <string name="continuous_from">Intervalo continuo a partir de %1s</string>
+    <string name="daily_from_to">Intervalo diario de %1$s a %2$s</string>
+    <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="reminder_status">Estado del recordatorio</string>
     <string name="dosing_instructions">Instrucciones de dosificación</string>
     <string name="interval_type">Tipo de intervalo</string>

@@ -218,8 +218,8 @@
     <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следното меню</string>
     <string name="continuous">Непрекъснат</string>
     <string name="daily">Ежедневно</string>
-    <string name="daily_from_to">Дневен интервал от %1s до %2s</string>
-    <string name="continuous_from">Непрекъснат интервал, започващ от %1s</string>
+    <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
+    <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="reminder_status">Статус на напомнянето</string>
     <string name="dosing_instructions">Инструкции за дозиране</string>
     <string name="interval_type">Тип интервал</string>

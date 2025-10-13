@@ -229,8 +229,8 @@
     <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
     <string name="continuous">Ciągły</string>
     <string name="daily">Codzienny</string>
-    <string name="daily_from_to">Dzienny interwał od %1s do %2s</string>
-    <string name="continuous_from">Ciągły interwał zaczynający się od %1s</string>
+    <string name="daily_from_to">Dzienny interwał od %1$s do %2$s</string>
+    <string name="continuous_from">Ciągły interwał zaczynający się od %1$s</string>
     <string name="reminder_status">Status przypomnienia</string>
     <string name="dosing_instructions">Instrukcje dawkowania</string>
     <string name="interval_type">Typ interwału</string>

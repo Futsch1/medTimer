@@ -219,8 +219,8 @@
     <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
     <string name="continuous">Sürekli</string>
     <string name="daily">Günlük</string>
-    <string name="daily_from_to">Günlük aralık %1s ile %2s arası</string>
-    <string name="continuous_from">Sürekli aralık başlangıcı %1s</string>
+    <string name="daily_from_to">Günlük aralık %1$s ile %2$s arası</string>
+    <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="reminder_status">Hatırlatıcı durumu</string>
     <string name="dosing_instructions">Dozaj talimatları</string>
     <string name="interval_type">Aralık türü</string>

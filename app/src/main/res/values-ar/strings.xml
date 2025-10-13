@@ -239,8 +239,8 @@
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
     <string name="continuous">مستمر</string>
     <string name="daily">يومي</string>
-    <string name="daily_from_to">فاصل يومي من %1s إلى %2s</string>
-    <string name="continuous_from">فاصل مستمر يبدأ من %1s</string>
+    <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
+    <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="reminder_status">حالة التذكير</string>
     <string name="dosing_instructions">تعليمات الجرعات</string>
     <string name="interval_type">نوع الفاصل الزمني</string>

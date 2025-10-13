@@ -221,8 +221,8 @@
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
     <string name="continuous">Continuous</string>
     <string name="daily">Daily</string>
-    <string name="daily_from_to">Daily interval from %1s to %2s</string>
-    <string name="continuous_from">Continuous interval starting from %1s</string>
+    <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
+    <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="reminder_status">Reminder status</string>
     <string name="dosing_instructions">Dosing instructions</string>
     <string name="interval_type">Interval type</string>

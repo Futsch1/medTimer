@@ -219,8 +219,8 @@
     <string name="enable_notification_alarm_dialog">Για να επιτρέψετε την εμφάνιση υπενθυμίσεων ως συναγερμών, ενεργοποιήστε το για το MedTimer στο ακόλουθο μενού</string>
     <string name="continuous">Συνεχές</string>
     <string name="daily">Καθημερινά</string>
-    <string name="daily_from_to">Ημερήσιο διάστημα από %1s έως %2s</string>
-    <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1s</string>
+    <string name="daily_from_to">Ημερήσιο διάστημα από %1$s έως %2$s</string>
+    <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="reminder_status">Κατάσταση υπενθύμισης</string>
     <string name="dosing_instructions">Οδηγίες δοσολογίας</string>
     <string name="interval_type">Τύπος διαστήματος</string>

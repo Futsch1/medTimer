@@ -224,8 +224,8 @@
     <string name="enable_notification_alarm_dialog">Para permitir a exibição de lembretes como alarmes, ative essa opção para o MedTimer no seguinte menu</string>
     <string name="continuous">Contínuo</string>
     <string name="daily">Diariamente</string>
-    <string name="daily_from_to">Intervalo diário de %1s a %2s</string>
-    <string name="continuous_from">Intervalo contínuo a partir de %1s</string>
+    <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
+    <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="reminder_status">Status do lembrete</string>
     <string name="dosing_instructions">Instruções de dosagem</string>
     <string name="interval_type">Tipo de intervalo</string>

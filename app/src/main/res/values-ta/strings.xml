@@ -219,8 +219,8 @@
     <string name="enable_notification_alarm_dialog">நினைவூட்டல்களை அலாரங்களாகக் காட்ட அனுமதிக்க, பின்வரும் மெனுவில் MedTimer-க்கு இதை இயக்கவும்</string>
     <string name="continuous">தொடர்ச்சியான</string>
     <string name="daily">தினசரி</string>
-    <string name="daily_from_to">தினசரி இடைவெளி %1s முதல் %2s வரை</string>
-    <string name="continuous_from">தொடர்ச்சியான இடைவெளி %1s இலிருந்து தொடங்குகிறது</string>
+    <string name="daily_from_to">தினசரி இடைவெளி %1$s முதல் %2$s வரை</string>
+    <string name="continuous_from">தொடர்ச்சியான இடைவெளி %1$s இலிருந்து தொடங்குகிறது</string>
     <string name="reminder_status">நினைவூட்டல் நிலை</string>
     <string name="dosing_instructions">மருந்தளவு வழிமுறைகள்</string>
     <string name="interval_type">இடைவெளி வகை</string>

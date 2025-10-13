@@ -229,8 +229,8 @@
     <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
     <string name="continuous">Безперервний</string>
     <string name="daily">Щоденно</string>
-    <string name="daily_from_to">Щоденний інтервал від %1s до %2s</string>
-    <string name="continuous_from">Безперервний інтервал, починаючи з %1s</string>
+    <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
+    <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="reminder_status">Статус нагадування</string>
     <string name="dosing_instructions">Інструкції з дозування</string>
     <string name="interval_type">Тип інтервалу</string>

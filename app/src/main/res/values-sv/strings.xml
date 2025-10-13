@@ -219,8 +219,8 @@
     <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
     <string name="continuous">Kontinuerlig</string>
     <string name="daily">Dagligen</string>
-    <string name="daily_from_to">Dagligen intervall från %1s till %2s</string>
-    <string name="continuous_from">Kontinuerligt intervall från %1s</string>
+    <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
+    <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="reminder_status">Påminnelsestatus</string>
     <string name="dosing_instructions">Doseringsanvisningar</string>
     <string name="interval_type">Intervalltyp</string>

@@ -224,8 +224,8 @@
     <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attivare questa opzione per MedTimer nel seguente menu</string>
     <string name="continuous">Continuo</string>
     <string name="daily">Quotidiano</string>
-    <string name="daily_from_to">Intervallo giornaliero da %1s a %2s</string>
-    <string name="continuous_from">Intervallo continuo a partire da %1s</string>
+    <string name="daily_from_to">Intervallo giornaliero da %1$s a %2$s</string>
+    <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="reminder_status">Stato promemoria</string>
     <string name="dosing_instructions">Istruzioni di dosaggio</string>
     <string name="interval_type">Tipo di intervallo</string>

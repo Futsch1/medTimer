@@ -219,8 +219,8 @@
     <string name="enable_notification_alarm_dialog">Salliaksesi muistutusten näyttämisen hälytyksinä, ota tämä asetus käyttöön MedTimerille seuraavassa valikossa</string>
     <string name="continuous">Jatkuva</string>
     <string name="daily">Päivittäin</string>
-    <string name="daily_from_to">Päivittäinen väli %1s – %2s</string>
-    <string name="continuous_from">Jatkuva väli alkaen %1s</string>
+    <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
+    <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="reminder_status">Muistutuksen tila</string>
     <string name="dosing_instructions">Annostusohjeet</string>
     <string name="interval_type">Välin tyyppi</string>

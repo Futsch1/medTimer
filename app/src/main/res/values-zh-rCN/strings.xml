@@ -214,8 +214,8 @@
     <string name="enable_notification_alarm_dialog">为了允许将提醒显示为闹钟，请在以下菜单中为 MedTimer 启用此功能</string>
     <string name="continuous">持续</string>
     <string name="daily">每日</string>
-    <string name="daily_from_to">每日间隔从 %1s 到 %2s</string>
-    <string name="continuous_from">连续间隔从 %1s</string>
+    <string name="daily_from_to">每日间隔从 %1$s 到 %2$s</string>
+    <string name="continuous_from">连续间隔从 %1$s</string>
     <string name="reminder_status">提醒状态</string>
     <string name="dosing_instructions">剂量说明</string>
     <string name="interval_type">间隔类型</string>

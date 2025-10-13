@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 import android.icu.util.Calendar;
 
+import androidx.annotation.NonNull;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
@@ -22,9 +23,11 @@ import androidx.test.uiautomator.Until;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Locale;
 
 @SuppressWarnings("java:S2925")
 public class AndroidTestHelper {
@@ -72,7 +75,29 @@ public class AndroidTestHelper {
     }
 
     public static String dateToString(Date date) {
-        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+        return getDefaultTextInputFormat().format(date);
+    }
+
+    // Taken from UtcDates in Material DatePicker
+    static SimpleDateFormat getDefaultTextInputFormat() {
+        String defaultFormatPattern =
+                ((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()))
+                        .toPattern();
+        defaultFormatPattern = getDatePatternAsInputFormat(defaultFormatPattern);
+        SimpleDateFormat format = new SimpleDateFormat(defaultFormatPattern, Locale.getDefault());
+        format.setLenient(false);
+        return format;
+    }
+
+    @NonNull
+    static String getDatePatternAsInputFormat(@NonNull String localeFormat) {
+        return localeFormat
+                .replaceAll("[^dMy/\\-.]", "")
+                .replaceAll("d{1,2}", "dd")
+                .replaceAll("M{1,2}", "MM")
+                .replaceAll("y{1,4}", "yyyy")
+                .replaceAll("\\.$", "") // Removes a dot suffix that appears in some formats
+                .replaceAll("My", "M/y"); // Edge case for the Kako locale
     }
 
     public static void setValue(String value) {
