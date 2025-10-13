@@ -119,7 +119,6 @@
     <string name="date">Дата</string>
     <string name="active">Активний</string>
     <string name="inactive">Неактивний</string>
-    <string name="active_in_time_period">Активні в період часу</string>
     <string name="period_start">Початок менструації</string>
     <string name="period_end">Кінець періоду</string>
     <string name="activate_all">Активувати всі нагадування</string>

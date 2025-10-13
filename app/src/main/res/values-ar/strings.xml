@@ -130,7 +130,6 @@
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
     <string name="inactive">غير نشط</string>
-    <string name="active_in_time_period">نشط في الفترة الزمنية</string>
     <string name="period_start">بداية الفترة</string>
     <string name="period_end">نهاية الفترة</string>
     <string name="activate_all">فعِّل جميع التذكيرات</string>

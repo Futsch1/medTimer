@@ -101,7 +101,6 @@
     <string name="high">Wysoki</string>
     <string name="notification_importance">Priorytet powiadomień</string>
     <string name="calendar">Kalendarz</string>
-    <string name="active_in_time_period">Aktywne w okresie czasu</string>
     <string name="deactivate_all">Dezaktywuj wszystkie przypomnienia</string>
     <string name="block_screen_capture">Zablokuj zrzuty ekranu</string>
     <string name="icon">Ikona</string>

@@ -121,7 +121,6 @@
     <string name="date">Datum</string>
     <string name="active">Actief</string>
     <string name="inactive">Inactief</string>
-    <string name="active_in_time_period">Actief in periode</string>
     <string name="period_start">Begin van de periode</string>
     <string name="period_end">Einde periode</string>
     <string name="activate_all">Alle herinneringen activeren</string>

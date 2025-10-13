@@ -121,7 +121,6 @@
     <string name="date">Date</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="active_in_time_period">Aktiv in Zeitspanne</string>
     <string name="period_start">Beginn der Zeitspanne</string>
     <string name="period_end">Ende der Zeitspanne</string>
     <string name="activate_all">Alle Erinnerungen aktivieren</string>

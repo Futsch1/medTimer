@@ -126,7 +126,6 @@
     <string name="date">Datum</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="active_in_time_period">Aktiv i tidsperioden</string>
     <string name="period_start">Periodstart</string>
     <string name="period_end">Periodslut</string>
     <string name="activate_all">Aktivera alla påminnelser</string>

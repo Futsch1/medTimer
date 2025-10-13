@@ -123,7 +123,6 @@
     <string name="date">திகதி</string>
     <string name="active">செயலில்</string>
     <string name="inactive">செயலற்றது</string>
-    <string name="active_in_time_period">காலகட்டத்தில் செயலில் உள்ளது</string>
     <string name="period_start">காலம் தொடக்க</string>
     <string name="period_end">காலம் முடிவு</string>
     <string name="activate_all">அனைத்து நினைவூட்டல்களையும் செயல்படுத்தவும்</string>

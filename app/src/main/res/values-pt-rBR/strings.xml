@@ -103,7 +103,6 @@
     <string name="date">Data</string>
     <string name="active">Ativo</string>
     <string name="inactive">Inativo</string>
-    <string name="active_in_time_period">Ativo em um período de tempo</string>
     <string name="period_start">Início do período</string>
     <string name="activate_all">Ativar todos os lembretes</string>
     <string name="deactivate_all">Desativar todos os lembretes</string>

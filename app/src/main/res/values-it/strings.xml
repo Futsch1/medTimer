@@ -123,7 +123,6 @@
     <string name="date">Data</string>
     <string name="active">Attivo</string>
     <string name="inactive">Inattivo</string>
-    <string name="active_in_time_period">Attivo nel periodo</string>
     <string name="period_start">Inizio periodo</string>
     <string name="period_end">Fine periodo</string>
     <string name="activate_all">Attiva tutti i promemoria</string>

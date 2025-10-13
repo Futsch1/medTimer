@@ -120,7 +120,6 @@
     <string name="date">Дата</string>
     <string name="active">Активно</string>
     <string name="inactive">Неактивно</string>
-    <string name="active_in_time_period">Активно в период</string>
     <string name="period_start">Начало на период</string>
     <string name="period_end">Край на период</string>
     <string name="activate_all">Активиране на всички напомняния</string>

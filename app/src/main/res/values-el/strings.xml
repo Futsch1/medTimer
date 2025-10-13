@@ -121,7 +121,6 @@
     <string name="date">Ημερομηνία</string>
     <string name="active">Ενεργή</string>
     <string name="inactive">Μη ενεργή</string>
-    <string name="active_in_time_period">Ενεργή για ορισμένη περίοδο</string>
     <string name="period_start">Έναρξη περιόδου</string>
     <string name="period_end">Τέλος περιόδου</string>
     <string name="activate_all">Ενεργοποίηση όλων των υπενθυμίσεων</string>

@@ -7,7 +7,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -77,7 +76,6 @@ public class ScreenshotsTest extends BaseTestHelper {
 
         clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
         sleep(500);
-        assertContains(R.string.active_in_time_period);
         Screengrab.screenshot("4");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);

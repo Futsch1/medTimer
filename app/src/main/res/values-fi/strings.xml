@@ -122,7 +122,6 @@
     <string name="date">Päivämäärä</string>
     <string name="active">Aktiivinen</string>
     <string name="inactive">Epäaktiivinen</string>
-    <string name="active_in_time_period">Aktiivinen aikajaksolla</string>
     <string name="period_start">Ajanjakson alku</string>
     <string name="period_end">Ajanjakson loppu</string>
     <string name="activate_all">Aktivoi kaikki muistutukset</string>

@@ -119,7 +119,6 @@
     <string name="date">日期</string>
     <string name="active">启用提醒</string>
     <string name="inactive">关闭提醒</string>
-    <string name="active_in_time_period">自定义提醒时间段</string>
     <string name="period_start">开始日期</string>
     <string name="period_end">结束日期</string>
     <string name="activate_all">启用所有提醒</string>

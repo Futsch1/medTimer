@@ -121,7 +121,6 @@
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
     <string name="inactive">Aktif değil</string>
-    <string name="active_in_time_period">Zaman diliminde aktif</string>
     <string name="period_start">Dönem başlangıcı</string>
     <string name="period_end">Dönem sonu</string>
     <string name="activate_all">Tüm hatırlatıcıları etkinleştirin</string>

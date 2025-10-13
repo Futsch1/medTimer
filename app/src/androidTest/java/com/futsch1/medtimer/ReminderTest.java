@@ -29,7 +29,6 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -122,7 +121,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void activeIntervalReminderTest() {
         Calendar futureTime = Calendar.getInstance();
         int year = futureTime.get(Calendar.YEAR);
