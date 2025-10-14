@@ -68,13 +68,13 @@ public class AndroidTestHelper {
     }
 
     public static void setDate(Date date) {
-        String dateString = dateToString(date);
+        String dateString = dateToStringForDateEdit(date);
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle);
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString);
         clickOn(com.google.android.material.R.id.confirm_button);
     }
 
-    public static String dateToString(Date date) {
+    private static String dateToStringForDateEdit(Date date) {
         return getDefaultTextInputFormat().format(date);
     }
 

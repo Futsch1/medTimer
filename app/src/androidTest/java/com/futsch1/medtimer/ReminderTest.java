@@ -34,6 +34,8 @@ import com.futsch1.medtimer.helpers.TimeHelper;
 
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.Calendar;
@@ -150,7 +152,7 @@ public class ReminderTest extends BaseTestHelper {
 
         clickOn(R.id.openAdvancedSettings);
         clickOn(R.string.interval_type);
-        assertContains(AndroidTestHelper.dateToString(nowTime.getTime()));
+        assertContains(SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(nowTime.getTime()));
     }
 
     @Test

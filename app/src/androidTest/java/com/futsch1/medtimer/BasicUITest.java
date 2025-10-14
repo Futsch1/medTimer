@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicReference;
@@ -82,7 +84,7 @@ public class BasicUITest extends BaseTestHelper {
 
         Calendar cycleStart = Calendar.getInstance();
         cycleStart.set(2025, 1, 1);
-        String cycleStartString = AndroidTestHelper.dateToString(cycleStart.getTime());
+        String cycleStartString = SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(cycleStart.getTime());
         clickOn(R.string.cycle_reminder);
         clickOn(R.string.cycle_start_date);
         setDate(cycleStart.getTime());
