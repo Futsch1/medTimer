@@ -41,12 +41,10 @@
     <string name="theme">Tema</string>
     <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="no_instructions">ingen instruktioner</string>
     <string name="before_meal">før måltidet</string>
     <string name="after_meal">efter måltidet</string>
     <string name="time_before_meal">x minutter før måltidet</string>
     <string name="time_after">x timer efter medicin y</string>
-    <string name="instruction_templates">Instruktionsskabeloner</string>
     <string name="instructions_label">Yderligere instruktioner (f.eks. før måltider)</string>
     <string name="medicine_data">Medicindata</string>
     <string name="export_csv">Eksporter som CSV</string>
@@ -79,11 +77,9 @@
     <string name="weekend_mode_summary">Forsink notifikationer på specifikke ugedage indtil et givent tidspunkt</string>
     <string name="custom">Brugerdefineret…</string>
     <string name="advanced_settings">Avancerede indstillinger</string>
-    <string name="remind_on">Påmind</string>
     <string name="every_day">Hver dag</string>
     <string name="cycle_pause_days">Pausedage</string>
     <string name="cycle_start_date">Første cyklusstart</string>
-    <string name="cycle_reminders">Cykliske påmindelser</string>
     <string name="weekday_limited">Begrænset til nogle ugedage</string>
     <string name="reminders">Påmindelser</string>
     <string name="sort">Sorter</string>
@@ -120,7 +116,6 @@
     <string name="date">Dato</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="active_in_time_period">Aktiv i tidsperiode</string>
     <string name="period_start">Periode start</string>
     <string name="period_end">Periode slut</string>
     <string name="activate_all">Aktiver alle påmindelser</string>
@@ -129,8 +124,6 @@
     <string name="icon">Ikon</string>
     <string name="every_day_of_month">Hver dag i måneden</string>
     <string name="on_day_of_month">Den %s. i måneden</string>
-    <string name="clear_all">Afvælg alle</string>
-    <string name="select_all">Vælg alle</string>
     <string name="never">Aldrig</string>
     <string name="day_of_month_limited">Begrænset til nogle dage om måneden</string>
     <string name="medicines_tab_description">Medicin tab</string>
@@ -223,4 +216,19 @@
     <string name="automatically_taken">Automatisk marker som taget</string>
     <string name="high_and_alarm">Høj + Alarm</string>
     <string name="enable_notification_alarm_dialog">For at kunne vise notifikationer som alarmer, skal dette tillades for MedTimer i den følgende menu</string>
+    <string name="continuous">Kontinuerlig</string>
+    <string name="daily">Daglige</string>
+    <string name="daily_from_to">Dagligt interval fra %1$s til %2$s</string>
+    <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
+    <string name="reminder_status">Påmindelsesstatus</string>
+    <string name="dosing_instructions">Doseringsvejledning</string>
+    <string name="interval_type">Intervaltype</string>
+    <string name="sample_instructions">Udfyld med prøveinstruktioner</string>
+    <string name="daily_interval">Dagligt interval</string>
+    <string name="daily_start_time">Daglig starttid</string>
+    <string name="daily_end_time">Daglig sluttid</string>
+    <string name="remind_on_weekdays">Påmind på hverdage</string>
+    <string name="remind_on_days_of_month">Påmind på månedens dage</string>
+    <string name="start_date">Start dato</string>
+    <string name="end_date">Slut dato</string>
 </resources>

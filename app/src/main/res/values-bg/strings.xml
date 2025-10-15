@@ -216,8 +216,6 @@
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>
     <string name="display_settings">НАстройки на екрана</string>
-    <!--<string name="high_and_alarm">Висок + Аларма</string>-->
-    <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следното меню</string>
     <string name="continuous">Непрекъснат</string>
     <string name="daily">Ежедневно</string>
     <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
