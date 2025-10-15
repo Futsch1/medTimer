@@ -39,6 +39,7 @@ public class AndroidTestHelper {
             clickOn(R.id.editReminderTime);
             setTime(time.getHour(), time.getMinute(), false);
         }
+        closeKeyboard();
 
         clickOn(R.id.createReminder);
     }
