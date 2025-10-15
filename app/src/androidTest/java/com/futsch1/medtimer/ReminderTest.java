@@ -20,6 +20,7 @@ import static com.futsch1.medtimer.AndroidTestHelper.MainMenu.OVERVIEW;
 import static com.futsch1.medtimer.AndroidTestHelper.navigateTo;
 import static com.futsch1.medtimer.AndroidTestHelper.setDate;
 import static com.futsch1.medtimer.AndroidTestHelper.setTime;
+import static com.futsch1.medtimer.AndroidTestHelper.setValue;
 import static junit.framework.TestCase.assertEquals;
 
 import android.content.Context;
@@ -349,11 +350,11 @@ public class ReminderTest extends BaseTestHelper {
     //@AllowFlaky(attempts = 1)
     public void cyclicReminderTest() {
         CyclicReminderInfo[] reminders = {
-            new CyclicReminderInfo(1, 0, false),
-            new CyclicReminderInfo(1, 1, false),
-            new CyclicReminderInfo(1, 2, false),
-            new CyclicReminderInfo(2, 0, false),
-            new CyclicReminderInfo(2, 1, true),
+                new CyclicReminderInfo(1, 0, false),
+                new CyclicReminderInfo(1, 1, false),
+                new CyclicReminderInfo(1, 2, false),
+                new CyclicReminderInfo(2, 0, false),
+                new CyclicReminderInfo(2, 1, true),
         };
 
         // Create medicine
@@ -365,16 +366,21 @@ public class ReminderTest extends BaseTestHelper {
 
             // Set active and pause days
             clickOn(R.id.openAdvancedSettings);
-            writeTo(R.id.consecutiveDays, Integer.toString(reminder.consecutiveDays));
-            writeTo(R.id.pauseDays, Integer.toString(reminder.pauseDays));
+            clickOn(R.string.cycle_reminder);
+            clickOn(R.string.cycle_consecutive_days);
+            setValue(Integer.toString(reminder.consecutiveDays));
+            clickOn(R.string.cycle_pause_days);
+            setValue(Integer.toString(reminder.pauseDays));
 
             // Set cycle start date of the reminder
             Calendar cycleStart = Calendar.getInstance();
             // The month here is 7, not 8, since it is zero-indexed (so January is 0)
             cycleStart.set(2025, 7, 1);
-            writeTo(R.id.cycleStartDate, AndroidTestHelper.dateToString(cycleStart.getTime()));
+            clickOn(R.string.cycle_start_date);
+            setDate(cycleStart.getTime());
 
             // Go back to medicines list
+            pressBack();
             pressBack();
             pressBack();
 
@@ -408,7 +414,7 @@ public class ReminderTest extends BaseTestHelper {
         }
     }
 
-    private class CyclicReminderInfo {
+    private static class CyclicReminderInfo {
         public int consecutiveDays;
         public int pauseDays;
         public boolean shouldHaveInfo;

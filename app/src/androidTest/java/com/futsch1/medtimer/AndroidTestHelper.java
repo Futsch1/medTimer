@@ -90,14 +90,15 @@ public class AndroidTestHelper {
     }
 
     @NonNull
+    @SuppressWarnings("java:S5361")
     static String getDatePatternAsInputFormat(@NonNull String localeFormat) {
         return localeFormat
-                .replace("[^dMy/\\-.]", "")
-                .replace("d{1,2}", "dd")
-                .replace("M{1,2}", "MM")
-                .replace("y{1,4}", "yyyy")
-                .replace("\\.$", "") // Removes a dot suffix that appears in some formats
-                .replace("My", "M/y"); // Edge case for the Kako locale
+                .replaceAll("[^dMy/\\-.]", "")
+                .replaceAll("d{1,2}", "dd")
+                .replaceAll("M{1,2}", "MM")
+                .replaceAll("y{1,4}", "yyyy")
+                .replaceAll("\\.$", "") // Removes a dot suffix that appears in some formats
+                .replaceAll("My", "M/y"); // Edge case for the Kako locale
     }
 
     public static void setValue(String value) {
