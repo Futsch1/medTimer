@@ -344,4 +344,79 @@ public class ReminderTest extends BaseTestHelper {
         sleep(1000);
         assertContains(context.getString(R.string.interval_time, "0 min"));
     }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    public void cyclicReminderTest() {
+        CyclicReminderInfo[] reminders = {
+            new CyclicReminderInfo(1, 0, false),
+            new CyclicReminderInfo(1, 1, false),
+            new CyclicReminderInfo(1, 2, false),
+            new CyclicReminderInfo(2, 0, false),
+            new CyclicReminderInfo(2, 1, true),
+        };
+
+        // Create medicine
+        AndroidTestHelper.createMedicine("Test");
+
+        for (CyclicReminderInfo reminder : reminders) {
+            // Create reminder
+            AndroidTestHelper.createReminder("1", LocalTime.of(20, 0));
+
+            // Set active and pause days
+            clickOn(R.id.openAdvancedSettings);
+            writeTo(R.id.consecutiveDays, Integer.toString(reminder.consecutiveDays));
+            writeTo(R.id.pauseDays, Integer.toString(reminder.pauseDays));
+
+            // Set cycle start date of the reminder
+            Calendar cycleStart = Calendar.getInstance();
+            // The month here is 7, not 8, since it is zero-indexed (so January is 0)
+            cycleStart.set(2025, 7, 1);
+            writeTo(R.id.cycleStartDate, AndroidTestHelper.dateToString(cycleStart.getTime()));
+
+            // Go back to medicines list
+            pressBack();
+            pressBack();
+
+            // Mark event as taken
+            AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+            clickOn(R.id.stateButton);
+            clickOn(R.id.takenButton);
+
+            // Check if cyclic information is present
+            clickOn(R.id.overviewContentContainer);
+            if (reminder.shouldHaveInfo) {
+                assertContains(R.id.editEventName, String.format("Test (1/%d)", reminder.consecutiveDays));
+            } else {
+                assertNotContains(R.id.editEventName, "Test (");
+                assertContains(R.id.editEventName, "Test");
+            }
+            pressBack();
+
+            // Remove event
+            clickOn(R.id.stateButton);
+            clickOn(R.id.deleteButton);
+            clickDialogPositiveButton();
+
+            // Remove reminder
+            AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+            clickListItem(R.id.medicineList, 0);
+            clickOn(R.id.openAdvancedSettings);
+            openMenu();
+            clickOn(R.string.delete);
+            clickDialogPositiveButton();
+        }
+    }
+
+    private class CyclicReminderInfo {
+        public int consecutiveDays;
+        public int pauseDays;
+        public boolean shouldHaveInfo;
+
+        public CyclicReminderInfo(int consecutiveDays, int pauseDays, boolean shouldHaveInfo) {
+            this.consecutiveDays = consecutiveDays;
+            this.pauseDays = pauseDays;
+            this.shouldHaveInfo = shouldHaveInfo;
+        }
+    }
 }

@@ -23,12 +23,12 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 132
-        versionName = "1.19.0"
+        versionCode = 133
+        versionName = "1.19.1"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN")
+        resConfigs("en,ar,bg,da,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -63,7 +63,7 @@ android {
     @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
-        localeFilters += listOf("en", "ar", "bg", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN")
+        localeFilters += listOf("en", "ar", "bg", "da", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN", "zh-rTW")
     }
     testOptions {
         unitTests {
