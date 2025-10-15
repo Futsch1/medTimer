@@ -149,7 +149,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, _: Double ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)

@@ -24,9 +24,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ReminderSchedulerWeekendModeTest {
+class ReminderSchedulerWeekendModeTest {
     @Test
-    public void testWeekendDaysEmpty() {
+    void testWeekendDaysEmpty() {
         ReminderScheduler scheduler = getScheduler();
 
         Mockito.when(scheduler.getSharedPreferences().getBoolean(PreferencesNames.WEEKEND_MODE, false)).thenReturn(true);
@@ -35,14 +35,15 @@ public class ReminderSchedulerWeekendModeTest {
         FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
         medicineWithReminders1.reminders.add(reminder1);
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(new ArrayList<>() {{
-            add(medicineWithReminders1);
-        }}, new ArrayList<>());
+
+        List<FullMedicine> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders1);
+        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
         assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1);
     }
 
     @Test
-    public void testWeekendMode() {
+    void testWeekendMode() {
         // 1.1.1970 is a Thursday
         ReminderScheduler scheduler = getScheduler();
 
