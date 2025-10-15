@@ -60,7 +60,9 @@ class ReminderAlarmActivity(
             mediaPlayer.stop()
             mediaPlayer.release()
         }
-        vibrator.cancel()
+        if (this::vibrator.isInitialized) {
+            vibrator.cancel()
+        }
     }
 
     private fun startAlarmTone() {
