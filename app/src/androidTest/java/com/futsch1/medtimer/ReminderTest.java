@@ -134,11 +134,9 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createIntervalReminder("1", 180);
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.string.interval_type);
         clickOn(R.string.interval_start_time);
         setDate(futureTime.getTime());
         setTime(futureTime.get(Calendar.HOUR_OF_DAY), futureTime.get(Calendar.MINUTE), false);
-        pressBack();
         clickOn(R.string.reminder_status);
         clickOn(R.string.active);
 
@@ -151,7 +149,6 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.string.activate_all);
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.string.interval_type);
         assertContains(DateFormat.getDateInstance(DateFormat.SHORT).format(nowTime.getTime()));
     }
 
@@ -204,8 +201,8 @@ public class ReminderTest extends BaseTestHelper {
 
         // Interval reminder (amount 3) 2 hours from now
         clickOn(R.id.addReminder);
+        clickOn(R.id.continuousIntervalCard);
         writeTo(R.id.editAmount, "3");
-        clickOn(R.id.intervalBased);
         clickOn(R.id.intervalHours);
         writeTo(R.id.editIntervalTime, "2");
         closeKeyboard();

@@ -99,7 +99,7 @@ public class Reminder {
     public ReminderType getReminderType() {
         if (linkedReminderId != 0) {
             return ReminderType.LINKED;
-        } else if (intervalStart != 0) {
+        } else if (intervalStart != 0 && !windowedInterval) {
             return ReminderType.CONTINUOUS_INTERVAL;
         } else if (windowedInterval) {
             return ReminderType.WINDOWED_INTERVAL;

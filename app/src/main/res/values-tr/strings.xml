@@ -201,8 +201,6 @@
     <string name="use_relative_date_time_summary">Hatırlatıcılar için ilgili tarih/saati göster</string>
     <string name="use_relative_date_time">Göreceli tarih/saat</string>
     <string name="invalid_amount">Bu hatırlatıcı için ilaç stok takibini etkinleştirmek için miktar bir sayı içermelidir.</string>
-    <string name="time_reminder_type_hint">Günün belirli bir saatinde hatırlatır.</string>
-    <string name="interval_reminder_type_hint">Son hatırlatmadan sonra belirli bir süre geçtikten sonra hatırlatır.</string>
     <string name="sticky_on_lockscreen">Kilit ekranında kalıcı hatırlatıcılar</string>
     <string name="sticky_on_lockscreen_summary">Hatırlatıcılar kilit ekranından kapatılamaz, sadece bildirim çekmecesinden kapatılabilir</string>
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
@@ -217,15 +215,11 @@
     <string name="sort">Sırala</string>
     <string name="high_and_alarm">Yüksek + Alarm</string>
     <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
-    <string name="continuous">Sürekli</string>
-    <string name="daily">Günlük</string>
     <string name="daily_from_to">Günlük aralık %1$s ile %2$s arası</string>
     <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="reminder_status">Hatırlatıcı durumu</string>
     <string name="dosing_instructions">Dozaj talimatları</string>
-    <string name="interval_type">Aralık türü</string>
     <string name="sample_instructions">Örnek talimatlarla doldurun</string>
-    <string name="daily_interval">Günlük aralık</string>
     <string name="daily_start_time">Günlük başlangıç zamanı</string>
     <string name="daily_end_time">Günlük bitiş zamanı</string>
     <string name="remind_on_weekdays">Hafta içi hatırlat</string>

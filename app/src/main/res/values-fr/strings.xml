@@ -206,8 +206,6 @@
     <string name="use_relative_date_time_summary">Afficher la date et l\'heure relatives pour les rappels</string>
     <string name="use_relative_date_time">Date/heure relative</string>
     <string name="invalid_amount">Le montant doit contenir un nombre pour activer le suivi du stock de médicaments pour ce rappel.</string>
-    <string name="time_reminder_type_hint">Rappelle à une heure précise de la journée.</string>
-    <string name="interval_reminder_type_hint">Rappelle après un délai spécifié après le dernier rappel.</string>
     <string name="sticky_on_lockscreen">Rappels persistants sur l\'écran de verrouillage</string>
     <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être supprimés à partir de l\'écran de verrouillage, mais uniquement à partir du tiroir de notifications</string>
     <string name="big_notifications">Gros boutons de notification</string>
@@ -222,19 +220,20 @@
     <string name="sort">Trier</string>
     <string name="high_and_alarm">Haut + Alarme</string>
     <string name="enable_notification_alarm_dialog">Pour que les rappels soient affichés comme des alarmes, activez cette option pour MedTimer dans le menu suivant</string>
-    <string name="continuous">Continu</string>
-    <string name="daily">Quotidien</string>
     <string name="daily_from_to">Intervalle journalier de %1$s à %2$s</string>
     <string name="continuous_from">Intervalle continu à partir de %1$s</string>
     <string name="reminder_status">Statut du rappel</string>
     <string name="dosing_instructions">Instructions de dosage</string>
-    <string name="interval_type">Type d\'intervalle</string>
     <string name="sample_instructions">Remplir avec des exemples d\'instructions</string>
-    <string name="daily_interval">Intervalle journalier</string>
     <string name="daily_start_time">Heure de début journalière</string>
     <string name="daily_end_time">Heure de fin journalière</string>
     <string name="remind_on_weekdays">Rappel les jours de semaine</string>
     <string name="remind_on_days_of_month">Rappel les jours du mois</string>
     <string name="start_date">Date de début</string>
     <string name="end_date">Date de fin</string>
+    <string name="windowed_interval_reminder">Rappel d\'intervalle fenêtré</string>
+    <string name="continuous_interval_reminder">Rappel à intervalle continu</string>
+    <string name="time_based_reminder_help">Définissez des heures spécifiques (par exemple, 8h00) et configurez un schéma récurrent. Cela permet un contrôle précis sur des jours de la semaine spécifiques, des jours du mois ou des calendriers périodiques complexes (comme « tous les 3 jours »).</string>
+    <string name="continuous_interval_help">Démarrez un rappel basé sur un intervalle de temps (par exemple, toutes les 6 heures) à partir d\'un moment précis. Ce modèle est continu, ignorant les contraintes de temps de la journée, jusqu\'à ce qu\'il soit désactivé manuellement.</string>
+    <string name="windowed_interval_help">Définissez une fenêtre active quotidienne (par exemple, de 9 h à 21 h) où le premier rappel est toujours à l\'heure de début. Les rappels suivants se déclenchent à intervalles fixes jusqu\'à ce que l\'heure de fin soit atteinte. Le schéma complet se réinitialise chaque jour.</string>
 </resources>

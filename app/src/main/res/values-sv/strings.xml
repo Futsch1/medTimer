@@ -202,8 +202,6 @@
     <string name="use_relative_date_time_summary">Visa relativ datum/tid för påminnelser</string>
     <string name="use_relative_date_time">Relativ datum/tid</string>
     <string name="invalid_amount">Mängden måste innehålla ett nummer för att möjliggöra lagerspårning av läkemdel för denna påminnelse.</string>
-    <string name="time_reminder_type_hint">Påminner vid en viss tid på dygnet.</string>
-    <string name="interval_reminder_type_hint">Påminner efter att en viss tid har gått sedan den senaste påminnelsen.</string>
     <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avfärdas från låsskärmen, endast från aviseringsfönstret</string>
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
@@ -217,15 +215,11 @@
     <string name="sort">Sortera</string>
     <string name="high_and_alarm">Hög + Larm</string>
     <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
-    <string name="continuous">Kontinuerlig</string>
-    <string name="daily">Dagligen</string>
     <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="reminder_status">Påminnelsestatus</string>
     <string name="dosing_instructions">Doseringsanvisningar</string>
-    <string name="interval_type">Intervalltyp</string>
     <string name="sample_instructions">Fyll i med exempelinstruktioner</string>
-    <string name="daily_interval">Dagligen intervall</string>
     <string name="daily_start_time">Dagligen starttid</string>
     <string name="daily_end_time">Dagligen sluttid</string>
     <string name="remind_on_weekdays">Påminn om veckodagar</string>

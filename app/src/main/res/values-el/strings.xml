@@ -200,8 +200,6 @@
     <string name="use_relative_date_time_summary">Εμφάνιση παρελθόντος χρόνου για τις υπενθυμίσεις</string>
     <string name="use_relative_date_time">Σχετική ημερομηνία/ώρα</string>
     <string name="invalid_amount">Το πεδίο της ποσότητας πρέπει να περιέχει έναν αριθμό για να ενεργοποιηθεί η παρακολούθηση του αποθέματος φαρμάκου για αυτήν την υπενθύμιση.</string>
-    <string name="time_reminder_type_hint">Υπενθύμιση για συγκεκριμένη ώρα και ημέρα.</string>
-    <string name="interval_reminder_type_hint">Γίνεται υπενθύμιση μετά την παρέλευση καθορισμένου χρόνου από την προηγούμενη υπενθύμιση.</string>
     <string name="sticky_on_lockscreen">Επίμονες υπενθυμίσεις στην οθόνη κλειδώματος</string>
     <string name="sticky_on_lockscreen_summary">Δεν θα είναι δυνατή η παράλειψη των υπενθυμίσεων στην οθόνη κλειδώματος, παρά μόνο στο συρτάρι ειδοποιήσεων</string>
     <string name="big_notifications">Μεγεθυμένα πλήκτρα ειδοποιήσεων</string>
@@ -217,15 +215,11 @@
     <string name="sort">Ταξινόμηση</string>
     <string name="high_and_alarm">Υψηλό + Συναγερμός</string>
     <string name="enable_notification_alarm_dialog">Για να επιτρέψετε την εμφάνιση υπενθυμίσεων ως συναγερμών, ενεργοποιήστε το για το MedTimer στο ακόλουθο μενού</string>
-    <string name="continuous">Συνεχές</string>
-    <string name="daily">Καθημερινά</string>
     <string name="daily_from_to">Ημερήσιο διάστημα από %1$s έως %2$s</string>
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="reminder_status">Κατάσταση υπενθύμισης</string>
     <string name="dosing_instructions">Οδηγίες δοσολογίας</string>
-    <string name="interval_type">Τύπος διαστήματος</string>
     <string name="sample_instructions">Συμπληρώστε με δείγματα οδηγιών</string>
-    <string name="daily_interval">Ημερήσιο διάστημα</string>
     <string name="daily_start_time">Ημερήσια ώρα έναρξης</string>
     <string name="daily_end_time">Ημερήσια ώρα λήξης</string>
     <string name="remind_on_weekdays">Υπενθύμιση τις καθημερινές</string>

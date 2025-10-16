@@ -201,8 +201,6 @@
     <string name="use_relative_date_time_summary">Vis relativ dato/tid for påmindelser</string>
     <string name="use_relative_date_time">Relativ dato/tid</string>
     <string name="invalid_amount">Antallet skal indeholde et tal for at tillade medicinbeholdningssporing for denne påmindelse.</string>
-    <string name="time_reminder_type_hint">Påminder på et specifikt tidspunkt på dagen.</string>
-    <string name="interval_reminder_type_hint">Påminder efter et specifikt stykke tid er gået efter den sidste påmindelse.</string>
     <string name="sticky_on_lockscreen">Vedvarende påmindelser på låseskærmen</string>
     <string name="sticky_on_lockscreen_summary">Påmindelser kan ikke afvises fra låseskærmen, kun fra notifikationsoversigten</string>
     <string name="big_notifications">Store notifikationsknapper</string>
@@ -216,15 +214,11 @@
     <string name="automatically_taken">Automatisk marker som taget</string>
     <string name="high_and_alarm">Høj + Alarm</string>
     <string name="enable_notification_alarm_dialog">For at kunne vise notifikationer som alarmer, skal dette tillades for MedTimer i den følgende menu</string>
-    <string name="continuous">Kontinuerlig</string>
-    <string name="daily">Daglige</string>
     <string name="daily_from_to">Dagligt interval fra %1$s til %2$s</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="reminder_status">Påmindelsesstatus</string>
     <string name="dosing_instructions">Doseringsvejledning</string>
-    <string name="interval_type">Intervaltype</string>
     <string name="sample_instructions">Udfyld med prøveinstruktioner</string>
-    <string name="daily_interval">Dagligt interval</string>
     <string name="daily_start_time">Daglig starttid</string>
     <string name="daily_end_time">Daglig sluttid</string>
     <string name="remind_on_weekdays">Påmind på hverdage</string>

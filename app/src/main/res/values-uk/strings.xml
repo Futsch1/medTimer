@@ -107,7 +107,7 @@
     <string name="intro_medicine_description">Використовуйте вкладку "Ліки", щоб створити ліки, які ви приймаєте і про які хочете отримувати нагадування. Проведіть вліво, щоб видалити ліки.</string>
     <string name="intro_reminder_description">Виберіть лікарський засіб, щоб змінити його дані та створити нагадування для різних доз ліків, які вам потрібно прийняти.\n\nНагадування можуть бути як простими - з&amp;apos;являтися один раз на день у певний час, так і складними - з кількома днями поспіль і кількома днями перерви.</string>
     <string name="intro_notification_description">Як тільки настане час нагадування, з&amp;apos;явиться сповіщення, яке надасть вам можливість позначити дозу як прийняту (натиснувши кнопку \&amp;quot;ПРИЙНЯТО\&amp;quot;), пропустити (відкинувши сповіщення) або отримати нагадування знову через деякий час (\&amp;quot;ПРОСПИТАТИ\&amp;quot;).</string>
-    <string name="intro_overview_description">На оглядовому екрані ви можете побачити майбутні нагадування та останні події нагадування. Події нагадування можна редагувати, проводячи вправо, і видаляти, проводячи вліво.\n\nОкрім того, ви можете вручну реєструвати додаткові дози одного з налаштованих препаратів або користувацького препарату.</string>
+    <string name="intro_overview_description">На оглядовому екрані ви можете побачити майбутні нагадування та останні події нагадування. Події нагадування можна редагувати, проводя вправо, і видаляти, проводя вліво.\n\nОкрім того, ви можете вручну реєструвати додаткові дози одного з налаштованих препаратів або користувацького препарату.</string>
     <string name="intro_analysis_description">Додаток зберігає всі події нагадування. Ви можете проаналізувати свої минулі дози на екрані аналізу та експортувати історію за допомогою меню &amp;quot;кебаб&amp;quot; (три крапки). Історія збережеться, навіть якщо ліки або нагадування будуть видалені або перейменовані.</string>
     <string name="show_intro">Показати вступ до програми</string>
     <string name="are_you_sure_delete_reminder_event">Ви впевнені, що хочете видалити подію-нагадування?</string>
@@ -211,8 +211,6 @@
     <string name="use_relative_date_time_summary">Показувати відносну дату/час для нагадувань</string>
     <string name="use_relative_date_time">Відносна дата/час</string>
     <string name="invalid_amount">Сума повинна містити число, щоб увімкнути відстеження запасів ліків для цього нагадування.</string>
-    <string name="time_reminder_type_hint">Нагадує в певний час доби.</string>
-    <string name="interval_reminder_type_hint">Нагадує через певний час після останнього нагадування.</string>
     <string name="sticky_on_lockscreen">Постійні нагадування на екрані блокування</string>
     <string name="sticky_on_lockscreen_summary">Нагадування не можна відкинути з екрана блокування, тільки зі скриньки сповіщень</string>
     <string name="big_notifications">Великі кнопки сповіщень</string>
@@ -227,19 +225,20 @@
     <string name="sort">Сортування</string>
     <string name="high_and_alarm">Високий + Тривога</string>
     <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
-    <string name="continuous">Безперервний</string>
-    <string name="daily">Щоденно</string>
     <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
     <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="reminder_status">Статус нагадування</string>
     <string name="dosing_instructions">Інструкції з дозування</string>
-    <string name="interval_type">Тип інтервалу</string>
     <string name="sample_instructions">Заповнити зразками інструкцій</string>
-    <string name="daily_interval">Щоденний інтервал</string>
     <string name="daily_start_time">Щоденний час початку</string>
     <string name="daily_end_time">Щоденний час закінчення</string>
     <string name="remind_on_weekdays">Нагадувати у будні</string>
     <string name="remind_on_days_of_month">Нагадувати у дні місяця</string>
     <string name="start_date">Дата початку</string>
     <string name="end_date">Дата закінчення</string>
+    <string name="windowed_interval_reminder">Нагадування з інтервалом у вікні</string>
+    <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
+    <string name="time_based_reminder_help">Встановіть певний час (наприклад, 8:00 ранку) і налаштуйте повторюваний шаблон. Це дозволяє точно контролювати певні дні тижня, дні місяця або складні періодичні розклади (наприклад, «кожні 3 дні»).</string>
+    <string name="continuous_interval_help">Почніть нагадування на основі часового інтервалу (наприклад, кожні 6 годин) із зазначеного моменту. Цей шаблон є безперервним, ігноруючи обмеження часу доби, доки не буде деактивовано вручну.</string>
+    <string name="windowed_interval_help">Визначте щоденне активне вікно (наприклад, з 9 ранку до 9 вечора), де перше нагадування завжди відбувається в час початку. Наступні нагадування спрацьовують через фіксовані проміжки часу, доки не буде досягнуто час закінчення. Повний шаблон скидається щодня.</string>
 </resources>

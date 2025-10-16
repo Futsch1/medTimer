@@ -206,8 +206,6 @@
     <string name="use_relative_date_time_summary">Mostrar la fecha/hora relativa de los recordatorios</string>
     <string name="use_relative_date_time">Fecha/hora relativa</string>
     <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
-    <string name="time_reminder_type_hint">Recuerda una hora concreta del día.</string>
-    <string name="interval_reminder_type_hint">Recuerda una vez transcurrido un tiempo especificado desde el último recordatorio.</string>
     <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
     <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, sólo desde el cajón de notificaciones</string>
     <string name="big_notifications">Botones de notificación grandes</string>
@@ -222,19 +220,20 @@
     <string name="sort">Ordenar</string>
     <string name="high_and_alarm">Alta + Alarma</string>
     <string name="enable_notification_alarm_dialog">Para poder mostrar los recordatorios como alarmas, active esta opción para MedTimer en el siguiente menú</string>
-    <string name="continuous">Continuo</string>
-    <string name="daily">Diario</string>
     <string name="daily_from_to">Intervalo diario de %1$s a %2$s</string>
     <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="reminder_status">Estado del recordatorio</string>
     <string name="dosing_instructions">Instrucciones de dosificación</string>
-    <string name="interval_type">Tipo de intervalo</string>
     <string name="sample_instructions">Rellenar con instrucciones de ejemplo</string>
-    <string name="daily_interval">Intervalo diario</string>
     <string name="daily_start_time">Hora de inicio diaria</string>
     <string name="daily_end_time">Hora de finalización diaria</string>
     <string name="remind_on_weekdays">Recordar los días de la semana</string>
     <string name="remind_on_days_of_month">Recordar los días del mes</string>
     <string name="start_date">Fecha de inicio</string>
     <string name="end_date">Fecha de finalización</string>
+    <string name="windowed_interval_reminder">Recordatorio de intervalo con ventana</string>
+    <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
+    <string name="time_based_reminder_help">Establezca horas específicas (p. ej., 8:00 a. m.) y configure un patrón recurrente. Esto permite un control preciso sobre días de la semana específicos, días del mes o programaciones periódicas complejas (como \'cada 3 días\').</string>
+    <string name="continuous_interval_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
+    <string name="windowed_interval_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) donde el primer recordatorio es siempre a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta que se alcanza la hora de finalización. El patrón completo se reinicia todos los días.</string>
 </resources>

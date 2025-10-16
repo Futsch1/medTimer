@@ -198,7 +198,6 @@
     <string name="medicine_stock_string">تبقى %1$s</string>
     <string name="out_of_stock_notification_title">تذكير بنفاد مخزون الدواء</string>
     <string name="medicine_stock">مخزون الدواء</string>
-    <string name="interval_reminder_type_hint">يذكر بعد انقضاء وقت محدد بعد التذكير الأخير.</string>
     <string name="sticky_on_lockscreen">تذكيرات ثابتة على شاشة القفل</string>
     <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات</string>
     <string name="big_notifications">أزرار إشعار كبيرة</string>
@@ -226,7 +225,6 @@
     <string name="use_relative_date_time_summary">عرض التاريخ/الوقت النسبي للتذكيرات</string>
     <string name="use_relative_date_time">التاريخ/الوقت النسبي</string>
     <string name="invalid_amount">يجب أن تحتوي الكمية على رقم لتفعيل تتبع مخزون الدواء لهذا التذكير.</string>
-    <string name="time_reminder_type_hint">يذكر في وقت محدد من اليوم.</string>
     <string name="interval_time">فاصل %s</string>
     <string name="reminded">ذُكِر</string>
     <string name="all_taken">أخذت الكل (%s)</string>
@@ -237,15 +235,11 @@
     <string name="sort">فرز</string>
     <string name="high_and_alarm">إنذار عالي + إنذار</string>
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
-    <string name="continuous">مستمر</string>
-    <string name="daily">يومي</string>
     <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="reminder_status">حالة التذكير</string>
     <string name="dosing_instructions">تعليمات الجرعات</string>
-    <string name="interval_type">نوع الفاصل الزمني</string>
     <string name="sample_instructions">املأ بتعليمات نموذجية</string>
-    <string name="daily_interval">فاصل يومي</string>
     <string name="daily_start_time">وقت البدء اليومي</string>
     <string name="daily_end_time">وقت الانتهاء اليومي</string>
     <string name="remind_on_weekdays">تذكير في أيام الأسبوع</string>

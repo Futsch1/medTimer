@@ -154,7 +154,6 @@
     <string name="hide_med_name">Ocultar nome do medicamento na notificação</string>
     <string name="display_settings">Configurações de exibição</string>
     <string name="use_relative_date_time">Data/hora relativa</string>
-    <string name="time_reminder_type_hint">Lembrar em um horário específico do dia.</string>
     <string name="sticky_on_lockscreen">Lembretes persistentes na tela de bloqueio</string>
     <string name="big_notifications">Botões de notificação grandes</string>
     <string name="please_wait">Por favor, aguarde…</string>
@@ -205,7 +204,6 @@
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
     <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
-    <string name="interval_reminder_type_hint">Lembrar após um tempo específico ter passado após o último lembrete.</string>
     <string name="off">Desligado</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>
@@ -222,15 +220,11 @@
     <string name="sort">Classificar</string>
     <string name="high_and_alarm">Alto + Alarme</string>
     <string name="enable_notification_alarm_dialog">Para permitir a exibição de lembretes como alarmes, ative essa opção para o MedTimer no seguinte menu</string>
-    <string name="continuous">Contínuo</string>
-    <string name="daily">Diariamente</string>
     <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="reminder_status">Status do lembrete</string>
     <string name="dosing_instructions">Instruções de dosagem</string>
-    <string name="interval_type">Tipo de intervalo</string>
     <string name="sample_instructions">Preencher com instruções de amostra</string>
-    <string name="daily_interval">Intervalo diário</string>
     <string name="daily_start_time">Hora de início diária</string>
     <string name="daily_end_time">Hora de término diária</string>
     <string name="remind_on_weekdays">Lembrar nos dias úteis</string>

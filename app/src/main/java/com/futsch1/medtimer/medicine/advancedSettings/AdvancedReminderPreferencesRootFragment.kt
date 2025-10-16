@@ -78,11 +78,6 @@ class AdvancedReminderPreferencesRootFragment(
                 id
             )
         },
-        "interval_type" to { id ->
-            AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesIntervalType(
-                id
-            )
-        },
         "cyclic_reminder" to { id ->
             AdvancedReminderPreferencesRootFragmentDirections.actionAdvancedReminderPreferencesRootFragmentToAdvancedReminderPreferencesCyclicFragment(
                 id
@@ -93,9 +88,12 @@ class AdvancedReminderPreferencesRootFragment(
         "add_linked_reminder" to { activity, preference ->
             val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
             LinkedReminderHandling(reminderDataStore.reminder, reminderDataStore.medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
-        }
+        },
+        "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
+        "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
+        "interval_daily_end_time" to { activity, preference -> showTimeEdit(activity, preference) }
     ),
-    listOf("instructions")
+    listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
     override fun onReminderUpdated(reminder: Reminder) {
         super.onReminderUpdated(reminder)
@@ -144,6 +142,9 @@ class AdvancedReminderPreferencesRootFragment(
     override fun customSetup(reminder: Reminder) {
         findPreference<Preference>("interval_category")?.isVisible =
             reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("interval_start_time")?.isVisible = reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL
+        findPreference<Preference>("interval_daily_start_time")?.isVisible = reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("interval_daily_end_time")?.isVisible = reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
         findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->

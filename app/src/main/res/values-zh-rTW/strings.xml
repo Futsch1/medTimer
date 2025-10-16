@@ -196,8 +196,6 @@
     <string name="use_relative_date_time_summary">以相對日期／時間顯示提醒</string>
     <string name="use_relative_date_time">相對日期／時間</string>
     <string name="invalid_amount">必須輸入數字的數量，才能為此提醒啟用藥品庫存追蹤。</string>
-    <string name="time_reminder_type_hint">在一天中的特定時間提醒。</string>
-    <string name="interval_reminder_type_hint">在上一次提醒後經過指定時間再提醒。</string>
     <string name="sticky_on_lockscreen">鎖定畫面持續性提醒</string>
     <string name="sticky_on_lockscreen_summary">無法在鎖定畫面關閉提醒，只能從通知欄關閉</string>
     <string name="big_notifications">大型通知按鈕</string>
@@ -211,15 +209,11 @@
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>
     <string name="enable_notification_alarm_dialog">若要將提醒以鬧鐘形式顯示，請在以下選單中為 MedTimer 啟用此設定</string>
-    <string name="continuous">連續</string>
-    <string name="daily">每日</string>
     <string name="daily_from_to">每日間隔從 %1$s 到 %2$s</string>
     <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="reminder_status">提醒狀態</string>
     <string name="dosing_instructions">劑量說明</string>
-    <string name="interval_type">間隔類型</string>
     <string name="sample_instructions">填寫範例說明</string>
-    <string name="daily_interval">每日間隔</string>
     <string name="daily_start_time">每日開始時間</string>
     <string name="daily_end_time">每日結束時間</string>
     <string name="remind_on_weekdays">在平日提醒</string>

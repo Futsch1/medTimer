@@ -202,8 +202,6 @@
     <string name="use_relative_date_time_summary">Näytä suhteellinen päivämäärä/aika muistutuksille</string>
     <string name="use_relative_date_time">Suhteellinen päivämäärä/aika</string>
     <string name="invalid_amount">Määrän tulee sisältää numero, jotta lääkevaraston seuranta voidaan ottaa käyttöön tässä muistutuksessa.</string>
-    <string name="time_reminder_type_hint">Muistuttaa tiettyyn aikaan päivästä.</string>
-    <string name="interval_reminder_type_hint">Muistuttaa, kun edellisestä muistutuksesta on kulunut määritetty aika.</string>
     <string name="sticky_on_lockscreen">Pysyvät muistutukset lukitusnäytöllä</string>
     <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi hylätä lukitusnäytöltä, ainoastaan ilmoituspalkista</string>
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
@@ -217,15 +215,11 @@
     <string name="automatically_taken">Merkitse automaattisesti otetuksi</string>
     <string name="high_and_alarm">Korkea + Hälytys</string>
     <string name="enable_notification_alarm_dialog">Salliaksesi muistutusten näyttämisen hälytyksinä, ota tämä asetus käyttöön MedTimerille seuraavassa valikossa</string>
-    <string name="continuous">Jatkuva</string>
-    <string name="daily">Päivittäin</string>
     <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="reminder_status">Muistutuksen tila</string>
     <string name="dosing_instructions">Annostusohjeet</string>
-    <string name="interval_type">Välin tyyppi</string>
     <string name="sample_instructions">Täytä näyteohjeilla</string>
-    <string name="daily_interval">Päivittäinen väli</string>
     <string name="daily_start_time">Päivittäinen aloitusaika</string>
     <string name="daily_end_time">Päivittäinen lopetusaika</string>
     <string name="remind_on_weekdays">Muistuta viikonpäivisin</string>

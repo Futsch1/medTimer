@@ -196,8 +196,6 @@
     <string name="use_relative_date_time_summary">显示提醒的相对日期/时间</string>
     <string name="use_relative_date_time">相对日期/时间</string>
     <string name="invalid_amount">金额必须包含数字，才能为此提醒启用药品库存跟踪。</string>
-    <string name="time_reminder_type_hint">在一天中的特定时间提醒。</string>
-    <string name="interval_reminder_type_hint">在最后一次提醒后的指定时间后提醒。</string>
     <string name="sticky_on_lockscreen">锁屏上的持续提醒</string>
     <string name="sticky_on_lockscreen_summary">不能从锁屏解除提醒，只能从通知抽屉解除提醒</string>
     <string name="big_notifications">大通知按钮</string>
@@ -212,15 +210,11 @@
     <string name="sort">分类</string>
     <string name="high_and_alarm">高电平 + 警报</string>
     <string name="enable_notification_alarm_dialog">为了允许将提醒显示为闹钟，请在以下菜单中为 MedTimer 启用此功能</string>
-    <string name="continuous">持续</string>
-    <string name="daily">每日</string>
     <string name="daily_from_to">每日间隔从 %1$s 到 %2$s</string>
     <string name="continuous_from">连续间隔从 %1$s</string>
     <string name="reminder_status">提醒状态</string>
     <string name="dosing_instructions">剂量说明</string>
-    <string name="interval_type">间隔类型</string>
     <string name="sample_instructions">填写示例说明</string>
-    <string name="daily_interval">每日间隔</string>
     <string name="daily_start_time">每日开始时间</string>
     <string name="daily_end_time">每日结束时间</string>
     <string name="remind_on_weekdays">在工作日提醒</string>
