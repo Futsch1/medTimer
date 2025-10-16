@@ -21,16 +21,15 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textview.MaterialTextView
 import java.time.Instant
-import java.time.LocalDate
 
 
 class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
     val medicine: Medicine,
-    val medicineViewModel: MedicineViewModel
+    val medicineViewModel: MedicineViewModel,
+    val reminder: Reminder
 ) {
     private val dialog: Dialog = Dialog(context)
 
@@ -49,15 +48,6 @@ class NewReminderDialog(
 
         startEditAmount()
         dialog.show()
-    }
-
-    private fun setReminderTypeHint(checkedId: Int) {
-        val reminderTypeHint = dialog.findViewById<MaterialTextView>(R.id.reminderTypeHint)
-        if (checkedId == R.id.timeBased) {
-            reminderTypeHint.setText(R.string.time_reminder_type_hint)
-        } else {
-            reminderTypeHint.setText(R.string.interval_reminder_type_hint)
-        }
     }
 
     private fun startEditAmount() {
@@ -80,27 +70,22 @@ class NewReminderDialog(
     }
 
     private fun setupVisibilities() {
-        dialog.findViewById<RadioGroup>(R.id.reminderType)
-            .setOnCheckedChangeListener { _, checkedId ->
-                setVisibilities(checkedId)
-                setReminderTypeHint(checkedId)
-            }
-        setVisibilities(
-            dialog.findViewById<RadioGroup>(R.id.reminderType).checkedRadioButtonId
-        )
-    }
-
-    private fun setVisibilities(checkedId: Int) {
         val timeBasedVisibility =
-            if (checkedId == R.id.timeBased) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
         val intervalBasedVisibility =
-            if (checkedId == R.id.intervalBased) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+        val continuousIntervalVisibility =
+            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+        val windowedIntervalVisibility = if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+
         dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
             intervalBasedVisibility
         dialog.findViewById<MaterialButtonToggleGroup>(R.id.intervalUnit).visibility =
             intervalBasedVisibility
         dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
-            intervalBasedVisibility
+            continuousIntervalVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyStartTimeLayout).visibility = windowedIntervalVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyEndTimeLayout).visibility = windowedIntervalVisibility
         dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
             intervalBasedVisibility
         dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
@@ -109,8 +94,6 @@ class NewReminderDialog(
 
     private fun setupCreateReminder(
     ) {
-        val reminder = Reminder(medicine.medicineId)
-
         val timeEditor = TimeEditor(
             activity,
             dialog.findViewById(R.id.editReminderTime),
@@ -130,39 +113,58 @@ class NewReminderDialog(
             Instant.now().epochSecond
         )
 
+        val dailyStartTimeEditor = TimeEditor(
+            activity,
+            dialog.findViewById(R.id.editIntervalDailyStartTime),
+            reminder.intervalStartTimeOfDay,
+            { _ -> },
+            null
+        )
+        val dailyEndTimeEditor = TimeEditor(
+            activity,
+            dialog.findViewById(R.id.editIntervalDailyEndTime),
+            reminder.intervalEndTimeOfDay,
+            { _ -> },
+            null
+        )
+
+
         setupOnClickCreateReminder(
-            reminder,
             timeEditor,
             intervalEditor,
-            intervalStartDateTimeEditor
+            intervalStartDateTimeEditor,
+            dailyStartTimeEditor,
+            dailyEndTimeEditor
         )
     }
 
     private fun setupOnClickCreateReminder(
-        reminder: Reminder,
         timeEditor: TimeEditor,
         intervalEditor: IntervalEditor,
-        intervalStartDateTimeEditor: DateTimeEditor
+        intervalStartDateTimeEditor: DateTimeEditor,
+        dailyStartTimeEditor: TimeEditor,
+        dailyEndTimeEditor: TimeEditor
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
-            setDefaults(reminder)
             reminder.amount =
                 dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
 
-            val isTimeBased = dialog.findViewById<MaterialRadioButton>(R.id.timeBased).isChecked
-
-            val minutes = if (isTimeBased) {
+            val minutes = if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
                 timeEditor.getMinutes()
             } else {
                 intervalEditor.getMinutes()
             }
             reminder.timeInMinutes = minutes
-            if (!isTimeBased) {
+            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
                 reminder.intervalStart = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
                 reminder.intervalStartsFromProcessed =
                     dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
             }
-            if (minutes >= 0 && (isTimeBased || reminder.intervalStart >= 0)) {
+            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) {
+                reminder.intervalStartTimeOfDay = dailyStartTimeEditor.getMinutes()
+                reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
+            }
+            if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
                 medicineViewModel.medicineRepository.insertReminder(reminder)
                 dialog.dismiss()
             } else {
@@ -171,9 +173,4 @@ class NewReminderDialog(
         }
     }
 
-    private fun setDefaults(reminder: Reminder) {
-        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-        reminder.instructions = ""
-    }
 }

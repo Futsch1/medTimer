@@ -74,7 +74,7 @@ public class Reminder {
     public int intervalEndTimeOfDay;
     @Expose
     @ColumnInfo(defaultValue = "false")
-    public boolean dailyInterval;
+    public boolean windowedInterval;
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
@@ -93,14 +93,16 @@ public class Reminder {
         variableAmount = false;
         intervalStartTimeOfDay = 480;
         intervalEndTimeOfDay = 1320;
-        dailyInterval = false;
+        windowedInterval = false;
     }
 
     public ReminderType getReminderType() {
         if (linkedReminderId != 0) {
             return ReminderType.LINKED;
         } else if (intervalStart != 0) {
-            return ReminderType.INTERVAL_BASED;
+            return ReminderType.CONTINUOUS_INTERVAL;
+        } else if (windowedInterval) {
+            return ReminderType.WINDOWED_INTERVAL;
         } else {
             return ReminderType.TIME_BASED;
         }
@@ -138,12 +140,13 @@ public class Reminder {
                 variableAmount == that.variableAmount &&
                 intervalStartTimeOfDay == that.intervalStartTimeOfDay &&
                 intervalEndTimeOfDay == that.intervalEndTimeOfDay &&
-                dailyInterval == that.dailyInterval;
+                windowedInterval == that.windowedInterval;
     }
 
     public enum ReminderType {
         TIME_BASED,
-        INTERVAL_BASED,
-        LINKED
+        CONTINUOUS_INTERVAL,
+        LINKED,
+        WINDOWED_INTERVAL
     }
 }

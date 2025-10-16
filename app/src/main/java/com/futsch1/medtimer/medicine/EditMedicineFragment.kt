@@ -26,7 +26,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
-import com.futsch1.medtimer.medicine.dialogs.NewReminderDialog
+import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
@@ -215,7 +215,7 @@ class EditMedicineFragment :
 
     private fun setupAddReminderButton(fragmentView: View, medicine: Medicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { _: View? -> NewReminderDialog(requireContext(), requireActivity(), medicine, this.medicineViewModel) }
+        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireContext(), requireActivity(), medicine, this.medicineViewModel) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {

@@ -5,7 +5,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
 
-class DailyIntervalScheduling(
+class WindowedIntervalScheduling(
     private val reminder: Reminder,
     private val reminderEventList: List<ReminderEvent>,
     private val timeAccess: TimeAccess

@@ -20,7 +20,7 @@ class AdvancedReminderPreferencesIntervalType(
 
     override fun onReminderUpdated(reminder: Reminder) {
         super.onReminderUpdated(reminder)
-        findPreference<Preference>("interval_start_time")?.isEnabled = !reminder.dailyInterval
+        findPreference<Preference>("interval_start_time")?.isEnabled = !reminder.windowedInterval
     }
 
 }

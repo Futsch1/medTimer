@@ -16,12 +16,12 @@ class SchedulingFactory {
                 LinkedScheduling(reminder, filteredEvents)
             }
 
-            Reminder.ReminderType.INTERVAL_BASED -> {
-                if (reminder.dailyInterval) {
-                    DailyIntervalScheduling(reminder, filteredEvents, timeAccess)
-                } else {
-                    IntervalScheduling(reminder, filteredEvents, timeAccess)
-                }
+            Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
+                IntervalScheduling(reminder, filteredEvents, timeAccess)
+            }
+
+            Reminder.ReminderType.WINDOWED_INTERVAL -> {
+                WindowedIntervalScheduling(reminder, filteredEvents, timeAccess)
             }
 
             else -> {

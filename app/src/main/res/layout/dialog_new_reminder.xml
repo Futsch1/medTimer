@@ -31,34 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="4dp" />
 
-        <RadioGroup
-            android:id="@+id/reminderType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@id/timeBased">
-
-            <RadioButton
-                android:id="@+id/timeBased"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/time_based_reminder" />
-
-            <RadioButton
-                android:id="@+id/intervalBased"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/interval_based_reminder" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/reminderTypeHint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:drawablePadding="5dp"
-            android:text="@string/time_reminder_type_hint"
-            app:drawableStartCompat="@drawable/info_circle" />
-
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,7 +51,133 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <include layout="@layout/include_interval_settings" />
+        <LinearLayout
+            android:id="@+id/intervalBasedGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editIntervalTimeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/interval">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editIntervalTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberSigned" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/intervalUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:checkedButton="@id/intervalHours"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/intervalMinutes"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minutes_string" />
+
+                <Button
+                    android:id="@+id/intervalHours"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hours_string" />
+
+                <Button
+                    android:id="@+id/intervalDays"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/days_string" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <RadioGroup
+                android:id="@+id/intervalStartType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@id/intervalStartsFromReminded"
+                android:divider="?android:attr/listDivider">
+
+                <RadioButton
+                    android:id="@+id/intervalStartsFromReminded"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/interval_start_reminded" />
+
+                <RadioButton
+                    android:id="@+id/intervalStarsFromProcessed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/interval_start_processed" />
+            </RadioGroup>
+
+
+            <RadioGroup
+                android:id="@+id/intervalType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editIntervalStartDateTimeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/interval_start_time">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editIntervalStartDateTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="datetime" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editIntervalDailyStartTimeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/interval_start_time">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editIntervalDailyStartTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="datetime" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editIntervalDailyEndTimeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:hint="@string/interval_start_time">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editIntervalDailyEndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="datetime" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </RadioGroup>
+
+        </LinearLayout>
 
         <LinearLayout
             style="?android:attr/buttonBarStyle"

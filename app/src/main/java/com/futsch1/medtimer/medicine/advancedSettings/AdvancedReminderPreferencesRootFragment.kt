@@ -142,7 +142,8 @@ class AdvancedReminderPreferencesRootFragment(
     }
 
     override fun customSetup(reminder: Reminder) {
-        findPreference<Preference>("interval_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED
+        findPreference<Preference>("interval_category")?.isVisible =
+            reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
         findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
