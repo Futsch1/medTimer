@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:defaultValue="0"
         android:entries="@array/theme_entries_titles"
-        android:entryValues="@array/theme_entries_values"
+        android:entryValues="@array/values_0_and_1"
         android:title="@string/theme"
         app:key="theme"
         app:useSimpleSummaryProvider="true" />

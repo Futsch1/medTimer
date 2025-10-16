@@ -73,7 +73,7 @@ class NotificationTest : BaseTestHelper() {
 
         clickOn(R.id.openAdvancedSettings)
 
-        clickOn(R.id.addLinkedReminder)
+        clickOn(R.string.add_linked_reminder)
         clickDialogPositiveButton()
         AndroidTestHelper.setTime(0, 1, true)
 
@@ -200,7 +200,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 2)
         clickOn(R.id.openAdvancedSettings)
-        clickOn(R.id.variableAmount)
+        clickOn(R.string.variable_amount)
         pressBack()
         navigateTo(MainMenu.ANALYSIS)
         device.openNotification()
@@ -408,7 +408,7 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createReminder("1", notificationTime)
         clickOn(R.id.openAdvancedSettings)
-        clickOn(R.id.automaticallyTaken)
+        clickOn(R.string.automatically_taken)
         pressBack()
 
         navigateTo(MainMenu.OVERVIEW)

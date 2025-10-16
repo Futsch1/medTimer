@@ -46,12 +46,10 @@
     <string name="theme">Theme</string>
     <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="no_instructions">kein Hinweis</string>
     <string name="before_meal">vor der Mahlzeit</string>
     <string name="after_meal">nach der Mahlzeit</string>
     <string name="time_before_meal">x Minuten vor der Mahlzeit</string>
     <string name="time_after">x Stunden nach Medikament y</string>
-    <string name="instruction_templates">Hinweisvorlagen</string>
     <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
     <string name="medicine_data">Medikamentendaten</string>
     <string name="export_csv">Export als CSV</string>
@@ -84,11 +82,10 @@
     <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
-    <string name="remind_on">Erinnere</string>
     <string name="every_day">Jeden Tag</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="cycle_start_date">Beginn des ersten Zyklus</string>
-    <string name="cycle_reminders">Zyklische Erinnerungen</string>
+    <string name="cycle_reminder">Zyklische Erinnerung</string>
     <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
@@ -124,7 +121,6 @@
     <string name="date">Date</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="active_in_time_period">Aktiv in Zeitspanne</string>
     <string name="period_start">Beginn der Zeitspanne</string>
     <string name="period_end">Ende der Zeitspanne</string>
     <string name="activate_all">Alle Erinnerungen aktivieren</string>
@@ -133,8 +129,6 @@
     <string name="icon">Icon</string>
     <string name="every_day_of_month">Jeden Tag im Monat</string>
     <string name="on_day_of_month">Am %s des Monats</string>
-    <string name="clear_all">Alle löschen</string>
-    <string name="select_all">Alle auswählen</string>
     <string name="never">Niemals</string>
     <string name="day_of_month_limited">Auf manche Tage im Monat beschränkt</string>
     <string name="medicines_tab_description">Registerkarte Medikamente</string>
@@ -223,4 +217,19 @@
     <string name="sort">Sort</string>
     <string name="high_and_alarm">Hoch + Alarm</string>
     <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktivieren Sie dies für MedTimer im folgenden Menü</string>
+    <string name="continuous">Kontinuierlich</string>
+    <string name="daily">Täglich</string>
+    <string name="daily_from_to">Tägliches Intervall von %1$s bis %2$s</string>
+    <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
+    <string name="reminder_status">Erinnerungsstatus</string>
+    <string name="dosing_instructions">Dosierungsanweisungen</string>
+    <string name="interval_type">Intervalltyp</string>
+    <string name="sample_instructions">Beispielanweisungen einsetzen</string>
+    <string name="daily_interval">Tägliches Intervall</string>
+    <string name="daily_start_time">Tägliche Startzeit</string>
+    <string name="daily_end_time">Tägliche Endzeit</string>
+    <string name="remind_on_weekdays">An Wochentagen erinnern</string>
+    <string name="remind_on_days_of_month">An Tagen des Monats erinnern</string>
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Enddatum</string>
 </resources>

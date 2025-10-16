@@ -76,7 +76,8 @@ class ManualDoseTest : BaseTestHelper() {
 
         // Disable reminder
         clickOn(R.id.openAdvancedSettings)
-        clickOn(R.id.inactive)
+        clickOn(R.string.reminder_status)
+        clickOn(R.string.active)
 
         // Create manual dose of the disabled reminder
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)

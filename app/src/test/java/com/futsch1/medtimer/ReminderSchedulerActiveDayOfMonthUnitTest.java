@@ -1,8 +1,8 @@
 package com.futsch1.medtimer;
 
+import static com.futsch1.medtimer.ReminderSchedulerUnitTest.getScheduler;
 import static com.futsch1.medtimer.TestHelper.on;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.futsch1.medtimer.database.FullMedicine;
@@ -13,18 +13,13 @@ import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 class ReminderSchedulerActiveDayOfMonthUnitTest {
     @Test
     void testScheduleDayOfMonth() {
-        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
-        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
-        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
-
-        ReminderScheduler scheduler = new ReminderScheduler(mockTimeAccess);
+        ReminderScheduler scheduler = getScheduler(1);
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
@@ -40,12 +35,12 @@ class ReminderSchedulerActiveDayOfMonthUnitTest {
         assertEquals(1, scheduledReminders.size());
         assertEquals(on(2, 480), scheduledReminders.get(0).timestamp());
 
-        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
+        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertEquals(1, scheduledReminders.size());
         assertEquals(on(3, 480), scheduledReminders.get(0).timestamp());
 
-        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(10));
+        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(10));
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertEquals(1, scheduledReminders.size());
         assertEquals(on(32, 480), scheduledReminders.get(0).timestamp());

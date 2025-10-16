@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat app:key="reminder_active" app:title="@string/active"/>
+    <PreferenceCategory>
+    <SwitchPreferenceCompat app:dependency="reminder_active" app:key="period_start_switch" app:title="@string/period_start" />
+    <Preference app:dependency="period_start_switch" app:title="@string/start_date" app:key="period_start_date"/>
+    </PreferenceCategory>
+    <PreferenceCategory>
+    <SwitchPreferenceCompat app:dependency="reminder_active" app:key="period_end_switch" app:title="@string/period_end" />
+    <Preference app:dependency="period_end_switch" app:title="@string/end_date" app:key="period_end_date" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

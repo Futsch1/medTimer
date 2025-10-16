@@ -60,7 +60,6 @@
     <string name="change_color_toast">ملاحظة: تغييرات اللون لا تسري إلا على الأحداث المستقبلية</string>
     <string name="exact_reminders_summary">يتم جدولة التذكيرات في الوقت المحدد (يزيد من استهلاك البطارية)</string>
     <string name="alternative">بديل</string>
-    <string name="no_instructions">لا توجد تعليمات</string>
     <string name="before_meal">قبل الوجبة</string>
     <string name="enable_alarm_dialog">للسماح بجدولة التنبيهات الدقيقة، فعّل ذلك لتطبيق منبه الدواء في القائمة التالية</string>
     <string name="after_meal">بعد الوجبة</string>
@@ -70,7 +69,6 @@
     <string name="theme">المظهر</string>
     <string name="time_before_meal">س دقائق قبل الوجبة</string>
     <string name="time_after">س ساعات بعد الدواء ص</string>
-    <string name="instruction_templates">قوالب التعليمات</string>
     <string name="restore_failed">فشلت الاستعادة</string>
     <string name="default_">افتراضي</string>
     <string name="backup_failed">فشل النسخ الاحتياطي</string>
@@ -99,11 +97,10 @@
     <string name="weekend_mode_summary">تأخير الإشعارات في أيام معينة من الأسبوع حتى وقت محدد</string>
     <string name="custom">مخصّص…</string>
     <string name="advanced_settings">إعدادات متقدّمة</string>
-    <string name="remind_on">تذكير في</string>
     <string name="every_day">كل يوم</string>
     <string name="cycle_pause_days">أيام التوقف</string>
     <string name="cycle_start_date">بداية الدورة الأولى</string>
-    <string name="cycle_reminders">تذكيرات دورية</string>
+    <string name="cycle_reminder">تذكيرات دورية</string>
     <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
     <string name="reminders">التذكيرات</string>
     <string name="filter">تصفية</string>
@@ -133,7 +130,6 @@
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
     <string name="inactive">غير نشط</string>
-    <string name="active_in_time_period">نشط في الفترة الزمنية</string>
     <string name="period_start">بداية الفترة</string>
     <string name="period_end">نهاية الفترة</string>
     <string name="activate_all">فعِّل جميع التذكيرات</string>
@@ -142,8 +138,6 @@
     <string name="icon">الأيقونة</string>
     <string name="every_day_of_month">كل يوم من الشهر</string>
     <string name="on_day_of_month">في اليوم %s من الشهر</string>
-    <string name="clear_all">امسح الكل</string>
-    <string name="select_all">حدّد الكل</string>
     <string name="never">أبداً</string>
     <string name="day_of_month_limited">مقيد بأيام معينة من الشهر</string>
     <string name="medicines_tab_description">علامة تبويب الأدوية</string>
@@ -243,4 +237,19 @@
     <string name="sort">فرز</string>
     <string name="high_and_alarm">إنذار عالي + إنذار</string>
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
+    <string name="continuous">مستمر</string>
+    <string name="daily">يومي</string>
+    <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
+    <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
+    <string name="reminder_status">حالة التذكير</string>
+    <string name="dosing_instructions">تعليمات الجرعات</string>
+    <string name="interval_type">نوع الفاصل الزمني</string>
+    <string name="sample_instructions">املأ بتعليمات نموذجية</string>
+    <string name="daily_interval">فاصل يومي</string>
+    <string name="daily_start_time">وقت البدء اليومي</string>
+    <string name="daily_end_time">وقت الانتهاء اليومي</string>
+    <string name="remind_on_weekdays">تذكير في أيام الأسبوع</string>
+    <string name="remind_on_days_of_month">تذكير في أيام الشهر</string>
+    <string name="start_date">تاريخ البدء</string>
+    <string name="end_date">تاريخ الانتهاء</string>
 </resources>

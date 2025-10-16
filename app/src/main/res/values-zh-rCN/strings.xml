@@ -45,12 +45,10 @@
     <string name="theme">主题</string>
     <string name="default_">默认</string>
     <string name="alternative">主题二</string>
-    <string name="no_instructions">（点我清除备注）</string>
     <string name="before_meal">饭前服用</string>
     <string name="after_meal">饭后服用</string>
     <string name="time_before_meal">饭前 x 分钟</string>
     <string name="time_after">服用药物 x 后的 y 小时</string>
-    <string name="instruction_templates">备注模板</string>
     <string name="instructions_label">备注（如饭前服用）</string>
     <string name="medicine_data">药品数据</string>
     <string name="export_csv">导出为 CSV</string>
@@ -83,11 +81,10 @@
     <string name="weekend_mode_summary">周末模式当天的服药提醒将延迟到指定时间</string>
     <string name="custom">自定义……</string>
     <string name="advanced_settings">详细设置</string>
-    <string name="remind_on">提醒周期</string>
     <string name="every_day">每天（按周设置）</string>
     <string name="cycle_pause_days">暂停服药提醒天数</string>
     <string name="cycle_start_date">周期提醒开始日期</string>
-    <string name="cycle_reminders">循环提醒</string>
+    <string name="cycle_reminder">循环提醒</string>
     <string name="weekday_limited">一周中的某几天</string>
     <string name="reminders">提醒</string>
     <string name="filter">查找</string>
@@ -122,7 +119,6 @@
     <string name="date">日期</string>
     <string name="active">启用提醒</string>
     <string name="inactive">关闭提醒</string>
-    <string name="active_in_time_period">自定义提醒时间段</string>
     <string name="period_start">开始日期</string>
     <string name="period_end">结束日期</string>
     <string name="activate_all">启用所有提醒</string>
@@ -131,8 +127,6 @@
     <string name="icon">图标</string>
     <string name="every_day_of_month">每天（按月设置）</string>
     <string name="on_day_of_month">每月的 %s 日</string>
-    <string name="clear_all">清除全部</string>
-    <string name="select_all">选择全部</string>
     <string name="never">从不提醒</string>
     <string name="day_of_month_limited">一个月中的某几天</string>
     <string name="medicines_tab_description">药品选项卡</string>
@@ -218,4 +212,19 @@
     <string name="sort">分类</string>
     <string name="high_and_alarm">高电平 + 警报</string>
     <string name="enable_notification_alarm_dialog">为了允许将提醒显示为闹钟，请在以下菜单中为 MedTimer 启用此功能</string>
+    <string name="continuous">持续</string>
+    <string name="daily">每日</string>
+    <string name="daily_from_to">每日间隔从 %1$s 到 %2$s</string>
+    <string name="continuous_from">连续间隔从 %1$s</string>
+    <string name="reminder_status">提醒状态</string>
+    <string name="dosing_instructions">剂量说明</string>
+    <string name="interval_type">间隔类型</string>
+    <string name="sample_instructions">填写示例说明</string>
+    <string name="daily_interval">每日间隔</string>
+    <string name="daily_start_time">每日开始时间</string>
+    <string name="daily_end_time">每日结束时间</string>
+    <string name="remind_on_weekdays">在工作日提醒</string>
+    <string name="remind_on_days_of_month">在每月的某几天提醒</string>
+    <string name="start_date">开始日期</string>
+    <string name="end_date">结束日期</string>
 </resources>

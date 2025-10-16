@@ -41,11 +41,9 @@
     <string name="theme">Tema</string>
     <string name="default_">Padrão</string>
     <string name="alternative">Alternativo</string>
-    <string name="no_instructions">sem instruções</string>
     <string name="before_meal">antes da refeição</string>
     <string name="after_meal">depois da refeição</string>
     <string name="time_after">x horas após o medicamento y</string>
-    <string name="instruction_templates">Modelos de instruções</string>
     <string name="instructions_label">Instruções adicionais (por exemplo, antes das refeições)</string>
     <string name="medicine_data">Dados dos medicamentos</string>
     <string name="export_csv">Exportar como CSV</string>
@@ -75,10 +73,9 @@
     <string name="weekend_mode_summary">Adiar notificações em determinados dias da semana até um horário determinado</string>
     <string name="custom">Personalizado…</string>
     <string name="advanced_settings">Configurações avançadas</string>
-    <string name="remind_on">Lembrar</string>
     <string name="every_day">Diariamente</string>
     <string name="cycle_pause_days">Dias de pausa</string>
-    <string name="cycle_reminders">Lembretes cíclicos</string>
+    <string name="cycle_reminder">Lembretes cíclicos</string>
     <string name="reminders">Lembretes</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 dias</string>
@@ -106,13 +103,11 @@
     <string name="date">Data</string>
     <string name="active">Ativo</string>
     <string name="inactive">Inativo</string>
-    <string name="active_in_time_period">Ativo em um período de tempo</string>
     <string name="period_start">Início do período</string>
     <string name="activate_all">Ativar todos os lembretes</string>
     <string name="deactivate_all">Desativar todos os lembretes</string>
     <string name="block_screen_capture">Bloquear captura de tela</string>
     <string name="on_day_of_month">No dia %s do mês</string>
-    <string name="clear_all">Limpar tudo</string>
     <string name="day_of_month_limited">Limitado a alguns dias do mês</string>
     <string name="medicines_tab_description">Aba Medicamentos</string>
     <string name="overview_tab_description">Aba Visão Geral</string>
@@ -199,7 +194,6 @@
     <string name="privacy_settings">Configurações de privacidade</string>
     <string name="sticky_on_lockscreen_summary">Lembretes não podem ser descartados na tela de bloqueio, apenas na gaveta de notificações</string>
     <string name="invalid_amount">O valor deve conter um número para permitir o monitoramento do estoque de medicamentos para este lembrete.</string>
-    <string name="select_all">Selecionar tudo</string>
     <string name="never">Nunca</string>
     <string name="days_string">Dias</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
@@ -228,4 +222,19 @@
     <string name="sort">Classificar</string>
     <string name="high_and_alarm">Alto + Alarme</string>
     <string name="enable_notification_alarm_dialog">Para permitir a exibição de lembretes como alarmes, ative essa opção para o MedTimer no seguinte menu</string>
+    <string name="continuous">Contínuo</string>
+    <string name="daily">Diariamente</string>
+    <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
+    <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
+    <string name="reminder_status">Status do lembrete</string>
+    <string name="dosing_instructions">Instruções de dosagem</string>
+    <string name="interval_type">Tipo de intervalo</string>
+    <string name="sample_instructions">Preencher com instruções de amostra</string>
+    <string name="daily_interval">Intervalo diário</string>
+    <string name="daily_start_time">Hora de início diária</string>
+    <string name="daily_end_time">Hora de término diária</string>
+    <string name="remind_on_weekdays">Lembrar nos dias úteis</string>
+    <string name="remind_on_days_of_month">Lembrar nos dias do mês</string>
+    <string name="start_date">Data de início</string>
+    <string name="end_date">Data de término</string>
 </resources>

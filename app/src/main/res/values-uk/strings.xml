@@ -28,10 +28,8 @@
     <string name="create_reminder_dosage_hint">Дозування для нового нагадування</string>
     <string name="default_">Типові</string>
     <string name="alternative">Альтернативна</string>
-    <string name="no_instructions">без інструкцій</string>
     <string name="before_meal">до прийому їжі</string>
     <string name="time_before_meal">за Х хвилин до прийому їжі</string>
-    <string name="instruction_templates">Шаблони інструкцій</string>
     <string name="instructions_label">Додаткові інструкції (напр. перед їжею)</string>
     <string name="medicine_data">Дані про ліки</string>
     <string name="restore">Відновити</string>
@@ -86,11 +84,10 @@
     <string name="weekend_mode_summary">Відкласти сповіщення на певні дні тижня до вказаного часу</string>
     <string name="custom">Користувацьке…</string>
     <string name="advanced_settings">Розширені налаштування</string>
-    <string name="remind_on">Нагадати</string>
     <string name="every_day">Щодня</string>
     <string name="cycle_pause_days">Призупинити дні</string>
     <string name="cycle_start_date">Початок першого циклу</string>
-    <string name="cycle_reminders">Циклічні нагадування</string>
+    <string name="cycle_reminder">Циклічні нагадування</string>
     <string name="reminders">Нагадування</string>
     <string name="weekday_limited">Обмежується деякими будніми днями</string>
     <string name="filter">Фільтр</string>
@@ -122,7 +119,6 @@
     <string name="date">Дата</string>
     <string name="active">Активний</string>
     <string name="inactive">Неактивний</string>
-    <string name="active_in_time_period">Активні в період часу</string>
     <string name="period_start">Початок менструації</string>
     <string name="period_end">Кінець періоду</string>
     <string name="activate_all">Активувати всі нагадування</string>
@@ -131,8 +127,6 @@
     <string name="icon">Ікона</string>
     <string name="every_day_of_month">Щодня протягом місяця</string>
     <string name="on_day_of_month">У %s числах місяця</string>
-    <string name="clear_all">Зачистити все</string>
-    <string name="select_all">Вибрати все</string>
     <string name="never">Ніколи</string>
     <string name="day_of_month_limited">Обмежено деякими днями місяця</string>
     <string name="medicines_tab_description">Вкладка &amp;quot;Ліки</string>
@@ -233,4 +227,19 @@
     <string name="sort">Сортування</string>
     <string name="high_and_alarm">Високий + Тривога</string>
     <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
+    <string name="continuous">Безперервний</string>
+    <string name="daily">Щоденно</string>
+    <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
+    <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
+    <string name="reminder_status">Статус нагадування</string>
+    <string name="dosing_instructions">Інструкції з дозування</string>
+    <string name="interval_type">Тип інтервалу</string>
+    <string name="sample_instructions">Заповнити зразками інструкцій</string>
+    <string name="daily_interval">Щоденний інтервал</string>
+    <string name="daily_start_time">Щоденний час початку</string>
+    <string name="daily_end_time">Щоденний час закінчення</string>
+    <string name="remind_on_weekdays">Нагадувати у будні</string>
+    <string name="remind_on_days_of_month">Нагадувати у дні місяця</string>
+    <string name="start_date">Дата початку</string>
+    <string name="end_date">Дата закінчення</string>
 </resources>

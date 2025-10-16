@@ -69,7 +69,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editAmount.setText(reminder.amount);
 
         new Handler(thread.getLooper()).post(() -> {
-            String summary = SummaryHelperKt.reminderSummary(itemView.getContext(), reminder);
+            String summary = SummaryHelperKt.reminderSummary(reminder, itemView.getContext());
             this.fragmentActivity.runOnUiThread(() ->
                     advancedSettingsSummary.setText(summary));
         });
@@ -100,8 +100,8 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
     private void onClickAdvancedSettings(Reminder reminder) {
         NavController navController = Navigation.findNavController(itemView);
-        EditMedicineFragmentDirections.ActionEditMedicineToAdvancedReminderSettings action =
-                EditMedicineFragmentDirections.actionEditMedicineToAdvancedReminderSettings(
+        EditMedicineFragmentDirections.ActionEditMedicineFragmentToAdvancedReminderPreferencesRootFragment action =
+                EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesRootFragment(
                         reminder.reminderId
                 );
         try {

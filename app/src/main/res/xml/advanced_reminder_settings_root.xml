@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:title="@string/reminder_status"
+        app:key="reminder_status"
+        android:icon="@drawable/calendar_check"/>
+    <Preference
+        android:title="@string/dosing_instructions"
+        app:icon="@drawable/clipboard_plus"
+        app:key="instructions" />
+    <Preference
+        app:icon="@drawable/link"
+        app:key="add_linked_reminder"
+        app:title="@string/add_linked_reminder" />
+    <PreferenceCategory
+        app:key="interval_category"
+        app:title="@string/interval_based_reminder">
+        <Preference
+            android:icon="@drawable/interval"
+            android:title="@string/interval"
+            app:key="interval" />
+        <Preference
+            android:title="Interval type"
+            app:icon="@drawable/calendar2_event"
+            app:key="interval_type" />
+        <ListPreference
+            android:entries="@array/interval_start"
+            android:entryValues="@array/values_0_and_1"
+            android:icon="@drawable/align_start"
+            android:title="Interval start"
+            app:key="interval_start" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="time_based_category"
+        app:title="@string/time_based_reminder">
+        <Preference
+            android:icon="@drawable/repeat"
+            app:key="cyclic_reminder"
+            app:title="@string/cycle_reminder" />
+        <MultiSelectListPreference
+            app:entries="@array/days"
+            app:entryValues="@array/one_to_seven"
+            app:key="remind_on_weekdays"
+            app:title="@string/remind_on_weekdays"
+            android:icon="@drawable/calendar_day"/>
+        <MultiSelectListPreference
+            app:entries="@array/days_of_month"
+            app:entryValues="@array/days_of_month"
+            app:icon="@drawable/calendar_week"
+            app:key="remind_on_days"
+            app:title="@string/remind_on_days_of_month" />
+        />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Further settings">
+        <SwitchPreferenceCompat
+            android:title="@string/variable_amount"
+            app:key="variable_amount" />
+        <SwitchPreferenceCompat
+            android:title="@string/automatically_taken"
+            app:key="automatically_taken" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

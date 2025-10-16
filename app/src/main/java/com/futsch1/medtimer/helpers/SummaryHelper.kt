@@ -10,8 +10,8 @@ import java.util.Locale
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-fun reminderSummary(context: Context, reminder: Reminder): String {
-    val strings: MutableList<String> = LinkedList()
+fun reminderSummary(reminder: Reminder, context: Context): String {
+    var strings: MutableList<String> = LinkedList()
 
     if (!isReminderActive(reminder)) {
         strings.add(context.getString(R.string.inactive))
@@ -32,6 +32,7 @@ fun reminderSummary(context: Context, reminder: Reminder): String {
     if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
     }
+    strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
     return java.lang.String.join(", ", strings)
 }
@@ -41,8 +42,19 @@ fun intervalBasedReminderString(
     context: Context
 ): String {
     val interval = Interval(reminder.timeInMinutes)
-    val startInterval = context.getString(R.string.interval_start_time) + " " + TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
-    return context.getString(R.string.every_interval, interval.toTranslatedString(context)) + ", " + startInterval
+    return context.getString(R.string.every_interval, interval.toTranslatedString(context)) + ", " + getIntervalTypeSummary(reminder, context)
+}
+
+fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
+    return if (reminder.dailyInterval) {
+        context.getString(
+            R.string.daily_from_to,
+            TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong()),
+            TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
+        )
+    } else {
+        context.getString(R.string.continuous_from, TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart))
+    }
 }
 
 fun linkedReminderString(reminder: Reminder, context: Context): String {
@@ -74,7 +86,6 @@ private fun timeBasedReminderString(
     val dayOfMonthLimited = (reminder.activeDaysOfMonth and 0x7FFFFFFF) != 0x7FFFFFFF
     val never = reminder.days.stream()
         .noneMatch { day: Boolean -> day } || (reminder.activeDaysOfMonth and 0x7FFFFFFF) == 0
-    val cyclic = reminder.pauseDays > 0
     if (never) {
         strings.add(context.getString(R.string.never))
     } else {
@@ -82,15 +93,14 @@ private fun timeBasedReminderString(
             context,
             strings,
             reminder,
-            ReminderProperties(weekdayLimited, dayOfMonthLimited, cyclic)
+            ReminderProperties(weekdayLimited, dayOfMonthLimited)
         )
     }
 }
 
 data class ReminderProperties(
     val weekdayLimited: Boolean,
-    val dayOfMonthLimited: Boolean,
-    val cyclic: Boolean
+    val dayOfMonthLimited: Boolean
 )
 
 private fun buildReminderStrings(
@@ -105,15 +115,13 @@ private fun buildReminderStrings(
     if (properties.dayOfMonthLimited) {
         strings.add(context.getString(R.string.day_of_month_limited))
     }
-    if (properties.cyclic) {
-        strings.add(getCyclicReminderString(context, reminder))
-    }
-    if (!properties.weekdayLimited && !properties.cyclic) {
+    strings.add(getCyclicReminderString(reminder, context))
+    if (!properties.weekdayLimited && reminder.pauseDays == 0) {
         strings.add(context.getString(R.string.every_day))
     }
 }
 
-fun remindersSummary(context: Context, reminders: List<Reminder>): String {
+fun remindersSummary(reminders: List<Reminder>, context: Context): String {
     val reminderTimes = timeBasedRemindersSummary(
         reminders.stream()
             .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED },
@@ -177,8 +185,8 @@ private fun timeBasedRemindersSummary(
     return reminderTimes
 }
 
-private fun getCyclicReminderString(context: Context, reminder: Reminder): String {
-    return context.getString(R.string.cycle_reminders) +
+fun getCyclicReminderString(reminder: Reminder, context: Context): String {
+    return if (reminder.pauseDays > 0) context.getString(R.string.cycle_reminder) +
             " " +
             reminder.consecutiveDays +
             "/" +
@@ -187,6 +195,7 @@ private fun getCyclicReminderString(context: Context, reminder: Reminder): Strin
             firstToLower(context.getString(R.string.cycle_start_date)) +
             " " +
             TimeHelper.daysSinceEpochToDateString(context, reminder.cycleStartDay)
+    else ""
 }
 
 private fun firstToLower(string: String): String {

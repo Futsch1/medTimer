@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
@@ -63,7 +64,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             override fun localDate(): LocalDate {
                 return LocalDate.now()
             }
-        })
+        }, PreferenceManager.getDefaultSharedPreferences(medicineViewModel.getApplication()))
 
         val reminders: List<ScheduledReminder> = scheduler.schedule(
             fullMedicines, reminderEvents

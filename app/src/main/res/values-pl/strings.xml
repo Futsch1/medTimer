@@ -47,12 +47,10 @@
     <string name="theme">Motyw</string>
     <string name="default_">Domyślny</string>
     <string name="alternative">Alternatywny</string>
-    <string name="no_instructions">brak instrukcji</string>
     <string name="before_meal">przed posiłkiem</string>
     <string name="after_meal">po posiłku</string>
     <string name="time_before_meal">x minut przed posiłkiem</string>
     <string name="time_after">x godzin po leku y</string>
-    <string name="instruction_templates">Szablony instrukcji</string>
     <string name="instructions_label">Dodatkowe instrukcje (np. przed posiłkami)</string>
     <string name="export_csv">Eksportuj jako CSV</string>
     <string name="export_pdf">Eksportuj jako PDF</string>
@@ -78,7 +76,6 @@
     <string name="tuesday">Wtorek</string>
     <string name="thursday">Czwartek</string>
     <string name="weekend_mode_summary">Opóźnij powiadomienia w określone dni tygodnia do określonej godziny</string>
-    <string name="remind_on">Przypomnienie</string>
     <string name="cycle_pause_days">Wstrzymane dni</string>
     <string name="weekday_limited">Ograniczone do niektórych dni powszednich</string>
     <string name="reminders">Przypomnienia</string>
@@ -104,14 +101,11 @@
     <string name="high">Wysoki</string>
     <string name="notification_importance">Priorytet powiadomień</string>
     <string name="calendar">Kalendarz</string>
-    <string name="active_in_time_period">Aktywne w okresie czasu</string>
     <string name="deactivate_all">Dezaktywuj wszystkie przypomnienia</string>
     <string name="block_screen_capture">Zablokuj zrzuty ekranu</string>
     <string name="icon">Ikona</string>
     <string name="every_day_of_month">Każdego dnia miesiąca</string>
     <string name="on_day_of_month">W %s miesiąca</string>
-    <string name="clear_all">Wyczyść wszystko</string>
-    <string name="select_all">Wybierz wszystko</string>
     <string name="never">Nigdy</string>
     <string name="day_of_month_limited">Ograniczone do niektórych dni w miesiącu</string>
     <string name="medicines_tab_description">Karta lekarstw</string>
@@ -183,7 +177,7 @@
     <string name="advanced_settings">Zaawansowane</string>
     <string name="days_string">Dni</string>
     <string name="every_day">Codziennie</string>
-    <string name="cycle_reminders">Przypomnienia cykliczne</string>
+    <string name="cycle_reminder">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
     <string name="notification_settings_high">Ustawienia powiadomień o wysokim priorytecie</string>
     <string name="notification_settings_default">Domyślny priorytet ustawień powiadomień</string>
@@ -233,4 +227,19 @@
     <string name="sort">Sortuj</string>
     <string name="high_and_alarm">Wysoki + Alarm</string>
     <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
+    <string name="continuous">Ciągły</string>
+    <string name="daily">Codzienny</string>
+    <string name="daily_from_to">Dzienny interwał od %1$s do %2$s</string>
+    <string name="continuous_from">Ciągły interwał zaczynający się od %1$s</string>
+    <string name="reminder_status">Status przypomnienia</string>
+    <string name="dosing_instructions">Instrukcje dawkowania</string>
+    <string name="interval_type">Typ interwału</string>
+    <string name="sample_instructions">Wypełnij przykładowymi instrukcjami</string>
+    <string name="daily_interval">Dzienny interwał</string>
+    <string name="daily_start_time">Dzienny czas rozpoczęcia</string>
+    <string name="daily_end_time">Dzienny czas zakończenia</string>
+    <string name="remind_on_weekdays">Przypominaj w dni powszednie</string>
+    <string name="remind_on_days_of_month">Przypominaj w dniach miesiąca</string>
+    <string name="start_date">Data początkowa</string>
+    <string name="end_date">Data końcowa</string>
 </resources>

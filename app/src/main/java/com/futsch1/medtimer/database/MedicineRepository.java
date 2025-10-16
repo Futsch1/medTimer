@@ -15,6 +15,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import kotlinx.coroutines.flow.Flow;
+
 public class MedicineRepository {
 
     private final MedicineDao medicineDao;
@@ -61,6 +63,10 @@ public class MedicineRepository {
 
     public Reminder getReminder(int reminderId) {
         return medicineDao.getReminder(reminderId);
+    }
+
+    public Flow<Reminder> getReminderFlow(int reminderId) {
+        return medicineDao.getReminderFlow(reminderId);
     }
 
     public LiveData<List<ReminderEvent>> getLiveReminderEvents(long timeStamp, boolean withDeleted) {

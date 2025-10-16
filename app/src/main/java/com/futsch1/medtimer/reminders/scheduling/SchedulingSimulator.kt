@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders.scheduling
 
+import android.content.SharedPreferences
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
@@ -13,7 +14,12 @@ data class SchedulingItem(val medicine: FullMedicine, val reminder: Reminder)
 
 typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double) -> Boolean
 
-class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>, timeAccess: ReminderScheduler.TimeAccess) {
+class SchedulingSimulator(
+    medicines: List<FullMedicine>,
+    recentReminders: List<ReminderEvent>,
+    timeAccess: ReminderScheduler.TimeAccess,
+    private val sharedPreferences: SharedPreferences
+) {
     val maxSimulationDays = 400
 
     var totalEvents = mutableListOf(*recentReminders.toTypedArray())
@@ -54,7 +60,7 @@ class SchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<R
     }
 
     private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess)
+        val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess, sharedPreferences)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if (nextScheduledTime?.atZone(timeAccess.systemZone())?.toLocalDate() != currentDay) {

@@ -46,12 +46,10 @@
     <string name="theme">Theme</string>
     <string name="default_">Default</string>
     <string name="alternative">Alternative</string>
-    <string name="no_instructions">no instructions</string>
     <string name="before_meal">before the meal</string>
     <string name="after_meal">after the meal</string>
     <string name="time_before_meal">x minutes before the meal</string>
     <string name="time_after">x hours after medicine y</string>
-    <string name="instruction_templates">Instruction templates</string>
     <string name="instructions_label">Additional instructions (e.g. before meals)</string>
     <string name="medicine_data">Medicine data</string>
     <string name="export_csv">Export as CSV</string>
@@ -84,11 +82,10 @@
     <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
     <string name="custom">Custom…</string>
     <string name="advanced_settings">Advanced settings</string>
-    <string name="remind_on">Remind</string>
     <string name="every_day">Every day</string>
     <string name="cycle_pause_days">Pause days</string>
     <string name="cycle_start_date">First cycle start</string>
-    <string name="cycle_reminders">Cyclic reminders</string>
+    <string name="cycle_reminder">Cyclic reminder</string>
     <string name="weekday_limited">Limited to some weekdays</string>
     <string name="reminders">Reminders</string>
     <string name="sort">Sort</string>
@@ -125,7 +122,6 @@
     <string name="date">Date</string>
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
-    <string name="active_in_time_period">Active in time period</string>
     <string name="period_start">Period start</string>
     <string name="period_end">Period end</string>
     <string name="activate_all">Activate all reminders</string>
@@ -134,8 +130,6 @@
     <string name="icon">Icon</string>
     <string name="every_day_of_month">Every day of the month</string>
     <string name="on_day_of_month">On the %s of the month</string>
-    <string name="clear_all">Clear all</string>
-    <string name="select_all">Select all</string>
     <string name="never">Never</string>
     <string name="day_of_month_limited">Limited to some days of the month</string>
     <string name="medicines_tab_description">Medicines tab</string>
@@ -225,4 +219,19 @@
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
+    <string name="continuous">Continuous</string>
+    <string name="daily">Daily</string>
+    <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
+    <string name="continuous_from">Continuous interval starting from %1$s</string>
+    <string name="reminder_status">Reminder status</string>
+    <string name="dosing_instructions">Dosing instructions</string>
+    <string name="interval_type">Interval type</string>
+    <string name="sample_instructions">Fill with sample instructions</string>
+    <string name="daily_interval">Daily interval</string>
+    <string name="daily_start_time">Daily start time</string>
+    <string name="daily_end_time">Daily end time</string>
+    <string name="remind_on_weekdays">Remind on weekdays</string>
+    <string name="remind_on_days_of_month">Remind on days of month</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>

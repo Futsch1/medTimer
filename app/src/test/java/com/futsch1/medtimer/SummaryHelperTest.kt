@@ -36,7 +36,7 @@ class SummaryHelperTest {
         val reminder = Reminder(1)
         reminder.active = false
 
-        assertEquals("1, 2", reminderSummary(context, reminder))
+        assertEquals("1, 2", reminderSummary(reminder, context))
 
         reminder.active = true
         reminder.periodStart = LocalDate.of(2023, 1, 2).toEpochDay()
@@ -46,10 +46,10 @@ class SummaryHelperTest {
         val mockedLocalDate: MockedStatic<LocalDate> = mockStatic(LocalDate::class.java)
 
         mockedLocalDate.`when`<LocalDate> { LocalDate.now() }.thenReturn(dateBefore)
-        assertEquals("1, 2", reminderSummary(context, reminder))
+        assertEquals("1, 2", reminderSummary(reminder, context))
 
         mockedLocalDate.`when`<LocalDate> { LocalDate.now() }.thenReturn(dateIn)
-        assertEquals("2", reminderSummary(context, reminder))
+        assertEquals("2", reminderSummary(reminder, context))
 
         mockedLocalDate.close()
     }
@@ -63,13 +63,13 @@ class SummaryHelperTest {
         val reminder = Reminder(1)
 
         reminder.days[0] = false
-        assertEquals("1", reminderSummary(context, reminder))
+        assertEquals("1", reminderSummary(reminder, context))
 
         reminder.activeDaysOfMonth = 42
-        assertEquals("1, 2", reminderSummary(context, reminder))
+        assertEquals("1, 2", reminderSummary(reminder, context))
 
         reminder.days[0] = true
-        assertEquals("2, 3", reminderSummary(context, reminder))
+        assertEquals("2, 3", reminderSummary(reminder, context))
     }
 
     @Test
@@ -82,14 +82,14 @@ class SummaryHelperTest {
         Mockito.`when`(resources.configuration).thenReturn(configuration)
         val context = mock(Context::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
-        Mockito.`when`(context.getString(R.string.cycle_reminders)).thenReturn("1")
+        Mockito.`when`(context.getString(R.string.cycle_reminder)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.cycle_start_date)).thenReturn("2")
 
         val reminder = Reminder(1)
         reminder.consecutiveDays = 4
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
-        assertEquals("1 4/5, 2 4/10/24", reminderSummary(context, reminder))
+        assertEquals("1 4/5, 2 4/10/24", reminderSummary(reminder, context))
     }
 
     @Test
@@ -100,7 +100,7 @@ class SummaryHelperTest {
         val reminder = Reminder(1)
         reminder.active = false
         reminder.instructions = "3"
-        assertEquals("1, 2, 3", reminderSummary(context, reminder))
+        assertEquals("1, 2, 3", reminderSummary(reminder, context))
     }
 
     @Test
@@ -132,11 +132,11 @@ class SummaryHelperTest {
         val reminder = Reminder(1)
         reminder.linkedReminderId = 2
 
-        assertEquals("1", reminderSummary(context, reminder))
+        assertEquals("1", reminderSummary(reminder, context))
 
         sourceReminder.linkedReminderId = 3
         sourceReminder.timeInMinutes = 3
-        assertEquals("1 + 0:03", reminderSummary(context, reminder))
+        assertEquals("1 + 0:03", reminderSummary(reminder, context))
 
         mockedMedicineRepositoryConstruction.close()
         mockedDateFormat.close()
@@ -162,7 +162,7 @@ class SummaryHelperTest {
         reminder.timeInMinutes = 2
         val reminder2 = Reminder(2)
         reminder2.timeInMinutes = 63
-        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
+        assertEquals("ok", remindersSummary(listOf(reminder2, reminder), context))
 
         mockedDateFormat.close()
     }
@@ -213,7 +213,7 @@ class SummaryHelperTest {
                 ).thenReturn(reminder)
             }
 
-        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder, reminder3)))
+        assertEquals("ok", remindersSummary(listOf(reminder2, reminder, reminder3), context))
 
         mockedDateFormat.close()
         mockedMedicineRepositoryConstruction.close()
@@ -224,7 +224,7 @@ class SummaryHelperTest {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
             .thenReturn("ok")
-        Mockito.`when`(context.getString(R.string.interval_start_time))
+        Mockito.`when`(context.getString(R.string.continuous_from, "0 1"))
             .thenReturn("start time")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
@@ -243,7 +243,7 @@ class SummaryHelperTest {
             .thenReturn("ok")
         Mockito.`when`(resources.getQuantityString(R.plurals.minutes, 2))
             .thenReturn("ok")
-        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "ok, start time 0 1; ok, start time 0 1"))
+        Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "ok, start time; ok, start time"))
             .thenReturn("ok")
 
         val reminder = Reminder(1)
@@ -253,8 +253,8 @@ class SummaryHelperTest {
         reminder2.timeInMinutes = 120
         reminder2.intervalStart = 1
 
-        assertEquals("ok, start time 0 1", reminderSummary(context, reminder))
-        assertEquals("ok", remindersSummary(context, listOf(reminder2, reminder)))
+        assertEquals("ok, start time", reminderSummary(reminder, context))
+        assertEquals("ok", remindersSummary(listOf(reminder2, reminder), context))
 
         mockedDateFormat.close()
     }

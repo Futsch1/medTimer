@@ -96,7 +96,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
     }
 
     @SuppressLint("RestrictedApi")
-    private static void enableOptionalIcons(@NonNull Menu menu) {
+    public static void enableOptionalIcons(@NonNull Menu menu) {
         if (menu instanceof MenuBuilder) {
             try {
                 Method m = menu.getClass().getDeclaredMethod(

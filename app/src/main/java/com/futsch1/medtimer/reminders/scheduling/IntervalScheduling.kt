@@ -6,7 +6,7 @@ import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
 import kotlin.math.ceil
 
-class IntervalScheduling(
+open class IntervalScheduling(
     private val reminder: Reminder,
     private val reminderEventList: List<ReminderEvent>,
     private val timeAccess: TimeAccess
@@ -43,7 +43,7 @@ class IntervalScheduling(
         return instant?.plusSeconds(reminder.timeInMinutes * 60L)
     }
 
-    private fun adjustToToday(instant: Instant?): Instant? {
+    protected fun adjustToToday(instant: Instant?): Instant? {
         var adjustedInstant = instant
         if (instant != null) {
             // If the interval has been missed several times, do not re-raise the interval for all the past,

@@ -59,12 +59,10 @@
     <string name="theme">Tema</string>
     <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="no_instructions">inga instruktioner</string>
     <string name="before_meal">före måltid</string>
     <string name="after_meal">efter måltid</string>
     <string name="time_before_meal">x minuter före måltid</string>
     <string name="time_after">x timmar efter intag av läkemedel y</string>
-    <string name="instruction_templates">Instruktionsmallar</string>
     <string name="instructions_label">Ytterligare instruktioner (t.ex. före måltider)</string>
     <string name="medicine_data">Läkemdelsdata</string>
     <string name="export_csv">Exportera som CSV</string>
@@ -97,11 +95,10 @@
     <string name="weekend_mode_summary">Fördröja aviseringar på vissa veckodagar till en viss tidpunkt</string>
     <string name="custom">Anpassa…</string>
     <string name="advanced_settings">Avancerade inställnignar</string>
-    <string name="remind_on">Påminn</string>
     <string name="every_day">Varje dag</string>
     <string name="cycle_pause_days">Pausdagar</string>
     <string name="cycle_start_date">Första cykelstart</string>
-    <string name="cycle_reminders">Återkommande påminnelser</string>
+    <string name="cycle_reminder">Återkommande påminnelser</string>
     <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="reminders">Påminnelser</string>
     <string name="filter">Filter</string>
@@ -129,7 +126,6 @@
     <string name="date">Datum</string>
     <string name="active">Aktiv</string>
     <string name="inactive">Inaktiv</string>
-    <string name="active_in_time_period">Aktiv i tidsperioden</string>
     <string name="period_start">Periodstart</string>
     <string name="period_end">Periodslut</string>
     <string name="activate_all">Aktivera alla påminnelser</string>
@@ -138,8 +134,6 @@
     <string name="icon">Ikon</string>
     <string name="every_day_of_month">Varje dag i månaden</string>
     <string name="on_day_of_month">På den %s dagen i månaden</string>
-    <string name="clear_all">Rensa alla</string>
-    <string name="select_all">Välj alla</string>
     <string name="never">Aldrig</string>
     <string name="day_of_month_limited">Begränsad till några dagar i månaden</string>
     <string name="medicines_tab_description">Läkemdelsflik</string>
@@ -223,4 +217,19 @@
     <string name="sort">Sortera</string>
     <string name="high_and_alarm">Hög + Larm</string>
     <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
+    <string name="continuous">Kontinuerlig</string>
+    <string name="daily">Dagligen</string>
+    <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
+    <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
+    <string name="reminder_status">Påminnelsestatus</string>
+    <string name="dosing_instructions">Doseringsanvisningar</string>
+    <string name="interval_type">Intervalltyp</string>
+    <string name="sample_instructions">Fyll i med exempelinstruktioner</string>
+    <string name="daily_interval">Dagligen intervall</string>
+    <string name="daily_start_time">Dagligen starttid</string>
+    <string name="daily_end_time">Dagligen sluttid</string>
+    <string name="remind_on_weekdays">Påminn om veckodagar</string>
+    <string name="remind_on_days_of_month">Påminn om månadens dagar</string>
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Slutdatum</string>
 </resources>

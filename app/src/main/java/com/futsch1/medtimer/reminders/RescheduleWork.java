@@ -44,12 +44,10 @@ import java.util.List;
 public class RescheduleWork extends Worker {
     protected final Context context;
     private final AlarmManager alarmManager;
-    private final WeekendMode weekendMode;
 
     public RescheduleWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
-        this.weekendMode = new WeekendMode(PreferenceManager.getDefaultSharedPreferences(context));
         alarmManager = context.getSystemService(AlarmManager.class);
     }
 
@@ -80,21 +78,23 @@ public class RescheduleWork extends Worker {
     private ReminderScheduler getReminderScheduler() {
 
         return new ReminderScheduler(new ReminderScheduler.TimeAccess() {
+            @NonNull
             @Override
             public ZoneId systemZone() {
                 return ZoneId.systemDefault();
             }
 
+            @NonNull
             @Override
             public LocalDate localDate() {
                 return LocalDate.now();
             }
-        });
+        }, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     protected void enqueueNotification(ReminderNotificationData reminderNotificationData) {
         // Apply weekend mode shift
-        Instant timestamp = weekendMode.adjustInstant(reminderNotificationData.timestamp());
+        Instant timestamp = reminderNotificationData.timestamp();
         // Apply test setting
         if (getInputData().hasKeyWithValueOfType(EXTRA_SCHEDULE_FOR_TESTS, Long.class)) {
             timestamp = Instant.now().plusMillis(getInputData().getLong(EXTRA_SCHEDULE_FOR_TESTS, 0));

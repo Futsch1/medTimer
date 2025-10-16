@@ -40,7 +40,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
             override fun localDate(): LocalDate {
                 return LocalDate.now()
             }
-        })
+        }, PreferenceManager.getDefaultSharedPreferences(context))
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }
