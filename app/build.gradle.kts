@@ -81,7 +81,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.cardview:cardview:1.0.0")
     val appcompatVersion = "1.7.1"
     val materialVersion = "1.13.0"
     val constraintLayoutVersion = "2.2.1"
