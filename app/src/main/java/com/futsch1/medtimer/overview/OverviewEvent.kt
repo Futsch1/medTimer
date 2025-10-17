@@ -7,6 +7,7 @@ import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
+import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 
 
 enum class OverviewState {
@@ -16,19 +17,24 @@ enum class OverviewState {
     SKIPPED
 }
 
-abstract class OverviewEvent() {
+abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
+    val hasRelativeTimes = sharedPreferences.getBoolean(USE_RELATIVE_DATE_TIME, false)
+
     abstract val id: Int
     abstract val timestamp: Long
     abstract val text: Spanned
     abstract val icon: Int
     abstract val color: Int?
     abstract val state: OverviewState
+    val updateValue: Long
+        get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as OverviewEvent
-        return id == other.id && timestamp == other.timestamp && text.toString() == other.text.toString() && icon == other.icon && color == other.color && state == other.state
+        return id == other.id && timestamp == other.timestamp && text.toString() == other.text.toString() && icon == other.icon && color == other.color && state == other.state && updateValue == other.updateValue
     }
 
     override fun hashCode(): Int {
@@ -42,7 +48,7 @@ abstract class OverviewEvent() {
     }
 }
 
-class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferences, val reminderEvent: ReminderEvent) : OverviewEvent() {
+class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferences, val reminderEvent: ReminderEvent) : OverviewEvent(sharedPreferences) {
     override val text: Spanned = formatReminderString(context, reminderEvent, sharedPreferences)
 
     override val id: Int
@@ -66,7 +72,8 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
     }
 }
 
-class OverviewScheduledReminderEvent(context: Context, sharedPreferences: SharedPreferences, val scheduledReminder: ScheduledReminder) : OverviewEvent() {
+class OverviewScheduledReminderEvent(context: Context, sharedPreferences: SharedPreferences, val scheduledReminder: ScheduledReminder) :
+    OverviewEvent(sharedPreferences) {
     override val text: Spanned = formatScheduledReminderString(context, scheduledReminder, sharedPreferences)
     override val id: Int
         get() = scheduledReminder.reminder.reminderId + 1_000_000
