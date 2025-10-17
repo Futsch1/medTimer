@@ -238,4 +238,10 @@
     <string name="windowed_interval_reminder_help">Définissez une fenêtre active quotidienne (par exemple, de 9 h à 21 h) où le premier rappel est toujours à l\'heure de début. Les rappels suivants se déclenchent à intervalles fixes jusqu\'à ce que l\'heure de fin soit atteinte. Le schéma complet se réinitialise chaque jour.</string>
     <string name="linked_reminder">Rappel lié</string>
     <string name="linked_reminder_help">Un rappel lié est un rappel de suivi qui est programmé un certain temps après qu\'un rappel principal a été pris. Ceci est utile pour les médicaments qui doivent être pris en séquence, avec un délai spécifique entre eux.</string>
+    <string name="add_linked_reminder_summary">Crée un rappel de suivi qui est programmé un certain temps après le déclenchement de ce rappel.</string>
+    <string name="cyclic_reminder_summary">Configure un schéma récurrent de jours actifs et de jours de pause à partir d\'une date donnée. Le rappel ne déclenchera une notification que les jours actifs. Utilisez cette fonction pour les médicaments tels que les pilules contraceptives.</string>
+    <string name="variable_amount_summary">Lorsqu\'il est actif, une boîte de dialogue permettant de saisir la posologie s\'affiche lorsque le rappel est pris.</string>
+    <string name="automatically_taken_summary">Lorsqu\'il est actif, le rappel n\'est pas affiché comme une notification et est automatiquement marqué comme pris (peut être utilisé pour suivre uniquement le stock).</string>
+    <string name="reminder_status_summary">Les rappels peuvent être actifs et inactifs. S\'ils sont inactifs, aucune notification n\'est déclenchée. Cela peut être configuré de manière statique ou en fonction de dates. Utilisez cette fonction pour configurer la réduction progressive d\'un médicament.</string>
+    <string name="further_settings">Autres paramètres</string>
 </resources>

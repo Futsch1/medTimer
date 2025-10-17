@@ -233,4 +233,10 @@
     <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
     <string name="linked_reminder">Verknüpfte Erinnerung</string>
     <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung geplant wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
+    <string name="add_linked_reminder_summary">Erstellt eine Folgeerinnerung, die eine bestimmte Zeit nach dieser Erinnerung ausgelöst wird.</string>
+    <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung löst nur an aktiven Tagen eine Benachrichtigung aus. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
+    <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
+    <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
+    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder statisch oder datumsbasiert konfiguriert werden. Dies kann zum Ausschleichen eines Medikaments verwendet werden.</string>
+    <string name="further_settings">Weitere Einstellungen</string>
 </resources>

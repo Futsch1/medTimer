@@ -233,4 +233,10 @@
     <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
     <string name="linked_reminder">Linkitetty muistutus</string>
     <string name="linked_reminder_help">Linkitetty muistutus on seurantamuistutus, joka ajoitetaan tietyn ajan kuluttua siitä, kun ensisijainen muistutus on kuitattu (joko otettu tai torkutettu). Tämä on hyödyllistä lääkkeille, jotka on otettava peräkkäin, ja joiden välillä on oltava tietty viive.</string>
+    <string name="add_linked_reminder_summary">Luo seurantamuistutuksen, joka ajoitetaan tietyn ajan kuluttua tämän muistutuksen laukeamisesta.</string>
+    <string name="cyclic_reminder_summary">Määrittää toistuvan aktiivisten ja tauotettujen päivien mallin tietystä päivämäärästä alkaen. Muistutus lähettää ilmoituksen vain aktiivisina päivinä. Käytä tätä esimerkiksi ehkäisypillereiden kaltaisiin lääkkeisiin.</string>
+    <string name="variable_amount_summary">Kun toiminto on aktiivinen, annoksen syöttämistä varten näytetään valintaikkuna, kun muistutus otetaan.</string>
+    <string name="automatically_taken_summary">Kun toiminto on aktiivinen, muistutusta ei näytetä ilmoituksena ja se merkitään automaattisesti otetuksi (voidaan käyttää vain varaston seurantaan).</string>
+    <string name="reminder_status_summary">Muistutukset voivat olla aktiivisia ja passiivisia. Jos ne ovat passiivisia, ilmoitusta ei lähetetä. Tämä voidaan määrittää staattisesti tai päivämäärien perusteella. Käytä tätä lääkkeen annoksen pienentämisen määrittämiseen.</string>
+    <string name="further_settings">Lisäasetukset</string>
 </resources>
