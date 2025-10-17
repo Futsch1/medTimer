@@ -226,4 +226,5 @@
     <string name="remind_on_days_of_month">在每月的特定日期提醒</string>
     <string name="start_date">開始日期</string>
     <string name="end_date">結束日期</string>
+    <string name="cycle_reminder">重複提醒</string>
 </resources>
