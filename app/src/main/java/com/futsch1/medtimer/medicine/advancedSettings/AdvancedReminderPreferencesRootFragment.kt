@@ -1,5 +1,9 @@
 package com.futsch1.medtimer.medicine.advancedSettings
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -95,8 +99,13 @@ class AdvancedReminderPreferencesRootFragment(
     ),
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
+    val menuProvider = AdvancedReminderSettingsMenuProvider(this)
+
     override fun onReminderUpdated(reminder: Reminder) {
         super.onReminderUpdated(reminder)
+
+        menuProvider.medicineRepository = (preferenceManager.preferenceDataStore as ReminderDataStore).medicineRepository
+        menuProvider.reminder = reminder
 
         findPreference<Preference>("reminder_status")?.summary =
             requireContext().getString(if (isReminderActive(reminder)) R.string.active else R.string.inactive)
@@ -157,10 +166,17 @@ class AdvancedReminderPreferencesRootFragment(
             true
         }
 
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+
         requireActivity().addMenuProvider(
-            AdvancedReminderSettingsMenuProvider(reminder, (preferenceManager.preferenceDataStore as ReminderDataStore).medicineRepository, this),
+            menuProvider,
             getViewLifecycleOwner()
         )
+
+        return view
     }
 
 }
