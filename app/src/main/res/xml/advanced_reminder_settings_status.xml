@@ -9,4 +9,8 @@
     <SwitchPreferenceCompat app:dependency="reminder_active" app:key="period_end_switch" app:title="@string/period_end" />
     <Preference app:dependency="period_end_switch" app:title="@string/end_date" app:key="period_end_date" />
     </PreferenceCategory>
+    <Preference
+        app:allowDividerAbove="true"
+        app:key="summary_only"
+        app:summary="@string/reminder_status_summary" />
 </androidx.preference.PreferenceScreen>
