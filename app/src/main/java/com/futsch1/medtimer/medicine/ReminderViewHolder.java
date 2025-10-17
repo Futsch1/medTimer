@@ -6,9 +6,11 @@ import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -36,6 +38,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
     private final TextView advancedSettingsSummary;
     private final HandlerThread thread;
     private final TextInputLayout editTimeLayout;
+    private final ImageView reminderTypeIcon;
 
     private Reminder reminder;
     private TimeEditor timeEditor;
@@ -45,6 +48,7 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         editTime = itemView.findViewById(R.id.editReminderTime);
         editTimeLayout = itemView.findViewById(R.id.editReminderTimeLayout);
         editAmount = itemView.findViewById(R.id.editAmount);
+        reminderTypeIcon = itemView.findViewById(R.id.reminderTypeIcon);
         advancedSettings = itemView.findViewById(R.id.openAdvancedSettings);
         advancedSettingsSummary = itemView.findViewById(R.id.advancedSettingsSummary);
         this.thread = thread;
@@ -83,10 +87,12 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         } else {
             ((TextInputLayout) itemView.findViewById(R.id.editAmountLayout)).setErrorEnabled(false);
         }
+
+        setupTypeIcon();
     }
 
     private void setupTimeEditor() {
-        if (reminder.getReminderType() != Reminder.ReminderType.INTERVAL_BASED) {
+        if (reminder.getReminderType() != Reminder.ReminderType.CONTINUOUS_INTERVAL && reminder.getReminderType() != Reminder.ReminderType.WINDOWED_INTERVAL) {
             @StringRes int textId = reminder.getReminderType() == Reminder.ReminderType.TIME_BASED ? R.string.time : R.string.delay;
             editTimeLayout.setHint(textId);
             timeEditor = new TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, minutes -> {
@@ -109,6 +115,39 @@ public class ReminderViewHolder extends RecyclerView.ViewHolder {
         } catch (IllegalArgumentException e) {
             // Intentionally empty (monkey test can cause this to fail)
         }
+    }
+
+    private void setupTypeIcon() {
+        int titleText = 0;
+        int helpText = 0;
+        int iconId = 0;
+        switch (reminder.getReminderType()) {
+            case TIME_BASED:
+                iconId = R.drawable.calendar2_event;
+                titleText = R.string.time_based_reminder;
+                helpText = R.string.time_based_reminder_help;
+                break;
+            case LINKED:
+                iconId = R.drawable.link;
+                titleText = R.string.linked_reminder;
+                helpText = R.string.linked_reminder_help;
+                break;
+            case CONTINUOUS_INTERVAL:
+                iconId = R.drawable.repeat;
+                titleText = R.string.continuous_interval_reminder;
+                helpText = R.string.continuous_interval_reminder_help;
+                break;
+            case WINDOWED_INTERVAL:
+                iconId = R.drawable.interval;
+                titleText = R.string.windowed_interval_reminder;
+                helpText = R.string.windowed_interval_reminder_help;
+                break;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext())
+                .setTitle(titleText)
+                .setMessage(helpText).setIcon(iconId).setPositiveButton(R.string.ok, null);
+        reminderTypeIcon.setImageResource(iconId);
+        reminderTypeIcon.setOnClickListener(v -> builder.create().show());
     }
 
     public Reminder getReminder() {

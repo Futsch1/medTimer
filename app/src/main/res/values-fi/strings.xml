@@ -202,8 +202,6 @@
     <string name="use_relative_date_time_summary">Näytä suhteellinen päivämäärä/aika muistutuksille</string>
     <string name="use_relative_date_time">Suhteellinen päivämäärä/aika</string>
     <string name="invalid_amount">Määrän tulee sisältää numero, jotta lääkevaraston seuranta voidaan ottaa käyttöön tässä muistutuksessa.</string>
-    <string name="time_reminder_type_hint">Muistuttaa tiettyyn aikaan päivästä.</string>
-    <string name="interval_reminder_type_hint">Muistuttaa, kun edellisestä muistutuksesta on kulunut määritetty aika.</string>
     <string name="sticky_on_lockscreen">Pysyvät muistutukset lukitusnäytöllä</string>
     <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi hylätä lukitusnäytöltä, ainoastaan ilmoituspalkista</string>
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
@@ -217,19 +215,22 @@
     <string name="automatically_taken">Merkitse automaattisesti otetuksi</string>
     <string name="high_and_alarm">Korkea + Hälytys</string>
     <string name="enable_notification_alarm_dialog">Salliaksesi muistutusten näyttämisen hälytyksinä, ota tämä asetus käyttöön MedTimerille seuraavassa valikossa</string>
-    <string name="continuous">Jatkuva</string>
-    <string name="daily">Päivittäin</string>
     <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="reminder_status">Muistutuksen tila</string>
     <string name="dosing_instructions">Annostusohjeet</string>
-    <string name="interval_type">Välin tyyppi</string>
     <string name="sample_instructions">Täytä näyteohjeilla</string>
-    <string name="daily_interval">Päivittäinen väli</string>
     <string name="daily_start_time">Päivittäinen aloitusaika</string>
     <string name="daily_end_time">Päivittäinen lopetusaika</string>
     <string name="remind_on_weekdays">Muistuta viikonpäivisin</string>
     <string name="remind_on_days_of_month">Muistuta kuukauden päivinä</string>
     <string name="start_date">Aloituspäivämäärä</string>
     <string name="end_date">Päättymispäivämäärä</string>
+    <string name="windowed_interval_reminder">Ikkunallinen intervallimuistutus</string>
+    <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
+    <string name="time_based_reminder_help">Aseta tietyt ajat (esim. klo 8.00) ja määritä toistuva kaava. Tämä mahdollistaa tarkan hallinnan tietyille viikonpäiville, kuukauden päiville tai monimutkaisille jaksollisille aikatauluille (kuten \"joka 3. päivä\").</string>
+    <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>
+    <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
+    <string name="linked_reminder">Linkitetty muistutus</string>
+    <string name="linked_reminder_help">Linkitetty muistutus on seurantamuistutus, joka ajoitetaan tietyn ajan kuluttua siitä, kun ensisijainen muistutus on kuitattu (joko otettu tai torkutettu). Tämä on hyödyllistä lääkkeille, jotka on otettava peräkkäin, ja joiden välillä on oltava tietty viive.</string>
 </resources>

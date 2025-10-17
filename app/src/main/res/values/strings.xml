@@ -204,8 +204,6 @@
     <string name="use_relative_date_time_summary">Show relative date/time for reminders</string>
     <string name="use_relative_date_time">Relative date/time</string>
     <string name="invalid_amount">The amount has to contain a number to enable medicine stock tracking for this reminder.</string>
-    <string name="time_reminder_type_hint">Reminds at a specific time of day.</string>
-    <string name="interval_reminder_type_hint">Reminds after a specified time has elapsed after the last reminder.</string>
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer</string>
     <string name="big_notifications">Big notification buttons</string>
@@ -219,19 +217,22 @@
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
-    <string name="continuous">Continuous</string>
-    <string name="daily">Daily</string>
     <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
     <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="reminder_status">Reminder status</string>
     <string name="dosing_instructions">Dosing instructions</string>
-    <string name="interval_type">Interval type</string>
     <string name="sample_instructions">Fill with sample instructions</string>
-    <string name="daily_interval">Daily interval</string>
     <string name="daily_start_time">Daily start time</string>
     <string name="daily_end_time">Daily end time</string>
     <string name="remind_on_weekdays">Remind on weekdays</string>
     <string name="remind_on_days_of_month">Remind on days of month</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="linked_reminder">Linked reminder</string>
+    <string name="windowed_interval_reminder">Windowed interval reminder</string>
+    <string name="continuous_interval_reminder">Continuous interval reminder</string>
+    <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
+    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
+    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9 AM to 9 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is actioned (either taken or snoozed). This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
 </resources>

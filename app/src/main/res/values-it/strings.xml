@@ -206,8 +206,6 @@
     <string name="use_relative_date_time_summary">Mostra la data/ora relativa per i promemoria</string>
     <string name="use_relative_date_time">Data/ora relativa</string>
     <string name="invalid_amount">La quantità deve contenere un numero per permettere il tracciamento delle scorte di farmaci per questo promemoria.</string>
-    <string name="time_reminder_type_hint">Ricorda ad un\'ora precisa del giorno.</string>
-    <string name="interval_reminder_type_hint">Riproponi dopo un determinato periodo di tempo dall\'ultimo promemoria.</string>
     <string name="sticky_on_lockscreen">Promemoria persistenti sulla schermata di blocco</string>
     <string name="sticky_on_lockscreen_summary">I promemoria non possono essere eliminati dalla schermata di blocco, ma solo dal cassetto delle notifiche</string>
     <string name="big_notifications">Pulsanti di notifica grandi</string>
@@ -222,19 +220,22 @@
     <string name="sort">Ordinamento</string>
     <string name="high_and_alarm">Alto + Allarme</string>
     <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attivare questa opzione per MedTimer nel seguente menu</string>
-    <string name="continuous">Continuo</string>
-    <string name="daily">Quotidiano</string>
     <string name="daily_from_to">Intervallo giornaliero da %1$s a %2$s</string>
     <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="reminder_status">Stato promemoria</string>
     <string name="dosing_instructions">Istruzioni di dosaggio</string>
-    <string name="interval_type">Tipo di intervallo</string>
     <string name="sample_instructions">Compila con istruzioni di esempio</string>
-    <string name="daily_interval">Intervallo giornaliero</string>
     <string name="daily_start_time">Orario di inizio giornaliero</string>
     <string name="daily_end_time">Orario di fine giornaliero</string>
     <string name="remind_on_weekdays">Promemoria nei giorni feriali</string>
     <string name="remind_on_days_of_month">Promemoria nei giorni del mese</string>
     <string name="start_date">Data d\'inizio</string>
     <string name="end_date">Data di fine</string>
+    <string name="windowed_interval_reminder">Promemoria a intervalli in una finestra temporale</string>
+    <string name="continuous_interval_reminder">Promemoria a intervallo continuo</string>
+    <string name="time_based_reminder_help">Imposta orari specifici (ad es. 8:00) e configura un modello ricorrente. Ciò consente un controllo preciso su giorni specifici della settimana, giorni del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
+    <string name="continuous_interval_reminder_help">Avvia un promemoria basato su un intervallo di tempo (ad esempio, ogni 6 ore) da un momento specificato. Questo schema è continuo, ignorando i vincoli di tempo del giorno, fino alla disattivazione manuale.</string>
+    <string name="windowed_interval_reminder_help">Definisci una finestra attiva giornaliera (ad es. dalle 9:00 alle 21:00) in cui il primo promemoria è sempre all\'ora di inizio. I promemoria successivi si attivano a intervalli fissi fino al raggiungimento dell\'ora di fine. Lo schema completo si ripristina ogni giorno.</string>
+    <string name="linked_reminder">Promemoria collegato</string>
+    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato attivato (preso o posticipato). Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
 </resources>

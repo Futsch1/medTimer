@@ -211,8 +211,6 @@
     </plurals>
     <string name="use_relative_date_time">Względna data/godzina</string>
     <string name="invalid_amount">Pole musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
-    <string name="time_reminder_type_hint">Przypomina o określonej porze dnia.</string>
-    <string name="interval_reminder_type_hint">Przypomina po upływie określonego czasu od ostatniego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
     <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
@@ -227,19 +225,22 @@
     <string name="sort">Sortuj</string>
     <string name="high_and_alarm">Wysoki + Alarm</string>
     <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
-    <string name="continuous">Ciągły</string>
-    <string name="daily">Codzienny</string>
     <string name="daily_from_to">Dzienny interwał od %1$s do %2$s</string>
     <string name="continuous_from">Ciągły interwał zaczynający się od %1$s</string>
     <string name="reminder_status">Status przypomnienia</string>
     <string name="dosing_instructions">Instrukcje dawkowania</string>
-    <string name="interval_type">Typ interwału</string>
     <string name="sample_instructions">Wypełnij przykładowymi instrukcjami</string>
-    <string name="daily_interval">Dzienny interwał</string>
     <string name="daily_start_time">Dzienny czas rozpoczęcia</string>
     <string name="daily_end_time">Dzienny czas zakończenia</string>
     <string name="remind_on_weekdays">Przypominaj w dni powszednie</string>
     <string name="remind_on_days_of_month">Przypominaj w dniach miesiąca</string>
     <string name="start_date">Data początkowa</string>
     <string name="end_date">Data końcowa</string>
+    <string name="windowed_interval_reminder">Przypomnienie o interwałach w oknie</string>
+    <string name="continuous_interval_reminder">Ciągłe przypomnienie o interwałach</string>
+    <string name="time_based_reminder_help">Ustaw określone godziny (np. 8:00) i skonfiguruj powtarzający się wzorzec. Pozwala to na precyzyjną kontrolę nad określonymi dniami tygodnia, dniami miesiąca lub złożonymi harmonogramami okresowymi (np. \"co 3 dni\").</string>
+    <string name="continuous_interval_reminder_help">Rozpocznij przypomnienie w oparciu o interwał czasowy (np. co 6 godzin) od określonego momentu. Ten wzorzec jest ciągły i ignoruje ograniczenia pory dnia, dopóki nie zostanie ręcznie dezaktywowany.</string>
+    <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno (np. od 9:00 do 21:00), w którym pierwsze przypomnienie jest zawsze o czasie rozpoczęcia. Kolejne przypomnienia uruchamiane są w stałych odstępach czasu, aż do osiągnięcia czasu zakończenia. Cały wzorzec resetuje się każdego dnia.</string>
+    <string name="linked_reminder">Przypomnienie połączone</string>
+    <string name="linked_reminder_help">Przypomnienie połączone to przypomnienie uzupełniające, które jest zaplanowane na określoną ilość czasu po wykonaniu przypomnienia podstawowego (przyjętego lub odłożonego). Jest to przydatne w przypadku leków, które należy przyjmować po kolei, z określonym opóźnieniem między nimi.</string>
 </resources>

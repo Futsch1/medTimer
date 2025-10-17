@@ -21,6 +21,15 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/reminderTypeIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/icon"
+                app:srcCompat="@drawable/calendar2_event" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editReminderTimeLayout"
                 android:layout_width="0dp"

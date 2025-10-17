@@ -114,7 +114,7 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": true,
           "intervalStartTimeOfDay": 1,
           "intervalEndTimeOfDay": 2,
-          "dailyInterval": false
+          "windowedInterval": false
         }
       ]
     }
@@ -255,7 +255,7 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "dailyInterval": false
+          "windowedInterval": false
         }
       ]
     },
@@ -303,7 +303,7 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "dailyInterval": false
+          "windowedInterval": false
         },
         {
           "reminderId": 2,
@@ -333,7 +333,7 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "dailyInterval": false
+          "windowedInterval": false
         }
       ]
     }

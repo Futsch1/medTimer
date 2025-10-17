@@ -20,7 +20,7 @@ class ReminderDataStore(
             "reminder_active" -> reminder.active
             "period_start_switch" -> reminder.periodStart != 0L
             "period_end_switch" -> reminder.periodEnd != 0L
-            "daily_interval" -> reminder.dailyInterval
+            "daily_interval" -> reminder.windowedInterval
             else -> defValue
         }
     }
@@ -47,7 +47,7 @@ class ReminderDataStore(
                 }
             }
 
-            "daily_interval" -> reminder.dailyInterval = value
+            "daily_interval" -> reminder.windowedInterval = value
         }
         medicineRepository.updateReminder(reminder)
     }

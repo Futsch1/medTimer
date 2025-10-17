@@ -196,8 +196,6 @@
     <string name="use_relative_date_time_summary">以相對日期／時間顯示提醒</string>
     <string name="use_relative_date_time">相對日期／時間</string>
     <string name="invalid_amount">必須輸入數字的數量，才能為此提醒啟用藥品庫存追蹤。</string>
-    <string name="time_reminder_type_hint">在一天中的特定時間提醒。</string>
-    <string name="interval_reminder_type_hint">在上一次提醒後經過指定時間再提醒。</string>
     <string name="sticky_on_lockscreen">鎖定畫面持續性提醒</string>
     <string name="sticky_on_lockscreen_summary">無法在鎖定畫面關閉提醒，只能從通知欄關閉</string>
     <string name="big_notifications">大型通知按鈕</string>
@@ -211,15 +209,11 @@
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>
     <string name="enable_notification_alarm_dialog">若要將提醒以鬧鐘形式顯示，請在以下選單中為 MedTimer 啟用此設定</string>
-    <string name="continuous">連續</string>
-    <string name="daily">每日</string>
     <string name="daily_from_to">每日間隔從 %1$s 到 %2$s</string>
     <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="reminder_status">提醒狀態</string>
     <string name="dosing_instructions">劑量說明</string>
-    <string name="interval_type">間隔類型</string>
     <string name="sample_instructions">填寫範例說明</string>
-    <string name="daily_interval">每日間隔</string>
     <string name="daily_start_time">每日開始時間</string>
     <string name="daily_end_time">每日結束時間</string>
     <string name="remind_on_weekdays">在平日提醒</string>
@@ -227,4 +221,11 @@
     <string name="start_date">開始日期</string>
     <string name="end_date">結束日期</string>
     <string name="cycle_reminder">重複提醒</string>
+    <string name="windowed_interval_reminder">窗口間隔提醒</string>
+    <string name="continuous_interval_reminder">連續間隔提醒</string>
+    <string name="time_based_reminder_help">設定特定時間（例如上午 8:00）並設定重複模式。這樣可以精確控制特定的工作日、月份中的日期或複雜的週期性排程（例如“每 3 天”）。</string>
+    <string name="continuous_interval_reminder_help">從指定時間點開始，根據時間間隔（例如每 6 小時）啟動提醒。此模式是連續的，忽略一天中的時間限制，直到手動停用為止。</string>
+    <string name="windowed_interval_reminder_help">定義每日活動窗口（例如上午 9 點至晚上 9 點），其中第一個提醒總是在開始時間。後續提醒會以固定間隔觸發，直到達到結束時間。整個模式每天重置。</string>
+    <string name="linked_reminder">連結提醒</string>
+    <string name="linked_reminder_help">連結提醒是在主要提醒被執行（已服用或延後）後一定時間安排的後續提醒。這對於需要按順序服用且藥物之間有特定延遲的藥物很有用。</string>
 </resources>

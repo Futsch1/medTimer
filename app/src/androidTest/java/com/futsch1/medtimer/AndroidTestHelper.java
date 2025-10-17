@@ -33,6 +33,7 @@ import java.util.Locale;
 public class AndroidTestHelper {
     public static void createReminder(String amount, LocalTime time) {
         clickOn(R.id.addReminder);
+        clickOn(R.id.timeBasedCard);
         writeTo(R.id.editAmount, amount);
 
         if (time != null) {
@@ -64,8 +65,8 @@ public class AndroidTestHelper {
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
         clickOn(com.google.android.material.R.id.material_minute_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
         closeKeyboard();
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
     }
 
     public static void setDate(Date date) {
@@ -109,9 +110,9 @@ public class AndroidTestHelper {
 
     public static void createIntervalReminder(String amount, int intervalMinutes) {
         clickOn(R.id.addReminder);
+        clickOn(R.id.continuousIntervalCard);
         writeTo(R.id.editAmount, amount);
 
-        clickOn(R.id.intervalBased);
         clickOn(R.id.intervalMinutes);
         writeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
 

@@ -82,13 +82,17 @@ class LinkedReminderAlgorithms {
     }
 
     private fun getTotalTimeInMinutes(reminder: Reminder, reminders: List<Reminder>): Int {
-        var total = reminder.timeInMinutes
+        var total = if (reminder.reminderType != Reminder.ReminderType.WINDOWED_INTERVAL) reminder.timeInMinutes else reminder.intervalStartTimeOfDay
         for (r in reminders) {
             if (r.reminderId == reminder.linkedReminderId) {
-                total += if (r.reminderType == Reminder.ReminderType.LINKED) {
-                    getTotalTimeInMinutes(r, reminders)
-                } else {
-                    r.timeInMinutes
+                total += when (r.reminderType) {
+                    Reminder.ReminderType.LINKED -> {
+                        getTotalTimeInMinutes(r, reminders)
+                    }
+
+                    else -> {
+                        r.timeInMinutes
+                    }
                 }
             }
         }
