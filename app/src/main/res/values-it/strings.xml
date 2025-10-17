@@ -237,5 +237,5 @@
     <string name="continuous_interval_reminder_help">Avvia un promemoria basato su un intervallo di tempo (ad esempio, ogni 6 ore) da un momento specificato. Questo schema è continuo, ignorando i vincoli di tempo del giorno, fino alla disattivazione manuale.</string>
     <string name="windowed_interval_reminder_help">Definisci una finestra attiva giornaliera (ad es. dalle 9:00 alle 21:00) in cui il primo promemoria è sempre all\'ora di inizio. I promemoria successivi si attivano a intervalli fissi fino al raggiungimento dell\'ora di fine. Lo schema completo si ripristina ogni giorno.</string>
     <string name="linked_reminder">Promemoria collegato</string>
-    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato attivato (preso o posticipato). Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
+    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato preso. Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
 </resources>

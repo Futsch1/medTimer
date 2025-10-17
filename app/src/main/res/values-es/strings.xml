@@ -237,5 +237,5 @@
     <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
     <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) donde el primer recordatorio es siempre a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta que se alcanza la hora de finalización. El patrón completo se reinicia todos los días.</string>
     <string name="linked_reminder">Recordatorio vinculado</string>
-    <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se acciona un recordatorio principal (ya sea que se tome o se posponga). Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
+    <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se tome un recordatorio principal. Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
 </resources>

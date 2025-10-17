@@ -237,5 +237,5 @@
     <string name="continuous_interval_reminder_help">Démarrez un rappel basé sur un intervalle de temps (par exemple, toutes les 6 heures) à partir d\'un moment précis. Ce modèle est continu, ignorant les contraintes de temps de la journée, jusqu\'à ce qu\'il soit désactivé manuellement.</string>
     <string name="windowed_interval_reminder_help">Définissez une fenêtre active quotidienne (par exemple, de 9 h à 21 h) où le premier rappel est toujours à l\'heure de début. Les rappels suivants se déclenchent à intervalles fixes jusqu\'à ce que l\'heure de fin soit atteinte. Le schéma complet se réinitialise chaque jour.</string>
     <string name="linked_reminder">Rappel lié</string>
-    <string name="linked_reminder_help">Un rappel lié est un rappel de suivi qui est programmé un certain temps après qu\'un rappel principal a été actionné (soit pris, soit mis en attente). Ceci est utile pour les médicaments qui doivent être pris en séquence, avec un délai spécifique entre eux.</string>
+    <string name="linked_reminder_help">Un rappel lié est un rappel de suivi qui est programmé un certain temps après qu\'un rappel principal a été pris. Ceci est utile pour les médicaments qui doivent être pris en séquence, avec un délai spécifique entre eux.</string>
 </resources>

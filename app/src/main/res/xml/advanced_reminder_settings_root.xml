@@ -12,6 +12,7 @@
     <Preference
         app:icon="@drawable/link"
         app:key="add_linked_reminder"
+        app:summary="@string/add_linked_reminder_summary"
         app:title="@string/add_linked_reminder" />
     <PreferenceCategory
         app:key="interval_category"
@@ -45,7 +46,8 @@
         <Preference
             android:icon="@drawable/repeat"
             app:key="cyclic_reminder"
-            app:title="@string/cycle_reminder" />
+            app:title="@string/cycle_reminder"
+            android:summary="@string/cyclic_reminder_summary"/>
         <MultiSelectListPreference
             android:icon="@drawable/calendar_day"
             app:entries="@array/days"
