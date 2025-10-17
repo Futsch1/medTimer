@@ -1,0 +1,34 @@
+Gyógyszeremlékeztetők és előzmények teljes offline adatvédelemmel
+
+Tartsd kézben a gyógyszereid kezelését a MedTimer-rel
+
+A MedTimer egy nyílt forráskódú gyógyszeremlékeztető alkalmazás, amely segít abban, hogy hatékonyan kezeld a gyógyszereidet és tablettáidat, miközben teljes mértékben te rendelkezel az érzékeny adataid felett.
+
+Rugalmas és személyre szabott emlékeztetők:
+
+- Kezelj korlátlan számú gyógyszert, egyedileg testreszabható emlékeztetőkkel és egyszerű alapbeállításokkal.
+- Hozz létre rugalmas emlékeztetőket szünetekkel és meghatározott napokkal (pl. fogamzásgátló tabletták esetében).
+- Hétvégi mód: késleltesd az emlékeztetőket egy meghatározott időpontra a kiválasztott napokon.
+- Szundi funkció: halaszd el az értesítéseket későbbre, vagy ismételd meg őket többször.
+- Adj hozzá extra adagokat bármikor.
+- Hozz létre időközönkénti emlékeztetőket, vagy egymást követő, intervallumokban megjelenő emlékeztetőket.
+
+Egyszerű és biztonságos adatkezelés:
+
+- Erősítsd meg vagy utasítsd el az emlékeztetőket a gyógyszerszedés pontos nyomon követéséhez.
+- Tekintsd meg a korábbi adagokat grafikonon és táblázatos nézetben.
+- Exportáld a gyógyszerszedési előzményeket CSV fájlba, hogy könnyen megőrizhesd vagy megoszthasd azokat egészségügyi szakemberrel.
+- Készíts biztonsági mentést vagy állítsd vissza a gyógyszerlistádat JSON fájlok segítségével.
+- Gyógyszerkészlet nyomon követése és elfogyásra figyelmeztető emlékeztetők.
+- Címkézd és szűrd a gyógyszereidet.
+
+Adatvédelem és offline hozzáférés:
+
+- Minden adat biztonságosan a készülékeden kerül tárolásra, teljes adatvédelmet és offline hozzáférést biztosítva.
+- Nincs szükség internetkapcsolatra – a gyógyszeremlékeztetőid mindig elérhetők.
+
+A MedTimer ingyenes alkalmazás, hirdetések nélkül.
+
+Tekintsd meg a projektet a GitHub-on: https://github.com/Futsch1/medTimer
+
+A grafikákat a https://hotpot.ai segítségével készítettük.
