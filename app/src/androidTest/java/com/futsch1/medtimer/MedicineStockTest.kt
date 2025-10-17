@@ -187,6 +187,7 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
 
         clickOn(R.id.addReminder)
+        clickOn(R.id.timeBasedCard)
         writeTo(R.id.editAmount, "something")
 
         assertErrorDisplayed(R.id.editAmount, R.string.invalid_amount)

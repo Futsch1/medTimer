@@ -21,26 +21,20 @@ class NewReminderTypeDialog(
 ) {
     private val dialog: Dialog = Dialog(context)
 
-    private enum class ReminderType {
-        TIME_BASED,
-        CONTINUOUS_INTERVAL,
-        WINDOWED_INTERVAL
-    }
-
-    private fun continueCreate(reminderType: ReminderType) {
+    private fun continueCreate(reminderType: Reminder.ReminderType) {
         val reminder = Reminder(medicine.medicineId)
         setDefaults(reminder)
         when (reminderType) {
-            ReminderType.TIME_BASED -> {
-                // Intentionally empty
-            }
-
-            ReminderType.CONTINUOUS_INTERVAL -> {
+            Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
                 reminder.intervalStart = Instant.now().epochSecond
             }
 
-            ReminderType.WINDOWED_INTERVAL -> {
+            Reminder.ReminderType.WINDOWED_INTERVAL -> {
                 reminder.windowedInterval = true
+            }
+
+            else -> {
+                // Intentionally empty
             }
         }
         dialog.dismiss()
@@ -55,13 +49,13 @@ class NewReminderTypeDialog(
         )
 
         dialog.findViewById<CardView>(R.id.timeBasedCard).setOnClickListener {
-            continueCreate(ReminderType.TIME_BASED)
+            continueCreate(Reminder.ReminderType.TIME_BASED)
         }
         dialog.findViewById<CardView>(R.id.continuousIntervalCard).setOnClickListener {
-            continueCreate(ReminderType.CONTINUOUS_INTERVAL)
+            continueCreate(Reminder.ReminderType.CONTINUOUS_INTERVAL)
         }
         dialog.findViewById<CardView>(R.id.windowedIntervalCard).setOnClickListener {
-            continueCreate(ReminderType.WINDOWED_INTERVAL)
+            continueCreate(Reminder.ReminderType.WINDOWED_INTERVAL)
         }
 
         dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {
