@@ -1,3 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tab_settings">Beállítások</string>
+    <string name="tab_overview">Áttekintés</string>
+    <string name="tab_medicine">Gyógyszer</string>
+    <string name="add_medicine">Gyógyszer hozzáadása</string>
+    <string name="medicine_name">Gyógyszer neve</string>
+    <string name="add_reminder">Emlékeztető hozzáadása</string>
+    <string name="delete">Törlés</string>
+    <string name="time">Idő</string>
+    <string name="dosage">Adagolás</string>
+    <string name="yes">Igen</string>
+    <string name="ok">Rendben</string>
+    <string name="cancel">Mégsem</string>
+    <string name="confirm">Megerősít</string>
+    <string name="are_you_sure_delete_medicine">Biztos törölni szeretnéd a gyógyszert?</string>
+    <string name="no_reminders">Nincs emlékeztető beállítva</string>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d emlékeztető\n%2$s</item>
+        <item quantity="other">%1$d emlékeztető\n%2$s</item>
+    </plurals>
+    <string name="notification_title">Gyógyszer emlékeztető</string>
+    <string name="taken">Bevéve</string>
+    <string name="skipped">Kihagyva</string>
+    <string name="recent_events">Legutóbbi események</string>
+    <string name="next_reminders">Következő emlékeztetők</string>
+    <string name="version">Verzió %s</string>
+    <string name="are_you_sure_delete_reminder">Biztosan törölni szeretnéd az emlékeztetőt?</string>
+    <string name="clear_events">Események törlése</string>
+    <string name="app_version">Alkalmazás verziója</string>
+    <string name="are_you_sure_delete_events">Biztosan törölni szeretnéd az összes eseményt?</string>
+    <string name="show_notifications">Értesítések megjelenítése</string>
+    <string name="twenty_four_hours">24 óra</string>
+    <string name="two_days">2 nap</string>
+    <string name="three_days">3 nap</string>
+    <string name="app_url">MedTimer a GitHubon</string>
+    <string name="color">Szín</string>
 </resources>
