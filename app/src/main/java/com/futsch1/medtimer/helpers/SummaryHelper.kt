@@ -21,7 +21,7 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             strings.add(linkedReminderString(reminder, context))
         }
 
-        Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
+        Reminder.ReminderType.CONTINUOUS_INTERVAL, Reminder.ReminderType.WINDOWED_INTERVAL -> {
             strings.add(intervalBasedReminderString(reminder, context))
         }
 
