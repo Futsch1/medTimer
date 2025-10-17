@@ -221,4 +221,11 @@
     <string name="start_date">開始日期</string>
     <string name="end_date">結束日期</string>
     <string name="cycle_reminder">重複提醒</string>
+    <string name="windowed_interval_reminder">窗口間隔提醒</string>
+    <string name="continuous_interval_reminder">連續間隔提醒</string>
+    <string name="time_based_reminder_help">設定特定時間（例如上午 8:00）並設定重複模式。這樣可以精確控制特定的工作日、月份中的日期或複雜的週期性排程（例如“每 3 天”）。</string>
+    <string name="continuous_interval_reminder_help">從指定時間點開始，根據時間間隔（例如每 6 小時）啟動提醒。此模式是連續的，忽略一天中的時間限制，直到手動停用為止。</string>
+    <string name="windowed_interval_reminder_help">定義每日活動窗口（例如上午 9 點至晚上 9 點），其中第一個提醒總是在開始時間。後續提醒會以固定間隔觸發，直到達到結束時間。整個模式每天重置。</string>
+    <string name="linked_reminder">連結提醒</string>
+    <string name="linked_reminder_help">連結提醒是在主要提醒被執行（已服用或延後）後一定時間安排的後續提醒。這對於需要按順序服用且藥物之間有特定延遲的藥物很有用。</string>
 </resources>

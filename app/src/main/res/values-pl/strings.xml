@@ -236,4 +236,11 @@
     <string name="remind_on_days_of_month">Przypominaj w dniach miesiąca</string>
     <string name="start_date">Data początkowa</string>
     <string name="end_date">Data końcowa</string>
+    <string name="windowed_interval_reminder">Przypomnienie o interwałach w oknie</string>
+    <string name="continuous_interval_reminder">Ciągłe przypomnienie o interwałach</string>
+    <string name="time_based_reminder_help">Ustaw określone godziny (np. 8:00) i skonfiguruj powtarzający się wzorzec. Pozwala to na precyzyjną kontrolę nad określonymi dniami tygodnia, dniami miesiąca lub złożonymi harmonogramami okresowymi (np. \"co 3 dni\").</string>
+    <string name="continuous_interval_reminder_help">Rozpocznij przypomnienie w oparciu o interwał czasowy (np. co 6 godzin) od określonego momentu. Ten wzorzec jest ciągły i ignoruje ograniczenia pory dnia, dopóki nie zostanie ręcznie dezaktywowany.</string>
+    <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno (np. od 9:00 do 21:00), w którym pierwsze przypomnienie jest zawsze o czasie rozpoczęcia. Kolejne przypomnienia uruchamiane są w stałych odstępach czasu, aż do osiągnięcia czasu zakończenia. Cały wzorzec resetuje się każdego dnia.</string>
+    <string name="linked_reminder">Przypomnienie połączone</string>
+    <string name="linked_reminder_help">Przypomnienie połączone to przypomnienie uzupełniające, które jest zaplanowane na określoną ilość czasu po wykonaniu przypomnienia podstawowego (przyjętego lub odłożonego). Jest to przydatne w przypadku leków, które należy przyjmować po kolei, z określonym opóźnieniem między nimi.</string>
 </resources>

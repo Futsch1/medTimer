@@ -226,4 +226,11 @@
     <string name="remind_on_days_of_month">Ayın günlerinde hatırlat</string>
     <string name="start_date">Başlangıç tarihi</string>
     <string name="end_date">Bitiş tarihi</string>
+    <string name="windowed_interval_reminder">Pencereli aralık hatırlatıcısı</string>
+    <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
+    <string name="time_based_reminder_help">Belirli zamanları (örneğin sabah 8:00) ayarlayın ve tekrar eden bir desen yapılandırın. Bu, belirli hafta günleri, ayın günleri veya karmaşık periyodik programlar (\"her 3 günde bir\" gibi) üzerinde hassas kontrol sağlar.</string>
+    <string name="continuous_interval_reminder_help">Belirtilen bir andan itibaren bir zaman aralığına (örneğin her 6 saatte bir) dayalı bir hatırlatıcı başlatın. Bu desen, manuel olarak devre dışı bırakılana kadar günün saati kısıtlamalarını göz ardı ederek süreklidir.</string>
+    <string name="windowed_interval_reminder_help">İlk hatırlatıcının her zaman başlangıç saatinde olduğu günlük bir aktif pencere (örneğin sabah 9\'dan akşam 9\'a kadar) tanımlayın. Sonraki hatırlatıcılar, bitiş saatine ulaşılana kadar sabit aralıklarla tetiklenir. Tam desen her gün sıfırlanır.</string>
+    <string name="linked_reminder">Bağlantılı hatırlatıcı</string>
+    <string name="linked_reminder_help">Bağlantılı bir hatırlatıcı, birincil bir hatırlatıcıya işlem yapıldıktan (alındıktan veya ertelendikten) belirli bir süre sonra planlanan bir takip hatırlatıcısıdır. Bu, aralarında belirli bir gecikme ile sırayla alınması gereken ilaçlar için kullanışlıdır.</string>
 </resources>

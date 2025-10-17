@@ -221,4 +221,11 @@
     <string name="remind_on_days_of_month">在每月的某几天提醒</string>
     <string name="start_date">开始日期</string>
     <string name="end_date">结束日期</string>
+    <string name="windowed_interval_reminder">窗口间隔提醒</string>
+    <string name="continuous_interval_reminder">连续间隔提醒</string>
+    <string name="time_based_reminder_help">设置特定时间（例如，上午 8:00）并配置重复模式。这样可以精确控制特定的工作日、月份的日期或复杂的周期性计划（例如“每 3 天”）。</string>
+    <string name="continuous_interval_reminder_help">从指定时刻开始，根据时间间隔（例如，每 6 小时）启动提醒。此模式是连续的，忽略一天中的时间限制，直到手动停用。</string>
+    <string name="windowed_interval_reminder_help">定义一个每日活动窗口（例如，上午 9 点到晚上 9 点），其中第一个提醒总是在开始时间。后续提醒会以固定的时间间隔触发，直到到达结束时间。整个模式每天都会重置。</string>
+    <string name="linked_reminder">关联提醒</string>
+    <string name="linked_reminder_help">关联提醒是在主提醒被执行（服用或打盹）后一定时间安排的后续提醒。这对于需要按顺序服用的药物非常有用，它们之间有特定的延迟。</string>
 </resources>

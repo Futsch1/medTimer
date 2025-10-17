@@ -229,6 +229,8 @@
     <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
     <string name="time_based_reminder_help">Legen Sie bestimmte Zeiten fest (z. B. 8:00 Uhr) und konfigurieren Sie ein wiederkehrendes Muster. Dies ermöglicht eine präzise Steuerung bestimmter Wochentage, Tage des Monats oder komplexer periodischer Zeitpläne (wie \'alle 3 Tage\').</string>
-    <string name="continuous_interval_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z. B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster ist kontinuierlich und ignoriert die Tageszeitbeschränkungen, bis es manuell deaktiviert wird.</string>
-    <string name="windowed_interval_help">Definieren Sie ein täglich aktives Fenster (z. B. 9 bis 21 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist. Das gesamte Muster wird jeden Tag zurückgesetzt.</string>
+    <string name="continuous_interval_reminder_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z. B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster ist kontinuierlich und ignoriert die Tageszeitbeschränkungen, bis es manuell deaktiviert wird.</string>
+    <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9 bis 21 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist. Das gesamte Muster wird jeden Tag zurückgesetzt.</string>
+    <string name="linked_reminder">Verknüpfte Erinnerung</string>
+    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer primären Erinnerung geplant wird (entweder eingenommen oder snoozed). Dies ist nützlich für Medikamente, die nacheinander eingenommen werden müssen, mit einer bestimmten Verzögerung zwischen ihnen.</string>
 </resources>

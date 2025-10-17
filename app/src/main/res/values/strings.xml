@@ -228,9 +228,11 @@
     <string name="remind_on_days_of_month">Remind on days of month</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="linked_reminder">Linked reminder</string>
     <string name="windowed_interval_reminder">Windowed interval reminder</string>
     <string name="continuous_interval_reminder">Continuous interval reminder</string>
     <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
-    <string name="continuous_interval_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
-    <string name="windowed_interval_help">Define a daily active window (e.g., 9 AM to 9 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
+    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9 AM to 9 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is actioned (either taken or snoozed). This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
 </resources>

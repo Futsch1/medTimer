@@ -226,4 +226,11 @@
     <string name="remind_on_days_of_month">Påminn om månadens dagar</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Slutdatum</string>
+    <string name="windowed_interval_reminder">Fönsterintervallpåminnelse</string>
+    <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
+    <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
+    <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
+    <string name="windowed_interval_reminder_help">Definiera ett dagligt aktivt fönster (t.ex. 09.00 till 21.00) där den första påminnelsen alltid är vid starttiden. Efterföljande påminnelser utlöses med fasta intervall tills sluttiden har nåtts. Hela mönstret återställs varje dag.</string>
+    <string name="linked_reminder">Länkad påminnelse</string>
+    <string name="linked_reminder_help">En länkad påminnelse är en uppföljningspåminnelse som schemaläggs en viss tid efter att en primär påminnelse har åtgärdats (antingen tagits eller snoozats). Detta är användbart för mediciner som måste tas i följd, med en specifik fördröjning mellan dem.</string>
 </resources>

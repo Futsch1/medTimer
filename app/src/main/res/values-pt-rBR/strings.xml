@@ -231,4 +231,11 @@
     <string name="remind_on_days_of_month">Lembrar nos dias do mês</string>
     <string name="start_date">Data de início</string>
     <string name="end_date">Data de término</string>
+    <string name="windowed_interval_reminder">Lembrete de intervalo com janela</string>
+    <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
+    <string name="time_based_reminder_help">Defina horários específicos (por exemplo, 8:00) e configure um padrão recorrente. Isso permite um controle preciso sobre dias específicos da semana, dias do mês ou programações periódicas complexas (como \'a cada 3 dias\').</string>
+    <string name="continuous_interval_reminder_help">Inicie um lembrete com base em um intervalo de tempo (por exemplo, a cada 6 horas) a partir de um momento especificado. Este padrão é contínuo, ignorando as restrições de horário do dia, até ser desativado manualmente.</string>
+    <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
+    <string name="linked_reminder">Lembrete vinculado</string>
+    <string name="linked_reminder_help">Um lembrete vinculado é um lembrete de acompanhamento que é agendado um certo tempo depois que um lembrete principal é acionado (seja tomado ou adiado). Isso é útil para medicamentos que precisam ser tomados em sequência, com um atraso específico entre eles.</string>
 </resources>
