@@ -140,6 +140,8 @@ class AdvancedReminderPreferencesRootFragment(
     }
 
     override fun customSetup(reminder: Reminder) {
+        findPreference<Preference>("add_linked_reminder")?.isVisible =
+            reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.reminderType == Reminder.ReminderType.LINKED
         findPreference<Preference>("interval_category")?.isVisible =
             reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
         findPreference<Preference>("interval_start_time")?.isVisible = reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL
