@@ -3,10 +3,14 @@ package com.futsch1.medtimer.overview
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 
@@ -37,6 +41,15 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
         }
         overviewEvents.addSource(scheduledReminders) {
             overviewEvents.value = getFiltered()
+        }
+
+        if (PreferenceManager.getDefaultSharedPreferences(application).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
+            viewModelScope.launch {
+                while (true) {
+                    delay(60_000)
+                    update()
+                }
+            }
         }
     }
 
