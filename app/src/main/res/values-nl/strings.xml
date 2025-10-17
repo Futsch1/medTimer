@@ -201,8 +201,6 @@
     <string name="use_relative_date_time_summary">Toon relatieve datum/tijd voor herinneringen</string>
     <string name="use_relative_date_time">Relatieve datum/tijd</string>
     <string name="invalid_amount">Het bedrag moet een getal bevatten om de medicijnvoorraad-tracking voor deze herinnering in te schakelen.</string>
-    <string name="time_reminder_type_hint">Herinnert op een specifiek tijdstip.</string>
-    <string name="interval_reminder_type_hint">Herinnert nadat een opgegeven tijd is verstreken na de laatste herinnering.</string>
     <string name="sticky_on_lockscreen">Aanhoudende herinneringen op het vergrendelscherm</string>
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden verwijderd vanaf het vergrendelscherm, alleen vanuit de meldingenlade</string>
     <string name="big_notifications">Grote meldingsknoppen</string>
@@ -217,19 +215,22 @@
     <string name="sort">Sorteer</string>
     <string name="high_and_alarm">Hoog + Alarm</string>
     <string name="enable_notification_alarm_dialog">Om herinneringen als alarmen weer te geven, schakelt u dit in voor MedTimer in het volgende menu</string>
-    <string name="continuous">Continu</string>
-    <string name="daily">Dagelijks</string>
     <string name="daily_from_to">Dagelijks interval van %1$s tot %2$s</string>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="reminder_status">Herinneringsstatus</string>
     <string name="dosing_instructions">Doseringsinstructies</string>
-    <string name="interval_type">Intervaltype</string>
     <string name="sample_instructions">Vullen met voorbeeldsinstructies</string>
-    <string name="daily_interval">Dagelijks interval</string>
     <string name="daily_start_time">Dagelijkse starttijd</string>
     <string name="daily_end_time">Dagelijkse eindtijd</string>
     <string name="remind_on_weekdays">Herinneren op weekdagen</string>
     <string name="remind_on_days_of_month">Herinneren op dagen van de maand</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Einddatum</string>
+    <string name="windowed_interval_reminder">Herinnering met interval binnen een tijdvenster</string>
+    <string name="continuous_interval_reminder">Continue interval herinnering</string>
+    <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
+    <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
+    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9.00 tot 21.00 uur) waar de eerste herinnering altijd op de starttijd is. Volgende herinneringen worden met vaste tussenpozen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag opnieuw ingesteld.</string>
+    <string name="linked_reminder">Gekoppelde herinnering</string>
+    <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt gepland (ingenomen of gesnoozed). Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
 </resources>

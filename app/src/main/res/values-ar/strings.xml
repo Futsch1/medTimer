@@ -198,7 +198,6 @@
     <string name="medicine_stock_string">تبقى %1$s</string>
     <string name="out_of_stock_notification_title">تذكير بنفاد مخزون الدواء</string>
     <string name="medicine_stock">مخزون الدواء</string>
-    <string name="interval_reminder_type_hint">يذكر بعد انقضاء وقت محدد بعد التذكير الأخير.</string>
     <string name="sticky_on_lockscreen">تذكيرات ثابتة على شاشة القفل</string>
     <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات</string>
     <string name="big_notifications">أزرار إشعار كبيرة</string>
@@ -226,7 +225,6 @@
     <string name="use_relative_date_time_summary">عرض التاريخ/الوقت النسبي للتذكيرات</string>
     <string name="use_relative_date_time">التاريخ/الوقت النسبي</string>
     <string name="invalid_amount">يجب أن تحتوي الكمية على رقم لتفعيل تتبع مخزون الدواء لهذا التذكير.</string>
-    <string name="time_reminder_type_hint">يذكر في وقت محدد من اليوم.</string>
     <string name="interval_time">فاصل %s</string>
     <string name="reminded">ذُكِر</string>
     <string name="all_taken">أخذت الكل (%s)</string>
@@ -237,19 +235,22 @@
     <string name="sort">فرز</string>
     <string name="high_and_alarm">إنذار عالي + إنذار</string>
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
-    <string name="continuous">مستمر</string>
-    <string name="daily">يومي</string>
     <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="reminder_status">حالة التذكير</string>
     <string name="dosing_instructions">تعليمات الجرعات</string>
-    <string name="interval_type">نوع الفاصل الزمني</string>
     <string name="sample_instructions">املأ بتعليمات نموذجية</string>
-    <string name="daily_interval">فاصل يومي</string>
     <string name="daily_start_time">وقت البدء اليومي</string>
     <string name="daily_end_time">وقت الانتهاء اليومي</string>
     <string name="remind_on_weekdays">تذكير في أيام الأسبوع</string>
     <string name="remind_on_days_of_month">تذكير في أيام الشهر</string>
     <string name="start_date">تاريخ البدء</string>
     <string name="end_date">تاريخ الانتهاء</string>
+    <string name="windowed_interval_reminder">تذكير بفاصل زمني محدد</string>
+    <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
+    <string name="time_based_reminder_help">عيّن أوقاتًا محددة (على سبيل المثال، 8:00 صباحًا) وقم بتكوين نمط متكرر. يتيح ذلك التحكم الدقيق في أيام الأسبوع المحددة أو أيام الشهر أو الجداول الدورية المعقدة (مثل \"كل 3 أيام\").</string>
+    <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>
+    <string name="windowed_interval_reminder_help">حدد نافذة نشطة يومية (على سبيل المثال، من 9 صباحًا إلى 9 مساءً) حيث يكون التذكير الأول دائمًا في وقت البدء. يتم إطلاق التذكيرات اللاحقة على فترات زمنية ثابتة حتى يتم الوصول إلى وقت الانتهاء. يتم إعادة تعيين النمط الكامل كل يوم.</string>
+    <string name="linked_reminder">تذكير مرتبط</string>
+    <string name="linked_reminder_help">التذكير المرتبط هو تذكير متابعة يتم جدولته بعد فترة زمنية معينة من اتخاذ إجراء بشأن تذكير أساسي (إما تم تناوله أو تأجيله). هذا مفيد للأدوية التي يجب تناولها بالتتابع، مع تأخير محدد بينها.</string>
 </resources>

@@ -42,7 +42,7 @@ fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRe
 }
 
 fun setReminderActive(reminder: Reminder, active: Boolean) {
-    if (!reminder.active && active && reminder.reminderType == Reminder.ReminderType.INTERVAL_BASED) {
+    if (!reminder.active && active && reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
         // If reminder is activated again and an interval reminder, reset the interval start date to the current day in seconds since epoch
         reminder.intervalStart = TimeHelper.changeTimeStampDate(reminder.intervalStart, LocalDate.now())
     }

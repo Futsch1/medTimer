@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.pressBack;
-import static com.adevinta.android.barista.assertion.BaristaHintAssertions.assertHint;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
@@ -134,11 +133,9 @@ public class ReminderTest extends BaseTestHelper {
         AndroidTestHelper.createIntervalReminder("1", 180);
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.string.interval_type);
         clickOn(R.string.interval_start_time);
         setDate(futureTime.getTime());
         setTime(futureTime.get(Calendar.HOUR_OF_DAY), futureTime.get(Calendar.MINUTE), false);
-        pressBack();
         clickOn(R.string.reminder_status);
         clickOn(R.string.active);
 
@@ -151,7 +148,6 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.string.activate_all);
 
         clickOn(R.id.openAdvancedSettings);
-        clickOn(R.string.interval_type);
         assertContains(DateFormat.getDateInstance(DateFormat.SHORT).format(nowTime.getTime()));
     }
 
@@ -204,10 +200,24 @@ public class ReminderTest extends BaseTestHelper {
 
         // Interval reminder (amount 3) 2 hours from now
         clickOn(R.id.addReminder);
+        clickOn(R.id.continuousIntervalCard);
         writeTo(R.id.editAmount, "3");
-        clickOn(R.id.intervalBased);
         clickOn(R.id.intervalHours);
         writeTo(R.id.editIntervalTime, "2");
+        closeKeyboard();
+        clickOn(R.id.createReminder);
+
+        // Windowed interval reminder (amount 4)
+        clickOn(R.id.addReminder);
+        clickOn(R.id.windowedIntervalCard);
+        writeTo(R.id.editAmount, "4");
+        closeKeyboard();
+        clickOn(R.id.editIntervalDailyStartTime);
+        setTime(20, 0, false);
+        clickOn(R.id.editIntervalDailyEndTime);
+        setTime(23, 30, false);
+        clickOn(R.id.intervalHours);
+        writeTo(R.id.editIntervalTime, "3");
         closeKeyboard();
         clickOn(R.id.createReminder);
 
@@ -218,19 +228,22 @@ public class ReminderTest extends BaseTestHelper {
         String expectedString = context.getString(R.string.every_interval, "2 " + context.getResources().getQuantityString(R.plurals.hours, 2));
         assertCustomAssertionAtPosition(R.id.reminderList, 0, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
-        assertHint(R.id.editReminderTime, R.string.time);
         expectedString = TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60);
         assertDisplayedAtPosition(R.id.reminderList, 1, R.id.editReminderTime, expectedString);
 
-        assertHint(R.id.editReminderTime, R.string.delay);
         expectedString = context.getString(R.string.linked_reminder_summary, TimeHelper.minutesToTimeString(context, reminder1Time.toSecondOfDay() / 60));
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString);
+
+        expectedString = context.getString(R.string.every_interval, "3 " + context.getResources().getQuantityString(R.plurals.hours, 3));
+        assertCustomAssertionAtPosition(R.id.reminderList, 3, R.id.reminderCardLayout, ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString))));
 
         clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
         pressBack();
         clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings);
         pressBack();
         clickListItemChild(R.id.reminderList, 2, R.id.openAdvancedSettings);
+        pressBack();
+        clickListItemChild(R.id.reminderList, 3, R.id.openAdvancedSettings);
         pressBack();
 
         // Check overview and next reminders
@@ -241,6 +254,8 @@ public class ReminderTest extends BaseTestHelper {
         assertContains(R.id.reminderText, expectedString);
 
         assertContains(R.id.reminderText, "Test (3)");
+
+        assertContains(R.id.reminderText, "Test (4)");
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         clickListItemChild(R.id.reminders, 1, R.id.stateButton);

@@ -105,7 +105,7 @@
     <string name="intro_reminder_description">Vælg en medicin for at redigere dens detaljer og påmindelser for forskellige doser du har brug for.\n\nPåmindelser kan være enten tids- eller intervalbaserede, og kan holdes til specifikke dage.</string>
     <string name="intro_notification_description">Når det er tid til en påmindelse, vil en notifikation dukke op og give dig mulighed for at markere en dosis som taget (ved at klikke på \"TAGET\" knappen), hoppet over (ved at afvise notifikationen), eller udskudt til senere (\"SNOOZE\").</string>
     <string name="intro_overview_description">På oversigtsskærmen kan du se kommende påmindelser og de sidste påmindelseshændelser. Hændelser kan redigeres ved at swipe til højre, og slettes ved at swipe til venstre.\n\nDu kan også manuelt tilføje ekstra doser af enten en allerede tilføjede medicin, eller en manuelt indskrevet medicin.</string>
-    <string name="intro_analysis_description">Appen opbevarer alle påmindelseshændelser. Du kan analysere dine tidligere doser på analyseskærmen, og eksportere din historie via kebab (de tre prikker) menuen. Din historie vil blive beholdt, selv hvis din medicin eller dine påmindelser slettes.</string>
+    <string name="intro_analysis_description">Appen opbevarer alle påmindelseshændelser. Du kan analysere dine tidligere doser på analyseskærmen, og eksportere din historie via kebab (de tre prikker) menuen. Din historie vil blive beholdt, selv hvis din medicin of dine påmindelser slettes.</string>
     <string name="show_intro">Vis app intro</string>
     <string name="are_you_sure_delete_reminder_event">Er du sikker på at du vil slette påmindelseshændelsen?</string>
     <string name="high">Høj</string>
@@ -201,8 +201,6 @@
     <string name="use_relative_date_time_summary">Vis relativ dato/tid for påmindelser</string>
     <string name="use_relative_date_time">Relativ dato/tid</string>
     <string name="invalid_amount">Antallet skal indeholde et tal for at tillade medicinbeholdningssporing for denne påmindelse.</string>
-    <string name="time_reminder_type_hint">Påminder på et specifikt tidspunkt på dagen.</string>
-    <string name="interval_reminder_type_hint">Påminder efter et specifikt stykke tid er gået efter den sidste påmindelse.</string>
     <string name="sticky_on_lockscreen">Vedvarende påmindelser på låseskærmen</string>
     <string name="sticky_on_lockscreen_summary">Påmindelser kan ikke afvises fra låseskærmen, kun fra notifikationsoversigten</string>
     <string name="big_notifications">Store notifikationsknapper</string>
@@ -216,19 +214,23 @@
     <string name="automatically_taken">Automatisk marker som taget</string>
     <string name="high_and_alarm">Høj + Alarm</string>
     <string name="enable_notification_alarm_dialog">For at kunne vise notifikationer som alarmer, skal dette tillades for MedTimer i den følgende menu</string>
-    <string name="continuous">Kontinuerlig</string>
-    <string name="daily">Daglige</string>
     <string name="daily_from_to">Dagligt interval fra %1$s til %2$s</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="reminder_status">Påmindelsesstatus</string>
     <string name="dosing_instructions">Doseringsvejledning</string>
-    <string name="interval_type">Intervaltype</string>
     <string name="sample_instructions">Udfyld med prøveinstruktioner</string>
-    <string name="daily_interval">Dagligt interval</string>
     <string name="daily_start_time">Daglig starttid</string>
     <string name="daily_end_time">Daglig sluttid</string>
     <string name="remind_on_weekdays">Påmind på hverdage</string>
     <string name="remind_on_days_of_month">Påmind på månedens dage</string>
     <string name="start_date">Start dato</string>
     <string name="end_date">Slut dato</string>
+    <string name="cycle_reminder">Cyklist påmindelse</string>
+    <string name="windowed_interval_reminder">Vinduesintervalpåmindelse</string>
+    <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
+    <string name="time_based_reminder_help">Indstil specifikke tidspunkter (f.eks. 8:00) og konfigurer et tilbagevendende mønster. Dette giver præcis kontrol over specifikke ugedage, månedsdage eller komplekse periodiske tidsplaner (som \'hver 3. dag\').</string>
+    <string name="continuous_interval_reminder_help">Start en påmindelse baseret på et tidsinterval (f.eks. hver 6. time) fra et bestemt tidspunkt. Dette mønster er kontinuerligt og ignorerer begrænsninger for tid på dagen, indtil det deaktiveres manuelt.</string>
+    <string name="windowed_interval_reminder_help">Definer et dagligt aktivt vindue (f.eks. fra kl. 9 til 21), hvor den første påmindelse altid er på starttidspunktet. Efterfølgende påmindelser udløses med faste intervaller, indtil sluttidspunktet er nået. Hele mønsteret nulstilles hver dag.</string>
+    <string name="linked_reminder">Linket påmindelse</string>
+    <string name="linked_reminder_help">En linket påmindelse er en opfølgende påmindelse, der planlægges et vist stykke tid efter en primær påmindelse er blevet actionet (enten taget eller snoozed). Dette er nyttigt for medicin, der skal tages i rækkefølge, med en bestemt forsinkelse imellem.</string>
 </resources>

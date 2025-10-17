@@ -6,7 +6,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class ReminderSchedulerDailyIntervalUnitTest {
+class ReminderSchedulerWindowedIntervalUnitTest {
     @Test
     fun testScheduleIntervalReminder() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler()
@@ -14,7 +14,7 @@ class ReminderSchedulerDailyIntervalUnitTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
         reminder.intervalStart = 1
-        reminder.dailyInterval = true
+        reminder.windowedInterval = true
         reminder.intervalStartsFromProcessed = false
         reminder.intervalStartTimeOfDay = 120
         reminder.intervalEndTimeOfDay = 700
@@ -61,6 +61,15 @@ class ReminderSchedulerDailyIntervalUnitTest {
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 601),
+            medicine.medicine,
+            reminder
+        )
+
+        reminderEventList[2].processedTimestamp = TestHelper.on(2, 601).epochSecond
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(3, 120),
             medicine.medicine,
             reminder
         )

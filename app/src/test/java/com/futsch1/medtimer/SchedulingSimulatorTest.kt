@@ -137,7 +137,7 @@ class SchedulingSimulatorTest {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
         reminder.intervalStart = 1
-        reminder.dailyInterval = true
+        reminder.windowedInterval = true
         reminder.intervalStartsFromProcessed = false
         reminder.intervalStartTimeOfDay = 120
         reminder.intervalEndTimeOfDay = 700

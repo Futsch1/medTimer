@@ -122,7 +122,7 @@ public class ReminderWork extends Worker {
             reminderEvent.iconId = medicine.medicine.iconId;
             reminderEvent.askForAmount = reminder.variableAmount;
             reminderEvent.tags = medicine.tags.stream().map(t -> t.name).collect((Collectors.toList()));
-            if (reminder.getReminderType() == Reminder.ReminderType.INTERVAL_BASED) {
+            if (reminder.getReminderType() == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.getReminderType() == Reminder.ReminderType.WINDOWED_INTERVAL) {
                 reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(medicineRepository, reminderEvent);
             } else {
                 reminderEvent.lastIntervalReminderTimeInMinutes = 0;

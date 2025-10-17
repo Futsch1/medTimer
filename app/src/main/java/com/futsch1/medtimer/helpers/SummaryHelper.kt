@@ -21,7 +21,7 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             strings.add(linkedReminderString(reminder, context))
         }
 
-        Reminder.ReminderType.INTERVAL_BASED -> {
+        Reminder.ReminderType.CONTINUOUS_INTERVAL, Reminder.ReminderType.WINDOWED_INTERVAL -> {
             strings.add(intervalBasedReminderString(reminder, context))
         }
 
@@ -46,7 +46,7 @@ fun intervalBasedReminderString(
 }
 
 fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
-    return if (reminder.dailyInterval) {
+    return if (reminder.windowedInterval) {
         context.getString(
             R.string.daily_from_to,
             TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong()),
@@ -131,7 +131,7 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
         ({ r: Reminder -> linkedReminderSummaryString(r, context) })
     ) + getRemindersSummary(
         reminders.stream()
-            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.INTERVAL_BASED },
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || r.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL },
         ({ r: Reminder -> intervalBasedReminderString(r, context) })
     )
 

@@ -191,8 +191,6 @@
     <string name="use_relative_date_time_summary">Покажи относителни време/дата за напомнянията</string>
     <string name="use_relative_date_time">Остонисетлни време/дата</string>
     <string name="invalid_amount">Количеството трябва да има число за следене на наличните лекарства за това напомняне.</string>
-    <string name="time_reminder_type_hint">Напомняне в определено време на деня.</string>
-    <string name="interval_reminder_type_hint">Напомни след изтичането на определено време след последното напомняне.</string>
     <string name="sticky_on_lockscreen">Постоняни напомняния при заключен екран</string>
     <string name="sticky_on_lockscreen_summary">Напомнянията не могат да се махат от заключен екран, само от списъка с напомняния</string>
     <string name="big_notifications">Големи бутони в известието</string>
@@ -216,19 +214,23 @@
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>
     <string name="display_settings">НАстройки на екрана</string>
-    <string name="continuous">Непрекъснат</string>
-    <string name="daily">Ежедневно</string>
     <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
     <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="reminder_status">Статус на напомнянето</string>
     <string name="dosing_instructions">Инструкции за дозиране</string>
-    <string name="interval_type">Тип интервал</string>
     <string name="sample_instructions">Попълнете с примерни инструкции</string>
-    <string name="daily_interval">Дневен интервал</string>
     <string name="daily_start_time">Ежедневно начално време</string>
     <string name="daily_end_time">Ежедневно крайно време</string>
     <string name="remind_on_weekdays">Напомняне в делнични дни</string>
     <string name="remind_on_days_of_month">Напомняне в дни от месеца</string>
     <string name="start_date">Начална дата</string>
     <string name="end_date">Крайна дата</string>
+    <string name="off">Изключено</string>
+    <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
+    <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
+    <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
+    <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>
+    <string name="windowed_interval_reminder_help">Определете дневен активен прозорец (напр. от 9 до 21 ч.), в който първото напомняне винаги е в началния час. Последващите напомняния се задействат на определени интервали до достигане на крайния час. Пълният модел се нулира всеки ден.</string>
+    <string name="linked_reminder">Свързано напомняне</string>
+    <string name="linked_reminder_help">Свързаното напомняне е последващо напомняне, което се планира за определено време след предприемане на действие по основно напомняне (прието или отложено). Това е полезно за лекарства, които трябва да се приемат последователно, със специфично забавяне между тях.</string>
 </resources>

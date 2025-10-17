@@ -208,8 +208,6 @@
     <string name="use_relative_date_time_summary">Показывайте относительную дату/время для напоминаний</string>
     <string name="use_relative_date_time">Относительная дата/время</string>
     <string name="invalid_amount">Сумма должна содержать число, чтобы включить отслеживание запасов лекарств для этого напоминания.</string>
-    <string name="time_reminder_type_hint">Напоминание в определенное время суток.</string>
-    <string name="interval_reminder_type_hint">Напоминает по истечении заданного времени после последнего напоминания.</string>
     <string name="sticky_on_lockscreen">Постоянные напоминания на экране блокировки</string>
     <string name="sticky_on_lockscreen_summary">Напоминания нельзя отменить на экране блокировки, только в ящике уведомлений</string>
     <string name="big_notifications">Большие кнопки уведомлений</string>
@@ -224,19 +222,22 @@
     <string name="sort">Сортировать</string>
     <string name="high_and_alarm">Высокий + тревога</string>
     <string name="enable_notification_alarm_dialog">Чтобы разрешить отображение напоминаний в качестве будильников, включите эту функцию для MedTimer в следующем меню</string>
-    <string name="continuous">Непрерывный</string>
-    <string name="daily">Ежедневно</string>
     <string name="daily_from_to">Ежедневный интервал от %1$s до %2$s</string>
     <string name="continuous_from">Непрерывный интервал, начиная с %1$s</string>
     <string name="reminder_status">Статус напоминания</string>
     <string name="dosing_instructions">Инструкции по дозированию</string>
-    <string name="interval_type">Тип интервала</string>
     <string name="sample_instructions">Заполнить примерными инструкциями</string>
-    <string name="daily_interval">Ежедневный интервал</string>
     <string name="daily_start_time">Ежедневное время начала</string>
     <string name="daily_end_time">Ежедневное время окончания</string>
     <string name="remind_on_weekdays">Напоминать в будние дни</string>
     <string name="remind_on_days_of_month">Напоминать в дни месяца</string>
     <string name="start_date">Дата начала</string>
     <string name="end_date">Дата окончания</string>
+    <string name="windowed_interval_reminder">Напоминание об интервале в окне</string>
+    <string name="continuous_interval_reminder">Напоминание о непрерывном интервале</string>
+    <string name="time_based_reminder_help">Установите определенное время (например, 8:00) и настройте повторяющийся шаблон. Это обеспечивает точный контроль над определенными днями недели, днями месяца или сложными периодическими расписаниями (например, «каждые 3 дня»).</string>
+    <string name="continuous_interval_reminder_help">Начните напоминание на основе временного интервала (например, каждые 6 часов) с указанного момента. Этот шаблон является непрерывным, игнорируя ограничения по времени суток, пока не будет отключен вручную.</string>
+    <string name="windowed_interval_reminder_help">Определите ежедневное активное окно (например, с 9:00 до 21:00), в котором первое напоминание всегда приходится на время начала. Последующие напоминания срабатывают через фиксированные промежутки времени до тех пор, пока не будет достигнуто время окончания. Полный шаблон сбрасывается каждый день.</string>
+    <string name="linked_reminder">Связанное напоминание</string>
+    <string name="linked_reminder_help">Связанное напоминание — это последующее напоминание, которое планируется через определенное время после выполнения основного напоминания (принятого или отложенного). Это полезно для лекарств, которые необходимо принимать последовательно, с определенной задержкой между ними.</string>
 </resources>

@@ -201,8 +201,6 @@
     <string name="use_relative_date_time_summary">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
     <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>
     <string name="invalid_amount">Der Betrag muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>
-    <string name="time_reminder_type_hint">Erinnert zu einer bestimmten Tageszeit.</string>
-    <string name="interval_reminder_type_hint">Erinnert nach einer bestimmten Zeit, die nach der letzten Erinnerung vergangen ist.</string>
     <string name="sticky_on_lockscreen">Dauerhafte Erinnerungen auf dem Sperrbildschirm</string>
     <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht über den Sperrbildschirm, sondern nur über die Benachrichtigungsleiste verworfen werden</string>
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
@@ -217,19 +215,22 @@
     <string name="sort">Sort</string>
     <string name="high_and_alarm">Hoch + Alarm</string>
     <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktivieren Sie dies für MedTimer im folgenden Menü</string>
-    <string name="continuous">Kontinuierlich</string>
-    <string name="daily">Täglich</string>
     <string name="daily_from_to">Tägliches Intervall von %1$s bis %2$s</string>
     <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
     <string name="reminder_status">Erinnerungsstatus</string>
     <string name="dosing_instructions">Dosierungsanweisungen</string>
-    <string name="interval_type">Intervalltyp</string>
     <string name="sample_instructions">Beispielanweisungen einsetzen</string>
-    <string name="daily_interval">Tägliches Intervall</string>
     <string name="daily_start_time">Tägliche Startzeit</string>
     <string name="daily_end_time">Tägliche Endzeit</string>
     <string name="remind_on_weekdays">An Wochentagen erinnern</string>
     <string name="remind_on_days_of_month">An Tagen des Monats erinnern</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Enddatum</string>
+    <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
+    <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
+    <string name="time_based_reminder_help">Legen Sie bestimmte Zeiten fest (z. B. 8:00 Uhr) und konfigurieren Sie ein wiederkehrendes Muster. Dies ermöglicht eine präzise Steuerung bestimmter Wochentage, Tage des Monats oder komplexer periodischer Zeitpläne (wie \'alle 3 Tage\').</string>
+    <string name="continuous_interval_reminder_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z. B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster ist kontinuierlich und ignoriert die Tageszeitbeschränkungen, bis es manuell deaktiviert wird.</string>
+    <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9 bis 21 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist. Das gesamte Muster wird jeden Tag zurückgesetzt.</string>
+    <string name="linked_reminder">Verknüpfte Erinnerung</string>
+    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer primären Erinnerung geplant wird (entweder eingenommen oder snoozed). Dies ist nützlich für Medikamente, die nacheinander eingenommen werden müssen, mit einer bestimmten Verzögerung zwischen ihnen.</string>
 </resources>
