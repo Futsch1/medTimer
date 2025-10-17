@@ -14,7 +14,7 @@ for l in "${locales[@]}"; do
 	for i in $(seq 0 4); do
 		if [ -d ./app/src/main/res/drawable-"${l}" ]; then
 			cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l}"/intro_"${names[$i]}".png
-		elif [ -d ./app/src/main/res/drawable-"${l:0:2}"-r"${l:3:5}" ] ; then
+		elif [ -d ./app/src/main/res/drawable-"${l:0:2}"-r"${l:3:5}" ]; then
 			cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l:0:2}"-r"${l:3:5}"/intro_"${names[$i]}".png
 		else
 			cp -f -r ./fastlane/metadata/android/"${l}"/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable-"${l:0:2}"/intro_"${names[$i]}".png
