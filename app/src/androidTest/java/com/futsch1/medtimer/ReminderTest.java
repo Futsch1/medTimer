@@ -29,7 +29,6 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 import com.futsch1.medtimer.helpers.TimeHelper;
 
@@ -181,7 +180,7 @@ public class ReminderTest extends BaseTestHelper {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     public void reminderTypeTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -212,6 +211,7 @@ public class ReminderTest extends BaseTestHelper {
         clickOn(R.id.addReminder);
         clickOn(R.id.windowedIntervalCard);
         writeTo(R.id.editAmount, "4");
+        closeKeyboard();
         clickOn(R.id.editIntervalDailyStartTime);
         setTime(20, 0, false);
         clickOn(R.id.editIntervalDailyEndTime);
