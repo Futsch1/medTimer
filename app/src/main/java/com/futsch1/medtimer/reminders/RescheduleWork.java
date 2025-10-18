@@ -118,7 +118,7 @@ public class RescheduleWork extends Worker {
             }
 
             Log.i(LogTags.SCHEDULER,
-                    String.format("Scheduled reminder for %s/%d to %s",
+                    String.format("Scheduled reminder for %s/rID %d to %s",
                             reminderNotificationData.medicineName,
                             reminderNotificationData.reminderId,
                             timestamp));
@@ -128,7 +128,7 @@ public class RescheduleWork extends Worker {
         } else {
             // Immediately remind
             Log.i(LogTags.SCHEDULER,
-                    String.format("Scheduling reminder for %s/%d now",
+                    String.format("Scheduling reminder for %s/rID %d now",
                             reminderNotificationData.medicineName,
                             reminderNotificationData.reminderId));
             ZonedDateTime reminderDateTime = timestamp.atZone(ZoneId.systemDefault());

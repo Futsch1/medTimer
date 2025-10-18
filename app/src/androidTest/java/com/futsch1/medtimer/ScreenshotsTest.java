@@ -46,6 +46,7 @@ public class ScreenshotsTest extends BaseTestHelper {
 
         openMenu();
         clickOn(R.string.generate_test_data);
+        sleep(1_000);
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);

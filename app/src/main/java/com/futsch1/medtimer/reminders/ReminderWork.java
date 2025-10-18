@@ -46,7 +46,6 @@ public class ReminderWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i(LogTags.REMINDER, "Do reminder work");
         Data inputData = getInputData();
 
         medicineRepository = new MedicineRepository((Application) getApplicationContext());
@@ -66,7 +65,7 @@ public class ReminderWork extends Worker {
         int reminderId = inputData.getInt(EXTRA_REMINDER_ID, 0);
         Reminder reminder = medicineRepository.getReminder(reminderId);
         if (reminder == null) {
-            Log.e(LogTags.REMINDER, String.format("Could not find reminder %d in database", reminderId));
+            Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderId));
         }
         return reminder;
     }
@@ -84,6 +83,7 @@ public class ReminderWork extends Worker {
                         medicineRepository.getReminderEvent(reminderEventId);
 
         if (reminderEvent != null && medicine != null) {
+            Log.i(LogTags.REMINDER, String.format("Process reID %d for rID %d", reminderEvent.reminderEventId, reminderEvent.reminderId));
             performActionsOfReminder(reminder, reminderEvent, medicine, reminderDateTime);
             r = Result.success();
         }
@@ -103,7 +103,7 @@ public class ReminderWork extends Worker {
         if (reminder.automaticallyTaken) {
             NotificationAction.processReminderEvent(context, ReminderEvent.ReminderStatus.TAKEN, reminderEvent, medicineRepository);
 
-            Log.i(LogTags.REMINDER, String.format("Mark reminder %d as automatically taken for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+            Log.i(LogTags.REMINDER, String.format("Mark reminder reID %d as automatically taken for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
         } else {
             notificationAction(reminder, reminderEvent, medicine, reminderDateTime);
         }
@@ -148,7 +148,7 @@ public class ReminderWork extends Worker {
             ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
         }
 
-        Log.i(LogTags.REMINDER, String.format("Show reminder event %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+        Log.i(LogTags.REMINDER, String.format("Show reminder event reID %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
     }
 
     private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
