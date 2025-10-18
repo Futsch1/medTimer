@@ -116,7 +116,7 @@ class ReminderViewHolder private constructor(
         var iconId: Int
         when (reminder!!.reminderType) {
             ReminderType.TIME_BASED -> {
-                iconId = R.drawable.calendar2_event
+                iconId = R.drawable.calendar_event
                 titleText = R.string.time_based_reminder
                 helpText = R.string.time_based_reminder_help
             }

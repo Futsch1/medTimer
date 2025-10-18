@@ -145,7 +145,7 @@
                 android:contentDescription="@string/create_calendar_entry"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                app:icon="@drawable/calendar2_event"
+                app:icon="@drawable/calendar_event"
                 app:iconPadding="0dp" />
         </LinearLayout>
 
