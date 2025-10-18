@@ -86,7 +86,7 @@ class ReminderViewHolder private constructor(
     }
 
     private fun setupTimeEditor() {
-        if (reminder!!.reminderType != ReminderType.CONTINUOUS_INTERVAL && reminder!!.reminderType != ReminderType.WINDOWED_INTERVAL) {
+        if (!reminder!!.isInterval) {
             @StringRes val textId = if (reminder!!.reminderType == ReminderType.TIME_BASED) R.string.time else R.string.delay
             editTimeLayout.setHint(textId)
             timeEditor = TimeEditor(fragmentActivity, editTime, reminder!!.timeInMinutes, { minutes: Int? ->
