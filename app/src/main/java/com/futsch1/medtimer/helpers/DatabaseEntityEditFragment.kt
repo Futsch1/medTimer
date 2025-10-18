@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
 import com.google.gson.Gson
 
 
@@ -25,16 +24,6 @@ class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medic
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
         medicineViewModel.medicineRepository.updateMedicine(entity)
-    }
-}
-
-class ReminderEntityInterface : DatabaseEntityEditFragment.EntityInterface<Reminder> {
-    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Reminder? {
-        return medicineViewModel.medicineRepository.getReminder(id)
-    }
-
-    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Reminder) {
-        medicineViewModel.medicineRepository.updateReminder(entity)
     }
 }
 
