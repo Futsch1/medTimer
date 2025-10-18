@@ -45,7 +45,6 @@
     <string name="after_meal">efter måltidet</string>
     <string name="time_before_meal">x minutter før måltidet</string>
     <string name="time_after">x timer efter medicin y</string>
-    <string name="instructions_label">Yderligere instruktioner (f.eks. før måltider)</string>
     <string name="medicine_data">Medicindata</string>
     <string name="export_csv">Eksporter som CSV</string>
     <string name="export_pdf">Exporter som PDF</string>

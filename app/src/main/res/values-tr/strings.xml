@@ -50,7 +50,6 @@
     <string name="after_meal">yemekten sonra</string>
     <string name="time_before_meal">yemekten x dakika önce</string>
     <string name="time_after">ilacın y alınmasından x saat sonra</string>
-    <string name="instructions_label">Ek talimatlar (örn. yemeklerden önce)</string>
     <string name="medicine_data">İlaç verisi</string>
     <string name="export_csv">CSV olarak dışa aktar</string>
     <string name="export_pdf">PDF olarak dışa aktar</string>

@@ -134,7 +134,7 @@
     <fragment
         android:id="@+id/advancedReminderPreferencesInstructionsFragment"
         android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesInstructionsFragment"
-        android:label="@string/instructions_label">
+        android:label="@string/dosing_instructions">
         <argument
             android:name="reminderId"
             app:argType="integer" />

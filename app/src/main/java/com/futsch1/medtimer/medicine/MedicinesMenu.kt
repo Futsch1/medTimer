@@ -1,22 +1,21 @@
 package com.futsch1.medtimer.medicine
 
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.setAllRemindersActive
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MedicinesMenu(
     private val medicineViewModel: MedicineViewModel,
-    private val thread: HandlerThread
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
-
-    lateinit var medicinesList: List<FullMedicine>
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines, menu)
@@ -31,12 +30,9 @@ class MedicinesMenu(
     }
 
     private fun setRemindersActive(active: Boolean) {
-        val handler = Handler(thread.getLooper())
-        handler.post {
-            for (medicine in medicinesList) {
-                val reminders: List<Reminder> =
-                    medicineViewModel.medicineRepository.getReminders(medicine.medicine.medicineId)
-                com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineViewModel.medicineRepository, active)
+        medicineViewModel.viewModelScope.launch(dispatcher) {
+            for (medicine in medicineViewModel.medicineRepository.medicines) {
+                setAllRemindersActive(medicine, medicineViewModel.medicineRepository, active)
             }
         }
     }
@@ -55,5 +51,4 @@ class MedicinesMenu(
             }
         }
     }
-
 }

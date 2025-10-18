@@ -1,163 +1,163 @@
-package com.futsch1.medtimer.medicine;
+package com.futsch1.medtimer.medicine
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.OptionsMenu
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.helpers.DeleteHelper
+import com.futsch1.medtimer.helpers.SimpleIdlingResource
+import com.futsch1.medtimer.helpers.SwipeHelper
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.text.Editable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : Fragment() {
+    private var idlingResource: SimpleIdlingResource? = null
+    private var medicineViewModel: MedicineViewModel? = null
+    private var adapter: MedicineViewAdapter? = null
+    private var optionsMenu: OptionsMenu? = null
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.OptionsMenu;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.helpers.DeleteHelper;
-import com.futsch1.medtimer.helpers.SimpleIdlingResource;
-import com.futsch1.medtimer.helpers.SwipeHelper;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-public class MedicinesFragment extends Fragment {
-    private SimpleIdlingResource idlingResource;
-    @SuppressWarnings("java:S1450")
-    private MedicineViewModel medicineViewModel;
-    @SuppressWarnings("java:S1450")
-    private MedicineViewAdapter adapter;
-    private HandlerThread thread;
-    private OptionsMenu optionsMenu = null;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.thread = new HandlerThread("GetSummary");
-        this.thread.start();
-        idlingResource = new SimpleIdlingResource(MedicinesFragment.class.getName());
-        idlingResource.setBusy();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
+        idlingResource!!.setBusy()
 
         // Get a new or existing ViewModel from the ViewModelProvider.
-        medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
+        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
-        optionsMenu = new OptionsMenu(this,
-                medicineViewModel,
-                NavHostFragment.findNavController(this), false);
+        optionsMenu = OptionsMenu(
+            this,
+            medicineViewModel,
+            NavHostFragment.findNavController(this), false
+        )
 
-        adapter = new MedicineViewAdapter(thread, requireActivity(), medicineViewModel.medicineRepository);
+        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel!!.medicineRepository)
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false);
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false)
         // Medicine recycler
-        RecyclerView recyclerView = fragmentView.findViewById(R.id.medicineList);
+        val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.medicineList)
 
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
+        recyclerView.setAdapter(adapter)
+        recyclerView.setLayoutManager(LinearLayoutManager(fragmentView.context))
 
         // Swipe to delete
-        ItemTouchHelper itemTouchHelper = SwipeHelper.createSwipeHelper(requireContext(), viewHolder -> deleteItem(requireContext(), viewHolder.getItemId(), viewHolder.getBindingAdapterPosition()), adapter);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        val itemTouchHelper = SwipeHelper.createSwipeHelper(
+            requireContext(),
+            { viewHolder: RecyclerView.ViewHolder? ->
+                deleteItem(
+                    requireContext(),
+                    viewHolder!!.itemId,
+                    viewHolder.getBindingAdapterPosition()
+                )
+            },
+            adapter
+        )
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        postponeEnterTransition();
+        postponeEnterTransition()
 
-        setupAddMedicineButton(fragmentView);
+        setupAddMedicineButton(fragmentView)
 
-        MedicinesMenu medicinesMenu = new MedicinesMenu(medicineViewModel, thread);
-        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner());
+        val medicinesMenu = MedicinesMenu(medicineViewModel!!)
+        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
 
         // Connect view model to recycler view adapter
-        medicineViewModel.getMedicines().observe(getViewLifecycleOwner(), l -> {
-            adapter.submitList(l);
-            medicinesMenu.medicinesList = l;
-            startPostponedEnterTransition();
-            idlingResource.setIdle();
-        });
+        medicineViewModel!!.medicines.observe(getViewLifecycleOwner(), Observer { l: List<FullMedicine> ->
+            adapter!!.submitList(l)
+            startPostponedEnterTransition()
+            idlingResource!!.setIdle()
+        })
 
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
+        requireActivity().addMenuProvider(optionsMenu!!, getViewLifecycleOwner())
 
-        return fragmentView;
+        return fragmentView
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (thread != null) {
-            thread.quit();
-        }
+    override fun onDestroy() {
+        super.onDestroy()
         if (idlingResource != null) {
-            idlingResource.destroy();
+            idlingResource!!.destroy()
         }
         if (optionsMenu != null) {
-            optionsMenu.onDestroy();
+            optionsMenu!!.onDestroy()
         }
     }
 
-    private void deleteItem(Context context, long itemId, int adapterPosition) {
-        DeleteHelper deleteHelper = new DeleteHelper(context);
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, () -> medicineViewModel.medicineRepository.deleteMedicine((int) itemId), () -> adapter.notifyItemChanged(adapterPosition));
+    private fun deleteItem(context: Context?, itemId: Long, adapterPosition: Int) {
+        val deleteHelper = DeleteHelper(context)
+        deleteHelper.deleteItem(
+            R.string.are_you_sure_delete_medicine,
+            { medicineViewModel!!.medicineRepository.deleteMedicine(itemId.toInt()) },
+            { adapter!!.notifyItemChanged(adapterPosition) })
     }
 
-    private void setupAddMedicineButton(View fragmentView) {
-        ExtendedFloatingActionButton fab = fragmentView.findViewById(R.id.addMedicine);
-        fab.setOnClickListener(view -> {
-            TextInputLayout textInputLayout = new TextInputLayout(requireContext());
-            TextInputEditText editText = new TextInputEditText(requireContext());
-            editText.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-            editText.setHint(R.string.medicine_name);
-            editText.setSingleLine();
-            editText.setId(R.id.medicineName);
-            textInputLayout.addView(editText);
+    private fun setupAddMedicineButton(fragmentView: View) {
+        val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addMedicine)
+        fab.setOnClickListener { view: View? ->
+            val textInputLayout = TextInputLayout(requireContext())
+            val editText = TextInputEditText(requireContext())
+            editText.setLayoutParams(LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            editText.setHint(R.string.medicine_name)
+            editText.setSingleLine()
+            editText.setId(R.id.medicineName)
+            textInputLayout.addView(editText)
 
-            AlertDialog.Builder builder = getAlertBuilder(textInputLayout, editText);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
+            val builder = getAlertBuilder(textInputLayout, editText)
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
-    @NonNull
-    private AlertDialog.Builder getAlertBuilder(TextInputLayout textInputLayout, TextInputEditText editText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(textInputLayout);
-        builder.setTitle(R.string.add_medicine);
-        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-            Editable e = editText.getText();
+    private fun getAlertBuilder(textInputLayout: TextInputLayout?, editText: TextInputEditText): AlertDialog.Builder {
+        val builder = AlertDialog.Builder(context)
+        builder.setView(textInputLayout)
+        builder.setTitle(R.string.add_medicine)
+        builder.setPositiveButton(R.string.ok) { dialog: DialogInterface?, which: Int ->
+            val e = editText.getText()
             if (e != null) {
-                new Handler(thread.getLooper()).post(() -> {
-                    double highestSortOrder = medicineViewModel.medicineRepository.getHighestMedicineSortOrder();
-                    Medicine medicine = new Medicine(e.toString().trim());
-                    medicine.sortOrder = highestSortOrder + 1;
-                    int medicineId = (int) medicineViewModel.medicineRepository.insertMedicine(medicine);
-                    requireActivity().runOnUiThread(() -> navigateToMedicineId(medicineId));
-                });
+                lifecycleScope.launch(dispatcher) {
+                    val highestSortOrder = medicineViewModel!!.medicineRepository.highestMedicineSortOrder
+                    val medicine = Medicine(e.toString().trim { it <= ' ' })
+                    medicine.sortOrder = highestSortOrder + 1
+                    val medicineId = medicineViewModel!!.medicineRepository.insertMedicine(medicine).toInt()
+                    requireActivity().runOnUiThread { navigateToMedicineId(medicineId) }
+                }
             }
-        });
-        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
-        return builder;
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog: DialogInterface?, which: Int -> dialog!!.dismiss() }
+        return builder
     }
 
-    private void navigateToMedicineId(int medicineId) {
-        NavController navController = Navigation.findNavController(this.requireView());
-        MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicineId
-        );
-        navController.navigate(action);
+    private fun navigateToMedicineId(medicineId: Int) {
+        val navController = findNavController(this.requireView())
+        val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
+            medicineId
+        )
+        navController.navigate(action)
     }
 }

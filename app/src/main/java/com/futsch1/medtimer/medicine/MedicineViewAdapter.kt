@@ -1,87 +1,70 @@
-package com.futsch1.medtimer.medicine;
+package com.futsch1.medtimer.medicine
+
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
+import com.futsch1.medtimer.medicine.MedicineViewHolder.Companion.create
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Collections
 
 
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.view.ViewGroup;
+class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: MedicineRepository, val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
+    IdlingListAdapter<FullMedicine, MedicineViewHolder?>(MedicineDiff()), MovedCallback {
+    private val activity: FragmentActivity
+    private val medicineRepository: MedicineRepository
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DiffUtil;
-
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.helpers.IdlingListAdapter;
-import com.futsch1.medtimer.helpers.SwipeHelper;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class MedicineViewAdapter extends IdlingListAdapter<FullMedicine, MedicineViewHolder> implements SwipeHelper.MovedCallback {
-
-    private final HandlerThread thread;
-    private final FragmentActivity activity;
-    private final MedicineRepository medicineRepository;
-
-    public MedicineViewAdapter(HandlerThread thread, FragmentActivity activity, @NotNull MedicineRepository medicineRepository) {
-        super(new MedicineDiff());
-        setHasStableIds(true);
-        this.thread = thread;
-        this.activity = activity;
-        this.medicineRepository = medicineRepository;
+    init {
+        setHasStableIds(true)
+        this.activity = activity
+        this.medicineRepository = medicineRepository
     }
 
     // Create new views (invoked by the layout manager)
-    @NonNull
-    @Override
-    public MedicineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return MedicineViewHolder.create(parent, activity, thread);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
+        return create(parent, activity)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
-        FullMedicine current = getItem(position);
-        holder.bind(current);
+    override fun onBindViewHolder(holder: MedicineViewHolder, position: Int) {
+        val current = getItem(position)
+        holder.bind(current)
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).medicine.medicineId;
+    override fun getItemId(position: Int): Long {
+        return getItem(position).medicine.medicineId.toLong()
     }
 
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-        List<FullMedicine> list = new ArrayList<>(getCurrentList());
+    override fun onMoved(fromPosition: Int, toPosition: Int) {
+        val list: MutableList<FullMedicine?> = ArrayList(currentList)
         if (toPosition != -1) {
-            Collections.swap(list, fromPosition, toPosition);
-            submitList(list);
+            Collections.swap(list, fromPosition, toPosition)
+            submitList(list)
         }
     }
 
-    @Override
-    public void onMoveCompleted(int fromPosition, int toPosition) {
+    override fun onMoveCompleted(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
-            new Handler(thread.getLooper()).post(() -> medicineRepository.moveMedicine(fromPosition, toPosition)
-            );
+            activity.lifecycleScope.launch(dispatcher) {
+                medicineRepository.moveMedicine(fromPosition, toPosition)
+            }
         }
     }
 
-    public static class MedicineDiff extends DiffUtil.ItemCallback<FullMedicine> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem.medicine.medicineId == newItem.medicine.medicineId;
+    class MedicineDiff : DiffUtil.ItemCallback<FullMedicine?>() {
+        override fun areItemsTheSame(oldItem: FullMedicine, newItem: FullMedicine): Boolean {
+            return oldItem.medicine.medicineId == newItem.medicine.medicineId
         }
 
-        @Override
-        public boolean areContentsTheSame(@NonNull FullMedicine oldItem, @NonNull FullMedicine newItem) {
-            return oldItem.equals(newItem);
+        override fun areContentsTheSame(oldItem: FullMedicine, newItem: FullMedicine): Boolean {
+            return oldItem == newItem
         }
     }
-
 }
 

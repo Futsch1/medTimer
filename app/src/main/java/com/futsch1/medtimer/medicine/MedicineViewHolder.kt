@@ -1,125 +1,154 @@
-package com.futsch1.medtimer.medicine;
+package com.futsch1.medtimer.medicine
 
-import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.helpers.DeleteHelper
+import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockText
+import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.helpers.getActiveReminders
+import com.futsch1.medtimer.helpers.remindersSummary
+import com.futsch1.medtimer.helpers.setAllRemindersActive
+import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.chip.Chip
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
+class MedicineViewHolder private constructor(
+    holderItemView: View,
+    private val activity: FragmentActivity,
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) :
+    RecyclerView.ViewHolder(holderItemView) {
+    private val medicineNameView: TextView = holderItemView.findViewById(R.id.medicineName)
+    private val remindersSummaryView: TextView = holderItemView.findViewById(R.id.remindersSummary)
+    private val tags: FlexboxLayout = holderItemView.findViewById(R.id.tags)
 
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.Tag;
-import com.futsch1.medtimer.helpers.MedicineHelper;
-import com.futsch1.medtimer.helpers.ReminderHelperKt;
-import com.futsch1.medtimer.helpers.SummaryHelperKt;
-import com.futsch1.medtimer.helpers.ViewColorHelper;
-import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.material.chip.Chip;
+    fun bind(medicine: FullMedicine) {
+        medicineNameView.text = getMedicineNameWithStockText(itemView.context, medicine.medicine)
+        setupSummary(medicine)
 
-import java.util.Arrays;
-import java.util.List;
-
-public class MedicineViewHolder extends RecyclerView.ViewHolder {
-    private final TextView medicineNameView;
-    private final TextView remindersSummaryView;
-    private final FlexboxLayout tags;
-    private final HandlerThread thread;
-    private final FragmentActivity activity;
-
-    private MedicineViewHolder(View holderItemView, FragmentActivity activity, HandlerThread thread) {
-        super(holderItemView);
-        medicineNameView = holderItemView.findViewById(R.id.medicineName);
-        remindersSummaryView = holderItemView.findViewById(R.id.remindersSummary);
-        tags = holderItemView.findViewById(R.id.tags);
-        this.thread = thread;
-        this.activity = activity;
-    }
-
-    static MedicineViewHolder create(ViewGroup parent, FragmentActivity activity, HandlerThread thread) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_medicine, parent, false);
-        return new MedicineViewHolder(view, activity, thread);
-    }
-
-    public void bind(FullMedicine medicine) {
-        medicineNameView.setText(MedicineHelper.getMedicineNameWithStockText(itemView.getContext(), medicine.medicine));
-        setupSummary(medicine);
-
-        itemView.setOnClickListener(view -> navigateToEditFragment(medicine));
+        itemView.setOnClickListener { view: View? -> navigateToEditFragment(medicine) }
 
         if (medicine.medicine.useColor) {
-            ViewColorHelper.setViewBackground(itemView, Arrays.asList(medicineNameView, remindersSummaryView), medicine.medicine.color);
+            ViewColorHelper.setViewBackground(itemView, listOf(medicineNameView, remindersSummaryView), medicine.medicine.color)
         } else {
-            ViewColorHelper.setDefaultColors(itemView, Arrays.asList(medicineNameView, remindersSummaryView));
+            ViewColorHelper.setDefaultColors(itemView, listOf(medicineNameView, remindersSummaryView))
         }
 
-        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId);
+        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId)
 
-        buildTags(medicine.tags);
+        buildTags(medicine.tags)
+
+        setupLongPress(medicine)
     }
 
-    private void setupSummary(FullMedicine medicine) {
-        List<Reminder> activeReminders = ReminderHelperKt.getActiveReminders(medicine);
+    private fun setupLongPress(medicine: FullMedicine) {
+        val medicineRepository = MedicineRepository(activity.application)
+        itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
+            menu.add(R.string.activate_all).setOnMenuItemClickListener {
+                handleActivateClick(medicineRepository, medicine.medicine.medicineId, true)
+                true
+            }
+            menu.add(R.string.deactivate_all).setOnMenuItemClickListener {
+                handleActivateClick(medicineRepository, medicine.medicine.medicineId, false)
+                true
+            }
+            menu.add(R.string.delete).setOnMenuItemClickListener {
+                val deleteHelper = DeleteHelper(activity)
+                deleteHelper.deleteItem(
+                    R.string.are_you_sure_delete_medicine,
+                    { medicineRepository.deleteMedicine(medicine.medicine.medicineId) },
+                    { })
+
+                true
+            }
+        }
+    }
+
+    private fun handleActivateClick(medicineRepository: MedicineRepository, medicineId: Int, active: Boolean) {
+        activity.lifecycleScope.launch(dispatcher) {
+            // We need a local copy here to make sure that the recycler adapter update process works.
+            // If we use the provided medicine, we would modify the old adapter's list, avoiding a proper
+            // update of the recycler item.
+            val medicine = medicineRepository.getMedicine(medicineId)
+            setAllRemindersActive(medicine, medicineRepository, active)
+        }
+    }
+
+
+    private fun setupSummary(medicine: FullMedicine) {
+        val activeReminders: List<Reminder> = getActiveReminders(medicine)
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
-                remindersSummaryView.setText(R.string.no_reminders);
+                remindersSummaryView.setText(R.string.no_reminders)
             } else {
-                remindersSummaryView.setText(R.string.inactive);
+                remindersSummaryView.setText(R.string.inactive)
             }
         } else {
-            new Handler(thread.getLooper()).post(() -> {
-                String summary = SummaryHelperKt.remindersSummary(activeReminders, itemView.getContext());
-                this.activity.runOnUiThread(() ->
-                        remindersSummaryView.setText(summary));
-            });
+            activity.lifecycleScope.launch(dispatcher) {
+                val summary = remindersSummary(activeReminders, itemView.context)
+                activity.runOnUiThread { remindersSummaryView.text = summary }
+            }
         }
     }
 
-    private void navigateToEditFragment(FullMedicine medicine) {
-        NavController navController = Navigation.findNavController(itemView);
-        MedicinesFragmentDirections.ActionMedicinesFragmentToEditMedicineFragment action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-                medicine.medicine.medicineId
-        );
+    private fun navigateToEditFragment(medicine: FullMedicine) {
+        val navController = findNavController(itemView)
+        val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
+            medicine.medicine.medicineId
+        )
         try {
-            navController.navigate(action);
-        } catch (IllegalArgumentException e) {
+            navController.navigate(action)
+        } catch (_: IllegalArgumentException) {
             // Ignore
         }
-
     }
 
-    void buildTags(List<Tag> tagsList) {
-        tags.removeAllViews();
-        for (Tag tag : tagsList) {
-            @SuppressLint("InflateParams")
-            Chip chip = (Chip) LayoutInflater.from(itemView.getContext()).inflate(R.layout.tag, null);
-            chip.setText(tag.name);
-            chip.setChecked(true);
-            chip.setCheckable(false);
-            chip.setCloseIconVisible(false);
-            chip.setOnClickListener(v -> itemView.performClick());
-            chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT));
-            FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            int margin = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 4, this.itemView.getResources().getDisplayMetrics()
-            );
-            params.setMargins(margin, 0, margin, 0);
-            chip.setLayoutParams(params);
-            tags.addView(chip);
+    fun buildTags(tagsList: MutableList<Tag>) {
+        tags.removeAllViews()
+        for (tag in tagsList) {
+            @SuppressLint("InflateParams") val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip
+            chip.text = tag.name
+            chip.isChecked = true
+            chip.isCheckable = false
+            chip.setCloseIconVisible(false)
+            chip.setOnClickListener { v: View? -> itemView.performClick() }
+            chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT))
+            val params = FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            val margin = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 4f, this.itemView.resources.displayMetrics
+            ).toInt()
+            params.setMargins(margin, 0, margin, 0)
+            chip.setLayoutParams(params)
+            tags.addView(chip)
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun create(parent: ViewGroup, activity: FragmentActivity): MedicineViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.card_medicine, parent, false)
+            return MedicineViewHolder(view, activity)
         }
     }
 }

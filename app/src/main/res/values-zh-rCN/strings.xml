@@ -49,7 +49,6 @@
     <string name="after_meal">饭后服用</string>
     <string name="time_before_meal">饭前 x 分钟</string>
     <string name="time_after">服用药物 x 后的 y 小时</string>
-    <string name="instructions_label">备注（如饭前服用）</string>
     <string name="medicine_data">药品数据</string>
     <string name="export_csv">导出为 CSV</string>
     <string name="export_pdf">导出为 PDF</string>

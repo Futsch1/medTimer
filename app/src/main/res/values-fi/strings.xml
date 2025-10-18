@@ -50,7 +50,6 @@
     <string name="after_meal">aterian jälkeen</string>
     <string name="time_before_meal">x minuuttia ennen ateriaa</string>
     <string name="time_after">x tuntia y lääkkeen jälkeen</string>
-    <string name="instructions_label">Lisäohjeet (esim. ennen aterioita)</string>
     <string name="medicine_data">Lääkedata</string>
     <string name="export_csv">Vie CSV-tiedostona</string>
     <string name="export_pdf">Vie PDF-tiedostona</string>

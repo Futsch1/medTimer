@@ -51,7 +51,6 @@
     <string name="after_meal">po posiłku</string>
     <string name="time_before_meal">x minut przed posiłkiem</string>
     <string name="time_after">x godzin po leku y</string>
-    <string name="instructions_label">Dodatkowe instrukcje (np. przed posiłkami)</string>
     <string name="export_csv">Eksportuj jako CSV</string>
     <string name="export_pdf">Eksportuj jako PDF</string>
     <string name="restore">Przywróć kopię</string>
