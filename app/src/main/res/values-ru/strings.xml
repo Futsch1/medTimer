@@ -52,7 +52,6 @@
     <string name="after_meal">после еды</string>
     <string name="time_before_meal">x минут перед едой</string>
     <string name="time_after">x часов после лекарства y</string>
-    <string name="instructions_label">Дополнительные инструкции (пр. перед едой)</string>
     <string name="medicine_data">Данные лекарства</string>
     <string name="export_csv">Экспортировать как CSV</string>
     <string name="export_pdf">Экспортировать как PDF</string>

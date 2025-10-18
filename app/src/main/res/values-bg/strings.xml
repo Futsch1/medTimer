@@ -50,7 +50,6 @@
     <string name="after_meal">след ядене</string>
     <string name="time_before_meal">x минути преди ядене</string>
     <string name="time_after">x часа след лекарство y</string>
-    <string name="instructions_label">Допълнителни инструкции(пр. преди ядене)</string>
     <string name="medicine_data">Данни за лекарството</string>
     <string name="export_csv">Експортиране в CSV</string>
     <string name="export_pdf">Експортиране като PDF</string>

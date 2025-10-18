@@ -50,7 +50,6 @@
     <string name="after_meal">nach der Mahlzeit</string>
     <string name="time_before_meal">x Minuten vor der Mahlzeit</string>
     <string name="time_after">x Stunden nach Medikament y</string>
-    <string name="instructions_label">Zusätzliche Hinweise (z.B. vor einer Mahlzeit)</string>
     <string name="medicine_data">Medikamentendaten</string>
     <string name="export_csv">Export als CSV</string>
     <string name="export_pdf">Export als PDF</string>

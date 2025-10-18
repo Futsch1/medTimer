@@ -50,7 +50,6 @@
     <string name="after_meal">after the meal</string>
     <string name="time_before_meal">x minutes before the meal</string>
     <string name="time_after">x hours after medicine y</string>
-    <string name="instructions_label">Additional instructions (e.g. before meals)</string>
     <string name="medicine_data">Medicine data</string>
     <string name="export_csv">Export as CSV</string>
     <string name="export_pdf">Export as PDF</string>

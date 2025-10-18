@@ -41,6 +41,10 @@ fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRe
     }
 }
 
+fun setAllRemindersActive(medicine: FullMedicine, medicineRepository: MedicineRepository, active: Boolean) {
+    setRemindersActive(medicine.reminders, medicineRepository, active)
+}
+
 fun setReminderActive(reminder: Reminder, active: Boolean) {
     if (!reminder.active && active && reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
         // If reminder is activated again and an interval reminder, reset the interval start date to the current day in seconds since epoch

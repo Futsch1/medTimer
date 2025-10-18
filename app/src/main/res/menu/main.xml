@@ -16,7 +16,7 @@
     </group>
     <item
         android:id="@+id/event_data"
-        android:icon="@drawable/calendar2_event"
+        android:icon="@drawable/calendar_event"
         android:title="@string/event_data">
         <menu>
             <item

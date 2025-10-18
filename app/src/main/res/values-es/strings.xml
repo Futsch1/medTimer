@@ -51,7 +51,6 @@
     <string name="after_meal">después de la comida</string>
     <string name="time_before_meal">x minutos antes de la comida</string>
     <string name="time_after">x horas después del medicamento y</string>
-    <string name="instructions_label">Instrucciones adicionales (por ejemplo, antes de las comidas)</string>
     <string name="medicine_data">Datos de medicamentos</string>
     <string name="export_csv">Exportar como CSV</string>
     <string name="export_pdf">Exportar como PDF</string>

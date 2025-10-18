@@ -30,7 +30,6 @@
     <string name="alternative">Альтернативна</string>
     <string name="before_meal">до прийому їжі</string>
     <string name="time_before_meal">за Х хвилин до прийому їжі</string>
-    <string name="instructions_label">Додаткові інструкції (напр. перед їжею)</string>
     <string name="medicine_data">Дані про ліки</string>
     <string name="restore">Відновити</string>
     <string name="restore_failed">Не вдалося відновити</string>

@@ -28,7 +28,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/icon"
-                app:srcCompat="@drawable/calendar2_event" />
+                app:srcCompat="@drawable/calendar_event" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editReminderTimeLayout"

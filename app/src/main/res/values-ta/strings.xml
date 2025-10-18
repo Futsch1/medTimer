@@ -58,7 +58,6 @@
     <string name="after_meal">உணவுக்குப் பிறகு</string>
     <string name="time_before_meal">ஃச் உணவுக்கு நிமிடங்கள்</string>
     <string name="time_after">ஃச் மெடிசினுக்குப் பிறகு ஒய்</string>
-    <string name="instructions_label">கூடுதல் வழிமுறைகள் (எ.கா. உணவுக்கு முன்)</string>
     <string name="medicine_data">மருந்து தரவு</string>
     <string name="export_csv">காபிம ஆக ஏற்றுமதி</string>
     <string name="export_pdf">PDF ஆக ஏற்றுமதி</string>

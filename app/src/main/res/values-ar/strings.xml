@@ -36,7 +36,6 @@
     <string name="notification_title">تذكير دواء</string>
     <string name="twenty_four_hours">24 ساعة</string>
     <string name="two_days">يومان</string>
-    <string name="instructions_label">تعليمات إضافية (مثل: قبل الوجبات)</string>
     <string name="medicine_data">بيانات الدواء</string>
     <string name="export_csv">تصدير كملف CSV</string>
     <string name="export_pdf">تصدير كملف PDF</string>

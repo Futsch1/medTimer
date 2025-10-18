@@ -50,7 +50,6 @@
     <string name="after_meal">μετά το γεύμα</string>
     <string name="time_before_meal">x λεπτά πριν το γεύμα</string>
     <string name="time_after">x ώρες μετά το φάρμακο y</string>
-    <string name="instructions_label">Πρόσθετες οδηγίες (π.χ. πριν από τα γεύματα)</string>
     <string name="medicine_data">Δεδομένα φαρμ. αγωγών</string>
     <string name="export_csv">Εξαγωγή ως CSV</string>
     <string name="export_pdf">Εξαγωγή ως PDF</string>

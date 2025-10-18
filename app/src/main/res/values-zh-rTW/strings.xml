@@ -49,7 +49,6 @@
     <string name="time_before_meal">飯前 x 分鐘</string>
     <string name="before_meal">飯前</string>
     <string name="medicine_data">藥物資料</string>
-    <string name="instructions_label">額外說明（例如：飯前服用）</string>
     <string name="export_csv">匯出 CSV</string>
     <string name="export_pdf">匯出 PDF</string>
     <string name="restore">還原</string>
