@@ -236,6 +236,6 @@
     <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung löst nur an aktiven Tagen eine Benachrichtigung aus. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
     <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
     <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
-    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder statisch oder datumsbasiert konfiguriert werden. Dies kann zum Ausschleichen eines Medikaments verwendet werden.</string>
+    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder statisch oder datumsbasiert konfiguriert werden und kann zum Ausschleichen eines Medikaments verwendet werden.</string>
     <string name="further_settings">Weitere Einstellungen</string>
 </resources>

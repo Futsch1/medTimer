@@ -37,7 +37,7 @@ public class Notifications {
         ReminderNotificationFactory factory = ReminderNotificationFactoryKt.getReminderNotificationFactory(context, notificationId, new ReminderNotificationData(remindTime, medicine, reminder, reminderEvent, hasSameTimeReminders));
 
         notify(notificationId, factory.create());
-        Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
+        Log.d(LogTags.REMINDER, String.format("Show notification nID %d", notificationId));
 
         return notificationId;
     }
@@ -67,6 +67,6 @@ public class Notifications {
         OutOfStockNotificationFactory factory = new OutOfStockNotificationFactory(context, notificationId, medicine);
 
         notify(notificationId, factory.create());
-        Log.d(LogTags.REMINDER, String.format("Created notification %d", notificationId));
+        Log.d(LogTags.REMINDER, String.format("Show out of stock notification nID %d", notificationId));
     }
 }
