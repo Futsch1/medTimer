@@ -10,10 +10,9 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.google.gson.Gson
@@ -77,7 +76,7 @@ abstract class DatabaseEntityEditFragment<T>(
         idlingResource.setBusy()
         fragmentView = inflater.inflate(layoutId, container, false)
 
-        setupMenu(requireActivity().findNavController(R.id.navHost))
+        setupMenu(this.findNavController())
 
         if (::optionsMenu.isInitialized) {
             requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
