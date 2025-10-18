@@ -18,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiScrollable;
+import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -149,7 +152,16 @@ public class AndroidTestHelper {
         } else {
             device.pressBack();
         }
+    }
 
+    public static void scrollDown() {
+        UiScrollable appViews = new UiScrollable(
+                new UiSelector().scrollable(true));
+        try {
+            appViews.scrollForward();
+        } catch (UiObjectNotFoundException e) {
+            // Intentionally empty
+        }
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
