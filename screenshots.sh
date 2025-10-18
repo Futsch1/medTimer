@@ -20,15 +20,15 @@ function stop_clean_status_bar {
 	adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-#locales=('en-US' 'ar' 'bg' 'da-DK' 'de-DE' 'el-GR' 'es-ES' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-rCN' 'zH-rTW')
-locales=('da-DK' 'zh-rTW')
+locales=('en-US' 'ar' 'bg' 'da-DK' 'de-DE' 'el-GR' 'es-ES' 'fi-FI' 'fr-FR' 'it-IT' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-rCN' 'zH-rTW')
+#locales=('da-DK' 'zh-rTW')
 tests_apk_path="app/build/outputs/apk/debug/MedTimer-debug.apk"
 app_apk_path="app/build/outputs/apk/androidTest/debug/MedTimer-debug-androidTest.apk"
 
 ./gradlew assembleDebug assembleAndroidTest
 
 for i in "${locales[@]}"; do
-	#start_clean_status_bar
+	start_clean_status_bar
 	if [ "$i" == "en-US" ]; then
 		adb shell settings put system time_12_24 12
 	else
@@ -42,10 +42,9 @@ for i in "${locales[@]}"; do
 		--app_apk_path="$app_apk_path" \
 		--exit_on_test_failure=false \
 		--use_timestamp_suffix=false \
-		--use_adb_root=true \
 		--use_tests_in_classes=com.futsch1.medtimer.ScreenshotsTest
 	adb shell pm clear com.futsch1.medtimer
-	#stop_clean_status_bar
+	stop_clean_status_bar
 done
 
 ./copyIntroDrawables.sh
