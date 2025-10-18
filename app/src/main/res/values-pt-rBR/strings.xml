@@ -238,4 +238,10 @@
     <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
     <string name="linked_reminder">Lembrete vinculado</string>
     <string name="linked_reminder_help">Um lembrete vinculado é um lembrete de acompanhamento que é agendado um certo tempo depois que um lembrete principal é acionado (seja tomado ou adiado). Isso é útil para medicamentos que precisam ser tomados em sequência, com um atraso específico entre eles.</string>
+    <string name="add_linked_reminder_summary">Cria um lembrete de acompanhamento que é agendado um certo tempo após este lembrete ser acionado.</string>
+    <string name="cyclic_reminder_summary">Configura um padrão recorrente de dias ativos e de pausa a partir de uma data específica. O lembrete só enviará uma notificação nos dias ativos. Use isto para medicamentos como pílulas anticoncepcionais.</string>
+    <string name="variable_amount_summary">Quando ativo, uma caixa de diálogo para inserir a dosagem é exibida quando o lembrete é tomado.</string>
+    <string name="automatically_taken_summary">Quando ativo, o lembrete não é exibido como notificação e é automaticamente marcado como tomado (pode ser usado apenas para controlar o estoque).</string>
+    <string name="reminder_status_summary">Os lembretes podem estar ativos e inativos. Se estiverem inativos, nenhuma notificação é enviada. Isso pode ser configurado estaticamente ou com base em datas. Use isto para configurar a redução gradual de um medicamento.</string>
+    <string name="further_settings">Configurações adicionais</string>
 </resources>

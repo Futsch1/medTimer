@@ -233,6 +233,12 @@
     <string name="continuous_interval_reminder">Continuous interval reminder</string>
     <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
     <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
-    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9 AM to 9 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
-    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is actioned (either taken or snoozed). This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
+    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9:00 AM to 9:00 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is raised. This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
+    <string name="add_linked_reminder_summary">Creates a follow-up reminder that is scheduled a certain amount of time after this reminder is raised.</string>
+    <string name="cyclic_reminder_summary">Configures a recurring pattern of active and paused days starting from a given date. The reminder will only raise a notification on active days. Use this for meds like birth control pills.</string>
+    <string name="variable_amount_summary">When active, a dialog to enter the dosage is shown when the reminder is taken.</string>
+    <string name="automatically_taken_summary">When active, the reminder is not shown as notification and automatically marked as taken (can be used to only track the stock).</string>
+    <string name="reminder_status_summary">Reminders can be active and inactive. If they are inactive, no notification is raised. This can be either configured statically or based on dates. Use this to configure tapering of a medicine.</string>
+    <string name="further_settings">Further settings</string>
 </resources>

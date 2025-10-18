@@ -408,6 +408,7 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createReminder("1", notificationTime)
         clickOn(R.id.openAdvancedSettings)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.automatically_taken)
         pressBack()
 

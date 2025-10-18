@@ -24,7 +24,7 @@ android {
         multiDexEnabled = true
         targetSdk = 36
         versionCode = 135
-        versionName = "1.20.0"
+        versionName = "1.20.0-rc.1"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -106,7 +106,7 @@ dependencies {
     val mockitoCoreVersion = "5.20.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.16"
-    val jazzerVersion = "0.25.1"
+    val jazzerVersion = "0.26.0"
 
     val androidTestJunitVersion = "1.3.0"
     val androidTestEspressoVersion = "3.7.0"

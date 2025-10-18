@@ -232,5 +232,11 @@
     <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
     <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9.00 tot 21.00 uur) waar de eerste herinnering altijd op de starttijd is. Volgende herinneringen worden met vaste tussenpozen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag opnieuw ingesteld.</string>
     <string name="linked_reminder">Gekoppelde herinnering</string>
-    <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt gepland (ingenomen of gesnoozed). Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
+    <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt ingenomen. Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
+    <string name="add_linked_reminder_summary">Creëert een vervolgherinnering die een bepaalde tijd na het afgaan van deze herinnering wordt gepland.</string>
+    <string name="cyclic_reminder_summary">Configureert een terugkerend patroon van actieve en pauzedagen vanaf een bepaalde datum. De herinnering stuurt alleen een melding op actieve dagen. Gebruik dit voor medicijnen zoals de anticonceptiepil.</string>
+    <string name="variable_amount_summary">Indien actief, wordt een dialoogvenster getoond om de dosering in te voeren wanneer de herinnering wordt ingenomen.</string>
+    <string name="automatically_taken_summary">Indien actief, wordt de herinnering niet als melding getoond en automatisch als ingenomen gemarkeerd (kan worden gebruikt om alleen de voorraad bij te houden).</string>
+    <string name="reminder_status_summary">Herinneringen kunnen actief en inactief zijn. Als ze inactief zijn, wordt er geen melding verzonden. Dit kan statisch of op basis van datums worden geconfigureerd. Gebruik dit om het afbouwen van een medicijn te configureren.</string>
+    <string name="further_settings">Verdere instellingen</string>
 </resources>

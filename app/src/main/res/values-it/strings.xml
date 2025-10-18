@@ -237,5 +237,11 @@
     <string name="continuous_interval_reminder_help">Avvia un promemoria basato su un intervallo di tempo (ad esempio, ogni 6 ore) da un momento specificato. Questo schema è continuo, ignorando i vincoli di tempo del giorno, fino alla disattivazione manuale.</string>
     <string name="windowed_interval_reminder_help">Definisci una finestra attiva giornaliera (ad es. dalle 9:00 alle 21:00) in cui il primo promemoria è sempre all\'ora di inizio. I promemoria successivi si attivano a intervalli fissi fino al raggiungimento dell\'ora di fine. Lo schema completo si ripristina ogni giorno.</string>
     <string name="linked_reminder">Promemoria collegato</string>
-    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato attivato (preso o posticipato). Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
+    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato preso. Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
+    <string name="add_linked_reminder_summary">Crea un promemoria di follow-up che viene programmato un certo tempo dopo l\'attivazione di questo promemoria.</string>
+    <string name="cyclic_reminder_summary">Configura un modello ricorrente di giorni attivi e di pausa a partire da una data specifica. Il promemoria invierà una notifica solo nei giorni attivi. Utile per farmaci come le pillole anticoncezionali.</string>
+    <string name="variable_amount_summary">Quando è attiva, viene mostrata una finestra di dialogo per inserire il dosaggio al momento dell\'assunzione del promemoria.</string>
+    <string name="automatically_taken_summary">Quando è attiva, il promemoria non viene mostrato come notifica e viene automaticamente contrassegnato come assunto (può essere usato solo per monitorare le scorte).</string>
+    <string name="reminder_status_summary">I promemoria possono essere attivi e inattivi. Se sono inattivi, non viene inviata alcuna notifica. Questo stato può essere configurato staticamente o in base a date. Utile per configurare la riduzione graduale di un farmaco.</string>
+    <string name="further_settings">Impostazioni aggiuntive</string>
 </resources>

@@ -141,8 +141,8 @@
     <string name="number_of_repetitions">Anzahl der Wiederholungen</string>
     <string name="time_between_repetitions">Zeit zwischen den Wiederholungen</string>
     <string name="repeat_reminders_summary">Wiederholt automatisch eine Erinnerung, bis sie als erledigt oder übersprungen markiert wird</string>
-    <string name="add_linked_reminder">Erinnerung für die folgende Dosis hinzufügen</string>
-    <string name="linked_reminder_delay">Verzögerung der folgenden Dosis</string>
+    <string name="add_linked_reminder">Verknüpfte Erinnerung hinzufügen</string>
+    <string name="linked_reminder_delay">Verzögerung der verknüpften Erinnerung</string>
     <string name="delay">Verzögerung</string>
     <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
     <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
@@ -228,9 +228,15 @@
     <string name="end_date">Enddatum</string>
     <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
-    <string name="time_based_reminder_help">Legen Sie bestimmte Zeiten fest (z. B. 8:00 Uhr) und konfigurieren Sie ein wiederkehrendes Muster. Dies ermöglicht eine präzise Steuerung bestimmter Wochentage, Tage des Monats oder komplexer periodischer Zeitpläne (wie \'alle 3 Tage\').</string>
-    <string name="continuous_interval_reminder_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z. B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster ist kontinuierlich und ignoriert die Tageszeitbeschränkungen, bis es manuell deaktiviert wird.</string>
-    <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9 bis 21 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist. Das gesamte Muster wird jeden Tag zurückgesetzt.</string>
+    <string name="time_based_reminder_help">Erinnert an einer bestimmten Zeit des Tages (z.B. 8:00 Uhr). Weiterhin kann die Erinnerung an bestimmten Wochentage, Tagen des Monats oder komplexer periodischer Zeitpläne (wie \'alle 3 Tage\') ausgelöst werden.</string>
+    <string name="continuous_interval_reminder_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster wiederholt kontinuierlich, bis es manuell deaktiviert wird.</string>
+    <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
     <string name="linked_reminder">Verknüpfte Erinnerung</string>
-    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer primären Erinnerung geplant wird (entweder eingenommen oder snoozed). Dies ist nützlich für Medikamente, die nacheinander eingenommen werden müssen, mit einer bestimmten Verzögerung zwischen ihnen.</string>
+    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung geplant wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
+    <string name="add_linked_reminder_summary">Erstellt eine Folgeerinnerung, die eine bestimmte Zeit nach dieser Erinnerung ausgelöst wird.</string>
+    <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung löst nur an aktiven Tagen eine Benachrichtigung aus. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
+    <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
+    <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
+    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder statisch oder datumsbasiert konfiguriert werden. Dies kann zum Ausschleichen eines Medikaments verwendet werden.</string>
+    <string name="further_settings">Weitere Einstellungen</string>
 </resources>
