@@ -143,7 +143,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
             if (e != null) {
                 lifecycleScope.launch(dispatcher) {
                     val highestSortOrder = medicineViewModel!!.medicineRepository.highestMedicineSortOrder
-                    val medicine = Medicine(e.toString().trim { it <= ' ' })
+                    val medicine = Medicine(e.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
                     val medicineId = medicineViewModel!!.medicineRepository.insertMedicine(medicine).toInt()
                     requireActivity().runOnUiThread { navigateToMedicineId(medicineId) }
