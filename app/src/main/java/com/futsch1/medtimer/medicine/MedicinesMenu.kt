@@ -17,6 +17,8 @@ class MedicinesMenu(
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
 
+    lateinit var medicinesIdList: List<Int>
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines, menu)
         menu.setGroupDividerEnabled(true)
@@ -31,8 +33,10 @@ class MedicinesMenu(
 
     private fun setRemindersActive(active: Boolean) {
         medicineViewModel.viewModelScope.launch(dispatcher) {
-            for (medicine in medicineViewModel.medicineRepository.medicines) {
-                setAllRemindersActive(medicine, medicineViewModel.medicineRepository, active)
+            if (this@MedicinesMenu::medicinesIdList.isInitialized) {
+                for (medicineId in medicinesIdList) {
+                    setAllRemindersActive(medicineViewModel.medicineRepository.getMedicine(medicineId), medicineViewModel.medicineRepository, active)
+                }
             }
         }
     }
