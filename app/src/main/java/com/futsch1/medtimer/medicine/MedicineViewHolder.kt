@@ -14,15 +14,12 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
-import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockText
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.helpers.remindersSummary
-import com.futsch1.medtimer.helpers.setAllRemindersActive
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.CoroutineDispatcher
@@ -54,43 +51,7 @@ class MedicineViewHolder private constructor(
         ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId)
 
         buildTags(medicine.tags)
-
-        setupLongPress(medicine)
     }
-
-    private fun setupLongPress(medicine: FullMedicine) {
-        val medicineRepository = MedicineRepository(activity.application)
-        itemView.setOnCreateContextMenuListener { menu, _, _ ->
-            menu.add(R.string.activate_all).setOnMenuItemClickListener {
-                handleActivateClick(medicineRepository, medicine.medicine.medicineId, true)
-                true
-            }
-            menu.add(R.string.deactivate_all).setOnMenuItemClickListener {
-                handleActivateClick(medicineRepository, medicine.medicine.medicineId, false)
-                true
-            }
-            menu.add(R.string.delete).setOnMenuItemClickListener {
-                val deleteHelper = DeleteHelper(activity)
-                deleteHelper.deleteItem(
-                    R.string.are_you_sure_delete_medicine,
-                    { medicineRepository.deleteMedicine(medicine.medicine.medicineId) },
-                    { })
-
-                true
-            }
-        }
-    }
-
-    private fun handleActivateClick(medicineRepository: MedicineRepository, medicineId: Int, active: Boolean) {
-        activity.lifecycleScope.launch(dispatcher) {
-            // We need a local copy here to make sure that the recycler adapter update process works.
-            // If we use the provided medicine, we would modify the old adapter's list, avoiding a proper
-            // update of the recycler item.
-            val medicine = medicineRepository.getMedicine(medicineId)
-            setAllRemindersActive(medicine, medicineRepository, active)
-        }
-    }
-
 
     private fun setupSummary(medicine: FullMedicine) {
         val activeReminders: List<Reminder> = getActiveReminders(medicine)
