@@ -1,64 +1,48 @@
-package com.futsch1.medtimer.medicine;
+package com.futsch1.medtimer.medicine
+
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
+import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.medicine.ReminderViewHolder.Companion.create
 
 
-import android.os.HandlerThread;
-import android.view.ViewGroup;
+class ReminderViewAdapter(private val fragmentActivity: FragmentActivity) : IdlingListAdapter<Reminder, ReminderViewHolder?>(ReminderDiff()) {
+    private var medicine: Medicine? = null
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DiffUtil;
-
-import com.futsch1.medtimer.database.Medicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.helpers.IdlingListAdapter;
-
-public class ReminderViewAdapter extends IdlingListAdapter<Reminder, ReminderViewHolder> {
-
-    private final FragmentActivity fragmentActivity;
-    private final HandlerThread thread;
-    private Medicine medicine;
-
-    public ReminderViewAdapter(FragmentActivity fragmentActivity, HandlerThread thread) {
-        super(new ReminderDiff());
-        this.fragmentActivity = fragmentActivity;
-        this.thread = thread;
-        setHasStableIds(true);
+    init {
+        setHasStableIds(true)
     }
 
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    fun setMedicine(medicine: Medicine) {
+        this.medicine = medicine
     }
 
 
     // Create new views (invoked by the layout manager)
-    @NonNull
-    @Override
-    public ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ReminderViewHolder.create(parent, fragmentActivity, thread);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
+        return create(parent, fragmentActivity)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
-        Reminder current = getItem(position);
-        holder.bind(current, medicine);
+    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
+        val current = getItem(position)
+        holder.bind(current, medicine!!)
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).reminderId;
+    override fun getItemId(position: Int): Long {
+        return getItem(position).reminderId.toLong()
     }
 
-    public static class ReminderDiff extends DiffUtil.ItemCallback<Reminder> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull Reminder oldItem, @NonNull Reminder newItem) {
-            return oldItem.reminderId == newItem.reminderId;
+    class ReminderDiff : DiffUtil.ItemCallback<Reminder?>() {
+        override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+            return oldItem.reminderId == newItem.reminderId
         }
 
-        @Override
-        public boolean areContentsTheSame(@NonNull Reminder oldItem, @NonNull Reminder newItem) {
-            return oldItem.equals(newItem);
+        override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+            return oldItem == newItem
         }
     }
 }
