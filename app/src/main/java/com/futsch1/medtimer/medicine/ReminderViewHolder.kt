@@ -49,7 +49,7 @@ class ReminderViewHolder private constructor(
 
         setupTimeEditor()
 
-        advancedSettings.setOnClickListener { v: View? -> onClickAdvancedSettings(reminder) }
+        advancedSettings.setOnClickListener { _: View? -> onClickAdvancedSettings(reminder) }
 
         editAmount.setText(reminder.amount)
 
@@ -74,7 +74,7 @@ class ReminderViewHolder private constructor(
     }
 
     private fun setupLongPress() {
-        itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
+        itemView.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(R.string.delete).setOnMenuItemClickListener {
                 LinkedReminderHandling(reminder!!, MedicineRepository(fragmentActivity.application), fragmentActivity.lifecycleScope).deleteReminder(
                     fragmentActivity,
@@ -143,7 +143,7 @@ class ReminderViewHolder private constructor(
             .setTitle(titleText)
             .setMessage(helpText).setIcon(iconId).setPositiveButton(R.string.ok, null)
         reminderTypeIcon.setImageResource(iconId)
-        reminderTypeIcon.setOnClickListener { v: View? -> builder.create().show() }
+        reminderTypeIcon.setOnClickListener { _: View? -> builder.create().show() }
     }
 
     fun getReminder(): Reminder {

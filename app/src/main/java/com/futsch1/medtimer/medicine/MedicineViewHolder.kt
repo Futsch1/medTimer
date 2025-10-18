@@ -43,7 +43,7 @@ class MedicineViewHolder private constructor(
         medicineNameView.text = getMedicineNameWithStockText(itemView.context, medicine.medicine)
         setupSummary(medicine)
 
-        itemView.setOnClickListener { view: View? -> navigateToEditFragment(medicine) }
+        itemView.setOnClickListener { _: View? -> navigateToEditFragment(medicine) }
 
         if (medicine.medicine.useColor) {
             ViewColorHelper.setViewBackground(itemView, listOf(medicineNameView, remindersSummaryView), medicine.medicine.color)
@@ -60,7 +60,7 @@ class MedicineViewHolder private constructor(
 
     private fun setupLongPress(medicine: FullMedicine) {
         val medicineRepository = MedicineRepository(activity.application)
-        itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
+        itemView.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(R.string.activate_all).setOnMenuItemClickListener {
                 handleActivateClick(medicineRepository, medicine.medicine.medicineId, true)
                 true
@@ -120,7 +120,7 @@ class MedicineViewHolder private constructor(
         }
     }
 
-    fun buildTags(tagsList: MutableList<Tag>) {
+    fun buildTags(tagsList: List<Tag>) {
         tags.removeAllViews()
         for (tag in tagsList) {
             @SuppressLint("InflateParams") val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip
@@ -128,7 +128,7 @@ class MedicineViewHolder private constructor(
             chip.isChecked = true
             chip.isCheckable = false
             chip.setCloseIconVisible(false)
-            chip.setOnClickListener { v: View? -> itemView.performClick() }
+            chip.setOnClickListener { _: View? -> itemView.performClick() }
             chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT))
             val params = FlexboxLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,

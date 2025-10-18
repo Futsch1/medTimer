@@ -118,7 +118,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
 
     private fun setupAddMedicineButton(fragmentView: View) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addMedicine)
-        fab.setOnClickListener { view: View? ->
+        fab.setOnClickListener { _: View? ->
             val textInputLayout = TextInputLayout(requireContext())
             val editText = TextInputEditText(requireContext())
             editText.setLayoutParams(LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
@@ -137,7 +137,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
         val builder = AlertDialog.Builder(context)
         builder.setView(textInputLayout)
         builder.setTitle(R.string.add_medicine)
-        builder.setPositiveButton(R.string.ok) { dialog: DialogInterface?, which: Int ->
+        builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
             val e = editText.getText()
             if (e != null) {
                 lifecycleScope.launch(dispatcher) {
@@ -149,7 +149,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
                 }
             }
         }
-        builder.setNegativeButton(R.string.cancel) { dialog: DialogInterface?, which: Int -> dialog!!.dismiss() }
+        builder.setNegativeButton(R.string.cancel) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
         return builder
     }
 
