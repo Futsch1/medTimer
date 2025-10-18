@@ -9,11 +9,6 @@
         android:title="@string/dosing_instructions"
         app:icon="@drawable/clipboard_plus"
         app:key="instructions" />
-    <Preference
-        app:icon="@drawable/link"
-        app:key="add_linked_reminder"
-        app:summary="@string/add_linked_reminder_summary"
-        app:title="@string/add_linked_reminder" />
     <PreferenceCategory
         app:key="interval_category"
         app:title="@string/interval_based_reminder">
@@ -43,6 +38,11 @@
     <PreferenceCategory
         app:key="time_based_category"
         app:title="@string/time_based_reminder">
+        <Preference
+            app:icon="@drawable/link"
+            app:key="add_linked_reminder"
+            app:summary="@string/add_linked_reminder_summary"
+            app:title="@string/add_linked_reminder" />
         <Preference
             android:icon="@drawable/repeat"
             app:key="cyclic_reminder"
