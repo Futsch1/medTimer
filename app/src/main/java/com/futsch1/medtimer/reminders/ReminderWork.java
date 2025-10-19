@@ -77,10 +77,8 @@ public class ReminderWork extends Worker {
         LocalTime reminderTime = reminder.getReminderType() == Reminder.ReminderType.TIME_BASED ? LocalTime.of(reminder.timeInMinutes / 60, reminder.timeInMinutes % 60) : LocalTime.ofSecondOfDay(inputData.getInt(EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()));
         LocalDateTime reminderDateTime = LocalDateTime.of(reminderDate, reminderTime);
         FullMedicine medicine = medicineRepository.getMedicine(reminder.medicineRelId);
-        ReminderEvent reminderEvent =
-                reminderEventId == 0 ?
-                        buildAndInsertReminderEvent(reminderDateTime, medicine, reminder) :
-                        medicineRepository.getReminderEvent(reminderEventId);
+        long remindedTimeStamp = reminderDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(reminderDateTime));
+        ReminderEvent reminderEvent = getOrCreateEvent(reminderEventId, remindedTimeStamp, reminder, medicine);
 
         if (reminderEvent != null && medicine != null) {
             Log.i(LogTags.REMINDER, String.format("Process reID %d for rID %d", reminderEvent.reminderEventId, reminderEvent.reminderId));
@@ -90,13 +88,17 @@ public class ReminderWork extends Worker {
         return r;
     }
 
-    private ReminderEvent buildAndInsertReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder) {
-        ReminderEvent reminderEvent = buildReminderEvent(remindedDateTime, medicine, reminder, medicineRepository);
-        if (reminderEvent != null) {
-            reminderEvent.remainingRepeats = getNumberOfRepeats();
-            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+    private ReminderEvent getOrCreateEvent(int reminderEventId, long remindedTimeStamp, Reminder reminder, FullMedicine medicine) {
+        if (reminderEventId != 0) {
+            return medicineRepository.getReminderEvent(reminderEventId);
+        } else {
+            ReminderEvent event = medicineRepository.getReminderEvent(reminder.reminderId, remindedTimeStamp);
+            if (event != null) {
+                return event;
+            } else {
+                return buildAndInsertReminderEvent(remindedTimeStamp, medicine, reminder);
+            }
         }
-        return reminderEvent;
     }
 
     private void performActionsOfReminder(Reminder reminder, ReminderEvent reminderEvent, FullMedicine medicine, LocalDateTime reminderDateTime) {
@@ -109,11 +111,32 @@ public class ReminderWork extends Worker {
         }
     }
 
-    public static ReminderEvent buildReminderEvent(LocalDateTime remindedDateTime, FullMedicine medicine, Reminder reminder, MedicineRepository medicineRepository) {
+    private ReminderEvent buildAndInsertReminderEvent(long remindedTimeStamp, FullMedicine medicine, Reminder reminder) {
+        ReminderEvent reminderEvent = buildReminderEvent(remindedTimeStamp, medicine, reminder, medicineRepository);
+        if (reminderEvent != null) {
+            reminderEvent.remainingRepeats = getNumberOfRepeats();
+            reminderEvent.reminderEventId = (int) medicineRepository.insertReminderEvent(reminderEvent);
+        }
+        return reminderEvent;
+    }
+
+    private void notificationAction(Reminder reminder, ReminderEvent reminderEvent, FullMedicine medicine, LocalDateTime reminderDateTime) {
+        NotificationAction.cancelNotification(context, reminderEvent.notificationId);
+
+        showNotification(medicine, reminderEvent, reminder, reminderDateTime);
+
+        if (reminderEvent.remainingRepeats != 0 && isRepeatReminders()) {
+            ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
+        }
+
+        Log.i(LogTags.REMINDER, String.format("Show reminder event reID %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
+    }
+
+    public static ReminderEvent buildReminderEvent(long remindedTimeStamp, FullMedicine medicine, Reminder reminder, MedicineRepository medicineRepository) {
         if (medicine != null) {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = reminder.reminderId;
-            reminderEvent.remindedTimestamp = remindedDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(remindedDateTime));
+            reminderEvent.remindedTimestamp = remindedTimeStamp;
             reminderEvent.amount = reminder.amount;
             reminderEvent.medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder);
             reminderEvent.color = medicine.medicine.color;
@@ -139,27 +162,6 @@ public class ReminderWork extends Worker {
         return Integer.parseInt(sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3"));
     }
 
-    private void notificationAction(Reminder reminder, ReminderEvent reminderEvent, FullMedicine medicine, LocalDateTime reminderDateTime) {
-        NotificationAction.cancelNotification(context, reminderEvent.notificationId);
-
-        showNotification(medicine, reminderEvent, reminder, reminderDateTime);
-
-        if (reminderEvent.remainingRepeats != 0 && isRepeatReminders()) {
-            ReminderProcessor.requestRepeat(context, reminder.reminderId, reminderEvent.reminderEventId, getRepeatTimeSeconds(), reminderEvent.remainingRepeats);
-        }
-
-        Log.i(LogTags.REMINDER, String.format("Show reminder event reID %d for %s", reminderEvent.reminderEventId, reminderEvent.medicineName));
-    }
-
-    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
-        ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
-        if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
-            return (int) (lastReminderEvent.processedTimestamp / 60);
-        } else {
-            return 0;
-        }
-    }
-
     private void showNotification(FullMedicine medicine, ReminderEvent reminderEvent, Reminder reminder, LocalDateTime reminderDateTime) {
         if (canShowNotifications()) {
             boolean hasSameTimeReminders = !medicineRepository.getSameTimeReminders(reminder.reminderId).isEmpty();
@@ -179,6 +181,15 @@ public class ReminderWork extends Worker {
     private int getRepeatTimeSeconds() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
+    }
+
+    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
+        ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
+        if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
+            return (int) (lastReminderEvent.processedTimestamp / 60);
+        } else {
+            return 0;
+        }
     }
 
     private boolean canShowNotifications() {

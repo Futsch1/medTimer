@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.ZoneId
 
 class ScheduledReminderActions(
     event: OverviewScheduledReminderEvent,
@@ -48,10 +47,13 @@ class ScheduledReminderActions(
         // Perform database operations on the IO dispatcher
         withContext(ioCoroutineDispatcher) {
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application) // Ensure Application context is not null
-            val reminderEvent = ReminderWork.buildReminderEvent(
-                scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
-            )
+            var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
+            if (reminderEvent == null) {
+                reminderEvent = ReminderWork.buildReminderEvent(
+                    scheduledReminder.timestamp.epochSecond,
+                    scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
+                )
+            }
 
             if (reminderEvent != null) {
                 val reminderEventId = medicineRepository.insertReminderEvent(reminderEvent)
