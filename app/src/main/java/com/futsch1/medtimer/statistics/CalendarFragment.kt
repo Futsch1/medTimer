@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.statistics
 
 import android.content.res.ColorStateList
-import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,16 +34,16 @@ import java.util.Locale
 
 class CalendarFragment : Fragment() {
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
-    private var calendarView: CalendarView? = null
+    private lateinit var calendarView: CalendarView
     private var currentDayEvents: EditText? = null
-    private var calendarEventsViewModel: CalendarEventsViewModel? = null
+    private lateinit var calendarEventsViewModel: CalendarEventsViewModel
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, String>? = null
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
 
     private fun daySelected(data: CalendarDay) {
-        calendarView?.notifyDayChanged(currentDay)
+        calendarView.notifyDayChanged(currentDay)
         currentDay = data
         updateCurrentDay()
     }
@@ -68,14 +68,14 @@ class CalendarFragment : Fragment() {
         setupCalendarView(medicineCalenderArgs)
 
         calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
-        calendarEventsViewModel!!.getEventForDays(
+        calendarEventsViewModel.getEventForDays(
             medicineCalenderArgs.medicineId,
             medicineCalenderArgs.pastDays,
             medicineCalenderArgs.futureDays
         )
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
                 this.dayStrings = dayStrings
-                calendarView?.notifyCalendarChanged()
+                calendarView.notifyCalendarChanged()
                 updateCurrentDay()
                 idlingResource.setIdle()
             }
@@ -99,13 +99,13 @@ class CalendarFragment : Fragment() {
         startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30)
         endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30)
 
-        calendarView?.setup(
+        calendarView.setup(
             startMonth!!,
             endMonth!!,
             if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
                 DayOfWeek.SUNDAY else DayOfWeek.MONDAY
         )
-        calendarView?.scrollToMonth(YearMonth.now())
+        calendarView.scrollToMonth(YearMonth.now())
     }
 
     private fun setupMonthBinder() {
@@ -116,15 +116,15 @@ class CalendarFragment : Fragment() {
 
             init {
                 prevButton.setOnClickListener {
-                    calendarView?.scrollToMonth(calendarView?.findFirstVisibleMonth()?.yearMonth!!.previousMonth)
+                    calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()?.yearMonth!!.previousMonth)
                 }
                 nextButton.setOnClickListener {
-                    calendarView?.scrollToMonth(calendarView?.findFirstVisibleMonth()?.yearMonth!!.nextMonth)
+                    calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()?.yearMonth!!.nextMonth)
                 }
             }
         }
 
-        calendarView?.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+        calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View): MonthViewContainer = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, data: CalendarMonth) {
                 container.textView.text = data.yearMonth.format(
@@ -151,14 +151,14 @@ class CalendarFragment : Fragment() {
             init {
                 textView.setOnClickListener {
                     daySelected(day)
-                    calendarView?.notifyDayChanged(day)
+                    calendarView.notifyDayChanged(day)
                 }
             }
         }
 
-        calendarView?.dayBinder = object : MonthDayBinder<DayViewContainer> {
+        calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             private fun getColor(colorId: Int) = MaterialColors.getColor(
-                calendarView!!,
+                calendarView,
                 colorId
             )
 
@@ -187,8 +187,7 @@ class CalendarFragment : Fragment() {
                 container.textView.text =
                     String.format(Locale.getDefault(), "%d", data.date.dayOfMonth)
                 if (dayStrings?.get(data.date)?.isNotEmpty() == true) {
-                    container.textView.paintFlags =
-                        container.textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                    container.textView.setTypeface(container.textView.typeface, Typeface.BOLD)
                 }
                 container.day = data
                 if (data == currentDay) {
