@@ -131,6 +131,10 @@ public class MedicineRepository {
         return medicineDao.getReminderEvent(reminderEventId);
     }
 
+    public @Nullable ReminderEvent getReminderEvent(int reminderId, long remindedTimestamp) {
+        return medicineDao.getReminderEvent(reminderId, remindedTimestamp);
+    }
+
     public void updateReminderEvent(ReminderEvent reminderEvent) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
     }
@@ -157,10 +161,6 @@ public class MedicineRepository {
     public void deleteTags() {
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
         MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
-    }
-
-    public void deleteReminderEvent(int reminderEventId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvent(medicineDao.getReminderEvent(reminderEventId)));
     }
 
     public void deleteReminderEvent(ReminderEvent reminderEvent) {
