@@ -50,7 +50,6 @@
     <string name="after_meal">étkezés után</string>
     <string name="time_before_meal">x perccel étkezés előtt</string>
     <string name="time_after">x órával a(z) y gyógyszer után</string>
-    <string name="instructions_label">További utasítások (pl. étkezés előtt)</string>
     <string name="medicine_data">Gyógyszeradatok</string>
     <string name="export_csv">Exportálás CSV formátumban</string>
     <string name="export_pdf">Exportálás PDF formátumban</string>
