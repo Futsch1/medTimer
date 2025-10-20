@@ -1,33 +1,35 @@
 package com.futsch1.medtimer.overview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
 import android.widget.TextView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.TimeHelper
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
-import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import java.time.LocalDate
+import java.time.format.TextStyle
 import java.util.Locale
 
-class DaySelector(val context: Context, val calendarView: WeekCalendarView, startDay: LocalDate, val daySelected: (LocalDate) -> Unit) {
+class DaySelector(
+    val context: Context,
+    val calendarView: WeekCalendarView,
+    startDay: LocalDate,
+    val daySelected: (LocalDate) -> Unit
+) {
     private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
     val startDate: LocalDate = LocalDate.now().minusDays(5)
     val endDate: LocalDate = LocalDate.now().plusDays(1)
 
     init {
         setupDayBinder()
-        setupWeekHeaderBinder()
         calendarView.setup(
             startDate,
             endDate,
@@ -51,7 +53,7 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, star
             lateinit var day: WeekDay
 
             init {
-                textView.setOnClickListener {
+                view.setOnClickListener {
                     notifyDaySelected(day)
                     calendarView.notifyDayChanged(day)
                 }
@@ -94,9 +96,15 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, star
 
             override fun create(view: View) = DayViewContainer(view)
 
+            @SuppressLint("SetTextI18n")
             override fun bind(container: DayViewContainer, data: WeekDay) {
-                container.textView.text =
-                    String.format(Locale.getDefault(), "%d", data.date.dayOfMonth)
+                container.textView.text = "${data.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())}\n${
+                    String.format(
+                        Locale.getDefault(),
+                        "%d",
+                        data.date.dayOfMonth
+                    )
+                }"
                 container.day = data
                 if (data == currentDay) {
                     container.textView.setTextColor(selectedTextColor)
@@ -113,24 +121,6 @@ class DaySelector(val context: Context, val calendarView: WeekCalendarView, star
                     }
 
                 }
-            }
-        }
-    }
-
-    private fun setupWeekHeaderBinder() {
-        class WeekViewContainer(view: View) : ViewContainer(view) {
-            val textView: TextView = view.findViewById(R.id.calendarHeaderText)
-            val prevButton: MaterialButton = view.findViewById(R.id.prevCalendar)
-            val nextButton: MaterialButton = view.findViewById(R.id.nextCalendar)
-        }
-
-        calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<WeekViewContainer> {
-            override fun create(view: View): WeekViewContainer = WeekViewContainer(view)
-            override fun bind(container: WeekViewContainer, data: Week) {
-                container.textView.text = TimeHelper.localDateToFullDateString(context, currentDay.date)
-
-                container.prevButton.visibility = View.GONE
-                container.nextButton.visibility = View.GONE
             }
         }
     }
