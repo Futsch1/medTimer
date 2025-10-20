@@ -29,6 +29,6 @@ Adatvédelem és offline hozzáférés:
 
 A MedTimer ingyenes alkalmazás, hirdetések nélkül.
 
-Tekintsd meg a projektet a GitHub-on: https://github.com/Futsch1/medTimer
+Tekintsd meg a projektet a GitHubon: https://github.com/Futsch1/medTimer
 
 A grafikákat a https://hotpot.ai segítségével készítettük.
