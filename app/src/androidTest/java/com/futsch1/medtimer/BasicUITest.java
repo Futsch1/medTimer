@@ -27,8 +27,11 @@ import android.widget.TextView;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BasicUITest extends BaseTestHelper {
@@ -228,7 +231,10 @@ public class BasicUITest extends BaseTestHelper {
     //@AllowFlaky(attempts = 1)
     @SuppressWarnings("java:S2699") // Using internal assert
     public void overviewDaySelection() {
-        clickOn("2");
+        String secondDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2";
+        String today = DayOfWeek.FRIDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n1";
+
+        clickOn(secondDay);
 
         navigateTo(MEDICINES);
 
@@ -238,11 +244,13 @@ public class BasicUITest extends BaseTestHelper {
         view.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.overviewWeek));
 
         TextView currentDay = view.get().findViewWithTag("selected");
-        internalAssert(currentDay.getText().equals("2"));
+        internalAssert(currentDay.getText().equals(secondDay));
+
+        clickOn(R.id.overviewFragment);
 
         navigateTo(OVERVIEW);
         view.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.overviewWeek));
         currentDay = view.get().findViewWithTag("selected");
-        internalAssert(currentDay.getText().equals("1"));
+        internalAssert(currentDay.getText().equals(today));
     }
 }

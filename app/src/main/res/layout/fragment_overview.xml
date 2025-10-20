@@ -11,11 +11,11 @@
 
     <com.kizitonwose.calendar.view.WeekCalendarView
         android:id="@+id/overviewWeek"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginHorizontal="4dp"
         app:cv_dayViewResource="@layout/calendar_day_layout"
-        app:cv_weekHeaderResource="@layout/calendar_header_layout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +23,8 @@
         android:id="@+id/filterButtons"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="@string/filter"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +35,7 @@
             style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/taken"
             app:icon="@drawable/check2_circle" />
 
         <Button
@@ -41,6 +43,7 @@
             style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/skipped"
             app:icon="@drawable/x_circle" />
 
         <Button
