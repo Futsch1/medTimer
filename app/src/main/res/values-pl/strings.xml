@@ -51,7 +51,6 @@
     <string name="after_meal">po posiłku</string>
     <string name="time_before_meal">x minut przed posiłkiem</string>
     <string name="time_after">x godzin po leku y</string>
-    <string name="instructions_label">Dodatkowe instrukcje (np. przed posiłkami)</string>
     <string name="export_csv">Eksportuj jako CSV</string>
     <string name="export_pdf">Eksportuj jako PDF</string>
     <string name="restore">Przywróć kopię</string>
@@ -243,4 +242,10 @@
     <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno (np. od 9:00 do 21:00), w którym pierwsze przypomnienie jest zawsze o czasie rozpoczęcia. Kolejne przypomnienia uruchamiane są w stałych odstępach czasu, aż do osiągnięcia czasu zakończenia. Cały wzorzec resetuje się każdego dnia.</string>
     <string name="linked_reminder">Przypomnienie połączone</string>
     <string name="linked_reminder_help">Przypomnienie połączone to przypomnienie uzupełniające, które jest zaplanowane na określoną ilość czasu po wykonaniu przypomnienia podstawowego (przyjętego lub odłożonego). Jest to przydatne w przypadku leków, które należy przyjmować po kolei, z określonym opóźnieniem między nimi.</string>
+    <string name="add_linked_reminder_summary">Tworzy przypomnienie uzupełniające, które jest zaplanowane na określony czas po uruchomieniu tego przypomnienia.</string>
+    <string name="cyclic_reminder_summary">Konfiguruje cykliczny wzorzec aktywnych i wstrzymanych dni, zaczynając od podanej daty. Przypomnienie będzie wysyłać powiadomienie tylko w aktywne dni. Użyj tej opcji dla leków takich jak tabletki antykoncepcyjne.</string>
+    <string name="variable_amount_summary">Gdy opcja jest aktywna, po przyjęciu przypomnienia wyświetlane jest okno dialogowe do wprowadzenia dawki.</string>
+    <string name="automatically_taken_summary">Gdy opcja jest aktywna, przypomnienie nie jest wyświetlane jako powiadomienie i jest automatycznie oznaczane jako przyjęte (może być używane tylko do śledzenia zapasów).</string>
+    <string name="reminder_status_summary">Przypomnienia mogą być aktywne i nieaktywne. Jeśli są nieaktywne, powiadomienie nie jest wysyłane. Można to skonfigurować na stałe lub na podstawie dat. Użyj tej opcji do konfigurowania stopniowego odstawiania leku.</string>
+    <string name="further_settings">Dalsze ustawienia</string>
 </resources>

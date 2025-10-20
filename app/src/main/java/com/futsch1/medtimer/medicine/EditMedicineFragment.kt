@@ -198,7 +198,7 @@ class EditMedicineFragment :
 
     private fun setupMedicineList(fragmentView: View): RecyclerView {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
-        adapter = ReminderViewAdapter(requireActivity(), thread)
+        adapter = ReminderViewAdapter(requireActivity())
         recyclerView.setAdapter(adapter)
         recyclerView.setLayoutManager(LinearLayoutManager(recyclerView.context))
         return recyclerView

@@ -63,7 +63,6 @@
     <string name="after_meal">efter måltid</string>
     <string name="time_before_meal">x minuter före måltid</string>
     <string name="time_after">x timmar efter intag av läkemedel y</string>
-    <string name="instructions_label">Ytterligare instruktioner (t.ex. före måltider)</string>
     <string name="medicine_data">Läkemdelsdata</string>
     <string name="export_csv">Exportera som CSV</string>
     <string name="export_pdf">Exportera som PDF</string>
@@ -233,4 +232,10 @@
     <string name="windowed_interval_reminder_help">Definiera ett dagligt aktivt fönster (t.ex. 09.00 till 21.00) där den första påminnelsen alltid är vid starttiden. Efterföljande påminnelser utlöses med fasta intervall tills sluttiden har nåtts. Hela mönstret återställs varje dag.</string>
     <string name="linked_reminder">Länkad påminnelse</string>
     <string name="linked_reminder_help">En länkad påminnelse är en uppföljningspåminnelse som schemaläggs en viss tid efter att en primär påminnelse har åtgärdats (antingen tagits eller snoozats). Detta är användbart för mediciner som måste tas i följd, med en specifik fördröjning mellan dem.</string>
+    <string name="add_linked_reminder_summary">Skapar en uppföljningspåminnelse som schemaläggs en viss tid efter att denna påminnelse har utlösts.</string>
+    <string name="cyclic_reminder_summary">Konfigurerar ett återkommande mönster av aktiva och pausade dagar från ett angivet datum. Påminnelsen kommer endast att skicka en avisering på aktiva dagar. Använd detta för mediciner som p-piller.</string>
+    <string name="variable_amount_summary">När den är aktiv visas en dialogruta för att ange dosen när påminnelsen tas.</string>
+    <string name="automatically_taken_summary">När den är aktiv visas inte påminnelsen som en avisering och markeras automatiskt som tagen (kan användas för att endast spåra lagret).</string>
+    <string name="reminder_status_summary">Påminnelser kan vara aktiva och inaktiva. Om de är inaktiva skickas ingen avisering. Detta kan konfigureras antingen statiskt или baserat på datum. Använd detta för att konfigurera nedtrappning av en medicin.</string>
+    <string name="further_settings">Ytterligare inställningar</string>
 </resources>

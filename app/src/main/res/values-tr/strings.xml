@@ -50,7 +50,6 @@
     <string name="after_meal">yemekten sonra</string>
     <string name="time_before_meal">yemekten x dakika önce</string>
     <string name="time_after">ilacın y alınmasından x saat sonra</string>
-    <string name="instructions_label">Ek talimatlar (örn. yemeklerden önce)</string>
     <string name="medicine_data">İlaç verisi</string>
     <string name="export_csv">CSV olarak dışa aktar</string>
     <string name="export_pdf">PDF olarak dışa aktar</string>
@@ -233,4 +232,10 @@
     <string name="windowed_interval_reminder_help">İlk hatırlatıcının her zaman başlangıç saatinde olduğu günlük bir aktif pencere (örneğin sabah 9\'dan akşam 9\'a kadar) tanımlayın. Sonraki hatırlatıcılar, bitiş saatine ulaşılana kadar sabit aralıklarla tetiklenir. Tam desen her gün sıfırlanır.</string>
     <string name="linked_reminder">Bağlantılı hatırlatıcı</string>
     <string name="linked_reminder_help">Bağlantılı bir hatırlatıcı, birincil bir hatırlatıcıya işlem yapıldıktan (alındıktan veya ertelendikten) belirli bir süre sonra planlanan bir takip hatırlatıcısıdır. Bu, aralarında belirli bir gecikme ile sırayla alınması gereken ilaçlar için kullanışlıdır.</string>
+    <string name="add_linked_reminder_summary">Bu hatırlatıcı tetiklendikten belirli bir süre sonra planlanan bir takip hatırlatıcısı oluşturur.</string>
+    <string name="cyclic_reminder_summary">Belirli bir tarihten başlayarak aktif ve duraklatılmış günlerden oluşan yinelenen bir düzen yapılandırır. Hatırlatıcı yalnızca aktif günlerde bildirim gönderir. Doğum kontrol hapları gibi ilaçlar için bunu kullanın.</string>
+    <string name="variable_amount_summary">Aktif olduğunda, hatırlatıcı alındığında dozu girmek için bir diyalog kutusu gösterilir.</string>
+    <string name="automatically_taken_summary">Aktif olduğunda, hatırlatıcı bildirim olarak gösterilmez ve otomatik olarak alınmış olarak işaretlenir (sadece stok takibi için kullanılabilir).</string>
+    <string name="reminder_status_summary">Hatırlatıcılar aktif ve pasif olabilir. Pasif iseler, bildirim gönderilmez. Bu, statik olarak veya tarihlere göre yapılandırılabilir. Bir ilacın dozunu azaltmayı yapılandırmak için bunu kullanın.</string>
+    <string name="further_settings">Diğer ayarlar</string>
 </resources>

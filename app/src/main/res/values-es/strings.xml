@@ -51,7 +51,6 @@
     <string name="after_meal">después de la comida</string>
     <string name="time_before_meal">x minutos antes de la comida</string>
     <string name="time_after">x horas después del medicamento y</string>
-    <string name="instructions_label">Instrucciones adicionales (por ejemplo, antes de las comidas)</string>
     <string name="medicine_data">Datos de medicamentos</string>
     <string name="export_csv">Exportar como CSV</string>
     <string name="export_pdf">Exportar como PDF</string>
@@ -237,5 +236,11 @@
     <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
     <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) donde el primer recordatorio es siempre a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta que se alcanza la hora de finalización. El patrón completo se reinicia todos los días.</string>
     <string name="linked_reminder">Recordatorio vinculado</string>
-    <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se acciona un recordatorio principal (ya sea que se tome o se posponga). Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
+    <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se tome un recordatorio principal. Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
+    <string name="add_linked_reminder_summary">Crea un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se genera este recordatorio.</string>
+    <string name="cyclic_reminder_summary">Configura un patrón recurrente de días activos y en pausa a partir de una fecha determinada. El recordatorio solo generará una notificación en los días activos. Úselo para medicamentos como las píldoras anticonceptivas.</string>
+    <string name="variable_amount_summary">Cuando está activo, se muestra un diálogo para introducir la dosis cuando se toma el recordatorio.</string>
+    <string name="automatically_taken_summary">Cuando está activo, el recordatorio no se muestra como notificación y se marca automáticamente como tomado (se puede usar para rastrear solo el stock).</string>
+    <string name="reminder_status_summary">Los recordatorios pueden estar activos e inactivos. Si están inactivos, no se genera ninguna notificación. Esto se puede configurar de forma estática o en función de las fechas. Utilice esta opción para configurar la reducción gradual de un medicamento.</string>
+    <string name="further_settings">Más ajustes</string>
 </resources>

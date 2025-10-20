@@ -23,12 +23,12 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 135
+        versionCode = 136
         versionName = "1.20.0"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,da,de,el,es,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
+        resConfigs("en,ar,bg,da,de,el,es,fi,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -63,7 +63,28 @@ android {
     @Suppress("UnstableApiUsage")
     androidResources {
         generateLocaleConfig = true
-        localeFilters += listOf("en", "ar", "bg", "da", "de", "el", "es", "fr", "it", "nl", "pl", "pt-rBR", "ru", "sv", "ta", "tr", "uk", "zh-rCN", "zh-rTW")
+        localeFilters += listOf(
+            "en",
+            "ar",
+            "bg",
+            "da",
+            "de",
+            "el",
+            "es",
+            "fi",
+            "fr",
+            "it",
+            "nl",
+            "pl",
+            "pt-rBR",
+            "ru",
+            "sv",
+            "ta",
+            "tr",
+            "uk",
+            "zh-rCN",
+            "zh-rTW"
+        )
     }
     testOptions {
         unitTests {
@@ -106,7 +127,7 @@ dependencies {
     val mockitoCoreVersion = "5.20.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.16"
-    val jazzerVersion = "0.25.1"
+    val jazzerVersion = "0.26.0"
 
     val androidTestJunitVersion = "1.3.0"
     val androidTestEspressoVersion = "3.7.0"

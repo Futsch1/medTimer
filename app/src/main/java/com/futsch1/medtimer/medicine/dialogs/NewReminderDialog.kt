@@ -73,7 +73,7 @@ class NewReminderDialog(
         val timeBasedVisibility =
             if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
         val intervalBasedVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.isInterval) ViewGroup.VISIBLE else ViewGroup.GONE
         val continuousIntervalVisibility =
             if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
         val windowedIntervalVisibility = if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE

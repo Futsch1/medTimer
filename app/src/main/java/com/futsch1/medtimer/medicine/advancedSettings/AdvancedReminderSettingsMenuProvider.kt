@@ -14,10 +14,11 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 
 class AdvancedReminderSettingsMenuProvider(
-    private val reminder: Reminder,
-    private val medicineRepository: MedicineRepository,
     private val fragment: Fragment
 ) : MenuProvider {
+
+    lateinit var reminder: Reminder
+    lateinit var medicineRepository: MedicineRepository
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.advanced_reminder_settings, menu)
@@ -25,10 +26,12 @@ class AdvancedReminderSettingsMenuProvider(
         enableOptionalIcons(menu)
 
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
-            LinkedReminderHandling(reminder, medicineRepository, fragment.lifecycleScope).deleteReminder(
-                fragment.requireContext(),
-                { NavHostFragment.Companion.findNavController(fragment).navigateUp() }, { }
-            )
+            if (this::reminder.isInitialized) {
+                LinkedReminderHandling(reminder, medicineRepository, fragment.lifecycleScope).deleteReminder(
+                    fragment.requireContext(),
+                    { NavHostFragment.Companion.findNavController(fragment).navigateUp() }, { }
+                )
+            }
             true
         }
     }

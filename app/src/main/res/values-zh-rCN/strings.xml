@@ -49,7 +49,6 @@
     <string name="after_meal">饭后服用</string>
     <string name="time_before_meal">饭前 x 分钟</string>
     <string name="time_after">服用药物 x 后的 y 小时</string>
-    <string name="instructions_label">备注（如饭前服用）</string>
     <string name="medicine_data">药品数据</string>
     <string name="export_csv">导出为 CSV</string>
     <string name="export_pdf">导出为 PDF</string>
@@ -228,4 +227,10 @@
     <string name="windowed_interval_reminder_help">定义一个每日活动窗口（例如，上午 9 点到晚上 9 点），其中第一个提醒总是在开始时间。后续提醒会以固定的时间间隔触发，直到到达结束时间。整个模式每天都会重置。</string>
     <string name="linked_reminder">关联提醒</string>
     <string name="linked_reminder_help">关联提醒是在主提醒被执行（服用或打盹）后一定时间安排的后续提醒。这对于需要按顺序服用的药物非常有用，它们之间有特定的延迟。</string>
+    <string name="add_linked_reminder_summary">创建在此提醒触发后一定时间安排的后续提醒。</string>
+    <string name="cyclic_reminder_summary">从给定日期开始，配置一个由活动日和暂停日组成的重复模式。提醒只会在活动日发出通知。此功能可用于避孕药等药物。</string>
+    <string name="variable_amount_summary">激活后，在服用提醒时会显示一个对话框以输入剂量。</string>
+    <string name="automatically_taken_summary">激活后，提醒不会显示为通知，并自动标记为已服用（可仅用于跟踪库存）。</string>
+    <string name="reminder_status_summary">提醒可以是活动的和非活动的。如果是非活动的，则不会发出通知。这可以静态配置或根据日期配置。使用此功能来配置药物的逐渐减量。</string>
+    <string name="further_settings">更多设置</string>
 </resources>

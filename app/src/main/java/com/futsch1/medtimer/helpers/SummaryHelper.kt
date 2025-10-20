@@ -131,7 +131,7 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
         ({ r: Reminder -> linkedReminderSummaryString(r, context) })
     ) + getRemindersSummary(
         reminders.stream()
-            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL || r.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL },
+            .filter { r: Reminder -> r.isInterval },
         ({ r: Reminder -> intervalBasedReminderString(r, context) })
     )
 

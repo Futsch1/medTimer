@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.database.Reminder
@@ -31,16 +31,20 @@ abstract class AdvancedReminderPreferencesFragment(
         postponeEnterTransition()
 
         this.lifecycleScope.launch(ioDispatcher) {
-            reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
-            preferenceManager.preferenceDataStore = reminderDataStore
-            this.launch(mainDispatcher) {
-                setPreferencesFromResource(preferencesResId, rootKey)
-                observeUserData(reminderViewModel, reminderId)
-                setupLinks()
-                setupOnClick()
-                customSetup(reminderDataStore.reminder)
+            try {
+                reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
+                preferenceManager.preferenceDataStore = reminderDataStore
+                this.launch(mainDispatcher) {
+                    setPreferencesFromResource(preferencesResId, rootKey)
+                    observeUserData(reminderViewModel, reminderId)
+                    setupLinks()
+                    setupOnClick()
+                    customSetup(reminderDataStore.reminder)
 
-                startPostponedEnterTransition()
+                    startPostponedEnterTransition()
+                }
+            } catch (_: NullPointerException) {
+                // It may happen that the reminder is deleted already, so ignore this
             }
         }
     }
@@ -62,18 +66,22 @@ abstract class AdvancedReminderPreferencesFragment(
     }
 
     private fun setupLinks() {
-        val navController = findNavController(this.requireView())
+        try {
+            val navController = findNavController()
 
-        for (link in links) {
-            val preference = findPreference<Preference?>(link.key)
-            preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-                try {
-                    navController.navigate(link.value(reminderId))
-                } catch (_: IllegalArgumentException) {
-                    // Intentionally empty (monkey test can cause this to fail)
+            for (link in links) {
+                val preference = findPreference<Preference?>(link.key)
+                preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                    try {
+                        navController.navigate(link.value(reminderId))
+                    } catch (_: IllegalArgumentException) {
+                        // Intentionally empty (monkey test can cause this to fail)
+                    }
+                    true
                 }
-                true
             }
+        } catch (_: IllegalStateException) {
+            // Ignore this
         }
     }
 

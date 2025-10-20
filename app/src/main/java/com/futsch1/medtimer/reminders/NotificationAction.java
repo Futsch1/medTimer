@@ -39,9 +39,9 @@ public class NotificationAction {
         reminderEvent.status = status;
         doStockHandling(context, reminderEvent, medicineRepository);
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-        
+
         medicineRepository.updateReminderEvent(reminderEvent);
-        Log.i(LogTags.REMINDER, String.format("%s reminder %d for %s",
+        Log.i(LogTags.REMINDER, String.format("%s reminder reID %d for %s",
                 status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
                 reminderEvent.reminderEventId,
                 reminderEvent.medicineName));
@@ -53,7 +53,7 @@ public class NotificationAction {
     public static void cancelNotification(Context context, int notificationId) {
         if (notificationId != 0) {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            Log.d(LogTags.REMINDER, String.format("Cancel notification %d", notificationId));
+            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId));
             notificationManager.cancel(notificationId);
         }
     }
@@ -62,7 +62,7 @@ public class NotificationAction {
         PendingIntent snoozePendingIntent = new PendingIntentBuilder(context).
                 setReminderEventId(reminderEventId).
                 build();
-        Log.d(LogTags.REMINDER, String.format("Cancel all pending alarms for %d", reminderEventId));
+        Log.d(LogTags.REMINDER, String.format("Cancel all pending alarms for reID %d", reminderEventId));
         context.getSystemService(AlarmManager.class).cancel(snoozePendingIntent);
     }
 

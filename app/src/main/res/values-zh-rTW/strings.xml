@@ -49,7 +49,6 @@
     <string name="time_before_meal">飯前 x 分鐘</string>
     <string name="before_meal">飯前</string>
     <string name="medicine_data">藥物資料</string>
-    <string name="instructions_label">額外說明（例如：飯前服用）</string>
     <string name="export_csv">匯出 CSV</string>
     <string name="export_pdf">匯出 PDF</string>
     <string name="restore">還原</string>
@@ -228,4 +227,10 @@
     <string name="windowed_interval_reminder_help">定義每日活動窗口（例如上午 9 點至晚上 9 點），其中第一個提醒總是在開始時間。後續提醒會以固定間隔觸發，直到達到結束時間。整個模式每天重置。</string>
     <string name="linked_reminder">連結提醒</string>
     <string name="linked_reminder_help">連結提醒是在主要提醒被執行（已服用或延後）後一定時間安排的後續提醒。這對於需要按順序服用且藥物之間有特定延遲的藥物很有用。</string>
+    <string name="add_linked_reminder_summary">在此提醒觸發後的一段時間安排後續提醒。</string>
+    <string name="cyclic_reminder_summary">從給定日期開始，設定一個由啟用日和暫停日組成的重複模式。提醒只會在啟用日發出通知。此功能可用於避孕藥等藥物。</string>
+    <string name="variable_amount_summary">啟用後，在服用提醒時會顯示一個對話框以輸入劑量。</string>
+    <string name="automatically_taken_summary">啟用後，提醒不會顯示為通知，並自動標記為已服用（可僅用於追蹤庫存）。</string>
+    <string name="reminder_status_summary">提醒可以是啟用和停用的。如果停用，則不會發出通知。這可以靜態設定或根據日期設定。使用此功能來設定藥物的逐漸減量。</string>
+    <string name="further_settings">更多設定</string>
 </resources>

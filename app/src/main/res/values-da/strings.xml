@@ -45,7 +45,6 @@
     <string name="after_meal">efter måltidet</string>
     <string name="time_before_meal">x minutter før måltidet</string>
     <string name="time_after">x timer efter medicin y</string>
-    <string name="instructions_label">Yderligere instruktioner (f.eks. før måltider)</string>
     <string name="medicine_data">Medicindata</string>
     <string name="export_csv">Eksporter som CSV</string>
     <string name="export_pdf">Exporter som PDF</string>
@@ -233,4 +232,10 @@
     <string name="windowed_interval_reminder_help">Definer et dagligt aktivt vindue (f.eks. fra kl. 9 til 21), hvor den første påmindelse altid er på starttidspunktet. Efterfølgende påmindelser udløses med faste intervaller, indtil sluttidspunktet er nået. Hele mønsteret nulstilles hver dag.</string>
     <string name="linked_reminder">Linket påmindelse</string>
     <string name="linked_reminder_help">En linket påmindelse er en opfølgende påmindelse, der planlægges et vist stykke tid efter en primær påmindelse er blevet actionet (enten taget eller snoozed). Dette er nyttigt for medicin, der skal tages i rækkefølge, med en bestemt forsinkelse imellem.</string>
+    <string name="add_linked_reminder_summary">Opretter en opfølgende påmindelse, der planlægges et bestemt tidsrum efter, at denne påmindelse er udløst.</string>
+    <string name="cyclic_reminder_summary">Konfigurerer et tilbagevendende mønster af aktive og pausedage fra en given dato. Påmindelsen vil kun sende en notifikation på aktive dage. Brug dette til medicin som p-piller.</string>
+    <string name="variable_amount_summary">Når den er aktiv, vises en dialogboks til indtastning af dosis, når påmindelsen tages.</string>
+    <string name="automatically_taken_summary">Når den er aktiv, vises påmindelsen ikke som en notifikation og markeres automatisk som taget (kan kun bruges til at spore lagerbeholdning).</string>
+    <string name="reminder_status_summary">Påmindelser kan være aktive og inaktive. Hvis de er inaktive, udsendes ingen notifikation. Dette kan konfigureres statisk eller baseret på datoer. Brug dette til at konfigurere nedtrapning af medicin.</string>
+    <string name="further_settings">Yderligere indstillinger</string>
 </resources>

@@ -96,6 +96,10 @@ public class Reminder {
         windowedInterval = false;
     }
 
+    public boolean isInterval() {
+        return getReminderType() == ReminderType.CONTINUOUS_INTERVAL || getReminderType() == ReminderType.WINDOWED_INTERVAL;
+    }
+
     public ReminderType getReminderType() {
         if (linkedReminderId != 0) {
             return ReminderType.LINKED;
