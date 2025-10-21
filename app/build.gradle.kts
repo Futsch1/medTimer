@@ -5,8 +5,8 @@ plugins {
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    //noinspection NewerVersionAvailable,GradleDependency: Version 6 crashes with an error in apache.commons.compress
-    id("org.sonarqube") version "7.0.0.6105"
+    //noinspection NewerVersionAvailable,GradleDependency: Version 6 and 7 crashes with an error in apache.commons.compress
+    id("org.sonarqube") version "5.1.0.4882"
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
@@ -28,7 +28,7 @@ android {
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,da,de,el,es,fi,fr,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
+        resConfigs("en,ar,bg,da,de,el,es,fi,fr,hu,it,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -73,6 +73,7 @@ android {
             "es",
             "fi",
             "fr",
+            "hu",
             "it",
             "nl",
             "pl",
