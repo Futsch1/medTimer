@@ -6,6 +6,7 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString;
+import static com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate;
 
 import android.app.Application;
 import android.content.Context;
@@ -146,7 +147,7 @@ public class ReminderWork extends Worker {
             reminderEvent.askForAmount = reminder.variableAmount;
             reminderEvent.tags = medicine.tags.stream().map(t -> t.name).collect((Collectors.toList()));
             if (reminder.isInterval()) {
-                reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(medicineRepository, reminderEvent);
+                reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(medicineRepository, reminderEvent, reminder.getReminderType() == Reminder.ReminderType.WINDOWED_INTERVAL);
             } else {
                 reminderEvent.lastIntervalReminderTimeInMinutes = 0;
             }
@@ -183,9 +184,13 @@ public class ReminderWork extends Worker {
         return Integer.parseInt(sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")) * 60;
     }
 
-    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent) {
+    private static int getLastReminderEventTimeInMinutes(MedicineRepository medicineRepository, ReminderEvent reminderEvent, boolean isWindowedInterval) {
         ReminderEvent lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId);
         if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
+            if (isWindowedInterval && secondsSinceEpochToLocalDate(lastReminderEvent.remindedTimestamp, ZoneId.systemDefault()) != secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())) {
+                return 0;
+            }
+
             return (int) (lastReminderEvent.processedTimestamp / 60);
         } else {
             return 0;
