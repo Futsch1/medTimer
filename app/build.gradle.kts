@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("jacoco")
     //noinspection NewerVersionAvailable,GradleDependency: Version 6 and 7 crashes with an error in apache.commons.compress
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "7.0.1.6134"
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
