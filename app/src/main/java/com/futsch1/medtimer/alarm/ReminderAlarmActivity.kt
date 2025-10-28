@@ -27,12 +27,16 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ReminderAlarmActivity(
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var vibrator: Vibrator
+
+    // Use an AtomicBoolean for robust, race-condition-free state management
+    private val alarmStarted = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +62,16 @@ class ReminderAlarmActivity(
 
     override fun onPause() {
         super.onPause()
+        // Reset the flag so the alarm can start again if the activity is resumed.
+        alarmStarted.set(false)
+
+        // Clean up resources safely.
         if (this::mediaPlayer.isInitialized) {
-            mediaPlayer.stop()
+            try {
+                mediaPlayer.stop()
+            } catch (_: IllegalStateException) {
+                // Ignore
+            }
             mediaPlayer.release()
         }
         if (this::vibrator.isInitialized) {
@@ -68,8 +80,19 @@ class ReminderAlarmActivity(
     }
 
     private fun startAlarmTone() {
+        if (!alarmStarted.compareAndSet(false, true)) {
+            return
+        }
+
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
+                // If onPause() was called before this coroutine could execute,
+                // the flag will have been reset to false. This check prevents us
+                // from starting the alarm just before the activity is paused.
+                if (!alarmStarted.get()) {
+                    return@withContext
+                }
+
                 if (shallSoundAlarm()) {
                     val alarmURI = PreferenceManager.getDefaultSharedPreferences(this@ReminderAlarmActivity)
                         .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!.toUri()
