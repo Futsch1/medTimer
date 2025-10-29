@@ -245,4 +245,8 @@
     <string name="automatically_taken_summary">Когда активно, напоминание не отображается в виде уведомления и автоматически помечается как принятое (можно использовать только для отслеживания запасов).</string>
     <string name="reminder_status_summary">Напоминания могут быть активными и неактивными. Если они неактивны, уведомление не вызывается. Это можно настроить статически или на основе дат. Используйте это для настройки постепенного снижения дозы лекарства.</string>
     <string name="further_settings">Дополнительные настройки</string>
+    <string name="alarm_settings">Настройки будильника</string>
+    <string name="no_alarm_sound_when_silent">Нет звука будильника в беззвучном режиме</string>
+    <string name="no_vibration_when_silent">Нет вибрации в беззвучном режиме</string>
+    <string name="alarm_ringtone">Мелодия будильника</string>
 </resources>

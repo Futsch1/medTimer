@@ -258,4 +258,8 @@
     <string name="automatically_taken_summary">عندما يكون نشطًا، لا يتم عرض التذكير كإشعار ويتم تحديده تلقائيًا على أنه تم أخذه (يمكن استخدامه لتتبع المخزون فقط).</string>
     <string name="reminder_status_summary">يمكن أن تكون التذكيرات نشطة وغير نشطة. إذا كانت غير نشطة، فلن يتم إرسال أي إشعار. يمكن تكوين هذا بشكل ثابت أو بناءً على التواريخ. استخدم هذا لتكوين التخفيض التدريجي للدواء.</string>
     <string name="further_settings">إعدادات إضافية</string>
+    <string name="alarm_settings">إعدادات المنبه</string>
+    <string name="no_alarm_sound_when_silent">لا يوجد صوت للمنبه في الوضع الصامت</string>
+    <string name="no_vibration_when_silent">لا يوجد اهتزاز في الوضع الصامت</string>
+    <string name="alarm_ringtone">نغمة المنبه</string>
 </resources>

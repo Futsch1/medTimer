@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">செயலில் இருக்கும்போது, நினைவூட்டல் அறிவிப்பாகக் காட்டப்படாது மற்றும் தானாகவே எடுக்கப்பட்டதாகக் குறிக்கப்படும் (கையிருப்பை மட்டும் கண்காணிக்கப் பயன்படுத்தலாம்).</string>
     <string name="reminder_status_summary">நினைவூட்டல்கள் செயலில் மற்றும் செயலற்ற நிலையில் இருக்கலாம். அவை செயலற்ற நிலையில் இருந்தால், எந்த அறிவிப்பும் எழுப்பப்படாது. இது நிலையானதாகவோ அல்லது தேதிகளின் அடிப்படையிலோ உள்ளமைக்கப்படலாம். ஒரு மருந்தின் அளவைக் குறைக்க இதைப் பயன்படுத்தவும்.</string>
     <string name="further_settings">மேலும் அமைப்புகள்</string>
+    <string name="alarm_settings">அலாரம் அமைப்புகள்</string>
+    <string name="no_alarm_sound_when_silent">சைலண்ட் பயன்முறையில் அலார ஒலி இல்லை</string>
+    <string name="no_vibration_when_silent">சைலண்ட் பயன்முறையில் அதிர்வு இல்லை</string>
+    <string name="alarm_ringtone">அலார ரிங்டோன்</string>
 </resources>

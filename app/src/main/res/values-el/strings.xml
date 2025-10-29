@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">Όταν είναι ενεργό, η υπενθύμιση δεν εμφανίζεται ως ειδοποίηση και επισημαίνεται αυτόματα ως ληφθείσα (μπορεί να χρησιμοποιηθεί μόνο για την παρακολούθηση του αποθέματος).</string>
     <string name="reminder_status_summary">Οι υπενθυμίσεις μπορούν να είναι ενεργές και ανενεργές. Εάν είναι ανενεργές, δεν αποστέλλεται καμία ειδοποίηση. Αυτό μπορεί να ρυθμιστεί στατικά ή με βάση ημερομηνίες. Χρησιμοποιήστε το για να διαμορφώσετε τη σταδιακή μείωση ενός φαρμάκου.</string>
     <string name="further_settings">Περαιτέρω ρυθμίσεις</string>
+    <string name="alarm_settings">Ρυθμίσεις ειδοποίησης</string>
+    <string name="no_alarm_sound_when_silent">Χωρίς ήχο ειδοποίησης σε αθόρυβη λειτουργία</string>
+    <string name="no_vibration_when_silent">Χωρίς δόνηση σε αθόρυβη λειτουργία</string>
+    <string name="alarm_ringtone">Ήχος κλήσης ειδοποίησης</string>
 </resources>

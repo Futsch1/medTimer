@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">När den är aktiv visas inte påminnelsen som en avisering och markeras automatiskt som tagen (kan användas för att endast spåra lagret).</string>
     <string name="reminder_status_summary">Påminnelser kan vara aktiva och inaktiva. Om de är inaktiva skickas ingen avisering. Detta kan konfigureras antingen statiskt или baserat på datum. Använd detta för att konfigurera nedtrappning av en medicin.</string>
     <string name="further_settings">Ytterligare inställningar</string>
+    <string name="alarm_settings">Alarminställningar</string>
+    <string name="no_alarm_sound_when_silent">Inget alarmljud i tyst läge</string>
+    <string name="no_vibration_when_silent">Ingen vibration i tyst läge</string>
+    <string name="alarm_ringtone">Alarmsignal</string>
 </resources>

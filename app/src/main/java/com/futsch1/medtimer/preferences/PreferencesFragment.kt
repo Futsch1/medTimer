@@ -42,6 +42,11 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
         )
         setupPreferencesLink(
             this,
+            "alarm_settings",
+            R.id.action_preferencesFragment_to_alarmSettingsFragment
+        )
+        setupPreferencesLink(
+            this,
             "display_settings",
             R.id.action_preferencesFragment_to_displaySettingsFragment
         )

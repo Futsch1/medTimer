@@ -233,4 +233,8 @@
     <string name="automatically_taken_summary">啟用後，提醒不會顯示為通知，並自動標記為已服用（可僅用於追蹤庫存）。</string>
     <string name="reminder_status_summary">提醒可以是啟用和停用的。如果停用，則不會發出通知。這可以靜態設定或根據日期設定。使用此功能來設定藥物的逐漸減量。</string>
     <string name="further_settings">更多設定</string>
+    <string name="alarm_settings">鬧鐘設定</string>
+    <string name="no_alarm_sound_when_silent">靜音模式下沒有鬧鐘聲音</string>
+    <string name="no_vibration_when_silent">靜音模式下沒有震動</string>
+    <string name="alarm_ringtone">鬧鐘鈴聲</string>
 </resources>

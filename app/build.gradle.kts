@@ -123,6 +123,7 @@ dependencies {
     val iconDialogVersion = "3.3.0"
     val flexboxVersion = "3.0.0"
     val biometricVersion = "1.1.0"
+    val preferenceExtendedVersion = "1.1.0"
 
     val junitVersion = "6.0.0"
     val mockitoCoreVersion = "5.20.0"
@@ -165,6 +166,8 @@ dependencies {
     implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
     implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
     implementation("androidx.biometric:biometric:$biometricVersion")
+    implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceExtendedVersion")
+    implementation("com.takisoft.preferencex:preferencex:$preferenceExtendedVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")

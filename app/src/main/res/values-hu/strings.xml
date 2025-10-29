@@ -238,4 +238,8 @@
     <string name="reminder_status_summary">Az emlékeztetők lehetnek aktívak vagy inaktívak. Ha inaktívak, nem küldenek értesítést. Ezt beállíthatod fixen vagy dátumok alapján. Használható például gyógyszer adagcsökkentéshez.</string>
     <string name="further_settings">További beállítások</string>
     <string name="interval_time">Időköz: %s</string>
+    <string name="alarm_settings">Ébresztő beállításai</string>
+    <string name="no_alarm_sound_when_silent">Nincs ébresztőhang némításkor</string>
+    <string name="no_vibration_when_silent">Nincs rezgés némításkor</string>
+    <string name="alarm_ringtone">Ébresztő csengőhangja</string>
 </resources>
