@@ -13,9 +13,11 @@ import android.os.VibratorManager
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
@@ -68,21 +70,50 @@ class ReminderAlarmActivity(
     private fun startAlarmTone() {
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
-                val alarmURI = Settings.System.DEFAULT_ALARM_ALERT_URI
-                mediaPlayer =
-                    MediaPlayer.create(this@ReminderAlarmActivity, alarmURI, null, AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(), 0)
-                mediaPlayer.isLooping = true
-                mediaPlayer.start()
-
-                vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-                } else {
-                    @Suppress("DEPRECATION")
-                    getSystemService(VIBRATOR_SERVICE) as Vibrator
+                if (shallSoundAlarm()) {
+                    val alarmURI = PreferenceManager.getDefaultSharedPreferences(this@ReminderAlarmActivity)
+                        .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!.toUri()
+                    mediaPlayer =
+                        MediaPlayer.create(
+                            this@ReminderAlarmActivity,
+                            alarmURI,
+                            null,
+                            AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
+                            0
+                        )
+                    mediaPlayer.isLooping = true
+                    mediaPlayer.start()
                 }
-                vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
+
+                if (shallVibrate()) {
+                    vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+                    } else {
+                        @Suppress("DEPRECATION")
+                        getSystemService(VIBRATOR_SERVICE) as Vibrator
+                    }
+                    vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
+                }
             }
         }
+    }
+
+    private fun shallSoundAlarm(): Boolean {
+        return combinePreferenceAndRingerMode("no_alarm_sound_when_silent")
+    }
+
+    private fun shallVibrate(): Boolean {
+        return combinePreferenceAndRingerMode("no_vibration_when_silent")
+    }
+
+    private fun combinePreferenceAndRingerMode(preferenceName: String): Boolean {
+        val preferenceValue = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, true)
+        if (preferenceValue) {
+            // If the silent mode is active, do not ring the alarm
+            val audioManager = getSystemService(AUDIO_SERVICE) as android.media.AudioManager
+            return audioManager.ringerMode != android.media.AudioManager.RINGER_MODE_SILENT
+        }
+        return true
     }
 
     private fun addAlarmFragment(intent: Intent?) {

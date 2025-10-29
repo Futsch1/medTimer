@@ -248,4 +248,8 @@
     <string name="automatically_taken_summary">Gdy opcja jest aktywna, przypomnienie nie jest wyświetlane jako powiadomienie i jest automatycznie oznaczane jako przyjęte (może być używane tylko do śledzenia zapasów).</string>
     <string name="reminder_status_summary">Przypomnienia mogą być aktywne i nieaktywne. Jeśli są nieaktywne, powiadomienie nie jest wysyłane. Można to skonfigurować na stałe lub na podstawie dat. Użyj tej opcji do konfigurowania stopniowego odstawiania leku.</string>
     <string name="further_settings">Dalsze ustawienia</string>
+    <string name="alarm_settings">Ustawienia alarmu</string>
+    <string name="no_alarm_sound_when_silent">Brak dźwięku alarmu w trybie cichym</string>
+    <string name="no_vibration_when_silent">Brak wibracji w trybie cichym</string>
+    <string name="alarm_ringtone">Dzwonek alarmu</string>
 </resources>

@@ -16,7 +16,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few"/>
+        <item quantity="few" />
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -248,4 +248,8 @@
     <string name="automatically_taken_summary">Коли активно, нагадування не відображається як сповіщення та автоматично позначається як прийняте (можна використовувати лише для відстеження залишків).</string>
     <string name="reminder_status_summary">Нагадування можуть бути активними та неактивними. Якщо вони неактивні, сповіщення не надсилається. Це можна налаштувати статично або на основі дат. Використовуйте це для налаштування поступового зменшення дози ліків.</string>
     <string name="further_settings">Додаткові налаштування</string>
+    <string name="alarm_settings">Налаштування будильника</string>
+    <string name="no_alarm_sound_when_silent">Немає звуку будильника в беззвучному режимі</string>
+    <string name="no_vibration_when_silent">Немає вібрації в беззвучному режимі</string>
+    <string name="alarm_ringtone">Мелодія будильника</string>
 </resources>

@@ -5,6 +5,10 @@
         app:key="notification_settings"
         app:title="@string/notification_reminder_settings" />
     <Preference
+        android:icon="@drawable/alarm"
+        app:key="alarm_settings"
+        app:title="@string/alarm_settings" />
+    <Preference
         android:icon="@drawable/display"
         app:key="display_settings"
         app:title="@string/display_settings" />

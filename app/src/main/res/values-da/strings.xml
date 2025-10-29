@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">Når den er aktiv, vises påmindelsen ikke som en notifikation og markeres automatisk som taget (kan kun bruges til at spore lagerbeholdning).</string>
     <string name="reminder_status_summary">Påmindelser kan være aktive og inaktive. Hvis de er inaktive, udsendes ingen notifikation. Dette kan konfigureres statisk eller baseret på datoer. Brug dette til at konfigurere nedtrapning af medicin.</string>
     <string name="further_settings">Yderligere indstillinger</string>
+    <string name="alarm_settings">Alarmindstillinger</string>
+    <string name="no_alarm_sound_when_silent">Ingen alarmlyd i lydløs tilstand</string>
+    <string name="no_vibration_when_silent">Ingen vibration i lydløs tilstand</string>
+    <string name="alarm_ringtone">Alarm ringetone</string>
 </resources>

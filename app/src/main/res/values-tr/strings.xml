@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">Aktif olduğunda, hatırlatıcı bildirim olarak gösterilmez ve otomatik olarak alınmış olarak işaretlenir (sadece stok takibi için kullanılabilir).</string>
     <string name="reminder_status_summary">Hatırlatıcılar aktif ve pasif olabilir. Pasif iseler, bildirim gönderilmez. Bu, statik olarak veya tarihlere göre yapılandırılabilir. Bir ilacın dozunu azaltmayı yapılandırmak için bunu kullanın.</string>
     <string name="further_settings">Diğer ayarlar</string>
+    <string name="alarm_settings">Alarm ayarları</string>
+    <string name="no_alarm_sound_when_silent">Sessiz modda alarm sesi yok</string>
+    <string name="no_vibration_when_silent">Sessiz modda titreşim yok</string>
+    <string name="alarm_ringtone">Alarm zil sesi</string>
 </resources>

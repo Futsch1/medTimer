@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">Когато е активно, напомнянето не се показва като известие и автоматично се маркира като прието (може да се използва само за проследяване на наличността).</string>
     <string name="reminder_status_summary">Напомнянията могат да бъдат активни и неактивни. Ако са неактивни, не се изпраща известие. Това може да бъде конфигурирано статично или въз основа на дати. Използвайте това за конфигуриране на постепенно спиране на лекарство.</string>
     <string name="further_settings">Допълнителни настройки</string>
+    <string name="alarm_settings">Настройки на алармата</string>
+    <string name="no_alarm_sound_when_silent">Без звук на алармата в безшумен режим</string>
+    <string name="no_vibration_when_silent">Без вибрация в безшумен режим</string>
+    <string name="alarm_ringtone">Мелодия на алармата</string>
 </resources>

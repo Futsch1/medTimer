@@ -243,4 +243,8 @@
     <string name="automatically_taken_summary">Quando ativo, o lembrete não é exibido como notificação e é automaticamente marcado como tomado (pode ser usado apenas para controlar o estoque).</string>
     <string name="reminder_status_summary">Os lembretes podem estar ativos e inativos. Se estiverem inativos, nenhuma notificação é enviada. Isso pode ser configurado estaticamente ou com base em datas. Use isto para configurar a redução gradual de um medicamento.</string>
     <string name="further_settings">Configurações adicionais</string>
+    <string name="alarm_settings">Configurações de alarme</string>
+    <string name="no_alarm_sound_when_silent">Sem som de alarme no modo silencioso</string>
+    <string name="no_vibration_when_silent">Sem vibração no modo silencioso</string>
+    <string name="alarm_ringtone">Toque do alarme</string>
 </resources>

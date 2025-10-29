@@ -243,4 +243,8 @@
     <string name="automatically_taken_summary">Quando è attiva, il promemoria non viene mostrato come notifica e viene automaticamente contrassegnato come assunto (può essere usato solo per monitorare le scorte).</string>
     <string name="reminder_status_summary">I promemoria possono essere attivi e inattivi. Se sono inattivi, non viene inviata alcuna notifica. Questo stato può essere configurato staticamente o in base a date. Utile per configurare la riduzione graduale di un farmaco.</string>
     <string name="further_settings">Impostazioni aggiuntive</string>
+    <string name="alarm_settings">Impostazioni sveglia</string>
+    <string name="no_alarm_sound_when_silent">Nessun suono della sveglia in modalità silenziosa</string>
+    <string name="no_vibration_when_silent">Nessuna vibrazione in modalità silenziosa</string>
+    <string name="alarm_ringtone">Suoneria sveglia</string>
 </resources>

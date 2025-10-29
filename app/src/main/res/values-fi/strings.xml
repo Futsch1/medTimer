@@ -238,4 +238,8 @@
     <string name="automatically_taken_summary">Kun toiminto on aktiivinen, muistutusta ei näytetä ilmoituksena ja se merkitään automaattisesti otetuksi (voidaan käyttää vain varaston seurantaan).</string>
     <string name="reminder_status_summary">Muistutukset voivat olla aktiivisia ja passiivisia. Jos ne ovat passiivisia, ilmoitusta ei lähetetä. Tämä voidaan määrittää staattisesti tai päivämäärien perusteella. Käytä tätä lääkkeen annoksen pienentämisen määrittämiseen.</string>
     <string name="further_settings">Lisäasetukset</string>
+    <string name="alarm_settings">Hälytysasetukset</string>
+    <string name="no_alarm_sound_when_silent">Ei hälytysääntä äänettömässä tilassa</string>
+    <string name="no_vibration_when_silent">Ei värinää äänettömässä tilassa</string>
+    <string name="alarm_ringtone">Hälytyksen soittoääni</string>
 </resources>

@@ -243,4 +243,8 @@
     <string name="automatically_taken_summary">Lorsqu\'il est actif, le rappel n\'est pas affiché comme une notification et est automatiquement marqué comme pris (peut être utilisé pour suivre uniquement le stock).</string>
     <string name="reminder_status_summary">Les rappels peuvent être actifs et inactifs. S\'ils sont inactifs, aucune notification n\'est déclenchée. Cela peut être configuré de manière statique ou en fonction de dates. Utilisez cette fonction pour configurer la réduction progressive d\'un médicament.</string>
     <string name="further_settings">Autres paramètres</string>
+    <string name="alarm_settings">Paramètres de l\'alarme</string>
+    <string name="no_alarm_sound_when_silent">Pas de son d\'alarme en mode silencieux</string>
+    <string name="no_vibration_when_silent">Pas de vibration en mode silencieux</string>
+    <string name="alarm_ringtone">Sonnerie de l\'alarme</string>
 </resources>

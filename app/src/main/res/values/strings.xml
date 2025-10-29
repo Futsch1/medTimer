@@ -240,4 +240,8 @@
     <string name="automatically_taken_summary">When active, the reminder is not shown as notification and automatically marked as taken (can be used to only track the stock).</string>
     <string name="reminder_status_summary">Reminders can be active and inactive. If they are inactive, no notification is raised. This can be either configured statically or based on dates. Use this to configure tapering of a medicine.</string>
     <string name="further_settings">Further settings</string>
+    <string name="alarm_settings">Alarm settings</string>
+    <string name="no_alarm_sound_when_silent">No alarm sound when silent</string>
+    <string name="no_vibration_when_silent">No vibration when silent</string>
+    <string name="alarm_ringtone">Alarm ringtone</string>
 </resources>

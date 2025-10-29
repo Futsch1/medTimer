@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    android:label="@string/dosing_instructions"
+    android:label="@string/app_name"
     app:startDestination="@id/overviewFragment">
 
     <fragment
@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_preferencesFragment_to_displaySettingsFragment"
             app:destination="@id/displaySettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_alarmSettingsFragment"
+            app:destination="@id/alarmSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -155,4 +158,8 @@
             android:name="reminderId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/alarmSettingsFragment"
+        android:name="com.futsch1.medtimer.preferences.AlarmSettingsFragment"
+        android:label="@string/alarm_settings" />
 </navigation>

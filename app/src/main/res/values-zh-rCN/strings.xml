@@ -233,4 +233,8 @@
     <string name="automatically_taken_summary">激活后，提醒不会显示为通知，并自动标记为已服用（可仅用于跟踪库存）。</string>
     <string name="reminder_status_summary">提醒可以是活动的和非活动的。如果是非活动的，则不会发出通知。这可以静态配置或根据日期配置。使用此功能来配置药物的逐渐减量。</string>
     <string name="further_settings">更多设置</string>
+    <string name="alarm_settings">闹钟设置</string>
+    <string name="no_alarm_sound_when_silent">静音模式下无闹钟声音</string>
+    <string name="no_vibration_when_silent">静音模式下无振动</string>
+    <string name="alarm_ringtone">闹钟铃声</string>
 </resources>
