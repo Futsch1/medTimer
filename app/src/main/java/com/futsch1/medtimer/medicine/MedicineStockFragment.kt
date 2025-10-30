@@ -113,7 +113,7 @@ class MedicineStockFragment :
                 // null context will be used, causing a null pointer exception. Therefore, we
                 // add a null check for it here to make sure that this doesn't happen.
                 // https://github.com/Futsch1/medTimer/issues/798
-                val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToDateString(context, runOutDate) else "---"
+                val runOutString = if (runOutDate != null && context != null) TimeHelper.toLocalizedDateString(context, runOutDate) else "---"
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)
