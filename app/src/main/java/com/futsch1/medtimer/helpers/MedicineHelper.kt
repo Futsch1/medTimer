@@ -13,6 +13,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
+import java.text.ParseException
 import java.util.regex.Pattern
 
 object MedicineHelper {
@@ -93,12 +94,16 @@ object MedicineHelper {
     }
 
     fun parseAmount(amount: String): Double? {
-        val numberRegex = Pattern.compile("\\d+(?:[.,\\s]\\d+)*")
+        val numberRegex = Pattern.compile("(?:\\d|\\.\\d)[.,\\s\\d]*")
         val matcher = numberRegex.matcher(amount)
 
         return if (matcher.find() && matcher.group(0) != null) {
             val numberFormat = NumberFormat.getNumberInstance()
-            numberFormat.parse(matcher.group(0)!!.replace(" ", ""))?.toDouble()
+            try {
+                numberFormat.parse(matcher.group(0)!!.replace(" ", ""))?.toDouble()
+            } catch (_: ParseException) {
+                null
+            }
         } else {
             null
         }
