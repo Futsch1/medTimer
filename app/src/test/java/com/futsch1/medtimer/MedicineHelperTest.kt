@@ -23,6 +23,7 @@ class MedicineHelperTest {
     fun testParse() {
         assertEquals(3.5, MedicineHelper.parseAmount("3.5"))
         assertEquals(5.0, MedicineHelper.parseAmount("5"))
+        assertEquals(0.5, MedicineHelper.parseAmount(".5"))
         assertEquals(50000.0, MedicineHelper.parseAmount("50000"))
         assertEquals(50000.0, MedicineHelper.parseAmount("50,000"))
         assertEquals(50000.0, MedicineHelper.parseAmount("50 000"))
@@ -31,6 +32,9 @@ class MedicineHelperTest {
         assertEquals(3.566, MedicineHelper.parseAmount("3.566 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills"))
         assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills at 5 o'clock"))
+        assertEquals(null, MedicineHelper.parseAmount(".."))
+        assertEquals(null, MedicineHelper.parseAmount("There is no number here. Only some ,. and spaces."))
+        assertEquals(4.0, MedicineHelper.parseAmount("Many. 4 to be specific."))
         assertNull(MedicineHelper.parseAmount("Take pills"))
         var amount = 5.0
         MedicineHelper.parseAmount("No string")?.let { amount = it }
