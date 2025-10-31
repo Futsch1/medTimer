@@ -53,7 +53,7 @@ fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
             TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
         )
     } else {
-        context.getString(R.string.continuous_from, TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart))
+        context.getString(R.string.continuous_from, TimeHelper.secondsSinceEpochToDateTimeString(context, reminder.intervalStart))
     }
 }
 

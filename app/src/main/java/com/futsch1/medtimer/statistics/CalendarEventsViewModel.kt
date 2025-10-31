@@ -101,7 +101,7 @@ class CalendarEventsViewModel(
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): String {
-        return TimeHelper.toLocalizedTimeString(
+        return TimeHelper.secondsSinceEpochToTimeString(
             getApplication<Application>().applicationContext, scheduledReminder.timestamp.epochSecond
         ) + ": " + scheduledReminder.reminder.amount + " " + scheduledReminder.medicine.medicine.name
     }
@@ -140,9 +140,9 @@ class CalendarEventsViewModel(
     ): String {
         val timeStamp = if (reminderEvent.processedTimestamp != 0L) reminderEvent.processedTimestamp else reminderEvent.remindedTimestamp
         val formatTimestamp: (Context, Long) -> String = if (isSameDay(timeStamp, day)) {
-            TimeHelper::toLocalizedTimeString
+            TimeHelper::secondsSinceEpochToTimeString
         } else {
-            TimeHelper::toLocalizedDatetimeString
+            TimeHelper::secondsSinceEpochToDateTimeString
         }
         return formatTimestamp(
             getApplication<Application>().applicationContext, timeStamp

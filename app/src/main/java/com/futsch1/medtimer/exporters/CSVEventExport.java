@@ -31,17 +31,17 @@ public class CSVEventExport extends Export {
 
             for (ReminderEvent reminderEvent : reminderEvents) {
                 String line = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                        TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp),
+                        TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.remindedTimestamp),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.toLocalizedDatetimeString(context, reminderEvent.processedTimestamp) : "",
+                                TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.processedTimestamp) : "",
                         String.join(", ", reminderEvent.tags),
                         TimeHelper.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
                         reminderEvent.notes,
-                        TimeHelper.toISO8601DatetimeString(reminderEvent.remindedTimestamp),
+                        TimeHelper.secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
                         reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.toISO8601DatetimeString(reminderEvent.processedTimestamp) : ""
+                                TimeHelper.secondsSinceEpochToISO8601DatetimeString(reminderEvent.processedTimestamp) : ""
                 );
                 csvFile.write(line);
             }

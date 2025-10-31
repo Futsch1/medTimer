@@ -285,10 +285,10 @@ public class ReminderTest extends BaseTestHelper {
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer);
         assertContains(R.id.editEventName, "Test");
         assertContains(R.id.editEventAmount, "12");
-        assertContains(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, now));
-        assertContains(R.id.editEventRemindedDate, TimeHelper.toLocalizedDateString(context, now));
-        assertContains(R.id.editEventTakenTimestamp, TimeHelper.toLocalizedTimeString(context, now));
-        assertContains(R.id.editEventTakenDate, TimeHelper.toLocalizedDateString(context, now));
+        assertContains(R.id.editEventRemindedTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, now));
+        assertContains(R.id.editEventRemindedDate, TimeHelper.secondSinceEpochToDateString(context, now));
+        assertContains(R.id.editEventTakenTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, now));
+        assertContains(R.id.editEventTakenDate, TimeHelper.secondSinceEpochToDateString(context, now));
         assertContains(R.id.editEventNotes, "");
 
         writeTo(R.id.editEventNotes, "Test notes");
@@ -298,12 +298,12 @@ public class ReminderTest extends BaseTestHelper {
         assertContains(R.id.editEventNotes, "Test notes");
 
         long newReminded = now + 60 * 60 * 24 + 120;
-        writeTo(R.id.editEventRemindedTimestamp, TimeHelper.toLocalizedTimeString(context, newReminded));
-        writeTo(R.id.editEventRemindedDate, TimeHelper.toLocalizedDateString(context, newReminded));
+        writeTo(R.id.editEventRemindedTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, newReminded));
+        writeTo(R.id.editEventRemindedDate, TimeHelper.secondSinceEpochToDateString(context, newReminded));
 
         long newTaken = now + 60 * 60 * 48 + 180;
-        writeTo(R.id.editEventTakenTimestamp, TimeHelper.toLocalizedTimeString(context, newTaken));
-        writeTo(R.id.editEventTakenDate, TimeHelper.toLocalizedDateString(context, newTaken));
+        writeTo(R.id.editEventTakenTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, newTaken));
+        writeTo(R.id.editEventTakenDate, TimeHelper.secondSinceEpochToDateString(context, newTaken));
 
         pressBack();
 
@@ -315,9 +315,9 @@ public class ReminderTest extends BaseTestHelper {
         tableView.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.reminder_table));
 
         TextView view = tableView.get().getCellRecyclerView().findViewWithTag("time");
-        assertEquals(TimeHelper.toLocalizedDatetimeString(context, newReminded), view.getText());
+        assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded), view.getText());
         view = tableView.get().getCellRecyclerView().findViewWithTag("taken");
-        assertEquals(TimeHelper.toLocalizedDatetimeString(context, newTaken), view.getText());
+        assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken), view.getText());
     }
 
     @Test

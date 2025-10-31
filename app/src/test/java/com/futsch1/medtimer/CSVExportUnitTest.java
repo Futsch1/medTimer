@@ -1,6 +1,7 @@
 package com.futsch1.medtimer;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
@@ -83,8 +84,8 @@ class CSVExportUnitTest {
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class)) {
-            dateAccessMockedStatic.when(() -> DateFormat.getDateFormat(context)).thenReturn(usDateFormat);
-            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(context)).thenReturn(usTimeFormat);
+            dateAccessMockedStatic.when(() -> DateFormat.getDateFormat(any())).thenReturn(usDateFormat);
+            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(usTimeFormat);
             FragmentManager fragmentManager = mock(FragmentManager.class);
 
             // Create the CSVCreator object
@@ -151,7 +152,7 @@ class CSVExportUnitTest {
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
              MockedStatic<ZoneId> zoneIdMockedStatic = mockStatic(ZoneId.class)) {
             FragmentManager fragmentManager = mock(FragmentManager.class);
-            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(context)).thenReturn(usTimeFormat);
+            dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(usTimeFormat);
             zoneIdMockedStatic.when(ZoneId::systemDefault).thenReturn(utcId);
 
             // Create the CSVCreator object

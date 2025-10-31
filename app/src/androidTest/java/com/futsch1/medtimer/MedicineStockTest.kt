@@ -222,9 +222,9 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickOn(R.id.openStockTracking)
         writeTo(R.id.amountLeft, "10")
-        assertDisplayed(R.id.runOut, TimeHelper.toLocalizedDateString(context, LocalDate.now().plusDays(4)))
+        assertDisplayed(R.id.runOut, TimeHelper.localDateToString(context, LocalDate.now().plusDays(4)))
 
         writeTo(R.id.amountLeft, "13")
-        assertDisplayed(R.id.runOut, TimeHelper.toLocalizedDateString(context, LocalDate.now().plusDays(5)))
+        assertDisplayed(R.id.runOut, TimeHelper.localDateToString(context, LocalDate.now().plusDays(5)))
     }
 }

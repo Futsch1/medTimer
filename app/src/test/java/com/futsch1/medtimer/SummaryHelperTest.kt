@@ -2,13 +2,16 @@ package com.futsch1.medtimer
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.LocaleList
 import android.text.format.DateFormat
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.helpers.remindersSummary
+import com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.eq
@@ -84,12 +87,18 @@ class SummaryHelperTest {
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.getString(R.string.cycle_reminder)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.cycle_start_date)).thenReturn("2")
+        val preferencesMock = mock(SharedPreferences::class.java)
+        Mockito.`when`(preferencesMock.getBoolean(SYSTEM_LOCALE, false)).thenReturn(false)
+        val preferencesManager = mockStatic(PreferenceManager::class.java)
+        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(context) }.thenReturn(preferencesMock)
 
         val reminder = Reminder(1)
         reminder.consecutiveDays = 4
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
         assertEquals("1 4/5, 2 4/10/24", reminderSummary(reminder, context))
+
+        preferencesManager.close()
     }
 
     @Test
@@ -112,7 +121,7 @@ class SummaryHelperTest {
         Mockito.`when`(context.applicationContext).thenReturn(application)
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(any(Date::class.java))).thenReturn("0:02")
 
@@ -151,7 +160,7 @@ class SummaryHelperTest {
             .thenReturn("ok")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
             .thenReturn("0:02")
@@ -183,7 +192,7 @@ class SummaryHelperTest {
             .thenReturn("ok")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
             .thenReturn("0:02")
@@ -229,9 +238,9 @@ class SummaryHelperTest {
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
         val dateFormat = mock(java.text.DateFormat::class.java)
         val timeFormat = mock(java.text.DateFormat::class.java)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getDateFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getDateFormat(any()) }
             .thenReturn(dateFormat)
-        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(context) }
+        mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(timeFormat)
         Mockito.`when`(dateFormat.format(Date.from(Instant.ofEpochSecond(1))))
             .thenReturn("0")

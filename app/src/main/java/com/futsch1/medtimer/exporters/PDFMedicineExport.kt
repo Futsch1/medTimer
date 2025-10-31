@@ -22,7 +22,7 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
         simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
-        simplyPdfDocument.text.write(TimeHelper.toLocalizedDatetimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(TimeHelper.secondsSinceEpochToDateTimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
 
         for (medicine in medicines) {
             val activeReminders = getActiveReminders(medicine)

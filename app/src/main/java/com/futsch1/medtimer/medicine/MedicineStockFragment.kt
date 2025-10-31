@@ -92,7 +92,7 @@ class MedicineStockFragment :
 
     private fun setupToCalendarButton(fragmentView: View, medicine: Medicine) {
         fragmentView.findViewById<View>(R.id.runOutToCalendar).setOnClickListener {
-            val date = TimeHelper.dateStringToDate(context, runOutDateField.text.toString())
+            val date = TimeHelper.stringToLocalDate(context, runOutDateField.text.toString())
             if (date != null) {
                 val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + medicine.name, date)
                 startActivity(intent)
@@ -113,7 +113,7 @@ class MedicineStockFragment :
                 // null context will be used, causing a null pointer exception. Therefore, we
                 // add a null check for it here to make sure that this doesn't happen.
                 // https://github.com/Futsch1/medTimer/issues/798
-                val runOutString = if (runOutDate != null && context != null) TimeHelper.toLocalizedDateString(context, runOutDate) else "---"
+                val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(context, runOutDate) else "---"
 
                 this.activity?.runOnUiThread {
                     runOutDateField.setText(runOutString)

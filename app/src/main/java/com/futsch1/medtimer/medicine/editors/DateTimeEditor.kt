@@ -18,7 +18,7 @@ class DateTimeEditor(
 ) {
     init {
         dateTimeEdit.setText(
-            TimeHelper.toLocalizedDatetimeString(
+            TimeHelper.secondsSinceEpochToDateTimeString(
                 fragmentActivity.baseContext,
                 initialDateTimeSecondsSinceEpoch
             )
@@ -45,7 +45,7 @@ class DateTimeEditor(
                             LocalTime.of(selectedTime / 60, selectedTime % 60)
                         )
                         dateTimeEdit.setText(
-                            TimeHelper.toLocalizedDatetimeString(
+                            TimeHelper.secondsSinceEpochToDateTimeString(
                                 fragmentActivity.baseContext,
                                 selectedLocalDateTime.toEpochSecond(
                                     ZoneId.systemDefault().rules.getOffset(
@@ -60,7 +60,7 @@ class DateTimeEditor(
     }
 
     fun getDateTimeSecondsSinceEpoch(): Long {
-        return TimeHelper.dateTimeStringToSecondsSinceEpoch(
+        return TimeHelper.stringToSecondsSinceEpoch(
             fragmentActivity.baseContext,
             dateTimeEdit.getText().toString()
         )
