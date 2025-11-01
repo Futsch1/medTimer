@@ -248,5 +248,5 @@
     <string name="no_vibration_when_silent">No vibrar en modo silencio</string>
     <string name="alarm_ringtone">Tono de la alarma</string>
     <string name="system_locale">Utilizar la configuración del sistema para el formato de fecha/hora</string>
-    <string name="system_locale_summary">Si está desactivada, la aplicación utiliza la configuración que coincide con el idioma establecido para la aplicación.</string>
+    <string name="system_locale_summary">Si se desactiva, la aplicación utiliza la configuración que coincide con el idioma establecido para la aplicación.</string>
 </resources>

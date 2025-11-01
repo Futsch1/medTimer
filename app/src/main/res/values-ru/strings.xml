@@ -250,5 +250,5 @@
     <string name="no_vibration_when_silent">Нет вибрации в беззвучном режиме</string>
     <string name="alarm_ringtone">Мелодия будильника</string>
     <string name="system_locale">Используйте системные настройки для формата даты/времени</string>
-    <string name="system_locale_summary">Если он выключен, приложение использует настройки, соответствующие языку, установленному для данного приложения.</string>
+    <string name="system_locale_summary">В выключенном состоянии приложение использует настройки, соответствующие языку, установленному для данного приложения.</string>
 </resources>

@@ -187,7 +187,7 @@
         <item quantity="many">годин</item>
     </plurals>
     <plurals name="days">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
+        <item quantity="one">день</item>
         <item quantity="other">дні</item>
         <item quantity="few">дні</item>
         <item quantity="many">днів</item>
@@ -253,5 +253,5 @@
     <string name="no_vibration_when_silent">Немає вібрації в беззвучному режимі</string>
     <string name="alarm_ringtone">Мелодія будильника</string>
     <string name="system_locale">Використовуйте системні налаштування для формату дати/часу</string>
-    <string name="system_locale_summary">Якщо її вимкнено, програма використовує налаштування, що відповідають мові, встановленій для програми.</string>
+    <string name="system_locale_summary">У вимкненому стані програма використовує налаштування, що відповідають мові, встановленій для програми.</string>
 </resources>

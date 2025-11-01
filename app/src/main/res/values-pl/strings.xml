@@ -253,5 +253,5 @@
     <string name="no_vibration_when_silent">Brak wibracji w trybie cichym</string>
     <string name="alarm_ringtone">Dzwonek alarmu</string>
     <string name="system_locale">Użyj ustawień systemowych dla formatu daty/godziny</string>
-    <string name="system_locale_summary">Jeśli jest wyłączona, aplikacja korzysta z ustawienia odpowiadającego językowi ustawionemu dla aplikacji.</string>
+    <string name="system_locale_summary">Jeśli wyłączone, aplikacja korzysta z ustawienia odpowiadającego językowi ustawionemu dla aplikacji.</string>
 </resources>

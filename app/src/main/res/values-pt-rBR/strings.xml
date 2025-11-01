@@ -248,5 +248,5 @@
     <string name="no_vibration_when_silent">Sem vibração no modo silencioso</string>
     <string name="alarm_ringtone">Toque do alarme</string>
     <string name="system_locale">Usar a configuração do sistema para o formato de data/hora</string>
-    <string name="system_locale_summary">Se estiver desativado, o aplicativo usará a configuração correspondente ao idioma definido para o aplicativo.</string>
+    <string name="system_locale_summary">Quando desativado, o aplicativo usará a configuração correspondente ao idioma definido para o aplicativo.</string>
 </resources>

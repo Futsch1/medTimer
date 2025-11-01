@@ -243,5 +243,5 @@
     <string name="no_vibration_when_silent">Ingen vibration i tyst läge</string>
     <string name="alarm_ringtone">Alarmsignal</string>
     <string name="system_locale">Använd systeminställning för datum-/tidsformat</string>
-    <string name="system_locale_summary">Om den är avstängd använder appen den inställning som motsvarar det språk som har ställts in för appen.</string>
+    <string name="system_locale_summary">Om avstängd använder appen den inställning som motsvarar det språk som har ställts in för appen.</string>
 </resources>
