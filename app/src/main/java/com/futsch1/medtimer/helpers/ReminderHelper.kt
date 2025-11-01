@@ -56,7 +56,7 @@ fun setReminderActive(reminder: Reminder, active: Boolean) {
 fun formatReminderString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
-    val takenTime = TimeHelper.toConfigurableTimeString(
+    val takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp
     )
 
@@ -69,7 +69,7 @@ fun formatReminderString(
 fun formatReminderStringForWidget(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
-    val takenTime = TimeHelper.toConfigurableDateTimeString(
+    val takenTime = TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp
     ) + ": "
 
@@ -90,7 +90,7 @@ private fun statusToString(context: Context, status: ReminderEvent.ReminderStatu
 fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
-    val scheduledTime = TimeHelper.toConfigurableTimeString(
+    val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
     )
 
@@ -102,7 +102,7 @@ fun formatScheduledReminderString(
 fun formatScheduledReminderStringForWidget(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
-    val scheduledTime = TimeHelper.toConfigurableDateTimeString(
+    val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
         context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
     ) + ": "
 
@@ -132,7 +132,7 @@ private fun formatDuration(durationMillis: Long): String? {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
 
-    val measures: MutableList<Measure?> = ArrayList<Measure?>()
+    val measures: MutableList<Measure?> = ArrayList()
     if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
     if (minutes >= 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
 

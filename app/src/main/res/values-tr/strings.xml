@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -242,4 +242,6 @@
     <string name="no_alarm_sound_when_silent">Sessiz modda alarm sesi yok</string>
     <string name="no_vibration_when_silent">Sessiz modda titreşim yok</string>
     <string name="alarm_ringtone">Alarm zil sesi</string>
+    <string name="system_locale">Tarih/saat biçimi için sistem ayarını kullan</string>
+    <string name="system_locale_summary">Kapatıldığında, uygulama, uygulama için ayarlanan dille eşleşen ayarı kullanır.</string>
 </resources>

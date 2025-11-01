@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="restore_start">இது அனைத்து மருந்து அமைப்புகள் மற்றும்/அல்லது நினைவூட்டல் நிகழ்வுகளை மாற்றும்.\n\n தொடரவா?</string>
     <string name="log_additional_dose">கூடுதல் டோச் பதிவு</string>
@@ -242,4 +242,6 @@
     <string name="no_alarm_sound_when_silent">சைலண்ட் பயன்முறையில் அலார ஒலி இல்லை</string>
     <string name="no_vibration_when_silent">சைலண்ட் பயன்முறையில் அதிர்வு இல்லை</string>
     <string name="alarm_ringtone">அலார ரிங்டோன்</string>
+    <string name="system_locale">தேதி/நேர வடிவத்திற்கு கணினி அமைப்பைப் பயன்படுத்தவும்</string>
+    <string name="system_locale_summary">முடக்கப்பட்டால், பயன்பாட்டிற்காக அமைக்கப்பட்ட மொழியுடன் பொருந்தக்கூடிய அமைப்பைப் பயன்பாடு பயன்படுத்துகிறது.</string>
 </resources>

@@ -82,7 +82,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
         }
         timestamp = TimeHelper.changeTimeStampDate(
             timestamp,
-            TimeHelper.dateStringToDate(activity, editDate.getText().toString())
+            TimeHelper.stringToLocalDate(activity, editDate.getText().toString())
         )
         return timestamp
     }
@@ -108,7 +108,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
 
     private fun setupEditTime(timestamp: Long, editText: EditText) {
         editText.setText(
-            TimeHelper.toLocalizedTimeString(
+            TimeHelper.secondsSinceEpochToTimeString(
                 editText.context,
                 timestamp
             )
@@ -118,7 +118,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
 
     private fun setupEditDate(timestamp: Long, editText: EditText) {
         editText.setText(
-            TimeHelper.toLocalizedDateString(
+            TimeHelper.secondSinceEpochToDateString(
                 activity,
                 timestamp
             )
@@ -162,7 +162,7 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
 
     private fun onFocusEditDate(hasFocus: Boolean, editText: EditText) {
         if (hasFocus) {
-            var startDate = TimeHelper.dateStringToDate(activity, editText.getText().toString())
+            var startDate = TimeHelper.stringToLocalDate(activity, editText.getText().toString())
             if (startDate == null) {
                 startDate = LocalDate.now()
             }

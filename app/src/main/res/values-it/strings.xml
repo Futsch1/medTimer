@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -247,4 +247,6 @@
     <string name="no_alarm_sound_when_silent">Nessun suono della sveglia in modalità silenziosa</string>
     <string name="no_vibration_when_silent">Nessuna vibrazione in modalità silenziosa</string>
     <string name="alarm_ringtone">Suoneria sveglia</string>
+    <string name="system_locale">Utilizzare le impostazioni di sistema per il formato di data e ora</string>
+    <string name="system_locale_summary">In caso di disattivazione, l\'applicazione utilizza l\'impostazione corrispondente alla lingua impostata per l\'applicazione.</string>
 </resources>

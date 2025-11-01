@@ -27,7 +27,7 @@ fun showDateEdit(activity: FragmentActivity, preference: Preference) {
     val datePickerWrapper = DatePickerWrapper(activity)
     val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
     if (currentDateString != null) {
-        val currentDate = TimeHelper.dateStringToDate(activity, currentDateString)
+        val currentDate = TimeHelper.stringToLocalDate(activity, currentDateString)
         datePickerWrapper.show(currentDate) { daysSinceEpoch: Long ->
             val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
             preference.preferenceDataStore?.putString(preference.key, newDateString)
@@ -51,7 +51,7 @@ fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
     val datePickerWrapper = DatePickerWrapper(activity)
     val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
     if (currentDateString != null) {
-        val currentDateTime = TimeHelper.dateTimeStringToSecondsSinceEpoch(activity, currentDateString)
+        val currentDateTime = TimeHelper.stringToSecondsSinceEpoch(activity, currentDateString)
         val startInstant = Instant.ofEpochSecond(currentDateTime)
         val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
         datePickerWrapper.show(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
@@ -61,7 +61,7 @@ fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
                     LocalDate.ofEpochDay(daysSinceEpoch),
                     LocalTime.of(minutes / 60, minutes % 60)
                 )
-                val timeString = TimeHelper.toLocalizedDatetimeString(activity, selectedLocalDateTime)
+                val timeString = TimeHelper.localeDateTimeToDateTimeString(activity, selectedLocalDateTime)
                 preference.preferenceDataStore?.putString(preference.key, timeString)
             }
         }

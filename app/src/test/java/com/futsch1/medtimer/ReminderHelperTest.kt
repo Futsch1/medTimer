@@ -15,6 +15,7 @@ import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
@@ -40,8 +41,8 @@ class ReminderHelperTest {
         usTimeFormat.timeZone = utc
         usDateFormat.timeZone = utc
         val dateFormatMock = mockStatic(DateFormat::class.java)
-        dateFormatMock.`when`<Any> { DateFormat.getDateFormat(contextMock) }.thenReturn(usDateFormat)
-        dateFormatMock.`when`<Any> { DateFormat.getTimeFormat(contextMock) }.thenReturn(usTimeFormat)
+        dateFormatMock.`when`<Any> { DateFormat.getDateFormat(any()) }.thenReturn(usDateFormat)
+        dateFormatMock.`when`<Any> { DateFormat.getTimeFormat(any()) }.thenReturn(usTimeFormat)
         val timeZoneMock = mockStatic(TimeZone::class.java)
         timeZoneMock.`when`<Any> { TimeZone.getDefault() }.thenReturn(utc)
 

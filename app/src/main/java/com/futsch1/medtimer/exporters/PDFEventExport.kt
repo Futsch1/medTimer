@@ -44,7 +44,7 @@ class PDFEventExport(private val reminderEvents: MutableList<ReminderEvent>, fra
             rows.add(row)
         }
 
-        simplyPdfDocument.text.write(TimeHelper.toLocalizedDatetimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(TimeHelper.secondsSinceEpochToDateTimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
         simplyPdfDocument.table.draw(rows, tableProperties)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,12 +66,12 @@ class PDFEventExport(private val reminderEvents: MutableList<ReminderEvent>, fra
 
     private fun getCells(reminderEvent: ReminderEvent, textProperties: TextProperties, columnWidths: IntArray): LinkedList<Cell> {
         val row = LinkedList<Cell>()
-        row.add(TextCell(TimeHelper.toLocalizedDatetimeString(context, reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
+        row.add(TextCell(TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
         row.add(TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]))
         row.add(TextCell(reminderEvent.amount, textProperties, columnWidths[2]))
         row.add(
             TextCell(
-                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) TimeHelper.toLocalizedDatetimeString(
+                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) TimeHelper.secondsSinceEpochToDateTimeString(
                     context,
                     reminderEvent.processedTimestamp
                 ) else "", textProperties, columnWidths[3]

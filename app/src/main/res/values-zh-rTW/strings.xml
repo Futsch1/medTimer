@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">設定</string>
     <string name="tab_overview">總覽</string>
@@ -237,4 +237,6 @@
     <string name="no_alarm_sound_when_silent">靜音模式下沒有鬧鐘聲音</string>
     <string name="no_vibration_when_silent">靜音模式下沒有震動</string>
     <string name="alarm_ringtone">鬧鐘鈴聲</string>
+    <string name="system_locale">使用系統設定的日期/時間格式</string>
+    <string name="system_locale_summary">如果關閉，應用程式將使用與其設定語言相符的格式。</string>
 </resources>

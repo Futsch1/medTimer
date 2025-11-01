@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
@@ -242,4 +242,6 @@
     <string name="no_alarm_sound_when_silent">Без звук на алармата в безшумен режим</string>
     <string name="no_vibration_when_silent">Без вибрация в безшумен режим</string>
     <string name="alarm_ringtone">Мелодия на алармата</string>
+    <string name="system_locale">Използване на системната настройка за формат дата/час</string>
+    <string name="system_locale_summary">При изключено състояние приложението използва настройката, съответстваща на езика, зададен за приложението.</string>
 </resources>

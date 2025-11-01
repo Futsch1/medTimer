@@ -1,15 +1,21 @@
 package com.futsch1.medtimer.helpers;
 
+import static com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE;
 import static com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.LocaleList;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -31,6 +37,7 @@ import java.time.format.FormatStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeHelper {
 
@@ -48,7 +55,7 @@ public class TimeHelper {
     public static String minutesToTimeString(Context context, long minutes) {
         try {
             Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
-            return DateFormat.getTimeFormat(context).format(date);
+            return DateFormat.getTimeFormat(new LocaleContextWrapper(context)).format(date);
         } catch (DateTimeException e) {
             return minutesToDurationString(minutes);
         }
@@ -102,7 +109,7 @@ public class TimeHelper {
         LocalDate date = Instant.ofEpochSecond(daysSinceEpoch * 24 * 60 * 60)
                 .atZone(ZoneOffset.UTC)
                 .toLocalDate();
-        return localDateToDateString(context, date);
+        return localDateToString(context, date);
     }
 
     /**
@@ -110,21 +117,25 @@ public class TimeHelper {
      * @param localDate Local date
      * @return Date string in local format
      */
-    public static String localDateToDateString(Context context, LocalDate localDate) {
+    public static String localDateToString(Context context, LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-                .withLocale(context.getResources().getConfiguration().getLocales().get(0));
+                .withLocale(getLocale(context));
         return localDate.format(formatter);
     }
 
-    /**
-     * @param context   Context to extract date format
-     * @param localDate Local date
-     * @return Date string in local format
-     */
-    public static String localDateToFullDateString(Context context, LocalDate localDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-                .withLocale(context.getResources().getConfiguration().getLocales().get(0));
-        return localDate.format(formatter);
+    private static Locale getLocale(Context context) {
+        LocaleList localeList = context.getResources().getConfiguration().getLocales();
+        Locale locale;
+        if (useSystemLocale(context) && localeList.size() > 1) {
+            locale = localeList.get(1);
+        } else {
+            locale = localeList.get(0);
+        }
+        return locale;
+    }
+
+    private static boolean useSystemLocale(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SYSTEM_LOCALE, false);
     }
 
     /**
@@ -132,13 +143,13 @@ public class TimeHelper {
      * @param dateTimeString String containing date and time
      * @return Seconds since epoch of date/time
      */
-    public static long dateTimeStringToSecondsSinceEpoch(Context context, String dateTimeString) {
+    public static long stringToSecondsSinceEpoch(Context context, String dateTimeString) {
         String[] dateTimeComponents = dateTimeString.split(" ", 2);
         if (dateTimeComponents.length != 2) {
             return -1;
         }
 
-        LocalDate date = dateStringToDate(context, dateTimeComponents[0]);
+        LocalDate date = stringToLocalDate(context, dateTimeComponents[0]);
         if (date == null) {
             return -1;
         }
@@ -155,12 +166,12 @@ public class TimeHelper {
      * @param dateString Date string in local format
      * @return Local date
      */
-    public static @Nullable LocalDate dateStringToDate(Context context, String dateString) {
+    public static @Nullable LocalDate stringToLocalDate(Context context, String dateString) {
         try {
             return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
         } catch (DateTimeParseException e) {
             try {
-                Date date = DateFormat.getDateFormat(context).parse(dateString);
+                Date date = DateFormat.getDateFormat(new LocaleContextWrapper(context)).parse(dateString);
                 if (date != null) {
                     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 }
@@ -172,7 +183,6 @@ public class TimeHelper {
         return null;
     }
 
-
     /**
      * @param context    Context to extract time format
      * @param timeString Time string in local format
@@ -180,7 +190,7 @@ public class TimeHelper {
      */
     public static int timeStringToMinutes(Context context, String timeString) {
         try {
-            Date date = DateFormat.getTimeFormat(context).parse(timeString);
+            Date date = DateFormat.getTimeFormat(new LocaleContextWrapper(context)).parse(timeString);
             return date != null ? date.toInstant().atOffset(EPOCH_OFFSET).toLocalTime().toSecondOfDay() / 60 : -1;
         } catch (ParseException e) {
             return -1;
@@ -224,11 +234,11 @@ public class TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format as relative date time string
      */
-    public static String toConfigurableDateTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+    public static String secondsSinceEpochToConfigurableDateTimeString(Context context, SharedPreferences preferences, long timeStamp) {
         if (preferences.getBoolean(USE_RELATIVE_DATE_TIME, false)) {
-            return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+            return DateUtils.getRelativeDateTimeString(new LocaleContextWrapper(context), timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
         } else {
-            return toLocalizedDatetimeString(context, timeStamp);
+            return secondsSinceEpochToDateTimeString(context, timeStamp);
         }
     }
 
@@ -237,8 +247,8 @@ public class TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format
      */
-    public static String toLocalizedDatetimeString(Context context, long timeStamp) {
-        return toLocalizedDateString(context, timeStamp) + " " + toLocalizedTimeString(context, timeStamp);
+    public static String secondsSinceEpochToDateTimeString(Context context, long timeStamp) {
+        return secondSinceEpochToDateString(context, timeStamp) + " " + secondsSinceEpochToTimeString(context, timeStamp);
     }
 
     /**
@@ -246,8 +256,8 @@ public class TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date string in local format
      */
-    public static String toLocalizedDateString(Context context, long timeStamp) {
-        return DateFormat.getDateFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
+    public static String secondSinceEpochToDateString(Context context, long timeStamp) {
+        return DateFormat.getDateFormat(new LocaleContextWrapper(context)).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
     /**
@@ -255,13 +265,8 @@ public class TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Time string in local format
      */
-    public static String toLocalizedTimeString(Context context, long timeStamp) {
-        return DateFormat.getTimeFormat(context).format(Date.from(Instant.ofEpochSecond(timeStamp)));
-    }
-
-    public static String toLocalizedDatetimeString(Context context, LocalDateTime localDateTime) {
-        long epochSecond = localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
-        return toLocalizedDatetimeString(context, epochSecond);
+    public static String secondsSinceEpochToTimeString(Context context, long timeStamp) {
+        return DateFormat.getTimeFormat(new LocaleContextWrapper(context)).format(Date.from(Instant.ofEpochSecond(timeStamp)));
     }
 
     /**
@@ -269,16 +274,32 @@ public class TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format as relative date time string
      */
-    public static String toConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+    public static String secondsSinceEpochToConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp) {
         if (preferences.getBoolean(USE_RELATIVE_DATE_TIME, false)) {
-            return DateUtils.getRelativeDateTimeString(context, timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+            return DateUtils.getRelativeDateTimeString(new LocaleContextWrapper(context), timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
         } else {
-            return toLocalizedTimeString(context, timeStamp);
+            return secondsSinceEpochToTimeString(context, timeStamp);
         }
     }
 
-    public static Object toISO8601DatetimeString(long remindedTimestamp) {
+    /**
+     * Converts a local date time to a date time string
+     *
+     * @param context       Context to access locale and date/time format settings.
+     * @param localDateTime The timestamp in seconds since the epoch.
+     * @return A string representing the date and time in the localized format, e.g., "Jan 1, 2023 10:00 AM".
+     */
+    public static String localeDateTimeToDateTimeString(Context context, LocalDateTime localDateTime) {
+        long epochSecond = localDateTime.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(localDateTime));
+        return secondsSinceEpochToDateTimeString(context, epochSecond);
+    }
+
+    public static Object secondsSinceEpochToISO8601DatetimeString(long remindedTimestamp) {
         return Instant.ofEpochSecond(remindedTimestamp).toString();
+    }
+
+    public static void onChangedUseSystemLocale() {
+        LocaleContextWrapper.resetLocaleContextWrapper();
     }
 
     public interface TimePickerResult {
@@ -289,6 +310,42 @@ public class TimeHelper {
         void onDateSelected(long daysSinceEpoch);
     }
 
+    private static class LocaleContextWrapper extends ContextWrapper {
+
+        @SuppressLint("StaticFieldLeak") // No leak because this context is just a single copy of the enclosing context
+        private static Context mLocaleAwareContext = null;
+
+        public LocaleContextWrapper(Context base) {
+            super(base);
+
+            buildContext(base);
+        }
+
+        @SuppressLint("AppBundleLocaleChanges") // This is ok because the locale is not changed for the complete context, only wrapped for the DateFormat calls
+        private static synchronized void buildContext(Context base) {
+            if (mLocaleAwareContext != null) {
+                return;
+            }
+
+            if (base.getResources() != null && base.getResources().getConfiguration() != null) {
+                Configuration configuration = new Configuration(base.getResources().getConfiguration());
+                configuration.setLocales(new LocaleList(getLocale(base)));
+                mLocaleAwareContext = base.createConfigurationContext(configuration);
+            } else {
+                mLocaleAwareContext = base;
+            }
+        }
+
+        public static synchronized void resetLocaleContextWrapper() {
+            mLocaleAwareContext = null;
+        }
+
+        @Override
+        public Resources getResources() {
+            return mLocaleAwareContext.getResources();
+        }
+    }
+
     public static class TimePickerWrapper {
         final FragmentActivity activity;
         private final Integer titleText;
@@ -297,7 +354,7 @@ public class TimeHelper {
         public TimePickerWrapper(FragmentActivity activity) {
             this.activity = activity;
             this.titleText = null;
-            this.timeFormat = DateFormat.is24HourFormat(activity) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H;
+            this.timeFormat = DateFormat.is24HourFormat(new LocaleContextWrapper(activity)) ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H;
         }
 
         public TimePickerWrapper(FragmentActivity activity, @StringRes int titleText, int timeFormat) {
@@ -324,19 +381,7 @@ public class TimeHelper {
         }
     }
 
-    public static class DatePickerWrapper {
-        final FragmentActivity activity;
-        private final Integer titleText;
-
-        public DatePickerWrapper(FragmentActivity activity) {
-            this.activity = activity;
-            this.titleText = null;
-        }
-
-        public DatePickerWrapper(FragmentActivity activity, @StringRes int titleText) {
-            this.activity = activity;
-            this.titleText = titleText;
-        }
+    public record DatePickerWrapper(FragmentActivity activity) {
 
         public void show(LocalDate startDate, DatePickerResult datePickerResult) {
             if (startDate == null) {
@@ -344,10 +389,6 @@ public class TimeHelper {
             }
             MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker()
                     .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS);
-
-            if (titleText != null) {
-                builder.setTitleText(titleText);
-            }
 
             MaterialDatePicker<Long> datePickerDialog = builder.build();
             datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> datePickerResult.onDateSelected(selectedDate / DateUtils.DAY_IN_MILLIS));

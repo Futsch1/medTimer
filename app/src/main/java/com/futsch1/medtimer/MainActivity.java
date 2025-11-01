@@ -24,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.futsch1.medtimer.helpers.TimeHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         ReminderNotificationChannelManager.Companion.initialize(this);
+
+        TimeHelper.onChangedUseSystemLocale();
 
         authenticate(sharedPref);
     }

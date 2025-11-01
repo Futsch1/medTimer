@@ -2,21 +2,21 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SwitchPreferenceCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:defaultValue="false"
         android:title="@string/big_notifications"
         app:key="big_notifications" />
     <SwitchPreferenceCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:defaultValue="false"
         android:summary="@string/use_relative_date_time_summary"
         android:title="@string/use_relative_date_time"
         app:key="use_relative_date_time" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:title="@string/system_locale"
+        app:key="system_locale"
+        app:summary="@string/system_locale_summary"/>
+
     <ListPreference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:defaultValue="0"
         android:entries="@array/theme_entries_titles"
         android:entryValues="@array/values_0_and_1"

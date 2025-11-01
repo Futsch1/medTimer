@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
@@ -242,4 +242,6 @@
     <string name="no_alarm_sound_when_silent">Inget alarmljud i tyst läge</string>
     <string name="no_vibration_when_silent">Ingen vibration i tyst läge</string>
     <string name="alarm_ringtone">Alarmsignal</string>
+    <string name="system_locale">Använd systeminställning för datum-/tidsformat</string>
+    <string name="system_locale_summary">Om avstängd använder appen den inställning som motsvarar det språk som har ställts in för appen.</string>
 </resources>

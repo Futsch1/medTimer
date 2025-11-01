@@ -61,7 +61,7 @@ class ReminderDataStore(
             "period_start_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodStart)
             "period_end_date" -> TimeHelper.daysSinceEpochToDateString(context, reminder.periodEnd)
             "interval_start" -> if (reminder.intervalStartsFromProcessed) "1" else "0"
-            "interval_start_time" -> TimeHelper.toLocalizedDatetimeString(context, reminder.intervalStart)
+            "interval_start_time" -> TimeHelper.secondsSinceEpochToDateTimeString(context, reminder.intervalStart)
             "interval_daily_start_time" -> TimeHelper.minutesToTimeString(context, reminder.intervalStartTimeOfDay.toLong())
             "interval_daily_end_time" -> TimeHelper.minutesToTimeString(context, reminder.intervalEndTimeOfDay.toLong())
             else -> defValue
@@ -72,7 +72,7 @@ class ReminderDataStore(
         when (key) {
             "instructions" -> reminder.instructions = value!!
             "sample_instructions" -> reminder.instructions = value!!
-            "cycle_start_date" -> reminder.cycleStartDay = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
+            "cycle_start_date" -> reminder.cycleStartDay = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "cycle_consecutive_days" -> try {
                 reminder.consecutiveDays = value!!.toInt()
             } catch (_: NumberFormatException) { /* Intentionally empty */
@@ -83,10 +83,10 @@ class ReminderDataStore(
             } catch (_: NumberFormatException) { /* Intentionally empty */
             }
 
-            "period_start_date" -> reminder.periodStart = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
-            "period_end_date" -> reminder.periodEnd = TimeHelper.dateStringToDate(context, value!!)!!.toEpochDay()
+            "period_start_date" -> reminder.periodStart = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
+            "period_end_date" -> reminder.periodEnd = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "interval_start" -> reminder.intervalStartsFromProcessed = value == "1"
-            "interval_start_time" -> reminder.intervalStart = TimeHelper.dateTimeStringToSecondsSinceEpoch(context, value!!)
+            "interval_start_time" -> reminder.intervalStart = TimeHelper.stringToSecondsSinceEpoch(context, value!!)
             "interval_daily_start_time" -> reminder.intervalStartTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
             "interval_daily_end_time" -> reminder.intervalEndTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
         }
