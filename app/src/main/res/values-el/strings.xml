@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Ρυθμίσεις</string>
     <string name="tab_overview">Επισκόπηση</string>
@@ -242,4 +242,6 @@
     <string name="no_alarm_sound_when_silent">Χωρίς ήχο ειδοποίησης σε αθόρυβη λειτουργία</string>
     <string name="no_vibration_when_silent">Χωρίς δόνηση σε αθόρυβη λειτουργία</string>
     <string name="alarm_ringtone">Ήχος κλήσης ειδοποίησης</string>
+    <string name="system_locale">Χρήση της ρύθμισης του συστήματος για τη μορφή ημερομηνίας/ώρας</string>
+    <string name="system_locale_summary">Εάν είναι απενεργοποιημένη, η εφαρμογή χρησιμοποιεί τη ρύθμιση που αντιστοιχεί στη γλώσσα που έχει οριστεί για την εφαρμογή.</string>
 </resources>

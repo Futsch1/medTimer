@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -237,4 +237,6 @@
     <string name="no_alarm_sound_when_silent">静音模式下无闹钟声音</string>
     <string name="no_vibration_when_silent">静音模式下无振动</string>
     <string name="alarm_ringtone">闹钟铃声</string>
+    <string name="system_locale">使用系统设置日期/时间格式</string>
+    <string name="system_locale_summary">如果关闭，应用程序将使用与为应用程序设置的语言相匹配的设置。</string>
 </resources>
