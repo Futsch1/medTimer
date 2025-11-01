@@ -298,6 +298,10 @@ public class TimeHelper {
         return Instant.ofEpochSecond(remindedTimestamp).toString();
     }
 
+    public static void onChangedUseSystemLocale() {
+        LocaleContextWrapper.resetLocaleContextWrapper();
+    }
+
     public interface TimePickerResult {
         void onTimeSelected(int minutes);
     }
@@ -330,6 +334,10 @@ public class TimeHelper {
             } else {
                 mLocaleAwareContext = base;
             }
+        }
+
+        public static synchronized void resetLocaleContextWrapper() {
+            mLocaleAwareContext = null;
         }
 
         @Override
