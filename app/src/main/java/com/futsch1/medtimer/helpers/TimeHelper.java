@@ -308,10 +308,20 @@ public class TimeHelper {
 
     private static class LocaleContextWrapper extends ContextWrapper {
 
-        private final Context mLocaleAwareContext;
+        @SuppressLint("StaticFieldLeak") // No leak because this context is just a single copy of the enclosing context
+        private static Context mLocaleAwareContext = null;
 
         public LocaleContextWrapper(Context base) {
             super(base);
+
+            buildContext(base);
+        }
+
+        @SuppressLint("AppBundleLocaleChanges") // This is ok because the locale is not changed for the complete context, only wrapped for the DateFormat calls
+        private static synchronized void buildContext(Context base) {
+            if (mLocaleAwareContext != null) {
+                return;
+            }
 
             if (base.getResources() != null && base.getResources().getConfiguration() != null) {
                 Configuration configuration = new Configuration(base.getResources().getConfiguration());
