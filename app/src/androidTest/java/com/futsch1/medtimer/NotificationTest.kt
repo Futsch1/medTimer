@@ -38,9 +38,37 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 
-private const val TEST_MED = "Test med"
+const val TEST_MED = "Test med"
 
 private const val SECOND_ONE = "second one"
+
+
+fun clickNotificationButton(device: UiDevice, buttonText: String): Boolean {
+    val button = makeNotificationExpanded(device, buttonText)
+    button?.click()
+    return button != null
+}
+
+private fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
+    var repeats = 10
+    var button: UiObject2? = null
+    while (repeats-- > 0 && button == null) {
+        val expand = device.findObject(By.descContains("Expand"))
+        expand?.click()
+        button = device.findObject(By.text(buttonText))
+    }
+    return button
+}
+
+fun getNotificationText(stringId: Int, vararg args: Any): String {
+    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
+    return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        s.uppercase()
+    } else {
+        s
+    }
+}
+
 
 class NotificationTest : BaseTestHelper() {
     @Test
@@ -82,9 +110,8 @@ class NotificationTest : BaseTestHelper() {
         baristaRule.activityTestRule.finishActivity()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
         waitAndDismissNotification(device, 2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         waitAndDismissNotification(device, 2_000)
     }
 
@@ -184,7 +211,7 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
         val text = notification.text
 
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         device.wait(Until.gone(By.text(text)), 2_000)
 
         val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
@@ -206,15 +233,15 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         sleep(2_000)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
 
         device.pressBack()
 
         device.openNotification()
         sleep(2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        clickNotificationButton(device, TEST_MED, getNotificationText(R.string.taken))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "Test variable amount")
@@ -228,26 +255,6 @@ class NotificationTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         assertContains("Test variable amount again")
-    }
-
-    private fun clickNotificationButton(device: UiDevice, notificationText: String, buttonText: String) {
-        makeNotificationExpanded(device, notificationText)
-        // Do this twice since sometimes several notifications are collapsed inside one group and we need to
-        // then expand the notification again
-        makeNotificationExpanded(device, notificationText)
-        val button = device.findObject(By.text(buttonText))
-        internalAssert(button != null)
-        button.click()
-    }
-
-    private fun makeNotificationExpanded(device: UiDevice, notificationText: String) {
-        val notificationRow = device.findObject(By.res("com.android.systemui:id/expandableNotificationRow").hasDescendant(By.textContains(notificationText)))
-        if (notificationRow != null) {
-            val expand = notificationRow.findObject(By.res("android:id/expand_button"))
-            if (expand?.contentDescription == "Expand") {
-                expand.click()
-            }
-        }
     }
 
     @Test
@@ -277,7 +284,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
@@ -374,13 +381,12 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
         assertNotNull(notification)
 
-        clickNotificationButton(device, SECOND_ONE, getNotificationText(R.string.all_taken, notificationTimeString))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString)))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
@@ -420,7 +426,7 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
 
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
     }
 
@@ -445,7 +451,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify, 0)
 
         var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
@@ -460,10 +466,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+        ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify, 0)
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
-        ReminderProcessor.requestRescheduleNowForTests(context, 0)
+        ReminderProcessor.requestRescheduleNowForTests(context)
         clickTakenOnAlarmScreen(device, context)
 
         assertCustomAssertionAtPosition(
@@ -482,7 +488,7 @@ class NotificationTest : BaseTestHelper() {
         // For some reason, this last test does not work with the latest Android version
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
             device.sleep()
-            ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify)
+            ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify, 0)
 
             o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
             internalAssert(o != null)
@@ -511,15 +517,6 @@ class NotificationTest : BaseTestHelper() {
             } catch (_: StaleObjectException) {
                 // Ignore
             }
-        }
-    }
-
-    private fun getNotificationText(stringId: Int, vararg args: Any): String {
-        val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
-        return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            s.uppercase()
-        } else {
-            s
         }
     }
 

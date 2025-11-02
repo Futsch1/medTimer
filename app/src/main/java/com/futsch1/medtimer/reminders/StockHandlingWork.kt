@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
@@ -20,6 +21,8 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
 
         processStock(medicine, amount)
         medicineRepository.updateMedicine(medicine)
+        // Make sure that the database is flushed to avoid races between subsequent stock handling events
+        medicineRepository.flushDatabase()
 
         return Result.success()
     }
@@ -33,6 +36,7 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
             }
 
             checkForThreshold(medicine, amount)
+            Log.d("Stock handling", "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
         }
     }
 
