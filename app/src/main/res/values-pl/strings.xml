@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="period_end">Koniec okresu</string>
     <string name="tab_overview">Przegląd</string>
@@ -16,7 +16,7 @@
     <string name="active">Aktywne</string>
     <string name="wednesday">Środa</string>
     <string name="number_of_repetitions">Liczba powtórzeń</string>
-    <string name="interval">Powtarzanie</string>
+    <string name="interval">Odstęp czasu</string>
     <string name="off">Wył</string>
     <string name="variable_amount">Wprowadź dawkę podczas przyjmowania</string>
     <string name="time">Czas</string>
@@ -94,13 +94,13 @@
     <string name="backup">Kopia zapasowa</string>
     <string name="event_name">Nazwa zdarzenia</string>
     <string name="intro_medicine_description">Użyj zakładki „Lekarstwa”, aby utworzyć lek, który przyjmujesz i chcesz otrzymać przypomnienie. Możesz przypisać tagi do leków i skonfigurować ich zapasy.</string>
-    <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia o różnych dawkach leku, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub interwałach i można je ograniczyć do konkretnych dni.</string>
+    <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia dla różnych dawek, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub odstępach oraz ograniczone do określonych dni.</string>
     <string name="show_intro">Pokaż intro aplikacji</string>
     <string name="are_you_sure_delete_reminder_event">Czy na pewno chcesz usunąć wydarzenie przypomnienia?</string>
     <string name="high">Wysoki</string>
     <string name="notification_importance">Priorytet powiadomień</string>
     <string name="calendar">Kalendarz</string>
-    <string name="deactivate_all">Dezaktywuj wszystkie przypomnienia</string>
+    <string name="deactivate_all">Wyłącz wszystkie przypomnienia</string>
     <string name="block_screen_capture">Zablokuj zrzuty ekranu</string>
     <string name="icon">Ikona</string>
     <string name="every_day_of_month">Każdego dnia miesiąca</string>
@@ -141,8 +141,8 @@
     <string name="linked_reminder_summary">Po przypomnieniu o %1$s</string>
     <string name="no_reminders">Nie ustawiono przypomnień</string>
     <string name="interval_start_time">Czas rozpoczęcia</string>
-    <string name="interval_start_reminded">Interwał rozpoczyna się po przypomnieniu</string>
-    <string name="interval_start_processed">Interwał rozpoczyna się w momencie przyjęcia lub pominięcia</string>
+    <string name="interval_start_reminded">Odstęp czasu rozpoczyna się od momentu przypomnienia</string>
+    <string name="interval_start_processed">Odstęp czasu rozpoczyna się zarówno po przyjęciu dawki, jak i po pominięciu dawki</string>
     <string name="privacy_settings">Prywatność</string>
     <string name="are_you_sure_delete_medicine">Czy na pewno chcesz usunąć ten lek?</string>
     <plurals name="sum_reminders">
@@ -167,7 +167,7 @@
     <string name="repeat_reminders_summary">Automatyczne powtarza przypomnienie, dopóki nie zostanie oznaczone jako przyjęto lub pominięto</string>
     <string name="delete_re_raise_event">Czy chcesz usunąć to zdarzenie i ponownie wysłać powiadomienie?</string>
     <string name="amount">Ilość</string>
-    <string name="interval_based_reminder">Przypomnienie oparte na interwale</string>
+    <string name="interval_based_reminder">Przypomnienie oparte na odstępach czasu</string>
     <string name="tags">Tagi</string>
     <string name="friday">Piątek</string>
     <string name="custom">Niestandardowe…</string>
@@ -180,7 +180,7 @@
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
     <string name="notification_settings_high">Ustawienia powiadomień o wysokim priorytecie</string>
     <string name="notification_settings_default">Domyślny priorytet ustawień powiadomień</string>
-    <string name="activate_all">Aktywuj wszystkie przypomnienia</string>
+    <string name="activate_all">Włącz wszystkie przypomnienia</string>
     <string name="override_dnd_summary">Odtwarza powiadomienia dźwiękowe, jeśli włączona jest tylko wibracja lub tryb nie przeszkadzać bez wibracji lub wyciszenia</string>
     <string name="time_between_repetitions">Czas między powtórzeniami</string>
     <string name="once_below_threshold">Raz po przekroczeniu progu</string>
@@ -214,7 +214,7 @@
     <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
-    <string name="interval_time">Interwał %s</string>
+    <string name="interval_time">Odstęp %s</string>
     <string name="reminded">Przypomniano</string>
     <string name="all_taken">Przyjęto wszystko (%s)</string>
     <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
@@ -224,8 +224,8 @@
     <string name="sort">Sortuj</string>
     <string name="high_and_alarm">Wysoki + Alarm</string>
     <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
-    <string name="daily_from_to">Dzienny interwał od %1$s do %2$s</string>
-    <string name="continuous_from">Ciągły interwał zaczynający się od %1$s</string>
+    <string name="daily_from_to">Codzienny odstęp od %1$s do %2$s</string>
+    <string name="continuous_from">Ciągły odstęp rozpoczynający się od %1$s</string>
     <string name="reminder_status">Status przypomnienia</string>
     <string name="dosing_instructions">Instrukcje dawkowania</string>
     <string name="sample_instructions">Wypełnij przykładowymi instrukcjami</string>
@@ -235,11 +235,11 @@
     <string name="remind_on_days_of_month">Przypominaj w dniach miesiąca</string>
     <string name="start_date">Data początkowa</string>
     <string name="end_date">Data końcowa</string>
-    <string name="windowed_interval_reminder">Przypomnienie o interwałach w oknie</string>
-    <string name="continuous_interval_reminder">Ciągłe przypomnienie o interwałach</string>
+    <string name="windowed_interval_reminder">Przypomnienie oparte na oknie czasowym</string>
+    <string name="continuous_interval_reminder">Ciągłe przypomnienie o odstępie czasowym</string>
     <string name="time_based_reminder_help">Ustaw określone godziny (np. 8:00) i skonfiguruj powtarzający się wzorzec. Pozwala to na precyzyjną kontrolę nad określonymi dniami tygodnia, dniami miesiąca lub złożonymi harmonogramami okresowymi (np. \"co 3 dni\").</string>
-    <string name="continuous_interval_reminder_help">Rozpocznij przypomnienie w oparciu o interwał czasowy (np. co 6 godzin) od określonego momentu. Ten wzorzec jest ciągły i ignoruje ograniczenia pory dnia, dopóki nie zostanie ręcznie dezaktywowany.</string>
-    <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno (np. od 9:00 do 21:00), w którym pierwsze przypomnienie jest zawsze o czasie rozpoczęcia. Kolejne przypomnienia uruchamiane są w stałych odstępach czasu, aż do osiągnięcia czasu zakończenia. Cały wzorzec resetuje się każdego dnia.</string>
+    <string name="continuous_interval_reminder_help">Rozpocznij przypomnienie oparte na określonym interwale czasowym (np. co 6 godzin), liczone od wskazanego momentu. Przypomnienia te są ciągłe i nie uwzględniają ograniczeń czasowych w ciągu dnia, aż do ręcznego dezaktywowania.</string>
+    <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno czasowe (np. od 9:00 do 21:00), w którym pierwsze przypomnienie zawsze pojawia się na początku tego okresu. Kolejne przypomnienia następują w stałych odstępach czasowych aż do czasu zakończenia okna. Cały schemat przypomnień resetuje się każdego dnia.</string>
     <string name="linked_reminder">Przypomnienie połączone</string>
     <string name="linked_reminder_help">Przypomnienie powiązane to przypomnienie uzupełniające, które jest zaplanowane na określony czas po wyświetleniu przypomnienia głównego. Jest to przydatne w przypadku leków, które należy przyjmować w określonej kolejności, z określoną przerwą między kolejnymi dawkami.</string>
     <string name="add_linked_reminder_summary">Tworzy przypomnienie uzupełniające, które jest zaplanowane na określony czas po uruchomieniu tego przypomnienia.</string>
