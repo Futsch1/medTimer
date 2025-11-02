@@ -252,6 +252,7 @@ class MedicineStockTest : BaseTestHelper() {
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString)))
         device.pressBack()
+        sleep(1_000)
 
         clickOn(R.id.openStockTracking)
         assertDisplayed(R.id.amountLeft, "5")
