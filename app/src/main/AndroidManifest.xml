@@ -22,6 +22,10 @@
         tools:ignore="FullScreenIntentPolicy" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <attribution
+        android:label="@string/audio_playback_attribution"
+        android:tag="audioPlayback" />
+
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -59,7 +63,7 @@
         <activity
             android:name=".alarm.ReminderAlarmActivity"
             android:exported="false"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:showOnLockScreen="true"
             android:turnScreenOn="true" />
 
