@@ -64,8 +64,7 @@ public class AndroidTestHelper {
         }
 
         clickOn(com.google.android.material.R.id.material_timepicker_mode_button);
-        clickOn(com.google.android.material.R.id.material_hour_text_input);
-        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(hour)));
+        writeTo(com.google.android.material.R.id.material_hour_text_input, String.valueOf(hour));
         clickOn(com.google.android.material.R.id.material_minute_text_input);
         onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
         closeKeyboard();

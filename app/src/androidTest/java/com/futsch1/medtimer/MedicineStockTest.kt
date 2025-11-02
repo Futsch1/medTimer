@@ -19,7 +19,6 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -232,8 +231,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    // This is intended here since this test covers a potential race condition, so we do not want to repeat
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun allTaken() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         AndroidTestHelper.createMedicine(TEST_MED)

@@ -433,7 +433,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun alarmTest() {
         val timeToNotify = 10_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -465,6 +465,8 @@ class NotificationTest : BaseTestHelper() {
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
+
+        sleep(2_000)
 
         device.sleep()
 
