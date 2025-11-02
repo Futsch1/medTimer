@@ -48,13 +48,20 @@ public class ReminderProcessor extends BroadcastReceiver {
         workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
     }
 
-    public static void requestRescheduleNowForTests(@NonNull Context context, long delay) {
+    public static void requestRescheduleNowForTests(@NonNull Context context) {
+        requestRescheduleNowForTests(context, 0, 0);
+    }
+
+    public static void requestRescheduleNowForTests(@NonNull Context context, long delay, int repeats) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         OneTimeWorkRequest rescheduleWork =
                 new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                        .setInputData(new Data.Builder().putLong(EXTRA_SCHEDULE_FOR_TESTS, delay).build())
+                        .setInputData(new Data.Builder()
+                                .putLong(EXTRA_SCHEDULE_FOR_TESTS, delay)
+                                .putInt(EXTRA_REMAINING_REPEATS, repeats)
+                                .build())
                         .build();
-        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
+        workManager.enqueue(rescheduleWork);
     }
 
     public static void requestRepeat(@NonNull Context context, int reminderId, int reminderEventId, int repeatTimeSeconds, int remainingRepeats) {

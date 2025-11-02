@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders;
 
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
@@ -94,34 +95,32 @@ public class RescheduleWork extends Worker {
 
     protected void enqueueNotification(ReminderNotificationData reminderNotificationData) {
         // Apply weekend mode shift
-        Instant timestamp = reminderNotificationData.timestamp();
-        // Apply test setting
-        if (getInputData().hasKeyWithValueOfType(EXTRA_SCHEDULE_FOR_TESTS, Long.class)) {
-            timestamp = Instant.now().plusMillis(getInputData().getLong(EXTRA_SCHEDULE_FOR_TESTS, 0));
-        }
+        Instant scheduledInstant = reminderNotificationData.timestamp();
+        DebugReschedule debugReschedule = new DebugReschedule(context, getInputData());
+        scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant);
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(PendingIntent.getBroadcast(context, 0, new Intent(), FLAG_IMMUTABLE));
         alarmManager.cancel(PendingIntent.getBroadcast(context, reminderNotificationData.reminderEventId, new Intent(), FLAG_IMMUTABLE));
 
         // If the alarm is in the future, schedule with alarm manager
-        if (timestamp.isAfter(Instant.now())) {
+        if (scheduledInstant.isAfter(Instant.now())) {
             PendingIntent pendingIntent = new PendingIntentBuilder(context).
                     setReminderId(reminderNotificationData.reminderId).
                     setReminderEventId(reminderNotificationData.reminderEventId).
-                    setReminderDateTime(timestamp.atZone(ZoneId.systemDefault()).toLocalDateTime()).build();
+                    setReminderDateTime(scheduledInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()).build();
 
             if (canScheduleExactAlarms(alarmManager)) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent);
             } else {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timestamp.toEpochMilli(), pendingIntent);
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent);
             }
 
             Log.i(LogTags.SCHEDULER,
                     String.format("Scheduled reminder for %s/rID %d to %s",
                             reminderNotificationData.medicineName,
                             reminderNotificationData.reminderId,
-                            timestamp));
+                            scheduledInstant));
 
             updateNextReminderWidget();
 
@@ -131,7 +130,7 @@ public class RescheduleWork extends Worker {
                     String.format("Scheduling reminder for %s/rID %d now",
                             reminderNotificationData.medicineName,
                             reminderNotificationData.reminderId));
-            ZonedDateTime reminderDateTime = timestamp.atZone(ZoneId.systemDefault());
+            ZonedDateTime reminderDateTime = scheduledInstant.atZone(ZoneId.systemDefault());
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
                             .setInputData(new Data.Builder()
@@ -142,6 +141,8 @@ public class RescheduleWork extends Worker {
                             .build();
             WorkManagerAccess.getWorkManager(context).enqueue(reminderWork);
         }
+
+        debugReschedule.scheduleRepeat();
     }
 
     private void cancelNextReminder() {
@@ -172,6 +173,32 @@ public class RescheduleWork extends Worker {
 
         public ReminderNotificationData(Instant timestamp, int reminderId, String medicineName) {
             this(timestamp, reminderId, medicineName, 0);
+        }
+    }
+
+    private static class DebugReschedule {
+        Context context;
+        long delay;
+        int repeats;
+
+        DebugReschedule(Context context, Data inputData) {
+            this.context = context;
+            delay = inputData.getLong(EXTRA_SCHEDULE_FOR_TESTS, -1);
+            repeats = inputData.getInt(EXTRA_REMAINING_REPEATS, -1);
+        }
+
+        public Instant adjustTimestamp(Instant instant) {
+            if (delay >= 0) {
+                return Instant.now().plusMillis(delay);
+            } else {
+                return instant;
+            }
+        }
+
+        public void scheduleRepeat() {
+            if (delay >= 0 && repeats >= 0) {
+                ReminderProcessor.requestRescheduleNowForTests(context, delay, repeats - 1);
+            }
         }
     }
 }

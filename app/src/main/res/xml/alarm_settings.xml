@@ -11,7 +11,9 @@
         android:key="no_vibration_when_silent"
         android:title="@string/no_vibration_when_silent" />
     <com.takisoft.preferencex.RingtonePreference
+        android:defaultValue="content://settings/system/alarm_alert"
         android:key="alarm_ringtone"
+        android:ringtoneType="alarm"
         android:showDefault="true"
         android:title="@string/alarm_ringtone"
         app:useSimpleSummaryProvider="true" />

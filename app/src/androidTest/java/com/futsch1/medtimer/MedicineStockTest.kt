@@ -18,9 +18,11 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderProcessor
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import java.text.NumberFormat
@@ -226,5 +228,31 @@ class MedicineStockTest : BaseTestHelper() {
 
         writeTo(R.id.amountLeft, "13")
         assertDisplayed(R.id.runOut, TimeHelper.localDateToString(context, LocalDate.now().plusDays(5)))
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun allTaken() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createReminder("3", LocalTime.of(22, 0))
+        AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
+        val notificationTimeString =
+            TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 22 * 60L)
+
+        clickOn(R.id.openStockTracking)
+        writeTo(R.id.amountLeft, "10")
+        pressBack()
+
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
+        sleep(2_000)
+        device.openNotification()
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString)))
+        device.pressBack()
+        sleep(1_000)
+
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(R.id.amountLeft, "5")
     }
 }
