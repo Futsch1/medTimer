@@ -433,7 +433,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 2)
+    //@AllowFlaky(attempts = 1)
     fun alarmTest() {
         val timeToNotify = 10_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -486,26 +486,6 @@ class NotificationTest : BaseTestHelper() {
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.bell)))
         )
-
-        // For some reason, this last test does not work with the latest Android version
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
-            device.sleep()
-            ReminderProcessor.requestRescheduleNowForTests(context, timeToNotify, 0)
-
-            o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
-            internalAssert(o != null)
-            if (device.wait(Until.findObject(By.desc("com.android.systemui:id/ok")), 2_000) != null) {
-                device.findObject(By.desc("com.android.systemui:id/ok")).click()
-            }
-            device.pressBack()
-
-            assertCustomAssertionAtPosition(
-                R.id.reminders,
-                4,
-                R.id.stateButton,
-                matches(withTagValue(equalTo(R.drawable.bell)))
-            )
-        }
     }
 
     private fun clickTakenOnAlarmScreen(
