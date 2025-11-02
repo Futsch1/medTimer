@@ -4,6 +4,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -23,20 +24,19 @@ import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
-class ReminderAlarmActivity(
-    private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : AppCompatActivity() {
+class ReminderAlarmActivity : AppCompatActivity() {
+
+    // A single-threaded coroutine dispatcher for handling media player and vibrator operations
+    private val alarmExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var vibrator: Vibrator
-
-    // Use an AtomicBoolean for robust, race-condition-free state management
-    private val alarmStarted = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,75 +53,102 @@ class ReminderAlarmActivity(
         setContentView(R.layout.activity_alarm)
 
         addAlarmFragment(intent)
+
+        lifecycleScope.launch(alarmExecutor) {
+            buildMediaPlayerAndVibrator()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        startAlarmTone()
+        lifecycleScope.launch(alarmExecutor) {
+            startAlarm()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        // Reset the flag so the alarm can start again if the activity is resumed.
-        alarmStarted.set(false)
+        lifecycleScope.launch(alarmExecutor) {
+            pauseAlarm()
+        }
+    }
 
-        // Clean up resources safely.
-        if (this::mediaPlayer.isInitialized) {
-            try {
-                mediaPlayer.stop()
-            } catch (_: IllegalStateException) {
-                // Ignore
+    override fun onDestroy() {
+        super.onDestroy()
+        (alarmExecutor.executor as ExecutorService).awaitTermination(1, TimeUnit.SECONDS)
+        releaseMediaPlayer()
+        Log.d("ReminderAlarm", "Destroyed alarm activity")
+    }
+
+    private fun buildMediaPlayerAndVibrator() {
+        val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
+            .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!.toUri()
+        val audioContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            createAttributionContext("audioPlayback")
+        } else {
+            this@ReminderAlarmActivity
+        }
+        mediaPlayer =
+            MediaPlayer.create(
+                audioContext,
+                alarmURI,
+                null,
+                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
+                0
+            )
+        mediaPlayer.isLooping = true
+
+        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+    }
+
+    private fun startAlarm() {
+        // Launch a coroutine on the single-threaded dispatcher
+        Log.d("ReminderAlarm", "Executing startAlarm job")
+
+        if (shallPlayAlarm()) {
+            playAlarmTone()
+        }
+
+        if (shallVibrate()) {
+            vibrate()
+        }
+    }
+
+    private fun pauseAlarm() {
+        Log.d("ReminderAlarm", "Executing pauseAlarm job")
+
+        try {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
             }
+        } catch (_: IllegalStateException) {
+            // Ignore
+        }
+
+        vibrator.cancel()
+    }
+
+    private fun releaseMediaPlayer() {
+        if (::mediaPlayer.isInitialized) {
             mediaPlayer.release()
         }
-        if (this::vibrator.isInitialized) {
-            vibrator.cancel()
-        }
+        Log.d("ReminderAlarm", "Released media player")
     }
 
-    private fun startAlarmTone() {
-        if (!alarmStarted.compareAndSet(false, true)) {
-            return
-        }
-
-        lifecycleScope.launch {
-            withContext(ioCoroutineDispatcher) {
-                // If onPause() was called before this coroutine could execute,
-                // the flag will have been reset to false. This check prevents us
-                // from starting the alarm just before the activity is paused.
-                if (!alarmStarted.get()) {
-                    return@withContext
-                }
-
-                if (shallSoundAlarm()) {
-                    val alarmURI = PreferenceManager.getDefaultSharedPreferences(this@ReminderAlarmActivity)
-                        .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!.toUri()
-                    mediaPlayer =
-                        MediaPlayer.create(
-                            this@ReminderAlarmActivity,
-                            alarmURI,
-                            null,
-                            AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
-                            0
-                        )
-                    mediaPlayer.isLooping = true
-                    mediaPlayer.start()
-                }
-
-                if (shallVibrate()) {
-                    vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-                    } else {
-                        @Suppress("DEPRECATION")
-                        getSystemService(VIBRATOR_SERVICE) as Vibrator
-                    }
-                    vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
-                }
-            }
-        }
+    private fun vibrate() {
+        vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
     }
 
-    private fun shallSoundAlarm(): Boolean {
+    private fun playAlarmTone() {
+        mediaPlayer.start()
+    }
+
+    private fun shallPlayAlarm(): Boolean {
         return combinePreferenceAndRingerMode("no_alarm_sound_when_silent")
     }
 
@@ -130,18 +157,18 @@ class ReminderAlarmActivity(
     }
 
     private fun combinePreferenceAndRingerMode(preferenceName: String): Boolean {
-        val preferenceValue = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, true)
+        val preferenceValue = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, false)
         if (preferenceValue) {
             // If the silent mode is active, do not ring the alarm
-            val audioManager = getSystemService(AUDIO_SERVICE) as android.media.AudioManager
-            return audioManager.ringerMode != android.media.AudioManager.RINGER_MODE_SILENT
+            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+            return audioManager.ringerMode != AudioManager.RINGER_MODE_SILENT
         }
         return true
     }
 
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
-            Log.d("ReminderAlarmActivity", "Adding alarm fragment")
+            Log.d("ReminderAlarm", "Adding alarm fragment")
             supportFragmentManager.beginTransaction().add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
     }
