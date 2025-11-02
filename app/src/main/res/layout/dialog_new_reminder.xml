@@ -149,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:hint="@string/interval_start_time">
+                    android:hint="@string/daily_start_time">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editIntervalDailyStartTime"
@@ -164,7 +164,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:hint="@string/interval_start_time">
+                    android:hint="@string/daily_end_time">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editIntervalDailyEndTime"
