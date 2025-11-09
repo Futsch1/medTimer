@@ -51,6 +51,7 @@
             style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/raised"
             app:icon="@drawable/bell" />
 
         <Button
@@ -58,6 +59,7 @@
             style="@style/Widget.MedTimer.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/scheduled"
             app:icon="@drawable/alarm" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
