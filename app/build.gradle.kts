@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("androidx.room")
-    id("com.github.triplet.play") version "3.12.1"
+    id("com.github.triplet.play") version "3.12.2"
     id("androidx.navigation.safeargs")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
@@ -23,8 +23,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 137
-        versionName = "1.20.1"
+        versionCode = 138
+        versionName = "1.20.2"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -106,7 +106,7 @@ dependencies {
     val appcompatVersion = "1.7.1"
     val materialVersion = "1.13.0"
     val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.9.5"
+    val androidXNavigationVersion = "2.9.6"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val lifecycleKtxVersion = "2.9.4"

@@ -244,4 +244,6 @@
     <string name="alarm_ringtone">Мелодия на алармата</string>
     <string name="system_locale">Използване на системната настройка за формат дата/час</string>
     <string name="system_locale_summary">При изключено състояние приложението използва настройката, съответстваща на езика, зададен за приложението.</string>
+    <string name="raised">задействана</string>
+    <string name="scheduled">планирана</string>
 </resources>

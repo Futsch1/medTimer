@@ -249,4 +249,6 @@
     <string name="alarm_ringtone">Suoneria sveglia</string>
     <string name="system_locale">Utilizzare le impostazioni di sistema per il formato di data e ora</string>
     <string name="system_locale_summary">In caso di disattivazione, l\'applicazione utilizza l\'impostazione corrispondente alla lingua impostata per l\'applicazione.</string>
+    <string name="raised">Attivato</string>
+    <string name="scheduled">Pianificato</string>
 </resources>
