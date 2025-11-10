@@ -244,4 +244,6 @@
     <string name="alarm_ringtone">Ébresztő csengőhangja</string>
     <string name="system_locale">Rendszerbeállítás használata a dátum/idő formátumhoz</string>
     <string name="system_locale_summary">Kikapcsolt állapotban az alkalmazás az alkalmazáshoz beállított nyelvnek megfelelő beállítást használja.</string>
+    <string name="raised">Elindítva</string>
+    <string name="scheduled">Ütemezve</string>
 </resources>

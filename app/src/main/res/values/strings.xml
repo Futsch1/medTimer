@@ -247,4 +247,6 @@
     <string name="system_locale">Use system setting for date/time format</string>
     <string name="system_locale_summary">If switched off, the app uses the setting matching the language set for the app.</string>
     <string name="audio_playback_attribution" translatable="false">This app plays audio in an alarm</string>
+    <string name="raised">Raised</string>
+    <string name="scheduled">Scheduled</string>
 </resources>
