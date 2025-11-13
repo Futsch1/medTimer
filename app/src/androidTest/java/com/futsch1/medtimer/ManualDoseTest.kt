@@ -3,9 +3,11 @@ package com.futsch1.medtimer
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import org.junit.Test
@@ -90,6 +92,12 @@ class ManualDoseTest : BaseTestHelper() {
         assertNotContains(R.id.editEventName, "Test (1 pill)")
         assertContains(R.id.editEventName, "Test")
         assertContains(R.id.editEventAmount, "1 pill")
+
+        pressBack()
+
+        // Check that re-raise is not shown
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        assertNotDisplayed(R.string.re_raise_event)
     }
 
 }

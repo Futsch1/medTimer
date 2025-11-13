@@ -86,7 +86,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             view.getLocationInWindow(location)
 
             val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
-            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, view.left, popupTop)
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
         }
     }
 

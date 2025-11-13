@@ -61,7 +61,9 @@ Flexible & Personalized Reminders:
 - Weekend mode: Delay reminders to a defined time on chosen days.
 - Snooze notifications for later reminders or be reminded repeatedly.
 - Add extra doses on the fly.
-- Create interval based reminders or reminders following each other in intervals.
+- Create interval based reminders, reminders following each other in intervals or interval reminders
+  constrained with a start and end time per day.
+- Use alarm type reminders to ensure notification even when the device is set to silent mode.
 
 Simple & Secure Data Management:
 

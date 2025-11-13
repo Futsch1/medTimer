@@ -14,6 +14,7 @@ open class ActionsBase(view: View, popupWindow: PopupWindow) {
     val deleteButton: ExtendedFloatingActionButton = view.findViewById(R.id.deleteButton)
     val anchorTakenButton: View = view.findViewById(R.id.anchorTakenButton)
     val anchorSkippedButton: View = view.findViewById(R.id.anchorSkippedButton)
+    val anchorDeleteButton: View = view.findViewById(R.id.anchorDeleteButton)
 
     init {
         view.setOnClickListener {
@@ -29,7 +30,7 @@ open class ActionsBase(view: View, popupWindow: PopupWindow) {
         setAngle(anchorSkippedButton, 110f)
     }
 
-    private fun setAngle(view: View, f: Float) {
+    protected fun setAngle(view: View, f: Float) {
         val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.circleAngle = f
         view.setLayoutParams(layoutParams)
