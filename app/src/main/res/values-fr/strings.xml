@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -251,4 +251,4 @@
     <string name="system_locale_summary">En cas de désactivation, l\'application utilise le paramètre correspondant à la langue définie pour l\'application.</string>
     <string name="raised">Déclenchée</string>
     <string name="scheduled">Planifiée</string>
-</resources>
+<string name="no_calendar_app">Aucune application de calendrier trouvée</string></resources>

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.medicine
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
@@ -95,7 +97,11 @@ class MedicineStockFragment :
             val date = TimeHelper.stringToLocalDate(context, runOutDateField.text.toString())
             if (date != null) {
                 val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + medicine.name, date)
-                startActivity(intent)
+                try {
+                    startActivity(intent)
+                } catch (_: ActivityNotFoundException) {
+                    Toast.makeText(context, R.string.no_calendar_app, Toast.LENGTH_SHORT).show()
+                }
             }
 
         }

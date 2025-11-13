@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Indien uitgeschakeld, gebruikt de app de instelling die overeenkomt met de taal die voor de app is ingesteld.</string>
     <string name="raised">Afgegaan</string>
     <string name="scheduled">Gepland</string>
-</resources>
+<string name="no_calendar_app">Geen kalender-app gevonden</string></resources>

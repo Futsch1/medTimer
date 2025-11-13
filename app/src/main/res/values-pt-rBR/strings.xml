@@ -251,4 +251,4 @@
     <string name="system_locale_summary">Quando desativado, o aplicativo usará a configuração correspondente ao idioma definido para o aplicativo.</string>
     <string name="raised">Acionado</string>
     <string name="scheduled">Agendado</string>
-</resources>
+<string name="no_calendar_app">Nenhum aplicativo de calendário encontrado</string></resources>

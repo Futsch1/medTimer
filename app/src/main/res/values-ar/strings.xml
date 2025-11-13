@@ -266,4 +266,4 @@
     <string name="system_locale_summary">عند إيقاف تشغيله، يستخدم التطبيق الإعداد المطابق للغة التي تم تعيينها للتطبيق.</string>
     <string name="raised">تم الرفع</string>
     <string name="scheduled">مجدول</string>
-</resources>
+<string name="no_calendar_app">لم يتم العثور على تطبيق تقويم</string></resources>

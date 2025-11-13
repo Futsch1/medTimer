@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Kikapcsolt állapotban az alkalmazás az alkalmazáshoz beállított nyelvnek megfelelő beállítást használja.</string>
     <string name="raised">Elindítva</string>
     <string name="scheduled">Ütemezve</string>
-</resources>
+<string name="no_calendar_app">Nincs naptár alkalmazás található</string></resources>

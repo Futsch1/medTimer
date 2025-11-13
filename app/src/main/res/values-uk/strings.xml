@@ -16,7 +16,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few" />
+        <item quantity="few"/>
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -256,4 +256,4 @@
     <string name="system_locale_summary">У вимкненому стані програма використовує налаштування, що відповідають мові, встановленій для програми.</string>
     <string name="raised">Спрацював</string>
     <string name="scheduled">Заплановано</string>
-</resources>
+<string name="no_calendar_app">Не знайдено жодного додатку календаря</string></resources>

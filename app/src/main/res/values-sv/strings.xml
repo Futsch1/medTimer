@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Om avstängd använder appen den inställning som motsvarar det språk som har ställts in för appen.</string>
     <string name="raised">Utlöst</string>
     <string name="scheduled">Schemalagd</string>
-</resources>
+<string name="no_calendar_app">Ingen kalenderapp hittades</string></resources>

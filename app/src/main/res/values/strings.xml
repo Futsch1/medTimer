@@ -249,4 +249,5 @@
     <string name="audio_playback_attribution" translatable="false">This app plays audio in an alarm</string>
     <string name="raised">Raised</string>
     <string name="scheduled">Scheduled</string>
+    <string name="no_calendar_app">No calendar app found</string>
 </resources>

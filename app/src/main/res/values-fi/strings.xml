@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Jos pois päältä, sovellus käyttää sovellukselle asetettua kieltä vastaavaa asetusta.</string>
     <string name="raised">Laukaistu</string>
     <string name="scheduled">Ajastettu</string>
-</resources>
+<string name="no_calendar_app">Kalenterisovellusta ei löydy</string></resources>
