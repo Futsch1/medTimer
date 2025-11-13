@@ -137,13 +137,13 @@ Following doses can overlap into the next day, but are constrained to a maximum 
 It is also possible to chain following doses by entering the `Advanced settings` of a following dose
 and adding another following dose from there.
 
-This way, you can for example configure a medication where you always take the first dose at around 8:00
-and then another one every 4 hours until 20:00 (so 4 doses in total). So you would set up the doses like this:
+This way, you can for example configure a medication where you always take the first dose at around 8:00, then another one
+every 4 hours later and then two more with a different interval. So you would set up the doses like this:
 
 1. Reminder at 08:00
 2. Reminder following 1. 4:00 later
-3. Reminder following 2. 4:00 later
-4. Reminder following 3. 4:00 later
+3. Reminder following 2. 5:00 later
+4. Reminder following 3. 6:00 later
 
 ## Interval reminders
 
@@ -198,3 +198,18 @@ medication can be assigned to one or more of configurable tags. These tags are s
 the overview and the medication list. Using the tag icon <img src="tag.svg" width=40 />
 in the app title bar, you can filter certain tags to only show reminders and medication assigned to the
 selected tags.
+
+## Intervals during daytime
+
+If a medication should be taken in specific intervals starting from a time in the morning until some time
+in the evening, windowed intervals can be used. Select this type of interval when creating a new reminder
+and define the start and end time of day and the interval.
+
+Note that the interval can also be configured to either start when the dose was reminded (this way, the
+reminders will be equidistant) or when the reminder was marked taken.
+
+## Alarm reminders
+
+If the reminders for a certain medicine shall be raised in the type of alarms (showing as full-screen with
+an alarm sound and vibration), configure the notification priority of a medicine to "High + Alarm". All
+reminders of this medicine now show as alarms when the phone is in sleep mode.
