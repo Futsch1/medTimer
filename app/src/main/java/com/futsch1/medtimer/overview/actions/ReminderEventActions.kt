@@ -17,6 +17,9 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
         if (event.state == OverviewState.RAISED) {
             hideDeleteAndReraise()
         }
+        if (event.reminderEvent.reminderId == -1) {
+            hideReraise()
+        }
         takenButton.setOnClickListener {
             processTakenOrSkipped(event.reminderEvent, true)
             popupWindow.dismiss()
@@ -36,6 +39,14 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
             processDeleteReminderEvent(view.context, event.reminderEvent)
             popupWindow.dismiss()
         }
+    }
+
+    private fun hideReraise() {
+        reRaiseButton.visibility = View.INVISIBLE
+
+        setAngle(anchorTakenButton, 50f)
+        setAngle(anchorSkippedButton, 90f)
+        setAngle(anchorDeleteButton, 130f)
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
