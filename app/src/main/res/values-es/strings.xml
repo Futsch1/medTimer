@@ -251,4 +251,4 @@
     <string name="system_locale_summary">Si se desactiva, la aplicación utiliza la configuración que coincide con el idioma establecido para la aplicación.</string>
     <string name="raised">Activada</string>
     <string name="scheduled">Programada</string>
-</resources>
+<string name="no_calendar_app">No se ha encontrado ninguna aplicación de calendario</string></resources>

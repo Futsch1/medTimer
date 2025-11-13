@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Wenn ausgeschaltet verwendet die App die Einstellung, die der für die App eingestellten Sprache entspricht.</string>
     <string name="raised">Ausgelöst</string>
     <string name="scheduled">Geplant</string>
-</resources>
+<string name="no_calendar_app">Keine Kalender-App gefunden</string></resources>

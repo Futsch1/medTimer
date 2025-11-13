@@ -241,4 +241,5 @@
     <string name="system_locale_summary">如果關閉，應用程式將使用與其設定語言相符的格式。</string>
     <string name="raised">已觸發</string>
     <string name="scheduled">已排定</string>
+    <string name="no_calendar_app">找不到日曆應用程式</string>
 </resources>

@@ -253,4 +253,4 @@
     <string name="system_locale_summary">В выключенном состоянии приложение использует настройки, соответствующие языку, установленному для данного приложения.</string>
     <string name="raised">Сработало</string>
     <string name="scheduled">Запланировано</string>
-</resources>
+<string name="no_calendar_app">Приложение календаря не найдено</string></resources>

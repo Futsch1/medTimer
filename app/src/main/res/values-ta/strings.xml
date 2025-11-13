@@ -246,4 +246,5 @@
     <string name="system_locale_summary">முடக்கப்பட்டால், பயன்பாட்டிற்காக அமைக்கப்பட்ட மொழியுடன் பொருந்தக்கூடிய அமைப்பைப் பயன்பாடு பயன்படுத்துகிறது.</string>
     <string name="raised"> எழுப்பப்பட்டது</string>
     <string name="scheduled">திட்டமிடப்பட்டது</string>
+    <string name="no_calendar_app">கேலெண்டர் செயலி எதுவும் இல்லை</string>
 </resources>
