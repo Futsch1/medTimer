@@ -9,7 +9,8 @@ Elastyczne i spersonalizowane przypomnienia:
 - Tryb weekendowy: opóźniaj przypomnienia do określonej godziny w wybrane dni.
 - Drzemka powiadomień – odłóż przypomnienie na później lub ustaw powtarzające się alerty.
 - Dodawaj dodatkowe dawki w dowolnym momencie.
-- Twórz przypomnienia oparte na interwałach lub następujące po sobie w określonych odstępach czasu.
+- Twórz przypomnienia oparte na odstępach czasowych, przypomnienia następujące po sobie w określonych interwałach lub przypomnienia z przedziałem czasowym ograniczonym godziną rozpoczęcia i zakończenia w ciągu dnia.
+- Używaj przypomnień typu alarm, aby mieć pewność, że powiadomienie pojawi się nawet wtedy, gdy urządzenie jest ustawione w trybie cichym.
 
 Proste i bezpieczne zarządzanie danymi:
 
