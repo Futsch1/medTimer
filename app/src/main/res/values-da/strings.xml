@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Indstillinger</string>
     <string name="tab_overview">Oversigt</string>
@@ -224,7 +224,7 @@
     <string name="remind_on_days_of_month">Påmind på månedens dage</string>
     <string name="start_date">Start dato</string>
     <string name="end_date">Slut dato</string>
-    <string name="cycle_reminder">Cyklist påmindelse</string>
+    <string name="cycle_reminder">Gentagne påmindelser</string>
     <string name="windowed_interval_reminder">Vinduesintervalpåmindelse</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
     <string name="time_based_reminder_help">Indstil specifikke tidspunkter (f.eks. 8:00) og konfigurer et tilbagevendende mønster. Dette giver præcis kontrol over specifikke ugedage, månedsdage eller komplekse periodiske tidsplaner (som \'hver 3. dag\').</string>
@@ -246,4 +246,5 @@
     <string name="system_locale_summary">Hvis slået fra, bruger appen den indstilling, der svarer til det sprog, der er indstillet for appen.</string>
     <string name="raised">Udløst</string>
     <string name="scheduled">Planlagt</string>
-<string name="no_calendar_app">Ingen kalender-app fundet</string></resources>
+    <string name="no_calendar_app">Ingen kalender-app fundet</string>
+</resources>
