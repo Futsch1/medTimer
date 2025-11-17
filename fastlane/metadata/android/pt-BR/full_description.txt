@@ -12,7 +12,8 @@ Lembretes Flexíveis e Personalizados:
 - Modo Fim de Semana: Adie os lembretes para um horário definido em dias selecionados.
 - Adie as notificações para lembretes posteriores ou seja lembrado repetidamente.
 - Adicione doses extras rapidamente.
-- Crie lembretes baseados em intervalos ou lembretes que se sucedem em intervalos.
+- Crie lembretes baseados em intervalos, lembretes que se sucedem em intervalos ou lembretes com intervalos dentro de um horário diário com início e fim.
+- Use lembretes do tipo alarme que garantem a notificação mesmo quando o dispositivo está no modo silencioso.
 
 Gerenciamento de Dados Simples e Seguro:
 
