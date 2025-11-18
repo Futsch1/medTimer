@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
@@ -140,7 +140,7 @@
     <string name="statistics_tab_description">Statistikflik</string>
     <string name="previous_month">Föregående månad</string>
     <string name="next_month">Kommande månad</string>
-    <string name="repeat_reminders">Återkommande påminnelser</string>
+    <string name="repeat_reminders">Upprepa påminnelser</string>
     <string name="minutes_1">1 minut</string>
     <string name="number_of_repetitions">Antal upprepningar</string>
     <string name="time_between_repetitions">Tid mellan upprepningar</string>
@@ -167,7 +167,7 @@
     </plurals>
     <string name="days_string">Dagar</string>
     <string name="create_reminder">Skapa påminnelse</string>
-    <string name="interval">Interval</string>
+    <string name="interval">Intervall</string>
     <string name="interval_start_time">Starttid för intervall</string>
     <string name="interval_start_reminded">Intervallen startar när du blir påmind</string>
     <string name="interval_start_processed">Intervall startar när dosen tas eller hoppas över</string>
@@ -176,7 +176,7 @@
     <string name="off">Avstängd</string>
     <string name="once_below_threshold">En gång när tröskelvärdet underskrids</string>
     <string name="always_below_threshold">Alltid när under tröskelvärdet</string>
-    <string name="out_of_stock_notification">Endast %2$ av %1$ kvar! \nÖverväg att fylla på läkemedlet snart.</string>
+    <string name="out_of_stock_notification">Bara %2$s av %1$s kvar!\nKolla om du behöver förnya receptet.</string>
     <string name="medicine_stock_string">%1$s kvar</string>
     <string name="out_of_stock_notification_title">Påminnelse om att läkemedlet är slut i lager</string>
     <string name="medicine_stock">Lager av läkemedel</string>
@@ -229,9 +229,9 @@
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
     <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
     <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
-    <string name="windowed_interval_reminder_help">Definiera ett dagligt aktivt fönster (t.ex. 09.00 till 21.00) där den första påminnelsen alltid är vid starttiden. Efterföljande påminnelser utlöses med fasta intervall tills sluttiden har nåtts. Hela mönstret återställs varje dag.</string>
+    <string name="windowed_interval_reminder_help">Definiera ett bestämd tidsintervall per dag (t.ex. 09:00 till 21:00) där den första påminnelsen alltid kommer vid starttiden. Senare påminnelser kommer med bestämda intervall fram till sluttiden. Mönstret börjar om varje dag.</string>
     <string name="linked_reminder">Länkad påminnelse</string>
-    <string name="linked_reminder_help">En länkad påminnelse är en uppföljningspåminnelse som schemaläggs en viss tid efter att en primär påminnelse har åtgärdats (antingen tagits eller snoozats). Detta är användbart för mediciner som måste tas i följd, med en specifik fördröjning mellan dem.</string>
+    <string name="linked_reminder_help">En kopplad påminnelse är en som schemaläggs en viss tid efter att en första påminnelse har åtgärdats (antingen tagits eller skjutits upp). En sådan är bra för mediciner som måste tas i följd, med en bestämd tid mellan gångerna.</string>
     <string name="add_linked_reminder_summary">Skapar en uppföljningspåminnelse som schemaläggs en viss tid efter att denna påminnelse har utlösts.</string>
     <string name="cyclic_reminder_summary">Konfigurerar ett återkommande mönster av aktiva och pausade dagar från ett angivet datum. Påminnelsen kommer endast att skicka en avisering på aktiva dagar. Använd detta för mediciner som p-piller.</string>
     <string name="variable_amount_summary">När den är aktiv visas en dialogruta för att ange dosen när påminnelsen tas.</string>
@@ -246,4 +246,5 @@
     <string name="system_locale_summary">Om avstängd använder appen den inställning som motsvarar det språk som har ställts in för appen.</string>
     <string name="raised">Utlöst</string>
     <string name="scheduled">Schemalagd</string>
-<string name="no_calendar_app">Ingen kalenderapp hittades</string></resources>
+    <string name="no_calendar_app">Ingen kalenderapp hittades</string>
+</resources>
