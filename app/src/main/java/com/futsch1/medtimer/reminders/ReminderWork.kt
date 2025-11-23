@@ -67,11 +67,16 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         reminderIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)
         reminderEventIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)
         val triplets = ArrayList<NotificationTriplet>()
-        if (reminderIds != null && reminderEventIds != null) {
-
+        if (reminderIds != null) {
             for (i in reminderIds!!.indices) {
+
                 val reminderId = reminderIds!![i]
-                val reminderEventId = reminderEventIds!![i]
+
+                val reminderEventId = if (reminderEventIds == null) {
+                    0
+                } else {
+                    reminderEventIds!![i]
+                }
                 val reminder = medicineRepository.getReminder(reminderId)
                 if (reminder == null) {
                     Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderId))
