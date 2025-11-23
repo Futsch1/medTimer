@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.futsch1.medtimer.ActivityCodes.ALL_TAKEN_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
@@ -9,7 +8,8 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID_LIST;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS;
@@ -64,13 +64,13 @@ public class ReminderProcessor extends BroadcastReceiver {
         workManager.enqueue(rescheduleWork);
     }
 
-    public static void requestRepeat(@NonNull Context context, int reminderId, int reminderEventId, int repeatTimeSeconds, int remainingRepeats) {
+    public static void requestRepeat(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, int repeatTimeSeconds, int remainingRepeats) {
         WorkManager workManager = WorkManagerAccess.getWorkManager(context);
         OneTimeWorkRequest repeatWork =
                 new OneTimeWorkRequest.Builder(RepeatReminderWork.class)
                         .setInputData(new Data.Builder()
-                                .putInt(EXTRA_REMINDER_ID, reminderId)
-                                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
+                                .putIntArray(EXTRA_REMINDER_ID_LIST, reminderIds)
+                                .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
                                 .putInt(EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
                                 .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats)
                                 .build())
@@ -78,20 +78,20 @@ public class ReminderProcessor extends BroadcastReceiver {
         workManager.enqueue(repeatWork);
     }
 
-    public static Intent getReminderAction(@NonNull Context context, int reminderId, int reminderEventId, LocalDateTime reminderDateTime) {
+    public static Intent getReminderAction(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, LocalDateTime reminderDateTime) {
         Intent reminderIntent = new Intent(REMINDER_ACTION);
-        reminderIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
-        reminderIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        reminderIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
+        reminderIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
         reminderIntent.putExtra(EXTRA_REMINDER_DATE, reminderDateTime != null ? reminderDateTime.toLocalDate().toEpochDay() : 0);
         reminderIntent.putExtra(EXTRA_REMINDER_TIME, reminderDateTime != null ? reminderDateTime.toLocalTime().toSecondOfDay() : 0);
         reminderIntent.setClass(context, ReminderProcessor.class);
         return reminderIntent;
     }
 
-    public static Intent getSnoozeIntent(@NonNull Context context, int reminderId, int reminderEventId, int notificationId, int snoozeTime) {
+    public static Intent getSnoozeIntent(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, int notificationId, int snoozeTime) {
         Intent snoozeIntent = new Intent(SNOOZE_ACTION);
-        snoozeIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
-        snoozeIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        snoozeIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
+        snoozeIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         snoozeIntent.putExtra(EXTRA_SNOOZE_TIME, snoozeTime);
         snoozeIntent.setClass(context, ReminderProcessor.class);
@@ -110,8 +110,8 @@ public class ReminderProcessor extends BroadcastReceiver {
         workManager.enqueue(stockHandlingWork);
     }
 
-    public static void requestActionIntent(Context context, int reminderEventId, boolean taken) {
-        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventId) : getSkippedActionIntent(context, reminderEventId);
+    public static void requestActionIntent(Context context, int[] reminderEventIds, boolean taken) {
+        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventIds) : getSkippedActionIntent(context, reminderEventIds);
         if (taken) {
             WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWork.class));
         } else {
@@ -119,31 +119,27 @@ public class ReminderProcessor extends BroadcastReceiver {
         }
     }
 
-    public static Intent getTakenActionIntent(@NonNull Context context, int reminderEventId) {
-        return buildActionIntent(context, reminderEventId, TAKEN_ACTION);
+    public static Intent getTakenActionIntent(@NonNull Context context, int[] reminderEventIds) {
+        return buildActionIntent(context, reminderEventIds, TAKEN_ACTION);
     }
 
-    public static Intent getSkippedActionIntent(@NonNull Context context, int reminderEventId) {
-        return buildActionIntent(context, reminderEventId, DISMISSED_ACTION);
+    public static Intent getSkippedActionIntent(@NonNull Context context, int[] reminderEventIds) {
+        return buildActionIntent(context, reminderEventIds, DISMISSED_ACTION);
     }
 
     private static <T extends ListenableWorker> WorkRequest buildActionWorkRequest(Intent intent, Class<T> workerClass) {
         return new OneTimeWorkRequest.Builder(workerClass)
                 .setInputData(new Data.Builder()
-                        .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                        .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
                         .build())
                 .build();
     }
 
-    private static Intent buildActionIntent(@NonNull Context context, int reminderEventId, String actionName) {
+    private static Intent buildActionIntent(@NonNull Context context, int[] reminderEventIds, String actionName) {
         Intent actionIntent = new Intent(context, ReminderProcessor.class);
         actionIntent.setAction(actionName);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
         return actionIntent;
-    }
-
-    public static Intent getAllTakenActionIntent(@NonNull Context context, int reminderEventId) {
-        return buildActionIntent(context, reminderEventId, ALL_TAKEN_ACTION);
     }
 
     public static Intent getVariableAmountActionIntent(Context context, int reminderEventId, String amount) {
@@ -155,12 +151,12 @@ public class ReminderProcessor extends BroadcastReceiver {
         return actionIntent;
     }
 
-    public static Intent getCustomSnoozeActionIntent(Context context, int reminderId, int reminderEventId, int notificationId) {
+    public static Intent getCustomSnoozeActionIntent(Context context, int[] reminderIds, int[] reminderEventIds, int notificationId) {
         Intent actionIntent = new Intent(context, MainActivity.class);
         actionIntent.setAction("CUSTOM_SNOOZE");
         actionIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        actionIntent.putExtra(EXTRA_REMINDER_ID, reminderId);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
+        actionIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
+        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
         actionIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         return actionIntent;
     }
@@ -172,14 +168,12 @@ public class ReminderProcessor extends BroadcastReceiver {
             workManager.enqueue(buildActionWorkRequest(intent, SkippedWork.class));
         } else if (TAKEN_ACTION.equals(intent.getAction())) {
             workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
-        } else if (ALL_TAKEN_ACTION.equals(intent.getAction())) {
-            workManager.enqueue(buildActionWorkRequest(intent, AllTakenWork.class));
         } else if (SNOOZE_ACTION.equals(intent.getAction())) {
             WorkRequest snoozeWork =
                     new OneTimeWorkRequest.Builder(SnoozeWork.class)
                             .setInputData(new Data.Builder()
-                                    .putInt(EXTRA_REMINDER_ID, intent.getIntExtra(EXTRA_REMINDER_ID, 0))
-                                    .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                                    .putIntArray(EXTRA_REMINDER_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_ID_LIST))
+                                    .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
                                     .putInt(EXTRA_NOTIFICATION_ID, intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
                                     .putInt(EXTRA_SNOOZE_TIME, intent.getIntExtra(EXTRA_SNOOZE_TIME, 15))
                                     .build())
@@ -189,8 +183,8 @@ public class ReminderProcessor extends BroadcastReceiver {
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
                             .setInputData(new Data.Builder()
-                                    .putInt(EXTRA_REMINDER_ID, intent.getIntExtra(EXTRA_REMINDER_ID, 0))
-                                    .putInt(EXTRA_REMINDER_EVENT_ID, intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, 0))
+                                    .putIntArray(EXTRA_REMINDER_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_ID_LIST))
+                                    .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
                                     .putLong(EXTRA_REMINDER_DATE, intent.getLongExtra(EXTRA_REMINDER_DATE, 0))
                                     .putInt(EXTRA_REMINDER_TIME, intent.getIntExtra(EXTRA_REMINDER_TIME, 0))
                                     .build())

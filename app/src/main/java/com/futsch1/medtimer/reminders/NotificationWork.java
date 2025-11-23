@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
+import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST;
 
 import android.content.Context;
 
@@ -23,7 +23,7 @@ public class NotificationWork extends Worker {
     @NonNull
     @Override
     public ListenableWorker.Result doWork() {
-        NotificationAction.processNotification(getApplicationContext(), getInputData().getInt(EXTRA_REMINDER_EVENT_ID, 0), status);
+        NotificationAction.processNotification(getApplicationContext(), getInputData().getIntArray(EXTRA_REMINDER_EVENT_ID_LIST), status);
         return ListenableWorker.Result.success();
     }
 

@@ -19,15 +19,18 @@ public class NotificationAction {
         // Intentionally empty
     }
 
-    static void processNotification(Context context, int reminderEventId, ReminderEvent.ReminderStatus status) {
+    static void processNotification(Context context, int[] reminderEventIds, ReminderEvent.ReminderStatus status) {
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
-        ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
-        if (reminderEvent != null) {
-            if (reminderEvent.askForAmount && status == ReminderEvent.ReminderStatus.TAKEN) {
-                context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
-            } else {
-                processReminderEvent(context, status, reminderEvent, medicineRepository);
+        for (int reminderEventId : reminderEventIds) {
+            ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
+
+            if (reminderEvent != null) {
+                if (reminderEvent.askForAmount && status == ReminderEvent.ReminderStatus.TAKEN) {
+                    context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
+                } else {
+                    processReminderEvent(context, status, reminderEvent, medicineRepository);
+                }
             }
         }
     }

@@ -9,7 +9,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineHelper.formatAmount
 
 class OutOfStockNotificationFactory(context: Context, notificationId: Int, medicine: Medicine) :
-    NotificationFactory(context, notificationId, medicine) {
+    NotificationFactory(context, notificationId, listOf(medicine)) {
 
     init {
         val contentIntent = getStartAppIntent()

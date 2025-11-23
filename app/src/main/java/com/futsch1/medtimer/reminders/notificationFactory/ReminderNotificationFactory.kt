@@ -10,17 +10,12 @@ import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.NotificationTriplet
 
 
 data class ReminderNotificationData(
     val remindTime: String,
-    val medicine: FullMedicine,
-    val reminder: Reminder,
-    val reminderEvent: ReminderEvent,
-    val hasSameTimeReminders: Boolean
+    val triplets: List<NotificationTriplet>
 )
 
 fun getReminderNotificationFactory(
@@ -43,19 +38,23 @@ fun getReminderNotificationFactory(
 abstract class ReminderNotificationFactory(
     context: Context,
     notificationId: Int,
-    reminderNotificationData: ReminderNotificationData
-) : NotificationFactory(context, notificationId, reminderNotificationData.medicine.medicine) {
+    val reminderNotificationData: ReminderNotificationData
+) : NotificationFactory(context, notificationId, reminderNotificationData.triplets.map { it.medicine?.medicine }) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val intents = NotificationIntentBuilder(context, notificationId, reminderNotificationData.reminderEvent, reminderNotificationData.reminder)
+    val intents = NotificationIntentBuilder(
+        context, notificationId,
+        reminderNotificationData.triplets.map { it.reminderEvent.reminderEventId }.toIntArray(),
+        reminderNotificationData.triplets.map { it.reminder.reminderId }.toIntArray()
+    )
     val notificationStrings =
-        NotificationStringBuilder(context, reminderNotificationData.medicine, reminderNotificationData.reminder, reminderNotificationData.remindTime)
+        NotificationStringBuilder(
+            context,
+            reminderNotificationData.triplets.map { NotificationStringTuple(it.medicine!!, it.reminder) },
+            reminderNotificationData.remindTime
+        )
 
     val remindTime = reminderNotificationData.remindTime
-    val medicine = reminderNotificationData.medicine
-    val reminder = reminderNotificationData.reminder
-    val reminderEvent = reminderNotificationData.reminderEvent
-    val hasSameTimeReminders = reminderNotificationData.hasSameTimeReminders
 
     init {
         val contentIntent: PendingIntent? = getStartAppIntent()
@@ -73,7 +72,7 @@ abstract class ReminderNotificationFactory(
             builder.setOngoing(true)
         }
         // If shown as alarm, add a full screen intent
-        if (medicine.medicine.showNotificationAsAlarm) {
+        if (reminderNotificationData.triplets.any { it.medicine?.medicine?.showNotificationAsAlarm == true }) {
             addFullScreenIntent()
         }
     }
@@ -82,7 +81,10 @@ abstract class ReminderNotificationFactory(
     private fun addFullScreenIntent() {
         val pendingIntent = PendingIntent.getActivity(
             context, 0,
-            ReminderAlarmActivity.getIntent(context, reminderEvent, remindTime, notificationId),
+            ReminderAlarmActivity.getIntent(
+                context,
+                reminderNotificationData.triplets, remindTime, notificationId
+            ),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -118,11 +120,6 @@ abstract class ReminderNotificationFactory(
                 addSkippedAction()
                 addSnoozeAction()
             }
-        }
-        if (hasSameTimeReminders) {
-            builder.addAction(
-                R.drawable.check2_all, context.getString(R.string.all_taken, remindTime), intents.pendingAllTaken
-            )
         }
     }
 

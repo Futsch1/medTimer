@@ -55,18 +55,16 @@ class ScheduledReminderActions(
                 )
             }
 
-            if (reminderEvent != null) {
-                val reminderEventId = medicineRepository.insertReminderEvent(reminderEvent)
-                // Switch back to the Main dispatcher to send broadcast
-                withContext(mainCoroutineDispatcher) {
-                    view.context.sendBroadcast(
-                        if (taken)
-                            ReminderProcessor.getTakenActionIntent(view.context, reminderEventId.toInt())
-                        else
-                            ReminderProcessor.getSkippedActionIntent(view.context, reminderEventId.toInt()),
-                        "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
-                    )
-                }
+            val reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
+            // Switch back to the Main dispatcher to send broadcast
+            withContext(mainCoroutineDispatcher) {
+                view.context.sendBroadcast(
+                    if (taken)
+                        ReminderProcessor.getTakenActionIntent(view.context, intArrayOf(reminderEventId))
+                    else
+                        ReminderProcessor.getSkippedActionIntent(view.context, intArrayOf(reminderEventId)),
+                    "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
+                )
             }
         }
     }

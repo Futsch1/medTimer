@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.reminders;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 
 import android.app.Application;
@@ -14,8 +12,6 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
-
-import java.time.Instant;
 
 /**
  * Worker that schedules a repeat of the current reminder.
@@ -31,20 +27,16 @@ public class RepeatReminderWork extends SnoozeWork {
     public Result doWork() {
         Data inputData = getInputData();
 
-        int reminderId = inputData.getInt(EXTRA_REMINDER_ID, 0);
-        int reminderEventId = inputData.getInt(EXTRA_REMINDER_EVENT_ID, 0);
+        ScheduledNotification scheduledNotification = ScheduledNotification.Companion.fromInputData(inputData);
         int repeatTimeSeconds = inputData.getInt(EXTRA_REPEAT_TIME_SECONDS, 0);
         int remainingRepeats = inputData.getInt(EXTRA_REMAINING_REPEATS, 0);
-        Instant remindTime = Instant.now().plusSeconds(repeatTimeSeconds);
+        scheduledNotification.delayBy(repeatTimeSeconds);
 
-        ReminderNotificationData reminderNotificationData = new ReminderNotificationData(
-                remindTime,
-                reminderId,
-                "Repeat",
-                reminderEventId);
-        enqueueNotification(reminderNotificationData);
+        enqueueNotification(scheduledNotification);
 
-        updateRemainingRepeats(reminderEventId, remainingRepeats - 1);
+        for (int reminderEventId : scheduledNotification.getReminderEventIds()) {
+            updateRemainingRepeats(reminderEventId, remainingRepeats - 1);
+        }
 
         return Result.success();
     }

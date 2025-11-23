@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
 import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.NotificationTriplet
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringBuilder
+import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringTuple
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class AlarmFragment(
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : Fragment() {
-    var reminderEventId: Int = -1
+    lateinit var notificationTriplets: List<NotificationTriplet>
     var notificationId: Int = -1
     lateinit var remindTime: String
 
@@ -34,7 +34,8 @@ class AlarmFragment(
         super.onCreate(savedInstanceState)
 
         val bundle = requireArguments()
-        reminderEventId = bundle.getInt(EXTRA_REMINDER_EVENT_ID, -1)
+
+        notificationTriplets = NotificationTriplet.fromBundle(bundle, MedicineRepository(requireActivity().application))
         notificationId = bundle.getInt(EXTRA_NOTIFICATION_ID, -1)
         remindTime = bundle.getString(EXTRA_NOTIFICATION_TIME_STRING, "?")
     }
@@ -48,22 +49,20 @@ class AlarmFragment(
 
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
-                val medicineRepository = MedicineRepository(requireActivity().application)
+                Log.d("AlarmFragment", "Creating fragment for reminder event IDs $notificationTriplets and notification ID $notificationId")
 
-                val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
+                val notificationStringTuples = NotificationStringTuple.fromNotificationTriplets(notificationTriplets)
 
-                if (reminderEvent != null) {
-                    Log.d("AlarmFragment", "Creating fragment for reminder event ID $reminderEventId and notification ID $notificationId")
-                    val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
-                    val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
+                val notificationStrings = NotificationStringBuilder(requireContext(), notificationStringTuples, remindTime, false)
+                val intents =
+                    NotificationIntentBuilder(
+                        requireContext(), notificationId, NotificationTriplet.getReminderEventIds(notificationTriplets),
+                        NotificationTriplet.getReminderIds(notificationTriplets)
+                    )
 
-                    val notificationStrings = NotificationStringBuilder(requireContext(), medicine, reminder, remindTime, false)
-                    val intents = NotificationIntentBuilder(requireContext(), notificationId, reminderEvent, reminder)
-
-                    withContext(mainDispatcher) {
-                        setupTexts(view, notificationStrings, medicine)
-                        setupButtons(view, intents)
-                    }
+                withContext(mainDispatcher) {
+                    setupTexts(view, notificationStrings, notificationTriplets.any { it.medicine!!.medicine.isOutOfStock })
+                    setupButtons(view, intents)
                 }
             }
         }
@@ -72,10 +71,10 @@ class AlarmFragment(
         return view
     }
 
-    private fun setupTexts(view: View, notificationStrings: NotificationStringBuilder, medicine: FullMedicine) {
+    private fun setupTexts(view: View, notificationStrings: NotificationStringBuilder, anyOutOfStock: Boolean) {
         val notificationTitle = view.findViewById<TextView>(R.id.notificationTitle)
         notificationTitle.text = notificationStrings.notificationString
-        if (medicine.medicine.isOutOfStock) {
+        if (anyOutOfStock) {
             notificationTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 R.drawable.exclamation_triangle_fill,
                 0,
