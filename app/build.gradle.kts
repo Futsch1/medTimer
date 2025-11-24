@@ -109,7 +109,7 @@ dependencies {
     val androidXNavigationVersion = "2.9.6"
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
-    val lifecycleKtxVersion = "2.9.4"
+    val lifecycleKtxVersion = "2.10.0"
     val workRuntimeVersion = "2.11.0"
     val coreKtxVersion = "1.17.0"
     val roomVersion = "2.8.3"
