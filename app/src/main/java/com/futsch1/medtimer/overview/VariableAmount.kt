@@ -9,7 +9,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DialogHelper
-import com.futsch1.medtimer.reminders.NotificationAction
+import com.futsch1.medtimer.reminders.NotificationProcessor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ private fun updateReminderEvent(
         val repository = MedicineRepository(activity.application)
         val reminderEvent = repository.getReminderEvent(reminderEventId)
         reminderEvent?.amount = amount
-        NotificationAction.processReminderEvent(
+        NotificationProcessor.processReminderEvent(
             activity,
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvent!!,

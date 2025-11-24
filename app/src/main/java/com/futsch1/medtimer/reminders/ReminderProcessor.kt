@@ -1,196 +1,168 @@
-package com.futsch1.medtimer.reminders;
+package com.futsch1.medtimer.reminders
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.futsch1.medtimer.ActivityCodes.DISMISSED_ACTION;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID_LIST;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
-import static com.futsch1.medtimer.ActivityCodes.REMINDER_ACTION;
-import static com.futsch1.medtimer.ActivityCodes.SNOOZE_ACTION;
-import static com.futsch1.medtimer.ActivityCodes.TAKEN_ACTION;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkRequest
+import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.MainActivity
+import com.futsch1.medtimer.WorkManagerAccess
+import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notifications.ProcessedNotification
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.work.Data;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.ListenableWorker;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
-
-import com.futsch1.medtimer.MainActivity;
-import com.futsch1.medtimer.WorkManagerAccess;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-public class ReminderProcessor extends BroadcastReceiver {
-
-    public static void requestReschedule(@NonNull Context context) {
-        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        OneTimeWorkRequest rescheduleWork =
-                new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                        .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
-                        .build();
-        workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork);
-    }
-
-    public static void requestRescheduleNowForTests(@NonNull Context context) {
-        requestRescheduleNowForTests(context, 0, 0);
-    }
-
-    public static void requestRescheduleNowForTests(@NonNull Context context, long delay, int repeats) {
-        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        OneTimeWorkRequest rescheduleWork =
-                new OneTimeWorkRequest.Builder(RescheduleWork.class)
-                        .setInputData(new Data.Builder()
-                                .putLong(EXTRA_SCHEDULE_FOR_TESTS, delay)
-                                .putInt(EXTRA_REMAINING_REPEATS, repeats)
-                                .build())
-                        .build();
-        workManager.enqueue(rescheduleWork);
-    }
-
-    public static void requestRepeat(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, int repeatTimeSeconds, int remainingRepeats) {
-        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        OneTimeWorkRequest repeatWork =
-                new OneTimeWorkRequest.Builder(RepeatReminderWork.class)
-                        .setInputData(new Data.Builder()
-                                .putIntArray(EXTRA_REMINDER_ID_LIST, reminderIds)
-                                .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
-                                .putInt(EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
-                                .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats)
-                                .build())
-                        .build();
-        workManager.enqueue(repeatWork);
-    }
-
-    public static Intent getReminderAction(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, LocalDateTime reminderDateTime) {
-        Intent reminderIntent = new Intent(REMINDER_ACTION);
-        reminderIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
-        reminderIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
-        reminderIntent.putExtra(EXTRA_REMINDER_DATE, reminderDateTime != null ? reminderDateTime.toLocalDate().toEpochDay() : 0);
-        reminderIntent.putExtra(EXTRA_REMINDER_TIME, reminderDateTime != null ? reminderDateTime.toLocalTime().toSecondOfDay() : 0);
-        reminderIntent.setClass(context, ReminderProcessor.class);
-        return reminderIntent;
-    }
-
-    public static Intent getSnoozeIntent(@NonNull Context context, int[] reminderIds, int[] reminderEventIds, int notificationId, int snoozeTime) {
-        Intent snoozeIntent = new Intent(SNOOZE_ACTION);
-        snoozeIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
-        snoozeIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        snoozeIntent.putExtra(EXTRA_SNOOZE_TIME, snoozeTime);
-        snoozeIntent.setClass(context, ReminderProcessor.class);
-        return snoozeIntent;
-    }
-
-    public static void requestStockHandling(Context context, String amount, int medicineId) {
-        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        OneTimeWorkRequest stockHandlingWork =
-                new OneTimeWorkRequest.Builder(StockHandlingWork.class)
-                        .setInputData(new Data.Builder()
-                                .putString(EXTRA_AMOUNT, amount)
-                                .putInt(EXTRA_MEDICINE_ID, medicineId)
-                                .build())
-                        .build();
-        workManager.enqueue(stockHandlingWork);
-    }
-
-    public static void requestActionIntent(Context context, int[] reminderEventIds, boolean taken) {
-        Intent actionIntent = taken ? getTakenActionIntent(context, reminderEventIds) : getSkippedActionIntent(context, reminderEventIds);
-        if (taken) {
-            WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWork.class));
+class ReminderProcessor : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent) {
+        val workManager = WorkManagerAccess.getWorkManager(context)
+        if (ActivityCodes.DISMISSED_ACTION == intent.action) {
+            workManager.enqueue(buildActionWorkRequest(intent, SkippedWorkProcess::class.java))
+        } else if (ActivityCodes.TAKEN_ACTION == intent.action) {
+            workManager.enqueue(buildActionWorkRequest(intent, TakenWorkProcess::class.java))
+        } else if (ActivityCodes.SNOOZE_ACTION == intent.action) {
+            val builder = Data.Builder()
+            Notification.forwardToBuilder(intent.extras!!, builder)
+            builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
+            val snoozeWork: WorkRequest =
+                OneTimeWorkRequest.Builder(SnoozeWork::class.java)
+                    .setInputData(builder.build())
+                    .build()
+            workManager.enqueue(snoozeWork)
         } else {
-            WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, SkippedWork.class));
+            val builder = Data.Builder()
+            Notification.forwardToBuilder(intent.extras!!, builder)
+
+            val reminderWork: WorkRequest =
+                OneTimeWorkRequest.Builder(ReminderWork::class.java)
+                    .setInputData(builder.build())
+                    .build()
+            workManager.enqueue(reminderWork)
         }
     }
 
-    public static Intent getTakenActionIntent(@NonNull Context context, int[] reminderEventIds) {
-        return buildActionIntent(context, reminderEventIds, TAKEN_ACTION);
-    }
+    companion object {
+        @JvmStatic
+        fun requestReschedule(context: Context) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val rescheduleWork =
+                OneTimeWorkRequest.Builder(RescheduleWork::class.java)
+                    .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
+                    .build()
+            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWork)
+        }
 
-    public static Intent getSkippedActionIntent(@NonNull Context context, int[] reminderEventIds) {
-        return buildActionIntent(context, reminderEventIds, DISMISSED_ACTION);
-    }
+        @JvmStatic
+        @JvmOverloads
+        fun requestRescheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val rescheduleWork =
+                OneTimeWorkRequest.Builder(RescheduleWork::class.java)
+                    .setInputData(
+                        Data.Builder()
+                            .putLong(ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS, delay)
+                            .putInt(ActivityCodes.EXTRA_REMAINING_REPEATS, repeats)
+                            .build()
+                    )
+                    .build()
+            workManager.enqueue(rescheduleWork)
+        }
 
-    private static <T extends ListenableWorker> WorkRequest buildActionWorkRequest(Intent intent, Class<T> workerClass) {
-        return new OneTimeWorkRequest.Builder(workerClass)
-                .setInputData(new Data.Builder()
-                        .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
-                        .build())
-                .build();
-    }
+        fun requestRepeat(context: Context, notification: Notification, repeatTimeSeconds: Int) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val builder = Data.Builder()
+            notification.toBuilder(builder)
+            builder.putInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
+            builder.putInt(ActivityCodes.EXTRA_REMAINING_REPEATS, notification.notificationReminderEvents[0].reminderEvent.remainingRepeats)
+            val repeatWork =
+                OneTimeWorkRequest.Builder(RepeatReminderWork::class.java)
+                    .setInputData(builder.build())
+                    .build()
+            workManager.enqueue(repeatWork)
+        }
 
-    private static Intent buildActionIntent(@NonNull Context context, int[] reminderEventIds, String actionName) {
-        Intent actionIntent = new Intent(context, ReminderProcessor.class);
-        actionIntent.setAction(actionName);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
-        return actionIntent;
-    }
+        @JvmStatic
+        fun getReminderAction(context: Context): Intent {
+            val reminderIntent = Intent(ActivityCodes.REMINDER_ACTION)
+            reminderIntent.setClass(context, ReminderProcessor::class.java)
+            return reminderIntent
+        }
 
-    public static Intent getVariableAmountActionIntent(Context context, int reminderEventId, String amount) {
-        Intent actionIntent = new Intent(context, MainActivity.class);
-        actionIntent.setAction("VARIABLE_AMOUNT");
-        actionIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID, reminderEventId);
-        actionIntent.putExtra(EXTRA_AMOUNT, amount);
-        return actionIntent;
-    }
+        fun getSnoozeIntent(context: Context, notification: Notification, snoozeTime: Int): Intent {
+            val snoozeIntent = Intent(ActivityCodes.SNOOZE_ACTION)
+            notification.toIntent(snoozeIntent)
+            snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
+            snoozeIntent.setClass(context, ReminderProcessor::class.java)
+            return snoozeIntent
+        }
 
-    public static Intent getCustomSnoozeActionIntent(Context context, int[] reminderIds, int[] reminderEventIds, int notificationId) {
-        Intent actionIntent = new Intent(context, MainActivity.class);
-        actionIntent.setAction("CUSTOM_SNOOZE");
-        actionIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        actionIntent.putExtra(EXTRA_REMINDER_ID_LIST, reminderIds);
-        actionIntent.putExtra(EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds);
-        actionIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        return actionIntent;
-    }
+        @JvmStatic
+        fun requestStockHandling(context: Context?, amount: String?, medicineId: Int) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val stockHandlingWork =
+                OneTimeWorkRequest.Builder(StockHandlingWork::class.java)
+                    .setInputData(
+                        Data.Builder()
+                            .putString(ActivityCodes.EXTRA_AMOUNT, amount)
+                            .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+                            .build()
+                    )
+                    .build()
+            workManager.enqueue(stockHandlingWork)
+        }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        WorkManager workManager = WorkManagerAccess.getWorkManager(context);
-        if (DISMISSED_ACTION.equals(intent.getAction())) {
-            workManager.enqueue(buildActionWorkRequest(intent, SkippedWork.class));
-        } else if (TAKEN_ACTION.equals(intent.getAction())) {
-            workManager.enqueue(buildActionWorkRequest(intent, TakenWork.class));
-        } else if (SNOOZE_ACTION.equals(intent.getAction())) {
-            WorkRequest snoozeWork =
-                    new OneTimeWorkRequest.Builder(SnoozeWork.class)
-                            .setInputData(new Data.Builder()
-                                    .putIntArray(EXTRA_REMINDER_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_ID_LIST))
-                                    .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
-                                    .putInt(EXTRA_NOTIFICATION_ID, intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
-                                    .putInt(EXTRA_SNOOZE_TIME, intent.getIntExtra(EXTRA_SNOOZE_TIME, 15))
-                                    .build())
-                            .build();
-            workManager.enqueue(snoozeWork);
-        } else {
-            WorkRequest reminderWork =
-                    new OneTimeWorkRequest.Builder(ReminderWork.class)
-                            .setInputData(new Data.Builder()
-                                    .putIntArray(EXTRA_REMINDER_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_ID_LIST))
-                                    .putIntArray(EXTRA_REMINDER_EVENT_ID_LIST, intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST))
-                                    .putLong(EXTRA_REMINDER_DATE, intent.getLongExtra(EXTRA_REMINDER_DATE, 0))
-                                    .putInt(EXTRA_REMINDER_TIME, intent.getIntExtra(EXTRA_REMINDER_TIME, 0))
-                                    .build())
-                            .build();
-            workManager.enqueue(reminderWork);
+        fun requestActionIntent(context: Context, processedNotification: ProcessedNotification, taken: Boolean) {
+            val actionIntent: Intent =
+                if (taken) getTakenActionIntent(context, processedNotification) else getSkippedActionIntent(context, processedNotification)
+            if (taken) {
+                WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWorkProcess::class.java))
+            } else {
+                WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, SkippedWorkProcess::class.java))
+            }
+        }
+
+        fun getTakenActionIntent(context: Context, processedNotification: ProcessedNotification): Intent {
+            return buildActionIntent(context, processedNotification, ActivityCodes.TAKEN_ACTION)
+        }
+
+        fun getSkippedActionIntent(context: Context, processedNotification: ProcessedNotification): Intent {
+            return buildActionIntent(context, processedNotification, ActivityCodes.DISMISSED_ACTION)
+        }
+
+        private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {
+            val builder = Data.Builder()
+            ProcessedNotification.forwardToBuilder(intent.extras!!, builder)
+            return OneTimeWorkRequest.Builder(workerClass)
+                .setInputData(builder.build())
+                .build()
+        }
+
+        private fun buildActionIntent(context: Context, processedNotification: ProcessedNotification, actionName: String?): Intent {
+            val actionIntent = Intent(context, ReminderProcessor::class.java)
+            processedNotification.toIntent(actionIntent)
+            actionIntent.setAction(actionName)
+            return actionIntent
+        }
+
+        @JvmStatic
+        fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?): Intent {
+            val actionIntent = Intent(context, MainActivity::class.java)
+            actionIntent.setAction("VARIABLE_AMOUNT")
+            actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, reminderEventId)
+            actionIntent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
+            return actionIntent
+        }
+
+        fun getCustomSnoozeActionIntent(context: Context?, notification: Notification): Intent {
+            val actionIntent = Intent(context, MainActivity::class.java)
+            actionIntent.setAction("CUSTOM_SNOOZE")
+            actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            notification.toIntent(actionIntent)
+            return actionIntent
         }
     }
-
 }

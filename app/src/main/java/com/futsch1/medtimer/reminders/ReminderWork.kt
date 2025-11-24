@@ -10,7 +10,6 @@ import androidx.preference.PreferenceManager
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -19,17 +18,13 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.notifications.Notification
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
 import java.util.stream.Collectors
 
 class ReminderWork(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
-    private var reminderIds: IntArray? = null
-    private var reminderEventIds: IntArray? = null
 
     override fun doWork(): Result {
         val inputData = getInputData()
@@ -49,65 +44,15 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     private fun processReminders(inputData: Data): Result {
         var r = Result.failure()
 
-        val reminderDate = LocalDate.ofEpochDay(inputData.getLong(ActivityCodes.EXTRA_REMINDER_DATE, LocalDate.now().toEpochDay()))
-        val reminderTime = LocalTime.ofSecondOfDay(inputData.getInt(ActivityCodes.EXTRA_REMINDER_TIME, LocalTime.now().toSecondOfDay()).toLong())
-        val reminderDateTime = LocalDateTime.of(reminderDate, reminderTime)
-        val reminderTimestamp = reminderDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(reminderDateTime))
-        val triplets = getTriplets(inputData, reminderTimestamp)
+        val notification = Notification.fromInputData(inputData, applicationContext as Application)
+        notification.createReminderEvents(numberOfRepeats)
 
-        if (triplets.isNotEmpty()) {
-            performActionsOfReminders(triplets, reminderDateTime)
+        if (notification.valid) {
+            performActionsOfReminders(notification)
             r = Result.success()
         }
 
         return r
-    }
-
-    private fun getTriplets(inputData: Data, reminderTimestamp: Long): List<NotificationTriplet> {
-        reminderIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)
-        reminderEventIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)
-        val triplets = ArrayList<NotificationTriplet>()
-        if (reminderIds != null) {
-            for (i in reminderIds!!.indices) {
-
-                val reminderId = reminderIds!![i]
-
-                val reminderEventId = if (reminderEventIds == null) {
-                    0
-                } else {
-                    reminderEventIds!![i]
-                }
-                val reminder = medicineRepository.getReminder(reminderId)
-                if (reminder == null) {
-                    Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderId))
-                    return emptyList()
-                }
-
-                val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
-                var reminderEvent = getEvent(reminderEventId, reminderTimestamp, reminder)
-                if (reminderEvent == null) {
-                    reminderEvent = buildAndInsertReminderEvent(reminderTimestamp, medicine!!, reminder)
-                }
-                triplets.add(NotificationTriplet(reminder, reminderEvent, medicine))
-            }
-        }
-        return triplets
-    }
-
-    private fun getEvent(reminderEventId: Int, remindedTimeStamp: Long, reminder: Reminder): ReminderEvent? {
-        return if (reminderEventId != 0) {
-            medicineRepository.getReminderEvent(reminderEventId)
-        } else {
-            // We might have created the reminder event already
-            medicineRepository.getReminderEvent(reminder.reminderId, remindedTimeStamp)
-        }
-    }
-
-    private fun buildAndInsertReminderEvent(remindedTimeStamp: Long, medicine: FullMedicine, reminder: Reminder): ReminderEvent {
-        val reminderEvent: ReminderEvent = buildReminderEvent(remindedTimeStamp, medicine, reminder, medicineRepository)
-        reminderEvent.remainingRepeats = this.numberOfRepeats
-        reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
-        return reminderEvent
     }
 
     private val numberOfRepeats: Int
@@ -116,57 +61,64 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
             return sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")!!.toInt()
         }
 
-    private fun performActionsOfReminders(triplets: List<NotificationTriplet>, reminderDateTime: LocalDateTime) {
-        for (triplet in triplets) {
-            if (triplet.reminder.automaticallyTaken) {
-                NotificationAction.processReminderEvent(context, ReminderEvent.ReminderStatus.TAKEN, triplet.reminderEvent, medicineRepository)
+    private fun performActionsOfReminders(notification: Notification) {
+        for (notificationReminderEvent in notification.notificationReminderEvents) {
+            if (notificationReminderEvent.reminder.automaticallyTaken) {
+                NotificationProcessor.processReminderEvent(
+                    context,
+                    ReminderEvent.ReminderStatus.TAKEN,
+                    notificationReminderEvent.reminderEvent,
+                    medicineRepository
+                )
                 Log.i(
                     LogTags.REMINDER,
                     String.format(
                         "Mark reminder reID %d as automatically taken for %s",
-                        triplet.reminderEvent.reminderEventId,
-                        triplet.reminderEvent.medicineName
+                        notificationReminderEvent.reminderEvent.reminderEventId,
+                        notificationReminderEvent.reminderEvent.medicineName
                     )
                 )
             }
         }
 
-        notificationAction(triplets.stream().filter { !it.reminder.automaticallyTaken }.toList(), reminderDateTime)
+        notificationAction(notification.filterAutomaticallyTaken())
     }
 
-    private fun notificationAction(triplets: List<NotificationTriplet>, reminderDateTime: LocalDateTime) {
-        for (triplet in triplets) {
-            NotificationAction.cancelNotification(context, triplet.reminderEvent.notificationId)
+    private fun notificationAction(notification: Notification) {
+        for (notificationReminderEvent in notification.notificationReminderEvents) {
+            NotificationProcessor.cancelNotification(context, notificationReminderEvent.reminderEvent.notificationId)
 
             Log.i(
                 LogTags.REMINDER,
-                String.format("Show reminder event reID %d for %s", triplet.reminderEvent.reminderEventId, triplet.reminderEvent.medicineName)
+                String.format(
+                    "Show reminder event reID %d for %s",
+                    notificationReminderEvent.reminderEvent.reminderEventId,
+                    notificationReminderEvent.reminderEvent.medicineName
+                )
             )
         }
 
         // Schedule remaining repeats for all reminders
-        val remainingRepeats = triplets[0].reminderEvent.remainingRepeats
+        val remainingRepeats = notification.notificationReminderEvents[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
-            ReminderProcessor.requestRepeat(context, reminderIds, reminderEventIds, repeatTimeSeconds, remainingRepeats);
+            ReminderProcessor.requestRepeat(context, notification, repeatTimeSeconds)
         }
 
         // Show notifications for all reminders
-        showNotification(triplets, reminderDateTime)
-
+        showNotification(notification)
     }
 
-    private fun showNotification(triplets: List<NotificationTriplet>, reminderDateTime: LocalDateTime) {
+    private fun showNotification(notification: Notification) {
         if (canShowNotifications()) {
             val notifications = Notifications(context)
             val notificationId =
                 notifications.showNotification(
-                    TimeHelper.minutesToTimeString(context, reminderDateTime.hour * 60L + reminderDateTime.minute),
-                    triplets
+                    notification
                 )
 
-            for (triplet in triplets) {
-                triplet.reminderEvent.notificationId = notificationId
-                medicineRepository.updateReminderEvent(triplet.reminderEvent)
+            for (notificationReminderEvent in notification.notificationReminderEvents) {
+                notificationReminderEvent.reminderEvent.notificationId = notificationId
+                medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
             }
         }
     }

@@ -11,18 +11,19 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.notifications.ProcessedNotification;
 
 import java.time.Instant;
 
-public class NotificationAction {
-    private NotificationAction() {
+public class NotificationProcessor {
+    private NotificationProcessor() {
         // Intentionally empty
     }
 
-    static void processNotification(Context context, int[] reminderEventIds, ReminderEvent.ReminderStatus status) {
+    static void processNotification(Context context, ProcessedNotification processedNotification, ReminderEvent.ReminderStatus status) {
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
 
-        for (int reminderEventId : reminderEventIds) {
+        for (int reminderEventId : processedNotification.getReminderEventIds()) {
             ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
             if (reminderEvent != null) {

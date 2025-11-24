@@ -19,10 +19,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_TIME_STRING
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.reminders.NotificationTriplet
+import com.futsch1.medtimer.reminders.notifications.Notification
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
@@ -173,16 +171,11 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context, notificationTriplets: List<NotificationTriplet>, remindTime: String, notificationId: Int): Intent {
+        fun getIntent(context: Context, notification: Notification): Intent {
             val intent = Intent(context, ReminderAlarmActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-            val bundle = Bundle()
-            NotificationTriplet.toBundle(bundle, notificationTriplets)
-            bundle.putInt(EXTRA_NOTIFICATION_ID, notificationId)
-            bundle.putString(EXTRA_NOTIFICATION_TIME_STRING, remindTime)
-            intent.putExtras(bundle)
-
+            notification.toIntent(intent)
             return intent
         }
     }

@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
 
+import com.futsch1.medtimer.reminders.notifications.Notification;
+
 /*
  * Worker that snoozes a reminder and re-raises it once the snooze time has expired.
  */
@@ -24,17 +26,17 @@ public class SnoozeWork extends RescheduleWork {
         Data inputData = getInputData();
         int snoozeTime = inputData.getInt(EXTRA_SNOOZE_TIME, 15);
 
-        ScheduledNotification scheduledNotification = ScheduledNotification.Companion.fromInputData(inputData);
-        scheduledNotification.delayBy(snoozeTime * 60);
+        Notification notification = Notification.Companion.fromInputData(inputData, null);
+        notification.delayBy(snoozeTime * 60);
 
         int notificationId = inputData.getInt(EXTRA_NOTIFICATION_ID, 0);
 
         // Cancel a potential repeat alarm
-        NotificationAction.cancelPendingAlarms(context, scheduledNotification.getReminderEventIds().get(0));
+        NotificationProcessor.cancelPendingAlarms(context, notification.getReminderEventIds()[0]);
 
-        enqueueNotification(scheduledNotification);
+        enqueueNotification(notification);
 
-        NotificationAction.cancelNotification(context, notificationId);
+        NotificationProcessor.cancelNotification(context, notificationId);
 
         return Result.success();
     }

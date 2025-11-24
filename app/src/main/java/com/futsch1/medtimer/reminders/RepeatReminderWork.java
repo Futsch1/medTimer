@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.notifications.Notification;
 
 /**
  * Worker that schedules a repeat of the current reminder.
@@ -27,14 +28,14 @@ public class RepeatReminderWork extends SnoozeWork {
     public Result doWork() {
         Data inputData = getInputData();
 
-        ScheduledNotification scheduledNotification = ScheduledNotification.Companion.fromInputData(inputData);
+        Notification notification = Notification.Companion.fromInputData(inputData, null);
         int repeatTimeSeconds = inputData.getInt(EXTRA_REPEAT_TIME_SECONDS, 0);
         int remainingRepeats = inputData.getInt(EXTRA_REMAINING_REPEATS, 0);
-        scheduledNotification.delayBy(repeatTimeSeconds);
+        notification.delayBy(repeatTimeSeconds);
 
-        enqueueNotification(scheduledNotification);
+        enqueueNotification(notification);
 
-        for (int reminderEventId : scheduledNotification.getReminderEventIds()) {
+        for (int reminderEventId : notification.getReminderEventIds()) {
             updateRemainingRepeats(reminderEventId, remainingRepeats - 1);
         }
 

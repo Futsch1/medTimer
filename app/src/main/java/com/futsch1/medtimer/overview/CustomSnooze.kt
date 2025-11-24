@@ -3,24 +3,20 @@ package com.futsch1.medtimer.overview
 import android.content.Intent
 import android.text.InputType
 import androidx.appcompat.app.AppCompatActivity
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID_LIST
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
-import com.futsch1.medtimer.reminders.NotificationAction
+import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.notifications.Notification
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
-    val reminderIds = intent.getIntArrayExtra(EXTRA_REMINDER_ID_LIST)
-    val reminderEventIds = intent.getIntArrayExtra(EXTRA_REMINDER_EVENT_ID_LIST)
-    val notificationId: Int = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+    val notification = Notification.fromBundle(intent.extras!!, null)
 
-    if (reminderIds == null || reminderEventIds == null || reminderIds.isEmpty() || reminderEventIds.isEmpty()) {
+    if (!notification.valid) {
         return
     }
     // Cancel a potential repeat alarm
-    NotificationAction.cancelPendingAlarms(activity, reminderEventIds[0])
+    NotificationProcessor.cancelPendingAlarms(activity, notification.notificationReminderEvents[0].reminderEvent.reminderEventId)
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)
@@ -32,9 +28,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
             if (snoozeTimeInt != null) {
                 val snooze = ReminderProcessor.getSnoozeIntent(
                     activity,
-                    reminderIds,
-                    reminderEventIds,
-                    notificationId,
+                    notification,
                     snoozeTimeInt
                 )
                 activity.sendBroadcast(snooze, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")

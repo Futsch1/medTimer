@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.reminders;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST;
-
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -10,12 +8,13 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.notifications.ProcessedNotification;
 
-public class NotificationWork extends Worker {
+public class ProcessNotificationWork extends Worker {
 
     private final ReminderEvent.ReminderStatus status;
 
-    public NotificationWork(@NonNull Context context, @NonNull WorkerParameters workerParams, ReminderEvent.ReminderStatus status) {
+    public ProcessNotificationWork(@NonNull Context context, @NonNull WorkerParameters workerParams, ReminderEvent.ReminderStatus status) {
         super(context, workerParams);
         this.status = status;
     }
@@ -23,7 +22,7 @@ public class NotificationWork extends Worker {
     @NonNull
     @Override
     public ListenableWorker.Result doWork() {
-        NotificationAction.processNotification(getApplicationContext(), getInputData().getIntArray(EXTRA_REMINDER_EVENT_ID_LIST), status);
+        NotificationProcessor.processNotification(getApplicationContext(), ProcessedNotification.Companion.fromData(getInputData()), status);
         return ListenableWorker.Result.success();
     }
 

@@ -7,9 +7,9 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 
-public class TakenWork extends NotificationWork {
+public class TakenWorkProcess extends ProcessNotificationWork {
 
-    public TakenWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public TakenWorkProcess(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams, ReminderEvent.ReminderStatus.TAKEN);
     }
 }

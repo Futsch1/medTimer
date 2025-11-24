@@ -29,8 +29,8 @@ import androidx.work.WorkerParameters;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.SkippedWork;
-import com.futsch1.medtimer.reminders.TakenWork;
+import com.futsch1.medtimer.reminders.SkippedWorkProcess;
+import com.futsch1.medtimer.reminders.TakenWorkProcess;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,7 +75,7 @@ public class TakenSkippedWorkUnitTest {
                 .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
                 .build();
         when(workerParams.getInputData()).thenReturn(inputData);
-        TakenWork takenWork = new TakenWork(mockApplication, workerParams);
+        TakenWorkProcess takenWork = new TakenWorkProcess(mockApplication, workerParams);
 
         testWork(takenWork, ReminderEvent.ReminderStatus.TAKEN);
     }
@@ -132,7 +132,7 @@ public class TakenSkippedWorkUnitTest {
                 .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
                 .build();
         when(workerParams.getInputData()).thenReturn(inputData);
-        SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);
+        SkippedWorkProcess skippedWork = new SkippedWorkProcess(mockApplication, workerParams);
 
         testWork(skippedWork, ReminderEvent.ReminderStatus.SKIPPED);
     }

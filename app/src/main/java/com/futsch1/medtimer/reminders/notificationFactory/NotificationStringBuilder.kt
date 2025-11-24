@@ -6,53 +6,54 @@ import androidx.core.text.bold
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.reminders.NotificationReminderEvent
+import com.futsch1.medtimer.reminders.notifications.Notification
 import java.util.stream.Collectors
 
 class NotificationStringBuilder(
     val context: Context,
-    tuples: List<NotificationStringTuple>,
-    val remindTime: String,
+    val notification: Notification,
     val showOutOfStockIcon: Boolean = true
 ) {
-    val baseString = buildBaseString(tuples)
-    val notificationString = buildNotificationString(tuples)
+    val baseString = buildBaseString(notification.notificationReminderEvents)
+    val notificationString = buildNotificationString(notification.notificationReminderEvents)
 
-    private fun buildBaseString(tuples: List<NotificationStringTuple>): SpannableStringBuilder {
+    private fun buildBaseString(notificationReminderEvents: List<NotificationReminderEvent>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        for (tuple in tuples) {
-            builder.append(buildSingleBaseString(tuple))
+        for (notificationReminderEvent in notificationReminderEvents) {
+            builder.append(buildSingleBaseString(notificationReminderEvent))
             builder.append("\n")
         }
         return builder
     }
 
-    private fun buildNotificationString(tuples: List<NotificationStringTuple>): SpannableStringBuilder {
+    private fun buildNotificationString(notificationReminderEvents: List<NotificationReminderEvent>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        for (tuple in tuples) {
-            builder.append(buildSingleNotificationString(tuple))
+        for (notificationReminderEvent in notificationReminderEvents) {
+            builder.append(buildSingleNotificationString(notificationReminderEvent))
             builder.append("\n")
         }
         return builder
     }
 
-    private fun buildSingleNotificationString(tuple: NotificationStringTuple): SpannableStringBuilder {
-        val builder = SpannableStringBuilder(baseString).append("\n${getInstructions(tuple.reminder)}")
-        if (tuple.medicine.medicine.isStockManagementActive) {
-            builder.append(MedicineHelper.getStockText(context, tuple.medicine.medicine))
+    private fun buildSingleNotificationString(notificationReminderEvent: NotificationReminderEvent): SpannableStringBuilder {
+        val builder = SpannableStringBuilder(baseString).append("\n${getInstructions(notificationReminderEvent.reminder)}")
+        if (notificationReminderEvent.medicine.medicine.isStockManagementActive) {
+            builder.append(MedicineHelper.getStockText(context, notificationReminderEvent.medicine.medicine))
             if (showOutOfStockIcon) {
-                builder.append(MedicineHelper.getOutOfStockText(context, tuple.medicine.medicine))
+                builder.append(MedicineHelper.getOutOfStockText(context, notificationReminderEvent.medicine.medicine))
             }
             builder.append("\n")
         }
 
-        builder.append("${remindTime}\n${getTagNames(tuple.medicine.tags)}")
+        builder.append("${notification.getRemindTime(context)}\n${getTagNames(notificationReminderEvent.medicine.tags)}")
         return builder
     }
 
-    private fun buildSingleBaseString(tuple: NotificationStringTuple): SpannableStringBuilder {
-        val medicineNameString = MedicineHelper.getMedicineName(context, tuple.medicine.medicine, true)
+    private fun buildSingleBaseString(notificationReminderEvent: NotificationReminderEvent): SpannableStringBuilder {
+        val medicineNameString = MedicineHelper.getMedicineName(context, notificationReminderEvent.medicine.medicine, true)
         return SpannableStringBuilder().bold { append(medicineNameString) }
-            .append(if (tuple.reminder.amount.isNotEmpty()) " (${tuple.reminder.amount})" else "")
+            .append(if (notificationReminderEvent.reminder.amount.isNotEmpty()) " (${notificationReminderEvent.reminder.amount})" else "")
     }
 
     private fun getTagNames(tags: List<Tag>): String {
