@@ -4,6 +4,10 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
+import android.app.AlertDialog
+import android.content.DialogInterface
+import com.futsch1.medtimer.overview.ManualDoseListEntryAdapter
+import com.futsch1.medtimer.overview.ManualDose
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
@@ -25,17 +29,38 @@ class LinkedReminderHandling(
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        DialogHelper(fragmentActivity).title(R.string.add_linked_reminder)
-            .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
-                this.createReminder(
-                    fragmentActivity,
-                    amount
-                )
-            }.show()
+        // Fetch medicines off the main thread to avoid Room's main-thread check
+        coroutineScope.launch(dispatcher) {
+            val medicines = medicineRepository.medicines
+            val entries: MutableList<ManualDose.ManualDoseEntry> = ArrayList()
+            for (m in medicines) {
+                entries.add(ManualDose.ManualDoseEntry(m, null))
+            }
+
+            val adapter = ManualDoseListEntryAdapter(fragmentActivity, R.layout.manual_dose_list_entry, entries)
+
+            Handler(Looper.getMainLooper()).post {
+                AlertDialog.Builder(fragmentActivity)
+                    .setAdapter(adapter) { _: DialogInterface?, which: Int ->
+                        val selectedEntry = entries[which]
+                        DialogHelper(fragmentActivity).title(R.string.add_linked_reminder)
+                            .hint(R.string.create_reminder_dosage_hint)
+                            .textSink { amount: String? ->
+                                this@LinkedReminderHandling.createReminder(
+                                    fragmentActivity,
+                                    amount,
+                                    selectedEntry.medicineId
+                                )
+                            }.show()
+                    }
+                    .setTitle(R.string.add_linked_reminder)
+                    .show()
+            }
+        }
     }
 
-    private fun createReminder(fragmentActivity: FragmentActivity, amount: String?) {
-        val linkedReminder = Reminder(reminder.medicineRelId)
+    private fun createReminder(fragmentActivity: FragmentActivity, amount: String?, medicineRelId: Int) {
+        val linkedReminder = Reminder(medicineRelId)
         linkedReminder.amount = amount
         linkedReminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
         linkedReminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
@@ -48,8 +73,18 @@ class LinkedReminderHandling(
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
             linkedReminder.timeInMinutes = minutes
-            medicineRepository.insertReminder(linkedReminder)
-            fragmentActivity.supportFragmentManager.popBackStack()
+            // Insert reminder off the main thread and then update UI on the main thread
+            coroutineScope.launch(dispatcher) {
+                val insertedId = medicineRepository.insertReminder(linkedReminder)
+                Handler(Looper.getMainLooper()).post {
+                    // show a brief confirmation and return
+                    try {
+                        android.widget.Toast.makeText(fragmentActivity, "Linked reminder created", android.widget.Toast.LENGTH_SHORT).show()
+                    } catch (_: Exception) {
+                    }
+                    fragmentActivity.supportFragmentManager.popBackStack()
+                }
+            }
         }
     }
 
