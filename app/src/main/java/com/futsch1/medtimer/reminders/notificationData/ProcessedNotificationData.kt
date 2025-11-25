@@ -15,7 +15,7 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
     }
 
     companion object {
-        fun fromRaisedNotification(reminderNotificationData: ReminderNotificationData): ProcessedNotificationData {
+        fun fromReminderNotificationData(reminderNotificationData: ReminderNotificationData): ProcessedNotificationData {
             return ProcessedNotificationData(reminderNotificationData.reminderEventIds.toList())
         }
 

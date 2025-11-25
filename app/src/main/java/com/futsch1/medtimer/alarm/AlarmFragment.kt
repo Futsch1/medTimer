@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringBuilder
@@ -30,7 +31,7 @@ class AlarmFragment(
 
         val bundle = requireArguments()
 
-        reminderNotificationData = ReminderNotificationData.fromBundle(bundle, MedicineRepository(requireActivity().application))
+        reminderNotificationData = ReminderNotificationData.fromBundle(bundle)
     }
 
     override fun onCreateView(
@@ -42,16 +43,21 @@ class AlarmFragment(
 
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
-                Log.d("AlarmFragment", "Creating fragment for raised notification $reminderNotificationData")
+                val reminderNotification = ReminderNotification.fromReminderNotificationData(
+                    requireActivity().application,
+                    MedicineRepository(requireActivity().application),
+                    reminderNotificationData
+                )!!
+                Log.d("AlarmFragment", "Creating fragment for raised notification $reminderNotification")
 
-                val notificationStrings = NotificationStringBuilder(requireContext(), reminderNotificationData, false)
+                val notificationStrings = NotificationStringBuilder(requireContext(), reminderNotification, false)
                 val intents =
                     NotificationIntentBuilder(
-                        requireContext(), reminderNotificationData
+                        requireContext(), reminderNotification
                     )
 
                 withContext(mainDispatcher) {
-                    setupTexts(view, notificationStrings, reminderNotificationData.notificationReminderEvents.any { it.medicine.medicine.isOutOfStock })
+                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.medicine.isOutOfStock })
                     setupButtons(view, intents)
                 }
             }

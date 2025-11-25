@@ -1,53 +1,38 @@
-package com.futsch1.medtimer.reminders;
+package com.futsch1.medtimer.reminders
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
-
-import android.app.Application;
-import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.work.Data;
-import androidx.work.WorkerParameters;
-
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
+import android.app.Application
+import android.content.Context
+import androidx.work.WorkerParameters
+import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
 /**
  * Worker that schedules a repeat of the current reminder.
  */
-public class RepeatReminderWork extends SnoozeWork {
+class RepeatReminderWork(context: Context, workerParams: WorkerParameters) : SnoozeWork(context, workerParams) {
+    override fun doWork(): Result {
+        val inputData = getInputData()
 
-    public RepeatReminderWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
-        super(context, workerParams);
-    }
+        val reminderNotificationData = fromInputData(inputData)
+        val repeatTimeSeconds = inputData.getInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
+        reminderNotificationData.delayBy(repeatTimeSeconds)
 
-    @NonNull
-    @Override
-    public Result doWork() {
-        Data inputData = getInputData();
+        enqueueNotification(reminderNotificationData)
 
-        ReminderNotificationData reminderNotificationData = ReminderNotificationData.Companion.fromInputData(inputData, null);
-        int repeatTimeSeconds = inputData.getInt(EXTRA_REPEAT_TIME_SECONDS, 0);
-        int remainingRepeats = inputData.getInt(EXTRA_REMAINING_REPEATS, 0);
-        reminderNotificationData.delayBy(repeatTimeSeconds);
-
-        enqueueNotification(reminderNotificationData);
-
-        for (int reminderEventId : reminderNotificationData.getReminderEventIds()) {
-            updateRemainingRepeats(reminderEventId, remainingRepeats - 1);
+        for (reminderEventId in reminderNotificationData.reminderEventIds) {
+            decreaseRemainingRepeats(reminderEventId)
         }
 
-        return Result.success();
+        return Result.success()
     }
 
-    private void updateRemainingRepeats(int reminderEventId, int remainingRepeats) {
-        MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
-        ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
+    private fun decreaseRemainingRepeats(reminderEventId: Int) {
+        val medicineRepository = MedicineRepository(applicationContext as Application)
+        val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
         if (reminderEvent != null) {
-            reminderEvent.remainingRepeats = remainingRepeats;
-            medicineRepository.updateReminderEvent(reminderEvent);
+            reminderEvent.remainingRepeats = reminderEvent.remainingRepeats - 1
+            medicineRepository.updateReminderEvent(reminderEvent)
         }
     }
 }

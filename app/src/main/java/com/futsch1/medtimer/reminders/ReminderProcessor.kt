@@ -11,8 +11,8 @@ import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.WorkManagerAccess
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
@@ -76,7 +76,6 @@ class ReminderProcessor : BroadcastReceiver() {
             val builder = Data.Builder()
             reminderNotificationData.toBuilder(builder)
             builder.putInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
-            builder.putInt(ActivityCodes.EXTRA_REMAINING_REPEATS, reminderNotificationData.notificationReminderEvents[0].reminderEvent.remainingRepeats)
             val repeatWork =
                 OneTimeWorkRequest.Builder(RepeatReminderWork::class.java)
                     .setInputData(builder.build())

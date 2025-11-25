@@ -26,7 +26,7 @@ public class SnoozeWork extends RescheduleWork {
         Data inputData = getInputData();
         int snoozeTime = inputData.getInt(EXTRA_SNOOZE_TIME, 15);
 
-        ReminderNotificationData reminderNotificationData = ReminderNotificationData.Companion.fromInputData(inputData, null);
+        ReminderNotificationData reminderNotificationData = ReminderNotificationData.Companion.fromInputData(inputData);
         reminderNotificationData.delayBy(snoozeTime * 60);
 
         int notificationId = inputData.getInt(EXTRA_NOTIFICATION_ID, 0);

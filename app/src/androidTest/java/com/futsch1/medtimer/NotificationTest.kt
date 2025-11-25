@@ -433,7 +433,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun alarmTest() {
         val timeToNotify = 10_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())

@@ -10,7 +10,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
-    val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!, null)
+    val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
     if (!reminderNotificationData.valid) {
         return

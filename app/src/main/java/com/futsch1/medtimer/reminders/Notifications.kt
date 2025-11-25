@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.core.content.edit
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
 
@@ -15,13 +16,13 @@ import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificatio
 class Notifications(private val context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
 
-    fun showNotification(reminderNotificationData: com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData): Int {
+    fun showNotification(reminderNotification: ReminderNotification): Int {
         val notificationId = this.nextNotificationId
-        reminderNotificationData.notificationId = notificationId
+        reminderNotification.notificationId = notificationId
 
         val factory = getReminderNotificationFactory(
             context,
-            reminderNotificationData
+            reminderNotification
         )
 
         notify(notificationId, factory.create())

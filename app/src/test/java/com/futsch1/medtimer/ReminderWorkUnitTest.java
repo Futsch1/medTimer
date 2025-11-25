@@ -78,7 +78,7 @@ public class ReminderWorkUnitTest {
     public void setUp() {
         workerParams = mock(WorkerParameters.class);
 
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(null, new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.now());
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.now());
         Data.Builder inputData = new Data.Builder();
         data.toBuilder(inputData);
         when(workerParams.getInputData()).thenReturn(inputData.build());
@@ -227,8 +227,9 @@ public class ReminderWorkUnitTest {
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
+            LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
 
-            ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(null, new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.ofEpochSecond(Reminder.DEFAULT_TIME * 60 + 24 * 60 * 60));
+            ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, reminderEventTime.toInstant(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)));
             Data.Builder inputData = new Data.Builder();
             data.toBuilder(inputData);
             when(workerParams.getInputData()).thenReturn(inputData.build());
@@ -244,7 +245,6 @@ public class ReminderWorkUnitTest {
             assertEquals(NOTIFICATION_ID, captor.getValue().notificationId);
             assertEquals(REMINDER_ID, captor.getValue().reminderId);
             assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
-            LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
             assertEquals(reminderEventTime
                     .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)), captor.getValue().remindedTimestamp);
             verify(mockNotificationManager, times(1)).notify(eq(NOTIFICATION_ID), any());

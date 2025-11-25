@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.reminders.ReminderProcessor
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class NotificationIntentBuilder(val context: Context, val reminderNotificationData: ReminderNotificationData) {
+class NotificationIntentBuilder(val context: Context, val reminderNotification: ReminderNotification) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val processedNotificationData = ProcessedNotificationData.fromRaisedNotification(reminderNotificationData)
+    val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
     val pendingSkipped = getSkippedPendingIntent()
@@ -22,14 +22,14 @@ class NotificationIntentBuilder(val context: Context, val reminderNotificationDa
 
         val notifyTaken = ReminderProcessor.getTakenActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
-            context, reminderNotificationData.notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context, reminderNotification.notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
         val notifySkipped = ReminderProcessor.getSkippedActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
-            context, reminderNotificationData.notificationId, notifySkipped, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context, reminderNotification.notificationId, notifySkipped, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
@@ -38,19 +38,19 @@ class NotificationIntentBuilder(val context: Context, val reminderNotificationDa
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
-                context, reminderNotificationData
+                context, reminderNotification.reminderNotificationData
             )
             return PendingIntent.getActivity(
-                context, reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
+                context, reminderNotification.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
         }
 
         fun getStandardSnoozeIntent(): PendingIntent {
             val snooze = ReminderProcessor.getSnoozeIntent(
-                context, reminderNotificationData, snoozeTime
+                context, reminderNotification.reminderNotificationData, snoozeTime
             )
             return PendingIntent.getBroadcast(
-                context, reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                context, reminderNotification.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
 

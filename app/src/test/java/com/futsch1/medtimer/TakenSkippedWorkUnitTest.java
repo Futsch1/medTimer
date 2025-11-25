@@ -43,7 +43,7 @@ import org.mockito.MockedStatic;
 import org.robolectric.annotation.Config;
 
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.List;
 
 import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
@@ -73,7 +73,7 @@ public class TakenSkippedWorkUnitTest {
     @Test
     public void testDoWorkTaken() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(Arrays.asList(REMINDER_EVENT_ID));
+        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
         Data.Builder builder = new Data.Builder();
         processedNotificationData.toBuilder(builder);
         when(workerParams.getInputData()).thenReturn(builder.build());

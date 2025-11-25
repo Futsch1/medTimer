@@ -1,6 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -78,12 +77,11 @@ public class RepeatReminderWorkUnitTest {
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
         int remainingRepeats = 4;
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(null, new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data.Builder builder = new Data.Builder();
         data.toBuilder(builder);
-        builder.putInt(EXTRA_REPEAT_TIME_SECONDS, 15)
-                .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats);
+        builder.putInt(EXTRA_REPEAT_TIME_SECONDS, 15);
         when(workerParams.getInputData()).thenReturn(builder.build());
         Instant zero = Instant.ofEpochSecond(0);
         Instant repeat = Instant.ofEpochSecond(15);

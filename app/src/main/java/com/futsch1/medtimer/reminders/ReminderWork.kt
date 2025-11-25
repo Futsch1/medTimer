@@ -18,6 +18,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
@@ -44,79 +45,73 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     private fun processReminders(inputData: Data): Result {
         var r = Result.failure()
 
-        val reminderNotificationData = ReminderNotificationData.fromInputData(inputData, medicineRepository)
-        reminderNotificationData.createReminderEvents(numberOfRepeats)
+        val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
+        val reminderNotification = ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)
 
-        if (reminderNotificationData.valid) {
-            performActionsOfReminders(reminderNotificationData)
+        if (reminderNotification != null) {
+            performActionsOfReminders(reminderNotification)
             r = Result.success()
         }
 
         return r
     }
 
-    private val numberOfRepeats: Int
-        get() {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            return sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")!!.toInt()
-        }
-
-    private fun performActionsOfReminders(reminderNotificationData: ReminderNotificationData) {
-        for (notificationReminderEvent in reminderNotificationData.notificationReminderEvents) {
-            if (notificationReminderEvent.reminder.automaticallyTaken) {
+    private fun performActionsOfReminders(reminderNotification: ReminderNotification) {
+        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+            if (reminderNotificationPart.reminder.automaticallyTaken) {
                 NotificationProcessor.processReminderEvent(
                     context,
                     ReminderEvent.ReminderStatus.TAKEN,
-                    notificationReminderEvent.reminderEvent,
+                    reminderNotificationPart.reminderEvent,
                     medicineRepository
                 )
                 Log.i(
                     LogTags.REMINDER,
                     String.format(
                         "Mark reminder reID %d as automatically taken for %s",
-                        notificationReminderEvent.reminderEvent.reminderEventId,
-                        notificationReminderEvent.reminderEvent.medicineName
+                        reminderNotificationPart.reminderEvent.reminderEventId,
+                        reminderNotificationPart.reminderEvent.medicineName
                     )
                 )
             }
         }
 
-        notificationAction(reminderNotificationData.filterAutomaticallyTaken())
+        notificationAction(reminderNotification.filterAutomaticallyTaken())
     }
 
-    private fun notificationAction(reminderNotificationData: ReminderNotificationData) {
-        for (notificationReminderEvent in reminderNotificationData.notificationReminderEvents) {
-            NotificationProcessor.cancelNotification(context, notificationReminderEvent.reminderEvent.notificationId)
+    private fun notificationAction(reminderNotification: ReminderNotification) {
+        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId)
 
             Log.i(
                 LogTags.REMINDER,
                 String.format(
                     "Show reminder event reID %d for %s",
-                    notificationReminderEvent.reminderEvent.reminderEventId,
-                    notificationReminderEvent.reminderEvent.medicineName
+                    reminderNotificationPart.reminderEvent.reminderEventId,
+                    reminderNotificationPart.reminderEvent.medicineName
                 )
             )
         }
 
         // Schedule remaining repeats for all reminders
-        val remainingRepeats = reminderNotificationData.notificationReminderEvents[0].reminderEvent.remainingRepeats
+        val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
-            ReminderProcessor.requestRepeat(context, reminderNotificationData, repeatTimeSeconds)
+            ReminderProcessor.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
 
         // Show notifications for all reminders
-        showNotification(reminderNotificationData)
+        showNotification(reminderNotification)
     }
 
-    private fun showNotification(reminderNotificationData: ReminderNotificationData) {
+    private fun showNotification(reminderNotification: ReminderNotification) {
         if (canShowNotifications()) {
             val notifications = Notifications(context)
             val notificationId =
                 notifications.showNotification(
-                    reminderNotificationData
+                    reminderNotification
                 )
 
-            for (notificationReminderEvent in reminderNotificationData.notificationReminderEvents) {
+            for (notificationReminderEvent in reminderNotification.reminderNotificationParts) {
                 notificationReminderEvent.reminderEvent.notificationId = notificationId
                 medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
             }

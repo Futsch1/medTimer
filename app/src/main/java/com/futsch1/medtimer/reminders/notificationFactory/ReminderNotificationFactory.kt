@@ -9,38 +9,38 @@ import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
 fun getReminderNotificationFactory(
     context: Context,
-    reminderNotificationData: ReminderNotificationData
+    reminderNotification: ReminderNotification
 ): ReminderNotificationFactory {
     val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return if (defaultPreferences.getBoolean("big_notifications", false)) {
         BigReminderNotificationFactory(
-            context, reminderNotificationData
+            context, reminderNotification
         )
     } else {
         SimpleReminderNotificationFactory(
-            context, reminderNotificationData
+            context, reminderNotification
         )
     }
 }
 
 abstract class ReminderNotificationFactory(
     context: Context,
-    val reminderNotificationData: ReminderNotificationData
-) : NotificationFactory(context, reminderNotificationData.notificationId, reminderNotificationData.notificationReminderEvents.map { it.medicine.medicine }) {
+    val reminderNotification: ReminderNotification
+) : NotificationFactory(context, reminderNotification.notificationId, reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     val intents = NotificationIntentBuilder(
-        context, reminderNotificationData
+        context, reminderNotification
     )
     val notificationStrings =
         NotificationStringBuilder(
             context,
-            reminderNotificationData
+            reminderNotification
         )
 
     init {
@@ -59,7 +59,7 @@ abstract class ReminderNotificationFactory(
             builder.setOngoing(true)
         }
         // If shown as alarm, add a full screen intent
-        if (reminderNotificationData.notificationReminderEvents.any { it.medicine.medicine.showNotificationAsAlarm }) {
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.medicine.showNotificationAsAlarm }) {
             addFullScreenIntent()
         }
     }
@@ -69,7 +69,7 @@ abstract class ReminderNotificationFactory(
         val pendingIntent = PendingIntent.getActivity(
             context, 0,
             ReminderAlarmActivity.getIntent(
-                context, reminderNotificationData
+                context, reminderNotification.reminderNotificationData
             ),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
