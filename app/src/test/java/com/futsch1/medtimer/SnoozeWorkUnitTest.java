@@ -76,7 +76,7 @@ public class SnoozeWorkUnitTest {
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now(), -1);
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data.Builder inputData = new Data.Builder();
         data.toBuilder(inputData);

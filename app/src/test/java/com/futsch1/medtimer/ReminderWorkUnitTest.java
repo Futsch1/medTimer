@@ -78,7 +78,7 @@ public class ReminderWorkUnitTest {
     public void setUp() {
         workerParams = mock(WorkerParameters.class);
 
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.now());
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.now(), -1);
         Data.Builder inputData = new Data.Builder();
         data.toBuilder(inputData);
         when(workerParams.getInputData()).thenReturn(inputData.build());
@@ -166,7 +166,7 @@ public class ReminderWorkUnitTest {
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
                  when(mock.build()).thenReturn(new Notification());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
@@ -218,7 +218,7 @@ public class ReminderWorkUnitTest {
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
                  when(mock.build()).thenReturn(new Notification());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
@@ -229,7 +229,7 @@ public class ReminderWorkUnitTest {
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
             LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
 
-            ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, reminderEventTime.toInstant(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)));
+            ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, reminderEventTime.toInstant(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)), -1);
             Data.Builder inputData = new Data.Builder();
             data.toBuilder(inputData);
             when(workerParams.getInputData()).thenReturn(inputData.build());

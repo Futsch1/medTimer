@@ -64,7 +64,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
                 var reminderEvent = getEvent(medicineRepository, reminderNotificationData.reminderEventIds[i], reminder, reminderNotificationData.remindInstant)
                 if (reminderEvent == null) {
                     reminderEvent =
-                        buildAndInsertReminderEvent(medicineRepository, medicine!!, reminder, reminderNotificationData.remindInstant, numberOfRepeats)
+                        buildAndInsertReminderEvent(medicineRepository, medicine, reminder, reminderNotificationData.remindInstant, numberOfRepeats)
                 }
                 result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
             }

@@ -77,7 +77,7 @@ public class RepeatReminderWorkUnitTest {
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
         int remainingRepeats = 4;
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now(), -1);
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data.Builder builder = new Data.Builder();
         data.toBuilder(builder);
