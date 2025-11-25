@@ -10,9 +10,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringBuilder
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class AlarmFragment(
 
         val bundle = requireArguments()
 
-        reminderNotificationData = ReminderNotificationData.fromBundle(bundle, requireActivity().application)
+        reminderNotificationData = ReminderNotificationData.fromBundle(bundle, MedicineRepository(requireActivity().application))
     }
 
     override fun onCreateView(

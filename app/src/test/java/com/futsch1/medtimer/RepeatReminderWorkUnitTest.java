@@ -1,8 +1,6 @@
 package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMAINING_REPEATS;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -30,6 +28,7 @@ import androidx.work.WorkerParameters;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.RepeatReminderWork;
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,14 +78,13 @@ public class RepeatReminderWorkUnitTest {
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
         int remainingRepeats = 4;
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(null, new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_ID, reminderId)
-                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
-                .putInt(EXTRA_REPEAT_TIME_SECONDS, 15)
-                .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats)
-                .build();
-        when(workerParams.getInputData()).thenReturn(inputData);
+        Data.Builder builder = new Data.Builder();
+        data.toBuilder(builder);
+        builder.putInt(EXTRA_REPEAT_TIME_SECONDS, 15)
+                .putInt(EXTRA_REMAINING_REPEATS, remainingRepeats);
+        when(workerParams.getInputData()).thenReturn(builder.build());
         Instant zero = Instant.ofEpochSecond(0);
         Instant repeat = Instant.ofEpochSecond(15);
 

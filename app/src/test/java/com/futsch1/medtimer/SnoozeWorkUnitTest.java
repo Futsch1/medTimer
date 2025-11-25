@@ -1,9 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -28,6 +24,7 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.SnoozeWork;
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,14 +76,11 @@ public class SnoozeWorkUnitTest {
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
 
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(null, new int[]{reminderId}, new int[]{reminderEventId}, Instant.now());
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_ID, reminderId)
-                .putInt(EXTRA_REMINDER_EVENT_ID, reminderEventId)
-                .putInt(EXTRA_SNOOZE_TIME, 15)
-                .putInt(EXTRA_NOTIFICATION_ID, notificationId)
-                .build();
-        when(workerParams.getInputData()).thenReturn(inputData);
+        Data.Builder inputData = new Data.Builder();
+        data.toBuilder(inputData);
+        when(workerParams.getInputData()).thenReturn(inputData.build());
         Instant zero = Instant.ofEpochSecond(0);
         Instant snooze = Instant.ofEpochSecond(15L * 60);
 

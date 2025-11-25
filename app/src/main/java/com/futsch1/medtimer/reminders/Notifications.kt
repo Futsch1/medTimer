@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory
@@ -31,9 +32,8 @@ class Notifications(private val context: Context) {
 
     private val nextNotificationId: Int
         get() {
-            sharedPreferences.edit().apply()
             val notificationId = sharedPreferences.getInt("notificationId", 1)
-            sharedPreferences.edit().putInt("notificationId", notificationId + 1).apply()
+            sharedPreferences.edit { putInt("notificationId", notificationId + 1) }
 
             return notificationId
         }

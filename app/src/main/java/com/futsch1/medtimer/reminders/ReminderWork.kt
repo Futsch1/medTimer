@@ -44,7 +44,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     private fun processReminders(inputData: Data): Result {
         var r = Result.failure()
 
-        val reminderNotificationData = ReminderNotificationData.fromInputData(inputData, applicationContext as Application)
+        val reminderNotificationData = ReminderNotificationData.fromInputData(inputData, medicineRepository)
         reminderNotificationData.createReminderEvents(numberOfRepeats)
 
         if (reminderNotificationData.valid) {
@@ -167,18 +167,18 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
 
         private fun getLastReminderEventTimeInMinutes(medicineRepository: MedicineRepository, reminderEvent: ReminderEvent, isWindowedInterval: Boolean): Int {
             val lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId)
-            if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
+            return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
                 if (isWindowedInterval && TimeHelper.secondsSinceEpochToLocalDate(
                         lastReminderEvent.remindedTimestamp,
                         ZoneId.systemDefault()
                     ) !== TimeHelper.secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
                 ) {
-                    return 0
+                    0
+                } else {
+                    (lastReminderEvent.processedTimestamp / 60).toInt()
                 }
-
-                return (lastReminderEvent.processedTimestamp / 60).toInt()
             } else {
-                return 0
+                0
             }
         }
     }

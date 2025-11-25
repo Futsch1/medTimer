@@ -10,6 +10,10 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
         actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
     }
 
+    fun toBuilder(builder: Data.Builder) {
+        builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
+    }
+
     companion object {
         fun fromRaisedNotification(reminderNotificationData: ReminderNotificationData): ProcessedNotificationData {
             return ProcessedNotificationData(reminderNotificationData.reminderEventIds.toList())

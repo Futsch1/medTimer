@@ -112,7 +112,7 @@ public class RescheduleWork extends Worker {
             Log.i(LogTags.SCHEDULER,
                     String.format("Scheduled reminder for %s/rIDs %s to %s",
                             scheduledReminderNotificationData.getNotificationName(),
-                            scheduledReminderNotificationData.getReminderIds(),
+                            Arrays.toString(scheduledReminderNotificationData.getReminderIds()),
                             scheduledInstant));
 
             updateNextReminderWidget();
