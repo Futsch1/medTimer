@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringBuilder
-import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,14 +22,14 @@ class AlarmFragment(
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : Fragment() {
-    lateinit var notification: Notification
+    lateinit var reminderNotificationData: ReminderNotificationData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val bundle = requireArguments()
 
-        notification = Notification.fromBundle(bundle, requireActivity().application)
+        reminderNotificationData = ReminderNotificationData.fromBundle(bundle, requireActivity().application)
     }
 
     override fun onCreateView(
@@ -41,16 +41,16 @@ class AlarmFragment(
 
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
-                Log.d("AlarmFragment", "Creating fragment for raised notification $notification")
+                Log.d("AlarmFragment", "Creating fragment for raised notification $reminderNotificationData")
 
-                val notificationStrings = NotificationStringBuilder(requireContext(), notification, false)
+                val notificationStrings = NotificationStringBuilder(requireContext(), reminderNotificationData, false)
                 val intents =
                     NotificationIntentBuilder(
-                        requireContext(), notification
+                        requireContext(), reminderNotificationData
                     )
 
                 withContext(mainDispatcher) {
-                    setupTexts(view, notificationStrings, notification.notificationReminderEvents.any { it.medicine.medicine.isOutOfStock })
+                    setupTexts(view, notificationStrings, reminderNotificationData.notificationReminderEvents.any { it.medicine.medicine.isOutOfStock })
                     setupButtons(view, intents)
                 }
             }

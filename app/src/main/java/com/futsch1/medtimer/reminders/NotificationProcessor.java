@@ -11,7 +11,7 @@ import com.futsch1.medtimer.LogTags;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.notifications.ProcessedNotification;
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData;
 
 import java.time.Instant;
 
@@ -20,10 +20,10 @@ public class NotificationProcessor {
         // Intentionally empty
     }
 
-    static void processNotification(Context context, ProcessedNotification processedNotification, ReminderEvent.ReminderStatus status) {
+    static void processNotification(Context context, ProcessedNotificationData processedNotificationData, ReminderEvent.ReminderStatus status) {
         MedicineRepository medicineRepository = new MedicineRepository((Application) context);
 
-        for (int reminderEventId : processedNotification.getReminderEventIds()) {
+        for (int reminderEventId : processedNotificationData.getReminderEventIds()) {
             ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
 
             if (reminderEvent != null) {

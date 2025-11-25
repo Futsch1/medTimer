@@ -20,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
@@ -171,11 +171,11 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context, notification: Notification): Intent {
+        fun getIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
             val intent = Intent(context, ReminderAlarmActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-            notification.toIntent(intent)
+            reminderNotificationData.toIntent(intent)
             return intent
         }
     }

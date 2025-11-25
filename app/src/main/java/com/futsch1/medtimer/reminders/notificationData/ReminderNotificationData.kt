@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.reminders.notifications
+package com.futsch1.medtimer.reminders.notificationData
 
 import android.app.Application
 import android.app.PendingIntent
@@ -22,7 +22,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class Notification(
+class ReminderNotificationData(
     var remindInstant: Instant,
     var reminderIds: IntArray = IntArray(0),
     var reminderEventIds: IntArray = IntArray(0),
@@ -88,7 +88,7 @@ class Notification(
 
     companion object {
 
-        fun fromBundle(bundle: Bundle, application: Application?): Notification {
+        fun fromBundle(bundle: Bundle, application: Application?): ReminderNotificationData {
             val reminderIds = getReminderIds(bundle)
             val reminderEventIds = getReminderEventIds(bundle)
             val remindInstant = Instant.ofEpochMilli(bundle.getLong(ActivityCodes.EXTRA_REMIND_INSTANT))
@@ -114,11 +114,11 @@ class Notification(
             return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!
         }
 
-        fun fromArrays(application: Application?, reminderIds: IntArray, reminderEventIds: IntArray, remindInstant: Instant): Notification {
-            return Notification(remindInstant, reminderIds, reminderEventIds, application = application)
+        fun fromArrays(application: Application?, reminderIds: IntArray, reminderEventIds: IntArray, remindInstant: Instant): ReminderNotificationData {
+            return ReminderNotificationData(remindInstant, reminderIds, reminderEventIds, application = application)
         }
 
-        fun fromScheduledReminders(reminders: List<ScheduledReminder>): Notification {
+        fun fromScheduledReminders(reminders: List<ScheduledReminder>): ReminderNotificationData {
             val reminderIds = mutableListOf<Int>()
             val reminderEventIds = mutableListOf<Int>()
             val medicineNames = mutableListOf<String>()
@@ -132,16 +132,16 @@ class Notification(
                 }
             }
 
-            return Notification(
+            return ReminderNotificationData(
                 firstTimestamp, reminderIds.toIntArray(), reminderEventIds.toIntArray(), notificationName = medicineNames.joinToString(", ")
             )
         }
 
-        fun fromReminderEvent(reminderEvent: ReminderEvent): Notification {
+        fun fromReminderEvent(reminderEvent: ReminderEvent): ReminderNotificationData {
             val reminderIds = intArrayOf(reminderEvent.reminderId)
             val reminderEventIds = intArrayOf(reminderEvent.reminderEventId)
             val remindInstant = Instant.ofEpochSecond(reminderEvent.remindedTimestamp)
-            return Notification(
+            return ReminderNotificationData(
                 remindInstant, reminderIds, reminderEventIds, notificationName = "fromReminderEvent"
             )
         }
@@ -164,14 +164,14 @@ class Notification(
             return reminderEvent
         }
 
-        fun fromInputData(inputData: Data, application: Application? = null): Notification {
+        fun fromInputData(inputData: Data, application: Application? = null): ReminderNotificationData {
             val reminderIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)!!
             val reminderEventIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!
             val remindInstant = Instant.ofEpochMilli(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, 0))
             val notificationId = inputData.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1)
-            val notification = Notification(remindInstant, reminderIds, reminderEventIds, notificationName = "fromInputData", application = application)
-            notification.notificationId = notificationId
-            return notification
+            val reminderNotificationData = ReminderNotificationData(remindInstant, reminderIds, reminderEventIds, notificationName = "fromInputData", application = application)
+            reminderNotificationData.notificationId = notificationId
+            return reminderNotificationData
         }
     }
 
@@ -213,8 +213,8 @@ class Notification(
         return TimeHelper.minutesToTimeString(context, remindTime.hour * 60L + remindTime.minute)
     }
 
-    fun filterAutomaticallyTaken(): Notification {
-        return Notification(
+    fun filterAutomaticallyTaken(): ReminderNotificationData {
+        return ReminderNotificationData(
             remindInstant,
             notificationReminderEvents = notificationReminderEvents.stream().filter { !it.reminder.automaticallyTaken }.toList(),
             notificationName = notificationName

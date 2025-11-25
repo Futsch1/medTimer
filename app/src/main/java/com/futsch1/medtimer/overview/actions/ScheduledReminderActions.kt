@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.ReminderWork
-import com.futsch1.medtimer.reminders.notifications.ProcessedNotification
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,9 +61,9 @@ class ScheduledReminderActions(
             withContext(mainCoroutineDispatcher) {
                 view.context.sendBroadcast(
                     if (taken)
-                        ReminderProcessor.getTakenActionIntent(view.context, ProcessedNotification(listOf(reminderEventId)))
+                        ReminderProcessor.getTakenActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId)))
                     else
-                        ReminderProcessor.getSkippedActionIntent(view.context, ProcessedNotification(listOf(reminderEventId))),
+                        ReminderProcessor.getSkippedActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId))),
                     "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
                 )
             }

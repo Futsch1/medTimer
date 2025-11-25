@@ -10,7 +10,7 @@ import android.util.Log
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
-import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.util.function.Predicate
 import java.util.stream.Collectors
 
@@ -34,8 +34,8 @@ class Autostart : BroadcastReceiver() {
                     Collectors.toUnmodifiableList()
                 )
             for (reminderEvent in reminderEventList) {
-                val scheduledNotification = Notification.fromReminderEvent(reminderEvent)
-                scheduledNotification.getPendingIntent(context).send()
+                val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                scheduledReminderNotificationData.getPendingIntent(context).send()
             }
         }
     }

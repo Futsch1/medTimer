@@ -27,7 +27,7 @@ import com.futsch1.medtimer.WorkManagerAccess;
 import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.preferences.PreferencesNames;
-import com.futsch1.medtimer.reminders.notifications.Notification;
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver;
 
@@ -59,9 +59,9 @@ public class RescheduleWork extends Worker {
         ReminderScheduler reminderScheduler = getReminderScheduler();
         List<FullMedicine> fullMedicines = medicineRepository.getMedicines();
         List<ScheduledReminder> scheduledReminders = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(33));
-        Notification scheduledNotification = Notification.Companion.fromScheduledReminders(scheduledReminders);
-        if (!scheduledNotification.getValid()) {
-            this.enqueueNotification(scheduledNotification);
+        ReminderNotificationData scheduledReminderNotificationData = ReminderNotificationData.Companion.fromScheduledReminders(scheduledReminders);
+        if (!scheduledReminderNotificationData.getValid()) {
+            this.enqueueNotification(scheduledReminderNotificationData);
         } else {
             this.cancelNextReminder();
         }
@@ -87,21 +87,21 @@ public class RescheduleWork extends Worker {
         }, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
-    protected void enqueueNotification(Notification scheduledNotification) {
+    protected void enqueueNotification(ReminderNotificationData scheduledReminderNotificationData) {
         // Apply debug rescheduling
-        Instant scheduledInstant = scheduledNotification.getRemindInstant();
+        Instant scheduledInstant = scheduledReminderNotificationData.getRemindInstant();
         DebugReschedule debugReschedule = new DebugReschedule(context, getInputData());
         scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant);
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(PendingIntent.getBroadcast(context, 0, new Intent(), FLAG_IMMUTABLE));
-        for (int reminderEventId : scheduledNotification.getReminderEventIds()) {
+        for (int reminderEventId : scheduledReminderNotificationData.getReminderEventIds()) {
             alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, new Intent(), FLAG_IMMUTABLE));
         }
 
         // If the alarm is in the future, schedule with alarm manager
         if (scheduledInstant.isAfter(Instant.now())) {
-            PendingIntent pendingIntent = scheduledNotification.getPendingIntent(context);
+            PendingIntent pendingIntent = scheduledReminderNotificationData.getPendingIntent(context);
 
             if (canScheduleExactAlarms(alarmManager)) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent);
@@ -111,8 +111,8 @@ public class RescheduleWork extends Worker {
 
             Log.i(LogTags.SCHEDULER,
                     String.format("Scheduled reminder for %s/rIDs %s to %s",
-                            scheduledNotification.getNotificationName(),
-                            scheduledNotification.getReminderIds(),
+                            scheduledReminderNotificationData.getNotificationName(),
+                            scheduledReminderNotificationData.getReminderIds(),
                             scheduledInstant));
 
             updateNextReminderWidget();
@@ -121,10 +121,10 @@ public class RescheduleWork extends Worker {
             // Immediately remind
             Log.i(LogTags.SCHEDULER,
                     String.format("Scheduling reminder for %s/rIDs %s now",
-                            scheduledNotification.getNotificationName(),
-                            Arrays.toString(scheduledNotification.getReminderIds())));
+                            scheduledReminderNotificationData.getNotificationName(),
+                            Arrays.toString(scheduledReminderNotificationData.getReminderIds())));
             Data.Builder builder = new Data.Builder();
-            scheduledNotification.toBuilder(builder);
+            scheduledReminderNotificationData.toBuilder(builder);
             WorkRequest reminderWork =
                     new OneTimeWorkRequest.Builder(ReminderWork.class)
                             .setInputData(builder.build())

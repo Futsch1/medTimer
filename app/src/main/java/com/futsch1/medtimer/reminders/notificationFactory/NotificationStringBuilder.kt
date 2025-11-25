@@ -7,16 +7,16 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.NotificationReminderEvent
-import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.util.stream.Collectors
 
 class NotificationStringBuilder(
     val context: Context,
-    val notification: Notification,
+    val reminderNotificationData: ReminderNotificationData,
     val showOutOfStockIcon: Boolean = true
 ) {
-    val baseString = buildBaseString(notification.notificationReminderEvents)
-    val notificationString = buildNotificationString(notification.notificationReminderEvents)
+    val baseString = buildBaseString(reminderNotificationData.notificationReminderEvents)
+    val notificationString = buildNotificationString(reminderNotificationData.notificationReminderEvents)
 
     private fun buildBaseString(notificationReminderEvents: List<NotificationReminderEvent>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
@@ -46,7 +46,7 @@ class NotificationStringBuilder(
             builder.append("\n")
         }
 
-        builder.append("${notification.getRemindTime(context)}\n${getTagNames(notificationReminderEvent.medicine.tags)}")
+        builder.append("${reminderNotificationData.getRemindTime(context)}\n${getTagNames(notificationReminderEvent.medicine.tags)}")
         return builder
     }
 

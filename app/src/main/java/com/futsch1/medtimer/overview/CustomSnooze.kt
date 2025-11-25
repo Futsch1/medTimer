@@ -7,16 +7,16 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderProcessor
-import com.futsch1.medtimer.reminders.notifications.Notification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
-    val notification = Notification.fromBundle(intent.extras!!, null)
+    val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!, null)
 
-    if (!notification.valid) {
+    if (!reminderNotificationData.valid) {
         return
     }
     // Cancel a potential repeat alarm
-    NotificationProcessor.cancelPendingAlarms(activity, notification.notificationReminderEvents[0].reminderEvent.reminderEventId)
+    NotificationProcessor.cancelPendingAlarms(activity, reminderNotificationData.notificationReminderEvents[0].reminderEvent.reminderEventId)
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)
@@ -28,7 +28,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
             if (snoozeTimeInt != null) {
                 val snooze = ReminderProcessor.getSnoozeIntent(
                     activity,
-                    notification,
+                    reminderNotificationData,
                     snoozeTimeInt
                 )
                 activity.sendBroadcast(snooze, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")

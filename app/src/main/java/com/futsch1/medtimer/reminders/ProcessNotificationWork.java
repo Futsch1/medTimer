@@ -8,7 +8,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.notifications.ProcessedNotification;
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData;
 
 public class ProcessNotificationWork extends Worker {
 
@@ -22,7 +22,7 @@ public class ProcessNotificationWork extends Worker {
     @NonNull
     @Override
     public ListenableWorker.Result doWork() {
-        NotificationProcessor.processNotification(getApplicationContext(), ProcessedNotification.Companion.fromData(getInputData()), status);
+        NotificationProcessor.processNotification(getApplicationContext(), ProcessedNotificationData.Companion.fromData(getInputData()), status);
         return ListenableWorker.Result.success();
     }
 
