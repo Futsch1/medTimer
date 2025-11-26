@@ -34,8 +34,6 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
 
         val r = processReminders(inputData)
 
-        medicineRepository.flushDatabase()
-
         // Reminder shown, now schedule next reminder
         ReminderProcessor.requestReschedule(context)
 
@@ -48,10 +46,14 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)
 
+        medicineRepository.flushDatabase()
+
         if (reminderNotification != null) {
             performActionsOfReminders(reminderNotification)
             r = Result.success()
         }
+
+        medicineRepository.flushDatabase()
 
         return r
     }

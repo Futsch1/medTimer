@@ -29,10 +29,21 @@ public class NotificationProcessor {
             if (reminderEvent != null) {
                 if (reminderEvent.askForAmount && status == ReminderEvent.ReminderStatus.TAKEN) {
                     context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
+                    cancelNotification(context, reminderEvent.notificationId);
                 } else {
                     processReminderEvent(context, status, reminderEvent, medicineRepository);
                 }
+            } else {
+                Log.e(LogTags.REMINDER, String.format("Could not find reminder event reID %d in database", reminderEventId));
             }
+        }
+    }
+
+    public static void cancelNotification(Context context, int notificationId) {
+        if (notificationId != 0) {
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId));
+            notificationManager.cancel(notificationId);
         }
     }
 
@@ -52,14 +63,6 @@ public class NotificationProcessor {
 
         // Reschedule since the trigger condition for a linked reminder might have changed
         ReminderProcessor.requestReschedule(context);
-    }
-
-    public static void cancelNotification(Context context, int notificationId) {
-        if (notificationId != 0) {
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId));
-            notificationManager.cancel(notificationId);
-        }
     }
 
     public static void cancelPendingAlarms(Context context, int reminderEventId) {
