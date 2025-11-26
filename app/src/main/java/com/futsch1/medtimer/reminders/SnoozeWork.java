@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.reminders;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
 
 import android.content.Context;
@@ -29,14 +28,12 @@ public class SnoozeWork extends RescheduleWork {
         ReminderNotificationData reminderNotificationData = ReminderNotificationData.Companion.fromInputData(inputData);
         reminderNotificationData.delayBy(snoozeTime * 60);
 
-        int notificationId = inputData.getInt(EXTRA_NOTIFICATION_ID, 0);
-
         // Cancel a potential repeat alarm
         NotificationProcessor.cancelPendingAlarms(context, reminderNotificationData.getReminderEventIds()[0]);
 
         enqueueNotification(reminderNotificationData);
 
-        NotificationProcessor.cancelNotification(context, notificationId);
+        NotificationProcessor.cancelNotification(context, reminderNotificationData.getNotificationId());
 
         return Result.success();
     }

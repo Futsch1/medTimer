@@ -69,21 +69,22 @@ public class RepeatReminderWorkUnitTest {
     public void testDoWorkRepeatReminder() {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.notificationId = 14;
+        int remainingRepeats = 4;
         int reminderId = 11;
         reminderEvent.reminderId = reminderId;
         int reminderEventId = 12;
         reminderEvent.reminderEventId = reminderEventId;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+        reminderEvent.remainingRepeats = remainingRepeats;
 
-        int remainingRepeats = 4;
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now(), -1);
+        Instant zero = Instant.ofEpochSecond(0);
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, zero, reminderEvent.notificationId);
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data.Builder builder = new Data.Builder();
         data.toBuilder(builder);
         builder.putInt(EXTRA_REPEAT_TIME_SECONDS, 15);
         when(workerParams.getInputData()).thenReturn(builder.build());
-        Instant zero = Instant.ofEpochSecond(0);
         Instant repeat = Instant.ofEpochSecond(15);
 
         try (MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
@@ -92,6 +93,7 @@ public class RepeatReminderWorkUnitTest {
              )) {
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
             mockedInstant.when(Instant::now).thenReturn(zero);
+            mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             when(zero.plusSeconds(15)).thenReturn(repeat);
             RepeatReminderWork repeatReminderWork = new RepeatReminderWork(mockApplication, workerParams);
 

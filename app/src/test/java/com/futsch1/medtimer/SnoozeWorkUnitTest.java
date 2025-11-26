@@ -75,19 +75,20 @@ public class SnoozeWorkUnitTest {
         reminderEvent.reminderEventId = reminderEventId;
         reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
         reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+        Instant zero = Instant.ofEpochSecond(0);
 
-        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, Instant.now(), -1);
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, zero, notificationId);
         WorkerParameters workerParams = mock(WorkerParameters.class);
         Data.Builder inputData = new Data.Builder();
         data.toBuilder(inputData);
         when(workerParams.getInputData()).thenReturn(inputData.build());
-        Instant zero = Instant.ofEpochSecond(0);
         Instant snooze = Instant.ofEpochSecond(15L * 60);
 
         try (MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<Instant> mockedInstant = mockStatic(Instant.class)) {
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
             mockedInstant.when(Instant::now).thenReturn(zero);
+            mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60)).thenReturn(snooze);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60, 0)).thenReturn(snooze);
             SnoozeWork snoozeWork = new SnoozeWork(mockApplication, workerParams);

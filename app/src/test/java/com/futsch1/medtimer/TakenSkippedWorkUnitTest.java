@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -130,10 +129,10 @@ public class TakenSkippedWorkUnitTest {
     @Test
     public void testDoWorkSkipped() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
-                .build();
-        when(workerParams.getInputData()).thenReturn(inputData);
+        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
+        Data.Builder builder = new Data.Builder();
+        processedNotificationData.toBuilder(builder);
+        when(workerParams.getInputData()).thenReturn(builder.build());
         SkippedWorkProcess skippedWork = new SkippedWorkProcess(mockApplication, workerParams);
 
         testWork(skippedWork, ReminderEvent.ReminderStatus.SKIPPED);
