@@ -2,11 +2,11 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="no_alarm_sound_when_silent"
         android:title="@string/no_alarm_sound_when_silent" />
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="no_vibration_when_silent"
         android:title="@string/no_vibration_when_silent" />

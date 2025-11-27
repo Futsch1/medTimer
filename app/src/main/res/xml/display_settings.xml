@@ -9,6 +9,7 @@
         android:defaultValue="true"
         android:title="@string/combine_notifications"
         android:summary="@string/combine_notifications_summary"
+        app:singleLineTitle="false"
         app:key="combine_notifications" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -18,6 +19,7 @@
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:title="@string/system_locale"
+        app:singleLineTitle="false"
         app:key="system_locale"
         app:summary="@string/system_locale_summary"/>
 
