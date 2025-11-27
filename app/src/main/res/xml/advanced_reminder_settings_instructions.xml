@@ -9,5 +9,6 @@
         android:entryValues="@array/instructions_suggestions"
         android:title="@string/sample_instructions"
         app:icon="@drawable/clipboard_plus"
+        app:singleLineTitle="false"
         app:key="sample_instructions" />
 </androidx.preference.PreferenceScreen>

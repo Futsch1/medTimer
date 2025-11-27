@@ -65,10 +65,12 @@
         <SwitchPreferenceCompat
             android:title="@string/variable_amount"
             app:key="variable_amount"
+            app:singleLineTitle="false"
             android:summary="@string/variable_amount_summary"/>
         <SwitchPreferenceCompat
             android:title="@string/automatically_taken"
             app:key="automatically_taken"
+            app:singleLineTitle="false"
             android:summary="@string/automatically_taken_summary"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
