@@ -1,10 +1,10 @@
 package com.futsch1.medtimer;
 
 public class LogTags {
-    public static final String SCHEDULER = "Scheduler";
-    public static final String REMINDER = "Reminder";
-    public static final String BACKUP = "Backup";
-    public static final String STOCK_HANDLING = "StockHandling";
+    public static final String SCHEDULER = "SchedulerDebug";
+    public static final String REMINDER = "ReminderDebug";
+    public static final String BACKUP = "BackupDebug";
+    public static final String STOCK_HANDLING = "StockHandlingDebug";
 
     private LogTags() {
         // Intended empty
