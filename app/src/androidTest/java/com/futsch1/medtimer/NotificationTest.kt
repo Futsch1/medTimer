@@ -30,7 +30,6 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessor
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
@@ -60,8 +59,8 @@ private fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiOb
     return button
 }
 
-fun getNotificationText(stringId: Int, vararg args: Any): String {
-    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, *args)
+fun getNotificationText(stringId: Int): String {
+    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId)
     return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         s.uppercase()
     } else {
@@ -358,8 +357,6 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
-        val notificationTimeString =
-            TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, notificationTime.hour * 60L + notificationTime.minute)
 
         AndroidTestHelper.createReminder(
             "1",
@@ -377,7 +374,7 @@ class NotificationTest : BaseTestHelper() {
         val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
         assertNotNull(notification)
 
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken, notificationTimeString)))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)

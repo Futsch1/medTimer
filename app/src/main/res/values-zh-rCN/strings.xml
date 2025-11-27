@@ -241,4 +241,4 @@
     <string name="system_locale_summary">如果关闭，应用程序将使用与为应用程序设置的语言相匹配的设置。</string>
     <string name="raised">已触发</string>
     <string name="scheduled">已排定</string>
-<string name="no_calendar_app">未找到日历应用程序</string></resources>
+<string name="no_calendar_app">未找到日历应用程序</string><string name="combine_notifications">合并同一时间的通知</string><string name="combine_notifications_summary">如果设置，时间相同的通知将合并为一个通知</string></resources>

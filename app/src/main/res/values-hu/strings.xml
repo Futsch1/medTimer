@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Kikapcsolt állapotban az alkalmazás az alkalmazáshoz beállított nyelvnek megfelelő beállítást használja.</string>
     <string name="raised">Elindítva</string>
     <string name="scheduled">Ütemezve</string>
-<string name="no_calendar_app">Nincs naptár alkalmazás található</string></resources>
+<string name="no_calendar_app">Nincs naptár alkalmazás található</string><string name="combine_notifications">Egyidejű értesítések kombinálása</string><string name="combine_notifications_summary">Ha be van állítva, az azonos időpontú értesítések egyetlen értesítéssé állnak össze</string></resources>

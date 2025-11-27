@@ -242,4 +242,6 @@
     <string name="raised">已觸發</string>
     <string name="scheduled">已排定</string>
     <string name="no_calendar_app">找不到日曆應用程式</string>
+    <string name="combine_notifications">合併相同時間的通知</string>
+    <string name="combine_notifications_summary">如果設定，相同時間的通知將合併為單一通知</string>
 </resources>

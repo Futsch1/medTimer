@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Kapatıldığında, uygulama, uygulama için ayarlanan dille eşleşen ayarı kullanır.</string>
     <string name="raised">Çaldı</string>
     <string name="scheduled">Planlandı</string>
-<string name="no_calendar_app">Takvim uygulaması bulunamadı</string></resources>
+<string name="no_calendar_app">Takvim uygulaması bulunamadı</string><string name="combine_notifications">Aynı zamanlı bildirimleri birleştirin</string><string name="combine_notifications_summary">Ayarlanırsa, aynı zamana sahip bildirimler tek bir bildirimde birleştirilir</string></resources>

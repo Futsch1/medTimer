@@ -6,6 +6,11 @@
         android:title="@string/big_notifications"
         app:key="big_notifications" />
     <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:title="@string/combine_notifications"
+        android:summary="@string/combine_notifications_summary"
+        app:key="combine_notifications" />
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:summary="@string/use_relative_date_time_summary"
         android:title="@string/use_relative_date_time"

@@ -13,6 +13,7 @@ public class PreferencesNames {
     public static final String SECURE_WINDOW = "window_flag_secure";
     public static final String USE_RELATIVE_DATE_TIME = "use_relative_date_time";
     public static final String SYSTEM_LOCALE = "system_locale";
+    public static final String COMBINE_NOTIFICATIONS = "combine_notifications";
 
     private PreferencesNames() {
         // Intended empty

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
@@ -247,4 +247,4 @@
     <string name="raised">Utlöst</string>
     <string name="scheduled">Schemalagd</string>
     <string name="no_calendar_app">Ingen kalenderapp hittades</string>
-</resources>
+<string name="combine_notifications">Kombinera samma tidsmeddelanden</string><string name="combine_notifications_summary">Om inställt kombineras meddelanden med samma tid till ett enda meddelande</string></resources>
