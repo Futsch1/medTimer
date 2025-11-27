@@ -15,8 +15,7 @@ class ReminderNotificationData(
     var remindInstant: Instant,
     var reminderIds: IntArray = IntArray(0),
     var reminderEventIds: IntArray = IntArray(0),
-    var notificationId: Int = -1,
-    val notificationName: String = "Notification"
+    var notificationId: Int = -1
 ) {
     var valid: Boolean = reminderIds.isNotEmpty()
 
@@ -28,10 +27,6 @@ class ReminderNotificationData(
         if (reminderIds.size != reminderEventIds.size) {
             valid = false
         }
-    }
-
-    fun delayBy(delaySeconds: Int) {
-        remindInstant = remindInstant.plusSeconds(delaySeconds.toLong())
     }
 
     fun getPendingIntent(context: Context): PendingIntent {
@@ -91,25 +86,23 @@ class ReminderNotificationData(
             remindInstant: Instant,
             notificationId: Int = -1
         ): ReminderNotificationData {
-            return ReminderNotificationData(remindInstant, reminderIds, reminderEventIds, notificationId, notificationName = "fromArrays")
+            return ReminderNotificationData(remindInstant, reminderIds, reminderEventIds, notificationId)
         }
 
         fun fromScheduledReminders(reminders: List<ScheduledReminder>): ReminderNotificationData {
             val reminderIds = mutableListOf<Int>()
             val reminderEventIds = mutableListOf<Int>()
-            val medicineNames = mutableListOf<String>()
             val firstTimestamp = reminders.first().timestamp
 
             for (reminder in reminders) {
                 if (reminder.timestamp == firstTimestamp) {
                     reminderIds.add(reminder.reminder().reminderId)
                     reminderEventIds.add(0)
-                    medicineNames.add(reminder.medicine().medicine.name)
                 }
             }
 
             return ReminderNotificationData(
-                firstTimestamp, reminderIds.toIntArray(), reminderEventIds.toIntArray(), -1, medicineNames.joinToString(", ")
+                firstTimestamp, reminderIds.toIntArray(), reminderEventIds.toIntArray(), -1
             )
         }
 
@@ -118,7 +111,7 @@ class ReminderNotificationData(
             val reminderEventIds = intArrayOf(reminderEvent.reminderEventId)
             val remindInstant = Instant.ofEpochSecond(reminderEvent.remindedTimestamp)
             return ReminderNotificationData(
-                remindInstant, reminderIds, reminderEventIds, notificationName = "fromReminderEvent"
+                remindInstant, reminderIds, reminderEventIds
             )
         }
 
@@ -132,8 +125,7 @@ class ReminderNotificationData(
                     remindInstant,
                     reminderIds,
                     reminderEventIds,
-                    notificationId,
-                    notificationName = "fromInputData"
+                    notificationId
                 )
             return reminderNotificationData
         }
