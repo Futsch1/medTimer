@@ -120,7 +120,7 @@ public class RescheduleWork extends Worker {
         } else {
             // Immediately remind
             Log.i(LogTags.SCHEDULER,
-                    String.format("Scheduling reminder for %s/rIDs %s now",
+                    String.format("Scheduling reminder for %s/rIDs %s",
                             scheduledReminderNotificationData.getNotificationName(),
                             Arrays.toString(scheduledReminderNotificationData.getReminderIds())));
             Data.Builder builder = new Data.Builder();
@@ -176,7 +176,7 @@ public class RescheduleWork extends Worker {
         }
 
         public void scheduleRepeat() {
-            if (delay >= 0 && repeats >= 0) {
+            if (delay >= 0 && repeats > 0) {
                 ReminderProcessor.requestRescheduleNowForTests(context, delay, repeats - 1);
             }
         }

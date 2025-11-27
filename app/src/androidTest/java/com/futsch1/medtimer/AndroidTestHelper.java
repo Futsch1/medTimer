@@ -15,13 +15,9 @@ import static org.hamcrest.Matchers.is;
 import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -141,16 +137,6 @@ public class AndroidTestHelper {
         Calendar rightNow = Calendar.getInstance();
         LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
         return dateTime.plusMinutes(10);
-    }
-
-    public static void clearNotifications(UiDevice device) {
-        device.openNotification();
-        UiObject2 o = device.wait(Until.findObject(By.res("com.android.systemui:id/dismiss_text")), 1_000);
-        if (o != null) {
-            o.click();
-        } else {
-            device.pressBack();
-        }
     }
 
     public static void scrollDown() {

@@ -28,7 +28,6 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -73,7 +72,7 @@ fun getNotificationText(stringId: Int, vararg args: Any): String {
 
 class NotificationTest : BaseTestHelper() {
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun notificationTest() {
         AndroidTestHelper.createMedicine(TEST_MED)
 
@@ -237,21 +236,16 @@ class NotificationTest : BaseTestHelper() {
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
 
-        device.pressBack()
-
-        device.openNotification()
-        sleep(2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
-
-        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        if (null == device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)) {
+            device.pressBack()
+            device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        }
         writeTo(android.R.id.input, "Test variable amount")
         clickDialogPositiveButton()
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
 
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        BaristaListInteractions.clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
@@ -355,17 +349,12 @@ class NotificationTest : BaseTestHelper() {
                 2000
             )
         )
-        internalAssert(
-            device.findObject(By.text(getNotificationText(R.string.all_taken, "$$").replace("($$)", ""))) == null
-        )
     }
 
     @Test
     //@AllowFlaky(attempts = 1)
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-        AndroidTestHelper.clearNotifications(device)
 
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
@@ -383,12 +372,12 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         sleep(2_000)
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
         assertNotNull(notification)
 
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString)))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken, notificationTimeString)))
         device.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)

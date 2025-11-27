@@ -20,8 +20,8 @@ class NotificationStringBuilder(
 
     private fun buildBaseString(reminderNotificationParts: List<ReminderNotificationPart>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        for (notificationReminderEvent in reminderNotificationParts) {
-            builder.append(buildSingleBaseString(notificationReminderEvent))
+        for (reminderNotificationPart in reminderNotificationParts) {
+            builder.append(buildSingleBaseString(reminderNotificationPart))
             builder.append("\n")
         }
         return builder
@@ -29,15 +29,17 @@ class NotificationStringBuilder(
 
     private fun buildNotificationString(reminderNotificationParts: List<ReminderNotificationPart>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        for (notificationReminderEvent in reminderNotificationParts) {
-            builder.append(buildSingleNotificationString(notificationReminderEvent))
+        for (reminderNotificationPart in reminderNotificationParts) {
+            // baseString already contains both reminders, so we would add them again here
+            builder.append(buildSingleNotificationString(reminderNotificationPart))
             builder.append("\n")
         }
+        builder.append(reminderNotification.getRemindTime(context))
         return builder
     }
 
     private fun buildSingleNotificationString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
-        val builder = SpannableStringBuilder(baseString).append("\n${getInstructions(reminderNotificationPart.reminder)}")
+        val builder = SpannableStringBuilder(buildSingleBaseString(reminderNotificationPart)).append("\n${getInstructions(reminderNotificationPart.reminder)}")
         if (reminderNotificationPart.medicine.medicine.isStockManagementActive) {
             builder.append(MedicineHelper.getStockText(context, reminderNotificationPart.medicine.medicine))
             if (showOutOfStockIcon) {
@@ -46,7 +48,7 @@ class NotificationStringBuilder(
             builder.append("\n")
         }
 
-        builder.append("${reminderNotification.getRemindTime(context)}\n${getTagNames(reminderNotificationPart.medicine.tags)}")
+        builder.append(getTagNames(reminderNotificationPart.medicine.tags))
         return builder
     }
 
