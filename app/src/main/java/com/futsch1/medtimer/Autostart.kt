@@ -19,22 +19,23 @@ class Autostart : BroadcastReceiver() {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
             Log.i("Autostart", "Requesting reschedule")
             requestReschedule(context)
-            Log.i("Autostart", "Restore reminders")
-            restoreReminders(context)
+            Log.i("Autostart", "Restore notifications")
+            restoreNotifications(context)
         }
     }
 
-    private fun restoreReminders(context: Context) {
+    private fun restoreNotifications(context: Context) {
         val repo = MedicineRepository(context.applicationContext as Application?)
-        val thread = HandlerThread("RestoreReminders")
+        val thread = HandlerThread("RestoreNotifications")
         thread.start()
         Handler(thread.getLooper()).post {
-            val reminderEventList = repo.getLastDaysReminderEvents(1).stream()
-                .filter((Predicate { reminderEvent: ReminderEvent? -> reminderEvent!!.status == ReminderEvent.ReminderStatus.RAISED })).collect(
+            val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
+                .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
                     Collectors.toUnmodifiableList()
                 )
             for (reminderEvent in reminderEventList) {
                 val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                Log.i("Autostart", "Restoring notifications: $scheduledReminderNotificationData")
                 scheduledReminderNotificationData.getPendingIntent(context).send()
             }
         }

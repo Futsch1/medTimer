@@ -2,8 +2,10 @@ package com.futsch1.medtimer.reminders
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
@@ -18,6 +20,7 @@ class RepeatReminderWork(context: Context, workerParams: WorkerParameters) : Sno
         val repeatTimeSeconds = inputData.getInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
         reminderNotificationData.delayBy(repeatTimeSeconds)
 
+        Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
         enqueueNotification(reminderNotificationData)
 
         for (reminderEventId in reminderNotificationData.reminderEventIds) {

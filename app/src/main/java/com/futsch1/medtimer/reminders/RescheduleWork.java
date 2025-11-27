@@ -34,7 +34,6 @@ import com.futsch1.medtimer.widgets.WidgetUpdateReceiver;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,8 +52,6 @@ public class RescheduleWork extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i(LogTags.REMINDER, "Received scheduler request");
-
         MedicineRepository medicineRepository = new MedicineRepository((Application) getApplicationContext());
         ReminderScheduler reminderScheduler = getReminderScheduler();
         List<FullMedicine> fullMedicines = medicineRepository.getMedicines();
@@ -63,6 +60,7 @@ public class RescheduleWork extends Worker {
             ReminderNotificationData scheduledReminderNotificationData = ReminderNotificationData.Companion.fromScheduledReminders(scheduledReminders);
             this.enqueueNotification(scheduledReminderNotificationData);
         } else {
+            Log.d(LogTags.SCHEDULER, "No reminders scheduled");
             this.cancelNextReminder();
         }
 
@@ -110,19 +108,16 @@ public class RescheduleWork extends Worker {
             }
 
             Log.i(LogTags.SCHEDULER,
-                    String.format("Scheduled reminder for %s/rIDs %s to %s",
-                            scheduledReminderNotificationData.getNotificationName(),
-                            Arrays.toString(scheduledReminderNotificationData.getReminderIds()),
-                            scheduledInstant));
+                    String.format("Scheduled reminder: %s",
+                            scheduledReminderNotificationData));
 
             updateNextReminderWidget();
 
         } else {
             // Immediately remind
             Log.i(LogTags.SCHEDULER,
-                    String.format("Scheduling reminder for %s/rIDs %s",
-                            scheduledReminderNotificationData.getNotificationName(),
-                            Arrays.toString(scheduledReminderNotificationData.getReminderIds())));
+                    String.format("Scheduling reminder now: %s",
+                            scheduledReminderNotificationData));
             Data.Builder builder = new Data.Builder();
             scheduledReminderNotificationData.toBuilder(builder);
             WorkRequest reminderWork =

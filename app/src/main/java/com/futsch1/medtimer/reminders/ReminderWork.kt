@@ -49,6 +49,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         medicineRepository.flushDatabase()
 
         if (reminderNotification != null) {
+            Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
             performActionsOfReminders(reminderNotification)
             r = Result.success()
         }

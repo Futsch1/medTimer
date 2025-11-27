@@ -16,13 +16,6 @@ import java.util.List;
 
 public class ReminderSchedulerService extends LifecycleService {
 
-    @Nullable
-    @Override
-    public IBinder onBind(@NonNull Intent intent) {
-        super.onBind(intent);
-        return null;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,7 +24,28 @@ public class ReminderSchedulerService extends LifecycleService {
 
         medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
 
-        Log.i(LogTags.SCHEDULER, "Service created");
+        Log.i(LogTags.SCHEDULER, "Scheduler service created");
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(@NonNull Intent intent) {
+        super.onBind(intent);
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        scheduleRequest();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.i(LogTags.SCHEDULER, "Scheduler service destroyed");
     }
 
     public void updateMedicine(List<FullMedicine> ignoredFullMedicine) {
@@ -40,19 +54,5 @@ public class ReminderSchedulerService extends LifecycleService {
 
     private void scheduleRequest() {
         ReminderProcessor.requestReschedule(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        Log.i(LogTags.SCHEDULER, "Service destroyed");
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        scheduleRequest();
-        return START_STICKY;
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.futsch1.medtimer.LogTags;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -49,7 +50,7 @@ public abstract class JSONBackup<T> {
             }
             return null;
         } catch (JsonParseException e) {
-            Log.e("JSONBackup", e.getMessage() != null ? e.getMessage() : "");
+            Log.e(LogTags.BACKUP, e.getMessage() != null ? e.getMessage() : "");
             return null;
         }
     }
@@ -85,7 +86,7 @@ public abstract class JSONBackup<T> {
                         throw new JsonParseException("Missing field in JSON: " + f.getName());
                     }
                 } catch (IllegalArgumentException | IllegalAccessException ex) {
-                    Log.e("JSONBackup", "Internal error");
+                    Log.e(LogTags.BACKUP, "Internal error");
                 }
 
             }

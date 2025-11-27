@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -103,7 +102,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
                         "setOptionalIconsVisible", Boolean.TYPE);
                 m.invoke(menu, true);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                Log.e("Menu", "onMenuOpened", e);
+                // Intentionally empty
             }
         }
     }
@@ -185,10 +184,8 @@ public class OptionsMenu implements EntityEditOptionsMenu {
                 idlingResource.setBusy();
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
-                    Log.i("GenerateTestData", "Delete all data");
                     medicineViewModel.medicineRepository.deleteAll();
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
-                    Log.i("GenerateTestData", "Generate new medicine");
                     generateTestData.generateTestMedicine();
                     ReminderProcessor.requestReschedule(context);
                     idlingResource.setIdle();

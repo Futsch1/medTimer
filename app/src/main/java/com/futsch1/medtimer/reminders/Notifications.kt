@@ -56,6 +56,6 @@ class Notifications(private val context: Context) {
         val factory = OutOfStockNotificationFactory(context, notificationId, medicine)
 
         notify(notificationId, factory.create())
-        Log.d(LogTags.REMINDER, String.format("Show out of stock notification nID %d", notificationId))
+        Log.d(LogTags.STOCK_HANDLING, String.format("Show out of stock notification nID %d", notificationId))
     }
 }

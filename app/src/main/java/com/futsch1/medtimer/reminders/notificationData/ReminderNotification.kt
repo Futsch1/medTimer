@@ -34,6 +34,10 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         return TimeHelper.minutesToTimeString(context, remindTime.hour * 60L + remindTime.minute)
     }
 
+    override fun toString(): String {
+        return reminderNotificationData.toString()
+    }
+
     companion object {
         fun fromReminderNotificationData(
             context: Context,

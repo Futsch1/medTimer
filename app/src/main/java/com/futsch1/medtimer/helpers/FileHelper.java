@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.futsch1.medtimer.LogTags;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,7 +33,7 @@ public class FileHelper {
                 writer.write(content);
             }
         } catch (IOException e) {
-            Log.e("FileHelper", e.toString());
+            Log.e(LogTags.BACKUP, e.toString());
             return false;
         }
         return true;
@@ -45,7 +47,7 @@ public class FileHelper {
                     return stringBuilder.toString();
                 }
             } catch (IOException e) {
-                Log.e("FileHelper", e.toString());
+                Log.e(LogTags.BACKUP, e.toString());
             }
         }
         return null;
