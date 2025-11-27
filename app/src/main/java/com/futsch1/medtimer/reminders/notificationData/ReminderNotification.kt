@@ -16,8 +16,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ReminderNotification(val reminderNotificationParts: List<ReminderNotificationPart>, val reminderNotificationData: ReminderNotificationData) {
-    var notificationId = reminderNotificationData.notificationId
-
     fun filterAutomaticallyTaken(): ReminderNotification {
         return ReminderNotification(
             reminderNotificationParts.stream().filter { !it.reminder.automaticallyTaken }.toList(),
@@ -35,7 +33,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     override fun toString(): String {
-        return reminderNotificationData.toString()
+        return "ReminderNotification -> $reminderNotificationData"
     }
 
     companion object {

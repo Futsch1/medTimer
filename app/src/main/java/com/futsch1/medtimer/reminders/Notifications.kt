@@ -18,7 +18,7 @@ class Notifications(private val context: Context) {
 
     fun showNotification(reminderNotification: ReminderNotification): Int {
         val notificationId = this.nextNotificationId
-        reminderNotification.notificationId = notificationId
+        reminderNotification.reminderNotificationData.notificationId = notificationId
 
         val factory = getReminderNotificationFactory(
             context,
@@ -26,7 +26,7 @@ class Notifications(private val context: Context) {
         )
 
         notify(notificationId, factory.create())
-        Log.d(LogTags.REMINDER, String.format("Show notification nID %d", notificationId))
+        Log.d(LogTags.REMINDER, String.format("Show notification nID %d: ", notificationId, reminderNotification))
 
         return notificationId
     }

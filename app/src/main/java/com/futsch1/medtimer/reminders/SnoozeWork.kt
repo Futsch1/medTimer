@@ -1,40 +1,32 @@
-package com.futsch1.medtimer.reminders;
+package com.futsch1.medtimer.reminders
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME;
-
-import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.work.Data;
-import androidx.work.WorkerParameters;
-
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
+import android.content.Context
+import android.util.Log
+import androidx.work.WorkerParameters
+import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
+import java.time.Instant
 
 /*
  * Worker that snoozes a reminder and re-raises it once the snooze time has expired.
  */
-public class SnoozeWork extends RescheduleWork {
+open class SnoozeWork(context: Context, workerParams: WorkerParameters) : RescheduleWork(context, workerParams) {
+    override fun doWork(): Result {
+        val inputData = getInputData()
+        val snoozeTime = inputData.getInt(ActivityCodes.EXTRA_SNOOZE_TIME, 15)
 
-    public SnoozeWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
-        super(context, workerParams);
-    }
-
-    @NonNull
-    @Override
-    public Result doWork() {
-        Data inputData = getInputData();
-        int snoozeTime = inputData.getInt(EXTRA_SNOOZE_TIME, 15);
-
-        ReminderNotificationData reminderNotificationData = ReminderNotificationData.Companion.fromInputData(inputData);
-        reminderNotificationData.delayBy(snoozeTime * 60);
+        val reminderNotificationData = fromInputData(inputData)
+        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
+        Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm
-        NotificationProcessor.cancelPendingAlarms(context, reminderNotificationData.getReminderEventIds()[0]);
+        NotificationProcessor.cancelPendingAlarms(context, reminderNotificationData.reminderEventIds[0])
 
-        enqueueNotification(reminderNotificationData);
+        enqueueNotification(reminderNotificationData)
 
-        NotificationProcessor.cancelNotification(context, reminderNotificationData.getNotificationId());
+        NotificationProcessor.cancelNotification(context, reminderNotificationData.notificationId)
 
-        return Result.success();
+        return Result.success()
     }
 }

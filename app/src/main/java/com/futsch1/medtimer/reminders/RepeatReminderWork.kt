@@ -8,6 +8,7 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
+import java.time.Instant
 
 /**
  * Worker that schedules a repeat of the current reminder.
@@ -18,7 +19,7 @@ class RepeatReminderWork(context: Context, workerParams: WorkerParameters) : Sno
 
         val reminderNotificationData = fromInputData(inputData)
         val repeatTimeSeconds = inputData.getInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
-        reminderNotificationData.delayBy(repeatTimeSeconds)
+        reminderNotificationData.remindInstant = Instant.now().plusSeconds(repeatTimeSeconds.toLong())
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
         enqueueNotification(reminderNotificationData)

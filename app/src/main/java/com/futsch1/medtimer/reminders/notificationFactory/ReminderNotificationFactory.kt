@@ -31,7 +31,10 @@ fun getReminderNotificationFactory(
 abstract class ReminderNotificationFactory(
     context: Context,
     val reminderNotification: ReminderNotification
-) : NotificationFactory(context, reminderNotification.notificationId, reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
+) : NotificationFactory(
+    context,
+    reminderNotification.reminderNotificationData.notificationId,
+    reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
     val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     val intents = NotificationIntentBuilder(

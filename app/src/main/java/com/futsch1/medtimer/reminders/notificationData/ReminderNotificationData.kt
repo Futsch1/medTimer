@@ -56,7 +56,7 @@ class ReminderNotificationData(
     }
 
     override fun toString(): String {
-        return "$notificationName rIDs [$reminderIds] rEIDs [$reminderEventIds] @ $remindInstant"
+        return "rIDs ${reminderIds.contentToString()} rEIDs ${reminderEventIds.contentToString()} nID $notificationId @ $remindInstant"
     }
 
     companion object {

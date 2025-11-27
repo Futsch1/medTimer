@@ -14,6 +14,10 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
         builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
     }
 
+    override fun toString(): String {
+        return "ProcessedNotificationData: $reminderEventIds"
+    }
+
     companion object {
         fun fromReminderNotificationData(reminderNotificationData: ReminderNotificationData): ProcessedNotificationData {
             return ProcessedNotificationData(reminderNotificationData.reminderEventIds.toList())

@@ -22,14 +22,20 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
 
         val notifyTaken = ReminderProcessor.getTakenActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
-            context, reminderNotification.notificationId, notifyTaken, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context,
+            reminderNotification.reminderNotificationData.notificationId,
+            notifyTaken,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
         val notifySkipped = ReminderProcessor.getSkippedActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
-            context, reminderNotification.notificationId, notifySkipped, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context,
+            reminderNotification.reminderNotificationData.notificationId,
+            notifySkipped,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
@@ -41,7 +47,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
                 context, reminderNotification.reminderNotificationData
             )
             return PendingIntent.getActivity(
-                context, reminderNotification.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
+                context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
         }
 
@@ -50,7 +56,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
                 context, reminderNotification.reminderNotificationData, snoozeTime
             )
             return PendingIntent.getBroadcast(
-                context, reminderNotification.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
 
