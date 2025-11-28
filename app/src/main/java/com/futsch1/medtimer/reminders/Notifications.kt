@@ -40,7 +40,7 @@ class Notifications(private val context: Context) {
         }
 
 
-    private fun notify(notificationId: Int, notification: android.app.Notification?) {
+    private fun notify(notificationId: Int, notification: android.app.Notification) {
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         val soundManager = NotificationSoundManager(context)
 

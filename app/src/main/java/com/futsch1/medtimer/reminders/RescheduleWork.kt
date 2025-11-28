@@ -40,7 +40,7 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
         val reminderScheduler = this.reminderScheduler
         val fullMedicines = medicineRepository.medicines
         val scheduledReminders: List<ScheduledReminder> = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(33))
-        if (!scheduledReminders.isEmpty()) {
+        if (scheduledReminders.isNotEmpty()) {
             val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, true)
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(if (combinedReminders) scheduledReminders else listOf(scheduledReminders[0]))
