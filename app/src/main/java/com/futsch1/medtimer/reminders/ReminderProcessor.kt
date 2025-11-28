@@ -19,28 +19,30 @@ import java.time.temporal.ChronoUnit
 class ReminderProcessor : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)
-        if (ActivityCodes.DISMISSED_ACTION == intent.action) {
-            workManager.enqueue(buildActionWorkRequest(intent, SkippedWorkProcess::class.java))
-        } else if (ActivityCodes.TAKEN_ACTION == intent.action) {
-            workManager.enqueue(buildActionWorkRequest(intent, TakenWorkProcess::class.java))
-        } else if (ActivityCodes.SNOOZE_ACTION == intent.action) {
-            val builder = Data.Builder()
-            ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
-            builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
-            val snoozeWork: WorkRequest =
-                OneTimeWorkRequest.Builder(SnoozeWork::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            workManager.enqueue(snoozeWork)
-        } else {
-            val builder = Data.Builder()
-            ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
+        when (intent.action) {
+            ActivityCodes.DISMISSED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorkProcess::class.java))
+            ActivityCodes.TAKEN_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorkProcess::class.java))
+            ActivityCodes.SNOOZE_ACTION -> {
+                val builder = Data.Builder()
+                ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
+                builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
+                val snoozeWork: WorkRequest =
+                    OneTimeWorkRequest.Builder(SnoozeWork::class.java)
+                        .setInputData(builder.build())
+                        .build()
+                workManager.enqueue(snoozeWork)
+            }
 
-            val reminderWork: WorkRequest =
-                OneTimeWorkRequest.Builder(ReminderWork::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            workManager.enqueue(reminderWork)
+            ActivityCodes.REMINDER_ACTION -> {
+                val builder = Data.Builder()
+                ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
+
+                val reminderWork: WorkRequest =
+                    OneTimeWorkRequest.Builder(ReminderWork::class.java)
+                        .setInputData(builder.build())
+                        .build()
+                workManager.enqueue(reminderWork)
+            }
         }
     }
 
