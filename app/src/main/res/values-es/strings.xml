@@ -251,4 +251,4 @@
     <string name="system_locale_summary">Si se desactiva, la aplicación utiliza la configuración que coincide con el idioma establecido para la aplicación.</string>
     <string name="raised">Activada</string>
     <string name="scheduled">Programada</string>
-<string name="no_calendar_app">No se ha encontrado ninguna aplicación de calendario</string></resources>
+<string name="no_calendar_app">No se ha encontrado ninguna aplicación de calendario</string><string name="combine_notifications">Combinar notificaciones simultáneas</string><string name="combine_notifications_summary">Si se establece, las notificaciones con la misma hora se combinan en una sola notificación</string></resources>

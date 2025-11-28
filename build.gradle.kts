@@ -2,7 +2,7 @@
 plugins {
     //noinspection AndroidGradlePluginVersion
     id("com.android.application") version "8.13.1" apply false
-    id("androidx.room") version "2.8.3" apply false
+    id("androidx.room") version "2.8.4" apply false
     id("androidx.navigation.safeargs") version "2.9.6" apply false
     id("org.jetbrains.kotlin.android") version "2.2.21" apply false
 }

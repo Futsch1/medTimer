@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.ReminderWork
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,18 +56,16 @@ class ScheduledReminderActions(
                 )
             }
 
-            if (reminderEvent != null) {
-                val reminderEventId = medicineRepository.insertReminderEvent(reminderEvent)
-                // Switch back to the Main dispatcher to send broadcast
-                withContext(mainCoroutineDispatcher) {
-                    view.context.sendBroadcast(
-                        if (taken)
-                            ReminderProcessor.getTakenActionIntent(view.context, reminderEventId.toInt())
-                        else
-                            ReminderProcessor.getSkippedActionIntent(view.context, reminderEventId.toInt()),
-                        "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
-                    )
-                }
+            val reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
+            // Switch back to the Main dispatcher to send broadcast
+            withContext(mainCoroutineDispatcher) {
+                view.context.sendBroadcast(
+                    if (taken)
+                        ReminderProcessor.getTakenActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId)))
+                    else
+                        ReminderProcessor.getSkippedActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId))),
+                    "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
+                )
             }
         }
     }

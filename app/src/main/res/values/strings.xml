@@ -250,4 +250,6 @@
     <string name="raised">Raised</string>
     <string name="scheduled">Scheduled</string>
     <string name="no_calendar_app">No calendar app found</string>
+    <string name="combine_notifications">Combine same time notifications</string>
+    <string name="combine_notifications_summary">If set, notifications with the same time are combined into a single notification</string>
 </resources>

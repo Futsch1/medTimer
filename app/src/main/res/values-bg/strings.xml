@@ -246,4 +246,4 @@
     <string name="system_locale_summary">При изключено състояние приложението използва настройката, съответстваща на езика, зададен за приложението.</string>
     <string name="raised">задействана</string>
     <string name="scheduled">планирана</string>
-<string name="no_calendar_app">Не е намерено приложение за календар</string></resources>
+<string name="no_calendar_app">Не е намерено приложение за календар</string><string name="combine_notifications">Комбинирайте същите уведомления за време</string><string name="combine_notifications_summary">Ако е зададено, известията с един и същи час се обединяват в едно известие</string></resources>

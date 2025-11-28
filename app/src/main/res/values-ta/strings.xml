@@ -247,4 +247,6 @@
     <string name="raised"> எழுப்பப்பட்டது</string>
     <string name="scheduled">திட்டமிடப்பட்டது</string>
     <string name="no_calendar_app">கேலெண்டர் செயலி எதுவும் இல்லை</string>
+    <string name="combine_notifications">அதே நேர அறிவிப்புகளை இணை</string>
+    <string name="combine_notifications_summary">அமைத்தால், ஒரே நேரத்தைக் கொண்ட அறிவிப்புகள் ஒரே அறிவிப்பாக இணைக்கப்படும்</string>
 </resources>

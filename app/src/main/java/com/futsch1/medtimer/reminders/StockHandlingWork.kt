@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -36,7 +37,7 @@ class StockHandlingWork(val context: Context, workerParameters: WorkerParameters
             }
 
             checkForThreshold(medicine, amount)
-            Log.d("Stock handling", "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
+            Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
         }
     }
 

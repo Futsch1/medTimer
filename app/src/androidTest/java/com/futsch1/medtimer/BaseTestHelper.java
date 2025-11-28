@@ -75,7 +75,7 @@ public abstract class BaseTestHelper {
         baristaRule.launchActivity();
 
         if (!LocalDate.now().isEqual(LocalDate.of(2025, 8, 1))) {
-            failureHandler.handle(new AssertionError("Wrong date - tests require the date/time to be set to 01.08.2025, 16:00\nUse 'adb su 0 toybox date' to set it."), withId(0));
+            failureHandler.handle(new AssertionError("Wrong date - tests require the date/time to be set to 01.08.2025, 16:00\nUse 'adb su 0 toybox date 0801160025' to set it."), withId(0));
         }
     }
 

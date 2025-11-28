@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Indstillinger</string>
     <string name="tab_overview">Oversigt</string>
@@ -247,4 +247,4 @@
     <string name="raised">Udløst</string>
     <string name="scheduled">Planlagt</string>
     <string name="no_calendar_app">Ingen kalender-app fundet</string>
-</resources>
+<string name="combine_notifications">Kombiner meddelelser på samme tid</string><string name="combine_notifications_summary">Hvis indstillet, kombineres notifikationer med samme tidspunkt til en enkelt notifikation</string></resources>

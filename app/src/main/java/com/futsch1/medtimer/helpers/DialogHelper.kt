@@ -15,6 +15,7 @@ import kotlin.math.roundToInt
 
 class DialogHelper(var context: Context) {
     var title: Int? = null
+    var titleString: String? = null
     var hint: Int? = null
     private var initialText: String? = null
     private var textSink: TextSink? = null
@@ -30,6 +31,7 @@ class DialogHelper(var context: Context) {
     }
 
     fun title(title: Int) = apply { this.title = title }
+    fun title(title: String) = apply { this.titleString = title }
     fun hint(hint: Int) = apply { this.hint = hint }
     fun initialText(initialText: String?) = apply { this.initialText = initialText }
     fun textSink(textSink: TextSink) = apply { this.textSink = textSink }
@@ -54,6 +56,7 @@ class DialogHelper(var context: Context) {
         val builder = AlertDialog.Builder(context)
         builder.setView(textInputLayout)
         title?.let(builder::setTitle)
+        titleString?.let(builder::setTitle)
         builder.setPositiveButton(com.futsch1.medtimer.R.string.ok) { _: DialogInterface?, _: Int ->
             val e = editText.text
             if (e != null) {

@@ -1,9 +1,5 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_DATE;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_TIME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,6 +36,7 @@ import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.reminders.NotificationSoundManager;
 import com.futsch1.medtimer.reminders.ReminderWork;
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +47,7 @@ import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.robolectric.annotation.Config;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -80,9 +78,10 @@ public class ReminderWorkUnitTest {
     public void setUp() {
         workerParams = mock(WorkerParameters.class);
 
-        Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID).
-                putLong(EXTRA_REMINDER_DATE, 1).build();
-        when(workerParams.getInputData()).thenReturn(inputData);
+        ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, Instant.now(), -1);
+        Data.Builder inputData = new Data.Builder();
+        data.toBuilder(inputData);
+        when(workerParams.getInputData()).thenReturn(inputData.build());
 
         mockApplication = mock(Application.class);
 
@@ -167,7 +166,7 @@ public class ReminderWorkUnitTest {
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
                  when(mock.build()).thenReturn(new Notification());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(null));
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
@@ -219,7 +218,7 @@ public class ReminderWorkUnitTest {
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
                  when(mock.build()).thenReturn(new Notification());
              });
-             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(null));
+             MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class);
              MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
@@ -228,10 +227,12 @@ public class ReminderWorkUnitTest {
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
             mockedPreferencesManager.when(() -> PreferenceManager.getDefaultSharedPreferences(mockApplication)).thenReturn(mockSharedPreferences);
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
+            LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
 
-            Data inputData = new Data.Builder().putInt(EXTRA_REMINDER_ID, REMINDER_ID).putInt(EXTRA_REMINDER_EVENT_ID, 0).
-                    putLong(EXTRA_REMINDER_DATE, 1).putInt(EXTRA_REMINDER_TIME, Reminder.DEFAULT_TIME * 60).build();
-            when(workerParams.getInputData()).thenReturn(inputData);
+            ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{REMINDER_ID}, new int[]{REMINDER_EVENT_ID}, reminderEventTime.toInstant(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)), -1);
+            Data.Builder inputData = new Data.Builder();
+            data.toBuilder(inputData);
+            when(workerParams.getInputData()).thenReturn(inputData.build());
 
             // Expected to pass
             ListenableWorker.Result result = reminderWork.doWork();
@@ -244,7 +245,6 @@ public class ReminderWorkUnitTest {
             assertEquals(NOTIFICATION_ID, captor.getValue().notificationId);
             assertEquals(REMINDER_ID, captor.getValue().reminderId);
             assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
-            LocalDateTime reminderEventTime = LocalDateTime.of(LocalDate.ofEpochDay(1), LocalTime.of(Reminder.DEFAULT_TIME / 60, Reminder.DEFAULT_TIME % 60));
             assertEquals(reminderEventTime
                     .toEpochSecond(ZoneId.systemDefault().getRules().getOffset(reminderEventTime)), captor.getValue().remindedTimestamp);
             verify(mockNotificationManager, times(1)).notify(eq(NOTIFICATION_ID), any());

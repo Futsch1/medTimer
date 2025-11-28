@@ -2,15 +2,14 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 class SimpleReminderNotificationFactory(
     context: Context,
-    notificationId: Int,
-    reminderNotificationData: ReminderNotificationData
+    reminderNotification: ReminderNotification
 ) : ReminderNotificationFactory(
     context,
-    notificationId,
-    reminderNotificationData
+    reminderNotification
 ) {
     override fun build() {
         val notificationMessage = notificationStrings.notificationString

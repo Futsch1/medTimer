@@ -19,6 +19,7 @@
         android:defaultValue="false"
         android:summary="@string/override_dnd_summary"
         android:title="@string/override_dnd"
+        app:singleLineTitle="false"
         app:key="override_dnd" />
     <Preference
         android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
         android:entryValues="@array/values_0_to_2"
         android:key="dismiss_notification_action"
         android:title="@string/dismiss_notification_action"
+        app:singleLineTitle="false"
         app:useSimpleSummaryProvider="true" />
     <ListPreference
         android:defaultValue="15"
@@ -46,6 +48,7 @@
         android:defaultValue="false"
         android:summary="@string/sticky_on_lockscreen_summary"
         android:title="@string/sticky_on_lockscreen"
+        app:singleLineTitle="false"
         app:key="sticky_on_lockscreen" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"

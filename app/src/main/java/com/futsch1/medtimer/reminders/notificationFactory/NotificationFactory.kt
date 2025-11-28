@@ -20,25 +20,50 @@ import kotlin.time.Instant
 abstract class NotificationFactory(
     val context: Context,
     val notificationId: Int,
-    medicine: Medicine
+    medicines: List<Medicine?>
 ) {
     val builder: NotificationCompat.Builder
 
     init {
-        val importance =
-            if (medicine.notificationImportance == Importance.HIGH.value) Importance.HIGH else Importance.DEFAULT
+        val importance = getHighestImportance(medicines)
         val notificationChannelId = getNotificationChannel(context, importance).id
         builder = NotificationCompat.Builder(context, notificationChannelId)
 
-        val color = if (medicine.useColor) Color.valueOf(medicine.color) else null
-        if (medicine.iconId != 0) {
+        val color = getColor(medicines)
+        val iconId = getIconId(medicines)
+
+        if (iconId != 0) {
             val icons = MedicineIcons(context)
-            builder.setLargeIcon(icons.getIconBitmap(medicine.iconId))
+            builder.setLargeIcon(icons.getIconBitmap(iconId))
         }
         if (color != null) {
             builder.setColor(color.toArgb()).setColorized(true)
         }
         builder.setSilent(shouldBeSilent())
+    }
+
+    private fun getIconId(medicines: List<Medicine?>): Int {
+        for (medicine in medicines) {
+            if (medicine?.iconId != 0)
+                return medicine!!.iconId
+        }
+        return 0
+    }
+
+    private fun getHighestImportance(medicines: List<Medicine?>): Importance {
+        for (medicine in medicines) {
+            if (medicine?.notificationImportance == Importance.HIGH.value)
+                return Importance.HIGH
+        }
+        return Importance.DEFAULT
+    }
+
+    private fun getColor(medicines: List<Medicine?>): Color? {
+        for (medicine in medicines) {
+            if (medicine?.useColor == true)
+                return Color.valueOf(medicine.color)
+        }
+        return null
     }
 
     fun getStartAppIntent(): PendingIntent? {

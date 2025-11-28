@@ -7,8 +7,8 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 
-public class SkippedWork extends NotificationWork {
-    public SkippedWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+public class SkippedWorkProcess extends ProcessNotificationWork {
+    public SkippedWorkProcess(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams, ReminderEvent.ReminderStatus.SKIPPED);
     }
 }

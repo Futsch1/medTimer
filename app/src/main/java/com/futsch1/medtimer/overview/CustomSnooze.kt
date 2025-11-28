@@ -3,21 +3,20 @@ package com.futsch1.medtimer.overview
 import android.content.Intent
 import android.text.InputType
 import androidx.appcompat.app.AppCompatActivity
-import com.futsch1.medtimer.ActivityCodes.EXTRA_NOTIFICATION_ID
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_ID
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
-import com.futsch1.medtimer.reminders.NotificationAction
+import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
-    val reminderId: Int = intent.getIntExtra(EXTRA_REMINDER_ID, -1)
-    val reminderEventId: Int = intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, -1)
-    val notificationId: Int = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+    val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
+    if (!reminderNotificationData.valid) {
+        return
+    }
     // Cancel a potential repeat alarm
-    NotificationAction.cancelPendingAlarms(activity, reminderEventId)
+    NotificationProcessor.cancelPendingAlarms(activity, reminderNotificationData.reminderEventIds[0])
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)
@@ -29,9 +28,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
             if (snoozeTimeInt != null) {
                 val snooze = ReminderProcessor.getSnoozeIntent(
                     activity,
-                    reminderId,
-                    reminderEventId,
-                    notificationId,
+                    reminderNotificationData,
                     snoozeTimeInt
                 )
                 activity.sendBroadcast(snooze, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")

@@ -237,8 +237,6 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder("3", LocalTime.of(22, 0))
         AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
-        val notificationTimeString =
-            TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 22 * 60L)
 
         clickOn(R.id.openStockTracking)
         writeTo(R.id.amountLeft, "10")
@@ -248,7 +246,7 @@ class MedicineStockTest : BaseTestHelper() {
         sleep(2_000)
         device.openNotification()
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.all_taken, notificationTimeString)))
+        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
         device.pressBack()
         sleep(1_000)
 

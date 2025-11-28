@@ -246,4 +246,4 @@
     <string name="system_locale_summary">Όταν είναι απενεργοποιημένη, η εφαρμογή χρησιμοποιεί τη ρύθμιση που αντιστοιχεί στη γλώσσα που έχει οριστεί για την εφαρμογή.</string>
     <string name="raised">Ενεργοποιήθηκε</string>
     <string name="scheduled">Προγραμματισμένη</string>
-<string name="no_calendar_app">Δεν βρέθηκε εφαρμογή ημερολογίου</string></resources>
+<string name="no_calendar_app">Δεν βρέθηκε εφαρμογή ημερολογίου</string><string name="combine_notifications">Συνδυάστε την ίδια στιγμή κοινοποιήσεις</string><string name="combine_notifications_summary">Εάν έχει οριστεί, οι ειδοποιήσεις με την ίδια ώρα συνδυάζονται σε μια ενιαία ειδοποίηση</string></resources>

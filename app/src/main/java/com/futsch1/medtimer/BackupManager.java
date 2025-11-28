@@ -134,7 +134,7 @@ public class BackupManager {
         progressDialogFragment.show(fragmentManager, "restore");
         boolean restoreSuccessful = false;
         if (json != null) {
-            Log.d("BackupManager", "Starting backup restore: " + data);
+            Log.d(LogTags.BACKUP, "Starting backup restore: " + data);
             restoreSuccessful = restoreCombinedBackup(json);
         }
 
@@ -142,7 +142,7 @@ public class BackupManager {
             // Try legacy backup formats
             restoreSuccessful = restoreBackup(json, new JSONMedicineBackup()) || restoreBackup(json, new JSONReminderEventBackup());
         }
-        Log.d("BackupManager", "Backup restore finished");
+        Log.d(LogTags.BACKUP, "Backup restore finished");
         progressDialogFragment.dismiss();
 
         new AlertDialog.Builder(context)

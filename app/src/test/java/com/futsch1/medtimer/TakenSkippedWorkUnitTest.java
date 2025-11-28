@@ -2,7 +2,6 @@ package com.futsch1.medtimer;
 
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,8 +28,9 @@ import androidx.work.WorkerParameters;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.SkippedWork;
-import com.futsch1.medtimer.reminders.TakenWork;
+import com.futsch1.medtimer.reminders.SkippedWorkProcess;
+import com.futsch1.medtimer.reminders.TakenWorkProcess;
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +42,7 @@ import org.mockito.MockedStatic;
 import org.robolectric.annotation.Config;
 
 import java.time.Instant;
+import java.util.List;
 
 import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 
@@ -71,11 +72,11 @@ public class TakenSkippedWorkUnitTest {
     @Test
     public void testDoWorkTaken() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
-                .build();
-        when(workerParams.getInputData()).thenReturn(inputData);
-        TakenWork takenWork = new TakenWork(mockApplication, workerParams);
+        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
+        Data.Builder builder = new Data.Builder();
+        processedNotificationData.toBuilder(builder);
+        when(workerParams.getInputData()).thenReturn(builder.build());
+        TakenWorkProcess takenWork = new TakenWorkProcess(mockApplication, workerParams);
 
         testWork(takenWork, ReminderEvent.ReminderStatus.TAKEN);
     }
@@ -128,11 +129,11 @@ public class TakenSkippedWorkUnitTest {
     @Test
     public void testDoWorkSkipped() {
         WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data inputData = new Data.Builder()
-                .putInt(EXTRA_REMINDER_EVENT_ID, REMINDER_EVENT_ID)
-                .build();
-        when(workerParams.getInputData()).thenReturn(inputData);
-        SkippedWork skippedWork = new SkippedWork(mockApplication, workerParams);
+        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
+        Data.Builder builder = new Data.Builder();
+        processedNotificationData.toBuilder(builder);
+        when(workerParams.getInputData()).thenReturn(builder.build());
+        SkippedWorkProcess skippedWork = new SkippedWorkProcess(mockApplication, workerParams);
 
         testWork(skippedWork, ReminderEvent.ReminderStatus.SKIPPED);
     }
