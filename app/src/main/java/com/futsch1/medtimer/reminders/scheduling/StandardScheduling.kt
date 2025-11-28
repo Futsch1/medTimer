@@ -76,7 +76,7 @@ class StandardScheduling(
         val cycleLength = reminder.consecutiveDays + reminder.pauseDays
         for (x in possibleDays.indices) {
             possibleDays[x] =
-                abs((dayInCycle % cycleLength).toDouble()) < reminder.consecutiveDays && dayInCycle + x >= 0
+                abs((dayInCycle % cycleLength).toDouble()) < reminder.consecutiveDays && dayInCycle >= 0
             dayInCycle++
         }
         // Only schedule today if it's not already raised
