@@ -296,6 +296,7 @@ class ReminderSchedulerUnitTest {
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 3);
+        // Day 4 cycle start day means 5.1.
         reminder.cycleStartDay = 4;
         medicineWithReminders.reminders.add(reminder);
 
@@ -323,6 +324,37 @@ class ReminderSchedulerUnitTest {
 
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         assertReminded(scheduledReminders, on(11, 480), medicineWithReminders.medicine, reminder);
+    }
+
+    @Test
+    void testScheduleLongCycleInFuture() {
+        ReminderScheduler scheduler = getScheduler();
+
+        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
+        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 0);
+        reminder.consecutiveDays = 90;
+        reminder.pauseDays = 20;
+
+        reminder.cycleStartDay = 4;
+        medicineWithReminders.reminders.add(reminder);
+
+        List<FullMedicine> medicineList = new ArrayList<>();
+        medicineList.add(medicineWithReminders);
+
+        List<ReminderEvent> reminderEventList = new ArrayList<>();
+
+        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+
+        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(5));
+
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        assertReminded(scheduledReminders, on(6, 480), medicineWithReminders.medicine, reminder);
     }
 
 
