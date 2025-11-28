@@ -26,7 +26,7 @@ class Notifications(private val context: Context) {
         )
 
         notify(notificationId, factory.create())
-        Log.d(LogTags.REMINDER, String.format("Show notification nID %d: ", notificationId, reminderNotification))
+        Log.d(LogTags.REMINDER, String.format("Show notification nID %d: %s", notificationId, reminderNotification))
 
         return notificationId
     }
@@ -56,6 +56,6 @@ class Notifications(private val context: Context) {
         val factory = OutOfStockNotificationFactory(context, notificationId, medicine)
 
         notify(notificationId, factory.create())
-        Log.d(LogTags.STOCK_HANDLING, String.format("Show out of stock notification nID %d", notificationId))
+        Log.d(LogTags.STOCK_HANDLING, String.format("Show out of stock notification nID %d for mID", notificationId, medicine.medicineId))
     }
 }

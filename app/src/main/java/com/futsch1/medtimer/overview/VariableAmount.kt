@@ -3,8 +3,7 @@ package com.futsch1.medtimer.overview
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT
-import com.futsch1.medtimer.ActivityCodes.EXTRA_REMINDER_EVENT_ID
+import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -20,11 +19,12 @@ fun variableAmountDialog(
     intent: Intent,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
-    val reminderEventId = intent.getIntExtra(EXTRA_REMINDER_EVENT_ID, -1)
-    val amount = intent.getStringExtra(EXTRA_AMOUNT)
+    val reminderEventId = intent.getIntExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, -1)
+    val amount = intent.getStringExtra(ActivityCodes.EXTRA_AMOUNT)
+    val name = intent.getStringExtra(ActivityCodes.EXTRA_MEDICINE_NAME)!!
     if (reminderEventId != -1) {
         DialogHelper(activity)
-            .title(R.string.amount)
+            .title(name)
             .hint(R.string.dosage)
             .initialText(amount)
             .textSink { amountLocal: String? ->

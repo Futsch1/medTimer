@@ -1,84 +1,87 @@
-package com.futsch1.medtimer.reminders;
+package com.futsch1.medtimer.reminders
 
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.util.Log;
+import android.app.AlarmManager
+import android.app.Application
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.util.Log
+import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.getVariableAmountActionIntent
+import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
+import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestStockHandling
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import java.time.Instant
 
-import com.futsch1.medtimer.LogTags;
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData;
+object NotificationProcessor {
+    @JvmStatic
+    fun processNotification(context: Context, processedNotificationData: ProcessedNotificationData, status: ReminderStatus?) {
+        val medicineRepository = MedicineRepository(context as Application?)
 
-import java.time.Instant;
-
-public class NotificationProcessor {
-    private NotificationProcessor() {
-        // Intentionally empty
-    }
-
-    static void processNotification(Context context, ProcessedNotificationData processedNotificationData, ReminderEvent.ReminderStatus status) {
-        MedicineRepository medicineRepository = new MedicineRepository((Application) context);
-
-        for (int reminderEventId : processedNotificationData.getReminderEventIds()) {
-            ReminderEvent reminderEvent = medicineRepository.getReminderEvent(reminderEventId);
+        for (reminderEventId in processedNotificationData.reminderEventIds) {
+            val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
 
             if (reminderEvent != null) {
-                if (reminderEvent.askForAmount && status == ReminderEvent.ReminderStatus.TAKEN) {
-                    context.startActivity(ReminderProcessor.getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount));
-                    cancelNotification(context, reminderEvent.notificationId);
+                if (reminderEvent.askForAmount && status == ReminderStatus.TAKEN) {
+                    val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
+                    val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
+                    Log.d(LogTags.REMINDER, String.format("Ask for amount for reminder event reID %d", reminderEventId))
+                    context.startActivity(getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount, medicine.medicine.name))
+                    cancelNotification(context, reminderEvent.notificationId)
                 } else {
-                    processReminderEvent(context, status, reminderEvent, medicineRepository);
+                    processReminderEvent(context, status, reminderEvent, medicineRepository)
                 }
             } else {
-                Log.e(LogTags.REMINDER, String.format("Could not find reminder event reID %d in database", reminderEventId));
+                Log.e(LogTags.REMINDER, String.format("Could not find reminder event reID %d in database", reminderEventId))
             }
         }
     }
 
-    public static void cancelNotification(Context context, int notificationId) {
+    fun cancelNotification(context: Context, notificationId: Int) {
         if (notificationId != 0) {
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId));
-            notificationManager.cancel(notificationId);
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId))
+            notificationManager.cancel(notificationId)
         }
     }
 
-    public static void processReminderEvent(Context context, ReminderEvent.ReminderStatus status, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
-        cancelNotification(context, reminderEvent.notificationId);
-        cancelPendingAlarms(context, reminderEvent.reminderEventId);
+    fun processReminderEvent(context: Context, status: ReminderStatus?, reminderEvent: ReminderEvent, medicineRepository: MedicineRepository) {
+        cancelNotification(context, reminderEvent.notificationId)
+        cancelPendingAlarms(context, reminderEvent.reminderEventId)
 
-        reminderEvent.status = status;
-        doStockHandling(context, reminderEvent, medicineRepository);
-        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
+        reminderEvent.status = status
+        doStockHandling(context, reminderEvent, medicineRepository)
+        reminderEvent.processedTimestamp = Instant.now().epochSecond
 
-        medicineRepository.updateReminderEvent(reminderEvent);
-        Log.i(LogTags.REMINDER, String.format("%s reminder reID %d for %s",
-                status == ReminderEvent.ReminderStatus.TAKEN ? "Taken" : "Dismissed",
+        medicineRepository.updateReminderEvent(reminderEvent)
+        Log.i(
+            LogTags.REMINDER, String.format(
+                "%s reminder reID %d for %s",
+                if (status == ReminderStatus.TAKEN) "Taken" else "Dismissed",
                 reminderEvent.reminderEventId,
-                reminderEvent.medicineName));
+                reminderEvent.medicineName
+            )
+        )
 
         // Reschedule since the trigger condition for a linked reminder might have changed
-        ReminderProcessor.requestReschedule(context);
+        requestReschedule(context)
     }
 
-    public static void cancelPendingAlarms(Context context, int reminderEventId) {
-        PendingIntent snoozePendingIntent = new PendingIntentBuilder(context).
-                setReminderEventId(reminderEventId).
-                build();
-        Log.d(LogTags.REMINDER, String.format("Cancel all pending alarms for reID %d", reminderEventId));
-        context.getSystemService(AlarmManager.class).cancel(snoozePendingIntent);
+    fun cancelPendingAlarms(context: Context, reminderEventId: Int) {
+        val snoozePendingIntent: PendingIntent = PendingIntentBuilder(context).setReminderEventId(reminderEventId).build()
+        Log.d(LogTags.REMINDER, String.format("Cancel all pending alarms for reID %d", reminderEventId))
+        context.getSystemService(AlarmManager::class.java).cancel(snoozePendingIntent)
     }
 
-    private static void doStockHandling(Context context, ReminderEvent reminderEvent, MedicineRepository medicineRepository) {
-        if (!reminderEvent.stockHandled && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
-            reminderEvent.stockHandled = true;
-            Reminder reminder = medicineRepository.getReminder(reminderEvent.reminderId);
+    private fun doStockHandling(context: Context?, reminderEvent: ReminderEvent, medicineRepository: MedicineRepository) {
+        if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN) {
+            reminderEvent.stockHandled = true
+            val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
             if (reminder != null) {
-                ReminderProcessor.requestStockHandling(context, reminder.amount, reminder.medicineRelId);
+                requestStockHandling(context, reminder.amount, reminder.medicineRelId)
             }
         }
     }

@@ -149,12 +149,13 @@ class ReminderProcessor : BroadcastReceiver() {
         }
 
         @JvmStatic
-        fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?): Intent {
+        fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?, name: String): Intent {
             val actionIntent = Intent(context, MainActivity::class.java)
             actionIntent.setAction("VARIABLE_AMOUNT")
             actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, reminderEventId)
             actionIntent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
+            actionIntent.putExtra(ActivityCodes.EXTRA_MEDICINE_NAME, name)
             return actionIntent
         }
 

@@ -12,6 +12,7 @@ public class ActivityCodes {
     public static final String EXTRA_REMINDER_EVENT_ID_LIST = "com.futsch1.medTimer.REMINDER_EVENT_ID_LIST";
     public static final String EXTRA_REMINDER_ID_LIST = "com.futsch1.medTimer.REMINDER_ID_LIST";
     public static final String EXTRA_REMIND_INSTANT = "com.futsch1.medTimer.REMIND_INSTANT";
+    public static final String EXTRA_MEDICINE_NAME = "com.futsch1.medTimer.EXTRA_MEDICINE_NAME";
 
     public static final String REMINDER_ACTION = "com.futsch1.medTimer.REMINDER_ACTION";
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";
