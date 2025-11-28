@@ -95,7 +95,8 @@ class ReminderNotificationData(
             val firstTimestamp = reminders.first().timestamp
 
             for (reminder in reminders) {
-                if (reminder.timestamp == firstTimestamp) {
+                // Reminders shall be raised together if they are due in the same minute
+                if (reminder.timestamp.epochSecond / 60 == firstTimestamp.epochSecond / 60) {
                     reminderIds.add(reminder.reminder().reminderId)
                     reminderEventIds.add(0)
                 }
