@@ -68,10 +68,10 @@ class CalendarFragment : Fragment() {
         setupCalendarView(medicineCalenderArgs)
 
         calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
-        calendarEventsViewModel.getEventForDays(
+        calendarEventsViewModel.getEventForMonths(
             medicineCalenderArgs.medicineId,
-            medicineCalenderArgs.pastDays,
-            medicineCalenderArgs.futureDays
+            medicineCalenderArgs.pastMonths,
+            medicineCalenderArgs.futureMonths
         )
             .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
                 this.dayStrings = dayStrings
@@ -87,7 +87,7 @@ class CalendarFragment : Fragment() {
         val medicineCalenderArgs = if (arguments != null) {
             CalendarFragmentArgs.fromBundle(requireArguments())
         } else {
-            CalendarFragmentArgs.Builder(-1, 90, 0).build()
+            CalendarFragmentArgs.Builder(-1, 3, 0).build()
         }
         return medicineCalenderArgs
     }
@@ -96,8 +96,8 @@ class CalendarFragment : Fragment() {
         setupDayBinder()
         setupMonthBinder()
 
-        startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastDays / 30)
-        endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureDays / 30)
+        startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastMonths.toLong())
+        endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureMonths.toLong())
 
         calendarView.setup(
             startMonth!!,
