@@ -260,7 +260,7 @@ class EditMedicineFragment :
         return EditMedicineFragmentArgs.fromBundle(requireArguments()).medicineId
     }
 
-    override val iconDialogIconPack: IconPack?
+    override val iconDialogIconPack: IconPack
         get() = MedicineIcons(requireContext()).getIconPack()
 
     override fun onIconDialogCancelled() {
