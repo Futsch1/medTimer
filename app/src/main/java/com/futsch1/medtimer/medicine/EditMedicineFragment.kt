@@ -166,8 +166,8 @@ class EditMedicineFragment :
             val action =
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
                     getEntityId(),
-                    30,
-                    30
+                    1,
+                    9
                 )
             try {
                 navController.navigate(action)
@@ -227,7 +227,7 @@ class EditMedicineFragment :
         threadHandler.post {
             val reminder = this.medicineViewModel.medicineRepository.getReminder(itemId.toInt())
             if (reminder != null) {
-                LinkedReminderHandling(reminder, this.medicineViewModel.medicineRepository, this.lifecycleScope).deleteReminder(requireContext(), { Unit }, {
+                LinkedReminderHandling(reminder, this.medicineViewModel.medicineRepository, this.lifecycleScope).deleteReminder(requireContext(), { }, {
                     adapter!!.notifyItemChanged(adapterPosition)
                 })
             }
@@ -257,7 +257,7 @@ class EditMedicineFragment :
     }
 
     override fun getEntityId(): Int {
-        return EditMedicineFragmentArgs.fromBundle(requireArguments()).getMedicineId()
+        return EditMedicineFragmentArgs.fromBundle(requireArguments()).medicineId
     }
 
     override val iconDialogIconPack: IconPack?
