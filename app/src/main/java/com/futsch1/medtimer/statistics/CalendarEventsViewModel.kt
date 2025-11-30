@@ -38,13 +38,19 @@ class CalendarEventsViewModel(
     private val eventsByDay: MutableLiveData<Map<LocalDate, String>> = MutableLiveData()
     private var eventListByDay: MutableMap<LocalDate, MutableList<String>> = mutableMapOf()
 
-    fun getEventForDays(
-        medicineId: Int, pastDays: Long, futureDays: Long
+    fun getEventForMonths(
+        medicineId: Int, pastMonths: Int, futureMonths: Int
+
     ): LiveData<Map<LocalDate, String>> {
         eventListByDay.clear()
 
+        // Calculate days in the past and the future based on the current date
+        val currentDate = LocalDate.now()
+        val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong()).withDayOfMonth(1).toEpochDay()
+        val futureDays = (currentDate.plusMonths(futureMonths.toLong() + 1).withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
+
         viewModelScope.launch(dispatcher) {
-            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
+            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastMonths)
             allMedicines = medicineRepository.medicines
             if (medicineId > 0) {
                 medicine = medicineRepository.getOnlyMedicine(medicineId)

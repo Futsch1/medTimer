@@ -82,11 +82,11 @@
             android:name="medicineId"
             app:argType="integer" />
         <argument
-            android:name="pastDays"
-            app:argType="long" />
+            android:name="pastMonths"
+            app:argType="integer" />
         <argument
-            android:name="futureDays"
-            app:argType="long" />
+            android:name="futureMonths"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/medicineStockFragment"
