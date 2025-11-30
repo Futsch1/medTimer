@@ -15,11 +15,13 @@ import kotlin.math.abs
 class StandardScheduling(
     private val reminder: Reminder,
     reminderEventList: List<ReminderEvent>,
-    private val timeAccess: TimeAccess
+    timeAccess: TimeAccess
 ) : Scheduling {
     private val raisedToday: Boolean
     private val raisedTomorrow: Boolean
     private val possibleDays: BooleanArray
+    private val systemZone = timeAccess.systemZone()
+    private val localDate = timeAccess.localDate()
 
     init {
         this.raisedToday = isRaisedOn(filterEvents(reminderEventList), today())
@@ -38,12 +40,12 @@ class StandardScheduling(
     }
 
     private fun isOnDay(epochSeconds: Long, epochDay: Long): Boolean {
-        return TimeHelper.secondsSinceEpochToLocalDate(epochSeconds, timeAccess.systemZone())
+        return TimeHelper.secondsSinceEpochToLocalDate(epochSeconds, systemZone)
             .toEpochDay() == epochDay
     }
 
     private fun today(): Long {
-        return timeAccess.localDate().toEpochDay()
+        return localDate.toEpochDay()
     }
 
     private val nextScheduledDate: LocalDate?
@@ -63,7 +65,7 @@ class StandardScheduling(
 
     private fun localDateToReminderInstant(localDate: LocalDate): Instant {
         return localDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(
-            timeAccess.systemZone()
+            systemZone
         ).toInstant()
     }
 
@@ -92,7 +94,7 @@ class StandardScheduling(
     }
 
     private fun clearPossibleDaysByWeekday() {
-        var dayOfWeek = timeAccess.localDate().dayOfWeek
+        var dayOfWeek = localDate.dayOfWeek
         for (i in possibleDays.indices) {
             if (java.lang.Boolean.FALSE == reminder.days[dayOfWeek.value - 1]) {
                 possibleDays[i] = false
@@ -102,7 +104,7 @@ class StandardScheduling(
     }
 
     private fun clearPossibleDaysByActivePeriod() {
-        val today = timeAccess.localDate().toEpochDay()
+        val today = localDate.toEpochDay()
         for (i in possibleDays.indices) {
             if (reminder.periodStart != 0L && today + i < reminder.periodStart) {
                 possibleDays[i] = false
@@ -114,7 +116,7 @@ class StandardScheduling(
     }
 
     private fun clearPossibleDaysByActiveDayOfMonth() {
-        var startDate = timeAccess.localDate()
+        var startDate = localDate
         val bitSet = BitSet.valueOf(longArrayOf(reminder.activeDaysOfMonth.toLong()))
         for (i in possibleDays.indices) {
             possibleDays[i] = possibleDays[i] and bitSet[startDate.dayOfMonth - 1]
@@ -126,14 +128,14 @@ class StandardScheduling(
         get() {
             for (i in possibleDays.indices) {
                 if (possibleDays[i]) {
-                    return timeAccess.localDate().plusDays(i.toLong())
+                    return localDate.plusDays(i.toLong())
                 }
             }
             return null
         }
 
     private fun reminderBeforeCreation(): Boolean {
-        return reminder.createdTimestamp < localDateToReminderInstant(timeAccess.localDate()).epochSecond
+        return reminder.createdTimestamp < localDateToReminderInstant(localDate).epochSecond
     }
 
     private fun filterEvents(
