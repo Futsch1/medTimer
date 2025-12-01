@@ -6,8 +6,7 @@ O MedTimer é um aplicativo de lembrete de medicamentos de código aberto desenv
 
 Lembretes Flexíveis e Personalizados:
 
-- Gerencie medicamentos ilimitados com lembretes personalizáveis por medicamento (incluindo padrões simples
-  para lembretes diários).
+- Gerencie medicamentos ilimitados com lembretes personalizáveis por medicamento (incluindo padrões simples para lembretes diários).
 - Crie lembretes flexíveis com intervalos e dias específicos (por exemplo, para pílulas anticoncepcionais).
 - Modo Fim de Semana: Adie os lembretes para um horário definido em dias selecionados.
 - Adie as notificações para lembretes posteriores ou seja lembrado repetidamente.
