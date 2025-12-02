@@ -47,7 +47,8 @@ class CalendarEventsViewModel(
         // Calculate days in the past and the future based on the current date
         val currentDate = LocalDate.now()
         val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong()).withDayOfMonth(1).toEpochDay()
-        val futureDays = (currentDate.plusMonths(futureMonths.toLong() + 1).withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
+        val futureDays = if (futureMonths > 0) (currentDate.plusMonths(futureMonths.toLong() + 1).withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
+        else 0
 
         viewModelScope.launch(dispatcher) {
             reminderEvents = medicineRepository.getLastDaysReminderEvents(pastMonths)
