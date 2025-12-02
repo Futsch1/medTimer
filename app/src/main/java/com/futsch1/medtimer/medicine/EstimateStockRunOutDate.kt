@@ -13,7 +13,8 @@ fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: In
     if (currentAmount != null) {
         fullMedicine.medicine.amount = currentAmount
     }
-    val recentReminders = medicineViewModel.medicineRepository.getLastDaysReminderEvents(33).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+    val recentReminders =
+        medicineViewModel.medicineRepository.getReminderEventsForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
     val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, object : TimeAccess {
         override fun systemZone(): ZoneId {
             return ZoneId.systemDefault()

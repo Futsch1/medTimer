@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -81,6 +82,16 @@ public class MedicineRepository {
         return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
     }
 
+    public List<ReminderEvent> getReminderEventsForScheduling(List<FullMedicine> medicines) {
+        List<ReminderEvent> reminderEvents = new LinkedList<>();
+        for (FullMedicine medicine : medicines) {
+            for (Reminder reminder : medicine.reminders) {
+                reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2));
+            }
+        }
+        return reminderEvents;
+    }
+
     public ReminderEvent getLastReminderEvent(int reminderId) {
         return medicineDao.getLastReminderEvent(reminderId);
     }
@@ -117,10 +128,6 @@ public class MedicineRepository {
 
     public void deleteReminder(int reminderId) {
         MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(medicineDao.getReminder(reminderId)));
-    }
-
-    public List<Reminder> getSameTimeReminders(int reminderId) {
-        return medicineDao.getSameTimeReminders(reminderId);
     }
 
     public long insertReminderEvent(ReminderEvent reminderEvent) {
