@@ -2,6 +2,7 @@ package com.futsch1.medtimer.database;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import org.jetbrains.annotations.NotNull;
@@ -256,6 +257,11 @@ public class MedicineRepository {
         } catch (java.util.concurrent.ExecutionException | java.util.concurrent.TimeoutException e) {
             // Intentionally left blank
         }
+    }
+
+    public void insertReminderEvents(@NonNull List<@NotNull ReminderEvent> reminderEvents) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminderEvents(reminderEvents));
+
     }
 
     interface Insert<T> {

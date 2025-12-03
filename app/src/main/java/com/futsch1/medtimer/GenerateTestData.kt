@@ -2,9 +2,12 @@ package com.futsch1.medtimer
 
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import java.time.Instant
 import java.time.LocalDate
+import java.time.Period
+import java.util.LinkedList
 
 class GenerateTestData(private val viewModel: MedicineViewModel) {
     fun generateTestMedicine() {
@@ -48,6 +51,24 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                 val tagId = viewModel.medicineRepository.insertTag(Tag(tag))
                 viewModel.medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
             }
+            // Insert reminder events for every day back from today
+            val reminderEvents: MutableList<ReminderEvent> = LinkedList()
+            for (testReminder in testMedicine.reminders) {
+                val today = Instant.now()
+
+                for (i in 1..1000) {
+                    val reminderEvent = ReminderEvent()
+                    reminderEvent.reminderId = testReminder.id
+                    reminderEvent.remindedTimestamp = today.minus(Period.ofDays(i)).epochSecond
+                    reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
+                    reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+                    reminderEvent.medicineName = testMedicine.name
+                    reminderEvent.amount = testReminder.toReminder(0).amount
+                    reminderEvents.add(reminderEvent)
+                }
+            }
+
+            viewModel.medicineRepository.insertReminderEvents(reminderEvents)
         }
     }
 

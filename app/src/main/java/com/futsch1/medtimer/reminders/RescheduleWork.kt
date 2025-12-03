@@ -36,6 +36,7 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun doWork(): Result {
+        val startOfFunction = Instant.now()
         val medicineRepository = MedicineRepository(applicationContext as Application)
         val reminderScheduler = this.reminderScheduler
         val fullMedicines = medicineRepository.medicines
@@ -50,6 +51,7 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
             Log.d(LogTags.SCHEDULER, "No reminders scheduled")
             this.cancelNextReminder()
         }
+        Log.d(LogTags.SCHEDULER, "RescheduleWork finished in " + (Instant.now().toEpochMilli() - startOfFunction.toEpochMilli()) + "ms")
 
         return Result.success()
     }

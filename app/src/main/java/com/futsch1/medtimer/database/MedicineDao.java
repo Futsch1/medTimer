@@ -10,6 +10,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -145,4 +146,7 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId AND remindedTimestamp= :remindedTimestamp")
     @Nullable ReminderEvent getReminderEvent(int reminderId, long remindedTimestamp);
+
+    @Insert
+    void insertReminderEvents(List<@NotNull ReminderEvent> reminderEvents);
 }
