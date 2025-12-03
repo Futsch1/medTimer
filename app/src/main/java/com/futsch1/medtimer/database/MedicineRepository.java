@@ -86,7 +86,9 @@ public class MedicineRepository {
         List<ReminderEvent> reminderEvents = new LinkedList<>();
         for (FullMedicine medicine : medicines) {
             for (Reminder reminder : medicine.reminders) {
-                reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2));
+                if (reminder.active) {
+                    reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2));
+                }
             }
         }
         return reminderEvents;
