@@ -51,7 +51,7 @@ class CalendarEventsViewModel(
         else 0
 
         viewModelScope.launch(dispatcher) {
-            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastMonths)
+            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
             allMedicines = medicineRepository.medicines
             if (medicineId > 0) {
                 medicine = medicineRepository.getOnlyMedicine(medicineId)
