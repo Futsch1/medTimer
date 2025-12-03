@@ -2,6 +2,7 @@ package com.futsch1.medtimer.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -9,7 +10,7 @@ import com.google.gson.annotations.Expose;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
+@Entity(indices = {@Index(value = "reminderId"), @Index("remindedTimestamp")})
 public class ReminderEvent {
     @PrimaryKey(autoGenerate = true)
     public int reminderEventId;
