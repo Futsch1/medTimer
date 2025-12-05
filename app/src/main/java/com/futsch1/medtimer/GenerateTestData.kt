@@ -10,7 +10,7 @@ import java.time.Period
 import java.util.LinkedList
 
 class GenerateTestData(private val viewModel: MedicineViewModel) {
-    fun generateTestMedicine() {
+    fun generateTestMedicine(withEvents: Boolean) {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(
@@ -51,26 +51,28 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                 val tagId = viewModel.medicineRepository.insertTag(Tag(tag))
                 viewModel.medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
             }
-            // Insert reminder events for every day back from today
-            val reminderEvents: MutableList<ReminderEvent> = LinkedList()
-            for (testReminder in testMedicine.reminders) {
-                val today = Instant.now()
+            if (withEvents) {
+                // Insert reminder events for every day back from today
+                val reminderEvents: MutableList<ReminderEvent> = LinkedList()
+                for (testReminder in testMedicine.reminders) {
+                    val today = Instant.now()
 
-                for (i in 1..1000) {
-                    val reminderEvent = ReminderEvent()
-                    reminderEvent.reminderId = testReminder.id
-                    reminderEvent.remindedTimestamp = today.minus(Period.ofDays(i)).epochSecond
-                    reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-                    reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
-                    reminderEvent.medicineName = testMedicine.name
-                    reminderEvent.amount = testReminder.toReminder(0).amount
-                    reminderEvent.notes = ""
-                    reminderEvent.tags = testMedicine.tags.toList()
-                    reminderEvents.add(reminderEvent)
+                    for (i in 1..1000) {
+                        val reminderEvent = ReminderEvent()
+                        reminderEvent.reminderId = testReminder.id
+                        reminderEvent.remindedTimestamp = today.minus(Period.ofDays(i)).epochSecond
+                        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
+                        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+                        reminderEvent.medicineName = testMedicine.name
+                        reminderEvent.amount = testReminder.toReminder(0).amount
+                        reminderEvent.notes = ""
+                        reminderEvent.tags = testMedicine.tags.toList()
+                        reminderEvents.add(reminderEvent)
+                    }
                 }
-            }
 
-            viewModel.medicineRepository.insertReminderEvents(reminderEvents)
+                viewModel.medicineRepository.insertReminderEvents(reminderEvents)
+            }
         }
     }
 

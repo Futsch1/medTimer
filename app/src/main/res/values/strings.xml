@@ -41,6 +41,7 @@
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
     <string name="generate_test_data">Generate test data</string>
+    <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="cycle_consecutive_days">Active days</string>
     <string name="theme">Theme</string>

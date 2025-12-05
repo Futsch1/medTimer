@@ -178,22 +178,27 @@ public class OptionsMenu implements EntityEditOptionsMenu {
 
     void setupGenerateTestData() {
         MenuItem item = menu.findItem(R.id.generate_test_data);
+        MenuItem itemWithEvents = menu.findItem(R.id.generate_test_data_and_events);
         if (BuildConfig.DEBUG) {
+            itemWithEvents.setVisible(true);
             item.setVisible(true);
-            item.setOnMenuItemClickListener(menuItem -> {
+            MenuItem.OnMenuItemClickListener menuItemClickListener = menuItem -> {
                 idlingResource.setBusy();
                 final Handler handler = new Handler(backgroundThread.getLooper());
                 handler.post(() -> {
                     medicineViewModel.medicineRepository.deleteAll();
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel);
-                    generateTestData.generateTestMedicine();
+                    generateTestData.generateTestMedicine(menuItem == itemWithEvents);
                     ReminderProcessor.requestReschedule(context);
                     idlingResource.setIdle();
                 });
                 return true;
-            });
+            };
+            item.setOnMenuItemClickListener(menuItemClickListener);
+            itemWithEvents.setOnMenuItemClickListener(menuItemClickListener);
         } else {
             item.setVisible(false);
+            itemWithEvents.setVisible(false);
         }
     }
 
