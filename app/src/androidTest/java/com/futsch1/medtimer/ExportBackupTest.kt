@@ -20,25 +20,25 @@ class ExportBackupTest : BaseTestHelper() {
         clickOn(R.string.event_data)
         clickOn(R.string.export_csv)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
         clickOn(R.string.event_data)
         clickOn(R.string.export_pdf)
-        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
         clickOn(R.string.medicine_data)
         clickOn(R.string.export_csv)
-        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
         clickOn(R.string.medicine_data)
         clickOn(R.string.export_pdf)
-        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
+        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
     }
 

@@ -64,6 +64,8 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
                     reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
                     reminderEvent.medicineName = testMedicine.name
                     reminderEvent.amount = testReminder.toReminder(0).amount
+                    reminderEvent.notes = ""
+                    reminderEvent.tags = testMedicine.tags.toList()
                     reminderEvents.add(reminderEvent)
                 }
             }
