@@ -26,6 +26,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
@@ -35,7 +36,9 @@ import com.futsch1.medtimer.reminders.ReminderProcessor
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.LocalTime
 
 
 const val TEST_MED = "Test med"
@@ -180,7 +183,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -204,24 +207,46 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.MEDICINES)
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 120)
+        AndroidTestHelper.createReminder("First reminder", LocalTime.of(22, 0))
+        AndroidTestHelper.createReminder("Second reminder", LocalTime.of(22, 0))
         pressBack()
 
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+
         device.openNotification()
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        assertNotNull(notification)
+        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        assertNotNull(notification)
+        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
+        assertNotNull(notification)
+        device.pressBack()
+        navigateTo(MainMenu.OVERVIEW)
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+        navigateTo(MainMenu.ANALYSIS)
+
+        device.openNotification()
+        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        assertNull(notification)
+        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
         assertNotNull(notification)
         val text = notification.text
 
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
-        device.wait(Until.gone(By.text(text)), 2_000)
-
-        val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2000)
+        device.wait(Until.gone(By.text(text)), 120_000)
+        val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         assertNotNull(nextNotification)
+        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        assertNull(notification)
+        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
+        assertNotNull(notification)
+
         device.pressBack()
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun variableAmount() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
