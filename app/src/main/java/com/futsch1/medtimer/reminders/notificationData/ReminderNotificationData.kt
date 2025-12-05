@@ -29,6 +29,24 @@ class ReminderNotificationData(
         }
     }
 
+    fun removeReminderEventIds(reminderEventIds: List<Int>): ReminderNotificationData {
+        val newReminderEventIds = mutableListOf<Int>()
+        val newReminderIds = mutableListOf<Int>()
+        for (i in this.reminderEventIds.indices) {
+            if (!reminderEventIds.contains(this.reminderEventIds[i])) {
+                newReminderEventIds.add(this.reminderEventIds[i])
+                newReminderIds.add(reminderIds[i])
+            }
+        }
+
+        return ReminderNotificationData(
+            remindInstant,
+            newReminderIds.toIntArray(),
+            newReminderEventIds.toIntArray(),
+            notificationId
+        )
+    }
+
     fun getPendingIntent(context: Context): PendingIntent {
         val reminderIntent = ReminderProcessor.getReminderAction(context)
         toIntent(reminderIntent)
@@ -52,6 +70,13 @@ class ReminderNotificationData(
 
     override fun toString(): String {
         return "rIDs ${reminderIds.contentToString()} rEIDs ${reminderEventIds.contentToString()} nID $notificationId @ $remindInstant"
+    }
+
+    fun toBundle(bundle: Bundle) {
+        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds)
+        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
+        bundle.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
+        bundle.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
     }
 
     companion object {

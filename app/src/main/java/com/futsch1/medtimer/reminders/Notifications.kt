@@ -16,8 +16,11 @@ import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificatio
 class Notifications(private val context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
 
-    fun showNotification(reminderNotification: ReminderNotification): Int {
-        val notificationId = this.nextNotificationId
+    fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
+        var notificationId = notificationId
+        if (notificationId == -1) {
+            notificationId = this.nextNotificationId
+        }
         reminderNotification.reminderNotificationData.notificationId = notificationId
 
         val factory = getReminderNotificationFactory(

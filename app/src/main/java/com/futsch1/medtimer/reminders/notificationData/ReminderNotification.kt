@@ -17,9 +17,26 @@ import java.time.ZoneId
 
 class ReminderNotification(val reminderNotificationParts: List<ReminderNotificationPart>, val reminderNotificationData: ReminderNotificationData) {
     fun filterAutomaticallyTaken(): ReminderNotification {
+        return filter { !it.reminder.automaticallyTaken }
+    }
+
+    fun filterAlreadyProcessed(): ReminderNotification {
+        return filter { it.reminderEvent.status == ReminderEvent.ReminderStatus.RAISED }
+    }
+
+    private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {
+        val reminderNotificationParts = mutableListOf<ReminderNotificationPart>()
+        val removedReminderEventIds = mutableListOf<Int>()
+        for (part in this.reminderNotificationParts) {
+            if (predicate(part)) {
+                reminderNotificationParts.add(part)
+            } else {
+                removedReminderEventIds.add(part.reminderEvent.reminderEventId)
+            }
+        }
         return ReminderNotification(
-            reminderNotificationParts.stream().filter { !it.reminder.automaticallyTaken }.toList(),
-            reminderNotificationData
+            reminderNotificationParts,
+            reminderNotificationData.removeReminderEventIds(removedReminderEventIds)
         )
     }
 

@@ -86,6 +86,7 @@ abstract class ReminderNotificationFactory(
 
     override fun create(): android.app.Notification {
         build()
+        reminderNotification.reminderNotificationData.toBundle(builder.extras)
         return builder.build()
     }
 
