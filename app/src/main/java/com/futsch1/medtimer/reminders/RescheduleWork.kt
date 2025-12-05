@@ -36,10 +36,12 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun doWork(): Result {
+        val startOfFunction = Instant.now()
         val medicineRepository = MedicineRepository(applicationContext as Application)
         val reminderScheduler = this.reminderScheduler
         val fullMedicines = medicineRepository.medicines
-        val scheduledReminders: List<ScheduledReminder> = reminderScheduler.schedule(fullMedicines, medicineRepository.getLastDaysReminderEvents(33))
+        val scheduledReminders: List<ScheduledReminder> =
+            reminderScheduler.schedule(fullMedicines, medicineRepository.getReminderEventsForScheduling(fullMedicines))
         if (scheduledReminders.isNotEmpty()) {
             val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, true)
             val scheduledReminderNotificationData =
@@ -49,6 +51,7 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
             Log.d(LogTags.SCHEDULER, "No reminders scheduled")
             this.cancelNextReminder()
         }
+        Log.d(LogTags.SCHEDULER, "RescheduleWork finished in " + (Instant.now().toEpochMilli() - startOfFunction.toEpochMilli()) + "ms")
 
         return Result.success()
     }

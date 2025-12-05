@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Database(
         entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class},
-        version = 20,
+        version = 21,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
                 @AutoMigration(from = 2, to = 3),
@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
                 @AutoMigration(from = 17, to = 18),
                 @AutoMigration(from = 18, to = 19),
                 @AutoMigration(from = 19, to = 20),
+                @AutoMigration(from = 20, to = 21, spec = MedicineRoomDatabase.AutoMigration20To21.class),
         }
 )
 @TypeConverters({Converters.class})
@@ -120,4 +121,12 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
         }
     }
 
+
+    static class AutoMigration20To21 implements AutoMigrationSpec {
+        @Override
+        public void onPostMigrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE INDEX IF NOT EXISTS `index_ReminderEvent_remindedTimestamp` ON `ReminderEvent` (`remindedTimestamp`)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS `index_ReminderEvent_reminderId` ON `ReminderEvent` (`reminderId`)");
+        }
+    }
 }
