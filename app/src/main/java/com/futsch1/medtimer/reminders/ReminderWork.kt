@@ -44,7 +44,8 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         var r = Result.failure()
 
         val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)
+        val reminderNotification =
+            ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 
         medicineRepository.flushDatabase()
 
@@ -84,7 +85,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId)
+            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId, -1)
 
             Log.i(
                 LogTags.REMINDER,

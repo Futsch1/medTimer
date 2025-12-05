@@ -14,6 +14,8 @@ import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.getVariableAmo
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 
 object NotificationProcessor {
@@ -30,7 +32,7 @@ object NotificationProcessor {
                     val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
                     Log.d(LogTags.REMINDER, String.format("Ask for amount for reminder event reID %d", reminderEventId))
                     context.startActivity(getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount, medicine.medicine.name))
-                    cancelNotification(context, reminderEvent.notificationId)
+                    cancelNotification(context, reminderEvent.notificationId, reminderEventId)
                 } else {
                     processReminderEvent(context, status, reminderEvent, medicineRepository)
                 }
@@ -40,16 +42,39 @@ object NotificationProcessor {
         }
     }
 
-    fun cancelNotification(context: Context, notificationId: Int) {
+    fun cancelNotification(context: Context, notificationId: Int, reminderEventId: Int) {
         if (notificationId != 0) {
             val notificationManager = context.getSystemService(NotificationManager::class.java)
-            Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId))
-            notificationManager.cancel(notificationId)
+            for (notification in notificationManager.activeNotifications) {
+                if (notification.id == notificationId) {
+                    val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
+                    if (reminderNotificationData.reminderEventIds.size == 1 || reminderEventId == -1) {
+                        // The current notification is for a single reminder event, so cancel it
+                        Log.d(LogTags.REMINDER, String.format("Cancel notification nID %d", notificationId))
+                        notificationManager.cancel(notification.id)
+                    } else {
+                        updateNotification(reminderNotificationData, reminderEventId, context)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateNotification(
+        reminderNotificationData: ReminderNotificationData,
+        reminderEventId: Int,
+        context: Context
+    ) {
+        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(listOf(reminderEventId))
+        val medicineRepository = MedicineRepository(context as Application?)
+        val reminderNotification = ReminderNotification.fromReminderNotificationData(context, medicineRepository, newReminderNotificationData)
+        if (reminderNotification != null) {
+            Notifications(context).showNotification(reminderNotification, reminderNotificationData.notificationId)
         }
     }
 
     fun processReminderEvent(context: Context, status: ReminderStatus?, reminderEvent: ReminderEvent, medicineRepository: MedicineRepository) {
-        cancelNotification(context, reminderEvent.notificationId)
+        cancelNotification(context, reminderEvent.notificationId, reminderEvent.reminderEventId)
         cancelPendingAlarms(context, reminderEvent.reminderEventId)
 
         reminderEvent.status = status

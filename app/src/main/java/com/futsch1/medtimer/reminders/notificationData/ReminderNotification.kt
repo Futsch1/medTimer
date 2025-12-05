@@ -21,30 +21,22 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     fun filterAlreadyProcessed(): ReminderNotification {
-        return filter { it.reminderEvent.status != ReminderEvent.ReminderStatus.RAISED }
+        return filter { it.reminderEvent.status == ReminderEvent.ReminderStatus.RAISED }
     }
 
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {
-        // Find the indices in reminderNotificationParts to filter and afterwards remove both the parts and the corresponding data
-        val reminderIds = mutableListOf<Int>()
-        val reminderEventIds = mutableListOf<Int>()
         val reminderNotificationParts = mutableListOf<ReminderNotificationPart>()
-
-        for (reminderNotificationPart in this.reminderNotificationParts) {
-            if (predicate(reminderNotificationPart)) {
-                reminderIds.add(reminderNotificationPart.reminder.reminderId)
-                reminderEventIds.add(reminderNotificationPart.reminderEvent.reminderEventId)
-                reminderNotificationParts.add(reminderNotificationPart)
+        val removedReminderEventIds = mutableListOf<Int>()
+        for (part in this.reminderNotificationParts) {
+            if (predicate(part)) {
+                reminderNotificationParts.add(part)
+            } else {
+                removedReminderEventIds.add(part.reminderEvent.reminderEventId)
             }
         }
         return ReminderNotification(
             reminderNotificationParts,
-            ReminderNotificationData(
-                reminderNotificationData.remindInstant,
-                reminderIds.toIntArray(),
-                reminderEventIds.toIntArray(),
-                reminderNotificationData.notificationId
-            )
+            reminderNotificationData.removeReminderEventIds(removedReminderEventIds)
         )
     }
 

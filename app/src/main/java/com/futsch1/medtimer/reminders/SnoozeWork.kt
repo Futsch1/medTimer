@@ -25,7 +25,7 @@ open class SnoozeWork(context: Context, workerParams: WorkerParameters) : Resche
 
         enqueueNotification(reminderNotificationData)
 
-        NotificationProcessor.cancelNotification(context, reminderNotificationData.notificationId)
+        NotificationProcessor.cancelNotification(context, reminderNotificationData.notificationId, -1)
 
         return Result.success()
     }
