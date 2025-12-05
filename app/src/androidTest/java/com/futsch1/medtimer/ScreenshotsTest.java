@@ -47,6 +47,8 @@ public class ScreenshotsTest extends BaseTestHelper {
         openMenu();
         clickOn(R.string.generate_test_data);
 
+        sleep(5_000);
+
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);
         clickListItemChild(R.id.reminders, 1, R.id.stateButton);
@@ -88,6 +90,8 @@ public class ScreenshotsTest extends BaseTestHelper {
 
         clickOn(R.id.tableChip);
         Screengrab.screenshot("7");
+
+        sleep(5_000);
 
         clickListItem(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView, 1);
 
