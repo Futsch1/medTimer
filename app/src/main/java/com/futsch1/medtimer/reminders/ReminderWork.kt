@@ -87,18 +87,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     }
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
-        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId)
-
-            Log.i(
-                LogTags.REMINDER,
-                String.format(
-                    "Show reminder event reID %d for %s",
-                    reminderNotificationPart.reminderEvent.reminderEventId,
-                    reminderNotificationPart.reminderEvent.medicineName
-                )
-            )
-        }
+        NotificationProcessor.cancelNotification(context, reminderNotification.reminderNotificationData.notificationId)
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
