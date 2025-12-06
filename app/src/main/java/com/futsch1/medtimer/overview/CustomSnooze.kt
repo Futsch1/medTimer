@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
-import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.getSnoozeIntent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
@@ -16,7 +16,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         return
     }
     // Cancel a potential repeat alarm
-    NotificationProcessor.cancelPendingAlarms(activity, reminderNotificationData.reminderEventIds[0])
+    NotificationProcessor(activity).cancelPendingAlarms(reminderNotificationData.reminderEventIds[0])
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)
@@ -26,7 +26,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         .textSink { snoozeTime: String? ->
             val snoozeTimeInt = snoozeTime?.toIntOrNull()
             if (snoozeTimeInt != null) {
-                val snooze = ReminderProcessor.getSnoozeIntent(
+                val snooze = getSnoozeIntent(
                     activity,
                     reminderNotificationData,
                     snoozeTimeInt

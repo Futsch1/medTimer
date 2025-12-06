@@ -10,16 +10,33 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.reminders.ReminderWork
+import com.futsch1.medtimer.reminders.ReminderWorker
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ReminderNotification(val reminderNotificationParts: List<ReminderNotificationPart>, val reminderNotificationData: ReminderNotificationData) {
     fun filterAutomaticallyTaken(): ReminderNotification {
+        return filter { !it.reminder.automaticallyTaken }
+    }
+
+    fun filterAlreadyProcessed(): ReminderNotification {
+        return filter { it.reminderEvent.status == ReminderEvent.ReminderStatus.RAISED }
+    }
+
+    private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {
+        val reminderNotificationParts = mutableListOf<ReminderNotificationPart>()
+        val removedReminderEventIds = mutableListOf<Int>()
+        for (part in this.reminderNotificationParts) {
+            if (predicate(part)) {
+                reminderNotificationParts.add(part)
+            } else {
+                removedReminderEventIds.add(part.reminderEvent.reminderEventId)
+            }
+        }
         return ReminderNotification(
-            reminderNotificationParts.stream().filter { !it.reminder.automaticallyTaken }.toList(),
-            reminderNotificationData
+            reminderNotificationParts,
+            reminderNotificationData.removeReminderEventIds(removedReminderEventIds)
         )
     }
 
@@ -86,7 +103,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         private fun buildAndInsertReminderEvent(
             medicineRepository: MedicineRepository, medicine: FullMedicine, reminder: Reminder, remindInstant: Instant, numberOfRepeats: Int
         ): ReminderEvent {
-            val reminderEvent: ReminderEvent = ReminderWork.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository)
+            val reminderEvent: ReminderEvent = ReminderWorker.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository)
             reminderEvent.remainingRepeats = numberOfRepeats
             reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
             return reminderEvent

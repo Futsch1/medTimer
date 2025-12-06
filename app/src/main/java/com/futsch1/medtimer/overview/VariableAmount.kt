@@ -65,11 +65,9 @@ private fun updateReminderEvent(
         val repository = MedicineRepository(activity.application)
         val reminderEvent = repository.getReminderEvent(reminderEventId)
         reminderEvent?.amount = amount
-        NotificationProcessor.processReminderEvent(
-            activity,
+        NotificationProcessor(activity).setSingleReminderEventStatus(
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvent!!,
-            repository
         )
     }
 }

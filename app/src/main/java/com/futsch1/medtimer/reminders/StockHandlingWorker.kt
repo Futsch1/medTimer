@@ -11,7 +11,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 
-class StockHandlingWork(val context: Context, workerParameters: WorkerParameters) :
+class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
         val amount = inputData.getString(ActivityCodes.EXTRA_AMOUNT) ?: return Result.failure()

@@ -23,7 +23,7 @@ import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.SnoozeWork;
+import com.futsch1.medtimer.reminders.SnoozeWorker;
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +53,7 @@ public class SnoozeWorkUnitTest {
 
         mockApplication = mock(Application.class);
         when(mockApplication.getPackageName()).thenReturn("test");
+        when(mockApplication.getApplicationContext()).thenReturn(mockApplication);
 
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
@@ -91,7 +92,7 @@ public class SnoozeWorkUnitTest {
             mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60)).thenReturn(snooze);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60, 0)).thenReturn(snooze);
-            SnoozeWork snoozeWork = new SnoozeWork(mockApplication, workerParams);
+            SnoozeWorker snoozeWork = new SnoozeWorker(mockApplication, workerParams);
 
             // Expected to pass
             ListenableWorker.Result result = snoozeWork.doWork();

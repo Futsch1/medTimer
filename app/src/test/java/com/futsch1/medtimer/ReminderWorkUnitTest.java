@@ -19,6 +19,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 
 import androidx.core.app.NotificationCompat;
@@ -35,7 +36,7 @@ import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineIcons;
 import com.futsch1.medtimer.reminders.NotificationSoundManager;
-import com.futsch1.medtimer.reminders.ReminderWork;
+import com.futsch1.medtimer.reminders.ReminderWorker;
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ public class ReminderWorkUnitTest {
     private static final int REMINDER_EVENT_ID = 12;
     private static final int MEDICINE_ID = 1;
     private static final int NOTIFICATION_ID = 14;
-    private ReminderWork reminderWork;
+    private ReminderWorker reminderWorker;
     @Mock
     private Application mockApplication;
     private SharedPreferences mockSharedPreferences;
@@ -85,7 +86,7 @@ public class ReminderWorkUnitTest {
 
         mockApplication = mock(Application.class);
 
-        reminderWork = new ReminderWork(mockApplication, workerParams);
+        reminderWorker = new ReminderWorker(mockApplication, workerParams);
 
         mockSharedPreferences = mock(SharedPreferences.class);
         when(mockSharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
@@ -111,7 +112,7 @@ public class ReminderWorkUnitTest {
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
-            ListenableWorker.Result result = reminderWork.doWork();
+            ListenableWorker.Result result = reminderWorker.doWork();
             assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
         // Medicine is null
@@ -122,7 +123,7 @@ public class ReminderWorkUnitTest {
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
-            ListenableWorker.Result result = reminderWork.doWork();
+            ListenableWorker.Result result = reminderWorker.doWork();
             assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
         // Reminder event is null
@@ -134,7 +135,7 @@ public class ReminderWorkUnitTest {
              MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
             WorkManager mockWorkManager = mock(WorkManager.class);
             mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
-            ListenableWorker.Result result = reminderWork.doWork();
+            ListenableWorker.Result result = reminderWorker.doWork();
             assertInstanceOf(ListenableWorker.Result.Failure.class, result);
         }
     }
@@ -150,6 +151,7 @@ public class ReminderWorkUnitTest {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = REMINDER_ID;
             reminderEvent.reminderEventId = REMINDER_EVENT_ID;
+            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
             when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
@@ -164,6 +166,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
+                 when(mock.getExtras()).thenReturn(new Bundle());
                  when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
@@ -177,7 +180,7 @@ public class ReminderWorkUnitTest {
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(java.text.DateFormat.getTimeInstance());
 
             // Expected to pass
-            ListenableWorker.Result result = reminderWork.doWork();
+            ListenableWorker.Result result = reminderWorker.doWork();
             assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID
@@ -216,6 +219,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
+                 when(mock.getExtras()).thenReturn(new Bundle());
                  when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
@@ -235,7 +239,7 @@ public class ReminderWorkUnitTest {
             when(workerParams.getInputData()).thenReturn(inputData.build());
 
             // Expected to pass
-            ListenableWorker.Result result = reminderWork.doWork();
+            ListenableWorker.Result result = reminderWorker.doWork();
             assertInstanceOf(ListenableWorker.Result.Success.class, result);
 
             // Check if reminder event was updated with the generated notification ID

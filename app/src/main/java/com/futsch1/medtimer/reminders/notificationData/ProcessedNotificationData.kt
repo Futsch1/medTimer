@@ -28,7 +28,10 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
         }
 
         fun forwardToBuilder(bundle: Bundle, builder: Data.Builder) {
-            builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!)
+            val reminderEventIds = bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)
+            if (reminderEventIds != null) {
+                builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
+            }
         }
     }
 }

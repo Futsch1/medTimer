@@ -9,6 +9,7 @@ import com.evrencoskun.tableview.sort.ISortableModel;
 public class ReminderTableCellModel implements ISortableModel, IFilterableModel {
     private final Object content;
     private final int id;
+    private final String stringId;
     private final String representation;
     private final String viewTag;
 
@@ -16,13 +17,14 @@ public class ReminderTableCellModel implements ISortableModel, IFilterableModel 
         this.content = content;
         this.representation = representation;
         this.id = id;
+        this.stringId = Integer.toString(id);
         this.viewTag = viewTag;
     }
 
     @NonNull
     @Override
     public String getId() {
-        return Integer.toString(id);
+        return this.stringId;
     }
 
     @Nullable

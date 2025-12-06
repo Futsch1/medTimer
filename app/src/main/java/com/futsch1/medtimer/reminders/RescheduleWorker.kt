@@ -19,7 +19,6 @@ import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.WorkManagerAccess
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.getReminderAction
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestRescheduleNowForTests
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
@@ -32,7 +31,7 @@ import java.time.ZoneId
 /**
  * Worker that schedules the next reminder.
  */
-open class RescheduleWork(@JvmField protected val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+open class RescheduleWorker(@JvmField protected val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun doWork(): Result {
@@ -109,11 +108,11 @@ open class RescheduleWork(@JvmField protected val context: Context, workerParams
             )
             val builder = Data.Builder()
             scheduledReminderNotificationData.toBuilder(builder)
-            val reminderWork: WorkRequest =
-                OneTimeWorkRequest.Builder(ReminderWork::class.java)
+            val reminderWorker: WorkRequest =
+                OneTimeWorkRequest.Builder(ReminderWorker::class.java)
                     .setInputData(builder.build())
                     .build()
-            WorkManagerAccess.getWorkManager(context).enqueue(reminderWork)
+            WorkManagerAccess.getWorkManager(context).enqueue(reminderWorker)
         }
 
         debugReschedule.scheduleRepeat()

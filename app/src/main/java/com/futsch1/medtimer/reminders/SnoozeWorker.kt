@@ -11,7 +11,7 @@ import java.time.Instant
 /*
  * Worker that snoozes a reminder and re-raises it once the snooze time has expired.
  */
-open class SnoozeWork(context: Context, workerParams: WorkerParameters) : RescheduleWork(context, workerParams) {
+open class SnoozeWorker(context: Context, workerParams: WorkerParameters) : RescheduleWorker(context, workerParams) {
     override fun doWork(): Result {
         val inputData = getInputData()
         val snoozeTime = inputData.getInt(ActivityCodes.EXTRA_SNOOZE_TIME, 15)
@@ -21,11 +21,12 @@ open class SnoozeWork(context: Context, workerParams: WorkerParameters) : Resche
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm
-        NotificationProcessor.cancelPendingAlarms(context, reminderNotificationData.reminderEventIds[0])
+        val notificationProcessor = NotificationProcessor(context)
+        notificationProcessor.cancelPendingAlarms(reminderNotificationData.reminderEventIds[0])
 
         enqueueNotification(reminderNotificationData)
 
-        NotificationProcessor.cancelNotification(context, reminderNotificationData.notificationId)
+        notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
 
         return Result.success()
     }

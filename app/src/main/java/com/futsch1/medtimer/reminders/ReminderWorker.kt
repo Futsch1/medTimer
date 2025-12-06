@@ -24,7 +24,7 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderWork(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class ReminderWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
 
     override fun doWork(): Result {
@@ -44,17 +44,22 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         var r = Result.failure()
 
         val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)
+        // Create reminder events and filter those that are already processed
+        val reminderNotification =
+            ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 
         medicineRepository.flushDatabase()
 
         if (reminderNotification != null) {
-            Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
-            performActionsOfReminders(reminderNotification)
+            if (reminderNotification.reminderNotificationParts.isEmpty()) {
+                Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
+            } else {
+                Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
+                performActionsOfReminders(reminderNotification)
+                medicineRepository.flushDatabase()
+            }
             r = Result.success()
         }
-
-        medicineRepository.flushDatabase()
 
         return r
     }
@@ -62,11 +67,9 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     private fun performActionsOfReminders(reminderNotification: ReminderNotification) {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
-                NotificationProcessor.processReminderEvent(
-                    context,
+                NotificationProcessor(context).setSingleReminderEventStatus(
                     ReminderEvent.ReminderStatus.TAKEN,
-                    reminderNotificationPart.reminderEvent,
-                    medicineRepository
+                    reminderNotificationPart.reminderEvent
                 )
                 Log.i(
                     LogTags.REMINDER,
@@ -83,27 +86,16 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
     }
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
-        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId)
+        NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
 
-            Log.i(
-                LogTags.REMINDER,
-                String.format(
-                    "Show reminder event reID %d for %s",
-                    reminderNotificationPart.reminderEvent.reminderEventId,
-                    reminderNotificationPart.reminderEvent.medicineName
-                )
-            )
-        }
-
+        // Show notifications for all reminders
+        showNotification(reminderNotification)
+        
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
             ReminderProcessor.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
-
-        // Show notifications for all reminders
-        showNotification(reminderNotification)
     }
 
     private fun showNotification(reminderNotification: ReminderNotification) {
