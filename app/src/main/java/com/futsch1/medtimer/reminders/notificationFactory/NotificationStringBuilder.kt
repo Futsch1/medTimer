@@ -30,25 +30,34 @@ class NotificationStringBuilder(
     private fun buildNotificationString(reminderNotificationParts: List<ReminderNotificationPart>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         for (reminderNotificationPart in reminderNotificationParts) {
-            // baseString already contains both reminders, so we would add them again here
-            builder.append(buildSingleNotificationString(reminderNotificationPart))
+            builder.append(buildSingleNotificationString(reminderNotificationPart, reminderNotificationParts.size > 3))
             builder.append("\n")
         }
         builder.append(reminderNotification.getRemindTime(context))
         return builder
     }
 
-    private fun buildSingleNotificationString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
-        val builder = SpannableStringBuilder(buildSingleBaseString(reminderNotificationPart)).append("\n${getInstructions(reminderNotificationPart.reminder)}")
+    private fun buildSingleNotificationString(reminderNotificationPart: ReminderNotificationPart, concise: Boolean = false): SpannableStringBuilder {
+        val builder =
+            SpannableStringBuilder(buildSingleBaseString(reminderNotificationPart))
+        val instructions = getInstructions(reminderNotificationPart.reminder)
+        val separatorChar = if (concise) ", " else "\n"
+        if (instructions.isNotEmpty()) {
+            builder.append("$separatorChar$instructions")
+        }
+
         if (reminderNotificationPart.medicine.medicine.isStockManagementActive) {
+            builder.append(separatorChar)
             builder.append(MedicineHelper.getStockText(context, reminderNotificationPart.medicine.medicine))
             if (showOutOfStockIcon) {
                 builder.append(MedicineHelper.getOutOfStockText(context, reminderNotificationPart.medicine.medicine))
             }
-            builder.append("\n")
         }
 
-        builder.append(getTagNames(reminderNotificationPart.medicine.tags))
+        if (!concise) {
+            builder.append(getTagNames(reminderNotificationPart.medicine.tags))
+        }
+
         return builder
     }
 
@@ -60,7 +69,7 @@ class NotificationStringBuilder(
 
     private fun getTagNames(tags: List<Tag>): String {
         val tagNames = tags.stream().map { t: Tag? -> t!!.name }.collect(Collectors.toList())
-        return java.lang.String.join(", ", tagNames)
+        return "\n" + java.lang.String.join(", ", tagNames)
     }
 
     private fun getInstructions(reminder: Reminder): String {
@@ -68,14 +77,6 @@ class NotificationStringBuilder(
         if (instructions == null) {
             instructions = ""
         }
-        return addLineBreakIfNotEmpty(instructions)
-    }
-
-    private fun addLineBreakIfNotEmpty(string: String): String {
-        return if (string.isEmpty()) {
-            string
-        } else {
-            "$string\n"
-        }
+        return instructions
     }
 }
