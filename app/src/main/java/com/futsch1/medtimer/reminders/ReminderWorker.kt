@@ -88,14 +88,14 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
     private fun notificationAction(reminderNotification: ReminderNotification) {
         NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
 
+        // Show notifications for all reminders
+        showNotification(reminderNotification)
+        
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
             ReminderProcessor.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
-
-        // Show notifications for all reminders
-        showNotification(reminderNotification)
     }
 
     private fun showNotification(reminderNotification: ReminderNotification) {
