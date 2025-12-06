@@ -53,6 +53,7 @@ public class SnoozeWorkUnitTest {
 
         mockApplication = mock(Application.class);
         when(mockApplication.getPackageName()).thenReturn("test");
+        when(mockApplication.getApplicationContext()).thenReturn(mockApplication);
 
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
