@@ -108,7 +108,7 @@
     <string name="intro_medicine_description">Verwenden Sie die Registerkarte \"Medikamente\" um ein Medikament zu erstellen, das Sie einnehmen und an das Sie erinnert werden möchten. Sie können Medikamente Tags zuordnen und den Füllstand überwachen.</string>
     <string name="intro_reminder_description">Wählen Sie ein Medikament aus, um seine Details zu bearbeiten und Erinnerungen für die verschiedenen Einnahmezeiten zu erstellen.\n\nEs gibt verschiedene Erinnerungstypen wie zeitbasiert oder intervallbasiert, weiterhin lassen sich Erinnerungen auf bestimmte Tage beschränken.</string>
     <string name="intro_notification_description">Sobald eine Erinnerung fällig ist, erscheint eine Benachrichtigung, die Ihnen die Möglichkeit gibt, eine Dosis als eingenommen zu markieren (durch Klicken auf die Schaltfläche \"Eingenommen\"), zu überspringen (durch Verwerfen der Benachrichtigung) oder nach einiger Zeit erneut erinnert zu werden (\"Snooze\").</string>
-    <string name="intro_overview_description">Auf dem Übersichtsbildschirm können Sie anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Wischen nach rechts bearbeitet und nach links gelöscht werden.\n\n Darüber hinaus können Sie manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
+    <string name="intro_overview_description">Auf dem Übersichtsbildschirm können Sie anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Klicken bearbeitet.\n\n Darüber hinaus können Sie manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
     <string name="intro_analysis_description">Die App speichert alle Ereignisse. Sie können Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
@@ -131,7 +131,7 @@
     <string name="never">Niemals</string>
     <string name="day_of_month_limited">Auf manche Tage im Monat beschränkt</string>
     <string name="medicines_tab_description">Registerkarte Medikamente</string>
-    <string name="overview_tab_description">Registerkarte "Übersicht</string>
+    <string name="overview_tab_description">Registerkarte Übersicht</string>
     <string name="statistics_tab_description">Registerkarte Statistik</string>
     <string name="previous_month">Vorheriger Monat</string>
     <string name="next_month">Nächster Monat</string>
@@ -139,7 +139,7 @@
     <string name="minutes_1">1 Minute</string>
     <string name="number_of_repetitions">Anzahl der Wiederholungen</string>
     <string name="time_between_repetitions">Zeit zwischen den Wiederholungen</string>
-    <string name="repeat_reminders_summary">Wiederholt automatisch eine Erinnerung, bis sie als erledigt oder übersprungen markiert wird</string>
+    <string name="repeat_reminders_summary">Wiederholt eine Erinnerung automatisch, bis sie als erledigt oder übersprungen markiert wird</string>
     <string name="add_linked_reminder">Verknüpfte Erinnerung hinzufügen</string>
     <string name="linked_reminder_delay">Verzögerung der verknüpften Erinnerung</string>
     <string name="delay">Verzögerung</string>
@@ -166,13 +166,13 @@
     <string name="interval">Interval</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>
     <string name="interval_start_reminded">Intervall beginnt zum Zeitpunkt der Erinnerung</string>
-    <string name="interval_start_processed">Intervall beginnt, wenn eingenommen oder übersprungen</string>
+    <string name="interval_start_processed">Intervall beginnt wenn eingenommen oder übersprungen</string>
     <string name="every_interval">Alle %s</string>
     <string name="invalid_input">Ungültige Eingabe</string>
     <string name="off">Aus</string>
     <string name="once_below_threshold">Einmal beim Erreichen des Schwellwerts</string>
     <string name="always_below_threshold">Immer, wenn der Schwellwert unterschritten wird</string>
-    <string name="out_of_stock_notification">Es ist nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
+    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
     <string name="medicine_stock_string">%1$s übrig</string>
     <string name="out_of_stock_notification_title">Erinnerung an Medikamentenvorrat</string>
     <string name="medicine_stock">Medikamentenvorrat</string>
@@ -188,7 +188,7 @@
     <string name="unit">Einheit</string>
     <string name="unlimited">Unbegrenzt</string>
     <string name="override_dnd">Benachrichtigungston immer abspielen</string>
-    <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder stumm</string>
+    <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder Stumm</string>
     <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktivieren Sie den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
     <string name="app_authentication">Authentifizierung notwendig für Zugriff auf die App</string>
     <string name="login">Anmeldung bei MedTimer mit biometrischer Authentifizierung</string>
@@ -227,16 +227,16 @@
     <string name="end_date">Enddatum</string>
     <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
-    <string name="time_based_reminder_help">Erinnert an einer bestimmten Zeit des Tages (z.B. 8:00 Uhr). Weiterhin kann die Erinnerung an bestimmten Wochentage, Tagen des Monats oder komplexer periodischer Zeitpläne (wie \'alle 3 Tage\') ausgelöst werden.</string>
-    <string name="continuous_interval_reminder_help">Starten Sie eine Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Dieses Muster wiederholt kontinuierlich, bis es manuell deaktiviert wird.</string>
-    <string name="windowed_interval_reminder_help">Definieren Sie ein täglich aktives Fenster (z. B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung immer zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
+    <string name="time_based_reminder_help">Erinnert an einer bestimmten Zeit des Tages (z.B. 8:00 Uhr). Weiterhin kann die Erinnerung an bestimmten Wochentagen, Tagen des Monats oder über periodische Zeitpläne (wie \'alle 3 Tage\') ausgelöst werden.</string>
+    <string name="continuous_interval_reminder_help">Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Die Erinnerung wiederholt sich kontinuierlich in diesem Intervall.</string>
+    <string name="windowed_interval_reminder_help">Erinnert in einem täglich Zeitfenster (z.B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
     <string name="linked_reminder">Verknüpfte Erinnerung</string>
-    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung geplant wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
+    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung ausgelöst wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
     <string name="add_linked_reminder_summary">Erstellt eine Folgeerinnerung, die eine bestimmte Zeit nach dieser Erinnerung ausgelöst wird.</string>
-    <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung löst nur an aktiven Tagen eine Benachrichtigung aus. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
+    <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung wird nur an aktiven Tagen ausgelöst. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
     <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
     <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
-    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder statisch oder datumsbasiert konfiguriert werden und kann zum Ausschleichen eines Medikaments verwendet werden.</string>
+    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder dauerhaft oder datumsbasiert konfiguriert werden und kann zum Ausschleichen eines Medikaments verwendet werden.</string>
     <string name="further_settings">Weitere Einstellungen</string>
     <string name="alarm_settings">Alarmeinstellungen</string>
     <string name="no_alarm_sound_when_silent">Kein Alarmton im Lautlos-Modus</string>
@@ -246,4 +246,7 @@
     <string name="system_locale_summary">Wenn ausgeschaltet verwendet die App die Einstellung, die der für die App eingestellten Sprache entspricht.</string>
     <string name="raised">Ausgelöst</string>
     <string name="scheduled">Geplant</string>
-<string name="no_calendar_app">Keine Kalender-App gefunden</string><string name="combine_notifications">Gleichzeitige Benachrichtigungen zusammenfassen</string><string name="combine_notifications_summary">Wenn diese Option aktiviert ist, werden Benachrichtigungen mit derselben Uhrzeit zu einer einzigen Benachrichtigung zusammengefasst</string></resources>
+    <string name="no_calendar_app">Keine Kalender-App gefunden</string>
+    <string name="combine_notifications">Gleichzeitige Benachrichtigungen zusammenfassen</string>
+    <string name="combine_notifications_summary">Wenn diese Option aktiviert ist, werden Benachrichtigungen mit derselben Uhrzeit zu einer einzigen Benachrichtigung zusammengefasst</string>
+</resources>
