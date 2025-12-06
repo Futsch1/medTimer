@@ -65,11 +65,10 @@ class NotificationProcessor(val context: Context) {
         val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(context, medicineRepository, newReminderNotificationData)
         if (reminderNotification != null) {
-            if (reminderNotificationData.reminderEventIds.isEmpty()) {
-                cancelNotification(reminderNotificationData.notificationId)
-            } else {
-                Notifications(context).showNotification(reminderNotification, reminderNotificationData.notificationId)
-            }
+            Notifications(context).showNotification(reminderNotification, reminderNotificationData.notificationId)
+        } else {
+            Log.d(LogTags.REMINDER, String.format("Notification now empty, cancel nID %d", reminderNotificationData.notificationId))
+            cancelNotification(reminderNotificationData.notificationId)
         }
     }
 

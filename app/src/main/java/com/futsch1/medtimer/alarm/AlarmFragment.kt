@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.LogTags.ALARM
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -48,7 +49,7 @@ class AlarmFragment(
                     MedicineRepository(requireActivity().application),
                     reminderNotificationData
                 )!!
-                Log.d("AlarmFragment", "Creating fragment for raised notification $reminderNotification")
+                Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
 
                 val notificationStrings = NotificationStringBuilder(requireContext(), reminderNotification, false)
                 val intents =
@@ -104,7 +105,7 @@ class AlarmFragment(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("AlarmFragment", "Closing activity")
+        Log.d(ALARM, "Closing activity")
         requireActivity().finishAndRemoveTask()
     }
 }
