@@ -390,6 +390,11 @@ class NotificationTest : BaseTestHelper() {
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
+
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
 
