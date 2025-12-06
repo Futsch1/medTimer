@@ -25,7 +25,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
@@ -182,7 +181,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -278,7 +277,7 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
 
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        clickListItemChild(R.id.reminders, 2, R.id.stateButton)
         clickOn(R.id.takenButton)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
@@ -466,7 +465,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 2)
 
         navigateTo(MainMenu.OVERVIEW)
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
 
         sleep(2_000)
