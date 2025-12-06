@@ -50,12 +50,15 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         medicineRepository.flushDatabase()
 
         if (reminderNotification != null) {
-            Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
-            performActionsOfReminders(reminderNotification)
+            if (reminderNotification.reminderNotificationParts.isEmpty()) {
+                Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
+            } else {
+                Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
+                performActionsOfReminders(reminderNotification)
+                medicineRepository.flushDatabase()
+            }
             r = Result.success()
         }
-
-        medicineRepository.flushDatabase()
 
         return r
     }
@@ -85,7 +88,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId, -1)
+            NotificationProcessor.cancelNotification(context, reminderNotificationPart.reminderEvent.notificationId)
 
             Log.i(
                 LogTags.REMINDER,
