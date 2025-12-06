@@ -24,7 +24,7 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderWork(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class ReminderWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
 
     override fun doWork(): Result {
@@ -44,6 +44,7 @@ class ReminderWork(private val context: Context, workerParams: WorkerParameters)
         var r = Result.failure()
 
         val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
+        // Create reminder events and filter those that are already processed
         val reminderNotification =
             ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 

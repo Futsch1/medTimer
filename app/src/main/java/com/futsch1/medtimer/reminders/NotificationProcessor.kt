@@ -10,7 +10,6 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.getVariableAmountActionIntent
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -19,7 +18,6 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 
 object NotificationProcessor {
-    @JvmStatic
     fun processNotification(context: Context, processedNotificationData: ProcessedNotificationData, status: ReminderStatus?) {
         val medicineRepository = MedicineRepository(context as Application?)
 
@@ -64,7 +62,7 @@ object NotificationProcessor {
         context: Context
     ) {
         val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(listOf(reminderEventId))
-        val medicineRepository = MedicineRepository(context as Application?)
+        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(context, medicineRepository, newReminderNotificationData)
         if (reminderNotification != null) {
             if (reminderNotificationData.reminderEventIds.isEmpty()) {

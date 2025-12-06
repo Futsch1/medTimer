@@ -87,6 +87,8 @@ MedTimer is a free app without adds.
 See the [use cases documentation](doc/UseCases.md) for more details on how to use the app and
 the specific use cases it can satisfy.
 
+Some details of the reminder flow is documented in the [reminder flow documentation](doc/reminder_flow.md).
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) for details on how to contribute.

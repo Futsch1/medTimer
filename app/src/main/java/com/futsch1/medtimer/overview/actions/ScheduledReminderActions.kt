@@ -6,8 +6,9 @@ import android.widget.PopupWindow
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
-import com.futsch1.medtimer.reminders.ReminderProcessor
-import com.futsch1.medtimer.reminders.ReminderWork
+import com.futsch1.medtimer.reminders.ReminderWorker
+import com.futsch1.medtimer.reminders.getSkippedActionIntent
+import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +51,7 @@ class ScheduledReminderActions(
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application) // Ensure Application context is not null
             var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
             if (reminderEvent == null) {
-                reminderEvent = ReminderWork.buildReminderEvent(
+                reminderEvent = ReminderWorker.buildReminderEvent(
                     scheduledReminder.timestamp.epochSecond,
                     scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
                 )
@@ -61,9 +62,9 @@ class ScheduledReminderActions(
             withContext(mainCoroutineDispatcher) {
                 view.context.sendBroadcast(
                     if (taken)
-                        ReminderProcessor.getTakenActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId)))
+                        getTakenActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId)))
                     else
-                        ReminderProcessor.getSkippedActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId))),
+                        getSkippedActionIntent(view.context, ProcessedNotificationData(listOf(reminderEventId))),
                     "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
                 )
             }
