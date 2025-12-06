@@ -21,11 +21,12 @@ open class SnoozeWorker(context: Context, workerParams: WorkerParameters) : Resc
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm
-        NotificationProcessor.cancelPendingAlarms(context, reminderNotificationData.reminderEventIds[0])
+        val notificationProcessor = NotificationProcessor(context)
+        notificationProcessor.cancelPendingAlarms(reminderNotificationData.reminderEventIds[0])
 
         enqueueNotification(reminderNotificationData)
 
-        NotificationProcessor.cancelNotification(context, reminderNotificationData.notificationId)
+        notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
 
         return Result.success()
     }

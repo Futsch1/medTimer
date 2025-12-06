@@ -16,7 +16,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         return
     }
     // Cancel a potential repeat alarm
-    NotificationProcessor.cancelPendingAlarms(activity, reminderNotificationData.reminderEventIds[0])
+    NotificationProcessor(activity).cancelPendingAlarms(reminderNotificationData.reminderEventIds[0])
 
     DialogHelper(activity)
         .title(R.string.snooze_duration)

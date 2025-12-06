@@ -67,11 +67,9 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
     private fun performActionsOfReminders(reminderNotification: ReminderNotification) {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
-                NotificationProcessor.processReminderEvent(
-                    context,
+                NotificationProcessor(context).setSingleReminderEventStatus(
                     ReminderEvent.ReminderStatus.TAKEN,
-                    reminderNotificationPart.reminderEvent,
-                    medicineRepository
+                    reminderNotificationPart.reminderEvent
                 )
                 Log.i(
                     LogTags.REMINDER,
@@ -88,7 +86,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
     }
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
-        NotificationProcessor.cancelNotification(context, reminderNotification.reminderNotificationData.notificationId)
+        NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats

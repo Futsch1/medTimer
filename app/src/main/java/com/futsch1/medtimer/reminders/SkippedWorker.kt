@@ -1,7 +1,14 @@
 package com.futsch1.medtimer.reminders
 
 import android.content.Context
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData.Companion.fromData
 
-class SkippedWorker(context: Context, workerParams: WorkerParameters) : ProcessNotificationWorker(context, workerParams, ReminderEvent.ReminderStatus.SKIPPED)
+class SkippedWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+    override fun doWork(): Result {
+        NotificationProcessor(applicationContext).processReminderEventsInNotification(fromData(inputData), ReminderEvent.ReminderStatus.SKIPPED)
+        return Result.success()
+    }
+}
