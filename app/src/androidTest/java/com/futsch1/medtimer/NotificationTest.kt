@@ -206,6 +206,8 @@ class NotificationTest : BaseTestHelper() {
 
         clickOn(R.string.display_settings)
         clickOn(R.string.combine_notifications)
+        pressBack()
+        pressBack()
 
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder(FIRST_REMINDER, LocalTime.of(22, 0))
