@@ -78,7 +78,7 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
         initialized = reminderEvents.value != null && scheduledReminders.value != null
 
-        return filteredOverviewEvents.sortedBy { it.timestamp }
+        return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
     }
 
     private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder): Boolean {
