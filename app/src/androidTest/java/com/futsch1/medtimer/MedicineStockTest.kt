@@ -239,6 +239,12 @@ class MedicineStockTest : BaseTestHelper() {
     //@AllowFlaky(attempts = 1)
     fun allTaken() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
+
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder("3", LocalTime.of(22, 0))
         AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
