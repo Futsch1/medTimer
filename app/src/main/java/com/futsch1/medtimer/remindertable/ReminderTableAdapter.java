@@ -104,15 +104,16 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     public void submitList(List<ReminderEvent> reminderEvents) {
         List<List<ReminderTableCellModel>> cells = new ArrayList<>();
         List<ReminderTableCellModel> rows = new ArrayList<>();
+        TimeHelper.QuickSecondsSinceEpochFormatter formatter = new TimeHelper.QuickSecondsSinceEpochFormatter(tableView.getContext());
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
             cell.add(new ReminderTableCellModel(reminderEvent.status,
-                    getStatusString(reminderEvent),
+                    getStatusString(reminderEvent, formatter),
                     reminderEvent.reminderEventId, "taken"));
             cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderEventId, "medicineName"));
             cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderEventId, null));
-            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, TimeHelper.secondsSinceEpochToDateTimeString(tableView.getContext(), reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, "time"));
+            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, "time"));
             cells.add(cell);
             rows.add(new ReminderTableCellModel(reminderEvent.reminderEventId, Integer.toString(reminderEvent.reminderEventId), reminderEvent.reminderEventId, null));
         }
@@ -123,9 +124,9 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     }
 
     @NonNull
-    private String getStatusString(ReminderEvent reminderEvent) {
+    private String getStatusString(ReminderEvent reminderEvent, TimeHelper.QuickSecondsSinceEpochFormatter formatter) {
         return switch (reminderEvent.status) {
-            case TAKEN -> TimeHelper.secondsSinceEpochToDateTimeString(tableView.getContext(), reminderEvent.processedTimestamp);
+            case TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp);
             case RAISED -> " ";
             default -> "-";
         };

@@ -257,7 +257,7 @@ public class TimeHelper {
      * @return Date string in local format
      */
     public static String secondSinceEpochToDateString(Context context, long timeStamp) {
-        return DateFormat.getDateFormat(new LocaleContextWrapper(context)).format(Date.from(Instant.ofEpochSecond(timeStamp)));
+        return secondSinceEpochToDateString(DateFormat.getDateFormat(new LocaleContextWrapper(context)), timeStamp);
     }
 
     /**
@@ -266,7 +266,35 @@ public class TimeHelper {
      * @return Time string in local format
      */
     public static String secondsSinceEpochToTimeString(Context context, long timeStamp) {
-        return DateFormat.getTimeFormat(new LocaleContextWrapper(context)).format(Date.from(Instant.ofEpochSecond(timeStamp)));
+        return secondsSinceEpochToTimeString(DateFormat.getTimeFormat(new LocaleContextWrapper(context)), timeStamp);
+    }
+
+    /**
+     * @param format    Date format to use
+     * @param timeStamp Time stamp in seconds since epoch
+     * @return Date string in local format
+     */
+    private static String secondSinceEpochToDateString(java.text.DateFormat format, long timeStamp) {
+        return format.format(Date.from(Instant.ofEpochSecond(timeStamp)));
+    }
+
+    /**
+     * @param format    Date format to use
+     * @param timeStamp Time stamp in seconds since epoch
+     * @return Time string in local format
+     */
+    private static String secondsSinceEpochToTimeString(java.text.DateFormat format, long timeStamp) {
+        return format.format(Date.from(Instant.ofEpochSecond(timeStamp)));
+    }
+
+    /**
+     * @param dateFormat DateFormat
+     * @param timeFormat DateFormat
+     * @param timeStamp  Time stamp in seconds since epoch
+     * @return Date and time string in local format
+     */
+    private static String secondsSinceEpochToDateTimeString(java.text.DateFormat dateFormat, java.text.DateFormat timeFormat, long timeStamp) {
+        return secondSinceEpochToDateString(dateFormat, timeStamp) + " " + secondsSinceEpochToTimeString(timeFormat, timeStamp);
     }
 
     /**
@@ -394,6 +422,21 @@ public class TimeHelper {
             datePickerDialog.addOnPositiveButtonClickListener(selectedDate -> datePickerResult.onDateSelected(selectedDate / DateUtils.DAY_IN_MILLIS));
 
             datePickerDialog.show(activity.getSupportFragmentManager(), "date_picker");
+        }
+    }
+
+    public static class QuickSecondsSinceEpochFormatter {
+        java.text.DateFormat cachedDateFormat;
+        java.text.DateFormat cachedTimeFormat;
+
+        public QuickSecondsSinceEpochFormatter(Context context) {
+            LocaleContextWrapper wrapper = new LocaleContextWrapper(context);
+            cachedDateFormat = DateFormat.getDateFormat(wrapper);
+            cachedTimeFormat = DateFormat.getTimeFormat(wrapper);
+        }
+
+        public String secondsSinceEpochToDateTimeString(long timeStamp) {
+            return TimeHelper.secondsSinceEpochToDateTimeString(cachedDateFormat, cachedTimeFormat, timeStamp);
         }
     }
 }
