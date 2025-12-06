@@ -24,7 +24,7 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderWork(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class ReminderWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
 
     override fun doWork(): Result {

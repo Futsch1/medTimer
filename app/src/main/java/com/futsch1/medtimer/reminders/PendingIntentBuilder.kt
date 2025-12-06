@@ -12,7 +12,7 @@ class PendingIntentBuilder(private val context: Context) {
     }
 
     fun build(): PendingIntent {
-        val reminderIntent = ReminderProcessor.getReminderAction(context)
+        val reminderIntent = getReminderAction(context)
         // Use the reminderEventId as request code to ensure unique PendingIntent for each reminder event
         return PendingIntent.getBroadcast(context, reminderEventId, reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }

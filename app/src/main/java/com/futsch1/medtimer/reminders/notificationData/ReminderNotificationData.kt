@@ -8,7 +8,7 @@ import androidx.work.Data
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.getReminderAction
 import java.time.Instant
 
 class ReminderNotificationData(
@@ -48,7 +48,7 @@ class ReminderNotificationData(
     }
 
     fun getPendingIntent(context: Context): PendingIntent {
-        val reminderIntent = ReminderProcessor.getReminderAction(context)
+        val reminderIntent = getReminderAction(context)
         toIntent(reminderIntent)
         // Use the reminderEventId as request code to ensure unique PendingIntent for each reminder event
         return PendingIntent.getBroadcast(context, reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)

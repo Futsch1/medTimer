@@ -4,7 +4,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
+import com.futsch1.medtimer.reminders.getSkippedActionIntent
+import com.futsch1.medtimer.reminders.getSnoozeIntent
+import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -20,7 +23,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
 
     private fun getTakenPendingIntent(): PendingIntent {
 
-        val notifyTaken = ReminderProcessor.getTakenActionIntent(context, processedNotificationData)
+        val notifyTaken = getTakenActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
             context,
             reminderNotification.reminderNotificationData.notificationId,
@@ -30,7 +33,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped = ReminderProcessor.getSkippedActionIntent(context, processedNotificationData)
+        val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
             context,
             reminderNotification.reminderNotificationData.notificationId,
@@ -43,7 +46,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
-            val snooze = ReminderProcessor.getCustomSnoozeActionIntent(
+            val snooze = getCustomSnoozeActionIntent(
                 context, reminderNotification.reminderNotificationData
             )
             return PendingIntent.getActivity(
@@ -52,7 +55,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         }
 
         fun getStandardSnoozeIntent(): PendingIntent {
-            val snooze = ReminderProcessor.getSnoozeIntent(
+            val snooze = getSnoozeIntent(
                 context, reminderNotification.reminderNotificationData, snoozeTime
             )
             return PendingIntent.getBroadcast(

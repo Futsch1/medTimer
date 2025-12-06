@@ -13,7 +13,7 @@ import java.time.Instant
 /**
  * Worker that schedules a repeat of the current reminder.
  */
-class RepeatReminderWork(context: Context, workerParams: WorkerParameters) : SnoozeWork(context, workerParams) {
+class RepeatWorker(context: Context, workerParams: WorkerParameters) : SnoozeWorker(context, workerParams) {
     override fun doWork(): Result {
         val inputData = getInputData()
 

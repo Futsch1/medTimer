@@ -51,7 +51,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessor.requestActionIntent(view.context, ProcessedNotificationData(listOf(reminderEvent.reminderEventId)), taken)
+        ReminderProcessor.requestReminderAction(view.context, ProcessedNotificationData(listOf(reminderEvent.reminderEventId)), taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {

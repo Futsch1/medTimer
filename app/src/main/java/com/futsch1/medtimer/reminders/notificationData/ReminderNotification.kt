@@ -10,7 +10,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.reminders.ReminderWork
+import com.futsch1.medtimer.reminders.ReminderWorker
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -103,7 +103,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         private fun buildAndInsertReminderEvent(
             medicineRepository: MedicineRepository, medicine: FullMedicine, reminder: Reminder, remindInstant: Instant, numberOfRepeats: Int
         ): ReminderEvent {
-            val reminderEvent: ReminderEvent = ReminderWork.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository)
+            val reminderEvent: ReminderEvent = ReminderWorker.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository)
             reminderEvent.remainingRepeats = numberOfRepeats
             reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
             return reminderEvent

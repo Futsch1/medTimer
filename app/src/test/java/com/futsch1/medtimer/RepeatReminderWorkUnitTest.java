@@ -26,7 +26,7 @@ import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.RepeatReminderWork;
+import com.futsch1.medtimer.reminders.RepeatWorker;
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -95,7 +95,7 @@ public class RepeatReminderWorkUnitTest {
             mockedInstant.when(Instant::now).thenReturn(zero);
             mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             when(zero.plusSeconds(15)).thenReturn(repeat);
-            RepeatReminderWork repeatReminderWork = new RepeatReminderWork(mockApplication, workerParams);
+            RepeatWorker repeatReminderWork = new RepeatWorker(mockApplication, workerParams);
 
             // Expected to pass
             ListenableWorker.Result result = repeatReminderWork.doWork();
