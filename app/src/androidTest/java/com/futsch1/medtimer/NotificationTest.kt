@@ -204,7 +204,8 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         pressBack()
 
-        navigateTo(MainMenu.MEDICINES)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
 
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder(FIRST_REMINDER, LocalTime.of(22, 0))
