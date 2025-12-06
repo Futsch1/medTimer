@@ -6,7 +6,7 @@
         android:title="@string/big_notifications"
         app:key="big_notifications" />
     <SwitchPreferenceCompat
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:title="@string/combine_notifications"
         android:summary="@string/combine_notifications_summary"
         app:singleLineTitle="false"
