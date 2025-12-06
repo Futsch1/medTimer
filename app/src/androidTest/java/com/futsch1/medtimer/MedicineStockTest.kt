@@ -36,6 +36,11 @@ class MedicineStockTest : BaseTestHelper() {
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
+
         AndroidTestHelper.createMedicine("Test")
         // Interval reminder (amount 3.5) 10 minutes from now
         AndroidTestHelper.createIntervalReminder("Of the pills 3.5 are to be taken", 10)
