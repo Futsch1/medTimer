@@ -42,6 +42,8 @@ import java.time.LocalTime
 const val TEST_MED = "Test med"
 
 private const val SECOND_ONE = "second one"
+private const val FIRST_REMINDER = "First reminder"
+private const val SECOND_REMINDER = "Second reminder"
 
 
 fun clickNotificationButton(device: UiDevice, buttonText: String): Boolean {
@@ -205,8 +207,8 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.MEDICINES)
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createReminder("First reminder", LocalTime.of(22, 0))
-        AndroidTestHelper.createReminder("Second reminder", LocalTime.of(22, 0))
+        AndroidTestHelper.createReminder(FIRST_REMINDER, LocalTime.of(22, 0))
+        AndroidTestHelper.createReminder(SECOND_REMINDER, LocalTime.of(22, 0))
         pressBack()
 
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
@@ -214,9 +216,9 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         assertNotNull(notification)
-        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
         assertNotNull(notification)
-        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
         assertNotNull(notification)
         device.pressBack()
         navigateTo(MainMenu.OVERVIEW)
@@ -226,18 +228,18 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
 
         device.openNotification()
-        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
         assertNull(notification)
-        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
         assertNotNull(notification)
         val text = notification.text
 
         device.wait(Until.gone(By.text(text)), 120_000)
         val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         assertNotNull(nextNotification)
-        notification = device.wait(Until.findObject(By.textContains("First reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
         assertNull(notification)
-        notification = device.wait(Until.findObject(By.textContains("Second reminder")), 1_000)
+        notification = device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
         assertNotNull(notification)
 
         device.pressBack()
