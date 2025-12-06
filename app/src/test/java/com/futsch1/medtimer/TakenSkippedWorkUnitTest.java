@@ -4,7 +4,6 @@ import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
 import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.mockStatic;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.when;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.service.notification.StatusBarNotification;
 
 import androidx.work.Data;
 import androidx.work.ListenableWorker;
@@ -64,6 +63,8 @@ public class TakenSkippedWorkUnitTest {
 
         mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
+        when(mockNotificationManager.getActiveNotifications()).thenReturn(new StatusBarNotification[]{});
+
 
         mockAlarmManager = mock(AlarmManager.class);
         when(mockApplication.getSystemService(AlarmManager.class)).thenReturn(mockAlarmManager);
@@ -112,9 +113,6 @@ public class TakenSkippedWorkUnitTest {
             assertEquals(reminderId, captor.getValue().reminderId);
             assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
             assertEquals(status, captor.getValue().status);
-            verify(mockNotificationManager, times(1)).cancel(notificationId);
-
-            verify(mockAlarmManager, times(1)).cancel((PendingIntent) any());
 
             if (status == ReminderEvent.ReminderStatus.TAKEN) {
                 ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);

@@ -19,6 +19,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 
 import androidx.core.app.NotificationCompat;
@@ -150,6 +151,7 @@ public class ReminderWorkUnitTest {
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = REMINDER_ID;
             reminderEvent.reminderEventId = REMINDER_EVENT_ID;
+            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
             when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
         });
              MockedConstruction<NotificationCompat.Builder> ignored2 = mockConstruction(NotificationCompat.Builder.class, (mock, context) -> {
@@ -164,6 +166,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
+                 when(mock.getExtras()).thenReturn(new Bundle());
                  when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(0)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
@@ -216,6 +219,7 @@ public class ReminderWorkUnitTest {
                  when(mock.setLargeIcon((Bitmap) null)).thenReturn(mock);
                  when(mock.setCategory(Notification.CATEGORY_REMINDER)).thenReturn(mock);
                  when(mock.addAction(eq(R.drawable.check2_circle), eq(NOTIFICATION_TAKEN), any())).thenReturn(mock());
+                 when(mock.getExtras()).thenReturn(new Bundle());
                  when(mock.build()).thenReturn(new Notification());
              });
              MockedConstruction<MedicineIcons> ignored3 = mockConstruction(MedicineIcons.class, (mock, context) -> when(mock.getIconBitmap(16)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)));
