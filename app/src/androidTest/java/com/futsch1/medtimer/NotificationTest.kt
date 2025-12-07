@@ -57,7 +57,7 @@ fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
     var tries = 10
     var button: UiObject2? = null
     while (tries-- > 0 && button == null) {
-        val expandButtons = device.findObjects(By.res("android:id/expand_button")) //device.findObject(By.descContains("Expand"))
+        val expandButtons = device.findObjects(By.res("android:id/expand_button"))
         if (expandButtons.size > buttonIndex) {
             expandButtons[buttonIndex++].click()
         }
