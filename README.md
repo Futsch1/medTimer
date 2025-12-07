@@ -117,3 +117,5 @@ MedTimer uses the following great open source libraries and dependencies:
 - [Calendar](https://github.com/kizitonwose/Calendar)
 - [IconDialog](https://github.com/maltaisn/icondialoglib)
 - [HSV-Alpha Color Picker for Android](https://github.com/martin-stone/hsv-alpha-color-picker-android)
+
+Feature graphics generated using [hotpot.ai](https://hotpot.ai)

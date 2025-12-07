@@ -12,22 +12,20 @@ import static com.adevinta.android.barista.interaction.BaristaListInteractions.c
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
+import static com.futsch1.medtimer.NotificationTestKt.getNotificationText;
+import static com.futsch1.medtimer.NotificationTestKt.makeNotificationExpanded;
 import static junit.framework.TestCase.assertEquals;
 
 import android.widget.TextView;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.Until;
 
 import com.evrencoskun.tableview.TableView;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -55,11 +53,7 @@ public class ScreenshotsTest extends BaseTestHelper {
         clickOn(R.id.skippedButton);
 
         device.openNotification();
-        UiObject2 medTimerNotifications = device.wait(Until.findObject(By.text("MedTimer")), 2_000);
-        UiObject2 expand = medTimerNotifications.findObject(By.res("android:id/expand_button"));
-        if (expand != null && Objects.equals(expand.getContentDescription(), "Expand")) {
-            expand.click();
-        }
+        makeNotificationExpanded(device, getNotificationText(R.string.taken));
         Screengrab.screenshot("5");
         device.pressBack();
 
