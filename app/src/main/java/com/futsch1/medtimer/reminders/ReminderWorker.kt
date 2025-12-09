@@ -45,17 +45,18 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
 
         val reminderNotificationData = ReminderNotificationData.fromInputData(inputData)
         // Create reminder events and filter those that are already processed
-        val reminderNotification =
+        var reminderNotification =
             ReminderNotification.fromReminderNotificationData(applicationContext, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 
         medicineRepository.flushDatabase()
 
         if (reminderNotification != null) {
+            reminderNotification = handleAutomaticallyTaken(reminderNotification)
             if (reminderNotification.reminderNotificationParts.isEmpty()) {
                 Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
             } else {
                 Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
-                performActionsOfReminders(reminderNotification)
+                notificationAction(reminderNotification)
                 medicineRepository.flushDatabase()
             }
             r = Result.success()
@@ -64,7 +65,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
         return r
     }
 
-    private fun performActionsOfReminders(reminderNotification: ReminderNotification) {
+    private fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
                 NotificationProcessor(context).setSingleReminderEventStatus(
@@ -81,8 +82,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
                 )
             }
         }
-
-        notificationAction(reminderNotification.filterAutomaticallyTaken())
+        return reminderNotification.filterAutomaticallyTaken()
     }
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
@@ -90,7 +90,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
 
         // Show notifications for all reminders
         showNotification(reminderNotification)
-        
+
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {

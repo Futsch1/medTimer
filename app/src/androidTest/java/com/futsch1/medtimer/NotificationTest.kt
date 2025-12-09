@@ -462,6 +462,9 @@ class NotificationTest : BaseTestHelper() {
 
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
+
+        device.openNotification()
+        internalAssert(device.findObject(By.textContains(getNotificationText(R.string.taken))) == null)
     }
 
     @Test
