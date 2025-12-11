@@ -16,7 +16,7 @@
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few"/>
+        <item quantity="few" />
         <item quantity="many">%1$d нагадування\n%2$s</item>
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
@@ -256,4 +256,11 @@
     <string name="system_locale_summary">У вимкненому стані програма використовує налаштування, що відповідають мові, встановленій для програми.</string>
     <string name="raised">Спрацював</string>
     <string name="scheduled">Заплановано</string>
-<string name="no_calendar_app">Не знайдено жодного додатку календаря</string><string name="combine_notifications">Об&amp;apos;єднати одночасні сповіщення</string><string name="combine_notifications_summary">Якщо встановлено, сповіщення з однаковим часом об&amp;apos;єднуються в одне сповіщення</string></resources>
+    <string name="no_calendar_app">Не знайдено жодного додатку календаря</string>
+    <string name="combine_notifications">Об&amp;apos;єднати одночасні сповіщення</string>
+    <string name="combine_notifications_summary">Якщо встановлено, сповіщення з однаковим часом об&amp;apos;єднуються в одне сповіщення</string>
+    <string name="battery_optimization_warning_title">Оптимізацію батареї увімкнено</string>
+    <string name="battery_optimization_warning_summary">Якщо у вас виникають проблеми з пропущеними сповіщеннями, будь ласка, вимкніть оптимізацію батареї для цього додатка в налаштуваннях сповіщень.</string>
+    <string name="ignore_battery_optimization">Ігнорувати оптимізацію батареї</string>
+    <string name="dismiss">Відхилити</string>
+</resources>

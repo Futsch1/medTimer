@@ -1,14 +1,18 @@
 package com.futsch1.medtimer.preferences
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
@@ -24,6 +28,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
         setupNotificationSettings()
         setupExactReminders()
+        setupBatteryOptimization()
 
         setupPreferencesLink(
             this,
@@ -88,6 +93,24 @@ class NotificationSettingsFragment : PreferencesFragment() {
                     }
             } else {
                 preference.isVisible = false
+            }
+        }
+    }
+
+    @SuppressLint("BatteryLife")
+    private fun setupBatteryOptimization() {
+        val preference = preferenceScreen.findPreference<Preference?>("ignore_battery_optimization")
+        val powerManager = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
+
+        if (powerManager.isIgnoringBatteryOptimizations(requireContext().packageName)) {
+            preference?.isVisible = false
+        } else {
+            preference?.isVisible = true
+            preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                intent.data = "package:${requireContext().packageName}".toUri()
+                safeStartActivity(context, intent)
+                true
             }
         }
     }

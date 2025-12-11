@@ -57,4 +57,10 @@
         android:summary="@string/exact_reminders_summary"
         android:title="@string/exact_reminders"
         app:key="exact_reminders" />
+    <Preference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:key="ignore_battery_optimization"
+        android:title="@string/ignore_battery_optimization"
+        app:singleLineTitle="false" />
 </androidx.preference.PreferenceScreen>

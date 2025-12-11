@@ -253,4 +253,8 @@
     <string name="no_calendar_app">No calendar app found</string>
     <string name="combine_notifications">Combine same time notifications</string>
     <string name="combine_notifications_summary">If set, notifications with the same time are combined into a single notification</string>
+    <string name="battery_optimization_warning_title">Battery optimization is enabled</string>
+    <string name="battery_optimization_warning_summary">If you experience issues with missed notifications, please disable battery optimization for this app in the notification settings.</string>
+    <string name="ignore_battery_optimization">Ignore battery optimization</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

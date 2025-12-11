@@ -246,4 +246,11 @@
     <string name="system_locale_summary">Kapatıldığında, uygulama, uygulama için ayarlanan dille eşleşen ayarı kullanır.</string>
     <string name="raised">Çaldı</string>
     <string name="scheduled">Planlandı</string>
-<string name="no_calendar_app">Takvim uygulaması bulunamadı</string><string name="combine_notifications">Aynı zamanlı bildirimleri birleştirin</string><string name="combine_notifications_summary">Ayarlanırsa, aynı zamana sahip bildirimler tek bir bildirimde birleştirilir</string></resources>
+    <string name="no_calendar_app">Takvim uygulaması bulunamadı</string>
+    <string name="combine_notifications">Aynı zamanlı bildirimleri birleştirin</string>
+    <string name="combine_notifications_summary">Ayarlanırsa, aynı zamana sahip bildirimler tek bir bildirimde birleştirilir</string>
+    <string name="battery_optimization_warning_title">Pil optimizasyonu etkin</string>
+    <string name="battery_optimization_warning_summary">Cevapsız bildirimlerle ilgili sorunlar yaşıyorsanız, lütfen bildirim ayarlarından bu uygulama için pil optimizasyonunu devre dışı bırakın.</string>
+    <string name="ignore_battery_optimization">Pil optimizasyonunu yoksay</string>
+    <string name="dismiss">Kapat</string>
+</resources>

@@ -249,4 +249,8 @@
     <string name="no_calendar_app">Geen kalender-app gevonden</string>
     <string name="combine_notifications">Combineer kennisgevingen op hetzelfde moment</string>
     <string name="combine_notifications_summary">Indien ingesteld, worden meldingen met dezelfde tijd gecombineerd tot één melding</string>
+    <string name="battery_optimization_warning_title">Batterijoptimalisatie is ingeschakeld</string>
+    <string name="battery_optimization_warning_summary">Als u problemen ondervindt met gemiste meldingen, schakel dan de batterijoptimalisatie uit voor deze app in de meldingsinstellingen.</string>
+    <string name="ignore_battery_optimization">Batterijoptimalisatie negeren</string>
+    <string name="dismiss">Sluiten</string>
 </resources>

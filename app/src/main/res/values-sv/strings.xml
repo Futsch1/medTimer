@@ -247,4 +247,10 @@
     <string name="raised">Utlöst</string>
     <string name="scheduled">Schemalagd</string>
     <string name="no_calendar_app">Ingen kalenderapp hittades</string>
-<string name="combine_notifications">Kombinera samma tidsmeddelanden</string><string name="combine_notifications_summary">Om inställt kombineras meddelanden med samma tid till ett enda meddelande</string></resources>
+    <string name="combine_notifications">Kombinera samma tidsmeddelanden</string>
+    <string name="combine_notifications_summary">Om inställt kombineras meddelanden med samma tid till ett enda meddelande</string>
+    <string name="battery_optimization_warning_title">Batterioptimering är aktiverat</string>
+    <string name="battery_optimization_warning_summary">Om du upplever problem med missade aviseringar, inaktivera batterioptimering för den här appen i aviseringsinställningarna.</string>
+    <string name="ignore_battery_optimization">Ignorera batterioptimering</string>
+    <string name="dismiss">Avfärda</string>
+</resources>

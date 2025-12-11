@@ -247,4 +247,10 @@
     <string name="raised">Udløst</string>
     <string name="scheduled">Planlagt</string>
     <string name="no_calendar_app">Ingen kalender-app fundet</string>
-<string name="combine_notifications">Kombiner meddelelser på samme tid</string><string name="combine_notifications_summary">Hvis indstillet, kombineres notifikationer med samme tidspunkt til en enkelt notifikation</string></resources>
+    <string name="combine_notifications">Kombiner meddelelser på samme tid</string>
+    <string name="combine_notifications_summary">Hvis indstillet, kombineres notifikationer med samme tidspunkt til en enkelt notifikation</string>
+    <string name="battery_optimization_warning_title">Batterioptimering er slået til</string>
+    <string name="battery_optimization_warning_summary">Hvis du oplever problemer med manglende meddelelser, skal du deaktivere batterioptimering for denne app i meddelelsesindstillingerne.</string>
+    <string name="ignore_battery_optimization">Ignorer batterioptimering</string>
+    <string name="dismiss">Afvis</string>
+</resources>

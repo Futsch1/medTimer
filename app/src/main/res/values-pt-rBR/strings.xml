@@ -251,4 +251,11 @@
     <string name="system_locale_summary">Quando desativado, o aplicativo usará a configuração correspondente ao idioma definido para o aplicativo.</string>
     <string name="raised">Acionado</string>
     <string name="scheduled">Agendado</string>
-<string name="no_calendar_app">Nenhum aplicativo de calendário encontrado</string><string name="combine_notifications">Combinar notificações de mesmo horário</string><string name="combine_notifications_summary">Se definido, as notificações com o mesmo horário serão combinadas em uma única notificação</string></resources>
+    <string name="no_calendar_app">Nenhum aplicativo de calendário encontrado</string>
+    <string name="combine_notifications">Combinar notificações de mesmo horário</string>
+    <string name="combine_notifications_summary">Se definido, as notificações com o mesmo horário serão combinadas em uma única notificação</string>
+    <string name="battery_optimization_warning_title">A otimização da bateria está ativada</string>
+    <string name="battery_optimization_warning_summary">Se você estiver tendo problemas com notificações perdidas, desative a otimização da bateria para este aplicativo nas configurações de notificação.</string>
+    <string name="ignore_battery_optimization">Ignorar a otimização da bateria</string>
+    <string name="dismiss">Descartar</string>
+</resources>
