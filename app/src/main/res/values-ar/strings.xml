@@ -266,4 +266,11 @@
     <string name="system_locale_summary">عند إيقاف تشغيله، يستخدم التطبيق الإعداد المطابق للغة التي تم تعيينها للتطبيق.</string>
     <string name="raised">تم الرفع</string>
     <string name="scheduled">مجدول</string>
-<string name="no_calendar_app">لم يتم العثور على تطبيق تقويم</string><string name="combine_notifications">الجمع بين الإشعارات في نفس الوقت</string><string name="combine_notifications_summary">في حالة تعيينها، يتم دمج الإشعارات التي لها نفس الوقت في إشعار واحد</string></resources>
+    <string name="no_calendar_app">لم يتم العثور على تطبيق تقويم</string>
+    <string name="combine_notifications">الجمع بين الإشعارات في نفس الوقت</string>
+    <string name="combine_notifications_summary">في حالة تعيينها، يتم دمج الإشعارات التي لها نفس الوقت في إشعار واحد</string>
+    <string name="battery_optimization_warning_title">تمكين تحسين البطارية</string>
+    <string name="battery_optimization_warning_summary">إذا واجهت مشاكل في الإشعارات الفائتة، يرجى تعطيل تحسين البطارية لهذا التطبيق في إعدادات الإشعار.</string>
+    <string name="ignore_battery_optimization">تجاهل تحسين البطارية</string>
+    <string name="dismiss">رفض</string>
+</resources>

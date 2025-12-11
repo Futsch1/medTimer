@@ -246,4 +246,11 @@
     <string name="system_locale_summary">Kikapcsolt állapotban az alkalmazás az alkalmazáshoz beállított nyelvnek megfelelő beállítást használja.</string>
     <string name="raised">Elindítva</string>
     <string name="scheduled">Ütemezve</string>
-<string name="no_calendar_app">Nincs naptár alkalmazás található</string><string name="combine_notifications">Egyidejű értesítések kombinálása</string><string name="combine_notifications_summary">Ha be van állítva, az azonos időpontú értesítések egyetlen értesítéssé állnak össze</string></resources>
+    <string name="no_calendar_app">Nincs naptár alkalmazás található</string>
+    <string name="combine_notifications">Egyidejű értesítések kombinálása</string>
+    <string name="combine_notifications_summary">Ha be van állítva, az azonos időpontú értesítések egyetlen értesítéssé állnak össze</string>
+    <string name="battery_optimization_warning_title">Az akkumulátor optimalizálása be van kapcsolva</string>
+    <string name="battery_optimization_warning_summary">Ha problémákat tapasztal a nem fogadott értesítésekkel, kérjük, tiltsa le az akkumulátor optimalizálását ehhez az alkalmazáshoz az értesítési beállításokban.</string>
+    <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
+    <string name="dismiss">Elutasítás</string>
+</resources>

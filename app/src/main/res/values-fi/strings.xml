@@ -246,4 +246,11 @@
     <string name="system_locale_summary">Jos pois päältä, sovellus käyttää sovellukselle asetettua kieltä vastaavaa asetusta.</string>
     <string name="raised">Laukaistu</string>
     <string name="scheduled">Ajastettu</string>
-<string name="no_calendar_app">Kalenterisovellusta ei löydy</string><string name="combine_notifications">Yhdistä samaan aikaan tehtävät ilmoitukset</string><string name="combine_notifications_summary">Jos asetetaan, ilmoitukset, joiden kellonaika on sama, yhdistetään yhdeksi ilmoitukseksi</string></resources>
+    <string name="no_calendar_app">Kalenterisovellusta ei löydy</string>
+    <string name="combine_notifications">Yhdistä samaan aikaan tehtävät ilmoitukset</string>
+    <string name="combine_notifications_summary">Jos asetetaan, ilmoitukset, joiden kellonaika on sama, yhdistetään yhdeksi ilmoitukseksi</string>
+    <string name="battery_optimization_warning_title">Akun optimointi on käytössä</string>
+    <string name="battery_optimization_warning_summary">Jos sinulla on ongelmia vastaamattomien ilmoitusten kanssa, poista akun optimointi käytöstä tämän sovelluksen ilmoitusasetuksissa.</string>
+    <string name="ignore_battery_optimization">Ohita akun optimointi</string>
+    <string name="dismiss">Hylkää</string>
+</resources>

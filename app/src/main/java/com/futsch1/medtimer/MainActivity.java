@@ -5,17 +5,21 @@ import static androidx.navigation.ActivityKt.findNavController;
 import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -32,7 +36,9 @@ import java.util.List;
 import kotlin.Unit;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String BATTERY_WARNING_DISMISSED = "battery_warning_dismissed";
     private AppBarConfiguration appBarConfiguration;
+    private CardView batteryOptimizationWarning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
     private void start() {
         setContentView(R.layout.activity_main);
         setupNavigation();
+        batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning);
+        findViewById(R.id.dismissBatteryWarning).setOnClickListener(v -> {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sharedPref.edit().putBoolean(BATTERY_WARNING_DISMISSED, true).apply();
+            checkBatteryOptimization();
+        });
 
         ActivityIntentKt.dispatch(this, this.getIntent());
         this.setIntent(new Intent());
@@ -133,15 +145,27 @@ public class MainActivity extends AppCompatActivity {
             navController.popBackStack(item.getItemId(), false);
             List<Fragment> currentFragments = navHostFragment.getChildFragmentManager().getFragments();
 
-            if (!currentFragments.isEmpty() && currentFragments.get(0) instanceof OnFragmentReselectedListener) {
+            if (!currentFragments.isEmpty() && currentFragments.get(0) instanceof OnFragmentReselectedListener onFragmentReselectedListener) {
                 // Forward the reselection event to the current fragment
-                ((OnFragmentReselectedListener) currentFragments.get(0)).onFragmentReselected();
+                onFragmentReselectedListener.onFragmentReselected();
             }
         });
         bottomNavigationView.setOnItemSelectedListener(item -> {
             NavigationUI.onNavDestinationSelected(item, navController);
             return true;
         });
+    }
+
+    private void checkBatteryOptimization() {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean warningDismissed = sharedPref.getBoolean(BATTERY_WARNING_DISMISSED, false);
+
+        if (!powerManager.isIgnoringBatteryOptimizations(getPackageName()) && !warningDismissed && !BuildConfig.DEBUG) {
+            batteryOptimizationWarning.setVisibility(View.VISIBLE);
+        } else {
+            batteryOptimizationWarning.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -158,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        checkBatteryOptimization();
     }
 
     @Override
