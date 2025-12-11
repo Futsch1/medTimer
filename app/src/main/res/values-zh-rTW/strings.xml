@@ -196,7 +196,7 @@
     <string name="use_relative_date_time">相對日期／時間</string>
     <string name="invalid_amount">必須輸入數字的數量，才能為此提醒啟用藥品庫存追蹤。</string>
     <string name="sticky_on_lockscreen">鎖定畫面持續性提醒</string>
-    <string name="sticky_on_lockscreen_summary">無法在鎖定畫面關閉提醒，只能從通知欄關閉</string>
+    <string name="sticky_on_lockscreen_summary">提醒無法在鎖定螢幕上關閉，只能在通知抽屜中關閉\n注意：某些智慧手錶可能不再顯示通知</string>
     <string name="big_notifications">大型通知按鈕</string>
     <string name="please_wait">請稍候…</string>
     <string name="interval_time">間隔 %s</string>

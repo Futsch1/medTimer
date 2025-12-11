@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Fecha/hora relativa</string>
     <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
     <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
-    <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, sólo desde el cajón de notificaciones</string>
+    <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, solo desde el panel de notificaciones\nNota: Es posible que algunos relojes inteligentes ya no muestren notificaciones</string>
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="please_wait">Por favor, espere…</string>
     <string name="interval_time">Intervalo %s</string>

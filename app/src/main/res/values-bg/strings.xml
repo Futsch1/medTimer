@@ -191,7 +191,7 @@
     <string name="use_relative_date_time">Относителни време/дата</string>
     <string name="invalid_amount">Количеството трябва да има число за следене на наличните лекарства за това напомняне.</string>
     <string name="sticky_on_lockscreen">Постонянни напомняния при заключен екран</string>
-    <string name="sticky_on_lockscreen_summary">Напомнянията не могат да се махат от заключен екран, само от списъка с напомняния</string>
+    <string name="sticky_on_lockscreen_summary">Напомнянията не могат да бъдат отхвърляни от заключения екран, а само от панела с известия\nЗабележка: Някои смарт часовници може повече да не показват известия</string>
     <string name="big_notifications">Големи бутони в известието</string>
     <string name="please_wait">Моля изчакайте…</string>
     <string name="interval_time">Интервал %s</string>

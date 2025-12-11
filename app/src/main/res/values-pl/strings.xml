@@ -211,7 +211,7 @@
     <string name="use_relative_date_time">Względna data/godzina</string>
     <string name="invalid_amount">Pole musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
-    <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucić z ekranu blokady, a jedynie z szuflady powiadomień</string>
+    <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucać z ekranu blokady, a jedynie z szuflady powiadomień\nUwaga: niektóre smartwatche mogą już nie wyświetlać powiadomień</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="interval_time">Odstęp %s</string>

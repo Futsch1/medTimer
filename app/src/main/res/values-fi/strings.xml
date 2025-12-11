@@ -202,7 +202,7 @@
     <string name="use_relative_date_time">Suhteellinen päivämäärä/aika</string>
     <string name="invalid_amount">Määrän tulee sisältää numero, jotta lääkevaraston seuranta voidaan ottaa käyttöön tässä muistutuksessa.</string>
     <string name="sticky_on_lockscreen">Pysyvät muistutukset lukitusnäytöllä</string>
-    <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi hylätä lukitusnäytöltä, ainoastaan ilmoituspalkista</string>
+    <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi ohittaa lukitusnäytöltä, ainoastaan ilmoituspaneelista\nHuomautus: Jotkin älykellot eivät ehkä enää näytä ilmoituksia</string>
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
     <string name="please_wait">Odota, olkaa hyvä…</string>
     <string name="interval_time">Väliaika %s</string>
