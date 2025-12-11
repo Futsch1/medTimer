@@ -126,7 +126,7 @@ dependencies {
     val preferenceExtendedVersion = "1.1.0"
 
     val junitVersion = "6.0.1"
-    val mockitoCoreVersion = "5.20.0"
+    val mockitoCoreVersion = "5.21.0"
     val mockitoInlineVersion = "5.2.0"
     val robolectricVersion = "4.16"
     val jazzerVersion = "0.28.0"

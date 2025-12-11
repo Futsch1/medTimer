@@ -200,7 +200,7 @@
     <string name="use_relative_date_time">Σχετική ημερομηνία/ώρα</string>
     <string name="invalid_amount">Το πεδίο της ποσότητας πρέπει να περιέχει έναν αριθμό για να ενεργοποιηθεί η παρακολούθηση του αποθέματος φαρμάκου για αυτήν την υπενθύμιση.</string>
     <string name="sticky_on_lockscreen">Επίμονες υπενθυμίσεις στην οθόνη κλειδώματος</string>
-    <string name="sticky_on_lockscreen_summary">Δεν θα είναι δυνατή η παράλειψη των υπενθυμίσεων στην οθόνη κλειδώματος, παρά μόνο στο συρτάρι ειδοποιήσεων</string>
+    <string name="sticky_on_lockscreen_summary">Οι υπενθυμίσεις δεν μπορούν να απορριφθούν από την οθόνη κλειδώματος, μόνο από τη γραμμή ειδοποιήσεων\nΣημείωση: Ορισμένα έξυπνα ρολόγια ενδέχεται να μην εμφανίζουν πλέον ειδοποιήσεις</string>
     <string name="big_notifications">Μεγεθυμένα πλήκτρα ειδοποιήσεων</string>
     <string name="please_wait">Παρακαλώ περιμένετε…</string>
     <string name="interval_time">Χρονικό διάστημα %s</string>

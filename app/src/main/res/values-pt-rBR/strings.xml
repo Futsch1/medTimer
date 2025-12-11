@@ -190,7 +190,7 @@
     <string name="unlimited">Ilimitado</string>
     <string name="once_below_threshold">Uma vez quando abaixo do limite</string>
     <string name="privacy_settings">Configurações de privacidade</string>
-    <string name="sticky_on_lockscreen_summary">Lembretes não podem ser descartados na tela de bloqueio, apenas na gaveta de notificações</string>
+    <string name="sticky_on_lockscreen_summary">Os lembretes não podem ser dispensados na tela de bloqueio, apenas na gaveta de notificações\nObservação: alguns smartwatches podem não mostrar mais notificações</string>
     <string name="invalid_amount">O valor deve conter um número para permitir o monitoramento do estoque de medicamentos para este lembrete.</string>
     <string name="never">Nunca</string>
     <string name="days_string">Dias</string>

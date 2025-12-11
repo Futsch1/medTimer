@@ -201,7 +201,7 @@
     <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>
     <string name="invalid_amount">Der Betrag muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>
     <string name="sticky_on_lockscreen">Dauerhafte Erinnerungen auf dem Sperrbildschirm</string>
-    <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht über den Sperrbildschirm, sondern nur über die Benachrichtigungsleiste verworfen werden</string>
+    <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht vom Sperrbildschirm, sondern nur aus der Benachrichtigungsleiste ausgeblendet werden\nHinweis: Einige Smartwatches zeigen Benachrichtigungen möglicherweise nicht mehr an</string>
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
     <string name="please_wait">Bitte warten…</string>
     <string name="interval_time">Intervall %s</string>

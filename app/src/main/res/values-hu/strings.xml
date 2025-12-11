@@ -202,7 +202,7 @@
     <string name="use_relative_date_time">Hozzávetőleges dátum/idő</string>
     <string name="invalid_amount">Ahhoz, hogy a gyógyszerkészlet nyomon követhető legyen, a mennyiségnek számnak kell lennie.</string>
     <string name="sticky_on_lockscreen">Tartós emlékeztetők zárolt képernyőn</string>
-    <string name="sticky_on_lockscreen_summary">Az emlékeztetőket csak az értesítési sávből lehet elvetni, zárolt képernyőről nem.</string>
+    <string name="sticky_on_lockscreen_summary">Az emlékeztetőket nem lehet elvetni a lezárási képernyőről, csak az értesítési fiókból\nMegjegyzés: Előfordulhat, hogy egyes okosórák már nem jelenítik meg az értesítéseket</string>
     <string name="big_notifications">Nagy méretű értesítési gombok</string>
     <string name="please_wait">Kérlek, várj…</string>
     <string name="reminded">Emlékeztetve</string>

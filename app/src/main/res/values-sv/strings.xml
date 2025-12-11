@@ -201,7 +201,7 @@
     <string name="use_relative_date_time_summary">Visa relativ datum/tid för påminnelser</string>
     <string name="use_relative_date_time">Relativ datum/tid</string>
     <string name="invalid_amount">Mängden måste innehålla ett nummer för att möjliggöra lagerspårning av läkemdel för denna påminnelse.</string>
-    <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avfärdas från låsskärmen, endast från aviseringsfönstret</string>
+    <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avvisas från låsskärmen, endast från meddelandefältet\nObs: Vissa smartklockor kanske inte längre visar aviseringar</string>
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
     <string name="interval_time">Intervall %s</string>

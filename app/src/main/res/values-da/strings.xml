@@ -201,7 +201,7 @@
     <string name="use_relative_date_time">Relativ dato/tid</string>
     <string name="invalid_amount">Antallet skal indeholde et tal for at tillade medicinbeholdningssporing for denne påmindelse.</string>
     <string name="sticky_on_lockscreen">Vedvarende påmindelser på låseskærmen</string>
-    <string name="sticky_on_lockscreen_summary">Påmindelser kan ikke afvises fra låseskærmen, kun fra notifikationsoversigten</string>
+    <string name="sticky_on_lockscreen_summary">Påmindelser kan ikke afvises fra låseskærmen, kun fra meddelelsesbakken\nBemærk: Nogle smartwatches viser muligvis ikke længere notifikationer</string>
     <string name="big_notifications">Store notifikationsknapper</string>
     <string name="please_wait">Vent venligst…</string>
     <string name="interval_time">Interval %s</string>
