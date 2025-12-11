@@ -6,13 +6,13 @@ import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
@@ -108,7 +108,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             preference?.isVisible = true
             preference?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                 val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-                intent.data = Uri.parse("package:${requireContext().packageName}")
+                intent.data = "package:${requireContext().packageName}".toUri()
                 safeStartActivity(context, intent)
                 true
             }
