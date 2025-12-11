@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -105,8 +105,8 @@
     <string name="edit_event">Herinnering bewerken</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
-    <string name="intro_medicine_description">Gebruik het tabblad \"Behandeling\" om de behandeling aan te maken dat je gebruikt en waaraan je herinnerd wilt worden. Veeg naar links om een behandeling te verwijderen.</string>
-    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen aan te maken voor de verschillende doses van het behandeling die je moet innemen.\n\nHerinneringen kunnen zo simpel zijn als één keer per dag op een bepaald tijdstip verschijnen of complexe schema\'s met meerdere dagen achter elkaar en meerdere dagen pauze.</string>
+    <string name="intro_medicine_description">Gebruik het tabblad \'Medicijnen\' om de medicijnen aan te maken die u gebruikt en waarvoor u een herinnering wilt ontvangen. U kunt tags aan medicijnen toewijzen en de voorraad ervan configureren.</string>
+    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen te maken voor de verschillende doses die u moet innemen.\n\nHerinneringen kunnen tijd- of intervalgebaseerd zijn en kunnen worden beperkt tot specifieke dagen.</string>
     <string name="intro_notification_description">Zodra er een herinnering is, verschijnt er een melding die je de mogelijkheid geeft om een dosis te markeren als ingenomen (door op de knop \"INGENOMEN\" te klikken), overgeslagen (door de melding te negeren) of na enige tijd opnieuw te worden herinnerd (\"SNOOZEN\").</string>
     <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen.\n\nVerder kun je handmatig extra doses van een van de geconfigureerde behandelingen of een aangepast behandeling registreren.</string>
     <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als behandelingen of herinneringen worden verwijderd of een andere naam krijgen.</string>
@@ -229,7 +229,7 @@
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
     <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
     <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
-    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9.00 tot 21.00 uur) waar de eerste herinnering altijd op de starttijd is. Volgende herinneringen worden met vaste tussenpozen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag opnieuw ingesteld.</string>
+    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9:00 uur tot 21:00 uur) waarbij de eerste herinnering altijd op de starttijd valt. Volgende herinneringen worden met vaste intervallen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag gereset.</string>
     <string name="linked_reminder">Gekoppelde herinnering</string>
     <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt ingenomen. Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
     <string name="add_linked_reminder_summary">Creëert een vervolgherinnering die een bepaalde tijd na het afgaan van deze herinnering wordt gepland.</string>
