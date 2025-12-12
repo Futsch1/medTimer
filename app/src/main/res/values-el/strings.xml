@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Εάν αντιμετωπίζετε προβλήματα με τις αναπάντητες ειδοποιήσεις, απενεργοποιήστε τη βελτιστοποίηση της μπαταρίας για αυτήν την εφαρμογή στις ρυθμίσεις ειδοποιήσεων.</string>
     <string name="ignore_battery_optimization">Παράβλεψη βελτιστοποίησης μπαταρίας</string>
     <string name="dismiss">Απόρριψη</string>
+    <string name="reschedule_reminder">Επαναπρογραμματισμός υπενθύμισης</string>
 </resources>

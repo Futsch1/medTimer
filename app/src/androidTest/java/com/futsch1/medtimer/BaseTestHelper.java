@@ -71,11 +71,38 @@ public abstract class BaseTestHelper {
     public void setup() {
         Espresso.setFailureHandler(failureHandler);
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        try {
+            device.wakeUp();
+        } catch (RemoteException e) {
+            // Ignore
+        }
+
+        dismissAllNotifications(device);
+
         device.pressHome();
         baristaRule.launchActivity();
 
         if (!LocalDate.now().isEqual(LocalDate.of(2025, 8, 1))) {
             failureHandler.handle(new AssertionError("Wrong date - tests require the date/time to be set to 01.08.2025, 16:00\nUse 'adb su 0 toybox date 0801160025' to set it."), withId(0));
+        }
+    }
+
+    private void dismissAllNotifications(UiDevice device) {
+        try {
+            device.openNotification();
+
+            UiObject clearAllButton = device.findObject(new UiSelector().resourceId("com.android.systemui:id/dismiss_text")
+                    .textContains("Clear all"));
+            if (!clearAllButton.exists()) {
+                clearAllButton = device.findObject(new UiSelector().descriptionContains("Clear all"));
+            }
+            if (clearAllButton.exists()) {
+                clearAllButton.click();
+            } else {
+                device.pressBack();
+            }
+        } catch (UiObjectNotFoundException e) {
+            device.pressBack();
         }
     }
 

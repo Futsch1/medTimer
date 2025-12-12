@@ -99,6 +99,17 @@ class ReminderProcessor : BroadcastReceiver() {
             workManager.enqueue(stockHandlingWorker)
         }
 
+        fun requestSchedule(context: Context, reminderNotificationData: ReminderNotificationData) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val builder = Data.Builder()
+            reminderNotificationData.toBuilder(builder)
+            val scheduleWork =
+                OneTimeWorkRequest.Builder(ScheduleWorker::class.java)
+                    .setInputData(builder.build())
+                    .build()
+            workManager.enqueue(scheduleWork)
+        }
+
         fun requestReminderAction(context: Context, processedNotificationData: ProcessedNotificationData, taken: Boolean) {
             val actionIntent: Intent =
                 if (taken) getTakenActionIntent(context, processedNotificationData) else getSkippedActionIntent(context, processedNotificationData)

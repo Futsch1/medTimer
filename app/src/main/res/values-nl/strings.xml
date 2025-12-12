@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Als u problemen ondervindt met gemiste meldingen, schakel dan de batterijoptimalisatie uit voor deze app in de meldingsinstellingen.</string>
     <string name="ignore_battery_optimization">Batterijoptimalisatie negeren</string>
     <string name="dismiss">Sluiten</string>
+    <string name="reschedule_reminder">Herinnering opnieuw plannen</string>
 </resources>

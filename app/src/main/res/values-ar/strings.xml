@@ -273,4 +273,5 @@
     <string name="battery_optimization_warning_summary">إذا واجهت مشاكل في الإشعارات الفائتة، يرجى تعطيل تحسين البطارية لهذا التطبيق في إعدادات الإشعار.</string>
     <string name="ignore_battery_optimization">تجاهل تحسين البطارية</string>
     <string name="dismiss">رفض</string>
+    <string name="reschedule_reminder">إعادة جدولة التذكير</string>
 </resources>

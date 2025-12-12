@@ -159,7 +159,7 @@ public class TimeHelper {
             return -1;
         }
 
-        return changeTimeStampDate(instantFromTodayMinutes(minutes).getEpochSecond(), date);
+        return changeTimeStampDate(instantFromDateAndMinutes(minutes, LocalDate.now()).getEpochSecond(), date);
     }
 
     /**
@@ -212,8 +212,7 @@ public class TimeHelper {
      * @param minutes Minutes since midnight
      * @return Instant of today at given time
      */
-    public static Instant instantFromTodayMinutes(int minutes) {
-        LocalDate date = LocalDate.now();
+    public static Instant instantFromDateAndMinutes(int minutes, LocalDate date) {
         LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of((minutes / 60), (minutes % 60)));
         return dateTime.toInstant(ZoneId.systemDefault().getRules().getOffset(dateTime));
     }

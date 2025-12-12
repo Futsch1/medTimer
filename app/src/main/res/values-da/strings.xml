@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Hvis du oplever problemer med manglende meddelelser, skal du deaktivere batterioptimering for denne app i meddelelsesindstillingerne.</string>
     <string name="ignore_battery_optimization">Ignorer batterioptimering</string>
     <string name="dismiss">Afvis</string>
+    <string name="reschedule_reminder">Flyt påmindelse</string>
 </resources>
