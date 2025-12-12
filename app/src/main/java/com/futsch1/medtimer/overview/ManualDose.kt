@@ -15,6 +15,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.reminders.ReminderProcessor
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
@@ -124,7 +125,7 @@ class ManualDose(
         val timePicker = TimePickerWrapper(activity)
         timePicker.show(localDateTime.hour, localDateTime.minute) { minutes: Int ->
             reminderEvent.remindedTimestamp =
-                TimeHelper.instantFromTodayMinutes(minutes).epochSecond
+                TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now()).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             medicineRepository.insertReminderEvent(reminderEvent)
 

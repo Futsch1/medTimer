@@ -258,4 +258,5 @@
     <string name="battery_optimization_warning_summary">Si vous rencontrez des problèmes avec des notifications manquées, veuillez désactiver l\'optimisation de la batterie pour cette application dans les paramètres de notification.</string>
     <string name="ignore_battery_optimization">Ignorer l\'optimisation de la batterie</string>
     <string name="dismiss">Rejeter</string>
+    <string name="reschedule_reminder">Reporter le rappel</string>
 </resources>

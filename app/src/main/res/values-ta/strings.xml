@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">தவறவிட்ட அறிவிப்புகளில் சிக்கல்கள் ஏற்பட்டால், அறிவிப்பு அமைப்புகளில் இந்த செயலிக்கான பேட்டரி மேம்படுத்தலை முடக்கவும்.</string>
     <string name="ignore_battery_optimization">பேட்டரி உகப்பாக்கத்தைப் புறக்கணிக்கவும்</string>
     <string name="dismiss">புறக்கணி</string>
+    <string name="reschedule_reminder">நினைவூட்டலை மீண்டும் திட்டமிடுங்கள்</string>
 </resources>

@@ -263,4 +263,5 @@
     <string name="battery_optimization_warning_summary">Jeśli masz problemy z nieotrzymanymi powiadomieniami, wyłącz optymalizację baterii dla tej aplikacji w ustawieniach powiadomień.</string>
     <string name="ignore_battery_optimization">Ignoruj optymalizację baterii</string>
     <string name="dismiss">Odrzuć</string>
+    <string name="reschedule_reminder">Zmień termin przypomnienia</string>
 </resources>

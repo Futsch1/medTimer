@@ -10,10 +10,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 open class ActionsBase(view: View, popupWindow: PopupWindow) {
     val takenButton: ExtendedFloatingActionButton = view.findViewById(R.id.takenButton)
     val skippedButton: ExtendedFloatingActionButton = view.findViewById(R.id.skippedButton)
-    val reRaiseButton: ExtendedFloatingActionButton = view.findViewById(R.id.reraiseButton)
+    val reRaiseOrScheduleButton: ExtendedFloatingActionButton = view.findViewById(R.id.reraiseOrScheduleButton)
     val deleteButton: ExtendedFloatingActionButton = view.findViewById(R.id.deleteButton)
     val anchorTakenButton: View = view.findViewById(R.id.anchorTakenButton)
     val anchorSkippedButton: View = view.findViewById(R.id.anchorSkippedButton)
+    val anchorReraiseOrScheduleButton: View = view.findViewById(R.id.anchorReraiseButton)
     val anchorDeleteButton: View = view.findViewById(R.id.anchorDeleteButton)
 
     init {
@@ -24,11 +25,20 @@ open class ActionsBase(view: View, popupWindow: PopupWindow) {
 
     fun hideDeleteAndReraise() {
         deleteButton.visibility = View.INVISIBLE
-        reRaiseButton.visibility = View.INVISIBLE
+        reRaiseOrScheduleButton.visibility = View.INVISIBLE
 
         setAngle(anchorTakenButton, 70f)
         setAngle(anchorSkippedButton, 110f)
     }
+
+    fun hideDelete() {
+        deleteButton.visibility = View.INVISIBLE
+
+        setAngle(anchorTakenButton, 50f)
+        setAngle(anchorSkippedButton, 90f)
+        setAngle(anchorReraiseOrScheduleButton, 130f)
+    }
+
 
     protected fun setAngle(view: View, f: Float) {
         val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams

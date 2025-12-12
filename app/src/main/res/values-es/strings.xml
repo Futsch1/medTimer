@@ -258,4 +258,5 @@
     <string name="battery_optimization_warning_summary">Si tiene problemas con las notificaciones perdidas, desactive la optimización de la batería para esta aplicación en la configuración de notificaciones.</string>
     <string name="ignore_battery_optimization">Ignorar la optimización de la batería</string>
     <string name="dismiss">Descartar</string>
+    <string name="reschedule_reminder">Reprogramar recordatorio</string>
 </resources>
