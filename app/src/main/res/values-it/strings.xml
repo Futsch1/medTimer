@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -234,7 +234,7 @@
     <string name="continuous_interval_reminder">Promemoria a intervallo continuo</string>
     <string name="time_based_reminder_help">Imposta orari specifici (ad es. 8:00) e configura un modello ricorrente. Ciò consente un controllo preciso su giorni specifici della settimana, giorni del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
     <string name="continuous_interval_reminder_help">Avvia un promemoria basato su un intervallo di tempo (ad esempio, ogni 6 ore) da un momento specificato. Questo schema è continuo, ignorando i vincoli di tempo del giorno, fino alla disattivazione manuale.</string>
-    <string name="windowed_interval_reminder_help">Definisci una finestra attiva giornaliera (ad es. dalle 9:00 alle 21:00) in cui il primo promemoria è sempre all\'ora di inizio. I promemoria successivi si attivano a intervalli fissi fino al raggiungimento dell\'ora di fine. Lo schema completo si ripristina ogni giorno.</string>
+    <string name="windowed_interval_reminder_help">Definisci una finestra attiva giornaliera (ad esempio, dalle 9:00 alle 21:00) in cui il primo promemoria sia sempre all\'ora di inizio. I promemoria successivi vengono attivati a intervalli fissi fino al raggiungimento dell\'orario di fine. Lo schema completo si reimposta ogni giorno.</string>
     <string name="linked_reminder">Promemoria collegato</string>
     <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up che viene programmato un certo tempo dopo che un promemoria principale è stato preso. Questo è utile per i farmaci che devono essere assunti in sequenza, con un ritardo specifico tra di loro.</string>
     <string name="add_linked_reminder_summary">Crea un promemoria di follow-up che viene programmato un certo tempo dopo l\'attivazione di questo promemoria.</string>
