@@ -161,10 +161,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean warningDismissed = sharedPref.getBoolean(BATTERY_WARNING_DISMISSED, false);
 
-        if (!powerManager.isIgnoringBatteryOptimizations(getPackageName()) && !warningDismissed && !BuildConfig.DEBUG) {
-            batteryOptimizationWarning.setVisibility(View.VISIBLE);
-        } else {
-            batteryOptimizationWarning.setVisibility(View.GONE);
+        if (batteryOptimizationWarning != null) {
+            if (!powerManager.isIgnoringBatteryOptimizations(getPackageName()) && !warningDismissed && !BuildConfig.DEBUG) {
+                batteryOptimizationWarning.setVisibility(View.VISIBLE);
+            } else {
+                batteryOptimizationWarning.setVisibility(View.GONE);
+            }
         }
     }
 
