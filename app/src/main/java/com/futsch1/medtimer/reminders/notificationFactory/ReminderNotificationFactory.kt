@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
@@ -53,6 +54,9 @@ abstract class ReminderNotificationFactory(
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
 
         builder.setDeleteIntent(intents.pendingDismiss)
+
+        // Set group key to reminder notification time string so that same time reminders are grouped
+        builder.setGroup(TimeHelper.secondsSinceEpochToTimeString(context, reminderNotification.reminderNotificationData.remindInstant.epochSecond))
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
