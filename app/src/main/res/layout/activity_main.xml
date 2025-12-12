@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="@string/dismiss"
+                android:text="@string/ok"
                 android:textColor="?attr/colorOnErrorContainer" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
