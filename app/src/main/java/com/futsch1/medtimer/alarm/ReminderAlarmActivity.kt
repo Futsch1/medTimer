@@ -32,7 +32,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
     // A single-threaded coroutine dispatcher for handling media player and vibrator operations
     private val alarmExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +93,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
                 0
             )
-        mediaPlayer.isLooping = true
+        mediaPlayer?.isLooping = true
 
         vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
@@ -120,8 +120,8 @@ class ReminderAlarmActivity : AppCompatActivity() {
         Log.d("ReminderAlarm", "Executing pauseAlarm job")
 
         try {
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
             }
         } catch (_: IllegalStateException) {
             // Ignore
@@ -131,9 +131,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun releaseMediaPlayer() {
-        if (::mediaPlayer.isInitialized) {
-            mediaPlayer.release()
-        }
+        mediaPlayer?.release()
         Log.d("ReminderAlarm", "Released media player")
     }
 
@@ -142,7 +140,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun playAlarmTone() {
-        mediaPlayer.start()
+        mediaPlayer?.start()
     }
 
     private fun shallPlayAlarm(): Boolean {
