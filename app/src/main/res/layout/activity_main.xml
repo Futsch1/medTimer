@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:visibility="gone"
-        app:cardBackgroundColor="?attr/colorErrorContainer"
+        app:cardBackgroundColor="?attr/colorTertiaryContainer"
         app:cardCornerRadius="8dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
@@ -36,14 +36,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/battery_optimization_warning_title"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="?attr/colorOnErrorContainer" />
+                android:textColor="?attr/colorOnTertiaryContainer" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/battery_optimization_warning_summary"
-                android:textColor="?attr/colorOnErrorContainer" />
+                android:textColor="?attr/colorOnTertiaryContainer" />
 
             <Button
                 android:id="@+id/dismissBatteryWarning"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@string/ok"
-                android:textColor="?attr/colorOnErrorContainer" />
+                android:textColor="?attr/colorOnTertiaryContainer" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
