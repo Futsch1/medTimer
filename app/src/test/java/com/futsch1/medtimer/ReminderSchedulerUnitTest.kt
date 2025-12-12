@@ -1,401 +1,370 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import static com.futsch1.medtimer.TestHelper.assertReminded;
-import static com.futsch1.medtimer.TestHelper.assertRemindedAtIndex;
-import static com.futsch1.medtimer.TestHelper.on;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import android.content.SharedPreferences
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
+import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
+import java.time.LocalDate
+import java.time.ZoneId
 
-import android.content.SharedPreferences;
-
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
-
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-
-class ReminderSchedulerUnitTest {
-
-    public static final String TEST_1 = "Test1";
-    public static final String TEST = "Test";
-    public static final String TEST_2 = "Test2";
-
+internal class ReminderSchedulerUnitTest {
     @Test
-    void testScheduleEmptyLists() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleEmptyLists() {
+        val scheduler: ReminderScheduler = scheduler
 
         // Two empty lists
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(new ArrayList<>(), new ArrayList<>());
-        assertTrue(scheduledReminders.isEmpty());
+        var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(emptyList(), emptyList())
+        Assertions.assertTrue(scheduledReminders.isEmpty())
 
         // One medicine without reminders, no reminder events
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        scheduledReminders = scheduler.schedule(new ArrayList<>() {{
-            add(medicineWithReminders);
-        }}, new ArrayList<>());
-        assertTrue(scheduledReminders.isEmpty());
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        scheduledReminders = scheduler.schedule(listOf(medicineWithReminders), emptyList())
+        Assertions.assertTrue(scheduledReminders.isEmpty())
 
         // No reminder events
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 12, 1);
-        reminder.createdTimestamp = on(1, 13).getEpochSecond();
-        medicineWithReminders.reminders.add(reminder);
-        scheduledReminders = scheduler.schedule(new ArrayList<>() {{
-            add(medicineWithReminders);
-        }}, new ArrayList<>());
-        assertEquals(1, scheduledReminders.size());
-        assertReminded(scheduledReminders, on(2, 12), medicineWithReminders.medicine, reminder);
-    }
-
-    public static ReminderScheduler getScheduler() {
-        return getScheduler(0);
-    }
-
-    public static ReminderScheduler getScheduler(int plusDays) {
-        ReminderScheduler.TimeAccess mockTimeAccess = mock(ReminderScheduler.TimeAccess.class);
-        when(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"));
-        when(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(plusDays));
-        SharedPreferences sharedPreferencesMock = mock(SharedPreferences.class);
-        when(sharedPreferencesMock.getBoolean(anyString(), anyBoolean())).thenReturn(false);
-
-        return new ReminderScheduler(mockTimeAccess, sharedPreferencesMock);
+        val reminder = TestHelper.buildReminder(1, 1, "1", 12, 1)
+        reminder.createdTimestamp = TestHelper.on(1, 13).epochSecond
+        medicineWithReminders.reminders.add(reminder)
+        scheduledReminders = scheduler.schedule(listOf(medicineWithReminders), emptyList())
+        Assertions.assertEquals(1, scheduledReminders.size)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 12), medicineWithReminders.medicine, reminder)
     }
 
     @Test
-    void testScheduleReminders() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleReminders() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        Reminder reminder2 = TestHelper.buildReminder(1, 1, "2", 12, 1);
-        medicineWithReminders1.reminders.add(reminder1);
-        medicineWithReminders1.reminders.add(reminder2);
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(new ArrayList<>() {{
-            add(medicineWithReminders1);
-        }}, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 12), medicineWithReminders1.medicine, reminder2);
-        assertRemindedAtIndex(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1, 1);
+        val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
+        val reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1)
+        val reminder2 = TestHelper.buildReminder(1, 1, "2", 12, 1)
+        medicineWithReminders1.reminders.add(reminder1)
+        medicineWithReminders1.reminders.add(reminder2)
+        var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(listOf(medicineWithReminders1), emptyList())
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(1, 12), medicineWithReminders1.medicine, reminder2)
+        TestHelper.assertRemindedAtIndex(scheduledReminders, TestHelper.on(1, 16), medicineWithReminders1.medicine, reminder1, 1)
 
         // Now add a second medicine with an earlier reminder
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
-        Reminder reminder3 = TestHelper.buildReminder(2, 1, "1", 3, 1);
-        medicineWithReminders2.reminders.add(reminder3);
-        scheduledReminders = scheduler.schedule(new ArrayList<>() {{
-            add(medicineWithReminders1);
-            add(medicineWithReminders2);
-        }}, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 3), medicineWithReminders2.medicine, reminder3);
+        val medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2)
+        val reminder3 = TestHelper.buildReminder(2, 1, "1", 3, 1)
+        medicineWithReminders2.reminders.add(reminder3)
+        scheduledReminders = scheduler.schedule(listOf(medicineWithReminders1, medicineWithReminders2), emptyList())
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(1, 3), medicineWithReminders2.medicine, reminder3)
     }
 
     @Test
-    void testScheduleWithEvents() {
-        ReminderScheduler scheduler = getScheduler(1);
+    fun testScheduleWithEvents() {
+        val scheduler: ReminderScheduler = getScheduler(1)
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 12, 1);
-        medicineWithReminders1.reminders.add(reminder1);
-        medicineWithReminders1.reminders.add(reminder2);
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
-        Reminder reminder3 = TestHelper.buildReminder(2, 3, "1", 3, 1);
-        medicineWithReminders2.reminders.add(reminder3);
-        ArrayList<FullMedicine> medicineWithReminders = new ArrayList<>() {{
-            add(medicineWithReminders1);
-            add(medicineWithReminders2);
-        }};
+        val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
+        val reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1)
+        val reminder2 = TestHelper.buildReminder(1, 2, "2", 12, 1)
+        medicineWithReminders1.reminders.add(reminder1)
+        medicineWithReminders1.reminders.add(reminder2)
+        val medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2)
+        val reminder3 = TestHelper.buildReminder(2, 3, "1", 3, 1)
+        medicineWithReminders2.reminders.add(reminder3)
+        val medicineWithReminders = listOf(medicineWithReminders1, medicineWithReminders2)
         // Reminder 3 already invoked
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(TestHelper.buildReminderEvent(3, on(2, 3).getEpochSecond()));
-        }});
-        assertReminded(scheduledReminders, on(2, 12), medicineWithReminders1.medicine, reminder2);
-        assertRemindedAtIndex(scheduledReminders, on(2, 16), medicineWithReminders1.medicine, reminder1, 1);
-        assertRemindedAtIndex(scheduledReminders, on(3, 3), medicineWithReminders2.medicine, reminder3, 2);
+        var scheduledReminders: List<ScheduledReminder> =
+            scheduler.schedule(medicineWithReminders, listOf(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3).epochSecond)))
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 12), medicineWithReminders1.medicine, reminder2)
+        TestHelper.assertRemindedAtIndex(scheduledReminders, TestHelper.on(2, 16), medicineWithReminders1.medicine, reminder1, 1)
+        TestHelper.assertRemindedAtIndex(scheduledReminders, TestHelper.on(3, 3), medicineWithReminders2.medicine, reminder3, 2)
 
         // Check two reminders at the same time
-        Reminder reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1);
-        medicineWithReminders2.reminders.add(reminder4);
-        scheduledReminders = scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(TestHelper.buildReminderEvent(3, on(2, 3).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(2, on(2, 12).getEpochSecond()));
-        }});
-        assertReminded(scheduledReminders, on(2, 12), medicineWithReminders2.medicine, reminder4);
+        val reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1)
+        medicineWithReminders2.reminders.add(reminder4)
+        scheduledReminders = scheduler.schedule(
+            medicineWithReminders,
+            listOf(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3).epochSecond), TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).epochSecond))
+        )
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 12), medicineWithReminders2.medicine, reminder4)
 
-        scheduledReminders = scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(TestHelper.buildReminderEvent(3, on(2, 4).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(2, on(2, 12).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(4, on(2, 12).getEpochSecond()));
-        }});
-        assertReminded(scheduledReminders, on(2, 16), medicineWithReminders1.medicine, reminder1);
+        scheduledReminders = scheduler.schedule(
+            medicineWithReminders,
+            listOf(
+                TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).epochSecond),
+                TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).epochSecond),
+                TestHelper.buildReminderEvent(4, TestHelper.on(2, 12).epochSecond)
+            )
+        )
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 16), medicineWithReminders1.medicine, reminder1)
 
         // All reminders already invoked, switch to next day
-        scheduledReminders = scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(TestHelper.buildReminderEvent(3, on(2, 4).getEpochSecond() + 4 * 60));
-            add(TestHelper.buildReminderEvent(2, on(2, 12).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(1, on(2, 16).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(4, on(2, 16).getEpochSecond()));
-        }});
-        assertReminded(scheduledReminders, on(3, 3), medicineWithReminders2.medicine, reminder3);
+        scheduledReminders = scheduler.schedule(
+            medicineWithReminders, listOf(
+                TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).epochSecond + 4 * 60),
+                TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).epochSecond),
+                TestHelper.buildReminderEvent(1, TestHelper.on(2, 16).epochSecond),
+                TestHelper.buildReminderEvent(4, TestHelper.on(2, 16).epochSecond)
+            )
+        )
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 3), medicineWithReminders2.medicine, reminder3)
 
         // All reminders already invoked, we are on the next day
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
-        scheduledReminders = scheduler.schedule(medicineWithReminders, new ArrayList<>() {{
-            add(TestHelper.buildReminderEvent(3, on(2, 4).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(2, on(2, 12).getEpochSecond()));
-            add(TestHelper.buildReminderEvent(1, on(2, 16).getEpochSecond()));
-        }});
-        assertReminded(scheduledReminders, on(3, 3), medicineWithReminders2.medicine, reminder3);
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
+        scheduledReminders = scheduler.schedule(
+            medicineWithReminders,
+            listOf(
+                TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).epochSecond),
+                TestHelper.buildReminderEvent(2, TestHelper.on(2, 12).epochSecond),
+                TestHelper.buildReminderEvent(1, TestHelper.on(2, 16).epochSecond)
+            )
+        )
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 3), medicineWithReminders2.medicine, reminder3)
     }
 
     // schedules a reminder for the same day
     @Test
-    void test_scheduleSameDayReminder() {
-        ReminderScheduler scheduler = getScheduler();
+    fun test_scheduleSameDayReminder() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
-        reminder.createdTimestamp = on(1, 500).getEpochSecond();
-        medicineWithReminders.reminders.add(reminder);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
+        reminder.createdTimestamp = TestHelper.on(1, 500).epochSecond
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = emptyList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
 
-        assertReminded(scheduledReminders, on(2, 480), medicineWithReminders.medicine, reminder);
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 480), medicineWithReminders.medicine, reminder)
     }
 
     // schedules a reminder for a different medicine
     @Test
-    void testScheduleDifferentMedicineReminder() {
-        ReminderScheduler scheduler = getScheduler(1);
+    fun testScheduleDifferentMedicineReminder() {
+        val scheduler: ReminderScheduler = getScheduler(1)
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 480, 1);
-        medicineWithReminders1.reminders.add(reminder1);
+        val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
+        val reminder1 = TestHelper.buildReminder(1, 1, "1", 480, 1)
+        medicineWithReminders1.reminders.add(reminder1)
 
-        FullMedicine medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2);
-        Reminder reminder2 = TestHelper.buildReminder(2, 2, "2", 480, 1);
-        medicineWithReminders2.reminders.add(reminder2);
+        val medicineWithReminders2 = TestHelper.buildFullMedicine(2, TEST_2)
+        val reminder2 = TestHelper.buildReminder(2, 2, "2", 480, 1)
+        medicineWithReminders2.reminders.add(reminder2)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders1);
-        medicineList.add(medicineWithReminders2);
+        val medicineList = listOf(medicineWithReminders1, medicineWithReminders2)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = emptyList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
 
-        assertReminded(scheduledReminders, on(2, 480), medicineWithReminders1.medicine, reminder1);
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 480), medicineWithReminders1.medicine, reminder1)
     }
 
     // schedules a reminder for every two days
     @Test
-    void testScheduleReminderWithOneDayPause() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleReminderWithOneDayPause() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
-        medicineWithReminders.reminders.add(reminder);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 2)
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = mutableListOf<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(1, 480), medicineWithReminders.medicine, reminder);
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(1, 480), medicineWithReminders.medicine, reminder)
 
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(1, 480).getEpochSecond()));
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(3, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 480), medicineWithReminders.medicine, reminder)
     }
 
     // schedules a reminder for every two days
     @Test
-    void testScheduleTwoDayReminderVsOneDay() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleTwoDayReminderVsOneDay() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
-        medicineWithReminders.reminders.add(reminder);
-        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 1);
-        medicineWithReminders.reminders.add(reminder2);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 2)
+        medicineWithReminders.reminders.add(reminder)
+        val reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 1)
+        medicineWithReminders.reminders.add(reminder2)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(1, 480).getEpochSecond()));
+        val reminderEventList = listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
 
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(1));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(2, 481), medicineWithReminders.medicine, reminder2);
+        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 481), medicineWithReminders.medicine, reminder2)
     }
 
     @Test
-    void testScheduleReminderWithOneDayPauseVsThreeDaysPause() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleReminderWithOneDayPauseVsThreeDaysPause() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 2);
-        medicineWithReminders.reminders.add(reminder);
-        Reminder reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 4);
-        medicineWithReminders.reminders.add(reminder2);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 2)
+        medicineWithReminders.reminders.add(reminder)
+        val reminder2 = TestHelper.buildReminder(1, 2, "2", 481, 4)
+        medicineWithReminders.reminders.add(reminder2)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(1, 480).getEpochSecond()));
+        val reminderEventList = mutableListOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(1, 481), medicineWithReminders.medicine, reminder2);
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(1, 481), medicineWithReminders.medicine, reminder2)
 
-        reminderEventList.add(TestHelper.buildReminderEvent(2, on(1, 481).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(2, TestHelper.on(1, 481).epochSecond))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(3, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 480), medicineWithReminders.medicine, reminder)
 
         // On day 3
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(3, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 480), medicineWithReminders.medicine, reminder)
 
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(3, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(3, 480).epochSecond))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 480), medicineWithReminders.medicine, reminder)
 
         // On day 5
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
 
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(5, 480).getEpochSecond()));
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 480).epochSecond))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 481), medicineWithReminders.medicine, reminder2);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 481), medicineWithReminders.medicine, reminder2)
     }
 
     @Test
-    void testScheduleCycleInFuture() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleCycleInFuture() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 3);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 3)
         // Day 4 cycle start day means 5.1.
-        reminder.cycleStartDay = 4;
-        medicineWithReminders.reminders.add(reminder);
+        reminder.cycleStartDay = 4
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = ArrayList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 480), medicineWithReminders.medicine, reminder)
 
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 480), medicineWithReminders.medicine, reminder)
 
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(5));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(8, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(8, 480), medicineWithReminders.medicine, reminder)
 
         // Reminder already scheduled for tomorrow
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(6));
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(8, 480).getEpochSecond()));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(6))
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(8, 480).epochSecond))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(11, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(11, 480), medicineWithReminders.medicine, reminder)
     }
 
     @Test
-    void testScheduleLongCycleInFuture() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testScheduleLongCycleInFuture() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 0);
-        reminder.consecutiveDays = 90;
-        reminder.pauseDays = 20;
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 0)
+        reminder.consecutiveDays = 90
+        reminder.pauseDays = 20
 
-        reminder.cycleStartDay = 4;
-        medicineWithReminders.reminders.add(reminder);
+        reminder.cycleStartDay = 4
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = emptyList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 480), medicineWithReminders.medicine, reminder)
 
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(4));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(5, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(5, 480), medicineWithReminders.medicine, reminder)
 
-        when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(5));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(6, 480), medicineWithReminders.medicine, reminder);
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(6, 480), medicineWithReminders.medicine, reminder)
     }
 
 
     @Test
-    void testReminderOverMidnight() {
-        ReminderScheduler scheduler = getScheduler();
+    fun testReminderOverMidnight() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, TEST);
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60 + 45, 1);
-        medicineWithReminders.reminders.add(reminder);
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
+        val reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60 + 45, 1)
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = listOf(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
-        ReminderEvent reminderEvent = TestHelper.buildReminderEvent(1, on(1, 23 * 60 + 46).getEpochSecond());
-        reminderEvent.processedTimestamp = on(2, 1).getEpochSecond();
-        reminderEventList.add(reminderEvent);
+        val reminderEventList = ArrayList<ReminderEvent>()
+        val reminderEvent = TestHelper.buildReminderEvent(1, TestHelper.on(1, (23 * 60 + 46).toLong()).epochSecond)
+        reminderEvent.processedTimestamp = TestHelper.on(2, 1).epochSecond
+        reminderEventList.add(reminderEvent)
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
-        assertReminded(scheduledReminders, on(2, 23 * 60 + 45), medicineWithReminders.medicine, reminder);
+        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, (23 * 60 + 45).toLong()), medicineWithReminders.medicine, reminder)
     }
 
     @Test
-    void test_reminderTomorrow() {
-        ReminderScheduler scheduler = getScheduler();
+    fun test_reminderTomorrow() {
+        val scheduler: ReminderScheduler = scheduler
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        medicineWithReminders1.reminders.add(reminder1);
+        val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
+        val reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1)
+        medicineWithReminders1.reminders.add(reminder1)
 
-        List<FullMedicine> medicines = new ArrayList<>() {{
-            add(medicineWithReminders1);
-        }};
+        val medicines = listOf(medicineWithReminders1)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(1, 16).getEpochSecond()));
-        reminderEventList.add(TestHelper.buildReminderEvent(1, on(2, 16).getEpochSecond()));
+        val reminderEventList =
+            listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 16).epochSecond), TestHelper.buildReminderEvent(1, TestHelper.on(2, 16).epochSecond))
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicines, reminderEventList);
-        assertReminded(scheduledReminders, on(3, 16), medicineWithReminders1.medicine, reminder1);
+        val scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicines, reminderEventList)
+        TestHelper.assertReminded(scheduledReminders, TestHelper.on(3, 16), medicineWithReminders1.medicine, reminder1)
+    }
 
+    companion object {
+        const val TEST_1: String = "Test1"
+        const val TEST: String = "Test"
+        const val TEST_2: String = "Test2"
+
+        @JvmStatic
+        val scheduler: ReminderScheduler
+            get() = getScheduler(0)
+
+        @JvmStatic
+        fun getScheduler(plusDays: Int): ReminderScheduler {
+            val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+            Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+            Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(plusDays.toLong()))
+            val sharedPreferencesMock = Mockito.mock(SharedPreferences::class.java)
+            Mockito.`when`(sharedPreferencesMock.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(false)
+
+            return ReminderScheduler(mockTimeAccess, sharedPreferencesMock)
+        }
     }
 }
