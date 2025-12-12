@@ -465,6 +465,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         internalAssert(device.findObject(By.textContains(getNotificationText(R.string.taken))) == null)
+        device.pressBack()
     }
 
     @Test
@@ -523,6 +524,27 @@ class NotificationTest : BaseTestHelper() {
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.bell)))
         )
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun scheduleReminderTest() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+
+        AndroidTestHelper.createReminder("1", LocalTime.of(22, 0))
+
+        navigateTo(MainMenu.OVERVIEW)
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.string.schedule_reminder)
+
+        AndroidTestHelper.setTime(4, 0, false)
+
+        device.openNotification()
+        assertContains(TEST_MED)
+        device.pressBack()
     }
 
     private fun clickTakenOnAlarmScreen(

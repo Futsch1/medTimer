@@ -71,6 +71,11 @@ public abstract class BaseTestHelper {
     public void setup() {
         Espresso.setFailureHandler(failureHandler);
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        try {
+            device.wakeUp();
+        } catch (RemoteException e) {
+            // Ignore
+        }
         device.pressHome();
         baristaRule.launchActivity();
 
