@@ -9,6 +9,7 @@ import android.os.HandlerThread
 import android.util.Log
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.util.function.Predicate
@@ -35,8 +36,8 @@ class Autostart : BroadcastReceiver() {
                 )
             for (reminderEvent in reminderEventList) {
                 val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                Log.i("Autostart", "Restoring notifications: $scheduledReminderNotificationData")
-                scheduledReminderNotificationData.getPendingIntent(context).send()
+                Log.i("Autostart", "Restoring reminder event: $scheduledReminderNotificationData")
+                ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
             }
         }
     }
