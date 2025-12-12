@@ -1,6 +1,6 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.getScheduler
+import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
@@ -12,7 +12,7 @@ import java.time.LocalDate
 class ReminderSchedulerIntervalUnitTest {
     @Test
     fun testScheduleIntervalReminder() {
-        val scheduler = getScheduler()
+        val scheduler = getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -84,7 +84,7 @@ class ReminderSchedulerIntervalUnitTest {
 
     @Test
     fun test_scheduleIntervalReminder_NotTaken() {
-        val scheduler = getScheduler()
+        val scheduler = getScheduler(0)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 24 * 60 * 3, 1)
