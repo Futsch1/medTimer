@@ -538,7 +538,7 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.string.schedule_reminder)
+        clickOn(R.string.reschedule_reminder)
 
         AndroidTestHelper.setTime(4, 0, false)
 

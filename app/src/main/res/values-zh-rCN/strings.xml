@@ -248,4 +248,5 @@
     <string name="battery_optimization_warning_summary">如果您遇到通知丢失的问题，请在通知设置中禁用此应用程序的电池优化。</string>
     <string name="ignore_battery_optimization">忽略电池优化</string>
     <string name="dismiss">忽略</string>
+    <string name="reschedule_reminder">重新安排提醒</string>
 </resources>

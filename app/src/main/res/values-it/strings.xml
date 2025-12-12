@@ -258,4 +258,5 @@
     <string name="battery_optimization_warning_summary">Se riscontri problemi con le notifiche perse, disabilita l\'ottimizzazione della batteria per questa app nelle impostazioni di notifica.</string>
     <string name="ignore_battery_optimization">Ignora l\'ottimizzazione della batteria</string>
     <string name="dismiss">Ignora</string>
+    <string name="reschedule_reminder">Ripianifica promemoria</string>
 </resources>

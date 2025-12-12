@@ -52,7 +52,7 @@ class ScheduledReminderActions(
             scheduleReminder(event.scheduledReminder)
             popupWindow.dismiss()
         }
-        reRaiseOrScheduleButton.text = view.context.getString(R.string.schedule_reminder)
+        reRaiseOrScheduleButton.text = view.context.getString(R.string.reschedule_reminder)
     }
 
     private fun scheduleReminder(scheduledReminder: ScheduledReminder) {
