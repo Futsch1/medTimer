@@ -31,7 +31,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
             popupWindow.dismiss()
         }
 
-        reRaiseButton.setOnClickListener {
+        reRaiseOrScheduleButton.setOnClickListener {
             processDeleteReRaiseReminderEvent(event.reminderEvent)
             popupWindow.dismiss()
         }
@@ -43,7 +43,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
     }
 
     private fun hideReraise() {
-        reRaiseButton.visibility = View.INVISIBLE
+        reRaiseOrScheduleButton.visibility = View.INVISIBLE
 
         setAngle(anchorTakenButton, 50f)
         setAngle(anchorSkippedButton, 90f)
