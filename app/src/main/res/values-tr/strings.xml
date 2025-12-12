@@ -252,6 +252,5 @@
     <string name="battery_optimization_warning_title">Pil optimizasyonu etkin</string>
     <string name="battery_optimization_warning_summary">Cevapsız bildirimlerle ilgili sorunlar yaşıyorsanız, lütfen bildirim ayarlarından bu uygulama için pil optimizasyonunu devre dışı bırakın.</string>
     <string name="ignore_battery_optimization">Pil optimizasyonunu yoksay</string>
-    <string name="dismiss">Kapat</string>
     <string name="reschedule_reminder">Hatırlatıcıyı yeniden planla</string>
 </resources>

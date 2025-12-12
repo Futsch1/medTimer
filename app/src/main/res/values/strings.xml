@@ -256,6 +256,5 @@
     <string name="battery_optimization_warning_title">Battery optimization is enabled</string>
     <string name="battery_optimization_warning_summary">Should you experience issues with missed notifications, consider disabling battery optimization for this app in the notification settings.</string>
     <string name="ignore_battery_optimization">Ignore battery optimization</string>
-    <string name="dismiss">Dismiss</string>
     <string name="reschedule_reminder">Reschedule reminder</string>
 </resources>

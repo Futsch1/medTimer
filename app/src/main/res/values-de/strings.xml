@@ -252,6 +252,5 @@
     <string name="battery_optimization_warning_title">Batterieoptimierung ist aktiviert</string>
     <string name="battery_optimization_warning_summary">Falls Sie Probleme mit verpassten Benachrichtigungen haben, können Sie die Batterieoptimierung für diese App in den Benachrichtigungseinstellungen deaktivieren.</string>
     <string name="ignore_battery_optimization">Batterieoptimierung ignorieren</string>
-    <string name="dismiss">Verwerfen</string>
     <string name="reschedule_reminder">Erinnerung verschieben</string>
 </resources>

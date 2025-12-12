@@ -252,6 +252,5 @@
     <string name="battery_optimization_warning_title">Akun optimointi on käytössä</string>
     <string name="battery_optimization_warning_summary">Jos sinulla on ongelmia vastaamattomien ilmoitusten kanssa, poista akun optimointi käytöstä tämän sovelluksen ilmoitusasetuksissa.</string>
     <string name="ignore_battery_optimization">Ohita akun optimointi</string>
-    <string name="dismiss">Hylkää</string>
     <string name="reschedule_reminder">Ajoita muistutus uudelleen</string>
 </resources>
