@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Date/heure relative</string>
     <string name="invalid_amount">Le montant doit contenir un nombre pour activer le suivi du stock de médicaments pour ce rappel.</string>
     <string name="sticky_on_lockscreen">Rappels persistants sur l\'écran de verrouillage</string>
-    <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être ignorés depuis l\'écran de verrouillage, uniquement depuis le panneau de notifications\nRemarque : certaines montres intelligentes peuvent ne plus afficher les notifications</string>
+    <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être ignorés depuis l\'écran de verrouillage, uniquement depuis le panneau de notifications\nRemarque : certaines montres intelligentes peuvent ne plus afficher les notifications</string>
     <string name="big_notifications">Gros boutons de notification</string>
     <string name="please_wait">Veuillez patienter…</string>
     <string name="interval_time">Intervalle %s</string>
