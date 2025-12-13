@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="?android:colorPrimary" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="oval">
+            <solid android:color="?android:colorPrimary" />
+        </shape>
+    </item>
+
+    <!-- 2. Inner Shadow Layer -->
+    <!-- This sits on top of the ring and below the main background -->
+    <item android:left="4dp" android:right="4dp" android:top="4dp" android:bottom="4dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:startColor="?android:colorBackground"
+                android:gradientRadius="300%"
+            android:endColor="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- 3. Foreground Circle (on top) -->
+    <!-- This is inset slightly more to let the shadow show -->
+    <item android:left="6dp" android:right="6dp" android:top="6dp" android:bottom="6dp">
+        <shape android:shape="oval">
+            <solid android:color="?android:colorBackground" />
+        </shape>
+    </item>
+    <!--
+    <item android:left="4dp" android:right="4dp" android:top="4dp" android:bottom="4dp">
+        <shape
+            android:shape="oval">
+            <solid android:color="?android:colorBackground" />
+        </shape>
+    </item>-->
+</layer-list>
+
