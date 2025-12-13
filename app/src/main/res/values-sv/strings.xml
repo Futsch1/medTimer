@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
