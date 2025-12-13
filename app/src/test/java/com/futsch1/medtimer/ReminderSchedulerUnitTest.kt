@@ -120,7 +120,7 @@ internal class ReminderSchedulerUnitTest {
 
     // schedules a reminder for the same day
     @Test
-    fun test_scheduleSameDayReminder() {
+    fun testscheduleSameDayReminder() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -331,7 +331,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun test_reminderTomorrow() {
+    fun testReminderTomorrow() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
