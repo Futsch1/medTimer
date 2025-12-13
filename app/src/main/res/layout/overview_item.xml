@@ -19,8 +19,8 @@
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/guideline_half_height"
-        app:layout_constraintEnd_toEndOf="@id/buttonBackground"
-        app:layout_constraintStart_toStartOf="@id/buttonBackground"
+        app:layout_constraintEnd_toEndOf="@id/stateButton"
+        app:layout_constraintStart_toStartOf="@id/stateButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -30,38 +30,25 @@
         android:background="@drawable/shape_rect_primary"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/buttonBackground"
-        app:layout_constraintStart_toStartOf="@id/buttonBackground"
+        app:layout_constraintEnd_toEndOf="@id/stateButton"
+        app:layout_constraintStart_toStartOf="@id/stateButton"
         app:layout_constraintTop_toTopOf="@id/guideline_half_height" />
 
-    <View
-        android:id="@+id/buttonBackground"
+    <ImageView
+        android:id="@+id/stateButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/shape_round_primary"
-        android:elevation="4dp"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/stateButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/shape_round_bg"
         android:clickable="true"
         android:contentDescription="@string/taken"
         android:cropToPadding="true"
-        android:elevation="8dp"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/buttonBackground"
-        app:layout_constraintEnd_toEndOf="@id/buttonBackground"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@id/buttonBackground"
-        app:layout_constraintTop_toTopOf="@id/buttonBackground"
-        app:layout_constraintVertical_bias="0.5"
+        android:elevation="4dp"
+        android:foregroundGravity="center"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/check2_circle" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,7 +60,7 @@
         android:background="@drawable/shape_rounded_corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonBackground"
+        app:layout_constraintStart_toEndOf="@id/stateButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView

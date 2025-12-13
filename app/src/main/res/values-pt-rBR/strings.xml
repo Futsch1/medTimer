@@ -257,6 +257,5 @@
     <string name="battery_optimization_warning_title">A otimização da bateria está ativada</string>
     <string name="battery_optimization_warning_summary">Se você estiver tendo problemas com notificações perdidas, desative a otimização da bateria para este aplicativo nas configurações de notificação.</string>
     <string name="ignore_battery_optimization">Ignorar a otimização da bateria</string>
-    <string name="dismiss">Descartar</string>
     <string name="reschedule_reminder">Reagendar lembrete</string>
 </resources>

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ReminderSchedulerWindowedIntervalUnitTest {
     @Test
     fun testScheduleIntervalReminder() {
-        val scheduler = ReminderSchedulerUnitTest.getScheduler()
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)

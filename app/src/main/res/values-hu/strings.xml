@@ -252,6 +252,5 @@
     <string name="battery_optimization_warning_title">Az akkumulátor optimalizálása be van kapcsolva</string>
     <string name="battery_optimization_warning_summary">Ha problémákat tapasztal a nem fogadott értesítésekkel, kérjük, tiltsa le az akkumulátor optimalizálását ehhez az alkalmazáshoz az értesítési beállításokban.</string>
     <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
-    <string name="dismiss">Elutasítás</string>
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
 </resources>

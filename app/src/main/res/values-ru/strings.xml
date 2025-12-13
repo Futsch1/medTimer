@@ -259,6 +259,5 @@
     <string name="battery_optimization_warning_title">Оптимизация батареи включена</string>
     <string name="battery_optimization_warning_summary">Если у вас возникли проблемы с пропущенными уведомлениями, пожалуйста, отключите оптимизацию батареи для этого приложения в настройках уведомлений.</string>
     <string name="ignore_battery_optimization">Игнорировать оптимизацию батареи</string>
-    <string name="dismiss">Отклонить</string>
     <string name="reschedule_reminder">Перенести напоминание</string>
 </resources>
