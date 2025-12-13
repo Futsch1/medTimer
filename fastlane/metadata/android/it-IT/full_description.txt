@@ -7,12 +7,12 @@ MedTimer è un'app open source per promemoria dei farmaci progettata per aiutart
 Promemoria flessibili e personalizzati:
 
 - Gestisci farmaci illimitati con promemoria personalizzabili per farmaco (inclusi semplici valori
-  predefiniti per promemoria giornalieri).
+ predefiniti per promemoria giornalieri).
 - Crea promemoria flessibili con pause e giorni specifici (ad esempio per le pillole anticoncezionali).
 - Modalità weekend: ritarda i promemoria a un orario definito nei giorni scelti.
 - Posticipa le notifiche per promemoria successivi o ricevi promemoria ripetuti.
 - Aggiungi dosi extra al volo.
-- Crea promemoria basati su intervalli o promemoria che si susseguono a intervalli.
+- Crea promemoria basati su intervalli, promemoria che si susseguono a intervalli o promemoria a intervalli vincolati a un orario di inizio e di fine giornaliero.
 
 Gestione dati semplice e sicura:
 
