@@ -252,6 +252,5 @@
     <string name="battery_optimization_warning_title">Оптимизацията на батерията е активирана</string>
     <string name="battery_optimization_warning_summary">Ако имате проблеми с пропуснати известия, моля, деактивирайте оптимизацията на батерията за това приложение в настройките за известия.</string>
     <string name="ignore_battery_optimization">Игнориране на оптимизацията на батерията</string>
-    <string name="dismiss">Отхвърляне</string>
     <string name="reschedule_reminder">Пренасрочване на напомнянето</string>
 </resources>
