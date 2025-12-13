@@ -51,7 +51,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
         thread.start()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         NextReminders(this, medicineViewModel)
 
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
@@ -134,7 +134,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             val handler = Handler(thread.getLooper())
             // Run the setup of the drop down in a separate thread to access the database
             handler.post {
-                ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity()).logManualDose()
+                ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity(), overviewViewModel.day).logManualDose()
             }
         }
     }

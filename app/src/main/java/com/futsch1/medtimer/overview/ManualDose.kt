@@ -22,7 +22,8 @@ import java.util.stream.Collectors
 class ManualDose(
     private val context: Context,
     private val medicineRepository: MedicineRepository,
-    private val activity: FragmentActivity
+    private val activity: FragmentActivity,
+    private val date: LocalDate
 ) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
     private val sharedPreferences: SharedPreferences =
@@ -125,7 +126,7 @@ class ManualDose(
         val timePicker = TimePickerWrapper(activity)
         timePicker.show(localDateTime.hour, localDateTime.minute) { minutes: Int ->
             reminderEvent.remindedTimestamp =
-                TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now()).epochSecond
+                TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             medicineRepository.insertReminderEvent(reminderEvent)
 
