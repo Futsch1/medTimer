@@ -260,7 +260,7 @@
     <string name="combine_notifications">Łączenie powiadomień w tym samym czasie</string>
     <string name="combine_notifications_summary">Jeśli jest ustawiona, powiadomienia o tym samym czasie są łączone w jedno powiadomienie</string>
     <string name="battery_optimization_warning_title">Optymalizacja baterii jest włączona</string>
-    <string name="battery_optimization_warning_summary">Jeśli masz problemy z nieotrzymanymi powiadomieniami, wyłącz optymalizację baterii dla tej aplikacji w ustawieniach powiadomień.</string>
+    <string name="battery_optimization_warning_summary">Jeśli masz problemy z powiadomieniami, wyłącz optymalizację baterii dla tej aplikacji w ustawieniach.</string>
     <string name="ignore_battery_optimization">Ignoruj optymalizację baterii</string>
     <string name="reschedule_reminder">Zmień termin przypomnienia</string>
 </resources>
