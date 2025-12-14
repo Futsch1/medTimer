@@ -270,7 +270,7 @@
     <string name="combine_notifications">الجمع بين الإشعارات في نفس الوقت</string>
     <string name="combine_notifications_summary">في حالة تعيينها، يتم دمج الإشعارات التي لها نفس الوقت في إشعار واحد</string>
     <string name="battery_optimization_warning_title">تمكين تحسين البطارية</string>
-    <string name="battery_optimization_warning_summary">إذا واجهت مشاكل في الإشعارات الفائتة، يرجى تعطيل تحسين البطارية لهذا التطبيق في إعدادات الإشعار.</string>
+    <string name="battery_optimization_warning_summary">إذا واجهت مشاكل في فقدان الإشعارات، ففكر في تعطيل تحسين البطارية لهذا التطبيق في إعدادات الإشعارات.</string>
     <string name="ignore_battery_optimization">تجاهل تحسين البطارية</string>
     <string name="reschedule_reminder">إعادة جدولة التذكير</string>
 </resources>
