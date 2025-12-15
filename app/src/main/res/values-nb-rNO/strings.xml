@@ -1,3 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tab_settings">Innstillinger</string>
+    <string name="tab_overview">Oversikt</string>
+    <string name="tab_medicine">Legemiddel</string>
+    <string name="add_medicine">Legg til legemiddel</string>
+    <string name="medicine_name">Navn på legemiddel</string>
+    <string name="add_reminder">Legg til påminnelse</string>
+    <string name="delete">Slett</string>
+    <string name="time">Tid</string>
+    <string name="dosage">Dose</string>
+    <string name="yes">Ja</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Avbryt</string>
+    <string name="confirm">Bekreft</string>
+    <string name="are_you_sure_delete_medicine">Er du sikker på at du vil slette dette legemiddelet?</string>
+    <string name="no_reminders">Ingen påminnelser satt</string>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d påminnelse\n%2$s</item>
+        <item quantity="other">%1$d påminnelser\n%2$s</item>
+    </plurals>
+    <string name="notification_title">Påminnelse om medisinering</string>
+    <string name="taken">Tatt</string>
+    <string name="skipped">Hoppet over</string>
+    <string name="recent_events">Nylige hendelser</string>
 </resources>
