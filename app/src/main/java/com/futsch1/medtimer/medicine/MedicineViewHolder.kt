@@ -88,9 +88,9 @@ class MedicineViewHolder private constructor(
             chip.text = tag.name
             chip.isChecked = true
             chip.isCheckable = false
-            chip.setCloseIconVisible(false)
+            chip.isCloseIconVisible = false
             chip.setOnClickListener { _: View? -> itemView.performClick() }
-            chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT))
+            chip.rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
             val params = FlexboxLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
