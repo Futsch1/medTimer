@@ -17,6 +17,17 @@ enum class OverviewState {
     SKIPPED
 }
 
+
+enum class EventPosition {
+    FIRST,
+
+    @Suppress("unused")
+    MIDDLE,
+    LAST,
+    ONLY
+}
+
+
 abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     val hasRelativeTimes = sharedPreferences.getBoolean(USE_RELATIVE_DATE_TIME, false)
 
@@ -28,6 +39,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     abstract val state: OverviewState
     val updateValue: Long
         get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
+    var eventPosition: EventPosition = EventPosition.MIDDLE
 
 
     override fun equals(other: Any?): Boolean {

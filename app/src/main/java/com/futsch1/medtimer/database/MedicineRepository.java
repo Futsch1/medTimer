@@ -229,10 +229,14 @@ public class MedicineRepository {
 
     public void moveMedicine(int fromPosition, int toPosition) {
         List<FullMedicine> medicines = getMedicines();
-        FullMedicine moveMedicine = medicines.get(fromPosition);
-        SortOrders sortOrders = new SortOrders(fromPosition, toPosition, medicines);
-        moveMedicine.medicine.sortOrder = (sortOrders.start + sortOrders.end) / 2;
-        updateMedicine(moveMedicine.medicine);
+        try {
+            FullMedicine moveMedicine = medicines.remove(fromPosition);
+            medicines.add(toPosition, moveMedicine);
+            moveMedicine.medicine.sortOrder = (medicines.get(toPosition + 1).medicine.sortOrder + medicines.get(toPosition - 1).medicine.sortOrder) / 2;
+            updateMedicine(moveMedicine.medicine);
+        } catch (IndexOutOfBoundsException e) {
+            // Intentionally left blank
+        }
     }
 
     public List<FullMedicine> getMedicines() {
@@ -266,20 +270,5 @@ public class MedicineRepository {
 
     interface Insert<T> {
         long insert(T item);
-    }
-
-    static class SortOrders {
-        public final double start;
-        public final double end;
-
-        SortOrders(int fromPosition, int toPosition, List<FullMedicine> medicines) {
-            if (fromPosition > toPosition) {
-                start = toPosition > 0 ? medicines.get(toPosition - 1).medicine.sortOrder : 0;
-                end = medicines.get(toPosition).medicine.sortOrder;
-            } else {
-                start = medicines.get(toPosition).medicine.sortOrder;
-                end = toPosition + 1 < medicines.size() ? medicines.get(toPosition + 1).medicine.sortOrder : medicines.get(medicines.size() - 1).medicine.sortOrder + 1.0;
-            }
-        }
     }
 }

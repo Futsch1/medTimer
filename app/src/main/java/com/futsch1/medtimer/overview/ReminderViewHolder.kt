@@ -17,15 +17,6 @@ import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 
 
-enum class EventPosition {
-    FIRST,
-
-    @Suppress("unused")
-    MIDDLE,
-    LAST,
-    ONLY
-}
-
 class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -47,6 +38,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     fun bind(event: OverviewEvent) {
         this.event = event
         reminderText.text = event.text
+        setBarsVisibility(event.eventPosition)
         if (event.color != null) {
             ViewColorHelper.setViewBackground(contentContainer, mutableListOf<TextView?>(reminderText), event.color!!)
         } else {
@@ -112,7 +104,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         }
     }
 
-    fun setBarsVisibility(position: EventPosition) {
+    private fun setBarsVisibility(position: EventPosition) {
         if (position == EventPosition.FIRST) {
             topBar.visibility = View.GONE
         } else {

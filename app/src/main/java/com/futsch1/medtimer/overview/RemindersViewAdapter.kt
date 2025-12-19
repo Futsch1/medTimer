@@ -1,14 +1,12 @@
 package com.futsch1.medtimer.overview
 
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 
 class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, val fragmentActivity: FragmentActivity) :
-    IdlingListAdapter<OverviewEvent, ReminderViewHolder?>(diffCallback), Filterable {
+    IdlingListAdapter<OverviewEvent, ReminderViewHolder?>(diffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -26,10 +24,6 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
 
     override fun getItemId(position: Int): Long {
         return getItem(position).id.toLong()
-    }
-
-    override fun getFilter(): Filter {
-        return filter
     }
 
     class OverviewEventDiff : DiffUtil.ItemCallback<OverviewEvent>() {
