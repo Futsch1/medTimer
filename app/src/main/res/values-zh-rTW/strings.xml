@@ -245,7 +245,7 @@
     <string name="combine_notifications">合併相同時間的通知</string>
     <string name="combine_notifications_summary">如果設定，相同時間的通知將合併為單一通知</string>
     <string name="battery_optimization_warning_title">電池優化已啟用</string>
-    <string name="battery_optimization_warning_summary">如果您遇到通知遺失的問題，請在通知設定中停用此應用程式的電池優化。</string>
+    <string name="battery_optimization_warning_summary">如果您遇到通知遺失的問題，請考慮在通知設定中停用此應用程式的電池優化。</string>
     <string name="ignore_battery_optimization">忽略電池優化</string>
     <string name="reschedule_reminder">重新安排提醒</string>
 </resources>
