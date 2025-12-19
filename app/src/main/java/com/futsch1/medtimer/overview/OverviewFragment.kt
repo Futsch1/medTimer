@@ -21,7 +21,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.util.stream.IntStream.range
 
 class OverviewFragment : Fragment(), OnFragmentReselectedListener {
 
@@ -101,7 +100,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
                         onceStable = true
                         scrollToCurrentTimeItem()
                     }
-                    updatePositions()
                 }
             }
         }
@@ -113,18 +111,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
                 reminders.scrollToPosition(index)
                 return
             }
-        }
-    }
-
-    private fun updatePositions() {
-        for (position in range(0, adapter.itemCount)) {
-            val positionEnum = when (position) {
-                0 -> if (adapter.itemCount > 1) EventPosition.FIRST else EventPosition.ONLY
-                adapter.itemCount - 1 -> EventPosition.LAST
-                else -> EventPosition.MIDDLE
-            }
-            val viewAdapter = reminders.findViewHolderForAdapterPosition(position)
-            viewAdapter?.let { (it as ReminderViewHolder).setBarsVisibility(positionEnum) }
         }
     }
 

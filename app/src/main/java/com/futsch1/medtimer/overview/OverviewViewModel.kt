@@ -78,7 +78,18 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
         initialized = reminderEvents.value != null && scheduledReminders.value != null
 
-        return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
+        return assignPositions(filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id }))
+    }
+
+    private fun assignPositions(overviewEvents: List<OverviewEvent>): List<OverviewEvent> {
+        overviewEvents.forEach { overviewEvent -> overviewEvent.eventPosition = EventPosition.MIDDLE }
+        if (overviewEvents.size == 1) {
+            overviewEvents[0].eventPosition = EventPosition.ONLY
+        } else {
+            overviewEvents.firstOrNull()?.eventPosition = EventPosition.FIRST
+            overviewEvents.lastOrNull()?.eventPosition = EventPosition.LAST
+        }
+        return overviewEvents
     }
 
     private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder): Boolean {
