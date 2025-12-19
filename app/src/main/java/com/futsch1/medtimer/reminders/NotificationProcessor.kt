@@ -22,21 +22,35 @@ class NotificationProcessor(val context: Context) {
 
     fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
+        val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
             val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
 
             if (reminderEvent != null) {
                 if (reminderEvent.askForAmount && status == ReminderStatus.TAKEN) {
-                    val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
-                    val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
-                    Log.d(LogTags.REMINDER, String.format("Ask for amount for reminder event reID %d", reminderEventId))
-                    context.startActivity(getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount, medicine.medicine.name))
-                    removeReminderFromNotification(reminderEvent.notificationId, reminderEventId)
+                    askForAmount(reminderEvent, reminderEventId)
                 } else {
-                    setSingleReminderEventStatus(status, reminderEvent)
+                    reminderEventsToUpdate.add(reminderEvent)
                 }
             } else {
                 Log.e(LogTags.REMINDER, String.format("Could not find reminder event reID %d in database", reminderEventId))
+            }
+        }
+
+        setReminderEventStatus(status, reminderEventsToUpdate)
+
+        // Reschedule since the trigger condition for a linked reminder might have changed
+        requestReschedule(context)
+    }
+
+    private fun askForAmount(reminderEvent: ReminderEvent, reminderEventId: Int) {
+        val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
+        if (reminder != null) {
+            val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
+            if (medicine != null) {
+                Log.d(LogTags.REMINDER, String.format("Ask for amount for reminder event reID %d", reminderEventId))
+                context.startActivity(getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount, medicine.medicine.name))
+                removeRemindersFromNotification(listOf(reminderEvent))
             }
         }
     }
@@ -46,22 +60,24 @@ class NotificationProcessor(val context: Context) {
         notificationManager.cancel(notificationId)
     }
 
-    fun removeReminderFromNotification(notificationId: Int, reminderEventId: Int) {
+    fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
         val notificationManager = context.getSystemService(NotificationManager::class.java)
+        val notificationId = reminderEvents.firstOrNull()?.notificationId
         for (notification in notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
-                Log.d(LogTags.REMINDER, String.format("Remove reID %d from notification nID %d", reminderEventId, notificationId))
-                updateNotification(reminderNotificationData, reminderEventId)
+                val reminderEventIds = reminderEvents.map { it.reminderEventId }
+                Log.d(LogTags.REMINDER, String.format("Remove reIDs %s from notification nID %d", reminderEventIds, notificationId))
+                updateNotification(reminderNotificationData, reminderEventIds)
             }
         }
     }
 
     private fun updateNotification(
         reminderNotificationData: ReminderNotificationData,
-        reminderEventId: Int
+        reminderEventIds: List<Int>
     ) {
-        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(listOf(reminderEventId))
+        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(reminderEventIds)
         val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(context, medicineRepository, newReminderNotificationData)
         if (reminderNotification != null) {
@@ -72,25 +88,23 @@ class NotificationProcessor(val context: Context) {
         }
     }
 
-    fun setSingleReminderEventStatus(status: ReminderStatus?, reminderEvent: ReminderEvent) {
-        removeReminderFromNotification(reminderEvent.notificationId, reminderEvent.reminderEventId)
-
-        reminderEvent.status = status
-        doStockHandling(reminderEvent)
-        reminderEvent.processedTimestamp = Instant.now().epochSecond
-
-        medicineRepository.updateReminderEvent(reminderEvent)
-        Log.i(
-            LogTags.REMINDER, String.format(
-                "%s reminder reID %d for %s",
-                if (status == ReminderStatus.TAKEN) "Taken" else "Skipped",
-                reminderEvent.reminderEventId,
-                reminderEvent.medicineName
+    fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
+        for (reminderEvent in reminderEvents) {
+            reminderEvent.status = status
+            doStockHandling(reminderEvent)
+            reminderEvent.processedTimestamp = Instant.now().epochSecond
+            Log.i(
+                LogTags.REMINDER, String.format(
+                    "%s reminder reID %d for %s",
+                    if (status == ReminderStatus.TAKEN) "Taken" else "Skipped",
+                    reminderEvent.reminderEventId,
+                    reminderEvent.medicineName
+                )
             )
-        )
+        }
 
-        // Reschedule since the trigger condition for a linked reminder might have changed
-        requestReschedule(context)
+        medicineRepository.updateReminderEvents(reminderEvents)
+        removeRemindersFromNotification(reminderEvents)
     }
 
     fun cancelPendingAlarms(reminderEventId: Int) {

@@ -102,7 +102,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     private fun getFilteredEvents(
         liveData: List<ReminderEvent>,
         validTagIds: Set<Int>,
-        liveTags: MutableList<Tag>
+        liveTags: List<Tag>
     ): List<ReminderEvent> {
         if (validTagIds.isEmpty()) {
             return liveData

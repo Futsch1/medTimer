@@ -35,7 +35,10 @@ class MedicinesMenu(
         medicineViewModel.viewModelScope.launch(dispatcher) {
             if (this@MedicinesMenu::medicinesIdList.isInitialized) {
                 for (medicineId in medicinesIdList) {
-                    setAllRemindersActive(medicineViewModel.medicineRepository.getMedicine(medicineId), medicineViewModel.medicineRepository, active)
+                    val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicineId)
+                    if (fullMedicine != null) {
+                        setAllRemindersActive(fullMedicine, medicineViewModel.medicineRepository, active)
+                    }
                 }
             }
         }

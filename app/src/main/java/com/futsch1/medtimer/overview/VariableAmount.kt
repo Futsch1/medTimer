@@ -49,8 +49,9 @@ private fun touchReminderEvent(
 ) {
     activity.lifecycleScope.launch(dispatcher) {
         val repository = MedicineRepository(activity.application)
-        val reminderEvent = repository.getReminderEvent(reminderEventId)
-        reminderEvent?.processedTimestamp = Instant.now().epochSecond
+        val reminderEvent = repository.getReminderEvent(reminderEventId) ?: return@launch
+
+        reminderEvent.processedTimestamp = Instant.now().epochSecond
         repository.updateReminderEvent(reminderEvent)
     }
 }
@@ -63,11 +64,11 @@ private fun updateReminderEvent(
 ) {
     activity.lifecycleScope.launch(dispatcher) {
         val repository = MedicineRepository(activity.application)
-        val reminderEvent = repository.getReminderEvent(reminderEventId)
-        reminderEvent?.amount = amount
-        NotificationProcessor(activity).setSingleReminderEventStatus(
+        val reminderEvent = repository.getReminderEvent(reminderEventId) ?: return@launch
+        reminderEvent.amount = amount
+        NotificationProcessor(activity).setReminderEventStatus(
             ReminderEvent.ReminderStatus.TAKEN,
-            reminderEvent!!,
+            listOf(reminderEvent),
         )
     }
 }

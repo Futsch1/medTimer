@@ -1,274 +1,264 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import android.app.Application;
+import android.app.Application
+import androidx.lifecycle.LiveData
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import kotlinx.coroutines.flow.Flow
+import java.time.Instant
+import java.util.Arrays
+import java.util.LinkedList
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import java.util.stream.Collectors
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
+class MedicineRepository(application: Application?) {
+    private val medicineDao: MedicineDao
+    private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+    // Stream.toList() not available in SDK version selected
+    private val allStatusValues: List<ReminderStatus> =
+        Arrays.stream(arrayOf(ReminderStatus.DELETED, ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN))
+            .collect(
+                Collectors.toList()
+            )
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+    private val statusValuesWithoutDelete: List<ReminderStatus> =
+        Arrays.stream(arrayOf(ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN)).collect(
+            Collectors.toList()
+        )
 
-import kotlinx.coroutines.flow.Flow;
-
-public class MedicineRepository {
-
-    private final MedicineDao medicineDao;
-    private final MedicineRoomDatabase database;
-    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
-    private final List<ReminderEvent.ReminderStatus> allStatusValues = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.DELETED, ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
-            collect(Collectors.toList());
-    @SuppressWarnings("java:S6204") // Stream.toList() not available in SDK version selected
-    private final List<ReminderEvent.ReminderStatus> statusValuesWithoutDelete = Arrays.stream(new ReminderEvent.ReminderStatus[]{ReminderEvent.ReminderStatus.RAISED, ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.TAKEN}).
-            collect(Collectors.toList());
-
-    public MedicineRepository(Application application) {
-        database = MedicineRoomDatabase.getDatabase(application);
-        medicineDao = database.medicineDao();
+    init {
+        medicineDao = database.medicineDao()
     }
 
-    public int getVersion() {
-        return database.getVersion();
+    val version: Int
+        get() = database.version
+
+    val liveMedicines: LiveData<List<FullMedicine>>
+        get() = medicineDao.getLiveMedicines()
+
+    fun getOnlyMedicine(medicineId: Int): Medicine? {
+        return medicineDao.getOnlyMedicine(medicineId)
     }
 
-    public LiveData<List<FullMedicine>> getLiveMedicines() {
-        return medicineDao.getLiveMedicines();
+    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine> {
+        return medicineDao.getLiveMedicine(medicineId)
     }
 
-    public Medicine getOnlyMedicine(int medicineId) {
-        return medicineDao.getOnlyMedicine(medicineId);
+    fun getMedicine(medicineId: Int): FullMedicine? {
+        return medicineDao.getMedicine(medicineId)
     }
 
-    public LiveData<FullMedicine> getLiveMedicine(int medicineId) {
-        return medicineDao.getLiveMedicine(medicineId);
+    fun getLiveReminders(medicineId: Int): LiveData<List<Reminder>> {
+        return medicineDao.getLiveReminders(medicineId)
     }
 
-    public FullMedicine getMedicine(int medicineId) {
-        return medicineDao.getMedicine(medicineId);
+    fun getReminders(medicineId: Int): List<Reminder> {
+        return medicineDao.getReminders(medicineId)
     }
 
-    public LiveData<List<Reminder>> getLiveReminders(int medicineId) {
-        return medicineDao.getLiveReminders(medicineId);
+    fun getReminder(reminderId: Int): Reminder? {
+        return medicineDao.getReminder(reminderId)
     }
 
-    public List<Reminder> getReminders(int medicineId) {
-        return medicineDao.getReminders(medicineId);
+    fun getReminderFlow(reminderId: Int): Flow<Reminder> {
+        return medicineDao.getReminderFlow(reminderId)
     }
 
-    public Reminder getReminder(int reminderId) {
-        return medicineDao.getReminder(reminderId);
+    fun getLiveReminderEvents(timeStamp: Long, withDeleted: Boolean): LiveData<List<ReminderEvent>> {
+        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, if (withDeleted) allStatusValues else statusValuesWithoutDelete)
     }
 
-    public Flow<Reminder> getReminderFlow(int reminderId) {
-        return medicineDao.getReminderFlow(reminderId);
+    val allReminderEventsWithoutDeleted: List<ReminderEvent>
+        get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
+
+    fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
+        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)
     }
 
-    public LiveData<List<ReminderEvent>> getLiveReminderEvents(long timeStamp, boolean withDeleted) {
-        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, withDeleted ? allStatusValues : statusValuesWithoutDelete);
-    }
-
-    public List<ReminderEvent> getAllReminderEventsWithoutDeleted() {
-        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete);
-    }
-
-    public List<ReminderEvent> getLastDaysReminderEvents(int days) {
-        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - ((long) days * 24 * 60 * 60), allStatusValues);
-    }
-
-    public List<ReminderEvent> getReminderEventsForScheduling(List<FullMedicine> medicines) {
-        List<ReminderEvent> reminderEvents = new LinkedList<>();
-        for (FullMedicine medicine : medicines) {
-            for (Reminder reminder : medicine.reminders) {
+    fun getReminderEventsForScheduling(medicines: List<FullMedicine>): List<ReminderEvent> {
+        val reminderEvents: MutableList<ReminderEvent> = LinkedList<ReminderEvent>()
+        for (medicine in medicines) {
+            for (reminder in medicine.reminders) {
                 if (reminder.active) {
-                    reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2));
+                    reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2))
                 }
             }
         }
-        return reminderEvents;
+        return reminderEvents
     }
 
-    public ReminderEvent getLastReminderEvent(int reminderId) {
-        return medicineDao.getLastReminderEvent(reminderId);
+    fun getLastReminderEvent(reminderId: Int): ReminderEvent? {
+        return medicineDao.getLastReminderEvent(reminderId)
     }
 
-    public long insertMedicine(Medicine medicine) {
-        return internalInsert(medicine, medicineDao::insertMedicine);
+    fun insertMedicine(medicine: Medicine): Long {
+        return internalInsert(medicine) { medicine -> medicineDao.insertMedicine(medicine) }
     }
 
-    private <T> long internalInsert(T insertType, Insert<T> f) {
+    private fun <T> internalInsert(insertType: T, f: Insert<T>): Long {
         try {
-            return MedicineRoomDatabase.databaseWriteExecutor.submit(() -> f.insert(insertType)).get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e1) {
-            return -1;
+            return MedicineRoomDatabase.databaseWriteExecutor.submit(Callable { f.insert(insertType) }).get()
+        } catch (_: InterruptedException) {
+            Thread.currentThread().interrupt()
+        } catch (_: ExecutionException) {
+            return -1
         }
-        return 0;
+        return 0
     }
 
-    public void deleteMedicine(int medicineId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.deleteMedicineToTagForMedicine(medicineId);
-            medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId));
-        });
-    }
-
-    public long insertReminder(Reminder reminder) {
-        return internalInsert(reminder, medicineDao::insertReminder);
-    }
-
-    public void updateReminder(Reminder reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminder(reminder));
-    }
-
-    public void deleteReminder(int reminderId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminder(medicineDao.getReminder(reminderId)));
-    }
-
-    public long insertReminderEvent(ReminderEvent reminderEvent) {
-        return internalInsert(reminderEvent, medicineDao::insertReminderEvent);
-    }
-
-    public @Nullable ReminderEvent getReminderEvent(int reminderEventId) {
-        return medicineDao.getReminderEvent(reminderEventId);
-    }
-
-    public @Nullable ReminderEvent getReminderEvent(int reminderId, long remindedTimestamp) {
-        return medicineDao.getReminderEvent(reminderId, remindedTimestamp);
-    }
-
-    public void updateReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateReminderEvent(reminderEvent));
-    }
-
-    public void deleteAll() {
-        deleteReminders();
-        deleteMedicines();
-        deleteReminderEvents();
-        deleteTags();
-    }
-
-    public void deleteReminders() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminders);
-    }
-
-    public void deleteMedicines() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicines);
-    }
-
-    public void deleteReminderEvents() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteReminderEvents);
-    }
-
-    public void deleteTags() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteTags);
-        MedicineRoomDatabase.databaseWriteExecutor.execute(medicineDao::deleteMedicineToTags);
-    }
-
-    public void deleteReminderEvent(ReminderEvent reminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteReminderEvent(reminderEvent));
-    }
-
-    public List<Reminder> getLinkedReminders(int reminderId) {
-        return medicineDao.getLinkedReminders(reminderId);
-    }
-
-    @NotNull
-    public LiveData<List<Tag>> getLiveTags() {
-        return medicineDao.getLiveTags();
-    }
-
-    public long insertTag(@NotNull Tag tag) {
-        Tag existingTag = getTagByName(tag.name);
-        if (existingTag == null) {
-            return internalInsert(tag, medicineDao::insertTag);
-        } else {
-            return existingTag.tagId;
+    fun deleteMedicine(medicineId: Int) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute {
+            medicineDao.deleteMedicineToTagForMedicine(medicineId)
+            medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId))
         }
     }
 
-    public Tag getTagByName(String name) {
-        return medicineDao.getTagByName(name);
+    fun insertReminder(reminder: Reminder): Long {
+        return internalInsert(reminder) { reminder -> medicineDao.insertReminder(reminder) }
     }
 
-    public void deleteTag(@NotNull Tag tag) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> {
-            medicineDao.deleteMedicineToTagForTag(tag.tagId);
-            medicineDao.deleteTag(tag);
-        });
+    fun updateReminder(reminder: Reminder) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminder(reminder) }
     }
 
-    public void insertMedicineToTag(int medicineId, int tagId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertMedicineToTag(new MedicineToTag(medicineId, tagId)));
+    fun deleteReminder(reminderId: Int) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminder(medicineDao.getReminder(reminderId)) }
     }
 
-    public void deleteMedicineToTag(int medicineId, int tagId) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.deleteMedicineToTag(new MedicineToTag(medicineId, tagId)));
+    fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
+        return internalInsert(reminderEvent) { reminderEvent -> medicineDao.insertReminderEvent(reminderEvent) }
     }
 
-    @NotNull
-    public LiveData<List<MedicineToTag>> getLiveMedicineToTags() {
-        return medicineDao.getLiveMedicineToTags();
+    fun getReminderEvent(reminderEventId: Int): ReminderEvent? {
+        return medicineDao.getReminderEvent(reminderEventId)
     }
 
-    public boolean hasTags() {
-        return medicineDao.countTags() > 0;
+    fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
+        return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
     }
 
-    public double getHighestMedicineSortOrder() {
-        return medicineDao.getHighestMedicineSortOrder();
+    fun updateReminderEvent(reminderEvent: ReminderEvent) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminderEvent(reminderEvent) }
     }
 
-    public void moveMedicine(int fromPosition, int toPosition) {
-        List<FullMedicine> medicines = getMedicines();
+    fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminderEvents(reminderEvents) }
+    }
+
+    fun deleteAll() {
+        deleteReminders()
+        deleteMedicines()
+        deleteReminderEvents()
+        deleteTags()
+    }
+
+    fun deleteReminders() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminders() }
+    }
+
+    fun deleteMedicines() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicines() }
+    }
+
+    fun deleteReminderEvents() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminderEvents() }
+    }
+
+    fun deleteTags() {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteTags() }
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicineToTags() }
+    }
+
+    fun deleteReminderEvent(reminderEvent: ReminderEvent) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminderEvent(reminderEvent) }
+    }
+
+    fun getLinkedReminders(reminderId: Int): List<Reminder> {
+        return medicineDao.getLinkedReminders(reminderId)
+    }
+
+    val liveTags: LiveData<List<Tag>>
+        get() = medicineDao.getLiveTags()
+
+    fun insertTag(tag: Tag): Long {
+        val existingTag = getTagByName(tag.name)
+        return existingTag?.tagId?.toLong() ?: internalInsert(tag) { tag -> medicineDao.insertTag(tag) }
+    }
+
+    fun getTagByName(name: String?): Tag? {
+        return medicineDao.getTagByName(name)
+    }
+
+    fun deleteTag(tag: Tag) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute {
+            medicineDao.deleteMedicineToTagForTag(tag.tagId)
+            medicineDao.deleteTag(tag)
+        }
+    }
+
+    fun insertMedicineToTag(medicineId: Int, tagId: Int) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertMedicineToTag(MedicineToTag(medicineId, tagId)) }
+    }
+
+    fun deleteMedicineToTag(medicineId: Int, tagId: Int) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId)) }
+    }
+
+    val liveMedicineToTags: LiveData<List<MedicineToTag>>
+        get() = medicineDao.getLiveMedicineToTags()
+
+    fun hasTags(): Boolean {
+        return medicineDao.countTags() > 0
+    }
+
+    val highestMedicineSortOrder: Double
+        get() = medicineDao.getHighestMedicineSortOrder()
+
+    fun moveMedicine(fromPosition: Int, toPosition: Int) {
+        val medicines = this.medicines
         try {
-            FullMedicine moveMedicine = medicines.remove(fromPosition);
-            medicines.add(toPosition, moveMedicine);
-            moveMedicine.medicine.sortOrder = (medicines.get(toPosition + 1).medicine.sortOrder + medicines.get(toPosition - 1).medicine.sortOrder) / 2;
-            updateMedicine(moveMedicine.medicine);
-        } catch (IndexOutOfBoundsException e) {
+            val moveMedicine = medicines.removeAt(fromPosition)
+            medicines.add(toPosition, moveMedicine)
+            moveMedicine.medicine.sortOrder = (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2
+            updateMedicine(moveMedicine.medicine)
+        } catch (_: IndexOutOfBoundsException) {
             // Intentionally left blank
         }
     }
 
-    public List<FullMedicine> getMedicines() {
-        return medicineDao.getMedicines();
+    val medicines: MutableList<FullMedicine>
+        get() = medicineDao.getMedicines()
+
+    fun updateMedicine(medicine: Medicine?) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
     }
 
-    public void updateMedicine(Medicine medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.updateMedicine(medicine));
-    }
-
-    public void flushDatabase() {
-        if (MedicineRoomDatabase.databaseWriteExecutor.isShutdown()) {
-            return;
+    fun flushDatabase() {
+        if (MedicineRoomDatabase.databaseWriteExecutor.isShutdown) {
+            return
         }
         try {
             // Submit an empty task and wait for its completion.
             // This guarantees all prior submitted tasks have completed.
-            Future<?> future = MedicineRoomDatabase.databaseWriteExecutor.submit(() -> { /* No operation */ });
-            future.get(10, TimeUnit.SECONDS); // Wait with a timeout
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restore interrupt status
-        } catch (java.util.concurrent.ExecutionException | java.util.concurrent.TimeoutException e) {
+            val future = MedicineRoomDatabase.databaseWriteExecutor.submit {}
+            future[10, TimeUnit.SECONDS] // Wait with a timeout
+        } catch (_: InterruptedException) {
+            Thread.currentThread().interrupt() // Restore interrupt status
+        } catch (_: ExecutionException) {
+            // Intentionally left blank
+        } catch (_: TimeoutException) {
             // Intentionally left blank
         }
     }
 
-    public void insertReminderEvents(@NonNull List<@NotNull ReminderEvent> reminderEvents) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute(() -> medicineDao.insertReminderEvents(reminderEvents));
-
+    fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminderEvents(reminderEvents) }
     }
 
-    interface Insert<T> {
-        long insert(T item);
+    internal fun interface Insert<T> {
+        fun insert(item: T): Long
     }
 }
