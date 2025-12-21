@@ -218,7 +218,7 @@ class MedicineRepository(application: Application?) {
         get() = medicineDao.getHighestMedicineSortOrder()
 
     fun moveMedicine(fromPosition: Int, toPosition: Int) {
-        val medicines = this.medicines
+        val medicines = this.medicines.toMutableList()
         try {
             val moveMedicine = medicines.removeAt(fromPosition)
             medicines.add(toPosition, moveMedicine)
@@ -229,7 +229,7 @@ class MedicineRepository(application: Application?) {
         }
     }
 
-    val medicines: MutableList<FullMedicine>
+    val medicines: List<FullMedicine>
         get() = medicineDao.getMedicines()
 
     fun updateMedicine(medicine: Medicine?) {
