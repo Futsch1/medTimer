@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
@@ -253,4 +253,4 @@
     <string name="battery_optimization_warning_summary">Ако имате проблеми с пропуснати известия, моля, деактивирайте оптимизацията на батерията за това приложение в настройките за известия.</string>
     <string name="ignore_battery_optimization">Игнориране на оптимизацията на батерията</string>
     <string name="reschedule_reminder">Пренасрочване на напомнянето</string>
-</resources>
+<string name="interval_start_condition">Условие за стартиране на интервала</string></resources>

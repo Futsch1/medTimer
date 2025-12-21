@@ -37,7 +37,7 @@
             android:entries="@array/interval_start"
             android:entryValues="@array/values_0_and_1"
             android:icon="@drawable/stopwatch"
-            android:title="Interval start"
+            android:title="@string/interval_start_condition"
             app:key="interval_start" />
     </PreferenceCategory>
     <PreferenceCategory
