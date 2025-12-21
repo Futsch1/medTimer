@@ -5,6 +5,7 @@ import static androidx.navigation.ActivityKt.findNavController;
 import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
 
 import android.app.ActivityManager;
+import android.app.ApplicationExitInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void showIntro(SharedPreferences sharedPref) {
         boolean introShown = sharedPref.getBoolean("intro_shown", false);
         if (!introShown && !BuildConfig.DEBUG) {
+            Log.d(LogTags.MAIN, "Show MedTimer intro");
             startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
             sharedPref.edit().putBoolean("intro_shown", true).apply();
         } else {
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             return Unit.INSTANCE;
         });
         if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+            Log.d(LogTags.MAIN, "Start biometric authentication");
             biometrics.authenticate();
         } else {
             start();
@@ -113,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityIntentKt.dispatch(this, this.getIntent());
         this.setIntent(new Intent());
+
+        checkForceStopped();
     }
 
     private void handleBackPressed() {
@@ -163,9 +169,23 @@ public class MainActivity extends AppCompatActivity {
 
         if (batteryOptimizationWarning != null) {
             if (!powerManager.isIgnoringBatteryOptimizations(getPackageName()) && !warningDismissed && !BuildConfig.DEBUG) {
+                Log.d(LogTags.MAIN, "Show battery optimization");
                 batteryOptimizationWarning.setVisibility(View.VISIBLE);
             } else {
                 batteryOptimizationWarning.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void checkForceStopped() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            List<ApplicationExitInfo> exitInfos = activityManager.getHistoricalProcessExitReasons(null, 0, 1);
+
+            if (!exitInfos.isEmpty() && exitInfos.get(0).getReason() == ApplicationExitInfo.REASON_USER_REQUESTED) {
+                Log.w(LogTags.MAIN, "MedTimer was force stopped");
+
+                Autostart.Companion.restoreNotifications(getApplicationContext());
             }
         }
     }

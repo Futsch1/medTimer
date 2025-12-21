@@ -26,19 +26,22 @@ class Autostart : BroadcastReceiver() {
         }
     }
 
-    private fun restoreNotifications(context: Context) {
-        val repo = MedicineRepository(context.applicationContext as Application?)
-        val thread = HandlerThread("RestoreNotifications")
-        thread.start()
-        Handler(thread.getLooper()).post {
-            val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
-                .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
-                    Collectors.toUnmodifiableList()
-                )
-            for (reminderEvent in reminderEventList) {
-                val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
-                ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
+    companion object {
+        fun restoreNotifications(context: Context) {
+            val repo = MedicineRepository(context.applicationContext as Application?)
+            val thread = HandlerThread("RestoreNotifications")
+            thread.start()
+            Handler(thread.getLooper()).post {
+                val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
+                    .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
+                        Collectors.toUnmodifiableList()
+                    )
+                for (reminderEvent in reminderEventList) {
+                    val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                    scheduledReminderNotificationData.notificationId = reminderEvent.notificationId
+                    Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
+                    ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
+                }
             }
         }
     }
