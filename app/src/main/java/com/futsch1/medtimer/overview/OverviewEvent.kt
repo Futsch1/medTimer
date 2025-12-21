@@ -46,7 +46,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as OverviewEvent
-        return id == other.id && timestamp == other.timestamp && text.toString() == other.text.toString() && icon == other.icon && color == other.color && state == other.state && updateValue == other.updateValue
+        return id == other.id && timestamp == other.timestamp && text.toString() == other.text.toString() && icon == other.icon && color == other.color && state == other.state && updateValue == other.updateValue && eventPosition == other.eventPosition
     }
 
     override fun hashCode(): Int {

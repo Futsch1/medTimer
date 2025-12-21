@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="taken">تم التناول</string>
     <string name="skipped">تم التخطي</string>
@@ -273,4 +273,4 @@
     <string name="battery_optimization_warning_summary">إذا واجهت مشاكل في فقدان الإشعارات، ففكر في تعطيل تحسين البطارية لهذا التطبيق في إعدادات الإشعارات.</string>
     <string name="ignore_battery_optimization">تجاهل تحسين البطارية</string>
     <string name="reschedule_reminder">إعادة جدولة التذكير</string>
-</resources>
+<string name="interval_start_condition">حالة بدء الفاصل الزمني</string></resources>

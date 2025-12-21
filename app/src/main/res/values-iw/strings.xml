@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">הגדרות</string>
     <string name="tab_overview">ראיה כללית</string>
@@ -258,4 +258,5 @@
     <string name="combine_notifications_summary">אם מוגדר, התראות עם אותו זמן יתמזגו להתראה אחת</string>
     <string name="battery_optimization_warning_title">התאמות סוללה דולקות</string>
     <string name="battery_optimization_warning_summary">אם תתקלו בבעיות של התראות שלא הופיעו, שקלו לבטל את התאמות הסוללה עבור אפליקציה זו בהגדרות ההתראות.</string>
+    <string name="interval_start_condition">תנאי התחלת מחזור</string>
 </resources>
