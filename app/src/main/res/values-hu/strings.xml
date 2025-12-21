@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Beállítások</string>
     <string name="tab_overview">Áttekintés</string>
@@ -253,4 +253,4 @@
     <string name="battery_optimization_warning_summary">Ha problémákat tapasztal a nem fogadott értesítésekkel, kérjük, tiltsa le az akkumulátor optimalizálását ehhez az alkalmazáshoz az értesítési beállításokban.</string>
     <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
-</resources>
+<string name="interval_start_condition">Intervallum indítási feltétel</string></resources>

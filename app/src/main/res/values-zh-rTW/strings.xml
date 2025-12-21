@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">設定</string>
     <string name="tab_overview">總覽</string>
@@ -248,4 +248,5 @@
     <string name="battery_optimization_warning_summary">如果您遇到通知遺失的問題，請考慮在通知設定中停用此應用程式的電池優化。</string>
     <string name="ignore_battery_optimization">忽略電池優化</string>
     <string name="reschedule_reminder">重新安排提醒</string>
+    <string name="interval_start_condition">間隔開始條件</string>
 </resources>

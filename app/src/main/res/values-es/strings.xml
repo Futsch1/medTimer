@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -258,4 +258,4 @@
     <string name="battery_optimization_warning_summary">Si tiene problemas con las notificaciones perdidas, desactive la optimización de la batería para esta aplicación en la configuración de notificaciones.</string>
     <string name="ignore_battery_optimization">Ignorar la optimización de la batería</string>
     <string name="reschedule_reminder">Reprogramar recordatorio</string>
-</resources>
+<string name="interval_start_condition">Condición de inicio de intervalo</string></resources>
