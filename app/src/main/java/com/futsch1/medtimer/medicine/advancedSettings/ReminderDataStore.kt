@@ -11,7 +11,7 @@ import java.time.LocalDate
 class ReminderDataStore(
     val reminderId: Int, val context: Context, val medicineRepository: MedicineRepository,
 ) : PreferenceDataStore() {
-    var reminder: Reminder = medicineRepository.getReminder(reminderId)
+    var reminder: Reminder = medicineRepository.getReminder(reminderId)!!
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {

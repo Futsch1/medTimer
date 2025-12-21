@@ -20,7 +20,7 @@ class ColorPickerDialog(
     init {
         dialog.setContentView(R.layout.dialog_color_editor)
         colorPickerView = dialog.findViewById(R.id.colorPickerView)
-        colorPickerView.setColor(color)
+        colorPickerView.color = color
         colorPickerView.showAlpha(false)
         colorPickerView.showHex(true)
         colorPickerView.showPreview(false)

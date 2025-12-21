@@ -35,6 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -50,23 +51,22 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
 @SuppressWarnings("java:S5786") // Required for Robolectric extension
 public class TakenSkippedWorkUnitTest {
     private static final int REMINDER_EVENT_ID = 12;
-
+    @Captor
+    ArgumentCaptor<List<ReminderEvent>> listCaptor = ArgumentCaptor.forClass(List.class);
     @Mock
     private Application mockApplication;
-    private NotificationManager mockNotificationManager;
-    private AlarmManager mockAlarmManager;
 
     @BeforeEach
     public void setUp() {
 
         mockApplication = mock(Application.class);
 
-        mockNotificationManager = mock(NotificationManager.class);
+        NotificationManager mockNotificationManager = mock(NotificationManager.class);
         when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
         when(mockNotificationManager.getActiveNotifications()).thenReturn(new StatusBarNotification[]{});
 
 
-        mockAlarmManager = mock(AlarmManager.class);
+        AlarmManager mockAlarmManager = mock(AlarmManager.class);
         when(mockApplication.getSystemService(AlarmManager.class)).thenReturn(mockAlarmManager);
     }
 
@@ -107,12 +107,11 @@ public class TakenSkippedWorkUnitTest {
 
             // Check if reminder event was updated with the generated notification ID
             MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
-            ArgumentCaptor<ReminderEvent> captor = ArgumentCaptor.forClass(ReminderEvent.class);
-            verify(mockedMedicineRepository, times(1)).updateReminderEvent(captor.capture());
-            assertEquals(notificationId, captor.getValue().notificationId);
-            assertEquals(reminderId, captor.getValue().reminderId);
-            assertEquals(REMINDER_EVENT_ID, captor.getValue().reminderEventId);
-            assertEquals(status, captor.getValue().status);
+            verify(mockedMedicineRepository, times(1)).updateReminderEvents(listCaptor.capture());
+            assertEquals(notificationId, listCaptor.getValue().get(0).notificationId);
+            assertEquals(reminderId, listCaptor.getValue().get(0).reminderId);
+            assertEquals(REMINDER_EVENT_ID, listCaptor.getValue().get(0).reminderEventId);
+            assertEquals(status, listCaptor.getValue().get(0).status);
 
             if (status == ReminderEvent.ReminderStatus.TAKEN) {
                 ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);

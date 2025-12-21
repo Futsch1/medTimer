@@ -9,7 +9,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: Int, currentAmount: Double? = null): LocalDate? {
-    val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicineId)
+    val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicineId) ?: return null
+
     if (currentAmount != null) {
         fullMedicine.medicine.amount = currentAmount
     }

@@ -68,9 +68,9 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
     private fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
-                NotificationProcessor(context).setSingleReminderEventStatus(
+                NotificationProcessor(context).setReminderEventStatus(
                     ReminderEvent.ReminderStatus.TAKEN,
-                    reminderNotificationPart.reminderEvent
+                    listOf(reminderNotificationPart.reminderEvent)
                 )
                 Log.i(
                     LogTags.REMINDER,
