@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.medicine.editors
 
 import android.annotation.SuppressLint
+import androidx.core.widget.doAfterTextChanged
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.IntervalUnit
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -10,37 +12,60 @@ import com.google.android.material.textfield.TextInputEditText
 class IntervalEditor(
     private val timeEdit: TextInputEditText,
     private val intervalUnitToggle: MaterialButtonToggleGroup,
-    initialValueMinutes: Int
+    initialValueMinutes: Int,
+    private val maxMinutes: Int = Interval.MAX_INTERVAL_MINUTES
 ) {
     init {
-        val interval = Interval(initialValueMinutes)
+        val interval = Interval(initialValueMinutes, maxMinutes)
         var unit = interval.getUnit()
         timeEdit.setText(interval.getValue().toString())
         intervalUnitToggle.check(intervalUnitToggle.getChildAt(unit.ordinal).id)
+
         intervalUnitToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            val selectedUnit = checkedIntervalUnit(checkedId)
-            if (isChecked && timeEdit.text.toString().isNotBlank()) {
-                interval.setValue(timeEdit.text.toString().toInt(), unit)
-                var value = interval.getValue(selectedUnit)
-                if (value == 0) {
-                    value = 1
-                    interval.setValue(timeEdit.text.toString().toInt(), selectedUnit)
+            if (isChecked) {
+                val selectedUnit = checkedIntervalUnit(checkedId)
+                val text = timeEdit.text.toString()
+                if (text.isNotBlank()) {
+                    text.toIntOrNull()?.let { currentTextValue ->
+                        interval.setValue(currentTextValue, unit)
+                        var newValue = interval.getValue(selectedUnit)
+                        if (newValue == 0) {
+                            newValue = 1
+                            interval.setValue(1, selectedUnit)
+                        }
+                        timeEdit.setText(newValue.toString())
+                    }
                 }
-                timeEdit.setText(value.toString())
                 unit = selectedUnit
+                validate()
             }
+        }
+
+        timeEdit.doAfterTextChanged {
+            validate()
+        }
+        validate()
+    }
+
+    private fun validate() {
+        val minutes = getMinutesRaw()
+        if (minutes > maxMinutes) {
+            timeEdit.error = timeEdit.context.getString(R.string.invalid_input)
+        } else {
+            timeEdit.error = null
         }
     }
 
     fun getMinutes(): Int {
-        var value = 1
-        try {
-            value = timeEdit.text.toString().toInt()
-        } catch (_: NumberFormatException) {
-            // Intentionally empty
-        }
+        val minutes = getMinutesRaw()
+        return if (minutes > maxMinutes) maxMinutes else minutes
+    }
+
+    private fun getMinutesRaw(): Int {
+        val textValue = timeEdit.text.toString().toIntOrNull() ?: 1
+        val value = if (textValue > 0) textValue else 1
         val unit = checkedIntervalUnit(intervalUnitToggle.checkedButtonId)
-        return Interval(if (value > 0) value else 1, unit).minutesValue
+        return Interval(value, unit).minutesValue
     }
 
     private fun checkedIntervalUnit(checkedId: Int) = when (checkedId) {
