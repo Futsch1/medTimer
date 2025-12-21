@@ -13,7 +13,7 @@ private fun getMinutes(unit: IntervalUnit, value: Int) = when (unit) {
     IntervalUnit.DAYS -> value * 60 * 24
 }
 
-class Interval(var minutesValue: Int, var maxMinutesValue: Int = 31 * 60 * 24) {
+class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MINUTES) {
 
     constructor(value: Int, unit: IntervalUnit) : this(
         getMinutes(unit, value)
@@ -62,5 +62,9 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = 31 * 60 * 24) {
             IntervalUnit.DAYS -> R.plurals.days
         }
         return "$value ${context.resources.getQuantityString(textId, value)}"
+    }
+
+    companion object {
+        const val MAX_INTERVAL_MINUTES = 31 * 60 * 24
     }
 }

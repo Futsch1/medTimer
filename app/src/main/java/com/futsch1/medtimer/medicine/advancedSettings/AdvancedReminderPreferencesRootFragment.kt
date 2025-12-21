@@ -157,7 +157,7 @@ class AdvancedReminderPreferencesRootFragment(
         findPreference<Preference>("time_based_category")?.isVisible = reminder.reminderType == Reminder.ReminderType.TIME_BASED
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            EditIntervalDialog(requireContext(), reminder.timeInMinutes) { newIntervalMinutes ->
+            EditIntervalDialog(requireContext(), reminder) { newIntervalMinutes ->
                 preferenceManager.preferenceDataStore?.putInt(
                     "interval",
                     newIntervalMinutes

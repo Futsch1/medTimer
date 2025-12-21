@@ -13,6 +13,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.AmountTextWatcher
+import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
@@ -104,7 +105,8 @@ class NewReminderDialog(
 
         val intervalEditor = IntervalEditor(
             dialog.findViewById(R.id.editIntervalTime),
-            dialog.findViewById(R.id.intervalUnit), 12 * 60
+            dialog.findViewById(R.id.intervalUnit), 12 * 60,
+            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )
 
         val intervalStartDateTimeEditor = DateTimeEditor(
