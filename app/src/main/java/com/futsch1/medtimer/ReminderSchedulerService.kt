@@ -1,58 +1,49 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
+import android.content.Intent
+import android.os.IBinder
+import android.util.Log
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.Observer
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LifecycleService;
+class ReminderSchedulerService : LifecycleService() {
+    override fun onCreate() {
+        super.onCreate()
 
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.reminders.ReminderProcessor;
+        val medicineRepository = MedicineRepository(this.application)
 
-import java.util.List;
+        medicineRepository.liveMedicines.observe(
+            this,
+            Observer { _: List<FullMedicine> -> this.updateMedicine() })
 
-public class ReminderSchedulerService extends LifecycleService {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        MedicineRepository medicineRepository = new MedicineRepository(this.getApplication());
-
-        medicineRepository.getLiveMedicines().observe(this, this::updateMedicine);
-
-        Log.i(LogTags.SCHEDULER, "Scheduler service created");
+        Log.i(LogTags.SCHEDULER, "Scheduler service created")
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(@NonNull Intent intent) {
-        super.onBind(intent);
-        return null;
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
+        return null
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        scheduleRequest();
-        return START_STICKY;
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+        scheduleRequest()
+        return START_STICKY
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    override fun onDestroy() {
+        super.onDestroy()
 
-        Log.i(LogTags.SCHEDULER, "Scheduler service destroyed");
+        Log.i(LogTags.SCHEDULER, "Scheduler service destroyed")
     }
 
-    public void updateMedicine(List<FullMedicine> ignoredFullMedicine) {
-        scheduleRequest();
+    fun updateMedicine() {
+        scheduleRequest()
     }
 
-    private void scheduleRequest() {
-        ReminderProcessor.requestReschedule(this);
+    private fun scheduleRequest() {
+        requestReschedule(this)
     }
 }
