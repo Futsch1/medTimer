@@ -1,226 +1,223 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import static android.Manifest.permission.POST_NOTIFICATIONS;
-import static androidx.navigation.ActivityKt.findNavController;
-import static com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW;
+import android.Manifest.permission
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo
+import android.app.ApplicationExitInfo
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.PowerManager
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.content.edit
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.navigateUp
+import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
+import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
+import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.preferences.PreferencesNames
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-import android.app.ActivityManager;
-import android.app.ApplicationExitInfo;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.PowerManager;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
+class MainActivity : AppCompatActivity() {
+    private var appBarConfiguration: AppBarConfiguration? = null
+    private var batteryOptimizationWarning: CardView? = null
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
-
-import com.futsch1.medtimer.helpers.TimeHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
-
-import kotlin.Unit;
-
-public class MainActivity extends AppCompatActivity {
-    private static final String BATTERY_WARNING_DISMISSED = "battery_warning_dismissed";
-    private AppBarConfiguration appBarConfiguration;
-    private CardView batteryOptimizationWarning;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Select theme
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String theme = sharedPref.getString("theme", "0");
-        if (theme.equals("1")) {
-            setTheme(R.style.Theme_MedTimer2);
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val theme: String = sharedPref.getString("theme", "0")!!
+        if (theme == "1") {
+            setTheme(R.style.Theme_MedTimer2)
         }
 
         // Screen capture
-        if (sharedPref.getBoolean(SECURE_WINDOW, false)) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        if (sharedPref.getBoolean(PreferencesNames.SECURE_WINDOW, false)) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        showIntro(sharedPref);
+        showIntro(sharedPref)
 
-        EdgeToEdge.enable(this);
+        this.enableEdgeToEdge()
 
-        ReminderNotificationChannelManager.Companion.initialize(this);
+        initialize(this)
 
-        TimeHelper.onChangedUseSystemLocale();
+        TimeHelper.onChangedUseSystemLocale()
 
-        authenticate(sharedPref);
+        authenticate(sharedPref)
     }
 
-    private void showIntro(SharedPreferences sharedPref) {
-        boolean introShown = sharedPref.getBoolean("intro_shown", false);
+    private fun showIntro(sharedPref: SharedPreferences) {
+        val introShown = sharedPref.getBoolean("intro_shown", false)
         if (!introShown && !BuildConfig.DEBUG) {
-            Log.d(LogTags.MAIN, "Show MedTimer intro");
-            startActivity(new Intent(getApplicationContext(), MedTimerAppIntro.class));
-            sharedPref.edit().putBoolean("intro_shown", true).apply();
+            Log.d(LogTags.MAIN, "Show MedTimer intro")
+            startActivity(Intent(applicationContext, MedTimerAppIntro::class.java))
+            sharedPref.edit { putBoolean("intro_shown", true) }
         } else {
-            checkPermissions();
+            checkPermissions()
         }
     }
 
-    private void authenticate(SharedPreferences sharedPref) {
-        Biometrics biometrics = new Biometrics(this,
-                () -> {
-                    start();
-                    return Unit.INSTANCE;
-                }, () -> {
-            this.finish();
-            return Unit.INSTANCE;
-        });
+    private fun authenticate(sharedPref: SharedPreferences) {
+        val biometrics = Biometrics(
+            this,
+            {
+                start()
+            }, {
+                this.finish()
+            })
         if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
-            Log.d(LogTags.MAIN, "Start biometric authentication");
-            biometrics.authenticate();
+            Log.d(LogTags.MAIN, "Start biometric authentication")
+            biometrics.authenticate()
         } else {
-            start();
+            start()
         }
 
-        handleBackPressed();
+        handleBackPressed()
     }
 
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            new RequestPostNotificationPermission(this).requestPermission();
+    private fun checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
+                this,
+                permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            RequestPostNotificationPermission(this).requestPermission()
         }
     }
 
-    private void start() {
-        setContentView(R.layout.activity_main);
-        setupNavigation();
-        batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning);
-        findViewById(R.id.dismissBatteryWarning).setOnClickListener(v -> {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            sharedPref.edit().putBoolean(BATTERY_WARNING_DISMISSED, true).apply();
-            checkBatteryOptimization();
-        });
+    private fun start() {
+        setContentView(R.layout.activity_main)
+        setupNavigation()
+        batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning)
+        findViewById<View>(R.id.dismissBatteryWarning)?.setOnClickListener { _: View ->
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            sharedPref.edit { putBoolean(BATTERY_WARNING_DISMISSED, true) }
+            checkBatteryOptimization()
+        }
 
-        ActivityIntentKt.dispatch(this, this.getIntent());
-        this.setIntent(new Intent());
+        dispatch(this, this.intent)
+        this.intent = Intent()
 
-        checkForceStopped();
+        checkForceStopped()
     }
 
-    private void handleBackPressed() {
+    private fun handleBackPressed() {
         // Post the back event to the main loop to make sure all pending events are handled before
-        OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
+        val backPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
                 // Post the back event to the main loop to make sure all pending events are handled before
-                new Handler(getMainLooper()).postDelayed(() -> {
-                    setEnabled(false);
-                    getOnBackPressedDispatcher().onBackPressed();
-                }, 20);
+                Handler(mainLooper).postDelayed({
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }, 20)
             }
-        };
-        this.getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
+        }
+        this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    private void setupNavigation() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHost);
-        assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
-        setSupportActionBar(findViewById(R.id.toolbar));
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
-                .build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        bottomNavigationView.setOnItemReselectedListener(item -> {
-            navController.popBackStack(item.getItemId(), false);
-            List<Fragment> currentFragments = navHostFragment.getChildFragmentManager().getFragments();
-
-            if (!currentFragments.isEmpty() && currentFragments.get(0) instanceof OnFragmentReselectedListener onFragmentReselectedListener) {
+    private fun setupNavigation() {
+        val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
+        val navController = navHostFragment.navController
+        setSupportActionBar(findViewById(R.id.toolbar))
+        appBarConfiguration = AppBarConfiguration.Builder(
+            R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment
+        )
+            .build()
+        setupActionBarWithNavController(this, navController, appBarConfiguration!!)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        setupWithNavController(bottomNavigationView, navController)
+        bottomNavigationView.setOnItemReselectedListener { item: MenuItem? ->
+            navController.popBackStack(item!!.itemId, false)
+            val currentFragments = navHostFragment.getChildFragmentManager().fragments
+            val topFragment = currentFragments.firstOrNull()
+            if (topFragment is OnFragmentReselectedListener) {
                 // Forward the reselection event to the current fragment
-                onFragmentReselectedListener.onFragmentReselected();
+                topFragment.onFragmentReselected()
             }
-        });
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            NavigationUI.onNavDestinationSelected(item, navController);
-            return true;
-        });
-    }
-
-    private void checkBatteryOptimization() {
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean warningDismissed = sharedPref.getBoolean(BATTERY_WARNING_DISMISSED, false);
-
-        if (batteryOptimizationWarning != null) {
-            if (!powerManager.isIgnoringBatteryOptimizations(getPackageName()) && !warningDismissed && !BuildConfig.DEBUG) {
-                Log.d(LogTags.MAIN, "Show battery optimization");
-                batteryOptimizationWarning.setVisibility(View.VISIBLE);
-            } else {
-                batteryOptimizationWarning.setVisibility(View.GONE);
-            }
+        }
+        bottomNavigationView.setOnItemSelectedListener { item: MenuItem? ->
+            onNavDestinationSelected(item!!, navController)
+            true
         }
     }
 
-    private void checkForceStopped() {
+    private fun checkBatteryOptimization() {
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val warningDismissed = sharedPref.getBoolean(BATTERY_WARNING_DISMISSED, false)
+
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName) && !warningDismissed && !BuildConfig.DEBUG) {
+            Log.d(LogTags.MAIN, "Show battery optimization")
+            batteryOptimizationWarning?.visibility = View.VISIBLE
+        } else {
+            batteryOptimizationWarning?.visibility = View.GONE
+        }
+    }
+
+    private fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-            List<ApplicationExitInfo> exitInfos = activityManager.getHistoricalProcessExitReasons(null, 0, 1);
+            val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            val exitInfos = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
 
-            if (!exitInfos.isEmpty() && exitInfos.get(0).getReason() == ApplicationExitInfo.REASON_USER_REQUESTED) {
-                Log.w(LogTags.MAIN, "MedTimer was force stopped");
+            if (!exitInfos.isEmpty() && exitInfos[0]!!.reason == ApplicationExitInfo.REASON_USER_REQUESTED) {
+                Log.w(LogTags.MAIN, "MedTimer was force stopped")
 
-                Autostart.Companion.restoreNotifications(getApplicationContext());
+                restoreNotifications(applicationContext)
             }
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+    override fun onResume() {
+        super.onResume()
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         // hack for https://issuetracker.google.com/issues/113122354
         // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        val runningAppProcesses = activityManager.runningAppProcesses
         if (runningAppProcesses != null) {
-            int importance = runningAppProcesses.get(0).importance;
-            if (importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                startService(new Intent(getApplicationContext(), ReminderSchedulerService.class));
+            val importance = runningAppProcesses[0].importance
+            if (importance <= RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                startService(Intent(applicationContext, ReminderSchedulerService::class.java))
             }
         }
 
-        checkBatteryOptimization();
+        checkBatteryOptimization()
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        ActivityIntentKt.dispatch(this, intent);
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        dispatch(this, intent)
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
+    override fun onSupportNavigateUp(): Boolean {
         try {
-            NavController navController = findNavController(this, R.id.navHost);
-            return NavigationUI.navigateUp(navController, appBarConfiguration)
-                    || super.onSupportNavigateUp();
-        } catch (IllegalStateException e) {
-            return false;
+            val navController = this.findNavController(R.id.navHost)
+            return navigateUp(navController, appBarConfiguration!!)
+                    || super.onSupportNavigateUp()
+        } catch (_: IllegalStateException) {
+            return false
         }
+    }
+
+    companion object {
+        private const val BATTERY_WARNING_DISMISSED = "battery_warning_dismissed"
     }
 }
