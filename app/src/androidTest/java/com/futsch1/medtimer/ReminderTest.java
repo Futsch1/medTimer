@@ -395,9 +395,7 @@ public class ReminderTest extends BaseTestHelper {
             setDate(cycleStart.getTime());
 
             // Go back to medicines list
-            pressBack();
-            pressBack();
-            pressBack();
+            AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
 
             // Mark event as taken
             AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
