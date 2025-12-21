@@ -21,13 +21,20 @@ class Autostart : BroadcastReceiver() {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
             Log.i(AUTOSTART, "Requesting reschedule")
             requestReschedule(context)
-            Log.i(AUTOSTART, "Restore notifications")
             restoreNotifications(context)
         }
     }
 
     companion object {
+        var hasRestored = false
+
         fun restoreNotifications(context: Context) {
+            if (hasRestored) {
+                return
+            }
+            hasRestored = true
+
+            Log.i(AUTOSTART, "Restore notifications")
             val repo = MedicineRepository(context.applicationContext as Application?)
             val thread = HandlerThread("RestoreNotifications")
             thread.start()
