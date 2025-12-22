@@ -86,7 +86,10 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
     }
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
-        NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
+        if (reminderNotification.reminderNotificationData.notificationId != -1) {
+            Log.d(LogTags.REMINDER, "Cancel notification nID ${reminderNotification.reminderNotificationData.notificationId}")
+            NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
+        }
 
         // Show notifications for all reminders
         showNotification(reminderNotification)

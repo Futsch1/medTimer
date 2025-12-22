@@ -21,24 +21,34 @@ class Autostart : BroadcastReceiver() {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
             Log.i(AUTOSTART, "Requesting reschedule")
             requestReschedule(context)
-            Log.i(AUTOSTART, "Restore notifications")
             restoreNotifications(context)
         }
     }
 
-    private fun restoreNotifications(context: Context) {
-        val repo = MedicineRepository(context.applicationContext as Application?)
-        val thread = HandlerThread("RestoreNotifications")
-        thread.start()
-        Handler(thread.getLooper()).post {
-            val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
-                .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
-                    Collectors.toUnmodifiableList()
-                )
-            for (reminderEvent in reminderEventList) {
-                val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
-                ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
+    companion object {
+        var hasRestored = false
+
+        fun restoreNotifications(context: Context) {
+            if (hasRestored) {
+                return
+            }
+            hasRestored = true
+
+            Log.i(AUTOSTART, "Restore notifications")
+            val repo = MedicineRepository(context.applicationContext as Application?)
+            val thread = HandlerThread("RestoreNotifications")
+            thread.start()
+            Handler(thread.getLooper()).post {
+                val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
+                    .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
+                        Collectors.toUnmodifiableList()
+                    )
+                for (reminderEvent in reminderEventList) {
+                    val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                    scheduledReminderNotificationData.notificationId = reminderEvent.notificationId
+                    Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
+                    ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
+                }
             }
         }
     }

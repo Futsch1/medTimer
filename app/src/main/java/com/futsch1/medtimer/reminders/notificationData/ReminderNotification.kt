@@ -75,7 +75,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
 
                 val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
                 if (medicine == null) {
-                    Log.e(LogTags.REMINDER, String.format("Could not find medicine mID %d in database", reminder.medicineRelId))
+                    Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
                     return null
                 }
 
@@ -84,6 +84,9 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
                     reminderEvent =
                         buildAndInsertReminderEvent(medicineRepository, medicine, reminder, reminderNotificationData.remindInstant, numberOfRepeats)
                     reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
+                } else {
+                    Log.d(LogTags.REMINDER, "Reminder event reID ${reminderEvent.reminderEventId} already exists")
+                    reminderNotificationData.notificationId = reminderEvent.notificationId
                 }
                 result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
             }
