@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ρυθμίσεις</string>
     <string name="tab_overview">Επισκόπηση</string>
@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Εάν αντιμετωπίζετε προβλήματα με τις αναπάντητες ειδοποιήσεις, απενεργοποιήστε τη βελτιστοποίηση της μπαταρίας για αυτήν την εφαρμογή στις ρυθμίσεις ειδοποιήσεων.</string>
     <string name="ignore_battery_optimization">Παράβλεψη βελτιστοποίησης μπαταρίας</string>
     <string name="reschedule_reminder">Επαναπρογραμματισμός υπενθύμισης</string>
-<string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string></resources>
+    <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
+</resources>
