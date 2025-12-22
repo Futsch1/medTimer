@@ -87,12 +87,12 @@ jobs:
 
       - uses: qltysh/qlty-action/coverage@v2
         with:
-          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          token: {{secrets.QLTY_COVERAGE_TOKEN}}
           files: build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
 
       - uses: qltysh/qlty-action/coverage@v2
         with:
-          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          token: {{secrets.QLTY_COVERAGE_TOKEN}}
           files: app/build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
 
       - name: SonarQube
