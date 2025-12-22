@@ -147,8 +147,7 @@ class MainActivity : AppCompatActivity() {
         setupWithNavController(bottomNavigationView, navController)
         bottomNavigationView.setOnItemReselectedListener { item: MenuItem? ->
             navController.popBackStack(item!!.itemId, false)
-            val currentFragments = navHostFragment.getChildFragmentManager().fragments
-            val topFragment = currentFragments.firstOrNull()
+            val topFragment = navHostFragment.getChildFragmentManager().fragments.firstOrNull()
             if (topFragment is OnFragmentReselectedListener) {
                 // Forward the reselection event to the current fragment
                 topFragment.onFragmentReselected()
@@ -176,9 +175,9 @@ class MainActivity : AppCompatActivity() {
     private fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            val exitInfos = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
+            val exitInfos: List<ApplicationExitInfo> = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
 
-            if (!exitInfos.isEmpty() && exitInfos[0]!!.reason == ApplicationExitInfo.REASON_USER_REQUESTED) {
+            if (exitInfos.isNotEmpty() && exitInfos[0].reason == ApplicationExitInfo.REASON_USER_REQUESTED) {
                 Log.w(LogTags.MAIN, "MedTimer was force stopped")
 
                 restoreNotifications(applicationContext)
