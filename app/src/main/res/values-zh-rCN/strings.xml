@@ -196,7 +196,7 @@
     <string name="use_relative_date_time">相对日期/时间</string>
     <string name="invalid_amount">金额必须包含数字，才能为此提醒启用药品库存跟踪。</string>
     <string name="sticky_on_lockscreen">锁屏上的持续提醒</string>
-    <string name="sticky_on_lockscreen_summary">提醒无法在锁定屏幕上关闭，只能在通知抽屉中关闭\n注意：某些智能手表可能不再显示通知</string>
+    <string name="sticky_on_lockscreen_summary">提醒无法在锁定屏幕上关闭，只能在通知抽屉中关闭\n注意：即使开启通知，某些智能手表也可能不显示</string>
     <string name="big_notifications">大通知按钮</string>
     <string name="please_wait">请稍候…</string>
     <string name="interval_time">间隔 %s</string>
