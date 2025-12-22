@@ -120,7 +120,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             val handler = Handler(thread.getLooper())
             // Run the setup of the drop down in a separate thread to access the database
             handler.post {
-                ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity(), overviewViewModel.day).logManualDose()
+                ManualDose(requireContext(), medicineViewModel, this.requireActivity(), overviewViewModel.day).logManualDose()
             }
         }
     }
