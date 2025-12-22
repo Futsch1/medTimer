@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Relative date/time</string>
     <string name="invalid_amount">The amount has to contain a number to enable medicine stock tracking for this reminder.</string>
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
-    <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer\nNote: Some smartwatches might no longer show notifications</string>
+    <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer\nNote: Some smartwatches may no display notifications if enabled</string>
     <string name="big_notifications">Big notification buttons</string>
     <string name="please_wait">Please wait…</string>
     <string name="interval_time">Interval %s</string>
