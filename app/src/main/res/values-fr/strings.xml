@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -258,4 +258,5 @@
     <string name="battery_optimization_warning_summary">Si vous rencontrez des problèmes avec des notifications manquées, veuillez désactiver l\'optimisation de la batterie pour cette application dans les paramètres de notification.</string>
     <string name="ignore_battery_optimization">Ignorer l\'optimisation de la batterie</string>
     <string name="reschedule_reminder">Reporter le rappel</string>
-<string name="interval_start_condition">Condition de démarrage de l&amp;apos;intervalle</string></resources>
+    <string name="interval_start_condition">Condition de démarrage de l&amp;apos;intervalle</string>
+</resources>
