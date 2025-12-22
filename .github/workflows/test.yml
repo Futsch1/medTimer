@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   test:
@@ -85,14 +86,11 @@ jobs:
         run: ./gradlew lint
         if: github.ref == 'refs/heads/main'
 
-      - uses: qltysh/qlty-action/coverage@v2
+      - uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v2.2.0
+        env:
+          JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsDebug app/build/generated/ap_generated_sources/debug/out
         with:
-          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
-          files: build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
-
-      - uses: qltysh/qlty-action/coverage@v2
-        with:
-          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          oidc: true
           files: app/build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
 
       - name: SonarQube
