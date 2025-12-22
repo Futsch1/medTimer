@@ -12,7 +12,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderWorker
 import java.time.Instant
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 
 class ReminderNotification(val reminderNotificationParts: List<ReminderNotificationPart>, val reminderNotificationData: ReminderNotificationData) {
@@ -40,12 +40,13 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         )
     }
 
-    fun getLocalDateTime(): LocalDateTime {
-        return reminderNotificationData.remindInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+    private fun getRemindedTime(): LocalTime {
+        val remindedTimestamp = reminderNotificationParts.firstOrNull()?.reminderEvent?.remindedTimestamp ?: reminderNotificationData.remindInstant.epochSecond
+        return TimeHelper.secondsSinceEpochToLocalTime(remindedTimestamp, ZoneId.systemDefault())
     }
 
     fun getRemindTime(context: Context): String {
-        val remindTime = getLocalDateTime()
+        val remindTime = getRemindedTime()
         return TimeHelper.minutesToTimeString(context, remindTime.hour * 60L + remindTime.minute)
     }
 
