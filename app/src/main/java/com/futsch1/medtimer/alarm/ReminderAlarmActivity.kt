@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.alarm
 
-import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
@@ -40,8 +39,6 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
         setShowWhenLocked(true)
         setTurnScreenOn(true)
-        val keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-        keyguardManager.requestDismissKeyguard(this, null)
 
         val windowInsetsController =
             WindowCompat.getInsetsController(window, window.decorView)
