@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Asetukset</string>
     <string name="tab_overview">Yleiskatsaus</string>
@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Jos sinulla on ongelmia vastaamattomien ilmoitusten kanssa, poista akun optimointi käytöstä tämän sovelluksen ilmoitusasetuksissa.</string>
     <string name="ignore_battery_optimization">Ohita akun optimointi</string>
     <string name="reschedule_reminder">Ajoita muistutus uudelleen</string>
-<string name="interval_start_condition">Intervallin käynnistysehto</string></resources>
+    <string name="interval_start_condition">Intervallin käynnistysehto</string>
+</resources>
