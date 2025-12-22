@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Riepilogo</string>
@@ -258,4 +258,5 @@
     <string name="battery_optimization_warning_summary">Se riscontri problemi con le notifiche perse, valuta la possibilità di disattivare l\'ottimizzazione della batteria per questa app nelle impostazioni delle notifiche.</string>
     <string name="ignore_battery_optimization">Ignora l\'ottimizzazione della batteria</string>
     <string name="reschedule_reminder">Ripianifica promemoria</string>
-<string name="interval_start_condition">Condizione di avvio dell&amp;apos;intervallo</string></resources>
+    <string name="interval_start_condition">Condizione di avvio dell&amp;apos;intervallo</string>
+</resources>
