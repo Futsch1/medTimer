@@ -90,6 +90,7 @@ jobs:
         with:
           oidc: true
           files: app/build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
+          add-prefix: app/src/main/java
 
       - name: SonarQube
         env:
