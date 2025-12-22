@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.content.Context
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -59,57 +60,36 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        // Mark reminder as taken, no out of stock reminder expected
+        // Mark reminder as taken, no out of stock reminder expected (7 left)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
-        var o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
-            1_000
-        )
-        internalAssert(o == null)
-        device.pressBack()
+        checkOutOfStock(device, context, false)
 
-        // Mark reminder as skipped
+        // Mark reminder as skipped (10.5 left)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.skippedButton)
+        checkOutOfStock(device, context, false)
 
-        // Mark reminder as taken again, out of stock reminder expected
+        // Mark reminder as taken again, no out of stock reminder expected (7 left)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
-        device.openNotification()
-        o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
-            1_000
-        )
-        internalAssert(o == null)
-        device.pressBack()
+        checkOutOfStock(device, context, false)
 
-        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
-        assertDisplayed(R.id.amountLeft, "7")
-        pressBack()
-        pressBack()
-
-        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-
-        // Mark next instance as taken, out of stock reminder expected
+        // Mark next instance as taken, out of stock reminder expected (3.5 left)
         clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
-        device.openNotification()
-        o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
-            1_000
-        )
-        internalAssert(o != null)
-        device.pressBack()
+        checkOutOfStock(device, context, true)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+
         assertContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(R.id.amountLeft, "3.5")
+        pressBack()
+        pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
         clickOn(R.id.logManualDose)
@@ -135,6 +115,20 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, numberFormat.format(10.5))
         assertNotContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
+    }
+
+    private fun checkOutOfStock(device: UiDevice, context: Context, expected: Boolean) {
+        device.openNotification()
+        val o = device.wait(
+            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
+            1_000
+        )
+        if (expected) {
+            internalAssert(o != null)
+        } else {
+            internalAssert(o == null)
+        }
+        device.pressBack()
     }
 
     @Test
