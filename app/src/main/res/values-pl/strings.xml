@@ -113,7 +113,7 @@
     <string name="previous_month">Poprzedni miesiąc</string>
     <string name="repeat_reminders">Powtarzaj przypomnienia</string>
     <string name="add_linked_reminder">Dodaj przypomnienie o następnej dawce</string>
-    <string name="linked_reminder_delay">Opóźnienie dla następnej dawki</string>
+    <string name="linked_reminder_delay">Opóźnienie kolejnej dawki</string>
     <string name="delay">Opóźnienie</string>
     <string name="minutes_string">Minut</string>
     <string name="hours_string">Godzin</string>
@@ -153,7 +153,7 @@
     </plurals>
     <string name="intro_welcome_description">MedTimer to darmowa i otwartoźródłowa aplikacja przypominająca o zażyciu leków, która kładzie nacisk na prywatność.\n\nWymagane jest zezwolenie na wyświetlanie powiadomień przypominających o lekach.</string>
     <string name="cycle_start_date">Pierwszy start cyklu</string>
-    <string name="time_based_reminder">Przypomnienie oparte na czasie</string>
+    <string name="time_based_reminder">Przypomnienie według harmonogramu</string>
     <string name="clear_events">Wyczyść zdarzenia</string>
     <string name="app_url">MedTimer na GitHubie</string>
     <string name="exact_reminders">Dokładne przypomnienia</string>
@@ -211,7 +211,7 @@
     <string name="use_relative_date_time">Względna data/godzina</string>
     <string name="invalid_amount">Pole musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>
-    <string name="sticky_on_lockscreen_summary">Przypomnień nie można odrzucać z ekranu blokady, a jedynie z szuflady powiadomień\nUwaga: niektóre smartwatche mogą już nie wyświetlać powiadomień</string>
+    <string name="sticky_on_lockscreen_summary">Przypomnień nie można usuwać z ekranu blokady.\nUwaga: niektóre smartwatche mogą nie wyświetlać powiadomień, jeśli włączono</string>
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="interval_time">Odstęp %s</string>
@@ -235,11 +235,11 @@
     <string name="remind_on_days_of_month">Przypominaj w dniach miesiąca</string>
     <string name="start_date">Data początkowa</string>
     <string name="end_date">Data końcowa</string>
-    <string name="windowed_interval_reminder">Przypomnienie oparte na oknie czasowym</string>
-    <string name="continuous_interval_reminder">Ciągłe przypomnienie o odstępie czasowym</string>
-    <string name="time_based_reminder_help">Ustaw określone godziny (np. 8:00) i skonfiguruj powtarzający się wzorzec. Pozwala to na precyzyjną kontrolę nad określonymi dniami tygodnia, dniami miesiąca lub złożonymi harmonogramami okresowymi (np. \"co 3 dni\").</string>
-    <string name="continuous_interval_reminder_help">Rozpocznij przypomnienie oparte na określonym interwale czasowym (np. co 6 godzin), liczone od wskazanego momentu. Przypomnienia te są ciągłe i nie uwzględniają ograniczeń czasowych w ciągu dnia, aż do ręcznego dezaktywowania.</string>
-    <string name="windowed_interval_reminder_help">Zdefiniuj codzienne aktywne okno czasowe (np. od 9:00 do 21:00), w którym pierwsze przypomnienie zawsze pojawia się na początku tego okresu. Kolejne przypomnienia następują w stałych odstępach czasowych aż do czasu zakończenia okna. Cały schemat przypomnień resetuje się każdego dnia.</string>
+    <string name="windowed_interval_reminder">Przypomnienie w określonym przedziale czasu</string>
+    <string name="continuous_interval_reminder">Przypomnienie co określony czas</string>
+    <string name="time_based_reminder_help">Ustaw konkretne godziny (np. 8:00) i określ, jak często mają się powtarzać. Dzięki temu możesz dokładnie wybrać dni tygodnia, konkretne dni miesiąca albo bardziej złożone schematy (np. „co 3 dni”).</string>
+    <string name="continuous_interval_reminder_help">Ustaw przypomnienie, które będzie się powtarzać co dany odstęp czasu (np. co 6 godzin), zaczynając od wybranego momentu. Będzie ono działać bez przerwy, bez względu na porę dnia, dopóki go nie wyłączysz.</string>
+    <string name="windowed_interval_reminder_help">Ustal dzienny przedział, w którym przypomnienia mają być aktywne (np. od 9:00 do 21:00). Pierwsze przypomnienie pojawi się zawsze o godzinie startu, a kolejne będą wyświetlane w stałych odstępach aż do godziny końcowej. Każdego dnia schemat zaczyna się od nowa.</string>
     <string name="linked_reminder">Przypomnienie połączone</string>
     <string name="linked_reminder_help">Przypomnienie powiązane to przypomnienie uzupełniające, które jest zaplanowane na określony czas po wyświetleniu przypomnienia głównego. Jest to przydatne w przypadku leków, które należy przyjmować w określonej kolejności, z określoną przerwą między kolejnymi dawkami.</string>
     <string name="add_linked_reminder_summary">Tworzy przypomnienie uzupełniające, które jest zaplanowane na określony czas po uruchomieniu tego przypomnienia.</string>
