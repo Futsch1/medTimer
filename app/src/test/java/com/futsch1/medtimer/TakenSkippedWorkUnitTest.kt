@@ -1,137 +1,136 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_AMOUNT;
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_MEDICINE_ID;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockConstruction;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import android.app.AlarmManager
+import android.app.Application
+import android.app.NotificationManager
+import android.service.notification.StatusBarNotification
+import androidx.work.Data
+import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.reminders.SkippedWorker
+import com.futsch1.medtimer.reminders.TakenWorker
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.Mock
+import org.mockito.MockedConstruction
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
+import org.robolectric.annotation.Config
+import tech.apter.junit.jupiter.robolectric.RobolectricExtension
+import java.time.Instant
 
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.NotificationManager;
-import android.service.notification.StatusBarNotification;
-
-import androidx.work.Data;
-import androidx.work.ListenableWorker;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
-
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.SkippedWorker;
-import com.futsch1.medtimer.reminders.TakenWorker;
-import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockedConstruction;
-import org.mockito.MockedStatic;
-import org.robolectric.annotation.Config;
-
-import java.time.Instant;
-import java.util.List;
-
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension;
-
-@ExtendWith(RobolectricExtension.class)
-@Config(sdk = 34)
-@SuppressWarnings("java:S5786") // Required for Robolectric extension
-public class TakenSkippedWorkUnitTest {
-    private static final int REMINDER_EVENT_ID = 12;
+@ExtendWith(RobolectricExtension::class)
+@Config(sdk = [34])
+// Required for Robolectric extension
+class TakenSkippedWorkUnitTest {
     @Captor
-    ArgumentCaptor<List<ReminderEvent>> listCaptor = ArgumentCaptor.forClass(List.class);
+    lateinit var listCaptor: ArgumentCaptor<List<ReminderEvent>>
+
     @Mock
-    private Application mockApplication;
+    private var mockApplication: Application? = null
 
     @BeforeEach
-    public void setUp() {
+    fun setUp() {
+        MockitoAnnotations.openMocks(this)
 
-        mockApplication = mock(Application.class);
+        mockApplication = Mockito.mock(Application::class.java)
 
-        NotificationManager mockNotificationManager = mock(NotificationManager.class);
-        when(mockApplication.getSystemService(NotificationManager.class)).thenReturn(mockNotificationManager);
-        when(mockNotificationManager.getActiveNotifications()).thenReturn(new StatusBarNotification[]{});
+        val mockNotificationManager = Mockito.mock(NotificationManager::class.java)
+        Mockito.`when`(mockApplication!!.getSystemService(NotificationManager::class.java))
+            .thenReturn(mockNotificationManager)
+        Mockito.`when`(mockNotificationManager.getActiveNotifications()).thenReturn(arrayOf<StatusBarNotification?>())
 
-
-        AlarmManager mockAlarmManager = mock(AlarmManager.class);
-        when(mockApplication.getSystemService(AlarmManager.class)).thenReturn(mockAlarmManager);
+        val mockAlarmManager = Mockito.mock(AlarmManager::class.java)
+        Mockito.`when`(mockApplication!!.getSystemService(AlarmManager::class.java)).thenReturn(mockAlarmManager)
     }
 
     @Test
-    public void testDoWorkTaken() {
-        WorkerParameters workerParams = mock(WorkerParameters.class);
-        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
-        Data.Builder builder = new Data.Builder();
-        processedNotificationData.toBuilder(builder);
-        when(workerParams.getInputData()).thenReturn(builder.build());
-        TakenWorker takenWork = new TakenWorker(mockApplication, workerParams);
+    fun testDoWorkTaken() {
+        val workerParams = Mockito.mock(WorkerParameters::class.java)
+        val processedNotificationData = ProcessedNotificationData(listOf(REMINDER_EVENT_ID))
+        val builder = Data.Builder()
+        processedNotificationData.toBuilder(builder)
+        Mockito.`when`(workerParams.inputData).thenReturn(builder.build())
+        val takenWork = TakenWorker(mockApplication!!, workerParams)
 
-        testWork(takenWork, ReminderEvent.ReminderStatus.TAKEN);
+        testWork(takenWork, ReminderStatus.TAKEN)
     }
 
-    private void testWork(Worker worker, ReminderEvent.ReminderStatus status) {
-        ReminderEvent reminderEvent = new ReminderEvent();
-        int notificationId = 14;
-        reminderEvent.notificationId = notificationId;
-        int reminderId = 11;
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.reminderEventId = REMINDER_EVENT_ID;
-        reminderEvent.status = ReminderEvent.ReminderStatus.RAISED;
-        reminderEvent.processedTimestamp = Instant.now().getEpochSecond();
-        Reminder reminder = new Reminder(5);
-        reminder.amount = "4";
+    private fun testWork(worker: Worker, status: ReminderStatus?) {
+        val reminderEvent = ReminderEvent()
+        val notificationId = 14
+        reminderEvent.notificationId = notificationId
+        val reminderId = 11
+        reminderEvent.reminderId = reminderId
+        reminderEvent.reminderEventId = REMINDER_EVENT_ID
+        reminderEvent.status = ReminderStatus.RAISED
+        reminderEvent.processedTimestamp = Instant.now().epochSecond
+        val reminder = Reminder(5)
+        reminder.amount = "4"
 
-        try (MockedConstruction<MedicineRepository> mockedMedicineRepositories = mockConstruction(MedicineRepository.class, (mock, context) -> {
-            when(mock.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent);
-            when(mock.getReminder(reminderId)).thenReturn(reminder);
-        });
-             MockedStatic<WorkManagerAccess> mockedWorkManagerAccess = mockStatic(WorkManagerAccess.class)) {
-            WorkManager mockWorkManager = mock(WorkManager.class);
-            mockedWorkManagerAccess.when(() -> WorkManagerAccess.getWorkManager(mockApplication)).thenReturn(mockWorkManager);
-            // Expected to pass
-            ListenableWorker.Result result = worker.doWork();
-            assertInstanceOf(ListenableWorker.Result.Success.class, result);
+        Mockito.mockConstruction(
+            MedicineRepository::class.java
+        ) { mock: MedicineRepository?, _: MockedConstruction.Context? ->
+            Mockito.`when`<ReminderEvent?>(mock!!.getReminderEvent(REMINDER_EVENT_ID)).thenReturn(reminderEvent)
+            Mockito.`when`<Reminder?>(mock.getReminder(reminderId)).thenReturn(reminder)
+        }.use { mockedMedicineRepositories ->
+            Mockito.mockStatic(WorkManagerAccess::class.java).use { mockedWorkManagerAccess ->
+                val mockWorkManager = Mockito.mock(WorkManager::class.java)
+                mockedWorkManagerAccess.`when`<Any?> { WorkManagerAccess.getWorkManager(mockApplication) }
+                    .thenReturn(mockWorkManager)
+                // Expected to pass
+                val result = worker.doWork()
+                Assertions.assertInstanceOf(ListenableWorker.Result.Success::class.java, result)
 
-            // Check if reminder event was updated with the generated notification ID
-            MedicineRepository mockedMedicineRepository = mockedMedicineRepositories.constructed().get(0);
-            verify(mockedMedicineRepository, times(1)).updateReminderEvents(listCaptor.capture());
-            assertEquals(notificationId, listCaptor.getValue().get(0).notificationId);
-            assertEquals(reminderId, listCaptor.getValue().get(0).reminderId);
-            assertEquals(REMINDER_EVENT_ID, listCaptor.getValue().get(0).reminderEventId);
-            assertEquals(status, listCaptor.getValue().get(0).status);
+                // Check if reminder event was updated
+                val mockedMedicineRepository = mockedMedicineRepositories.constructed()[0]
 
-            if (status == ReminderEvent.ReminderStatus.TAKEN) {
-                ArgumentCaptor<WorkRequest> captor2 = ArgumentCaptor.forClass(WorkRequest.class);
-                verify(mockWorkManager, times(1)).enqueue(captor2.capture());
-                assertInstanceOf(OneTimeWorkRequest.class, captor2.getValue());
-                assertEquals(reminder.amount, captor2.getValue().getWorkSpec().input.getString(EXTRA_AMOUNT));
-                assertEquals(reminder.medicineRelId, captor2.getValue().getWorkSpec().input.getInt(EXTRA_MEDICINE_ID, -1));
+                Mockito.verify(mockedMedicineRepository, Mockito.times(1)).updateReminderEvents(listCaptor.capture() ?: emptyList())
+                Assertions.assertEquals(notificationId, listCaptor.getValue()!![0].notificationId)
+                Assertions.assertEquals(reminderId, listCaptor.getValue()!![0].reminderId)
+                Assertions.assertEquals(REMINDER_EVENT_ID, listCaptor.getValue()!![0].reminderEventId)
+                Assertions.assertEquals(status, listCaptor.getValue()!![0].status)
+
+                if (status == ReminderStatus.TAKEN) {
+                    val captor2 = ArgumentCaptor.forClass(WorkRequest::class.java)
+                    val dummyWorkRequest = OneTimeWorkRequest.Builder(TakenWorker::class.java).build()
+                    // Use Elvis operator to avoid NPE from Kotlin's null-safety check on non-nullable parameter
+                    Mockito.verify(mockWorkManager, Mockito.times(1)).enqueue(captor2.capture() ?: dummyWorkRequest)
+                    Assertions.assertInstanceOf(OneTimeWorkRequest::class.java, captor2.getValue())
+                    // Compare doubles as the input data stores the amount as a Double
+                    Assertions.assertEquals(4.0, captor2.getValue()!!.workSpec.input.getDouble(ActivityCodes.EXTRA_AMOUNT, 0.0))
+                    Assertions.assertEquals(reminder.medicineRelId, captor2.getValue()!!.workSpec.input.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1))
+                }
             }
         }
     }
 
     @Test
-    public void testDoWorkSkipped() {
-        WorkerParameters workerParams = mock(WorkerParameters.class);
-        ProcessedNotificationData processedNotificationData = new ProcessedNotificationData(List.of(REMINDER_EVENT_ID));
-        Data.Builder builder = new Data.Builder();
-        processedNotificationData.toBuilder(builder);
-        when(workerParams.getInputData()).thenReturn(builder.build());
-        SkippedWorker skippedWork = new SkippedWorker(mockApplication, workerParams);
+    fun testDoWorkSkipped() {
+        val workerParams = Mockito.mock(WorkerParameters::class.java)
+        val processedNotificationData = ProcessedNotificationData(listOf(REMINDER_EVENT_ID))
+        val builder = Data.Builder()
+        processedNotificationData.toBuilder(builder)
+        Mockito.`when`(workerParams.inputData).thenReturn(builder.build())
+        val skippedWork = SkippedWorker(mockApplication!!, workerParams)
 
-        testWork(skippedWork, ReminderEvent.ReminderStatus.SKIPPED);
+        testWork(skippedWork, ReminderStatus.SKIPPED)
+    }
+
+    companion object {
+        private const val REMINDER_EVENT_ID = 12
     }
 }
