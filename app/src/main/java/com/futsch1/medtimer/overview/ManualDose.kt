@@ -6,9 +6,9 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -21,7 +21,7 @@ import java.util.stream.Collectors
 
 class ManualDose(
     private val context: Context,
-    private val medicineRepository: MedicineRepository,
+    private val medicineViewModel: MedicineViewModel,
     private val activity: FragmentActivity,
     private val date: LocalDate
 ) {
@@ -30,7 +30,7 @@ class ManualDose(
         context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
 
     fun logManualDose() {
-        val medicines = medicineRepository.medicines
+        val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
         val adapter = ManualDoseListEntryAdapter(context, R.layout.manual_dose_list_entry, entries)
 
@@ -45,14 +45,17 @@ class ManualDose(
         }
     }
 
-    private fun getManualDoseEntries(medicines: List<FullMedicine>): List<ManualDoseEntry> {
+    private fun getManualDoseEntries(medicines: List<FullMedicine>?): List<ManualDoseEntry> {
         val entries: MutableList<ManualDoseEntry> = ArrayList()
+
         entries.add(ManualDoseEntry(context.getString(R.string.custom)))
         addCustomDoses(entries)
-        for (medicine in medicines) {
-            val entry = ManualDoseEntry(medicine, null)
-            entries.add(entry)
-            addInactiveReminders(medicine, entries)
+        if (medicines != null) {
+            for (medicine in medicines) {
+                val entry = ManualDoseEntry(medicine, null)
+                entries.add(entry)
+                addInactiveReminders(medicine, entries)
+            }
         }
         return entries
     }
@@ -128,7 +131,7 @@ class ManualDose(
             reminderEvent.remindedTimestamp =
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-            medicineRepository.insertReminderEvent(reminderEvent)
+            medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
 
             if (medicineId != -1) {
                 ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
@@ -184,8 +187,17 @@ class ManualDose(
         }
 
         override fun hashCode(): Int {
-            return super.hashCode()
+            var result = color
+            result = 31 * result + useColor.hashCode()
+            result = 31 * result + iconId
+            result = 31 * result + medicineId
+            result = 31 * result + baseName.hashCode()
+            result = 31 * result + name.hashCode()
+            result = 31 * result + (amount?.hashCode() ?: 0)
+            result = 31 * result + tags.hashCode()
+            return result
         }
+
     }
 
     companion object {

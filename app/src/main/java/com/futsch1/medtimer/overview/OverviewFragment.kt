@@ -37,6 +37,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        medicineViewModel.medicines.observe(this) {
+
+        }
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         overviewViewModel.day = LocalDate.now()
 
@@ -120,7 +123,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             val handler = Handler(thread.getLooper())
             // Run the setup of the drop down in a separate thread to access the database
             handler.post {
-                ManualDose(requireContext(), medicineViewModel.medicineRepository, this.requireActivity(), overviewViewModel.day).logManualDose()
+                ManualDose(requireContext(), medicineViewModel, this.requireActivity(), overviewViewModel.day).logManualDose()
             }
         }
     }
