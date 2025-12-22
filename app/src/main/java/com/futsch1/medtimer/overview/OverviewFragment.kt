@@ -37,6 +37,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        medicineViewModel.medicines.observe(this) {
+
+        }
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         overviewViewModel.day = LocalDate.now()
 
