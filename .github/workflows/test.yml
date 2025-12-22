@@ -87,6 +87,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
 
       - uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v2.2.0
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         env:
           JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsDebug app/build/generated/ap_generated_sources/debug/out
         with:

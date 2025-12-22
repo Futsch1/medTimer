@@ -85,13 +85,13 @@ class ReminderProcessor : BroadcastReceiver() {
         }
 
         @JvmStatic
-        fun requestStockHandling(context: Context?, amount: String?, medicineId: Int) {
+        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int) {
             val workManager = WorkManagerAccess.getWorkManager(context)
             val stockHandlingWorker =
                 OneTimeWorkRequest.Builder(StockHandlingWorker::class.java)
                     .setInputData(
                         Data.Builder()
-                            .putString(ActivityCodes.EXTRA_AMOUNT, amount)
+                            .putDouble(ActivityCodes.EXTRA_AMOUNT, amount)
                             .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
                             .build()
                     )
