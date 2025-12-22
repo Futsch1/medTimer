@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Instellingen</string>
     <string name="tab_overview">Overzicht</string>
@@ -253,4 +253,5 @@
     <string name="battery_optimization_warning_summary">Als u problemen ondervindt met gemiste meldingen, schakel dan de batterijoptimalisatie uit voor deze app in de meldingsinstellingen.</string>
     <string name="ignore_battery_optimization">Batterijoptimalisatie negeren</string>
     <string name="reschedule_reminder">Herinnering opnieuw plannen</string>
-<string name="interval_start_condition">Interval startvoorwaarde</string></resources>
+    <string name="interval_start_condition">Interval startvoorwaarde</string>
+</resources>
