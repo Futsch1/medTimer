@@ -11,6 +11,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
@@ -134,7 +135,10 @@ class ManualDose(
             medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
 
             if (medicineId != -1) {
-                ReminderProcessor.requestStockHandling(context, reminderEvent.amount!!, medicineId)
+                val amount = MedicineHelper.parseAmount(reminderEvent.amount)
+                if (amount != null) {
+                    ReminderProcessor.requestStockHandling(context, amount, medicineId)
+                }
             }
         }
     }

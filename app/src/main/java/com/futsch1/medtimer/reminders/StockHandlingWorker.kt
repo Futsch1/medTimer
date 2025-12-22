@@ -9,12 +9,14 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.helpers.MedicineHelper
 
 class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
-        val amount = inputData.getString(ActivityCodes.EXTRA_AMOUNT) ?: return Result.failure()
+        val amount = inputData.getDouble(ActivityCodes.EXTRA_AMOUNT, Double.NaN)
+        if (amount.isNaN()) {
+            return Result.failure()
+        }
         val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         val medicineRepository = MedicineRepository(context as Application?)
         val medicine = medicineRepository.getOnlyMedicine(medicineId)
@@ -28,17 +30,14 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
         return Result.success()
     }
 
-    private fun processStock(medicine: Medicine, reminderAmount: String) {
-        val amount: Double? = MedicineHelper.parseAmount(reminderAmount)
-        if (amount != null) {
-            medicine.amount -= amount
-            if (medicine.amount < 0) {
-                medicine.amount = 0.0
-            }
-
-            checkForThreshold(medicine, amount)
-            Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
+    private fun processStock(medicine: Medicine, amount: Double) {
+        medicine.amount -= amount
+        if (medicine.amount < 0) {
+            medicine.amount = 0.0
         }
+
+        checkForThreshold(medicine, amount)
+        Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
     }
 
     private fun checkForThreshold(medicine: Medicine, amount: Double) {

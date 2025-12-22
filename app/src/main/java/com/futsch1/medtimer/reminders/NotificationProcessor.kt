@@ -10,6 +10,7 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
 import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -114,11 +115,19 @@ class NotificationProcessor(val context: Context) {
     }
 
     private fun doStockHandling(reminderEvent: ReminderEvent) {
-        if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN) {
-            reminderEvent.stockHandled = true
+        if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
+            reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
+        ) {
             val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
             if (reminder != null) {
-                requestStockHandling(context, reminder.amount, reminder.medicineRelId)
+                var amount: Double? = MedicineHelper.parseAmount(reminder.amount)
+                if (amount != null) {
+                    if (reminderEvent.status == ReminderStatus.SKIPPED) {
+                        amount = -amount
+                    }
+                    reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
+                    requestStockHandling(context, amount, reminder.medicineRelId)
+                }
             }
         }
     }
