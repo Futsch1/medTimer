@@ -101,6 +101,15 @@ public class TimeHelper {
     }
 
     /**
+     * @param secondsSinceEpoch Seconds since epoch
+     * @param zoneId            Zone id
+     * @return Local date/time
+     */
+    public static LocalTime secondsSinceEpochToLocalTime(long secondsSinceEpoch, ZoneId zoneId) {
+        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalTime();
+    }
+
+    /**
      * @param context        Context to extract date format
      * @param daysSinceEpoch Days since epoch
      * @return Date string in local format
