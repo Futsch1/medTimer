@@ -1,19 +1,19 @@
 package com.futsch1.medtimer
 
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import java.security.KeyStore
 import java.util.concurrent.Executor
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
-import java.security.KeyStore
 
 
 class Biometrics(
@@ -26,7 +26,7 @@ class Biometrics(
     fun hasBiometrics(): Boolean {
         val biometricManager =
             BiometricManager.from(activity)
-        return biometricManager.canAuthenticate(BIOMETRIC_WEAK or DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
+        return biometricManager.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
     }
 
     private lateinit var executor: Executor
@@ -67,8 +67,8 @@ class Biometrics(
     private fun getCipher(): Cipher {
         return Cipher.getInstance(
             "${KeyProperties.KEY_ALGORITHM_AES}/" +
-                "${KeyProperties.BLOCK_MODE_CBC}/" +
-                KeyProperties.ENCRYPTION_PADDING_PKCS7
+                    "${KeyProperties.BLOCK_MODE_CBC}/" +
+                    KeyProperties.ENCRYPTION_PADDING_PKCS7
         )
     }
 
@@ -79,7 +79,7 @@ class Biometrics(
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(R.string.login))
-            .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
             .build()
 
         generateSecretKey()
@@ -88,8 +88,8 @@ class Biometrics(
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
         biometricPrompt.authenticate(
+            promptInfo,
             BiometricPrompt.CryptoObject(cipher),
-            promptInfo
         )
     }
 
@@ -121,7 +121,7 @@ class Biometrics(
                         val testData = "medtimer_auth".toByteArray(Charsets.UTF_8)
                         cipher.doFinal(testData)
                         successCallback()
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         failureCallback()
                     }
                 } else {
