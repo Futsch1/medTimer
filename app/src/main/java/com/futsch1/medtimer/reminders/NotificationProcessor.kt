@@ -120,7 +120,7 @@ class NotificationProcessor(val context: Context) {
         ) {
             val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
             if (reminder != null) {
-                var amount: Double? = MedicineHelper.parseAmount(reminder.amount)
+                var amount: Double? = MedicineHelper.parseAmount(reminderEvent.amount)
                 if (amount != null) {
                     if (reminderEvent.status == ReminderStatus.SKIPPED) {
                         amount = -amount
