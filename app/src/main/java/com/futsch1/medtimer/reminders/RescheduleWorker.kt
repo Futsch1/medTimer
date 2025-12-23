@@ -89,7 +89,7 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
             }
 
             Log.i(
-                LogTags.SCHEDULER,
+                LogTags.REMINDER,
                 String.format(
                     "Scheduled reminder: %s",
                     scheduledReminderNotificationData
@@ -100,7 +100,7 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
         } else {
             // Immediately remind
             Log.i(
-                LogTags.SCHEDULER,
+                LogTags.REMINDER,
                 String.format(
                     "Scheduling reminder now: %s",
                     scheduledReminderNotificationData

@@ -110,6 +110,17 @@ class ReminderProcessor : BroadcastReceiver() {
             workManager.enqueue(scheduleWork)
         }
 
+        fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
+            val workManager = WorkManagerAccess.getWorkManager(context)
+            val builder = Data.Builder()
+            reminderNotificationData.toBuilder(builder)
+            builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
+            val snoozeWork = OneTimeWorkRequest.Builder(SnoozeWorker::class.java)
+                .setInputData(builder.build())
+                .build()
+            workManager.enqueue(snoozeWork)
+        }
+
         fun requestReminderAction(context: Context, processedNotificationData: ProcessedNotificationData, taken: Boolean) {
             val actionIntent: Intent =
                 if (taken) getTakenActionIntent(context, processedNotificationData) else getSkippedActionIntent(context, processedNotificationData)

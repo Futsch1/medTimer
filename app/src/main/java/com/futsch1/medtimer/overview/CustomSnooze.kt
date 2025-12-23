@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
-import com.futsch1.medtimer.reminders.getSnoozeIntent
+import com.futsch1.medtimer.reminders.ReminderProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
@@ -26,12 +26,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         .textSink { snoozeTime: String? ->
             val snoozeTimeInt = snoozeTime?.toIntOrNull()
             if (snoozeTimeInt != null) {
-                val snooze = getSnoozeIntent(
-                    activity,
-                    reminderNotificationData,
-                    snoozeTimeInt
-                )
-                activity.sendBroadcast(snooze, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+                ReminderProcessor.requestSnooze(activity, reminderNotificationData, snoozeTimeInt)
             }
         }
         .show()

@@ -2,8 +2,14 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import androidx.core.app.NotificationCompat
+import androidx.core.app.RemoteInput
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.reminders.getSnoozeIntent
@@ -17,6 +23,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
+    val actionSnoozeRemoteInput = getSnoozeActionRemoteInput()
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
     val pendingDismiss = getDismissPendingIntent()
@@ -68,6 +75,30 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         } else {
             getStandardSnoozeIntent()
         }
+    }
+
+    private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
+        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
+        if (snoozeTime != -1) {
+            return null
+        }
+        val resultIntent = Intent(context, RemoteInputReceiver::class.java)
+        resultIntent.action = ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
+        reminderNotification.reminderNotificationData.toIntent(resultIntent)
+
+        val resultPendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                resultIntent,
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        val remoteInput = RemoteInput.Builder("snooze_time").setLabel(context.getString(R.string.snooze_duration)).build()
+        val action = NotificationCompat.Action.Builder(
+            R.drawable.hourglass_split, context.getString(R.string.snooze), resultPendingIntent
+        ).addRemoteInput(remoteInput).build()
+
+        return action
     }
 
     private fun getDismissPendingIntent(): PendingIntent {

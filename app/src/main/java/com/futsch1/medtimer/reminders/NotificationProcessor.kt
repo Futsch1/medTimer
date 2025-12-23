@@ -34,7 +34,7 @@ class NotificationProcessor(val context: Context) {
                     reminderEventsToUpdate.add(reminderEvent)
                 }
             } else {
-                Log.e(LogTags.REMINDER, String.format("Could not find reminder event reID %d in database", reminderEventId))
+                Log.e(LogTags.REMINDER, "Could not find reminder event reID $reminderEventId in database")
             }
         }
 
@@ -57,6 +57,7 @@ class NotificationProcessor(val context: Context) {
     }
 
     fun cancelNotification(notificationId: Int) {
+        Log.d(LogTags.REMINDER, "Cancel notification nID $notificationId")
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.cancel(notificationId)
     }
@@ -68,7 +69,7 @@ class NotificationProcessor(val context: Context) {
             if (notification.id == notificationId) {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
                 val reminderEventIds = reminderEvents.map { it.reminderEventId }
-                Log.d(LogTags.REMINDER, String.format("Remove reIDs %s from notification nID %d", reminderEventIds, notificationId))
+                Log.d(LogTags.REMINDER, "Remove reIDs $reminderEventIds from notification nID $notificationId")
                 updateNotification(reminderNotificationData, reminderEventIds)
             }
         }
@@ -84,7 +85,6 @@ class NotificationProcessor(val context: Context) {
         if (reminderNotification != null) {
             Notifications(context).showNotification(reminderNotification, reminderNotificationData.notificationId)
         } else {
-            Log.d(LogTags.REMINDER, String.format("Notification now empty, cancel nID %d", reminderNotificationData.notificationId))
             cancelNotification(reminderNotificationData.notificationId)
         }
     }
