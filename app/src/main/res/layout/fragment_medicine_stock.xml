@@ -33,6 +33,7 @@
             android:id="@+id/stockUnitLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:hint="@string/unit"
             android:orientation="horizontal">
 
@@ -48,6 +49,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:hint="@string/out_of_stock_reminder"
             android:orientation="horizontal">
 

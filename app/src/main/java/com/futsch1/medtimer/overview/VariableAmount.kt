@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.overview
 
 import android.content.Intent
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -63,6 +65,7 @@ private fun updateReminderEvent(
     dispatcher: CoroutineDispatcher
 ) {
     activity.lifecycleScope.launch(dispatcher) {
+        Log.d(LogTags.REMINDER, "Update reminder event reID $reminderEventId with variable amount $amount")
         val repository = MedicineRepository(activity.application)
         val reminderEvent = repository.getReminderEvent(reminderEventId) ?: return@launch
         reminderEvent.amount = amount
