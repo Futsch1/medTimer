@@ -135,9 +135,14 @@ abstract class ReminderNotificationFactory(
     }
 
     private fun addTakenAction() {
-        builder.addAction(
-            R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
-        )
+        val action = intents.actionTaken
+        if (action != null) {
+            builder.addAction(action)
+        } else {
+            builder.addAction(
+                R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
+            )
+        }
     }
 
 }

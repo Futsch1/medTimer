@@ -26,10 +26,11 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     val actionSnoozeRemoteInput = getSnoozeActionRemoteInput()
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
+    val actionTaken = getTakenActionRemoteInput()
+
     val pendingDismiss = getDismissPendingIntent()
 
     private fun getTakenPendingIntent(): PendingIntent {
-
         val notifyTaken = getTakenActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
             context,
@@ -99,6 +100,38 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         ).addRemoteInput(remoteInput).build()
 
         return action
+    }
+
+    private fun getTakenActionRemoteInput(): NotificationCompat.Action? {
+        if (reminderNotification.reminderNotificationParts.none { it.reminder.variableAmount }) {
+            return null
+        }
+        val resultIntent = Intent(context, RemoteInputReceiver::class.java)
+        resultIntent.action = ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
+        reminderNotification.reminderNotificationData.toIntent(resultIntent)
+
+        val resultPendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderNotification.reminderNotificationData.notificationId + 1000,
+            resultIntent,
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val action = NotificationCompat.Action.Builder(
+            R.drawable.check2_circle, context.getString(R.string.taken), resultPendingIntent
+        )
+
+        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+            if (!reminderNotificationPart.reminder.variableAmount) {
+                continue
+            }
+            val remoteInput =
+                RemoteInput.Builder("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
+                    .setLabel("${context.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
+            action.addRemoteInput(remoteInput)
+        }
+
+        return action.build()
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
