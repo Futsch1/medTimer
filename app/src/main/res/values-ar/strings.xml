@@ -198,7 +198,7 @@
     <string name="out_of_stock_notification_title">تذكير بنفاد مخزون الدواء</string>
     <string name="medicine_stock">مخزون الدواء</string>
     <string name="sticky_on_lockscreen">تذكيرات ثابتة على شاشة القفل</string>
-    <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات\nملاحظة: قد لا تعرض بعض الساعات الذكية الإشعارات بعد الآن</string>
+    <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات\nملاحظة: بعض الساعات الذكية قد لا تعرض الإشعارات إذا فُعِّل</string>
     <string name="big_notifications">أزرار إشعار كبيرة</string>
     <string name="amount">الكمية</string>
     <string name="out_of_stock_reminder">تذكير بنفاد المخزون</string>

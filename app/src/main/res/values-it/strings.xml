@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Data/ora relativa</string>
     <string name="invalid_amount">La quantità deve contenere un numero per permettere il tracciamento delle scorte di farmaci per questo promemoria.</string>
     <string name="sticky_on_lockscreen">Promemoria persistenti sulla schermata di blocco</string>
-    <string name="sticky_on_lockscreen_summary">I promemoria non possono essere ignorati dalla schermata di blocco, ma solo dall\'area notifiche\nNota: alcuni smartwatch potrebbero non mostrare più le notifiche</string>
+    <string name="sticky_on_lockscreen_summary">I promemoria non possono essere ignorati dalla schermata di blocco, ma solo dall\'area notifiche\nNota: alcuni smartwatch potrebbero non visualizzare le notifiche se abilitate</string>
     <string name="big_notifications">Pulsanti di notifica grandi</string>
     <string name="please_wait">Attendere prego…</string>
     <string name="interval_time">Intervallo %s</string>
