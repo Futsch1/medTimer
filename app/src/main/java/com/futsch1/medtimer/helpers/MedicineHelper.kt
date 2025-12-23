@@ -93,9 +93,9 @@ object MedicineHelper {
         return numberFormat.format(amount) + if (unit.isEmpty()) "" else " $unit"
     }
 
-    fun parseAmount(amount: String): Double? {
+    fun parseAmount(amount: String?): Double? {
         val numberRegex = Pattern.compile("(?:\\d|\\.\\d)[.,\\s\\d]*")
-        val matcher = numberRegex.matcher(amount)
+        val matcher = numberRegex.matcher(amount ?: "")
 
         return if (matcher.find() && matcher.group(0) != null) {
             val numberFormat = NumberFormat.getNumberInstance()

@@ -78,8 +78,8 @@ class TakenSkippedWorkUnitTest {
         reminderEvent.reminderEventId = REMINDER_EVENT_ID
         reminderEvent.status = ReminderStatus.RAISED
         reminderEvent.processedTimestamp = Instant.now().epochSecond
+        reminderEvent.amount = "4"
         val reminder = Reminder(5)
-        reminder.amount = "4"
 
         Mockito.mockConstruction(
             MedicineRepository::class.java
