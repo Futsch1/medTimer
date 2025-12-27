@@ -51,8 +51,8 @@
     <string name="after_meal">po posiłku</string>
     <string name="time_before_meal">x minut przed posiłkiem</string>
     <string name="time_after">x godzin po leku y</string>
-    <string name="export_csv">Eksportuj jako CSV</string>
-    <string name="export_pdf">Eksportuj jako PDF</string>
+    <string name="export_csv">Zapisz jako CSV</string>
+    <string name="export_pdf">Zapisz jako PDF</string>
     <string name="restore">Przywróć kopię</string>
     <string name="restore_failed">Nie udało się przywrócić</string>
     <string name="backup_failed">Nie udało się utworzyć kopii</string>
@@ -178,8 +178,8 @@
     <string name="every_day">Codziennie</string>
     <string name="cycle_reminder">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
-    <string name="notification_settings_high">Ustawienia powiadomień o wysokim priorytecie</string>
-    <string name="notification_settings_default">Domyślny priorytet ustawień powiadomień</string>
+    <string name="notification_settings_high">Wysoki priorytet</string>
+    <string name="notification_settings_default">Domyślny priorytet</string>
     <string name="activate_all">Włącz wszystkie przypomnienia</string>
     <string name="override_dnd_summary">Odtwarza powiadomienia dźwiękowe, jeśli włączona jest tylko wibracja lub tryb nie przeszkadzać bez wibracji lub wyciszenia</string>
     <string name="time_between_repetitions">Czas między powtórzeniami</string>
@@ -249,8 +249,8 @@
     <string name="reminder_status_summary">Przypomnienia mogą być aktywne i nieaktywne. Jeśli są nieaktywne, powiadomienie nie jest wysyłane. Można to skonfigurować na stałe lub na podstawie dat. Użyj tej opcji do konfigurowania stopniowego odstawiania leku.</string>
     <string name="further_settings">Dalsze ustawienia</string>
     <string name="alarm_settings">Ustawienia alarmu</string>
-    <string name="no_alarm_sound_when_silent">Brak dźwięku alarmu w trybie cichym</string>
-    <string name="no_vibration_when_silent">Brak wibracji w trybie cichym</string>
+    <string name="no_alarm_sound_when_silent">Bez dźwięku w trybie cichym</string>
+    <string name="no_vibration_when_silent">Bez wibracji w trybie cichym</string>
     <string name="alarm_ringtone">Dzwonek alarmu</string>
     <string name="system_locale">Użyj ustawień systemowych dla formatu daty/godziny</string>
     <string name="system_locale_summary">Jeśli wyłączone, aplikacja korzysta z ustawienia odpowiadającego językowi ustawionemu dla aplikacji.</string>
@@ -258,7 +258,7 @@
     <string name="scheduled">Zaplanowano</string>
     <string name="no_calendar_app">Nie znaleziono aplikacji kalendarza</string>
     <string name="combine_notifications">Łączenie powiadomień w tym samym czasie</string>
-    <string name="combine_notifications_summary">Jeśli jest ustawiona, powiadomienia o tym samym czasie są łączone w jedno powiadomienie</string>
+    <string name="combine_notifications_summary">Jeśli włączone, powiadomienia o tej samej godzinie są łączone w jedno</string>
     <string name="battery_optimization_warning_title">Optymalizacja baterii jest włączona</string>
     <string name="battery_optimization_warning_summary">Jeśli masz problemy z powiadomieniami, wyłącz optymalizację baterii dla tej aplikacji w ustawieniach.</string>
     <string name="ignore_battery_optimization">Ignoruj optymalizację baterii</string>
