@@ -81,6 +81,32 @@ class SchedulingSimulatorTest {
         assertRemindedAtIndex(scheduledReminders, on(1, 1200), medicines[0].medicine, medicines[0].reminders[0], 1)
         assertRemindedAtIndex(scheduledReminders, on(2, 360), medicines[0].medicine, medicines[0].reminders[0], 2)
     }
+    
+    @Test
+    fun testWindowedInterval() {
+        val medicines = listOf(
+            TestHelper.buildFullMedicine(0, "Test")
+        )
+        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 480, 1))
+        medicines[0].reminders[0].intervalStart = on(1, 0).epochSecond
+        medicines[0].reminders[0].windowedInterval = true
+        medicines[0].reminders[0].intervalStartTimeOfDay = 120
+        medicines[0].reminders[0].intervalEndTimeOfDay = 700
+
+        val simulator = buildSchedulingSimulator(medicines, emptyList())
+
+        val scheduledReminders = mutableListOf<ScheduledReminder>()
+
+        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate, _: Double ->
+            scheduledReminders.add(scheduledReminder)
+            scheduledReminders.size < 3
+        }
+
+        assertEquals(3, scheduledReminders.size)
+        assertReminded(scheduledReminders, on(1, 120), medicines[0].medicine, medicines[0].reminders[0])
+        assertRemindedAtIndex(scheduledReminders, on(1, 600), medicines[0].medicine, medicines[0].reminders[0], 1)
+        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[0].medicine, medicines[0].reminders[0], 2)
+    }
 
     @Test
     fun testLinkedAndAmount() {

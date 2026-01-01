@@ -12,22 +12,20 @@ class WindowedIntervalScheduling(
     private val timeAccess: TimeAccess
 ) : IntervalScheduling(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
+        return adjustToPeriod(getNextScheduledTimeInternal())
+    }
+
+    fun getNextScheduledTimeInternal(): Instant? {
         val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.reminderId, reminderEventList)
-        if (reminder.intervalStartsFromProcessed) {
-            return if (lastReminderEvent != null) {
-                getNextIntervalTimeFromReminderEvent(lastReminderEvent)
-            } else {
-                getStartInstant(timeAccess.localDate())
-            }
+        val todayStart = getStartInstant(timeAccess.localDate())
+        val todayEnd = getEndInstant(todayStart)
+
+        return if (lastReminderEvent != null) {
+            getNextIntervalTimeFromReminderEvent(lastReminderEvent, todayStart, todayEnd)
+        } else {
+            todayStart
         }
-        val instant =
-            if (lastReminderEvent != null) {
-                getNextIntervalTimeFromReminderEvent(lastReminderEvent)
-            } else {
-                getStartInstant(timeAccess.localDate())
-            }
-        return adjustToToday(instant)
     }
 
     private fun getStartInstant(date: LocalDate, deltaDay: Long = 0): Instant {
@@ -46,7 +44,7 @@ class WindowedIntervalScheduling(
         return endDateTime.toInstant()
     }
 
-    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
+    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent, todayStart: Instant, todayEnd: Instant): Instant? {
         val instant =
             if (reminder.intervalStartsFromProcessed) {
                 if (lastReminderEvent.processedTimestamp != 0L)
@@ -58,8 +56,14 @@ class WindowedIntervalScheduling(
                 )
         val nextTime = instant?.plusSeconds(reminder.timeInMinutes * 60L)
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
-        return if (nextTime != null && nextTime.isAfter(getEndInstant(instant))) {
-            getStartInstant(instant.atZone(timeAccess.systemZone()).toLocalDate(), 1)
+        return if (nextTime != null) {
+            if (nextTime.isBefore(todayStart)) {
+                todayStart
+            } else if (nextTime.isAfter(todayEnd)) {
+                getStartInstant(timeAccess.localDate(), 1)
+            } else {
+                nextTime
+            }
         } else {
             nextTime
         }
