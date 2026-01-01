@@ -80,7 +80,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
     }
 
     @Test
-    fun test_scheduleWindowedIntervalReminder_Pause() {
+    fun testScheduleWindowedIntervalReminder_Pause() {
         val scheduler = getScheduler(3)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
@@ -92,8 +92,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         reminder.intervalEndTimeOfDay = 700
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
-        medicineList.add(fullMedicine)
+        val medicineList: List<FullMedicine> = listOf(fullMedicine)
 
         val reminderEventList: MutableList<ReminderEvent> = ArrayList()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 130).epochSecond))
@@ -108,7 +107,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
     }
 
     @Test
-    fun test_scheduleWindowedIntervalReminder_Created() {
+    fun testScheduleWindowedIntervalReminder_Created() {
         val scheduler = getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
