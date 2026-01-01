@@ -32,10 +32,10 @@ class ScheduleWorker(context: Context, workerParams: WorkerParameters) : Resched
                     // Check if all reminder event IDs from the notification are also in the reminder notification data
                     val reminderEventIds = reminderNotificationData.reminderEventIds.toList()
                     val notificationReminderEventIds = notificationData.reminderEventIds.toList()
-                    if (reminderEventIds.sorted() == notificationReminderEventIds.sorted()) {
+                    if (notificationReminderEventIds.containsAll(reminderEventIds)) {
                         Log.d(
                             LogTags.REMINDER,
-                            String.format("Notification nID %d already active, do not schedule again", reminderNotificationData.notificationId)
+                            "Notification nID ${reminderNotificationData.notificationId} found, reminder event IDs $reminderEventIds are in covered IDs $notificationReminderEventIds"
                         )
                         return true
                     }
