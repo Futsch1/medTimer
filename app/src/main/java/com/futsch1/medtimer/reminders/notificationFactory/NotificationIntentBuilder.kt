@@ -14,6 +14,7 @@ import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.reminders.getSnoozeIntent
 import com.futsch1.medtimer.reminders.getTakenActionIntent
+import com.futsch1.medtimer.reminders.getTakenActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -31,13 +32,25 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     val pendingDismiss = getDismissPendingIntent()
 
     private fun getTakenPendingIntent(): PendingIntent {
-        val notifyTaken = getTakenActionIntent(context, processedNotificationData)
-        return PendingIntent.getBroadcast(
-            context,
-            reminderNotification.reminderNotificationData.notificationId,
-            notifyTaken,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
+
+        return if (anyAskForAmount) {
+            val notifyTaken = getTakenActivityIntent(context, processedNotificationData)
+            PendingIntent.getActivity(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                notifyTaken,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        } else {
+            val notifyTaken = getTakenActionIntent(context, processedNotificationData)
+            PendingIntent.getBroadcast(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                notifyTaken,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {

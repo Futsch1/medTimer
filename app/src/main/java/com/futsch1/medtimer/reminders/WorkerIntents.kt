@@ -30,7 +30,7 @@ private fun buildActionIntent(context: Context, processedNotificationData: Proce
 
 fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?, name: String): Intent {
     val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction("VARIABLE_AMOUNT")
+    actionIntent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTION)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, reminderEventId)
     actionIntent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
@@ -40,7 +40,7 @@ fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amoun
 
 fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: ReminderNotificationData): Intent {
     val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction("CUSTOM_SNOOZE")
+    actionIntent.setAction(ActivityCodes.CUSTOM_SNOOZE_ACTION)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     reminderNotificationData.toIntent(actionIntent)
     return actionIntent
@@ -48,6 +48,14 @@ fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: Rem
 
 fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
     return buildActionIntent(context, processedNotificationData, ActivityCodes.TAKEN_ACTION)
+}
+
+fun getTakenActivityIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
+    val intent = Intent(context, MainActivity::class.java)
+    intent.setAction(ActivityCodes.TAKEN_ACTION)
+    processedNotificationData.toIntent(intent)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return intent
 }
 
 fun getSkippedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {

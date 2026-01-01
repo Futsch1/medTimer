@@ -20,7 +20,8 @@ public class ActivityCodes {
     public static final String SNOOZE_ACTION = "com.futsch1.medTimer.SNOOZE_ACTION";
     public static final String REMOTE_INPUT_SNOOZE_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION";
     public static final String REMOTE_INPUT_VARIABLE_AMOUNT_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION";
-
+    public static final String VARIABLE_AMOUNT_ACTION = "com.futsch1.medTimer.VARIABLE_AMOUNT_ACTION";
+    public static final String CUSTOM_SNOOZE_ACTION = "com.futsch1.medTimer.CUSTOM_SNOOZE_ACTION";
 
     private ActivityCodes() {
         // Intended empty

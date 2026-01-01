@@ -4,6 +4,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import com.futsch1.medtimer.ActivityCodes.CUSTOM_SNOOZE_ACTION
 import com.futsch1.medtimer.overview.customSnoozeDialog
 import com.futsch1.medtimer.overview.variableAmountDialog
 
@@ -31,7 +32,7 @@ private fun dispatchInternal(activity: AppCompatActivity, intent: Intent) {
     if (intent.action == "VARIABLE_AMOUNT") {
         variableAmountDialog(activity, intent)
     }
-    if (intent.action == "CUSTOM_SNOOZE") {
+    if (intent.action == CUSTOM_SNOOZE_ACTION) {
         customSnoozeDialog(activity, intent)
     }
 }
