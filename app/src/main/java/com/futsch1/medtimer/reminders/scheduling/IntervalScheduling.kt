@@ -4,6 +4,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
+import java.time.LocalDate
 import kotlin.math.ceil
 
 open class IntervalScheduling(
@@ -11,23 +12,19 @@ open class IntervalScheduling(
     private val reminderEventList: List<ReminderEvent>,
     private val timeAccess: TimeAccess
 ) : Scheduling {
+
     override fun getNextScheduledTime(): Instant? {
+        return adjustToPeriod(adjustToToday(getNextScheduledTimeInternal()))
+    }
+
+    private fun getNextScheduledTimeInternal(): Instant? {
         val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.reminderId, reminderEventList)
-        if (reminder.intervalStartsFromProcessed) {
-            return if (lastReminderEvent != null) {
-                getNextIntervalTimeFromReminderEvent(lastReminderEvent)
-            } else {
-                Instant.ofEpochSecond(reminder.intervalStart)
-            }
+        return if (lastReminderEvent != null) {
+            getNextIntervalTimeFromReminderEvent(lastReminderEvent)
+        } else {
+            Instant.ofEpochSecond(reminder.intervalStart)
         }
-        val instant =
-            if (lastReminderEvent != null && lastReminderEvent.remindedTimestamp >= reminder.intervalStart) {
-                getNextIntervalTimeFromReminderEvent(lastReminderEvent)
-            } else {
-                Instant.ofEpochSecond(reminder.intervalStart)
-            }
-        return adjustToToday(instant)
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
@@ -57,6 +54,24 @@ open class IntervalScheduling(
                 adjustedInstant = instant.plusSeconds(numIntervals * reminder.timeInMinutes * 60L)
             }
         }
+        return adjustedInstant
+    }
+
+    protected fun adjustToPeriod(instant: Instant?): Instant? {
+        var adjustedInstant = instant
+        if (instant != null) {
+            val instantDay = instant.atZone(timeAccess.systemZone()).toLocalDate().toEpochDay()
+            if (reminder.periodStart != 0L && instantDay < reminder.periodStart) {
+                val instantTimeOfDay = instant.atZone(timeAccess.systemZone()).toLocalTime()
+                val periodStartLocalDateTime = LocalDate.ofEpochDay(reminder.periodStart).atTime(instantTimeOfDay)
+                adjustedInstant = periodStartLocalDateTime.toInstant(timeAccess.systemZone().rules.getOffset(periodStartLocalDateTime))
+            }
+
+            if (reminder.periodEnd != 0L && instantDay > reminder.periodEnd) {
+                adjustedInstant = null
+            }
+        }
+
         return adjustedInstant
     }
 }
