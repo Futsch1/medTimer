@@ -1,31 +1,31 @@
 Promemoria e cronologia dei farmaci con privacy offline completa
 
-Mantieni il controllo dei tuoi farmaci con MedTimer
+Mantieni il Controllo dei Tuoi Farmaci con MedTimer
 
-MedTimer è un'app open source per promemoria dei farmaci progettata per aiutarti a gestire i tuoi farmaci e le tue pillole in modo efficace e con il pieno controllo dei tuoi dati sensibili.
+MedTimer è un'app open source di promemoria dei farmaci progettata per aiutarti a gestire i tuoi farmaci e le tue pillole in modo efficace e con il pieno controllo dei tuoi dati sensibili.
 
-Promemoria flessibili e personalizzati:
+Promemoria Flessibili e Personalizzati:
 
-- Gestisci farmaci illimitati con promemoria personalizzabili per farmaco (inclusi semplici valori
- predefiniti per promemoria giornalieri).
+- Gestisci farmaci illimitati con promemoria personalizzabili per farmaco (inclusi semplici valori predefiniti per promemoria giornalieri).
 - Crea promemoria flessibili con pause e giorni specifici (ad esempio per le pillole anticoncezionali).
-- Modalità weekend: ritarda i promemoria a un orario definito nei giorni scelti.
-- Posticipa le notifiche per promemoria successivi o ricevi promemoria ripetuti.
+- Modalità fine-settimana: ritarda i promemoria ad un orario prefissato nei giorni selezionati.
+- Ritarda le notifiche per promemoria successivi o genera promemoria ripetutamente.
 - Aggiungi dosi extra al volo.
-- Crea promemoria basati su intervalli, promemoria che si susseguono a intervalli o promemoria a intervalli vincolati a un orario di inizio e di fine giornaliero.
+- Crea promemoria basati su intervalli, promemoria che si susseguono ad intervalli o promemoria ad intervalli vincolati ad un orario di inizio e di fine giornaliero.
+- Usa promemoria di tipo allarme per garantire le notifiche anche quando il dispositivo è in modalità silenziosa.
 
-Gestione dati semplice e sicura:
+Gestione dei Dati Semplice e Sicura:
 
-- Conferma o ignora i promemoria per registrare accuratamente l'aderenza ai farmaci.
+- Conferma o ignora i promemoria per registrare accuratamente il rispetto della terapia farmacologica.
 - Ottieni una panoramica delle dosi passate in un grafico e una vista tabellare.
-- Esporta la cronologia dei tuoi farmaci come file CSV per una facile tenuta dei registri o per la condivisione con i professionisti sanitari.
-- Esegui il backup e il ripristino dell'elenco dei farmaci come file JSON.
+- Esporta la cronologia dei tuoi farmaci in un file CSV per una facile archiviazione dei dati o per la condivisione con sanitari professionisti.
+- Esegui il backup e il ripristino dell'elenco dei farmaci in formato JSON.
 - Monitoraggio delle scorte di farmaci e promemoria di esaurimento scorte.
-- Tagga e filtra i tuoi farmaci.
+- Etichetta e filtra i tuoi farmaci.
 
-Privacy e accessibilità offline:
+Privacy e Accessibilità Offline:
 
-- Tutti i dati vengono archiviati in modo sicuro sul tuo dispositivo, garantendo la completa privacy e accessibilità offline.
+- Tutti i dati vengono archiviati in modo sicuro sul tuo dispositivo, garantendo una privacy completa e l'accessibilità offline.
 - Non è richiesta alcuna connessione Internet: i promemoria dei tuoi farmaci sono sempre disponibili.
 
 MedTimer è un'app gratuita senza annunci pubblicitari.
