@@ -6,17 +6,24 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class RemoteInputReceiver : BroadcastReceiver() {
+class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val results = RemoteInput.getResultsFromIntent(intent)
         if (results != null) {
@@ -36,34 +43,37 @@ class RemoteInputReceiver : BroadcastReceiver() {
     }
 
     private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application)
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(
-            context,
-            medicineRepository,
-            reminderNotificationData
-        ) ?: return
+        ProcessLifecycleOwner.get().lifecycleScope.launch(dispatcher) {
+            val medicineRepository = MedicineRepository(context.applicationContext as Application)
+            val reminderNotification = ReminderNotification.fromReminderNotificationData(
+                context,
+                medicineRepository,
+                reminderNotificationData
+            ) ?: return@launch
 
-        val reminderEvents = mutableListOf<ReminderEvent>()
+            val reminderEvents = mutableListOf<ReminderEvent>()
 
-        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            if (!reminderNotificationPart.reminder.variableAmount) {
-                reminderEvents.add(reminderNotificationPart.reminderEvent)
-            } else {
-                val amount = results.getCharSequence("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
-                if (amount != null) {
-                    confirmNotification(context, reminderNotificationData.notificationId)
-
+            for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+                if (!reminderNotificationPart.reminder.variableAmount) {
                     reminderEvents.add(reminderNotificationPart.reminderEvent)
-                    reminderNotificationPart.reminderEvent.amount = amount.toString()
-                    medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
+                } else {
+                    val amount = results.getCharSequence("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
+                    if (amount != null) {
+                        Log.d(LogTags.REMINDER, "Setting variable amount to $amount of reID ${reminderNotificationPart.reminderEvent.reminderEventId}")
+                        confirmNotification(context, reminderNotificationData.notificationId)
+
+                        reminderEvents.add(reminderNotificationPart.reminderEvent)
+                        reminderNotificationPart.reminderEvent.amount = amount.toString()
+                        medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
+                    }
                 }
             }
-        }
 
-        NotificationProcessor(context).setReminderEventStatus(
-            ReminderEvent.ReminderStatus.TAKEN,
-            reminderEvents,
-        )
+            NotificationProcessor(context).setReminderEventStatus(
+                ReminderEvent.ReminderStatus.TAKEN,
+                reminderEvents,
+            )
+        }
     }
 
 
