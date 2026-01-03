@@ -22,7 +22,8 @@ import java.time.ZoneId
 
 fun interface WidgetLineProvider {
     fun getWidgetLine(
-        line: Int
+        line: Int,
+        isShort: Boolean
     ): Spanned
 }
 
@@ -48,7 +49,8 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
         PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
-        line: Int
+        line: Int,
+        isShort: Boolean
     ): Spanned {
         runBlocking {
             job.join()
@@ -57,17 +59,20 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
         val scheduledReminder = scheduledReminders.getOrNull(line)
 
         return if (scheduledReminder != null) scheduledReminderToString(
-            scheduledReminder
+            scheduledReminder,
+            isShort
         ) else SpannableStringBuilder()
     }
 
     private fun scheduledReminderToString(
-        scheduledReminder: ScheduledReminder
+        scheduledReminder: ScheduledReminder,
+        isSmall: Boolean
     ): Spanned {
         return formatScheduledReminderStringForWidget(
             context,
             scheduledReminder,
-            sharedPreferences!!
+            sharedPreferences!!,
+            isSmall
         )
     }
 }
@@ -82,7 +87,8 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
         PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
-        line: Int
+        line: Int,
+        isShort: Boolean
     ): Spanned {
         runBlocking {
             job.join()
@@ -90,13 +96,15 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
         val reminderEvent = reminderEvents.getOrNull(line)
 
         return if (reminderEvent != null) reminderEventToString(
-            reminderEvent
+            reminderEvent,
+            isShort
         ) else SpannableStringBuilder()
     }
 
     private fun reminderEventToString(
-        reminderEvent: ReminderEvent
+        reminderEvent: ReminderEvent,
+        isSmall: Boolean
     ): Spanned {
-        return formatReminderStringForWidget(context, reminderEvent, sharedPreferences!!)
+        return formatReminderStringForWidget(context, reminderEvent, sharedPreferences!!, isSmall)
     }
 }

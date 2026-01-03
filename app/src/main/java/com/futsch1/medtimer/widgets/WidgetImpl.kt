@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
@@ -27,31 +28,36 @@ class WidgetImpl(
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
-        val containerView = RemoteViews(context.packageName, widgetIds.widgetLayoutId)
-        createNextReminderWidgetLines(containerView, 4)
-        containerView.setOnClickPendingIntent(
-            widgetIds.widgetId,
-            getOpenAppPendingIntent()
-        )
-
-        val containerViewSmall =
-            RemoteViews(context.packageName, widgetIds.smallWidgetLayoutId)
-        createNextReminderWidgetLines(containerViewSmall, 1)
-        containerViewSmall.setOnClickPendingIntent(
-            widgetIds.widgetId,
-            getOpenAppPendingIntent()
-        )
+        val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+        val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+        val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+        Log.d("WidgetImpl", "Updating widget $appWidgetId: width=$minWidth, height=$minHeight")
 
         val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                SizeF(110f, 50f) to containerViewSmall,
-                SizeF(110f, 150f) to containerView
+                SizeF(110f, 40f) to createRemoteViews(1, true),
+                SizeF(200f, 40f) to createRemoteViews(1, false),
+                SizeF(110f, 110f) to createRemoteViews(4, true),
+                SizeF(200f, 110f) to createRemoteViews(4, false)
             )
             RemoteViews(viewMapping)
         } else {
-            containerViewSmall
+            val isSmall = minWidth < 200
+            val numLines = if (minHeight < 110) 1 else 4
+            createRemoteViews(numLines, isSmall)
         }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+    }
+
+    private fun createRemoteViews(numLines: Int, isShort: Boolean): RemoteViews {
+        val layoutId = if (numLines == 1) widgetIds.smallWidgetLayoutId else widgetIds.widgetLayoutId
+        val remoteViews = RemoteViews(context.packageName, layoutId)
+        createWidgetLines(remoteViews, numLines, isShort)
+        remoteViews.setOnClickPendingIntent(
+            widgetIds.widgetId,
+            getOpenAppPendingIntent()
+        )
+        return remoteViews
     }
 
     private fun getOpenAppPendingIntent(): PendingIntent? {
@@ -64,9 +70,10 @@ class WidgetImpl(
 
     }
 
-    private fun createNextReminderWidgetLines(
+    private fun createWidgetLines(
         containerViews: RemoteViews,
-        numLines: Int
+        numLines: Int,
+        isShort: Boolean
     ) {
         val viewIds = intArrayOf(
             R.id.widgetLine1,
@@ -76,7 +83,7 @@ class WidgetImpl(
         )
         for (i in 0..<numLines) {
             val views = RemoteViews(context.packageName, R.layout.widget_line)
-            val text = lineProvider.getWidgetLine(i)
+            val text = lineProvider.getWidgetLine(i, isShort)
             views.setTextViewText(R.id.widgetLineText, text)
             containerViews.addView(viewIds[i], views)
             containerViews.setViewVisibility(

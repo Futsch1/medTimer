@@ -67,11 +67,16 @@ fun formatReminderString(
 }
 
 fun formatReminderStringForWidget(
-    context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
+    context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences, isSmall: Boolean
 ): Spanned {
-    val takenTime = TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
-        context, sharedPreferences, reminderEvent.remindedTimestamp
-    ) + ": "
+    val takenTime = (if (isSmall)
+        TimeHelper.secondsSinceEpochToConfigurableTimeString(
+            context, sharedPreferences, reminderEvent.remindedTimestamp
+        )
+    else
+        TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
+            context, sharedPreferences, reminderEvent.remindedTimestamp
+        )) + ": "
 
     val amountStatusString = "${reminderEvent.amount} ${statusToString(context, reminderEvent.status)}".trim()
 
@@ -100,11 +105,16 @@ fun formatScheduledReminderString(
 }
 
 fun formatScheduledReminderStringForWidget(
-    context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
+    context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences, isSmall: Boolean
 ): Spanned {
-    val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
-        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
-    ) + ": "
+    val scheduledTime = (if (isSmall)
+        TimeHelper.secondsSinceEpochToConfigurableTimeString(
+            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+        )
+    else
+        TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
+            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+        )) + ": "
 
     return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(getAmountString(scheduledReminder))
 }
