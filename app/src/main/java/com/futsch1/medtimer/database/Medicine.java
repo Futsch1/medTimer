@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
@@ -58,18 +59,13 @@ public class Medicine {
     @ColumnInfo(defaultValue = "false")
     public boolean showNotificationAsAlarm;
 
+    @Ignore
+    public Medicine() {
+        this("");
+    }
+
     public Medicine(String name) {
-        this.name = name;
-        this.useColor = false;
-        this.color = Color.DKGRAY;
-        this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        this.iconId = 0;
-        this.outOfStockReminder = OutOfStockReminderType.OFF;
-        this.refillSizes = new ArrayList<>();
-        this.unit = "";
-        this.sortOrder = 1.0;
-        this.notes = "";
-        this.showNotificationAsAlarm = false;
+        this(name, 0);
     }
 
     public Medicine(String name, int id) {

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -75,6 +76,11 @@ public class Reminder {
     @Expose
     @ColumnInfo(defaultValue = "false")
     public boolean windowedInterval;
+
+    @Ignore
+    public Reminder() {
+        this(0);
+    }
 
     public Reminder(int medicineRelId) {
         timeInMinutes = DEFAULT_TIME;
