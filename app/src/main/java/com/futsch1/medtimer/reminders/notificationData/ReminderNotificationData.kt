@@ -98,11 +98,11 @@ class ReminderNotificationData(
         }
 
         fun getReminderIds(bundle: Bundle): IntArray {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)!!
+            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST) ?: IntArray(0)
         }
 
         fun getReminderEventIds(bundle: Bundle): IntArray {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!
+            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST) ?: IntArray(0)
         }
 
         fun fromArrays(
