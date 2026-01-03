@@ -306,13 +306,19 @@ public class TimeHelper {
     }
 
     /**
-     * @param context   Context to extract date and time formats
-     * @param timeStamp Time stamp in seconds since epoch
+     * @param context     Context to extract date and time formats
+     * @param preferences SharedPreferences to use for checking if relative date time is active
+     * @param timeStamp   Time stamp in seconds since epoch
+     * @param isShort     Whether to show the actual time stamp or not
      * @return Date and time string in local format as relative date time string
      */
-    public static String secondsSinceEpochToConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp) {
+    public static String secondsSinceEpochToConfigurableTimeString(Context context, SharedPreferences preferences, long timeStamp, boolean isShort) {
         if (preferences.getBoolean(USE_RELATIVE_DATE_TIME, false)) {
-            return DateUtils.getRelativeDateTimeString(new LocaleContextWrapper(context), timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+            if (isShort) {
+                return DateUtils.getRelativeTimeSpanString(timeStamp * 1000, Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString();
+            } else {
+                return DateUtils.getRelativeDateTimeString(new LocaleContextWrapper(context), timeStamp * 1000, DateUtils.MINUTE_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2, DateUtils.FORMAT_SHOW_TIME).toString();
+            }
         } else {
             return secondsSinceEpochToTimeString(context, timeStamp);
         }

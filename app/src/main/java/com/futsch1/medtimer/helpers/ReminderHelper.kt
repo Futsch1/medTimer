@@ -57,7 +57,7 @@ fun formatReminderString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
     val takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
-        context, sharedPreferences, reminderEvent.remindedTimestamp
+        context, sharedPreferences, reminderEvent.remindedTimestamp, false
     )
 
     val intervalTime = getLastIntervalTime(context, reminderEvent)
@@ -67,11 +67,11 @@ fun formatReminderString(
 }
 
 fun formatReminderStringForWidget(
-    context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences, isSmall: Boolean
+    context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences, isShort: Boolean
 ): Spanned {
-    val takenTime = (if (isSmall)
+    val takenTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
-            context, sharedPreferences, reminderEvent.remindedTimestamp
+            context, sharedPreferences, reminderEvent.remindedTimestamp, true
         )
     else
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
@@ -96,7 +96,7 @@ fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
-        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, false
     )
 
     return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
@@ -105,11 +105,11 @@ fun formatScheduledReminderString(
 }
 
 fun formatScheduledReminderStringForWidget(
-    context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences, isSmall: Boolean
+    context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences, isShort: Boolean
 ): Spanned {
-    val scheduledTime = (if (isSmall)
+    val scheduledTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, true
         )
     else
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(

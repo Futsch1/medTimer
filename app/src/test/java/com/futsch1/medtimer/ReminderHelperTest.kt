@@ -45,13 +45,18 @@ class ReminderHelperTest {
         dateFormatMock.`when`<Any> { DateFormat.getTimeFormat(any()) }.thenReturn(usTimeFormat)
         val timeZoneMock = mockStatic(TimeZone::class.java)
         timeZoneMock.`when`<Any> { TimeZone.getDefault() }.thenReturn(utc)
+        val instant = Instant.ofEpochSecond(0)
+        val instantLater = instant.plusSeconds(3601)
+        val instantZero = Instant.ofEpochSecond(0)
+        val instantMock = mockStatic(Instant::class.java)
+        instantMock.`when`<Any> { Instant.now() }.thenReturn(instant)
+        instantMock.`when`<Any> { Instant.ofEpochSecond(0) }.thenReturn(instantZero)
 
         // Standard case
         val medicine = FullMedicine()
         medicine.medicine = Medicine("Test")
         val reminder = Reminder(1)
         reminder.amount = "5"
-        var instant = Instant.ofEpochSecond(0)
         var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
         val reminderEvent = ReminderEvent()
         reminderEvent.remindedTimestamp = instant.toEpochMilli() / 1000
@@ -63,9 +68,14 @@ class ReminderHelperTest {
         assertEquals("1:00 AM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result =
-            formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
+            formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, false)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("1/1/70 1:00 AM: Test (5)", result.toString())
+        assertEquals(result.toString(), resultReminder.toString())
+        result =
+            formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, true)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, true)
+        assertEquals("1:00 AM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
         // Empty amount
@@ -75,34 +85,37 @@ class ReminderHelperTest {
         resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
         assertEquals("1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
+        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, false)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("1/1/70 1:00 AM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
         // Relative date/time
         Mockito.`when`(preferencesMock.getBoolean(USE_RELATIVE_DATE_TIME, false)).thenReturn(true)
-        instant = Instant.ofEpochSecond(1).plusSeconds(3600)
-        scheduledReminder = ScheduledReminder(medicine, reminder, instant)
-        reminderEvent.remindedTimestamp = instant.toEpochMilli() / 1000
+        scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
+        reminderEvent.remindedTimestamp = instantLater.toEpochMilli() / 1000
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
         resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
         assertEquals("In 1 hour, 1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
+        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, false)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("In 1 hour, 1:00 AM: Test", result.toString())
+        assertEquals(result.toString(), resultReminder.toString())
+        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, true)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, true)
+        assertEquals("In 1 hour: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
         // Widget status
         Mockito.`when`(contextMock.getString(R.string.taken)).thenReturn("Taken")
         Mockito.`when`(contextMock.getString(R.string.skipped)).thenReturn("Skipped")
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("In 1 hour, 1:00 AM: Test (Taken)", resultReminder.toString())
         reminderEvent.status = ReminderEvent.ReminderStatus.SKIPPED
         reminderEvent.amount = "6"
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("In 1 hour, 1:00 AM: Test (6 Skipped)", resultReminder.toString())
     }
 }
