@@ -51,7 +51,26 @@ public class ReminderEvent {
     public int lastIntervalReminderTimeInMinutes;
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String notes = "";
+    public String notes;
+
+    public ReminderEvent() {
+        medicineName = "";
+        amount = "";
+        color = 0;
+        useColor = false;
+        status = ReminderStatus.RAISED;
+        remindedTimestamp = 0;
+        processedTimestamp = 0;
+        reminderId = 0;
+        notificationId = 0;
+        iconId = 0;
+        remainingRepeats = 0;
+        stockHandled = false;
+        askForAmount = false;
+        tags = List.of();
+        lastIntervalReminderTimeInMinutes = 0;
+        notes = "";
+    }
 
     @Override
     public boolean equals(Object o) {
