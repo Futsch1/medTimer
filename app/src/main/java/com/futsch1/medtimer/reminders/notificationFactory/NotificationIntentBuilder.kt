@@ -31,6 +31,15 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
 
     val pendingDismiss = getDismissPendingIntent()
 
+    /**
+     * Creates a [PendingIntent] for the "taken" action of a reminder notification.
+     *
+     * If any reminder requires manual amount entry (askForAmount), it returns
+     * an activity intent to open the main activity to ask for the amount. Otherwise, it returns
+     * a broadcast intent to immediately mark the reminder as taken.
+     *
+     * @return The [PendingIntent] to be triggered when the user marks the reminder as taken.
+     */
     private fun getTakenPendingIntent(): PendingIntent {
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 

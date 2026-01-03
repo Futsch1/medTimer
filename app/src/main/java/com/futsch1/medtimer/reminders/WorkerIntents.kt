@@ -30,7 +30,7 @@ private fun buildActionIntent(context: Context, processedNotificationData: Proce
 
 fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?, name: String): Intent {
     val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTION)
+    actionIntent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, reminderEventId)
     actionIntent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
@@ -40,7 +40,7 @@ fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amoun
 
 fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: ReminderNotificationData): Intent {
     val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction(ActivityCodes.CUSTOM_SNOOZE_ACTION)
+    actionIntent.setAction(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     reminderNotificationData.toIntent(actionIntent)
     return actionIntent
