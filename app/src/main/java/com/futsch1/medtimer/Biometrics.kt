@@ -1,6 +1,7 @@
 package com.futsch1.medtimer
 
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
@@ -73,6 +74,18 @@ class Biometrics(
     }
 
     fun authenticate(
+    ) {
+        try {
+            authenticateInternal()
+        } catch (_: KeyPermanentlyInvalidatedException) {
+            // When the biometrics are disabled, the key is invalidated. So delete it and create it again (safe since no user data is encrypted using it).
+            val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+            keyStore.deleteEntry(keyAlias)
+            authenticateInternal()
+        }
+    }
+
+    private fun authenticateInternal(
     ) {
         executor = ContextCompat.getMainExecutor(activity)
         biometricPrompt = getPrompt(activity, failureCallback, successCallback)
