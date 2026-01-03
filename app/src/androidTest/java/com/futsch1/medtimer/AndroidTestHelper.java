@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.is;
 import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
+import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
@@ -147,6 +148,11 @@ public class AndroidTestHelper {
         } catch (UiObjectNotFoundException e) {
             // Intentionally empty
         }
+    }
+
+
+    public static void closeNotifications(UiDevice device) {
+        device.swipe(device.getDisplayWidth() / 2, device.getDisplayHeight(), device.getDisplayWidth() / 2, device.getDisplayHeight() / 2, 10);
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}

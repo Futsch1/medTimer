@@ -143,7 +143,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
             R.drawable.check2_circle, context.getString(R.string.taken), resultPendingIntent
         )
 
-        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+        for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
                 continue
             }

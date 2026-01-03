@@ -85,6 +85,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
                 val builder = NotificationCompat.Builder(context, notification.notification.channelId)
                 builder.setSmallIcon(notification.notification.smallIcon.resId).setContentInfo(context.getString(R.string.snooze))
                 builder.setTimeoutAfter(2000)
+                builder.setExtras(notification.notification.extras)
                 notificationManager.notify(notificationId, builder.build())
             }
         }

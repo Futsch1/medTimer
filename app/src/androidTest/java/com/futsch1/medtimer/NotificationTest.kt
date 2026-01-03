@@ -37,7 +37,10 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.Locale
 
 
 const val TEST_MED = "Test med"
@@ -253,11 +256,23 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun variableAmount() {
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
+        pressBack()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
+
+        AndroidTestHelper.createMedicine(SECOND_ONE)
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
@@ -268,14 +283,22 @@ class NotificationTest : BaseTestHelper() {
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
-        val input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
+        var input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
         input.text = "Test variable amount"
         device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
 
-        device.pressBack()
+        clickNotificationButton(device, getNotificationText(R.string.taken))
+        input = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
+        input.text = "Test another variable amount"
+        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
+
+        AndroidTestHelper.closeNotifications(device)
 
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
+        assertContains("Test another variable amount")
     }
 
     @Test
@@ -285,23 +308,22 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
         clickOn(R.string.big_notifications)
-
+        clickOn(R.string.combine_notifications)
         pressBack()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 2)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
-        navigateTo(MainMenu.ANALYSIS)
-        device.openNotification()
-        sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        dismissNotification(device.findObject(By.textContains(TEST_MED)), device)
 
-        device.pressBack()
+        AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
 
         device.openNotification()
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
@@ -318,7 +340,9 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
 
-        clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        val nextDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
+        clickOn(nextDay)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()

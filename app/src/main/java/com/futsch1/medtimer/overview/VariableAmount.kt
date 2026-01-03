@@ -1,11 +1,8 @@
 package com.futsch1.medtimer.overview
 
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -46,7 +43,10 @@ fun variableAmountDialog(
                     .textSink { amountLocal: String? ->
                         amountLocal?.let {
                             reminderNotificationPart.reminderEvent.amount = it
-                            reminderEvents.add(reminderNotificationPart.reminderEvent)
+                            NotificationProcessor(activity).setReminderEventStatus(
+                                ReminderEvent.ReminderStatus.TAKEN,
+                                listOf(reminderNotificationPart.reminderEvent)
+                            )
                         }
                     }
                     .cancelCallback { touchReminderEvent(medicineRepository, reminderNotificationPart.reminderEvent) }
