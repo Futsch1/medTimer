@@ -28,11 +28,7 @@ class NotificationProcessor(val context: Context) {
             val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
 
             if (reminderEvent != null) {
-                if (reminderEvent.askForAmount && status == ReminderStatus.TAKEN) {
-                    askForAmount(reminderEvent, reminderEventId)
-                } else {
-                    reminderEventsToUpdate.add(reminderEvent)
-                }
+                reminderEventsToUpdate.add(reminderEvent)
             } else {
                 Log.e(LogTags.REMINDER, "Could not find reminder event reID $reminderEventId in database")
             }
@@ -42,18 +38,6 @@ class NotificationProcessor(val context: Context) {
 
         // Reschedule since the trigger condition for a linked reminder might have changed
         requestReschedule(context)
-    }
-
-    private fun askForAmount(reminderEvent: ReminderEvent, reminderEventId: Int) {
-        val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
-        if (reminder != null) {
-            val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
-            if (medicine != null) {
-                Log.d(LogTags.REMINDER, String.format("Ask for amount for reminder event reID %d", reminderEventId))
-                context.startActivity(getVariableAmountActionIntent(context, reminderEventId, reminderEvent.amount, medicine.medicine.name))
-                removeRemindersFromNotification(listOf(reminderEvent))
-            }
-        }
     }
 
     fun cancelNotification(notificationId: Int) {

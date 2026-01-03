@@ -33,25 +33,31 @@ fun variableAmountDialog(
             reminderNotificationData
         ) ?: return@launch
 
+        val reminderEvents = mutableListOf<ReminderEvent>()
+
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-            DialogHelper(activity)
-                .title(reminderNotificationPart.medicine.medicine.name)
-                .hint(R.string.dosage)
-                .initialText(reminderNotificationPart.reminder.amount)
-                .textSink { amountLocal: String? ->
-                    amountLocal?.let {
-                        updateReminderEvent(
-                            activity,
-                            reminderNotificationPart.reminderEvent,
-                            it
-                        )
+            if (!reminderNotificationPart.reminder.variableAmount) {
+                reminderEvents.add(reminderNotificationPart.reminderEvent)
+            } else {
+                DialogHelper(activity)
+                    .title(reminderNotificationPart.medicine.medicine.name)
+                    .hint(R.string.dosage)
+                    .initialText(reminderNotificationPart.reminder.amount)
+                    .textSink { amountLocal: String? ->
+                        amountLocal?.let {
+                            reminderNotificationPart.reminderEvent.amount = it
+                            reminderEvents.add(reminderNotificationPart.reminderEvent)
+                        }
                     }
-                }
-                .cancelCallback { touchReminderEvent(medicineRepository, reminderNotificationPart.reminderEvent) }
-                .show()
-
-
+                    .cancelCallback { touchReminderEvent(medicineRepository, reminderNotificationPart.reminderEvent) }
+                    .show()
+            }
         }
+
+        NotificationProcessor(activity).setReminderEventStatus(
+            ReminderEvent.ReminderStatus.TAKEN,
+            reminderEvents,
+        )
     }
 }
 
@@ -61,17 +67,4 @@ private fun touchReminderEvent(
 ) {
     reminderEvent.processedTimestamp = Instant.now().epochSecond
     medicineRepository.updateReminderEvent(reminderEvent)
-}
-
-private fun updateReminderEvent(
-    activity: AppCompatActivity,
-    reminderEvent: ReminderEvent,
-    amount: String
-) {
-    reminderEvent.amount = amount
-    NotificationProcessor(activity).setReminderEventStatus(
-        ReminderEvent.ReminderStatus.TAKEN,
-        listOf(reminderEvent),
-    )
-
 }

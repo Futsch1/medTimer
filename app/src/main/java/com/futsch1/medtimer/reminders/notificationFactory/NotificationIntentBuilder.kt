@@ -14,7 +14,7 @@ import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.reminders.getSnoozeIntent
 import com.futsch1.medtimer.reminders.getTakenActionIntent
-import com.futsch1.medtimer.reminders.getTakenActivityIntent
+import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -44,7 +44,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getTakenActivityIntent(context, processedNotificationData)
+            val notifyTaken = getVariableAmountActivityIntent(context, processedNotificationData)
             PendingIntent.getActivity(
                 context,
                 reminderNotification.reminderNotificationData.notificationId,

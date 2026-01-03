@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessor
@@ -252,8 +253,41 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun variableAmount() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
+
+        device.openNotification()
+        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        clickNotificationButton(device, getNotificationText(R.string.taken))
+
+        val input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
+        input.text = "Test variable amount"
+        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+
+        device.pressBack()
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertContains("Test variable amount")
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    fun variableAmountBigButton() {
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.big_notifications)
+
+        pressBack()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine(TEST_MED)
@@ -270,7 +304,6 @@ class NotificationTest : BaseTestHelper() {
         device.pressBack()
 
         device.openNotification()
-        sleep(2_000)
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
