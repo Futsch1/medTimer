@@ -10,6 +10,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.WorkManagerAccess
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Duration
@@ -121,13 +123,19 @@ class ReminderProcessor : BroadcastReceiver() {
             workManager.enqueue(snoozeWork)
         }
 
-        fun requestReminderAction(context: Context, processedNotificationData: ProcessedNotificationData, taken: Boolean) {
-            val actionIntent: Intent =
-                if (taken) getTakenActionIntent(context, processedNotificationData) else getSkippedActionIntent(context, processedNotificationData)
+        fun requestReminderAction(context: Context, reminder: Reminder?, reminderEvent: ReminderEvent, taken: Boolean) {
+            val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
+
             if (taken) {
-                WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, TakenWorker::class.java))
+                if (reminder?.variableAmount == true) {
+                    context.startActivity(getVariableAmountActivityIntent(context, ReminderNotificationData.fromReminderEvent(reminderEvent)))
+                } else {
+                    WorkManagerAccess.getWorkManager(context)
+                        .enqueue(buildActionWorkRequest(getTakenActionIntent(context, processedNotificationData), TakenWorker::class.java))
+                }
             } else {
-                WorkManagerAccess.getWorkManager(context).enqueue(buildActionWorkRequest(actionIntent, SkippedWorker::class.java))
+                WorkManagerAccess.getWorkManager(context)
+                    .enqueue(buildActionWorkRequest(getSkippedActionIntent(context, processedNotificationData), SkippedWorker::class.java))
             }
         }
 
