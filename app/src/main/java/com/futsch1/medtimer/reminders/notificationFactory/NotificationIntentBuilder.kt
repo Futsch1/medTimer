@@ -44,7 +44,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getVariableAmountActivityIntent(context, processedNotificationData)
+            val notifyTaken = getVariableAmountActivityIntent(context, reminderNotification.reminderNotificationData)
             PendingIntent.getActivity(
                 context,
                 reminderNotification.reminderNotificationData.notificationId,

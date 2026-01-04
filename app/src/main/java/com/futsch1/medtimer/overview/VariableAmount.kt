@@ -32,25 +32,27 @@ fun variableAmountDialog(
 
         val reminderEvents = mutableListOf<ReminderEvent>()
 
-        for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
+        for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
                 reminderEvents.add(reminderNotificationPart.reminderEvent)
             } else {
-                DialogHelper(activity)
+                val dialogHelper = DialogHelper(activity)
                     .title(reminderNotificationPart.medicine.medicine.name)
                     .hint(R.string.dosage)
                     .initialText(reminderNotificationPart.reminder.amount)
                     .textSink { amountLocal: String? ->
                         amountLocal?.let {
                             reminderNotificationPart.reminderEvent.amount = it
-                            NotificationProcessor(activity).setReminderEventStatus(
-                                ReminderEvent.ReminderStatus.TAKEN,
-                                listOf(reminderNotificationPart.reminderEvent)
-                            )
+                            activity.lifecycleScope.launch(dispatcher) {
+                                NotificationProcessor(activity).setReminderEventStatus(
+                                    ReminderEvent.ReminderStatus.TAKEN,
+                                    listOf(reminderNotificationPart.reminderEvent)
+                                )
+                            }
                         }
                     }
                     .cancelCallback { touchReminderEvent(medicineRepository, reminderNotificationPart.reminderEvent) }
-                    .show()
+                activity.runOnUiThread { dialogHelper.show() }
             }
         }
 

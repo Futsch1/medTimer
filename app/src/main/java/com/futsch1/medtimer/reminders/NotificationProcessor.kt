@@ -80,10 +80,11 @@ class NotificationProcessor(val context: Context) {
             reminderEvent.processedTimestamp = Instant.now().epochSecond
             Log.i(
                 LogTags.REMINDER, String.format(
-                    "%s reminder reID %d for %s",
+                    "%s reminder reID %d for %s (%s)",
                     if (status == ReminderStatus.TAKEN) "Taken" else "Skipped",
                     reminderEvent.reminderEventId,
-                    reminderEvent.medicineName
+                    reminderEvent.medicineName,
+                    reminderEvent.amount
                 )
             )
         }

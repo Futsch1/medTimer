@@ -9,8 +9,8 @@ import java.time.LocalDate
 import java.time.Period
 import java.util.LinkedList
 
-class GenerateTestData(private val viewModel: MedicineViewModel) {
-    fun generateTestMedicine(withEvents: Boolean) {
+class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents: Boolean) {
+    fun generateTestMedicine() {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(
@@ -26,12 +26,12 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
             ),
             TestMedicine(
                 "Ginseng (200mg)", -0x6f1170, 3, 0.0, arrayOf(
-                    TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast")
+                    TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast", true)
                 ), arrayOf("Energy")
             ),
             TestMedicine(
                 "Selen (200 µg)", null, 0, 0.0, arrayOf(
-                    TestReminderTimeBased("2", 9 * 60, 1, 0, ""),
+                    TestReminderTimeBased("2", 9 * 60, 1, 0, "", true),
                     TestReminderIntervalBased("1", 36 * 60)
                 ), arrayOf("Supplements")
             )
@@ -124,7 +124,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
     private class TestReminderTimeBased(
         val amount: String, val time: Int, val consecutiveDays: Int,
         val pauseDays: Int,
-        val instructions: String
+        val instructions: String, val variableAmount: Boolean = false
     ) : TestReminder() {
         override fun toReminder(medicineId: Int): Reminder {
             val reminder = Reminder(medicineId)
@@ -134,6 +134,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel) {
             reminder.pauseDays = pauseDays
             reminder.instructions = instructions
             reminder.cycleStartDay = LocalDate.now().toEpochDay()
+            reminder.variableAmount = variableAmount
             return reminder
         }
     }

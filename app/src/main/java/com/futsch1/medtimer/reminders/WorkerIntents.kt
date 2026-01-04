@@ -40,10 +40,10 @@ fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedN
     return buildActionIntent(context, processedNotificationData, ActivityCodes.TAKEN_ACTION)
 }
 
-fun getVariableAmountActivityIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
+fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
     val intent = Intent(context, MainActivity::class.java)
     intent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
-    processedNotificationData.toIntent(intent)
+    reminderNotificationData.toIntent(intent)
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     return intent
 }

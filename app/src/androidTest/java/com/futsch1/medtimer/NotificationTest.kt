@@ -318,27 +318,35 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
+        AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
 
-        AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createMedicine(SECOND_ONE)
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
+
+        navigateTo(MainMenu.ANALYSIS)
 
         device.openNotification()
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
-        if (null == device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)) {
-            device.pressBack()
-            device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
-        }
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         assertContains(TEST_MED)
         writeTo(android.R.id.input, "Test variable amount")
         clickDialogPositiveButton()
+
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertContains(SECOND_ONE)
+        writeTo(android.R.id.input, "Test another variable amount")
+        clickDialogPositiveButton()
+
         navigateTo(MainMenu.OVERVIEW)
         assertContains("Test variable amount")
+        assertContains("Test another variable amount")
+        assertContains("Not variable")
 
         val nextDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
         clickOn(nextDay)
