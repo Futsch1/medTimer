@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessor
@@ -47,6 +48,8 @@ const val TEST_MED = "Test med"
 private const val SECOND_ONE = "second one"
 private const val FIRST_REMINDER = "First reminder"
 private const val SECOND_REMINDER = "Second reminder"
+private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
+private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
 
 
 fun clickNotificationButton(device: UiDevice, buttonText: String): Boolean {
@@ -255,7 +258,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun variableAmount() {
         openMenu()
         clickOn(R.string.tab_settings)
@@ -283,21 +286,21 @@ class NotificationTest : BaseTestHelper() {
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
         var input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
-        input.text = "Test variable amount"
+        input.text = TEST_VARIABLE_AMOUNT
         device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
         device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
 
         clickNotificationButton(device, getNotificationText(R.string.taken))
         input = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
-        input.text = "Test another variable amount"
+        input.text = TEST_ANOTHER_VARIABLE_AMOUNT
         device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
         device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
 
         AndroidTestHelper.closeNotifications(device)
 
         navigateTo(MainMenu.OVERVIEW)
-        assertContains("Test variable amount")
-        assertContains("Test another variable amount")
+        assertContains(TEST_VARIABLE_AMOUNT)
+        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
     }
 
     @Test
@@ -330,21 +333,21 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        clickNotificationButton(device, getNotificationText(R.string.taken))
+        clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         assertContains(TEST_MED)
-        writeTo(android.R.id.input, "Test variable amount")
+        writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         assertContains(SECOND_ONE)
-        writeTo(android.R.id.input, "Test another variable amount")
+        writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
-        assertContains("Test variable amount")
-        assertContains("Test another variable amount")
+        assertContains(TEST_VARIABLE_AMOUNT)
+        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
         assertContains("Not variable")
 
         val nextDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
