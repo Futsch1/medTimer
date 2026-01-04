@@ -26,12 +26,12 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             ),
             TestMedicine(
                 "Ginseng (200mg)", -0x6f1170, 3, 0.0, arrayOf(
-                    TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast", true)
+                    TestReminderTimeBased("1", 9 * 60, 1, 0, "before breakfast", withEvents)
                 ), arrayOf("Energy")
             ),
             TestMedicine(
                 "Selen (200 µg)", null, 0, 0.0, arrayOf(
-                    TestReminderTimeBased("2", 9 * 60, 1, 0, "", true),
+                    TestReminderTimeBased("2", 9 * 60, 1, 0, "", withEvents),
                     TestReminderIntervalBased("1", 36 * 60)
                 ), arrayOf("Supplements")
             )

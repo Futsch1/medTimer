@@ -28,7 +28,6 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessor
@@ -258,7 +257,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    //@AllowFlaky(attempts = 1)
     fun variableAmount() {
         openMenu()
         clickOn(R.string.tab_settings)
@@ -368,10 +367,10 @@ class NotificationTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.snooze)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.snooze)
         pressBack()
         pressBack()
 
@@ -380,20 +379,55 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.ANALYSIS)
         waitAndDismissNotification(device, 2_000)
+        AndroidTestHelper.closeNotifications(device)
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "1")
         clickDialogPositiveButton()
 
+        navigateTo(MainMenu.OVERVIEW)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+
+        navigateTo(MainMenu.ANALYSIS)
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.taken)
+        pressBack()
+        pressBack()
         device.openNotification()
         sleep(2_000)
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
+        clickNotificationButton(device, getNotificationText(R.string.snooze))
+
+        val snoozeString = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze)
+        val input = device.wait(Until.findObject(By.hintContains(snoozeString)), 2_000)
+        input.text = "13"
+        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.wait(Until.gone(By.textContains(snoozeString)), 2_000)
+        AndroidTestHelper.closeNotifications(device)
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            1,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
     }
 
     @Test
