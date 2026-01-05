@@ -154,6 +154,7 @@ public class AndroidTestHelper {
 
     public static void closeNotifications(UiDevice device) {
         device.swipe(device.getDisplayWidth() / 2, device.getDisplayHeight(), device.getDisplayWidth() / 2, device.getDisplayHeight() / 2, 20);
+        device.waitForIdle(200);
         if (!device.findObjects(By.res("android:id/expand_button")).isEmpty() || !device.findObjects(By.descContains("Expand")).isEmpty()) {
             device.pressBack();
         }

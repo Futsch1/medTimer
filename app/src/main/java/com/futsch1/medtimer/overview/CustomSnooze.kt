@@ -2,7 +2,9 @@ package com.futsch1.medtimer.overview
 
 import android.content.Intent
 import android.text.InputType
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
@@ -28,6 +30,9 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
             if (snoozeTimeInt != null) {
                 ReminderProcessor.requestSnooze(activity, reminderNotificationData, snoozeTimeInt)
             }
+        }
+        .cancelCallback {
+            Log.d(LogTags.REMINDER, "Snooze dialog cancelled")
         }
         .show()
 
