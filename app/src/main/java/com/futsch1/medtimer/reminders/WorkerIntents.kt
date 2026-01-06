@@ -9,7 +9,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun getReminderAction(context: Context): Intent {
     val reminderIntent = Intent(ActivityCodes.REMINDER_ACTION)
-    reminderIntent.setClass(context, ReminderProcessor::class.java)
+    reminderIntent.setClass(context, ReminderWorkerReceiver::class.java)
     return reminderIntent
 }
 
@@ -17,12 +17,12 @@ fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotifica
     val snoozeIntent = Intent(ActivityCodes.SNOOZE_ACTION)
     reminderNotificationData.toIntent(snoozeIntent)
     snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
-    snoozeIntent.setClass(context, ReminderProcessor::class.java)
+    snoozeIntent.setClass(context, ReminderWorkerReceiver::class.java)
     return snoozeIntent
 }
 
 private fun buildActionIntent(context: Context, processedNotificationData: ProcessedNotificationData, actionName: String?): Intent {
-    val actionIntent = Intent(context, ReminderProcessor::class.java)
+    val actionIntent = Intent(context, ReminderWorkerReceiver::class.java)
     processedNotificationData.toIntent(actionIntent)
     actionIntent.setAction(actionName)
     return actionIntent

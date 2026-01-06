@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.content.Context
 import android.util.Log
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
@@ -11,9 +12,10 @@ import java.time.Instant
 /*
  * Worker that snoozes a reminder and re-raises it once the snooze time has expired.
  */
-open class SnoozeWorker(context: Context, workerParams: WorkerParameters) : RescheduleWorker(context, workerParams) {
+open class SnoozeWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+    val alarmSetter = SetAlarmForReminderNotification(context)
+
     override fun doWork(): Result {
-        val inputData = getInputData()
         val snoozeTime = inputData.getInt(ActivityCodes.EXTRA_SNOOZE_TIME, 15)
 
         val reminderNotificationData = fromInputData(inputData)
@@ -24,7 +26,7 @@ open class SnoozeWorker(context: Context, workerParams: WorkerParameters) : Resc
         val notificationProcessor = NotificationProcessor(context)
         notificationProcessor.cancelPendingAlarms(reminderNotificationData.reminderEventIds[0])
 
-        enqueueNotification(reminderNotificationData)
+        alarmSetter.setAlarmForReminderNotification(reminderNotificationData, inputData)
 
         notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
 

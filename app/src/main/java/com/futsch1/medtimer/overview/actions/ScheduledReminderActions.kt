@@ -9,8 +9,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
-import com.futsch1.medtimer.reminders.ReminderProcessor
-import com.futsch1.medtimer.reminders.ReminderWorker
+import com.futsch1.medtimer.reminders.ReminderNotificationWorker
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -63,7 +63,7 @@ class ScheduledReminderActions(
                         TimeHelper.instantFromDateAndMinutes(minutes, scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).epochSecond
                     val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderProcessor.requestSchedule(view.context, reminderNotificationData)
+                    ReminderWorkerReceiver.requestShowReminderNotification(view.context, reminderNotificationData)
                 }
             }
     }
@@ -86,7 +86,7 @@ class ScheduledReminderActions(
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application) // Ensure Application context is not null
             var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
             if (reminderEvent == null) {
-                reminderEvent = ReminderWorker.buildReminderEvent(
+                reminderEvent = ReminderNotificationWorker.buildReminderEvent(
                     reminderTimeStamp,
                     scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
                 )

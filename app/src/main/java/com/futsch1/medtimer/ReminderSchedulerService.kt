@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
 
 class ReminderSchedulerService : LifecycleService() {
     override fun onCreate() {
@@ -44,6 +44,6 @@ class ReminderSchedulerService : LifecycleService() {
     }
 
     private fun scheduleRequest() {
-        requestReschedule(this)
+        requestScheduleNextNotification(this)
     }
 }

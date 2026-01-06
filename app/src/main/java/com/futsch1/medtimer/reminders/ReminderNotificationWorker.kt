@@ -24,7 +24,7 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class ReminderNotificationWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
 
     override fun doWork(): Result {
@@ -35,7 +35,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
         val r = processReminders(inputData)
 
         // Reminder shown, now schedule next reminder
-        ReminderProcessor.requestReschedule(context)
+        ReminderWorkerReceiver.requestScheduleNextNotification(context)
 
         return r
     }
@@ -55,7 +55,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
             if (reminderNotification.reminderNotificationParts.isEmpty()) {
                 Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
             } else {
-                Log.d(LogTags.REMINDER, "Processing reminder $reminderNotification")
+                Log.d(LogTags.REMINDER, "Processing reminder notification $reminderNotification")
                 notificationAction(reminderNotification)
                 medicineRepository.flushDatabase()
             }
@@ -97,7 +97,7 @@ class ReminderWorker(private val context: Context, workerParams: WorkerParameter
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
-            ReminderProcessor.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
+            ReminderWorkerReceiver.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
     }
 

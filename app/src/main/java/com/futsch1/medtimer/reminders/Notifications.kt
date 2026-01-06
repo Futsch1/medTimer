@@ -42,7 +42,6 @@ class Notifications(private val context: Context) {
             return notificationId
         }
 
-
     private fun notify(notificationId: Int, notification: android.app.Notification) {
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         val soundManager = NotificationSoundManager(context)
@@ -51,7 +50,6 @@ class Notifications(private val context: Context) {
 
         soundManager.restore()
     }
-
 
     fun showOutOfStockNotification(medicine: Medicine) {
         val notificationId = this.nextNotificationId

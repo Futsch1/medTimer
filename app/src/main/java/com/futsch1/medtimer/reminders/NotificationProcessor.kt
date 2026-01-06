@@ -11,8 +11,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestStockHandling
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -41,7 +41,7 @@ class NotificationProcessor(val context: Context) {
         setReminderEventStatus(status, reminderEventsToUpdate)
 
         // Reschedule since the trigger condition for a linked reminder might have changed
-        requestReschedule(context)
+        requestScheduleNextNotification(context)
     }
 
     private fun askForAmount(reminderEvent: ReminderEvent, reminderEventId: Int) {
@@ -102,6 +102,7 @@ class NotificationProcessor(val context: Context) {
                     reminderEvent.medicineName
                 )
             )
+            SetAlarmForReminderNotification.cancelRepeatReminderEvent(context, reminderEvent.reminderEventId)
         }
 
         medicineRepository.updateReminderEvents(reminderEvents)

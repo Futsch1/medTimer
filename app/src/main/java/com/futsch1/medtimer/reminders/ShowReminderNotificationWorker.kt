@@ -3,21 +3,22 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
-class ScheduleWorker(context: Context, workerParams: WorkerParameters) : RescheduleWorker(context, workerParams) {
-    override fun doWork(): Result {
-        val inputData = getInputData()
+class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+    val alarmSetter = SetAlarmForReminderNotification(context)
 
+    override fun doWork(): Result {
         val reminderNotificationData = fromInputData(inputData)
         Log.d(LogTags.REMINDER, "Scheduling reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {
-            enqueueNotification(reminderNotificationData)
+            alarmSetter.setAlarmForReminderNotification(reminderNotificationData, inputData)
         }
 
         return Result.success()
