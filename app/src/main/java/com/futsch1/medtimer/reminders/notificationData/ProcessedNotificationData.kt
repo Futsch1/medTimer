@@ -27,11 +27,6 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
             return ProcessedNotificationData(data.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!.toList())
         }
 
-        fun fromIntent(intent: Intent): ProcessedNotificationData {
-            val reminderEventIds = intent.getIntArrayExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)
-            return ProcessedNotificationData(reminderEventIds?.toList() ?: emptyList())
-        }
-
         fun forwardToBuilder(bundle: Bundle, builder: Data.Builder) {
             val reminderEventIds = bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)
             if (reminderEventIds != null) {

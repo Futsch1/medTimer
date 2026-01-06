@@ -39,7 +39,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
         val snoozeTime = results.getCharSequence("snooze_time")
         val snoozeTimeInt = snoozeTime.toString().toIntOrNull() ?: 10
         confirmNotification(context, reminderNotificationData.notificationId)
-        ReminderProcessor.requestSnooze(context, reminderNotificationData, snoozeTimeInt)
+        ReminderWorkerReceiver.requestSnooze(context, reminderNotificationData, snoozeTimeInt)
     }
 
     private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {

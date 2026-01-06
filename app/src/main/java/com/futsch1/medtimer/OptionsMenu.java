@@ -188,7 +188,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
                 handler.post(() -> {
                     medicineViewModel.medicineRepository.deleteAll();
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel, menuItem == itemWithEvents);
-                    generateTestData.generateTestMedicine(menuItem == itemWithEvents);
+                    generateTestData.generateTestMedicine();
                     ReminderWorkerReceiver.requestScheduleNextNotification(context);
                     idlingResource.setIdle();
                 });

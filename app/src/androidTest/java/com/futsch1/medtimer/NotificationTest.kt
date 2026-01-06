@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
@@ -80,6 +81,8 @@ fun getNotificationText(stringId: Int): String {
     }
 }
 
+
+private const val COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND = "com.android.systemui:id/remote_input_send"
 
 class NotificationTest : BaseTestHelper() {
     @Test
@@ -257,7 +260,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun variableAmount() {
         openMenu()
         clickOn(R.string.tab_settings)
@@ -280,19 +283,19 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         device.openNotification()
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
         var input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
         input.text = TEST_VARIABLE_AMOUNT
-        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
 
         clickNotificationButton(device, getNotificationText(R.string.taken))
         input = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
         input.text = TEST_ANOTHER_VARIABLE_AMOUNT
-        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
 
         AndroidTestHelper.closeNotifications(device)
@@ -330,7 +333,7 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
 
         device.openNotification()
-        ReminderProcessor.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
 
@@ -408,7 +411,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         device.openNotification()
         sleep(2_000)
-        ReminderProcessor.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
+        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
         notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
@@ -420,7 +423,7 @@ class NotificationTest : BaseTestHelper() {
         val snoozeString = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze)
         val input = device.wait(Until.findObject(By.hintContains(snoozeString)), 2_000)
         input.text = "13"
-        device.findObject(By.res("com.android.systemui:id/remote_input_send")).click()
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(snoozeString)), 2_000)
         AndroidTestHelper.closeNotifications(device)
 
