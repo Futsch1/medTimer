@@ -11,7 +11,7 @@ import androidx.preference.PreferenceManager;
 
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,7 +72,7 @@ public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
     private void requestReschedule() {
         Context context = getContext();
         if (context != null) {
-            ReminderProcessor.requestReschedule(context);
+            ReminderWorkerReceiver.requestScheduleNextNotification(context);
         }
     }
 }

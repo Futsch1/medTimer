@@ -15,7 +15,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
-import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -137,7 +137,7 @@ class ManualDose(
             if (medicineId != -1) {
                 val amount = MedicineHelper.parseAmount(reminderEvent.amount)
                 if (amount != null) {
-                    ReminderProcessor.requestStockHandling(context, amount, medicineId)
+                    ReminderWorkerReceiver.requestStockHandling(context, amount, medicineId)
                 }
             }
         }
