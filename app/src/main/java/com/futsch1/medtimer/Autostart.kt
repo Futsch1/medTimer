@@ -10,8 +10,8 @@ import android.util.Log
 import com.futsch1.medtimer.LogTags.AUTOSTART
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.ReminderProcessor
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestReschedule
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.util.function.Predicate
 import java.util.stream.Collectors
@@ -20,7 +20,7 @@ class Autostart : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
             Log.i(AUTOSTART, "Requesting reschedule")
-            requestReschedule(context)
+            requestScheduleNextNotification(context)
             restoreNotifications(context)
         }
     }
@@ -47,7 +47,7 @@ class Autostart : BroadcastReceiver() {
                     val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
                     scheduledReminderNotificationData.notificationId = reminderEvent.notificationId
                     Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
-                    ReminderProcessor.requestSchedule(context, scheduledReminderNotificationData)
+                    ReminderWorkerReceiver.requestShowReminderNotification(context, scheduledReminderNotificationData)
                 }
             }
         }

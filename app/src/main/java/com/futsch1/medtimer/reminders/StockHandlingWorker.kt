@@ -10,6 +10,17 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 
+/**
+ * [Worker] implementation responsible for updating medicine stock levels.
+ *
+ * This worker retrieves the medicine ID and the amount to subtract from the input data.
+ * It updates the stock in the database, ensures the amount does not drop below zero,
+ * and triggers a notification if the stock level crosses the configured threshold.
+ *
+ * Input data keys:
+ * - [ActivityCodes.EXTRA_MEDICINE_ID]: The ID of the medicine to update.
+ * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
+ */
 class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {

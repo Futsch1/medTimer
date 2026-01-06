@@ -9,6 +9,15 @@ import android.os.Looper
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.preferences.PreferencesNames
 
+/**
+ * Manages notification sound settings and "Do Not Disturb" overrides for reminders.
+ *
+ * This class handles the temporary unmuting of the ringer and modification of the notification
+ * policy to ensure that medication reminders are audible. It tracks the original state of the
+ * audio settings and restores them after a brief delay once the reminder has been triggered.
+ *
+ * @property context The [Context] used to access system services and preferences.
+ */
 class NotificationSoundManager(val context: Context) {
     private val notificationManager: NotificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
