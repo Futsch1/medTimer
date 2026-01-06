@@ -11,7 +11,6 @@ import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
-import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 
 class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
     init {
