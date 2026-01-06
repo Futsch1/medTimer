@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -64,6 +63,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
                         reminderEvents.add(reminderNotificationPart.reminderEvent)
                         reminderNotificationPart.reminderEvent.amount = amount.toString()
                         medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
+                        confirmNotification(context, reminderNotificationData.notificationId)
                     }
                 }
             }
@@ -81,7 +81,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
         for (notification in notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
                 val builder = NotificationCompat.Builder(context, notification.notification.channelId)
-                builder.setSmallIcon(notification.notification.smallIcon.resId).setContentInfo(context.getString(R.string.snooze))
+                builder.setSmallIcon(notification.notification.smallIcon.resId).setContentInfo("")
                 builder.setTimeoutAfter(2000)
                 builder.setExtras(notification.notification.extras)
                 notificationManager.notify(notificationId, builder.build())
