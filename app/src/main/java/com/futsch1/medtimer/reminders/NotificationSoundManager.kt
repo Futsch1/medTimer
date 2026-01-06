@@ -17,7 +17,6 @@ import com.futsch1.medtimer.preferences.PreferencesNames
  * audio settings and restores them after a brief delay once the reminder has been triggered.
  *
  * @property context The [Context] used to access system services and preferences.
-notification sound settings and "Do Not Disturb" (DND) overrides for medication reminders.
  */
 class NotificationSoundManager(val context: Context) {
     private val notificationManager: NotificationManager =
