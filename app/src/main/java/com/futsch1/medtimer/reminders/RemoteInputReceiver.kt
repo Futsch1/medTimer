@@ -60,7 +60,6 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
                     val amount = results.getCharSequence("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
                     if (amount != null) {
                         Log.d(LogTags.REMINDER, "Setting variable amount to $amount of reID ${reminderNotificationPart.reminderEvent.reminderEventId}")
-                        confirmNotification(context, reminderNotificationData.notificationId)
 
                         reminderEvents.add(reminderNotificationPart.reminderEvent)
                         reminderNotificationPart.reminderEvent.amount = amount.toString()
@@ -75,7 +74,6 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
             )
         }
     }
-
 
     private fun confirmNotification(context: Context, notificationId: Int) {
         val notificationManager = context.getSystemService(NotificationManager::class.java)
