@@ -9,8 +9,15 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
+/**
+ * [Worker] responsible for triggering the display of a medication reminder notification.
+ *
+ * This worker retrieves reminder data from its input, checks if a notification for the
+ * specific reminder events is already active to prevent duplicates, and delegates
+ * the actual notification scheduling to [AlarmProcessor].
+ */
 class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
-    val alarmSetter = SetAlarmForReminderNotification(context)
+    val alarmSetter = AlarmProcessor(context)
 
     override fun doWork(): Result {
         val reminderNotificationData = fromInputData(inputData)

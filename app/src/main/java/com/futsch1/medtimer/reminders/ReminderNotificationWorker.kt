@@ -24,6 +24,17 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
+/**
+ * [Worker] implementation responsible for processing and displaying medicine reminder notifications.
+ *
+ * This worker:
+ * 1. Retrieves reminder data from the worker input.
+ * 2. Filters out reminders that have already been processed.
+ * 3. Handles medicines marked as "automatically taken" by updating their status without showing a notification.
+ * 4. Displays system notifications for the remaining reminders.
+ * 5. Schedules repeating notifications if configured in the app preferences.
+ * 6. Triggers the scheduling of the next upcoming medication reminder.
+ */
 class ReminderNotificationWorker(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private lateinit var medicineRepository: MedicineRepository
 

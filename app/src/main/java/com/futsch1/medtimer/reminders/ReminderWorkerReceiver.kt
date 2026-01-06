@@ -15,6 +15,16 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
+/**
+ * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
+ *
+ * This class handles incoming intents from notifications (like Dismiss, Taken, Snooze, or Reminder actions)
+ * and delegates them to the appropriate [androidx.work.ListenableWorker] via [androidx.work.WorkManager].
+ *
+ * It also provides static utility methods in its [companion object] to programmatically schedule
+ * various reminder tasks such as rescheduling notifications, handling stock updates, and
+ * repeating alerts.
+ */
 class ReminderWorkerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)

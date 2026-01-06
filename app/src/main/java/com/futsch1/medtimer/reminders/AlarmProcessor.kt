@@ -20,9 +20,19 @@ import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
 
 /**
- * Helper class that sets an alarm for a reminder notification.
+ * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
+ *
+ * This class is responsible for:
+ * - Setting exact or inexact alarms based on user preferences and Android version constraints.
+ * - Processing [ReminderNotificationData] to determine if a notification should be shown immediately via a worker
+ *   or scheduled for a future time.
+ * - Managing the cancellation of pending reminders to prevent duplicate or obsolete notifications.
+ * - Updating widgets when reminder schedules change.
+ * - Supporting debug rescheduling for testing purposes.
+ *
+ * @property context The application context used to access system services and shared preferences.
  */
-class SetAlarmForReminderNotification(val context: Context) {
+class AlarmProcessor(val context: Context) {
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
     fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, inputData: Data) {
@@ -35,7 +45,7 @@ class SetAlarmForReminderNotification(val context: Context) {
         alarmManager.cancel(PendingIntent.getBroadcast(context, 0, Intent(), PendingIntent.FLAG_IMMUTABLE))
         for (reminderEventId in scheduledReminderNotificationData.reminderEventIds) {
             if (reminderEventId != 0) {
-                cancelRepeatReminderEvent(context, reminderEventId)
+                cancelPendingReminderNotifications(reminderEventId)
             }
         }
 
@@ -87,6 +97,17 @@ class SetAlarmForReminderNotification(val context: Context) {
         alarmManager.cancel(pendingIntent)
     }
 
+    fun cancelPendingReminderNotifications(reminderEventId: Int) {
+        alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, getReminderAction(context), PendingIntent.FLAG_IMMUTABLE))
+        Log.d(LogTags.REMINDER, "Cancel pending reminder notification alarms for reID $reminderEventId")
+    }
+
+    fun cancelPendingReminderNotifications(reminderNotificationData: ReminderNotificationData) {
+        for (id in reminderNotificationData.reminderEventIds) {
+            cancelPendingReminderNotifications(id)
+        }
+    }
+
     private fun canScheduleExactAlarms(alarmManager: AlarmManager): Boolean {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val exactReminders = sharedPref.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
@@ -98,14 +119,6 @@ class SetAlarmForReminderNotification(val context: Context) {
         val intent = Intent(context, WidgetUpdateReceiver::class.java)
         intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
         context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
-    }
-
-    companion object {
-        fun cancelRepeatReminderEvent(context: Context, reminderEventId: Int) {
-            val alarmManager = context.getSystemService(AlarmManager::class.java)
-            alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, getReminderAction(context), PendingIntent.FLAG_IMMUTABLE))
-            Log.d(LogTags.REMINDER, "Cancel repeat alarm for reID $reminderEventId")
-        }
     }
 
     private class DebugReschedule(var context: Context, inputData: Data) {

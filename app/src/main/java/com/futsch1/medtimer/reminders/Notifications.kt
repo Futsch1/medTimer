@@ -12,6 +12,15 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
 
+/**
+ * Handles the creation and display of system notifications for reminders and stock alerts.
+ *
+ * This class manages notification IDs using [SharedPreferences] to ensure uniqueness across
+ * app restarts and coordinates with notification factories to build and dispatch
+ * [android.app.Notification] objects.
+ *
+ * @property context The application context used to access system services and shared preferences.
+ */
 @SuppressLint("DefaultLocale")
 class Notifications(private val context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
