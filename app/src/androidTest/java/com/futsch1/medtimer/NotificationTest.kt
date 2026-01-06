@@ -378,7 +378,10 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 120)
 
         navigateTo(MainMenu.ANALYSIS)
-        waitAndDismissNotification(device, 2_000)
+        device.openNotification()
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        assertNotNull(notification)
+        dismissNotification(notification, device)
         AndroidTestHelper.closeNotifications(device)
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
@@ -406,7 +409,7 @@ class NotificationTest : BaseTestHelper() {
         device.openNotification()
         sleep(2_000)
         ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
