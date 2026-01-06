@@ -15,6 +15,8 @@ import static org.hamcrest.Matchers.is;
 import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
@@ -146,6 +148,15 @@ public class AndroidTestHelper {
             appViews.scrollForward();
         } catch (UiObjectNotFoundException e) {
             // Intentionally empty
+        }
+    }
+
+
+    public static void closeNotifications(UiDevice device) {
+        device.swipe(device.getDisplayWidth() / 2, device.getDisplayHeight(), device.getDisplayWidth() / 2, device.getDisplayHeight() / 2, 20);
+        device.waitForIdle(200);
+        if (!device.findObjects(By.res("android:id/expand_button")).isEmpty() || !device.findObjects(By.descContains("Expand")).isEmpty()) {
+            device.pressBack();
         }
     }
 

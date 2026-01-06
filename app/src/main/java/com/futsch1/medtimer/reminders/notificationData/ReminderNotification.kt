@@ -86,7 +86,6 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
                         buildAndInsertReminderEvent(medicineRepository, medicine, reminder, reminderNotificationData.remindInstant, numberOfRepeats)
                     reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
                 } else {
-                    Log.d(LogTags.REMINDER, "Reminder event reID ${reminderEvent.reminderEventId} already exists")
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                 }
                 result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))

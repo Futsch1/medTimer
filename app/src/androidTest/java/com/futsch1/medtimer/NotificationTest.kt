@@ -36,7 +36,10 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.Locale
 
 
 const val TEST_MED = "Test med"
@@ -44,6 +47,8 @@ const val TEST_MED = "Test med"
 private const val SECOND_ONE = "second one"
 private const val FIRST_REMINDER = "First reminder"
 private const val SECOND_REMINDER = "Second reminder"
+private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
+private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
 
 
 fun clickNotificationButton(device: UiDevice, buttonText: String): Boolean {
@@ -75,6 +80,8 @@ fun getNotificationText(stringId: Int): String {
     }
 }
 
+
+private const val COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND = "com.android.systemui:id/remote_input_send"
 
 class NotificationTest : BaseTestHelper() {
     @Test
@@ -254,38 +261,99 @@ class NotificationTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
     fun variableAmount() {
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.combine_notifications)
+        pressBack()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 2)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
-        navigateTo(MainMenu.ANALYSIS)
-        device.openNotification()
-        sleep(2_000)
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        dismissNotification(device.findObject(By.textContains(TEST_MED)), device)
 
-        device.pressBack()
+        AndroidTestHelper.createMedicine(SECOND_ONE)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
 
         device.openNotification()
-        sleep(2_000)
         ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
-        if (null == device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)) {
-            device.pressBack()
-            device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
-        }
-        assertContains(TEST_MED)
-        writeTo(android.R.id.input, "Test variable amount")
-        clickDialogPositiveButton()
-        navigateTo(MainMenu.OVERVIEW)
-        assertContains("Test variable amount")
+        var input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
+        input.text = TEST_VARIABLE_AMOUNT
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
+        device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
 
-        clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        clickNotificationButton(device, getNotificationText(R.string.taken))
+        input = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
+        input.text = TEST_ANOTHER_VARIABLE_AMOUNT
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
+        device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
+
+        AndroidTestHelper.closeNotifications(device)
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertContains(TEST_VARIABLE_AMOUNT)
+        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun variableAmountBigButton() {
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.big_notifications)
+        clickOn(R.string.combine_notifications)
+        pressBack()
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
+        AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
+
+        AndroidTestHelper.createMedicine(SECOND_ONE)
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        clickOn(R.id.openAdvancedSettings)
+        clickOn(R.string.variable_amount)
+        pressBack()
+
+        navigateTo(MainMenu.ANALYSIS)
+
+        device.openNotification()
+        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0)
+        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
+
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertContains(TEST_MED)
+        writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
+        clickDialogPositiveButton()
+
+        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertContains(SECOND_ONE)
+        writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
+        clickDialogPositiveButton()
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertContains(TEST_VARIABLE_AMOUNT)
+        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
+        assertContains("Not variable")
+
+        val nextDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
+        clickOn(nextDay)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
@@ -301,10 +369,10 @@ class NotificationTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.snooze)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.snooze)
         pressBack()
         pressBack()
 
@@ -312,21 +380,59 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 120)
 
         navigateTo(MainMenu.ANALYSIS)
-        waitAndDismissNotification(device, 2_000)
+        device.openNotification()
+        var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        assertNotNull(notification)
+        dismissNotification(notification, device)
+        AndroidTestHelper.closeNotifications(device)
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "1")
         clickDialogPositiveButton()
 
+        navigateTo(MainMenu.OVERVIEW)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+
+        navigateTo(MainMenu.ANALYSIS)
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.notification_reminder_settings)
+        clickOn(R.string.dismiss_notification_action)
+        clickOn(R.string.taken)
+        pressBack()
+        pressBack()
         device.openNotification()
         sleep(2_000)
         ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+        notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
         makeNotificationExpanded(device, TEST_MED)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
-        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) == null)
+        internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
+        clickNotificationButton(device, getNotificationText(R.string.snooze))
+
+        val snoozeString = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze)
+        val input = device.wait(Until.findObject(By.hintContains(snoozeString)), 2_000)
+        input.text = "13"
+        device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
+        device.wait(Until.gone(By.textContains(snoozeString)), 2_000)
+        AndroidTestHelper.closeNotifications(device)
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            1,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
     }
 
     @Test

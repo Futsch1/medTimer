@@ -124,15 +124,25 @@ abstract class ReminderNotificationFactory(
     }
 
     private fun addSnoozeAction() {
-        builder.addAction(
-            R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
-        )
+        val action = intents.actionSnoozeRemoteInput
+        if (action != null) {
+            builder.addAction(action)
+        } else {
+            builder.addAction(
+                R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
+            )
+        }
     }
 
     private fun addTakenAction() {
-        builder.addAction(
-            R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
-        )
+        val action = intents.actionTaken
+        if (action != null) {
+            builder.addAction(action)
+        } else {
+            builder.addAction(
+                R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
+            )
+        }
     }
 
 }

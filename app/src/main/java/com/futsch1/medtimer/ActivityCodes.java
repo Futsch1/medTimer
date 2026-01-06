@@ -18,7 +18,10 @@ public class ActivityCodes {
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";
     public static final String TAKEN_ACTION = "com.futsch1.medTimer.TAKEN_ACTION";
     public static final String SNOOZE_ACTION = "com.futsch1.medTimer.SNOOZE_ACTION";
-
+    public static final String REMOTE_INPUT_SNOOZE_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION";
+    public static final String REMOTE_INPUT_VARIABLE_AMOUNT_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION";
+    public static final String VARIABLE_AMOUNT_ACTIVITY = "com.futsch1.medTimer.VARIABLE_AMOUNT_ACTIVITY";
+    public static final String CUSTOM_SNOOZE_ACTIVITY = "com.futsch1.medTimer.CUSTOM_SNOOZE_ACTIVITY";
 
     private ActivityCodes() {
         // Intended empty

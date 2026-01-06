@@ -42,29 +42,9 @@ private fun buildActionIntent(context: Context, processedNotificationData: Proce
     return actionIntent
 }
 
-/**
- * Creates an [Intent] to open the UI for entering a variable dosage amount.
- *
- * @param reminderEventId The ID of the reminder event.
- * @param amount The current/default amount.
- * @param name The name of the medicine.
- */
-fun getVariableAmountActionIntent(context: Context?, reminderEventId: Int, amount: String?, name: String): Intent {
-    val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction("VARIABLE_AMOUNT")
-    actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    actionIntent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID, reminderEventId)
-    actionIntent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
-    actionIntent.putExtra(ActivityCodes.EXTRA_MEDICINE_NAME, name)
-    return actionIntent
-}
-
-/**
- * Creates an [Intent] to open the UI for selecting a custom snooze duration.
- */
 fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: ReminderNotificationData): Intent {
     val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction("CUSTOM_SNOOZE")
+    actionIntent.setAction(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     reminderNotificationData.toIntent(actionIntent)
     return actionIntent
@@ -75,6 +55,14 @@ fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: Rem
  */
 fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
     return buildActionIntent(context, processedNotificationData, ActivityCodes.TAKEN_ACTION)
+}
+
+fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
+    val intent = Intent(context, MainActivity::class.java)
+    intent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
+    reminderNotificationData.toIntent(intent)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return intent
 }
 
 /**

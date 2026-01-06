@@ -11,9 +11,6 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderNotificationWorker
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
-import com.futsch1.medtimer.reminders.getSkippedActionIntent
-import com.futsch1.medtimer.reminders.getTakenActionIntent
-import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -71,14 +68,7 @@ class ScheduledReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-
-        view.context.sendBroadcast(
-            if (taken)
-                getTakenActionIntent(view.context, ProcessedNotificationData(listOf(reminderEvent.reminderEventId)))
-            else
-                getSkippedActionIntent(view.context, ProcessedNotificationData(listOf(reminderEvent.reminderEventId))),
-            "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
-        )
+        ReminderWorkerReceiver.requestReminderAction(view.context, scheduledReminder.reminder, reminderEvent, taken)
     }
 
     private suspend fun createReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {

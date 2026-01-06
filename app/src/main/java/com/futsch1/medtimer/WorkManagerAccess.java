@@ -15,7 +15,7 @@ public class WorkManagerAccess {
         // Intentionally empty
     }
 
-    public static WorkManager getWorkManager(Context context) {
+    public static synchronized WorkManager getWorkManager(Context context) {
         if (!WorkManager.isInitialized()) {
             IdlingThreadPoolExecutor executor = new IdlingThreadPoolExecutor(
                     "MedTimerWorkManagerExecutor", 1, 1, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
