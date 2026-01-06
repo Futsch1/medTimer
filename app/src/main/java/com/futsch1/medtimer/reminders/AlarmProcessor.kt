@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
-import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,62 +10,32 @@ import androidx.preference.PreferenceManager
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkRequest
-import androidx.work.Worker
-import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.WorkManagerAccess
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.reminders.ReminderProcessor.Companion.requestRescheduleNowForTests
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNowForTests
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 
 /**
- * Worker that schedules the next reminder.
+ * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
+ *
+ * This class is responsible for:
+ * - Setting exact or inexact alarms based on user preferences and Android version constraints.
+ * - Processing [ReminderNotificationData] to determine if a notification should be shown immediately via a worker
+ *   or scheduled for a future time.
+ * - Managing the cancellation of pending reminders to prevent duplicate or obsolete notifications.
+ * - Updating widgets when reminder schedules change.
+ * - Supporting debug rescheduling for testing purposes.
+ *
+ * @property context The application context used to access system services and shared preferences.
  */
-open class RescheduleWorker(@JvmField protected val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class AlarmProcessor(val context: Context) {
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
-    override fun doWork(): Result {
-        val startOfFunction = Instant.now()
-        val medicineRepository = MedicineRepository(applicationContext as Application)
-        val reminderScheduler = this.reminderScheduler
-        val fullMedicines = medicineRepository.medicines
-        val scheduledReminders: List<ScheduledReminder> =
-            reminderScheduler.schedule(fullMedicines, medicineRepository.getReminderEventsForScheduling(fullMedicines))
-        if (scheduledReminders.isNotEmpty()) {
-            val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
-            val scheduledReminderNotificationData =
-                ReminderNotificationData.fromScheduledReminders(if (combinedReminders) scheduledReminders else listOf(scheduledReminders[0]))
-            this.enqueueNotification(scheduledReminderNotificationData)
-        } else {
-            Log.d(LogTags.SCHEDULER, "No reminders scheduled")
-            this.cancelNextReminder()
-        }
-        Log.d(LogTags.SCHEDULER, "RescheduleWork finished in " + (Instant.now().toEpochMilli() - startOfFunction.toEpochMilli()) + "ms")
-
-        return Result.success()
-    }
-
-    private val reminderScheduler: ReminderScheduler
-        get() = ReminderScheduler(object : TimeAccess {
-            override fun systemZone(): ZoneId {
-                return ZoneId.systemDefault()
-            }
-
-            override fun localDate(): LocalDate {
-                return LocalDate.now()
-            }
-        }, PreferenceManager.getDefaultSharedPreferences(context))
-
-    protected fun enqueueNotification(scheduledReminderNotificationData: ReminderNotificationData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, inputData: Data) {
         // Apply debug rescheduling
         var scheduledInstant = scheduledReminderNotificationData.remindInstant
         val debugReschedule = DebugReschedule(context, inputData)
@@ -75,7 +44,9 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(PendingIntent.getBroadcast(context, 0, Intent(), PendingIntent.FLAG_IMMUTABLE))
         for (reminderEventId in scheduledReminderNotificationData.reminderEventIds) {
-            alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, Intent(), PendingIntent.FLAG_IMMUTABLE))
+            if (reminderEventId != 0) {
+                cancelPendingReminderNotifications(reminderEventId)
+            }
         }
 
         // If the alarm is in the future, schedule with alarm manager
@@ -91,7 +62,7 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
             Log.i(
                 LogTags.REMINDER,
                 String.format(
-                    "Scheduled reminder: %s",
+                    "Set alarm for reminder notification: %s",
                     scheduledReminderNotificationData
                 )
             )
@@ -102,23 +73,23 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
             Log.i(
                 LogTags.REMINDER,
                 String.format(
-                    "Scheduling reminder now: %s",
+                    "Show reminder notification now: %s",
                     scheduledReminderNotificationData
                 )
             )
             val builder = Data.Builder()
             scheduledReminderNotificationData.toBuilder(builder)
-            val reminderWorker: WorkRequest =
-                OneTimeWorkRequest.Builder(ReminderWorker::class.java)
+            val reminderNotificationWorker: WorkRequest =
+                OneTimeWorkRequest.Builder(ReminderNotificationWorker::class.java)
                     .setInputData(builder.build())
                     .build()
-            WorkManagerAccess.getWorkManager(context).enqueue(reminderWorker)
+            WorkManagerAccess.getWorkManager(context).enqueue(reminderNotificationWorker)
         }
 
         debugReschedule.scheduleRepeat()
     }
 
-    private fun cancelNextReminder() {
+    fun cancelNextReminder() {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
         val intent = getReminderAction(context)
@@ -126,8 +97,19 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
         alarmManager.cancel(pendingIntent)
     }
 
+    fun cancelPendingReminderNotifications(reminderEventId: Int) {
+        alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, getReminderAction(context), PendingIntent.FLAG_IMMUTABLE))
+        Log.d(LogTags.REMINDER, "Cancel pending reminder notification alarms for reID $reminderEventId")
+    }
+
+    fun cancelPendingReminderNotifications(reminderNotificationData: ReminderNotificationData) {
+        for (id in reminderNotificationData.reminderEventIds) {
+            cancelPendingReminderNotifications(id)
+        }
+    }
+
     private fun canScheduleExactAlarms(alarmManager: AlarmManager): Boolean {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val exactReminders = sharedPref.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
 
         return exactReminders && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
@@ -153,7 +135,7 @@ open class RescheduleWorker(@JvmField protected val context: Context, workerPara
 
         fun scheduleRepeat() {
             if (delay >= 0 && repeats > 0) {
-                requestRescheduleNowForTests(context, delay, repeats - 1)
+                requestScheduleNowForTests(context, delay, repeats - 1)
             }
         }
     }

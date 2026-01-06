@@ -17,7 +17,17 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
-class ReminderProcessor : BroadcastReceiver() {
+/**
+ * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
+ *
+ * This class handles incoming intents from notifications (like Dismiss, Taken, Snooze, or Reminder actions)
+ * and delegates them to the appropriate [androidx.work.ListenableWorker] via [androidx.work.WorkManager].
+ *
+ * It also provides static utility methods in its [companion object] to programmatically schedule
+ * various reminder tasks such as rescheduling notifications, handling stock updates, and
+ * repeating alerts.
+ */
+class ReminderWorkerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)
         when (intent.action) {
@@ -38,32 +48,32 @@ class ReminderProcessor : BroadcastReceiver() {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
 
-                val reminderWorker: WorkRequest =
-                    OneTimeWorkRequest.Builder(ReminderWorker::class.java)
+                val reminderNotificationWorker: WorkRequest =
+                    OneTimeWorkRequest.Builder(ReminderNotificationWorker::class.java)
                         .setInputData(builder.build())
                         .build()
-                workManager.enqueue(reminderWorker)
+                workManager.enqueue(reminderNotificationWorker)
             }
         }
     }
 
     companion object {
         @JvmStatic
-        fun requestReschedule(context: Context) {
+        fun requestScheduleNextNotification(context: Context) {
             val workManager = WorkManagerAccess.getWorkManager(context)
-            val rescheduleWorker =
-                OneTimeWorkRequest.Builder(RescheduleWorker::class.java)
+            val setAlarmForReminderNotification =
+                OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
                     .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
                     .build()
-            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, rescheduleWorker)
+            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, setAlarmForReminderNotification)
         }
 
         @JvmStatic
         @JvmOverloads
-        fun requestRescheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
+        fun requestScheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
             val workManager = WorkManagerAccess.getWorkManager(context)
-            val rescheduleWorker =
-                OneTimeWorkRequest.Builder(RescheduleWorker::class.java)
+            val setAlarmForReminderNotification =
+                OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
                     .setInputData(
                         Data.Builder()
                             .putLong(ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS, delay)
@@ -71,7 +81,7 @@ class ReminderProcessor : BroadcastReceiver() {
                             .build()
                     )
                     .build()
-            workManager.enqueue(rescheduleWorker)
+            workManager.enqueue(setAlarmForReminderNotification)
         }
 
         fun requestRepeat(context: Context, reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
@@ -101,12 +111,12 @@ class ReminderProcessor : BroadcastReceiver() {
             workManager.enqueue(stockHandlingWorker)
         }
 
-        fun requestSchedule(context: Context, reminderNotificationData: ReminderNotificationData) {
+        fun requestShowReminderNotification(context: Context, reminderNotificationData: ReminderNotificationData) {
             val workManager = WorkManagerAccess.getWorkManager(context)
             val builder = Data.Builder()
             reminderNotificationData.toBuilder(builder)
             val scheduleWork =
-                OneTimeWorkRequest.Builder(ScheduleWorker::class.java)
+                OneTimeWorkRequest.Builder(ShowReminderNotificationWorker::class.java)
                     .setInputData(builder.build())
                     .build()
             workManager.enqueue(scheduleWork)

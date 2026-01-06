@@ -35,7 +35,7 @@ import com.futsch1.medtimer.helpers.PathHelper;
 import com.futsch1.medtimer.helpers.SimpleIdlingResource;
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences;
 import com.futsch1.medtimer.medicine.tags.TagsFragment;
-import com.futsch1.medtimer.reminders.ReminderProcessor;
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -142,7 +142,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
                 medicineViewModel.medicineRepository.deleteReminderEvents();
-                ReminderProcessor.requestReschedule(context);
+                ReminderWorkerReceiver.requestScheduleNextNotification(context);
             });
             builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> { // Intentionally left empty
             });
@@ -188,8 +188,8 @@ public class OptionsMenu implements EntityEditOptionsMenu {
                 handler.post(() -> {
                     medicineViewModel.medicineRepository.deleteAll();
                     GenerateTestData generateTestData = new GenerateTestData(medicineViewModel, menuItem == itemWithEvents);
-                    generateTestData.generateTestMedicine();
-                    ReminderProcessor.requestReschedule(context);
+                    generateTestData.generateTestMedicine(menuItem == itemWithEvents);
+                    ReminderWorkerReceiver.requestScheduleNextNotification(context);
                     idlingResource.setIdle();
                 });
                 return true;

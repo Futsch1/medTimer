@@ -79,7 +79,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".reminders.ReminderProcessor"
+            android:name=".reminders.ReminderWorkerReceiver"
             android:enabled="true"
             android:exported="false"
             android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED"

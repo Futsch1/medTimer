@@ -23,7 +23,7 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.reminders.ReminderProcessor
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import java.text.NumberFormat
@@ -242,7 +242,7 @@ class MedicineStockTest : BaseTestHelper() {
         writeTo(R.id.amountLeft, "10")
         pressBack()
 
-        ReminderProcessor.requestRescheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
+        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
         sleep(2_000)
         device.openNotification()
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
