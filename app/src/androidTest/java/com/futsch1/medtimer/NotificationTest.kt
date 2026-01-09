@@ -266,6 +266,7 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.display_settings)
         clickOn(R.string.combine_notifications)
         pressBack()
+        pressBack()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -312,6 +313,7 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.display_settings)
         clickOn(R.string.big_notifications)
         clickOn(R.string.combine_notifications)
+        pressBack()
         pressBack()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
