@@ -5,7 +5,8 @@ This document outlines the flow of a reminder through the app and outlines the v
 ## General concept
 
 All activities around reminders are performed using [Android workers](https://developer.android.com/reference/androidx/work/Worker). They execute
-asynchronously on a background thread. The processer class is `ReminderProcessor`. This class also contains methods to enqueue new workers.
+asynchronously on a background thread. The receiver class that receives intents to start workers and enqueues them in the WorkManager
+is `ReminderWorkerReceiver`. This class also contains methods to enqueue new workers.
 
 Information about reminders is passed using the class `ReminderNotificationData`. This class contains a list of reminder and reminder event IDs
 (corresponding to the IDs in the Room database), the reminder [instant](https://developer.android.com/reference/java/time/Instant) and the notification ID.
@@ -21,7 +22,8 @@ For a scheduled reminder, `ReminderNotificationData` contains only the list of r
 
 ## Reminder flow
 
-When a scheduled reminder is triggered, `ReminderWorker` will process the `ReminderNotificationData` and create a `ReminderNotification` object. In the
+When a scheduled reminder is triggered, `ReminderNotificationWorker` will process the `ReminderNotificationData` and create a `ReminderNotification` object. In
+the
 creation process, reminder event database entries are created for each reminder. Furthermore, `ReminderNotification` will then contain the actual triplet of
 objects containing all data required for the reminder event (`FullMedicine`, `Reminder` and `ReminderEvent`). From this data, an [Android Notification]
 (https://developer.android.com/reference/kotlin/android/app/Notification) object is being created and raised via
