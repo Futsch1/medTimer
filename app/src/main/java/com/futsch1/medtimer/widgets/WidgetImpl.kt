@@ -35,10 +35,10 @@ class WidgetImpl(
 
         val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                SizeF(110f, 40f) to createRemoteViews(1, true),
-                SizeF(200f, 40f) to createRemoteViews(1, false),
-                SizeF(110f, 110f) to createRemoteViews(4, true),
-                SizeF(200f, 110f) to createRemoteViews(4, false)
+                SizeF(110f, 50f) to createRemoteViews(1, true),
+                SizeF(200f, 50f) to createRemoteViews(1, false),
+                SizeF(110f, 150f) to createRemoteViews(4, true),
+                SizeF(200f, 150f) to createRemoteViews(4, false)
             )
             RemoteViews(viewMapping)
         } else {
