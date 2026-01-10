@@ -52,7 +52,7 @@
     <string name="after_meal">po jídle</string>
     <string name="time_before_meal">x minut před jídlem</string>
     <string name="time_after">x hodin po léku y</string>
-    <string name="medicine_data">Data léku</string>
+    <string name="medicine_data">Data léků</string>
     <string name="export_csv">Exportovat jako CSV</string>
     <string name="export_pdf">Exportovat jako PDF</string>
     <string name="restore">Obnovit</string>
@@ -104,7 +104,7 @@
         <item quantity="other">Posledních %1$d dní</item>
     </plurals>
     <string name="name">Název</string>
-    <string name="event_data">Data události</string>
+    <string name="event_data">Data událostí</string>
     <string name="backup">Záloha</string>
     <string name="event_name">Název události</string>
     <string name="edit_event">Upravit událost</string>
@@ -144,8 +144,8 @@
     <string name="minutes_1">1 minuta</string>
     <string name="number_of_repetitions">Počet opakování</string>
     <string name="time_between_repetitions">Doba mezi opakováními</string>
-    <string name="repeat_reminders_summary">Automaticky opakovat připomenutí, dokud je označeno jako užito nebo přeskočeno</string>
-    <string name="add_linked_reminder">Přidat připomenutí pro následující dávku</string>
+    <string name="repeat_reminders_summary">Automaticky opakovat připomenutí, dokud není označeno jako užito nebo přeskočeno</string>
+    <string name="add_linked_reminder">Přidat připomenutí pro navazující dávku</string>
     <string name="linked_reminder_delay">Zpoždění následující dávky</string>
     <string name="delay">Zpoždění</string>
     <string name="linked_reminder_summary">Po připomenutí v %1$s</string>
@@ -178,7 +178,7 @@
     <string name="interval_start_time">Čas začátku intervalu</string>
     <string name="interval_start_reminded">Interval začne v době připomenutí</string>
     <string name="interval_start_processed">Interval začne v době užití nebo přeskočení</string>
-    <string name="every_interval">Každé %s</string>
+    <string name="every_interval">Každých %s</string>
     <string name="invalid_input">Neplatný vstup</string>
     <string name="off">Vypnuto</string>
     <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
@@ -225,7 +225,7 @@
     <string name="high_and_alarm">Vysoká + Alarm</string>
     <string name="enable_notification_alarm_dialog">Pro aktivaci zobrazení připomínek jako alarmy to povolte pro aplikaci MedTimer v následujícím menu</string>
     <string name="daily_from_to">Denní interval od %1$s do %2$s</string>
-    <string name="continuous_from">Nepřetržitý interval začínající v %1$s</string>
+    <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="reminder_status">Stav připomenutí</string>
     <string name="dosing_instructions">Instrukce k dávce</string>
     <string name="sample_instructions">Vyplnit ukázkovými instrukcemi</string>
@@ -237,9 +237,9 @@
     <string name="end_date">Koncové datum</string>
     <string name="linked_reminder">Propojené připomenutí</string>
     <string name="windowed_interval_reminder">Intervalové připomenutí v rámci rozsahu</string>
-    <string name="continuous_interval_reminder">Nepřetržité intervalové připomenutí</string>
+    <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
     <string name="time_based_reminder_help">Nastavte specifické časy (např. 8 ráno) a nastavte režim opakování. To umožňuje přesnou kontrolu nad konkrétními dny v týdnu, dny v měsící nebo složitějšími plány (jako \"každé 3 dny\").</string>
-    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřetržitý, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
+    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
     <string name="windowed_interval_reminder_help">Definuje denní aktivní rozsah časů (např. od 9 ráno do 9 večer), kde je první připomenutí vždy v počáteční čas. Následná připomenutí se spustí v pevné intervaly, dokud není dosaženo koncového času. Další den začíná odznova.</string>
     <string name="linked_reminder_help">Propojené připomenutí je navazující připomenutí, které je naplánováno po uplynutí určeného času po hlavním připomenutí. To je užitečné pro léky, které musí být užity v posloupnosti se specifickým odstupem mezi nimi.</string>
     <string name="add_linked_reminder_summary">Vytvoří navazující připomenutí, které je naplánováno na konkrétní časový odstup po tomto připomenutí.</string>
