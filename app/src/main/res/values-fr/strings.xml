@@ -259,5 +259,5 @@
     <string name="ignore_battery_optimization">Ignorer l\'optimisation de la batterie</string>
     <string name="reschedule_reminder">Reporter le rappel</string>
     <string name="interval_start_condition">Condition de démarrage de l&amp;apos;intervalle</string>
-<string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string></resources>
+<string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string>
 <string name="show_taken_time_in_overview">Afficher le temps écoulé dans l&amp;apos;aperçu</string></resources>

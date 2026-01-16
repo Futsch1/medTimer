@@ -261,5 +261,5 @@
     <string name="ignore_battery_optimization">Игнорировать оптимизацию батареи</string>
     <string name="reschedule_reminder">Перенести напоминание</string>
     <string name="interval_start_condition">Условие запуска интервала</string>
-<string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string></resources>
+<string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
 <string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string></resources>
