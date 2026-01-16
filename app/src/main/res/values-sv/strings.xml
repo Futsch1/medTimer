@@ -254,4 +254,5 @@
     <string name="ignore_battery_optimization">Ignorera batterioptimering</string>
     <string name="reschedule_reminder">Schemalägg om påminnelsen</string>
     <string name="interval_start_condition">Intervallets startvillkor</string>
+<string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string></resources>
 <string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string></resources>

@@ -254,4 +254,5 @@
     <string name="ignore_battery_optimization">Batterieoptimierung ignorieren</string>
     <string name="reschedule_reminder">Erinnerung verschieben</string>
     <string name="interval_start_condition">Intervallstartbedingung</string>
+<string name="tag_filter_active">Tag-Filter aktiv. Es werden nur Daten mit übereinstimmenden Tags exportiert.</string></resources>
 <string name="show_taken_time_in_overview">Übersicht über die benötigte Zeit anzeigen</string></resources>

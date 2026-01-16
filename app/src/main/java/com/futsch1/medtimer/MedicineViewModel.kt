@@ -34,7 +34,6 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     private val filteredReminderEvents = MediatorLiveData<List<ReminderEvent>>()
     private lateinit var liveReminderEvents: LiveData<List<ReminderEvent>>
 
-
     init {
         medicineRepository.liveMedicineToTags.observeForever {
             medicineToTags = it
@@ -97,6 +96,18 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
                 )
             }
             .collect(Collectors.toList())
+    }
+
+    fun filterEvents(events: List<ReminderEvent>): List<ReminderEvent> {
+        return getFilteredEvents(events, validTagIds.value!!, liveTags.value!!)
+    }
+
+    fun filterMedicines(medicines: List<FullMedicine>): List<FullMedicine> {
+        return getFiltered(medicines, validTagIds.value!!)
+    }
+
+    fun tagFilterActive(): Boolean {
+        return validTagIds.value != null && validTagIds.value!!.isNotEmpty()
     }
 
     private fun getFilteredEvents(

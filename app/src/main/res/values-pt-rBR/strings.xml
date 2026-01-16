@@ -259,4 +259,5 @@
     <string name="ignore_battery_optimization">Ignorar a otimização da bateria</string>
     <string name="reschedule_reminder">Reagendar lembrete</string>
     <string name="interval_start_condition">Condição de início do intervalo</string>
+<string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string></resources>
 <string name="show_taken_time_in_overview">Mostrar tempo decorrido na visão geral</string></resources>
