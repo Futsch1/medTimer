@@ -344,6 +344,12 @@ public class TimeHelper {
         LocaleContextWrapper.resetLocaleContextWrapper();
     }
 
+    public static boolean isSameDay(long secondsSinceEpochOne, long secondsSinceEpochTwo) {
+        return Instant.ofEpochSecond(secondsSinceEpochOne).atZone(ZoneId.systemDefault()).toLocalDate().equals(
+                Instant.ofEpochSecond(secondsSinceEpochTwo).atZone(ZoneId.systemDefault()).toLocalDate()
+        );
+    }
+
     public interface TimePickerResult {
         void onTimeSelected(int minutes);
     }

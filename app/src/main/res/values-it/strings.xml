@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Impostazioni</string>
     <string name="tab_overview">Panoramica</string>
@@ -259,4 +259,4 @@
     <string name="ignore_battery_optimization">Ignora l\'ottimizzazione della batteria</string>
     <string name="reschedule_reminder">Ripianifica il promemoria</string>
     <string name="interval_start_condition">Condizione di inizio dell\'intervallo</string>
-</resources>
+<string name="show_taken_time_in_overview">Mostra il tempo impiegato nella panoramica</string></resources>

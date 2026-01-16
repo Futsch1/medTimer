@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -249,4 +249,4 @@
     <string name="ignore_battery_optimization">忽略电池优化</string>
     <string name="reschedule_reminder">重新安排提醒</string>
     <string name="interval_start_condition">间隔启动条件</string>
-</resources>
+<string name="show_taken_time_in_overview">在概览中显示所用时间</string></resources>
