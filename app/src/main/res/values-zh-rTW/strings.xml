@@ -249,4 +249,5 @@
     <string name="ignore_battery_optimization">忽略電池優化</string>
     <string name="reschedule_reminder">重新安排提醒</string>
     <string name="interval_start_condition">間隔開始條件</string>
+    <string name="show_taken_time_in_overview">在總覽中顯示服用時間</string>
 </resources>
