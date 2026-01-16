@@ -11,6 +11,7 @@ import com.futsch1.medtimer.helpers.formatReminderString
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
+import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -34,6 +35,7 @@ class ReminderHelperTest {
         val contextMock = mock(Context::class.java)
         val preferencesMock = mock(SharedPreferences::class.java)
         Mockito.`when`(preferencesMock.getBoolean(USE_RELATIVE_DATE_TIME, false)).thenReturn(false)
+        Mockito.`when`(preferencesMock.getBoolean(SHOW_TAKEN_TIME_IN_OVERVIEW, false)).thenReturn(false)
 
         val utc = TimeZone.getTimeZone("WET")
         val usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US)
@@ -47,10 +49,10 @@ class ReminderHelperTest {
         timeZoneMock.`when`<Any> { TimeZone.getDefault() }.thenReturn(utc)
         val instant = Instant.ofEpochSecond(0)
         val instantLater = instant.plusSeconds(3601)
+        val instantOneDayLater = instant.plusSeconds(86400)
         val instantZero = Instant.ofEpochSecond(0)
-        val instantMock = mockStatic(Instant::class.java)
+        val instantMock = mockStatic(Instant::class.java, Mockito.CALLS_REAL_METHODS)
         instantMock.`when`<Any> { Instant.now() }.thenReturn(instant)
-        instantMock.`when`<Any> { Instant.ofEpochSecond(0) }.thenReturn(instantZero)
 
         // Standard case
         val medicine = FullMedicine()
@@ -117,5 +119,24 @@ class ReminderHelperTest {
         reminderEvent.amount = "6"
         resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesMock, false)
         assertEquals("In 1 hour, 1:00 AM: Test (6 Skipped)", resultReminder.toString())
+
+        // Test show taken time in overview
+        Mockito.`when`(preferencesMock.getBoolean(USE_RELATIVE_DATE_TIME, false)).thenReturn(false)
+        Mockito.`when`(preferencesMock.getBoolean(SHOW_TAKEN_TIME_IN_OVERVIEW, true)).thenReturn(true)
+
+        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+        reminderEvent.remindedTimestamp = instantZero.toEpochMilli() / 1000
+        reminderEvent.processedTimestamp = instantLater.toEpochMilli() / 1000
+        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        assertEquals("1:00 AM ➡ 2:00 AM\nTest (6)", resultReminder.toString())
+
+        reminderEvent.processedTimestamp = instantOneDayLater.toEpochMilli() / 1000
+        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        assertEquals("1:00 AM ➡ 1/2/70 1:00 AM\nTest (6)", resultReminder.toString())
+
+        // Cleanup
+        dateFormatMock.close()
+        timeZoneMock.close()
+        instantMock.close()
     }
 }
