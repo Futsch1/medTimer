@@ -17,10 +17,6 @@
         android:title="@string/use_relative_date_time"
         app:key="use_relative_date_time" />
     <SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:title="@string/show_taken_time_in_overview"
-        app:key="show_taken_time_in_overview" />
-    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:title="@string/system_locale"
         app:singleLineTitle="false"
