@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="tab_settings">Ayarlar</string>
     <string name="tab_overview">Genel Bakış</string>
@@ -254,4 +254,4 @@
     <string name="ignore_battery_optimization">Pil optimizasyonunu yoksay</string>
     <string name="reschedule_reminder">Hatırlatıcıyı yeniden planla</string>
     <string name="interval_start_condition">Aralık başlangıç koşulu</string>
-</resources>
+<string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string></resources>

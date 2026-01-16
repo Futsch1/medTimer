@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
 import java.time.LocalDate
 import java.util.Locale
 import java.util.stream.Collectors
@@ -56,9 +57,23 @@ fun setReminderActive(reminder: Reminder, active: Boolean) {
 fun formatReminderString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
-    val takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
+    var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp, false
     )
+    if (reminderEvent.processedTimestamp != 0L && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN &&
+        sharedPreferences.getBoolean(SHOW_TAKEN_TIME_IN_OVERVIEW, true)
+    ) {
+        val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
+            TimeHelper.secondsSinceEpochToConfigurableTimeString(
+                context, sharedPreferences, reminderEvent.processedTimestamp, false
+            )
+        else
+            TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
+                context, sharedPreferences, reminderEvent.processedTimestamp
+            )
+
+        takenTime = "$takenTime ➡ $processedTime"
+    }
 
     val intervalTime = getLastIntervalTime(context, reminderEvent)
 

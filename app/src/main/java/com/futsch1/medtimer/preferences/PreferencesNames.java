@@ -14,6 +14,8 @@ public class PreferencesNames {
     public static final String USE_RELATIVE_DATE_TIME = "use_relative_date_time";
     public static final String SYSTEM_LOCALE = "system_locale";
     public static final String COMBINE_NOTIFICATIONS = "combine_notifications";
+    public static final String SHOW_TAKEN_TIME_IN_OVERVIEW = "show_taken_time_in_overview";
+
 
     private PreferencesNames() {
         // Intended empty

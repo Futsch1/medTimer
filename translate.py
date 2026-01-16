@@ -56,6 +56,10 @@ for directory in glob.glob("app/src/main/res/*"):
 
     language = get_language_from_directory(directory)
 
+    # Skip Norwegian until it is fully translated
+    if language == "nb-rNO":
+        continue
+
     language_tree[language] = ET.parse(directory + "/strings.xml")
     resources = language_tree[language].getroot()
     language_strings = []
