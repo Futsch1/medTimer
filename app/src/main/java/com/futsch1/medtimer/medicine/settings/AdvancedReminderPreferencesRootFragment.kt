@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.advancedSettings
+package com.futsch1.medtimer.medicine.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
