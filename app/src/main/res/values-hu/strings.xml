@@ -254,4 +254,5 @@
     <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
+<string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
 <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string></resources>

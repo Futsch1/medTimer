@@ -259,5 +259,6 @@
     <string name="ignore_battery_optimization">Ignore battery optimization</string>
     <string name="reschedule_reminder">Reschedule reminder</string>
     <string name="interval_start_condition">Interval start condition</string>
+    <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
 </resources>

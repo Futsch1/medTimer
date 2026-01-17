@@ -26,9 +26,11 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
 
         for (medicine in medicines) {
             val activeReminders = getActiveReminders(medicine)
+            simplyPdfDocument.text.write(medicine.medicine.name, biggestBoldProperties)
             if (activeReminders.isNotEmpty()) {
-                simplyPdfDocument.text.write(medicine.medicine.name, biggestBoldProperties)
                 exportMedicine(simplyPdfDocument, activeReminders)
+            } else {
+                simplyPdfDocument.text.write(context.getString(R.string.no_reminders), standardTextProperties)
             }
         }
 

@@ -24,6 +24,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 
+import com.futsch1.medtimer.database.FullMedicine;
+import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.exporters.CSVEventExport;
 import com.futsch1.medtimer.exporters.CSVMedicineExport;
 import com.futsch1.medtimer.exporters.Export;
@@ -41,6 +43,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 
 public class OptionsMenu implements EntityEditOptionsMenu {
     private final Context context;
@@ -156,22 +159,22 @@ public class OptionsMenu implements EntityEditOptionsMenu {
 
         MenuItem item = menu.findItem(R.id.export_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVEventExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> eventExport(true));
             return true;
         });
         item = menu.findItem(R.id.export_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFEventExport(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> eventExport(false));
             return true;
         });
         item = menu.findItem(R.id.export_medicine_csv);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new CSVMedicineExport(medicineViewModel.medicineRepository.getMedicines(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> medicineExport(true));
             return true;
         });
         item = menu.findItem(R.id.export_medicine_pdf);
         item.setOnMenuItemClickListener(menuItem -> {
-            handler.post(() -> export(new PDFMedicineExport(medicineViewModel.medicineRepository.getMedicines(), fragment.getParentFragmentManager(), context)));
+            handler.post(() -> medicineExport(false));
             return true;
         });
     }
@@ -231,14 +234,22 @@ public class OptionsMenu implements EntityEditOptionsMenu {
         }
     }
 
-    private void export(Export export) {
-        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(export));
-        try {
-            export.export(csvFile);
-            FileHelper.shareFile(context, csvFile);
-        } catch (Export.ExporterException e) {
-            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
+    private void eventExport(boolean isCSV) {
+        if (medicineViewModel.tagFilterActive()) {
+            Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show();
         }
+        List<ReminderEvent> reminderEvents = medicineViewModel.filterEvents(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted());
+        Export exporter = isCSV ? new CSVEventExport(reminderEvents, fragment.getParentFragmentManager(), context) : new PDFEventExport(reminderEvents, fragment.getParentFragmentManager(), context);
+        export(exporter);
+    }
+
+    private void medicineExport(boolean isCSV) {
+        if (medicineViewModel.tagFilterActive()) {
+            Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show();
+        }
+        List<FullMedicine> medicines = medicineViewModel.filterMedicines(medicineViewModel.medicineRepository.getMedicines());
+        Export exporter = isCSV ? new CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context) : new PDFMedicineExport(medicines, fragment.getParentFragmentManager(), context);
+        export(exporter);
     }
 
     private void setupTagFilter() {
@@ -261,6 +272,16 @@ public class OptionsMenu implements EntityEditOptionsMenu {
                 item.setIcon(R.drawable.tag_fill);
             }
         });
+    }
+
+    private void export(Export export) {
+        File csvFile = new File(context.getCacheDir(), PathHelper.getExportFilename(export));
+        try {
+            export.export(csvFile);
+            FileHelper.shareFile(context, csvFile);
+        } catch (Export.ExporterException e) {
+            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

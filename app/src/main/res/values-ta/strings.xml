@@ -254,4 +254,5 @@
     <string name="ignore_battery_optimization">பேட்டரி உகப்பாக்கத்தைப் புறக்கணிக்கவும்</string>
     <string name="reschedule_reminder">நினைவூட்டலை மீண்டும் திட்டமிடுங்கள்</string>
     <string name="interval_start_condition">இடைவெளி தொடக்க நிலை</string>
+<string name="tag_filter_active">குறிச்சொல் வடிப்பான் செயலில் உள்ளது. பொருந்தும் குறிச்சொற்கள் கொண்ட தரவு மட்டுமே ஏற்றுமதி செய்யப்படும்.</string>
 <string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string></resources>

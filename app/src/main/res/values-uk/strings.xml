@@ -264,4 +264,5 @@
     <string name="ignore_battery_optimization">Ігнорувати оптимізацію батареї</string>
     <string name="reschedule_reminder">Перенести нагадування</string>
     <string name="interval_start_condition">Умова запуску інтервалу</string>
+<string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
 <string name="show_taken_time_in_overview">Показати витрачений час в огляді</string></resources>

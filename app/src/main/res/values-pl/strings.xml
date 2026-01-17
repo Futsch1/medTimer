@@ -264,4 +264,5 @@
     <string name="ignore_battery_optimization">Ignoruj optymalizację baterii</string>
     <string name="reschedule_reminder">Zmień termin przypomnienia</string>
     <string name="interval_start_condition">Warunek rozpoczęcia interwału</string>
+<string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
 <string name="show_taken_time_in_overview">Pokaż czas trwania w przeglądzie</string></resources>

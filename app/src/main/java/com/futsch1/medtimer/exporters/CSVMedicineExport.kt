@@ -37,10 +37,13 @@ class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
             )
             csvFile.write(line)
         }
+        if (reminders.isEmpty()) {
+            csvFile.write(String.format("%s;%s;%s\n", medicine.medicine.name, "", context.getString(R.string.no_reminders)))
+        }
     }
 
 
-    override fun getExtension(): String? {
+    override fun getExtension(): String {
         return "csv"
     }
 

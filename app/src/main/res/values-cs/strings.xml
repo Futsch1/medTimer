@@ -264,4 +264,5 @@
     <string name="ignore_battery_optimization">Ignorovat optimalizaci baterie</string>
     <string name="reschedule_reminder">Přeplánovat připomenutí</string>
     <string name="interval_start_condition">Podmínka začátku intervalu</string>
-<string name="show_taken_time_in_overview">Zobrazit čas v přehledu</string></resources>
+<string name="show_taken_time_in_overview">Zobrazit čas v přehledu</string>
+<string name="tag_filter_active">Filtr značek aktivní. Budou exportována pouze data se shodnými značkami.</string></resources>
