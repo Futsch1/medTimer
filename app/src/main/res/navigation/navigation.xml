@@ -119,7 +119,7 @@
         android:label="@string/tab_overview" />
     <fragment
         android:id="@+id/advancedReminderPreferencesRootFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesRootFragment"
+        android:name="com.futsch1.medtimer.medicine.settings.AdvancedReminderPreferencesRootFragment"
         android:label="@string/advanced_settings">
         <argument
             android:name="reminderId"
@@ -136,7 +136,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesInstructionsFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesInstructionsFragment"
+        android:name="com.futsch1.medtimer.medicine.settings.AdvancedReminderPreferencesInstructionsFragment"
         android:label="@string/dosing_instructions">
         <argument
             android:name="reminderId"
@@ -144,7 +144,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesStatusFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesStatusFragment"
+        android:name="com.futsch1.medtimer.medicine.settings.AdvancedReminderPreferencesStatusFragment"
         android:label="@string/reminder_status">
         <argument
             android:name="reminderId"
@@ -152,7 +152,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesCyclicFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesCyclicFragment"
+        android:name="com.futsch1.medtimer.medicine.settings.AdvancedReminderPreferencesCyclicFragment"
         android:label="@string/cycle_reminder">
         <argument
             android:name="reminderId"
