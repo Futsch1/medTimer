@@ -28,6 +28,7 @@ class Autostart : BroadcastReceiver() {
     companion object {
         var hasRestored = false
 
+        @SuppressWarnings("kotlin:S5320") // Sending to local receiver is safe
         fun restoreNotifications(context: Context) {
             if (hasRestored) {
                 return
@@ -49,7 +50,7 @@ class Autostart : BroadcastReceiver() {
                     Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
                     val intent = getReminderAction(context)
                     scheduledReminderNotificationData.toIntent(intent)
-                    context.sendBroadcast(intent, "com.futsch1.medTimer.NOTIFICATION_PROCESSED")
+                    context.sendBroadcast(intent)
                 }
             }
         }
