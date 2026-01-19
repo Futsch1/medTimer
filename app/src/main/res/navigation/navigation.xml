@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesRootFragment"
             app:destination="@id/advancedReminderPreferencesRootFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_stockSettingsFragment"
+            app:destination="@id/stockSettingsFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -162,4 +165,12 @@
         android:id="@+id/alarmSettingsFragment"
         android:name="com.futsch1.medtimer.preferences.AlarmSettingsFragment"
         android:label="@string/alarm_settings" />
+    <fragment
+        android:id="@+id/stockSettingsFragment"
+        android:name="com.futsch1.medtimer.medicine.stockSettings.StockSettingsFragment"
+        android:label="@string/medicine_stock">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

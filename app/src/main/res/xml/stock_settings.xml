@@ -11,6 +11,7 @@
             app:key="stock_reminder"
             app:entries="@array/stock_reminder"
             app:entryValues="@array/values_0_to_2"
+            app:useSimpleSummaryProvider="true"
             app:title="@string/out_of_stock_reminder" />
         <EditTextPreference
             app:key="stock_threshold"

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.medicine.stockSettings
 
 import android.os.Bundle
 import android.text.InputType
+import android.text.method.DigitsKeyListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.EditTextPreference
 import com.futsch1.medtimer.R
@@ -9,6 +10,9 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
+import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.medicine.addDoubleValidator
+import java.text.DecimalFormatSymbols
 
 class StockSettingsFragment(
 ) : EntityPreferencesFragment<Medicine>(
@@ -18,7 +22,7 @@ class StockSettingsFragment(
     mapOf(
 
     ),
-    listOf("stock_reminder")
+    listOf("stock_unit")
 ) {
     override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<Medicine> {
         return MedicineDataStore(requireArguments.getInt("medicineId"), requireContext(), getEntityViewModel().medicineRepository)
@@ -29,9 +33,17 @@ class StockSettingsFragment(
     }
 
     override fun customSetup(entity: Medicine) {
-        findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
-            editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
+        findPreference<EditTextPreference>("amount")!!.setOnBindEditTextListener { editText ->
+            val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+            editText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
+            editText.addDoubleValidator()
+            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
-        findPreference<EditTextPreference>("cycle_pause_days")?.setOnBindEditTextListener { editText -> editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED }
+    }
+
+    override fun onEntityUpdated(entity: Medicine) {
+        super.onEntityUpdated(entity)
+
+        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
     }
 }
