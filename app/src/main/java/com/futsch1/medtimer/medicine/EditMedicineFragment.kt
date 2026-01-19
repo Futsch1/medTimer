@@ -182,7 +182,7 @@ class EditMedicineFragment :
         openStockTracking.setOnClickListener { _: View? ->
             val navController = findNavController(openStockTracking)
             val action =
-                EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineStockFragment(getEntityId())
+                EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(getEntityId())
             navController.navigate(action)
         }
     }
