@@ -1,19 +1,33 @@
-package com.futsch1.medtimer.medicine.settings
+package com.futsch1.medtimer.helpers
 
+import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
+import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.MedicineRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-abstract class AdvancedReminderPreferencesFragment(
+abstract class EntityDataStore<T> : PreferenceDataStore() {
+    abstract var entity: T
+    abstract val entityId: Int
+}
+
+abstract class EntityViewModel<T>(application: Application) : AndroidViewModel(application) {
+    abstract fun getFlow(id: Int): Flow<T?>
+    abstract val medicineRepository: MedicineRepository
+}
+
+
+abstract class EntityPreferencesFragment<T>(
     val preferencesResId: Int,
     val links: Map<String, (Int) -> NavDirections>,
     val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
@@ -21,25 +35,22 @@ abstract class AdvancedReminderPreferencesFragment(
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : PreferenceFragmentCompat() {
-    var reminderId: Int = 0
-    lateinit var reminderDataStore: ReminderDataStore
+    lateinit var dataStore: EntityDataStore<T>
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        reminderId = AdvancedReminderPreferencesRootFragmentArgs.fromBundle(requireArguments()).getReminderId()
-        val reminderViewModel = ViewModelProvider(this)[ReminderViewModel::class.java]
-
         postponeEnterTransition()
 
         this.lifecycleScope.launch(ioDispatcher) {
             try {
-                reminderDataStore = ReminderDataStore(reminderId, requireContext(), reminderViewModel.medicineRepository)
-                preferenceManager.preferenceDataStore = reminderDataStore
+                dataStore = getEntityDataStore(requireArguments())
+
+                preferenceManager.preferenceDataStore = dataStore
                 this.launch(mainDispatcher) {
                     setPreferencesFromResource(preferencesResId, rootKey)
-                    observeUserData(reminderViewModel, reminderId)
+                    observeUserData()
                     setupLinks()
                     setupOnClick()
-                    customSetup(reminderDataStore.reminder)
+                    customSetup(dataStore.entity)
 
                     startPostponedEnterTransition()
                 }
@@ -49,18 +60,22 @@ abstract class AdvancedReminderPreferencesFragment(
         }
     }
 
-    open fun customSetup(reminder: Reminder) {
-        // Intentionally empty
-    }
+    abstract fun getEntityDataStore(
+        requireArguments: Bundle
+    ): EntityDataStore<T>
 
-    private fun observeUserData(reminderViewModel: ReminderViewModel, reminderId: Int) {
+    abstract fun getEntityViewModel(): EntityViewModel<T>
+
+    abstract fun customSetup(entity: T)
+
+    private fun observeUserData() {
         lifecycleScope.launch {
-            reminderViewModel.getReminderFlow(reminderId).collect { reminder ->
-                if (reminder == null) {
+            getEntityViewModel().getFlow(dataStore.entityId).collect { entity ->
+                if (entity == null) {
                     return@collect
                 }
-                reminderDataStore.reminder = reminder
-                onReminderUpdated(reminder)
+                dataStore.entity = entity
+                onEntityUpdated(entity)
             }
         }
     }
@@ -73,7 +88,7 @@ abstract class AdvancedReminderPreferencesFragment(
                 val preference = findPreference<Preference?>(link.key)
                 preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                     try {
-                        navController.navigate(link.value(reminderId))
+                        navController.navigate(link.value(dataStore.entityId))
                     } catch (_: IllegalArgumentException) {
                         // Intentionally empty (monkey test can cause this to fail)
                     }
@@ -95,7 +110,7 @@ abstract class AdvancedReminderPreferencesFragment(
         }
     }
 
-    open fun onReminderUpdated(reminder: Reminder) {
+    open fun onEntityUpdated(entity: T) {
         for (simpleSummaryKey in simpleSummaryKeys) {
             val preference = findPreference<Preference?>(simpleSummaryKey)
             preference!!.summary = preferenceManager.preferenceDataStore?.getString(simpleSummaryKey, "?")
