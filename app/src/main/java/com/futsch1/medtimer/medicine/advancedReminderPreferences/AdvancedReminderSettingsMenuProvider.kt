@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.settings
+package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.view.Menu
 import android.view.MenuInflater

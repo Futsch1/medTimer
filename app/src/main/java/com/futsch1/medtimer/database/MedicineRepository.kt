@@ -67,6 +67,11 @@ class MedicineRepository(application: Application?) {
         return medicineDao.getReminderFlow(reminderId)
     }
 
+    fun getMedicineFlow(medicineId: Int): Flow<Medicine> {
+        return medicineDao.getMedicineFlow(medicineId)
+    }
+
+
     fun getLiveReminderEvents(timeStamp: Long, withDeleted: Boolean): LiveData<List<ReminderEvent>> {
         return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, if (withDeleted) allStatusValues else statusValuesWithoutDelete)
     }
