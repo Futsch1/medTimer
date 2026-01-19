@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="amount"
+        app:title="@string/amount" />
+    <EditTextPreference
+        app:key="stock_unit"
+        app:title="@string/unit" />
+    <PreferenceCategory app:title="@string/reminder_threshold">
+        <ListPreference
+            app:key="stock_reminder"
+            app:entries="@array/stock_reminder"
+            app:entryValues="@array/values_0_to_2"
+            app:title="@string/out_of_stock_reminder" />
+        <EditTextPreference
+            app:key="stock_threshold"
+            app:title="@string/reminder_threshold" />
+        <EditTextPreference
+            app:key="stock_run_out_date"
+            app:selectable="false"
+            app:title="@string/estimated_run_out_date" />
+        <Preference
+            app:key="stock_run_out_to_calendar"
+            app:title="@string/create_calendar_entry" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/refill">
+        <EditTextPreference
+            app:key="stock_refill_size"
+            app:title="@string/refill_size" />
+        <Preference
+            app:key="stock_refill_now"
+            app:title="@string/refill_now" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

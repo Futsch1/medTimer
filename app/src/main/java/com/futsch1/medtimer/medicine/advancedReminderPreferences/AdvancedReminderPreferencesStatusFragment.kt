@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.settings
+package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
@@ -17,11 +17,11 @@ class AdvancedReminderPreferencesStatusFragment(
     listOf("period_start_date", "period_end_date")
 ) {
 
-    override fun onReminderUpdated(reminder: Reminder) {
-        super.onReminderUpdated(reminder)
+    override fun onEntityUpdated(entity: Reminder) {
+        super.onEntityUpdated(entity)
 
-        findPreference<Preference>("period_start_date")?.isVisible = reminder.periodStart != 0L
-        findPreference<Preference>("period_end_date")?.isVisible = reminder.periodEnd != 0L
+        findPreference<Preference>("period_start_date")?.isVisible = entity.periodStart != 0L
+        findPreference<Preference>("period_end_date")?.isVisible = entity.periodEnd != 0L
     }
 
 }

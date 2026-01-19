@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.settings
+package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.text.InputType
 import androidx.preference.EditTextPreference
@@ -16,7 +16,7 @@ class AdvancedReminderPreferencesCyclicFragment(
     listOf("cycle_start_date", "cycle_consecutive_days", "cycle_pause_days")
 ) {
 
-    override fun customSetup(reminder: Reminder) {
+    override fun customSetup(entity: Reminder) {
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
             editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
         }
