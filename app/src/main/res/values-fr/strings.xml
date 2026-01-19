@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="tab_settings">Paramètres</string>
     <string name="tab_overview">Aperçu</string>
@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Date/heure relative</string>
     <string name="invalid_amount">Le montant doit contenir un nombre pour activer le suivi du stock de médicaments pour ce rappel.</string>
     <string name="sticky_on_lockscreen">Rappels persistants sur l\'écran de verrouillage</string>
-    <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être ignorés depuis l\'écran de verrouillage, uniquement depuis le panneau de notifications\nRemarque : certaines montres intelligentes peuvent ne plus afficher les notifications</string>
+    <string name="sticky_on_lockscreen_summary">Les rappels ne peuvent pas être ignorés depuis l\'écran de verrouillage mais uniquement depuis le panneau de notifications\nRemarque : certaines montres intelligentes peuvent ne plus afficher les notifications</string>
     <string name="big_notifications">Gros boutons de notification</string>
     <string name="please_wait">Veuillez patienter…</string>
     <string name="interval_time">Intervalle %s</string>
@@ -259,5 +259,6 @@
     <string name="ignore_battery_optimization">Ignorer l\'optimisation de la batterie</string>
     <string name="reschedule_reminder">Reporter le rappel</string>
     <string name="interval_start_condition">Condition de démarrage de l&amp;apos;intervalle</string>
-<string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string>
-<string name="show_taken_time_in_overview">Afficher le temps écoulé dans l&amp;apos;aperçu</string></resources>
+    <string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string>
+    <string name="show_taken_time_in_overview">Afficher le temps écoulé dans l&amp;apos;aperçu</string>
+</resources>
