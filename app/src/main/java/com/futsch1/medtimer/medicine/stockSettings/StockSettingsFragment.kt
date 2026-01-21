@@ -38,7 +38,7 @@ class StockSettingsFragment(
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
-            "refill_now" to { _, _ -> refillNow() }
+            "stock_refill_now" to { _, _ -> refillNow() }
         )
 
     override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<Medicine> {
