@@ -17,7 +17,7 @@ class MedicineDataStore(
             "stock_unit" -> entity.unit
             "stock_reminder" -> entity.outOfStockReminder.ordinal.toString()
             "stock_threshold" -> MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, "")
-            "stock_refill_size" -> MedicineHelper.formatAmount(if (entity.refillSizes.isNotEmpty()) entity.refillSizes[0] else 0.0, "")
+            "stock_refill_size" -> MedicineHelper.formatAmount(entity.refillSize, "")
             else -> defValue
         }
     }
