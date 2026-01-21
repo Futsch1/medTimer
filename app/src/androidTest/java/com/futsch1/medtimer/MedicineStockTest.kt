@@ -1,10 +1,7 @@
 package com.futsch1.medtimer
 
 import android.content.Context
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
@@ -21,12 +18,11 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
-import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -42,19 +38,25 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("Of the pills 3.5 are to be taken", 10)
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "")
-        writeTo(R.id.reminderThreshold, "")
-        writeTo(R.id.refillSize, "")
+        clickOn(R.string.amount)
+        setValue("")
+        clickOn(R.string.reminder_threshold)
+        setValue("")
+        clickOn(R.string.refill_size)
+        setValue("")
         pressBack()
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "10.5")
-        writeTo(R.id.stockUnit, "pills")
-        clickOn(R.id.medicineStockReminder)
-        onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
-            .perform(click())
-        writeTo(R.id.reminderThreshold, "4")
-        writeTo(R.id.refillSize, "10.5")
+        clickOn(R.string.amount)
+        setValue("10.5")
+        clickOn(R.string.unit)
+        setValue("pills")
+        clickOn(R.string.out_of_stock_reminder)
+        clickOn(R.string.once_below_threshold)
+        clickOn(R.string.reminder_threshold)
+        setValue("4")
+        clickOn(R.string.refill_size)
+        setValue("10.8")
         pressBack()
         pressBack()
 
@@ -87,7 +89,7 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, "pills")
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
-        assertDisplayed(R.id.amountLeft, "3.5")
+        assertDisplayed(MedicineHelper.formatAmount(3.5, "pills"))
         pressBack()
         pressBack()
 
@@ -102,17 +104,13 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
-        clickOn(R.id.refillNow)
+        clickOn(R.string.refill_now)
 
-        val numberFormat = NumberFormat.getNumberInstance()
-        numberFormat.minimumFractionDigits = 0
-        numberFormat.maximumFractionDigits = 2
-
-        assertDisplayed(R.id.amountLeft, numberFormat.format(10.5))
+        assertDisplayed(MedicineHelper.formatAmount(10.8, "pills"))
         pressBack()
         pressBack()
 
-        assertContains(R.id.medicineName, numberFormat.format(10.5))
+        assertContains(R.id.medicineName, MedicineHelper.formatAmount(10.8, "pills"))
         assertNotContains(R.id.medicineName, "⚠")
         assertContains(R.id.medicineName, "pills")
     }
@@ -144,11 +142,12 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("TestMed")
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "120")
-        writeTo(R.id.stockUnit, "pills")
-        clickOn(R.id.medicineStockReminder)
-        onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
-            .perform(click())
+        clickOn(R.string.amount)
+        setValue("120")
+        clickOn(R.string.unit)
+        setValue("pills")
+        clickOn(R.string.out_of_stock_reminder)
+        clickOn(R.string.once_below_threshold)
         pressBack()
 
         AndroidTestHelper.createIntervalReminder("So many pills - 130", 10)
@@ -170,16 +169,17 @@ class MedicineStockTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
     fun reminderAmountWarningTest() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
         AndroidTestHelper.createMedicine("Test")
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "10.5")
-        writeTo(R.id.stockUnit, "pills")
-        clickOn(R.id.medicineStockReminder)
-        onData(equalTo(context.getString(R.string.once_below_threshold))).inRoot(RootMatchers.isPlatformPopup())
-            .perform(click())
-        writeTo(R.id.reminderThreshold, "4")
+        clickOn(R.string.amount)
+        setValue("10.5")
+        clickOn(R.string.unit)
+        setValue("pills")
+        clickOn(R.string.out_of_stock_reminder)
+        clickOn(R.string.once_below_threshold)
+        clickOn(R.string.reminder_threshold)
+        setValue("4")
         pressBack()
 
         clickOn(R.id.addReminder)
@@ -195,17 +195,15 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "10005")
-        writeTo(R.id.stockUnit, "pills")
+        clickOn(R.string.amount)
+        setValue("10005")
+        clickOn(R.string.unit)
+        setValue("pills")
 
         pressBack()
         clickOn(R.id.openStockTracking)
-        assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
-        assertDisplayed(R.id.runOut, "---")
-
-        pressBack()
-        clickOn(R.id.openStockTracking)
-        assertDisplayed(MedicineHelper.formatAmount(10005.0, ""))
+        assertDisplayed(MedicineHelper.formatAmount(10005.0, "pills"))
+        assertDisplayed("---")
     }
 
     @Test
@@ -217,11 +215,13 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("3", LocalTime.of(1, 0))
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "10")
-        assertDisplayed(R.id.runOut, TimeHelper.localDateToString(context, LocalDate.now().plusDays(4)))
+        clickOn(R.string.amount)
+        setValue("10")
+        assertDisplayed(TimeHelper.localDateToString(context, LocalDate.now().plusDays(4)))
 
-        writeTo(R.id.amountLeft, "13")
-        assertDisplayed(R.id.runOut, TimeHelper.localDateToString(context, LocalDate.now().plusDays(5)))
+        clickOn(R.string.amount)
+        setValue("13")
+        assertDisplayed(TimeHelper.localDateToString(context, LocalDate.now().plusDays(5)))
     }
 
     @Test
@@ -239,7 +239,8 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
 
         clickOn(R.id.openStockTracking)
-        writeTo(R.id.amountLeft, "10")
+        clickOn(R.string.amount)
+        setValue("10")
         pressBack()
 
         ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
@@ -251,6 +252,6 @@ class MedicineStockTest : BaseTestHelper() {
         sleep(1_000)
 
         clickOn(R.id.openStockTracking)
-        assertDisplayed(R.id.amountLeft, "5")
+        assertDisplayed("5")
     }
 }
