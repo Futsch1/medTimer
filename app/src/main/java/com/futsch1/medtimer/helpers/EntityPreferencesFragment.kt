@@ -26,11 +26,10 @@ abstract class EntityViewModel<T>(application: Application) : AndroidViewModel(a
     abstract val medicineRepository: MedicineRepository
 }
 
-
 abstract class EntityPreferencesFragment<T>(
     val preferencesResId: Int,
     val links: Map<String, (Int) -> NavDirections>,
-    val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
+    open val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
     val simpleSummaryKeys: List<String>,
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
