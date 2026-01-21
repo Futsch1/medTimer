@@ -16,19 +16,19 @@ class MedicineDataStore(
             "amount" -> MedicineHelper.formatAmount(entity.amount, "")
             "stock_unit" -> entity.unit
             "stock_reminder" -> entity.outOfStockReminder.ordinal.toString()
+            "stock_threshold" -> MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, "")
+            "stock_refill_size" -> MedicineHelper.formatAmount(if (entity.refillSizes.isNotEmpty()) entity.refillSizes[0] else 0.0, "")
             else -> defValue
         }
     }
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            "amount" -> try {
-                entity.amount = value!!.toDouble()
-            } catch (_: NumberFormatException) { /* Intentionally empty */
-            }
-
+            "amount" -> MedicineHelper.parseAmount(value)?.let { entity.amount = it }
             "stock_unit" -> entity.unit = value!!
             "stock_reminder" -> entity.outOfStockReminder = Medicine.OutOfStockReminderType.entries[value!!.toInt()]
+            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.outOfStockReminderThreshold = it }
+            "stock_refill_size" -> MedicineHelper.parseAmount(value)?.let { entity.refillSizes = arrayListOf(it) }
         }
         medicineRepository.updateMedicine(entity)
     }
