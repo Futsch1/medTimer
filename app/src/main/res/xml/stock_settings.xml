@@ -6,7 +6,7 @@
     <EditTextPreference
         app:key="stock_unit"
         app:title="@string/unit" />
-    <PreferenceCategory app:title="@string/reminder_threshold">
+    <PreferenceCategory app:title="@string/out_of_stock_notification_title">
         <ListPreference
             app:key="stock_reminder"
             app:entries="@array/stock_reminder"
