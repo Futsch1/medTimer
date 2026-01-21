@@ -118,6 +118,10 @@ public class Medicine {
                 showNotificationAsAlarm == that.showNotificationAsAlarm;
     }
 
+    public double getRefillSize() {
+        return refillSizes.isEmpty() ? 0.0 : refillSizes.get(0);
+    }
+
     public enum OutOfStockReminderType {
         OFF,
         ONCE,
