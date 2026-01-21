@@ -2,8 +2,11 @@ package com.futsch1.medtimer.medicine.stockSettings
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +22,6 @@ import com.futsch1.medtimer.helpers.EntityViewModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
-import com.futsch1.medtimer.medicine.addDoubleValidator
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
@@ -35,7 +37,8 @@ class StockSettingsFragment(
 ) {
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
-            "stock_run_out_to_calendar" to { _, _ -> addToCalendar() }
+            "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
+            "refill_now" to { _, _ -> refillNow() }
         )
 
     override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<Medicine> {
@@ -60,6 +63,8 @@ class StockSettingsFragment(
         calculateRunOutDate(entity)
 
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
+        findPreference<EditTextPreference>("stock_threshold")!!.summary = MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, entity.unit)
+        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.refillSize, entity.unit)
     }
 
     private fun calculateRunOutDate(entity: Medicine) {
@@ -96,4 +101,33 @@ class StockSettingsFragment(
             }
         }
     }
+
+    private fun refillNow() {
+        var amount = dataStore.entity.amount
+        val refillSize = dataStore.entity.refillSize
+        amount += refillSize
+        dataStore.putString("amount", MedicineHelper.formatAmount(amount, ""))
+    }
+}
+
+fun EditText.addDoubleValidator() {
+    addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // Only afterTextChanged required
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Only afterTextChanged required
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (s == null || s.toString().isEmpty()) return
+
+            val parsed: Double? = MedicineHelper.parseAmount(s.toString())
+            if (parsed == null || parsed.isNaN() || parsed < 0.0) {
+                // If the input is not a valid double, remove the last character
+                s.delete(s.length - 1, s.length)
+            }
+        }
+    })
 }
