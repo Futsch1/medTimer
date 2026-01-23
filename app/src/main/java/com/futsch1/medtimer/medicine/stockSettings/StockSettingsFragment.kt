@@ -65,6 +65,11 @@ class StockSettingsFragment(
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
         findPreference<EditTextPreference>("stock_threshold")!!.summary = MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, entity.unit)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.refillSize, entity.unit)
+        if (entity.outOfStockReminder != Medicine.OutOfStockReminderType.OFF && entity.amount <= entity.outOfStockReminderThreshold) {
+            findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
+        } else {
+            findPreference<EditTextPreference>("amount")!!.icon = null
+        }
     }
 
     private fun calculateRunOutDate(entity: Medicine) {
