@@ -276,4 +276,4 @@
     <string name="interval_start_condition">حالة بدء الفاصل الزمني</string>
     <string name="tag_filter_active">مرشح العلامات نشط. سيتم تصدير البيانات التي تحتوي على علامات مطابقة فقط.</string>
     <string name="show_taken_time_in_overview">عرض الوقت المستغرق في النظرة العامة</string>
-</resources>
+<string name="refill">إعادة تعبئة المخزون</string></resources>

@@ -255,4 +255,4 @@
     <string name="reschedule_reminder">Hatırlatıcıyı yeniden planla</string>
     <string name="interval_start_condition">Aralık başlangıç koşulu</string>
 <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
-<string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string></resources>
+<string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string><string name="refill">Stok yenileme</string></resources>

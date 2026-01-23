@@ -255,4 +255,4 @@
     <string name="reschedule_reminder">Flyt påmindelse</string>
     <string name="interval_start_condition">Intervallets starttilstand</string>
 <string name="tag_filter_active">Tagfilter aktivt. Kun data med matchende tags eksporteres.</string>
-<string name="show_taken_time_in_overview">Vis den anvendte tid i oversigten</string></resources>
+<string name="show_taken_time_in_overview">Vis den anvendte tid i oversigten</string><string name="refill">Lageropfyldning</string></resources>

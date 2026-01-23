@@ -262,4 +262,4 @@
     <string name="reschedule_reminder">Перенести напоминание</string>
     <string name="interval_start_condition">Условие запуска интервала</string>
 <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
-<string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string></resources>
+<string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string><string name="refill">Пополнение запасов</string></resources>

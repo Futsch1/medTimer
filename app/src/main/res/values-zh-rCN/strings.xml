@@ -250,4 +250,4 @@
     <string name="reschedule_reminder">重新安排提醒</string>
     <string name="interval_start_condition">间隔启动条件</string>
 <string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
-<string name="show_taken_time_in_overview">在概览中显示所用时间</string></resources>
+<string name="show_taken_time_in_overview">在概览中显示所用时间</string><string name="refill">库存补货</string></resources>

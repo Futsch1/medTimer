@@ -22,6 +22,7 @@
             app:title="@string/estimated_run_out_date" />
         <Preference
             app:key="stock_run_out_to_calendar"
+            app:icon="@drawable/calendar_event"
             app:title="@string/create_calendar_entry" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/refill">
@@ -30,6 +31,7 @@
             app:title="@string/refill_size" />
         <Preference
             app:key="stock_refill_now"
-            app:title="@string/refill_now" />
+            app:title="@string/refill_now"
+            app:icon="@drawable/cart2"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

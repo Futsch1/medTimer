@@ -261,4 +261,4 @@
     <string name="interval_start_condition">Condizione di inizio dell\'intervallo</string>
     <string name="tag_filter_active">Filtro tag attivo. Verranno esportati solo i dati con tag corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra il tempo impiegato nella panoramica</string>
-</resources>
+<string name="refill">Rifornimento scorte</string></resources>
