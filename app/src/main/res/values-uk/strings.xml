@@ -266,4 +266,5 @@
     <string name="interval_start_condition">Умова запуску інтервалу</string>
     <string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
     <string name="show_taken_time_in_overview">Показати витрачений час в огляді</string>
+    <string name="refill">Поповнення запасів</string>
 </resources>

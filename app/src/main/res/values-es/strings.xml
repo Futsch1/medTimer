@@ -261,4 +261,5 @@
     <string name="interval_start_condition">Condición de inicio de intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
     <string name="show_taken_time_in_overview">Mostrar tiempo empleado en resumen</string>
+    <string name="refill">Reposición de existencias</string>
 </resources>

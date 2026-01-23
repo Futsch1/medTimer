@@ -261,4 +261,5 @@
     <string name="interval_start_condition">Condizione di inizio dell\'intervallo</string>
     <string name="tag_filter_active">Filtro etichetta attivo. Verranno esportati solo i dati con etichette corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra nella panoramica l\'orario di assunzione</string>
+    <string name="refill">Rifornimento scorte</string>
 </resources>

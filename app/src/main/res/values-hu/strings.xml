@@ -255,4 +255,4 @@
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
 <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
-<string name="show_taken_time_in_overview">Az elvett idő áttekintése</string></resources>
+<string name="show_taken_time_in_overview">Az elvett idő áttekintése</string><string name="refill">Raktárkészlet feltöltése</string></resources>

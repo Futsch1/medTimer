@@ -255,4 +255,4 @@
     <string name="reschedule_reminder">Пренасрочване на напомнянето</string>
     <string name="interval_start_condition">Условие за стартиране на интервала</string>
 <string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
-<string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string></resources>
+<string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string><string name="refill">Допълване на запасите</string></resources>

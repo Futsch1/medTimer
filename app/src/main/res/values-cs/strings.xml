@@ -266,4 +266,5 @@
     <string name="interval_start_condition">Podmínka začátku intervalu</string>
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
+    <string name="refill">Doplnění zásob</string>
 </resources>
