@@ -261,4 +261,5 @@
     <string name="interval_start_condition">תנאי התחלת מחזור</string>
     <string name="tag_filter_active">מסנן התגיות פעיל. רק נתונים עם תגיות תואמות ייוצאו.</string>
     <string name="show_taken_time_in_overview">הצג את שעת הנטילה בסקירה הכללית</string>
+    <string name="refill">מילוי מלאי</string>
 </resources>

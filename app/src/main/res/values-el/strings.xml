@@ -255,4 +255,4 @@
     <string name="reschedule_reminder">Επαναπρογραμματισμός υπενθύμισης</string>
     <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
 <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
-<string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string></resources>
+<string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string><string name="refill">Αναπλήρωση αποθεμάτων</string></resources>

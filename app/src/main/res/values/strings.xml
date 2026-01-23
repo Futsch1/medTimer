@@ -261,5 +261,5 @@
     <string name="interval_start_condition">Interval start condition</string>
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
-    <string name="refill">Refill</string>
+    <string name="refill">Stock refill</string>
 </resources>
