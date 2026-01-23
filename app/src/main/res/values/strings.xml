@@ -262,4 +262,13 @@
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
     <string name="refill">Stock refill</string>
+    <string name="fourteen_days_before">Fourteen days before</string>
+    <string name="seven_days_before">Seven days before</string>
+    <string name="three_days_before">Three days before</string>
+    <string name="one_day_before">One day before</string>
+    <string name="on_expiration">On expiration</string>
+    <string name="expiration_settings">Expiration settings</string>
+    <string name="production_date">Production date</string>
+    <string name="expiration_date">Expiration date</string>
+    <string name="expiration_reminder">Expiration reminder</string>
 </resources>

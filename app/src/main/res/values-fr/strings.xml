@@ -262,4 +262,13 @@
     <string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string>
     <string name="show_taken_time_in_overview">Afficher le temps écoulé dans l&amp;apos;aperçu</string>
     <string name="refill">Réapprovisionnement des stocks</string>
+    <string name="fourteen_days_before">quatorze jours avant</string>
+    <string name="seven_days_before">sept jours avant</string>
+    <string name="three_days_before">trois jours avant</string>
+    <string name="one_day_before">un jour avant</string>
+    <string name="on_expiration">à l\'expiration</string>
+    <string name="expiration_settings">Paramètres d\'expiration</string>
+    <string name="production_date">Date de production</string>
+    <string name="expiration_date">Date d\'expiration</string>
+    <string name="expiration_reminder">Rappel d\'expiration</string>
 </resources>

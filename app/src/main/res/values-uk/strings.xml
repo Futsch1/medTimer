@@ -267,4 +267,13 @@
     <string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
     <string name="show_taken_time_in_overview">Показати витрачений час в огляді</string>
     <string name="refill">Поповнення запасів</string>
+    <string name="fourteen_days_before">чотирнадцять днів до</string>
+    <string name="seven_days_before">сім днів до</string>
+    <string name="three_days_before">три дні до</string>
+    <string name="one_day_before">один день до</string>
+    <string name="on_expiration">після закінчення терміну</string>
+    <string name="expiration_settings">Налаштування терміну придатності</string>
+    <string name="production_date">Дата виробництва</string>
+    <string name="expiration_date">Термін придатності</string>
+    <string name="expiration_reminder">Нагадування про термін придатності</string>
 </resources>

@@ -254,5 +254,16 @@
     <string name="ignore_battery_optimization">பேட்டரி உகப்பாக்கத்தைப் புறக்கணிக்கவும்</string>
     <string name="reschedule_reminder">நினைவூட்டலை மீண்டும் திட்டமிடுங்கள்</string>
     <string name="interval_start_condition">இடைவெளி தொடக்க நிலை</string>
-<string name="tag_filter_active">குறிச்சொல் வடிப்பான் செயலில் உள்ளது. பொருந்தும் குறிச்சொற்கள் கொண்ட தரவு மட்டுமே ஏற்றுமதி செய்யப்படும்.</string>
-<string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string><string name="refill">பொருள் நிரப்புதல்</string></resources>
+    <string name="tag_filter_active">குறிச்சொல் வடிப்பான் செயலில் உள்ளது. பொருந்தும் குறிச்சொற்கள் கொண்ட தரவு மட்டுமே ஏற்றுமதி செய்யப்படும்.</string>
+    <string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string>
+    <string name="refill">பொருள் நிரப்புதல்</string>
+    <string name="fourteen_days_before">பதினான்கு நாட்களுக்கு முன்</string>
+    <string name="seven_days_before">ஏழு நாட்களுக்கு முன்</string>
+    <string name="three_days_before">மூன்று நாட்களுக்கு முன்</string>
+    <string name="one_day_before">ஒரு நாள் முன்</string>
+    <string name="on_expiration">காலாவதியாகும் போது</string>
+    <string name="expiration_settings">காலாவதி அமைப்புகள்</string>
+    <string name="production_date">உற்பத்தி தேதி</string>
+    <string name="expiration_date">காலாவதி தேதி</string>
+    <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
+</resources>

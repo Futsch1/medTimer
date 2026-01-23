@@ -58,11 +58,16 @@ object MedicineHelper {
         context: Context,
         medicine: Medicine
     ): SpannableStringBuilder {
+        val builder = SpannableStringBuilder()
         if (medicine.isOutOfStock) {
-            return SpannableStringBuilder().append(" ")
+            builder.append(" ")
                 .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
         }
-        return SpannableStringBuilder()
+        if (medicine.hasExpired()) {
+            builder.append(" ")
+                .color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
+        }
+        return builder
     }
 
     @JvmStatic

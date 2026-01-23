@@ -262,4 +262,13 @@
     <string name="tag_filter_active">Filtro etichetta attivo. Verranno esportati solo i dati con etichette corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra nella panoramica l\'orario di assunzione</string>
     <string name="refill">Rifornimento scorte</string>
+    <string name="fourteen_days_before">quattordici giorni prima</string>
+    <string name="seven_days_before">sette giorni prima</string>
+    <string name="three_days_before">tre giorni prima</string>
+    <string name="one_day_before">un giorno prima</string>
+    <string name="on_expiration">alla scadenza</string>
+    <string name="expiration_settings">Impostazioni di scadenza</string>
+    <string name="production_date">Data di produzione</string>
+    <string name="expiration_date">Data di scadenza</string>
+    <string name="expiration_reminder">Promemoria di scadenza</string>
 </resources>

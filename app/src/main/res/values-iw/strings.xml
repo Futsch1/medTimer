@@ -262,4 +262,13 @@
     <string name="tag_filter_active">מסנן התגיות פעיל. רק נתונים עם תגיות תואמות ייוצאו.</string>
     <string name="show_taken_time_in_overview">הצג את שעת הנטילה בסקירה הכללית</string>
     <string name="refill">מילוי מלאי</string>
+    <string name="fourteen_days_before">ארבעה-עשר יום לפני</string>
+    <string name="seven_days_before">שבעה ימים לפני</string>
+    <string name="three_days_before">שלושה ימים לפני</string>
+    <string name="one_day_before">יום אחד לפני</string>
+    <string name="on_expiration">בתאריך התפוגה</string>
+    <string name="expiration_settings">הגדרות תפוגה</string>
+    <string name="production_date">תאריך ייצור</string>
+    <string name="expiration_date">תאריך תפוגה</string>
+    <string name="expiration_reminder">תזכורת תפוגה</string>
 </resources>

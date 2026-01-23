@@ -146,7 +146,6 @@
     <string name="time_between_repetitions">Tid mellan upprepningar</string>
     <string name="repeat_reminders_summary">Upprepar automatiskt en påminnelse tills den markeras som tagen eller överhoppad</string>
     <string name="add_linked_reminder">Lägg till påminnelse för kommande dos</string>
-    <string name="linked_reminder_delay">Fördröjning för kommande dos</string>
     <string name="linked_reminder_summary">Efter påminnelse på %1$s</string>
     <string name="delete_re_raise_event">Vill du ta bort den här händelsen och skapa en ny?</string>
     <string name="time_based_reminder">Tidsbaserad påminnelse</string>
@@ -257,4 +256,13 @@
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
     <string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string>
     <string name="refill">Lagerpåfyllning</string>
+    <string name="fourteen_days_before">fjorton dagar före</string>
+    <string name="seven_days_before">sju dagar före</string>
+    <string name="three_days_before">tre dagar före</string>
+    <string name="one_day_before">en dag före</string>
+    <string name="on_expiration">vid utgång</string>
+    <string name="expiration_settings">Inställningar för utgångsdatum</string>
+    <string name="production_date">Produktionsdatum</string>
+    <string name="expiration_date">Utgångsdatum</string>
+    <string name="expiration_reminder">Påminnelse om utgångsdatum</string>
 </resources>
