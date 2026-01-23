@@ -267,4 +267,13 @@
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
     <string name="refill">Doplnění zásob</string>
+    <string name="fourteen_days_before">čtrnáct dní před</string>
+    <string name="seven_days_before">sedm dní před</string>
+    <string name="three_days_before">tři dny před</string>
+    <string name="one_day_before">den před</string>
+    <string name="on_expiration">při vypršení</string>
+    <string name="expiration_settings">Nastavení vypršení</string>
+    <string name="production_date">Datum výroby</string>
+    <string name="expiration_date">Datum vypršení</string>
+    <string name="expiration_reminder">Připomenutí vypršení</string>
 </resources>

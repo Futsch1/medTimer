@@ -254,5 +254,16 @@
     <string name="ignore_battery_optimization">Παράβλεψη βελτιστοποίησης μπαταρίας</string>
     <string name="reschedule_reminder">Επαναπρογραμματισμός υπενθύμισης</string>
     <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
-<string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
-<string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string><string name="refill">Αναπλήρωση αποθεμάτων</string></resources>
+    <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
+    <string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string>
+    <string name="refill">Αναπλήρωση αποθεμάτων</string>
+    <string name="fourteen_days_before">δεκατέσσερις ημέρες πριν</string>
+    <string name="seven_days_before">επτά ημέρες πριν</string>
+    <string name="three_days_before">τρεις ημέρες πριν</string>
+    <string name="one_day_before">μία ημέρα πριν</string>
+    <string name="on_expiration">κατά τη λήξη</string>
+    <string name="expiration_settings">Ρυθμίσεις λήξης</string>
+    <string name="production_date">Ημερομηνία παραγωγής</string>
+    <string name="expiration_date">Ημερομηνία λήξης</string>
+    <string name="expiration_reminder">Υπενθύμιση λήξης</string>
+</resources>

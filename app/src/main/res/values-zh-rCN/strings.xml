@@ -249,5 +249,16 @@
     <string name="ignore_battery_optimization">忽略电池优化</string>
     <string name="reschedule_reminder">重新安排提醒</string>
     <string name="interval_start_condition">间隔启动条件</string>
-<string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
-<string name="show_taken_time_in_overview">在概览中显示所用时间</string><string name="refill">库存补货</string></resources>
+    <string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
+    <string name="show_taken_time_in_overview">在概览中显示所用时间</string>
+    <string name="refill">库存补货</string>
+    <string name="fourteen_days_before">十四天前</string>
+    <string name="seven_days_before">七天前</string>
+    <string name="three_days_before">三天前</string>
+    <string name="one_day_before">一天前</string>
+    <string name="on_expiration">到期时</string>
+    <string name="expiration_settings">到期设置</string>
+    <string name="production_date">生产日期</string>
+    <string name="expiration_date">到期日期</string>
+    <string name="expiration_reminder">到期提醒</string>
+</resources>

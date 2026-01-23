@@ -160,4 +160,20 @@
         <item>@string/interval_start_reminded</item>
         <item>@string/interval_start_processed</item>
     </string-array>
+    <string-array name="values_0_to_5">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="expiration_date_reminder_values">
+        <item>@string/off</item>
+        <item>@string/fourteen_days_before</item>
+        <item>@string/seven_days_before</item>
+        <item>@string/three_days_before</item>
+        <item>@string/one_day_before</item>
+        <item>@string/on_expiration</item>
+    </string-array>
 </resources>

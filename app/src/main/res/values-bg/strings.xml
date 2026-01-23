@@ -254,5 +254,16 @@
     <string name="ignore_battery_optimization">Игнориране на оптимизацията на батерията</string>
     <string name="reschedule_reminder">Пренасрочване на напомнянето</string>
     <string name="interval_start_condition">Условие за стартиране на интервала</string>
-<string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
-<string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string><string name="refill">Допълване на запасите</string></resources>
+    <string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
+    <string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string>
+    <string name="refill">Допълване на запасите</string>
+    <string name="fourteen_days_before">четиринадесет дни преди</string>
+    <string name="seven_days_before">седем дни преди</string>
+    <string name="three_days_before">три дни преди</string>
+    <string name="one_day_before">един ден преди</string>
+    <string name="on_expiration">при изтичане</string>
+    <string name="expiration_settings">Настройки за изтичане на срока</string>
+    <string name="production_date">Дата на производство</string>
+    <string name="expiration_date">Срок на годност</string>
+    <string name="expiration_reminder">Напомняне за изтичане на срока</string>
+</resources>

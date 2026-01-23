@@ -252,4 +252,13 @@
     <string name="tag_filter_active">標籤篩選已啟用。僅會匯出具有相符標籤的資料。</string>
     <string name="show_taken_time_in_overview">在總覽中顯示服用時間</string>
     <string name="refill">庫存補充</string>
+    <string name="fourteen_days_before">十四天前</string>
+    <string name="seven_days_before">七天前</string>
+    <string name="three_days_before">三天前</string>
+    <string name="one_day_before">一天前</string>
+    <string name="on_expiration">到期時</string>
+    <string name="expiration_settings">到期設定</string>
+    <string name="production_date">生產日期</string>
+    <string name="expiration_date">到期日期</string>
+    <string name="expiration_reminder">到期提醒</string>
 </resources>

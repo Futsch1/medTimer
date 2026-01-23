@@ -254,5 +254,16 @@
     <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
-<string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
-<string name="show_taken_time_in_overview">Az elvett idő áttekintése</string><string name="refill">Raktárkészlet feltöltése</string></resources>
+    <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
+    <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
+    <string name="refill">Raktárkészlet feltöltése</string>
+    <string name="fourteen_days_before">tizennégy nappal korábban</string>
+    <string name="seven_days_before">hét nappal korábban</string>
+    <string name="three_days_before">három nappal korábban</string>
+    <string name="one_day_before">egy nappal korábban</string>
+    <string name="on_expiration">lejáratkor</string>
+    <string name="expiration_settings">Lejárati beállítások</string>
+    <string name="production_date">Gyártási dátum</string>
+    <string name="expiration_date">Lejárati dátum</string>
+    <string name="expiration_reminder">Lejárati emlékeztető</string>
+</resources>

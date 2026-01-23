@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.google.gson.annotations.Expose;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -58,6 +59,15 @@ public class Medicine {
     public String notes;
     @ColumnInfo(defaultValue = "false")
     public boolean showNotificationAsAlarm;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public long productionDate;
+    @ColumnInfo(defaultValue = "0")
+    @Expose
+    public long expirationDate;
+    @ColumnInfo(defaultValue = "OFF")
+    @Expose
+    public ExpirationReminderType expirationReminder;
 
     @Ignore
     public Medicine() {
@@ -81,6 +91,9 @@ public class Medicine {
         this.sortOrder = 1.0;
         this.notes = "";
         this.showNotificationAsAlarm = false;
+        this.productionDate = 0;
+        this.expirationDate = 0;
+        this.expirationReminder = ExpirationReminderType.OFF;
     }
 
     public boolean isOutOfStock() {
@@ -89,6 +102,10 @@ public class Medicine {
 
     public boolean isStockManagementActive() {
         return (amount != 0 || outOfStockReminder != OutOfStockReminderType.OFF || outOfStockReminderThreshold != 0);
+    }
+
+    public boolean hasExpired() {
+        return expirationDate != 0L && expirationDate > LocalDate.now().toEpochDay();
     }
 
     @Override
@@ -115,7 +132,9 @@ public class Medicine {
                 Objects.equals(refillSizes, that.refillSizes) &&
                 Objects.equals(unit, that.unit) &&
                 Objects.equals(notes, that.notes) &&
-                showNotificationAsAlarm == that.showNotificationAsAlarm;
+                showNotificationAsAlarm == that.showNotificationAsAlarm &&
+                expirationDate == that.expirationDate &&
+                expirationReminder == that.expirationReminder;
     }
 
     public double getRefillSize() {
@@ -126,5 +145,14 @@ public class Medicine {
         OFF,
         ONCE,
         ALWAYS
+    }
+
+    public enum ExpirationReminderType {
+        OFF,
+        FOURTEEN_DAYS_BEFORE,
+        SEVEN_DAYS_BEFORE,
+        THREE_DAYS_BEFORE,
+        ONE_DAY_BEFORE,
+        ON_EXPIRATION
     }
 }

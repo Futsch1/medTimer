@@ -261,5 +261,16 @@
     <string name="ignore_battery_optimization">Игнорировать оптимизацию батареи</string>
     <string name="reschedule_reminder">Перенести напоминание</string>
     <string name="interval_start_condition">Условие запуска интервала</string>
-<string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
-<string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string><string name="refill">Пополнение запасов</string></resources>
+    <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
+    <string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string>
+    <string name="refill">Пополнение запасов</string>
+    <string name="fourteen_days_before">четырнадцать дней до</string>
+    <string name="seven_days_before">семь дней до</string>
+    <string name="three_days_before">три дня до</string>
+    <string name="one_day_before">один день до</string>
+    <string name="on_expiration">по истечении срока</string>
+    <string name="expiration_settings">Настройки срока годности</string>
+    <string name="production_date">Дата производства</string>
+    <string name="expiration_date">Срок годности</string>
+    <string name="expiration_reminder">Напоминание о сроке годности</string>
+</resources>

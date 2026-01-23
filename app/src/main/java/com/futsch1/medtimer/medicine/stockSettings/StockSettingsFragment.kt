@@ -22,6 +22,7 @@ import com.futsch1.medtimer.helpers.EntityViewModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
+import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
@@ -32,8 +33,10 @@ class StockSettingsFragment(
     mapOf(
     ),
     mapOf(
+        "production_date" to { activity, preference -> showDateEdit(activity, preference) },
+        "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
     ),
-    listOf("stock_unit")
+    listOf("stock_unit", "production_date", "expiration_date")
 ) {
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(

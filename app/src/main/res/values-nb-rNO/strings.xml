@@ -23,4 +23,13 @@
     <string name="taken">Tatt</string>
     <string name="skipped">Hoppet over</string>
     <string name="recent_events">Nylige hendelser</string>
+    <string name="fourteen_days_before">fjorten dager før</string>
+    <string name="seven_days_before">sju dager før</string>
+    <string name="three_days_before">tre dager før</string>
+    <string name="one_day_before">én dag før</string>
+    <string name="on_expiration">ved utløp</string>
+    <string name="expiration_settings">Innstillinger for utløpsdato</string>
+    <string name="production_date">Produksjonsdato</string>
+    <string name="expiration_date">Utløpsdato</string>
+    <string name="expiration_reminder">Påminnelse om utløpsdato</string>
 </resources>
