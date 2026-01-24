@@ -234,7 +234,7 @@
     <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
     <string name="time_based_reminder_help">Imposta orari fissi (ad es. 8:00) e configura modelli ricorrenti. Permette di scegliere i giorni della settimana, del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
     <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>
-    <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00-21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
+    <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00–21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
     <string name="linked_reminder">Promemoria collegato</string>
     <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up, programmato un certo lasso di tempo dopo che l\'attivazione del promemoria principale. È utile per farmaci da assumere in sequenza, con una pausa specifica tra di loro.</string>
     <string name="add_linked_reminder_summary">Crea un promemoria di follow-up, programmato un certo lasso di tempo dopo l\'attivazione di questo promemoria.</string>
