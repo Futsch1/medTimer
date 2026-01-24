@@ -2,51 +2,23 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Arrays
 import java.util.BitSet
-import java.util.stream.Collectors
 import kotlin.math.abs
 
 class StandardScheduling(
-    private val reminder: Reminder,
+    reminder: Reminder,
     reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
-) : Scheduling {
-    private val raisedToday: Boolean
-    private val raisedTomorrow: Boolean
-    private val possibleDays: BooleanArray
-    private val systemZone = timeAccess.systemZone()
-    private val localDate = timeAccess.localDate()
+) : SchedulingBase(reminder, reminderEventList, timeAccess) {
+    private val raisedToday: Boolean = isRaisedOn(today())
+    private val raisedTomorrow: Boolean = isRaisedOn(today() + 1)
 
-    init {
-        this.raisedToday = isRaisedOn(filterEvents(reminderEventList), today())
-        this.raisedTomorrow = isRaisedOn(filterEvents(reminderEventList), today() + 1)
-        // Bit map of possible days in the future on where the reminder may be raised
-        this.possibleDays = BooleanArray(31)
-    }
-
-    private fun isRaisedOn(reminderEventList: List<ReminderEvent>, epochDay: Long): Boolean {
-        for (reminderEvent in reminderEventList) {
-            if (isOnDay(reminderEvent.remindedTimestamp, epochDay)) {
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun isOnDay(epochSeconds: Long, epochDay: Long): Boolean {
-        return TimeHelper.secondsSinceEpochToLocalDate(epochSeconds, systemZone)
-            .toEpochDay() == epochDay
-    }
-
-    private fun today(): Long {
-        return localDate.toEpochDay()
-    }
+    // Bit map of possible days in the future on where the reminder may be raised
+    private val possibleDays: BooleanArray = BooleanArray(31)
 
     private val nextScheduledDate: LocalDate?
         get() {
@@ -62,12 +34,6 @@ class StandardScheduling(
 
             return earliestPossibleDate
         }
-
-    private fun localDateToReminderInstant(localDate: LocalDate): Instant {
-        return localDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(
-            systemZone
-        ).toInstant()
-    }
 
     private val isCyclic: Boolean
         get() = reminder.pauseDays != 0
@@ -136,15 +102,6 @@ class StandardScheduling(
 
     private fun reminderBeforeCreation(): Boolean {
         return reminder.createdTimestamp < localDateToReminderInstant(localDate).epochSecond
-    }
-
-    private fun filterEvents(
-        reminderEvents: List<ReminderEvent>
-    ): List<ReminderEvent> {
-        return reminderEvents.stream()
-            .filter { event: ReminderEvent -> event.reminderId == reminder.reminderId }.collect(
-                Collectors.toList()
-            )
     }
 
     override fun getNextScheduledTime(): Instant? {

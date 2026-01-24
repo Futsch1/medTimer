@@ -25,8 +25,16 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             strings.add(intervalBasedReminderString(reminder, context))
         }
 
-        else -> {
+        Reminder.ReminderType.TIME_BASED -> {
             timeBasedReminderString(reminder, strings, context)
+        }
+
+        Reminder.ReminderType.OUT_OF_STOCK -> {
+            strings.add(outOfStockReminderString(reminder, context))
+        }
+
+        Reminder.ReminderType.EXPIRATION_DATE -> {
+            strings.add(context.getString(R.string.expiration_date))
         }
     }
     if (reminder.instructions.isNotEmpty()) {
@@ -35,6 +43,13 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
     strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
     return java.lang.String.join(", ", strings)
+}
+
+fun outOfStockReminderString(reminder: Reminder, context: Context): String {
+    return context.resources.getStringArray(R.array.stock_reminder)[reminder.stockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
+        reminder.stockThreshold,
+        ""
+    )
 }
 
 fun intervalBasedReminderString(

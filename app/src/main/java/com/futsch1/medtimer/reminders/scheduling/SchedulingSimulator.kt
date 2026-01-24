@@ -59,7 +59,7 @@ class SchedulingSimulator(
     }
 
     private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess, sharedPreferences)
+        val scheduler = schedulingFactory.create(schedulingItem.reminder, schedulingItem.medicine.medicine, totalEvents, timeAccess, sharedPreferences)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if (nextScheduledTime?.atZone(timeAccess.systemZone())?.toLocalDate() != currentDay) {
