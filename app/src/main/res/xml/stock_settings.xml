@@ -6,25 +6,14 @@
     <EditTextPreference
         app:key="stock_unit"
         app:title="@string/unit" />
-    <PreferenceCategory app:title="@string/out_of_stock_notification_title">
-        <ListPreference
-            app:entries="@array/stock_reminder"
-            app:entryValues="@array/values_0_to_2"
-            app:key="stock_reminder"
-            app:title="@string/out_of_stock_reminder"
-            app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
-            app:key="stock_threshold"
-            app:title="@string/reminder_threshold" />
-        <EditTextPreference
-            app:key="stock_run_out_date"
-            app:selectable="false"
-            app:title="@string/estimated_run_out_date" />
-        <Preference
-            app:icon="@drawable/calendar_event"
-            app:key="stock_run_out_to_calendar"
-            app:title="@string/create_calendar_entry" />
-    </PreferenceCategory>
+    <EditTextPreference
+        app:key="stock_run_out_date"
+        app:selectable="false"
+        app:title="@string/estimated_run_out_date" />
+    <Preference
+        app:icon="@drawable/calendar_event"
+        app:key="stock_run_out_to_calendar"
+        app:title="@string/create_calendar_entry" />
     <PreferenceCategory app:title="@string/refill">
         <EditTextPreference
             app:key="stock_refill_size"
@@ -41,11 +30,5 @@
         <Preference
             app:key="expiration_date"
             app:title="@string/expiration_date" />
-        <ListPreference
-            app:key="expiration_reminder"
-            app:title="@string/expiration_reminder"
-            app:entries="@array/expiration_reminder"
-            app:entryValues="@array/values_0_to_5"
-            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

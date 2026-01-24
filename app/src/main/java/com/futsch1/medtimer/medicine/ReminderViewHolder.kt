@@ -40,7 +40,7 @@ class ReminderViewHolder private constructor(
     private val editTimeLayout: TextInputLayout = itemView.findViewById(R.id.editReminderTimeLayout)
     private val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
 
-    private var reminder: Reminder? = null
+    private lateinit var reminder: Reminder
     private var timeEditor: TimeEditor? = null
 
     @SuppressLint("SetTextI18n")
@@ -52,6 +52,10 @@ class ReminderViewHolder private constructor(
         advancedSettings.setOnClickListener { _: View? -> onClickAdvancedSettings(reminder) }
 
         editAmount.setText(reminder.amount)
+
+        if (reminder.isStockOrExpirationReminder) {
+            editAmount.visibility = View.GONE
+        }
 
         fragmentActivity.lifecycleScope.launch(dispatcher) {
             val summary = reminderSummary(reminder, itemView.context)
@@ -76,7 +80,7 @@ class ReminderViewHolder private constructor(
     private fun setupLongPress() {
         itemView.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(R.string.delete).setOnMenuItemClickListener {
-                LinkedReminderHandling(reminder!!, MedicineRepository(fragmentActivity.application), fragmentActivity.lifecycleScope).deleteReminder(
+                LinkedReminderHandling(reminder, MedicineRepository(fragmentActivity.application), fragmentActivity.lifecycleScope).deleteReminder(
                     fragmentActivity,
                     { }, { }
                 )
@@ -86,12 +90,12 @@ class ReminderViewHolder private constructor(
     }
 
     private fun setupTimeEditor() {
-        if (!reminder!!.isInterval) {
-            @StringRes val textId = if (reminder!!.reminderType == ReminderType.TIME_BASED) R.string.time else R.string.delay
+        if (reminder.usesTimeInMinutes) {
+            @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay
             editTimeLayout.setHint(textId)
-            timeEditor = TimeEditor(fragmentActivity, editTime, reminder!!.timeInMinutes, { minutes: Int? ->
-                reminder!!.timeInMinutes = minutes!!
-            }, if (reminder!!.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
+            timeEditor = TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, { minutes: Int? ->
+                reminder.timeInMinutes = minutes!!
+            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
         } else {
             editTimeLayout.visibility = View.GONE
         }
@@ -100,9 +104,15 @@ class ReminderViewHolder private constructor(
     private fun onClickAdvancedSettings(reminder: Reminder) {
         val navController = findNavController(itemView)
         val action =
-            EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesRootFragment(
-                reminder.reminderId
-            )
+            if (reminder.isStockOrExpirationReminder) {
+                EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesStockExpirationFragment(
+                    reminder.reminderId
+                )
+            } else {
+                EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesRootFragment(
+                    reminder.reminderId
+                )
+            }
         try {
             navController.navigate(action)
         } catch (_: IllegalArgumentException) {
@@ -114,7 +124,7 @@ class ReminderViewHolder private constructor(
         var titleText: Int
         var helpText: Int
         var iconId: Int
-        when (reminder!!.reminderType) {
+        when (reminder.reminderType) {
             ReminderType.TIME_BASED -> {
                 iconId = R.drawable.calendar_event
                 titleText = R.string.time_based_reminder
@@ -138,6 +148,18 @@ class ReminderViewHolder private constructor(
                 titleText = R.string.windowed_interval_reminder
                 helpText = R.string.windowed_interval_reminder_help
             }
+
+            ReminderType.OUT_OF_STOCK -> {
+                iconId = R.drawable.box_seam
+                titleText = R.string.out_of_stock_reminder
+                helpText = R.string.out_of_stock_reminder_help
+            }
+
+            ReminderType.EXPIRATION_DATE -> {
+                iconId = R.drawable.ban
+                titleText = R.string.expiration_date
+                helpText = R.string.expiration_date_reminder_help
+            }
         }
         val builder = AlertDialog.Builder(itemView.context)
             .setTitle(titleText)
@@ -147,14 +169,14 @@ class ReminderViewHolder private constructor(
     }
 
     fun getReminder(): Reminder {
-        reminder!!.amount = editAmount.getText().toString().trim()
+        reminder.amount = editAmount.getText().toString().trim()
         if (timeEditor != null) {
             val minutes = timeEditor!!.getMinutes()
             if (minutes >= 0) {
-                reminder!!.timeInMinutes = minutes
+                reminder.timeInMinutes = minutes
             }
         }
-        return reminder!!
+        return reminder
     }
 
     companion object {

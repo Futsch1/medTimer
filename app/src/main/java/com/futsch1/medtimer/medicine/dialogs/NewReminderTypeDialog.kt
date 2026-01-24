@@ -33,12 +33,30 @@ class NewReminderTypeDialog(
                 reminder.windowedInterval = true
             }
 
-            else -> {
+            Reminder.ReminderType.OUT_OF_STOCK -> {
+                reminder.stockThreshold = if (medicine.amount > 0.0) medicine.amount else 1.0
+            }
+
+            Reminder.ReminderType.EXPIRATION_DATE -> {
+                reminder.isExpirationReminder = true
+            }
+
+            Reminder.ReminderType.TIME_BASED -> {
                 // Intentionally empty
+            }
+
+            Reminder.ReminderType.LINKED -> {
+                // May never happen
+                assert(false)
             }
         }
         dialog.dismiss()
-        NewReminderDialog(context, activity, medicine, medicineViewModel, reminder)
+
+        if (reminder.isStockOrExpirationReminder) {
+            NewReminderStockExpirationDialog(context, activity, medicine, medicineViewModel, reminder)
+        } else {
+            NewReminderDialog(context, activity, medicine, medicineViewModel, reminder)
+        }
     }
 
     init {
@@ -56,6 +74,12 @@ class NewReminderTypeDialog(
         }
         dialog.findViewById<CardView>(R.id.windowedIntervalCard).setOnClickListener {
             continueCreate(Reminder.ReminderType.WINDOWED_INTERVAL)
+        }
+        dialog.findViewById<CardView>(R.id.stockReminderCard).setOnClickListener {
+            continueCreate(Reminder.ReminderType.OUT_OF_STOCK)
+        }
+        dialog.findViewById<CardView>(R.id.expirationDateReminderCard).setOnClickListener {
+            continueCreate(Reminder.ReminderType.EXPIRATION_DATE)
         }
 
         dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {

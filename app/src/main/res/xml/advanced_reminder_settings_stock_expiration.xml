@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="stock_threshold"
+        app:title="@string/reminder_threshold" />
+    <ListPreference
+        app:entries="@array/stock_reminder"
+        app:entryValues="@array/values_0_to_2"
+        app:key="stock_reminder"
+        app:title="@string/out_of_stock_reminder"
+        app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        app:key="expiration_days_before"
+        app:title="@string/remind_days_before_expiration" />
+
+</androidx.preference.PreferenceScreen>

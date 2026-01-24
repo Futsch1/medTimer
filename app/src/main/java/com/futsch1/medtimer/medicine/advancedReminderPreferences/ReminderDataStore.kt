@@ -5,6 +5,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.EntityDataStore
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import java.time.LocalDate
 
@@ -64,6 +65,9 @@ class ReminderDataStore(
             "interval_start_time" -> TimeHelper.secondsSinceEpochToDateTimeString(context, entity.intervalStart)
             "interval_daily_start_time" -> TimeHelper.minutesToTimeString(context, entity.intervalStartTimeOfDay.toLong())
             "interval_daily_end_time" -> TimeHelper.minutesToTimeString(context, entity.intervalEndTimeOfDay.toLong())
+            "stock_threshold" -> MedicineHelper.formatAmount(entity.stockThreshold, "")
+            "stock_reminder" -> entity.stockReminderType.ordinal.toString()
+            "expiration_days_before" -> entity.periodStart.toString()
             else -> defValue
         }
     }
@@ -73,22 +77,17 @@ class ReminderDataStore(
             "instructions" -> entity.instructions = value!!
             "sample_instructions" -> entity.instructions = value!!
             "cycle_start_date" -> entity.cycleStartDay = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
-            "cycle_consecutive_days" -> try {
-                entity.consecutiveDays = value!!.toInt()
-            } catch (_: NumberFormatException) { /* Intentionally empty */
-            }
-
-            "cycle_pause_days" -> try {
-                entity.pauseDays = value!!.toInt()
-            } catch (_: NumberFormatException) { /* Intentionally empty */
-            }
-
+            "cycle_consecutive_days" -> value?.toIntOrNull()?.let { entity.consecutiveDays = it }
+            "cycle_pause_days" -> value?.toIntOrNull()?.let { entity.pauseDays = it }
             "period_start_date" -> entity.periodStart = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "period_end_date" -> entity.periodEnd = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "interval_start" -> entity.intervalStartsFromProcessed = value == "1"
             "interval_start_time" -> entity.intervalStart = TimeHelper.stringToSecondsSinceEpoch(context, value!!)
             "interval_daily_start_time" -> entity.intervalStartTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
             "interval_daily_end_time" -> entity.intervalEndTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
+            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.stockThreshold = it }
+            "stock_reminder" -> entity.stockReminderType = Reminder.StockReminderType.entries[value!!.toInt()]
+            "expiration_days_before" -> value?.toLongOrNull()?.let { entity.periodStart = it }
         }
         medicineRepository.updateReminder(entity)
     }

@@ -144,12 +144,4 @@ public class Medicine {
         ALWAYS
     }
 
-    public enum ExpirationReminderType {
-        OFF,
-        FOURTEEN_DAYS_BEFORE,
-        SEVEN_DAYS_BEFORE,
-        THREE_DAYS_BEFORE,
-        ONE_DAY_BEFORE,
-        ON_EXPIRATION
-    }
 }

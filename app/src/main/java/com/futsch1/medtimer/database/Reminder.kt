@@ -1,162 +1,215 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-import com.google.gson.annotations.Expose;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
+import java.util.Objects
 
 @Entity
-@SuppressWarnings("java:S1104")
-public class Reminder {
-    public static final int DEFAULT_TIME = 480;
-    public int medicineRelId;
+class Reminder(@JvmField var medicineRelId: Int) {
+    @JvmField
     @PrimaryKey(autoGenerate = true)
     @Expose
-    public int reminderId;
+    var reminderId: Int = 0
+
+    @JvmField
     @Expose
-    public int timeInMinutes;
+    var timeInMinutes: Int = DEFAULT_TIME
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
-    public long createdTimestamp;
+    var createdTimestamp: Long = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "1")
     @Expose
-    public int consecutiveDays;
+    var consecutiveDays: Int = 1
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int pauseDays;
+    var pauseDays: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String instructions;
+    var instructions: String = ""
+
+    @JvmField
     @ColumnInfo(defaultValue = "19823") // 10.4.24
     @Expose
-    public long cycleStartDay;
+    var cycleStartDay: Long = 0
+
+    @JvmField
     @Expose
-    public String amount;
+    var amount: String = "?"
+
+    @JvmField
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
-    public List<Boolean> days;
+    var days: MutableList<Boolean> = mutableListOf(true, true, true, true, true, true, true)
+
+    @JvmField
     @ColumnInfo(defaultValue = "true")
     @Expose
-    public boolean active;
+    var active: Boolean = true
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public long periodStart;
+    var periodStart: Long = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public long periodEnd;
+    var periodEnd: Long = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0xFFFFFFFF")
     @Expose
-    public int activeDaysOfMonth;
+    var activeDaysOfMonth: Int = -0x1
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int linkedReminderId;
+    var linkedReminderId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public long intervalStart;
+    var intervalStart: Long = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean intervalStartsFromProcessed;
+    var intervalStartsFromProcessed: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean variableAmount;
+    var variableAmount: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean automaticallyTaken;
+    var automaticallyTaken: Boolean = false
+
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "480")
-    public int intervalStartTimeOfDay;
+    var intervalStartTimeOfDay: Int = 480
+
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "1320")
-    public int intervalEndTimeOfDay;
+    var intervalEndTimeOfDay: Int = 1320
+
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "false")
-    public boolean windowedInterval;
+    var windowedInterval: Boolean = false
+
+    @Expose
+    @ColumnInfo(defaultValue = "0.0")
+    var stockThreshold: Double = 0.0
+
+    @Expose
+    @ColumnInfo(defaultValue = "ONCE")
+    var stockReminderType: StockReminderType = StockReminderType.ONCE
+
+    @Expose
+    @ColumnInfo(defaultValue = "false")
+    var isExpirationReminder: Boolean = false
 
     @Ignore
-    public Reminder() {
-        this(0);
-    }
+    constructor() : this(0)
 
-    public Reminder(int medicineRelId) {
-        timeInMinutes = DEFAULT_TIME;
-        amount = "?";
-        consecutiveDays = 1;
-        pauseDays = 0;
-        days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
-        active = true;
-        this.medicineRelId = medicineRelId;
-        activeDaysOfMonth = 0xFFFFFFFF;
-        periodStart = 0;
-        periodEnd = 0;
-        linkedReminderId = 0;
-        intervalStart = 0;
-        intervalStartsFromProcessed = false;
-        variableAmount = false;
-        intervalStartTimeOfDay = 480;
-        intervalEndTimeOfDay = 1320;
-        windowedInterval = false;
-    }
+    val isInterval: Boolean
+        get() = this.reminderType == ReminderType.CONTINUOUS_INTERVAL || this.reminderType == ReminderType.WINDOWED_INTERVAL
 
-    public boolean isInterval() {
-        return getReminderType() == ReminderType.CONTINUOUS_INTERVAL || getReminderType() == ReminderType.WINDOWED_INTERVAL;
-    }
+    val isStockOrExpirationReminder: Boolean
+        get() = this.reminderType == ReminderType.OUT_OF_STOCK || this.reminderType == ReminderType.EXPIRATION_DATE
 
-    public ReminderType getReminderType() {
-        if (linkedReminderId != 0) {
-            return ReminderType.LINKED;
-        } else if (intervalStart != 0 && !windowedInterval) {
-            return ReminderType.CONTINUOUS_INTERVAL;
-        } else if (windowedInterval) {
-            return ReminderType.WINDOWED_INTERVAL;
-        } else {
-            return ReminderType.TIME_BASED;
+    val usesTimeInMinutes: Boolean
+        get() = !isInterval || this.reminderType == ReminderType.EXPIRATION_DATE || this.stockReminderType == StockReminderType.DAILY
+
+    val reminderType: ReminderType
+        get() {
+            return if (linkedReminderId != 0) {
+                ReminderType.LINKED
+            } else if (intervalStart != 0L && !windowedInterval) {
+                ReminderType.CONTINUOUS_INTERVAL
+            } else if (windowedInterval) {
+                ReminderType.WINDOWED_INTERVAL
+            } else if (stockThreshold > 0.0) {
+                ReminderType.OUT_OF_STOCK
+            } else if (isExpirationReminder) {
+                ReminderType.EXPIRATION_DATE
+            } else {
+                ReminderType.TIME_BASED
+            }
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || javaClass != other.javaClass) return false
+        return membersEqual(other as Reminder)
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        return membersEqual((Reminder) o);
+    override fun hashCode(): Int {
+        return Objects.hash(
+            reminderId,
+            medicineRelId,
+            timeInMinutes,
+            createdTimestamp,
+            consecutiveDays,
+            pauseDays,
+            instructions,
+            cycleStartDay,
+            amount,
+            days,
+            active,
+            periodStart,
+            periodEnd,
+            activeDaysOfMonth,
+            linkedReminderId,
+            intervalStart,
+            intervalStartsFromProcessed,
+            variableAmount,
+            automaticallyTaken,
+            intervalStartTimeOfDay,
+            intervalEndTimeOfDay,
+            windowedInterval,
+            stockThreshold,
+            stockReminderType,
+            isExpirationReminder
+        )
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(reminderId, medicineRelId, timeInMinutes, createdTimestamp, consecutiveDays, pauseDays, instructions, cycleStartDay, amount, days, active, periodStart, periodEnd, activeDaysOfMonth, linkedReminderId, intervalStart, intervalStartsFromProcessed, variableAmount);
+    private fun membersEqual(that: Reminder): Boolean {
+        return reminderId == that.reminderId && medicineRelId == that.medicineRelId && timeInMinutes == that.timeInMinutes && createdTimestamp == that.createdTimestamp && consecutiveDays == that.consecutiveDays && pauseDays == that.pauseDays &&
+                instructions == that.instructions && cycleStartDay == that.cycleStartDay &&
+                amount == that.amount &&
+                days == that.days && active == that.active && periodStart == that.periodStart && periodEnd == that.periodEnd && activeDaysOfMonth == that.activeDaysOfMonth && linkedReminderId == that.linkedReminderId && intervalStart == that.intervalStart && intervalStartsFromProcessed == that.intervalStartsFromProcessed && variableAmount == that.variableAmount && intervalStartTimeOfDay == that.intervalStartTimeOfDay && intervalEndTimeOfDay == that.intervalEndTimeOfDay && windowedInterval == that.windowedInterval
     }
 
-    private boolean membersEqual(Reminder that) {
-        return reminderId == that.reminderId &&
-                medicineRelId == that.medicineRelId &&
-                timeInMinutes == that.timeInMinutes &&
-                createdTimestamp == that.createdTimestamp &&
-                consecutiveDays == that.consecutiveDays &&
-                pauseDays == that.pauseDays &&
-                Objects.equals(instructions, that.instructions) &&
-                cycleStartDay == that.cycleStartDay &&
-                Objects.equals(amount, that.amount) &&
-                Objects.equals(days, that.days) &&
-                active == that.active &&
-                periodStart == that.periodStart &&
-                periodEnd == that.periodEnd &&
-                activeDaysOfMonth == that.activeDaysOfMonth &&
-                linkedReminderId == that.linkedReminderId &&
-                intervalStart == that.intervalStart &&
-                intervalStartsFromProcessed == that.intervalStartsFromProcessed &&
-                variableAmount == that.variableAmount &&
-                intervalStartTimeOfDay == that.intervalStartTimeOfDay &&
-                intervalEndTimeOfDay == that.intervalEndTimeOfDay &&
-                windowedInterval == that.windowedInterval;
-    }
-
-    public enum ReminderType {
+    enum class ReminderType {
         TIME_BASED,
         CONTINUOUS_INTERVAL,
         LINKED,
-        WINDOWED_INTERVAL
+        WINDOWED_INTERVAL,
+        OUT_OF_STOCK,
+        EXPIRATION_DATE
+    }
+
+    enum class StockReminderType {
+        ONCE,
+        ALWAYS,
+        DAILY
+    }
+
+    companion object {
+        const val DEFAULT_TIME: Int = 480
     }
 }
