@@ -83,6 +83,7 @@ class NewReminderStockExpirationDialog(
         dialog.findViewById<RadioGroup>(R.id.stockReminderType).visibility = outOfStockVisibility
 
         dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout).visibility = expirationDateVisibility
+        dialog.findViewById<RadioGroup>(R.id.expirationReminderType).visibility = expirationDateVisibility
         dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility = expirationDateVisibility
     }
 
@@ -118,11 +119,16 @@ class NewReminderStockExpirationDialog(
                     R.id.once -> Reminder.StockReminderType.ONCE
                     R.id.always -> Reminder.StockReminderType.ALWAYS
                     R.id.daily -> Reminder.StockReminderType.DAILY
-                    else -> Reminder.StockReminderType.ONCE
+                    else -> Reminder.StockReminderType.OFF
                 }
             }
             if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
                 try {
+                    reminder.expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
+                        R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
+                        R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
+                        else -> Reminder.ExpirationReminderType.OFF
+                    }
                     reminder.periodStart = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
                 } catch (_: NumberFormatException) {
                     canCreate = false

@@ -35,10 +35,11 @@ class NewReminderTypeDialog(
 
             Reminder.ReminderType.OUT_OF_STOCK -> {
                 reminder.stockThreshold = if (medicine.amount > 0.0) medicine.amount else 1.0
+                reminder.stockReminderType = Reminder.StockReminderType.ONCE
             }
 
             Reminder.ReminderType.EXPIRATION_DATE -> {
-                reminder.isExpirationReminder = true
+                reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
             }
 
             Reminder.ReminderType.TIME_BASED -> {

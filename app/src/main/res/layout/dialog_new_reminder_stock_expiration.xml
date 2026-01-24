@@ -55,6 +55,29 @@
 
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/expirationReminderType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="?android:attr/listDivider"
+            app:checkedButton="@id/once"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <RadioButton
+                android:id="@+id/onceExpiration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/once" />
+
+            <RadioButton
+                android:id="@+id/dailyExpiration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/daily" />
+
+        </RadioGroup>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editExpirationDaysBeforeLayout"
             android:layout_width="match_parent"

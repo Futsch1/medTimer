@@ -275,4 +275,6 @@
     <string name="remind_days_before_expiration">Remind days before expiration</string>
     <string name="out_of_stock_reminder_help">Reminds when the medicine is out of stock, either after every reminder or once or once per day.</string>
     <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
+    <string name="once">Once</string>
+    <string name="daily">Daily</string>
 </resources>

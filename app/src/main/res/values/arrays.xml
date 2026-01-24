@@ -160,4 +160,8 @@
         <item>@string/interval_start_reminded</item>
         <item>@string/interval_start_processed</item>
     </string-array>
+    <string-array name="expiration_reminder">
+        <item>@string/once</item>
+        <item>@string/daily</item>
+    </string-array>
 </resources>
