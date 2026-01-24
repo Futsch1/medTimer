@@ -11,6 +11,7 @@ import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.util.stream.Collectors
 
 class MedicineViewModel(application: Application) : AndroidViewModel(application) {

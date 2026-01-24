@@ -4,6 +4,7 @@ import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.scheduler
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
