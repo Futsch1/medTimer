@@ -5,14 +5,15 @@ import com.futsch1.medtimer.database.ReminderEvent
 import java.time.Instant
 
 class LinkedScheduling(
-    private val reminder: Reminder,
-    private val reminderEventList: List<ReminderEvent>
-) : Scheduling {
+    reminder: Reminder,
+    reminderEventList: List<ReminderEvent>,
+    timeAccess: ReminderScheduler.TimeAccess
+) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
         val lastSourceReminderEvent: ReminderEvent? =
-            findLastReminderEvent(reminder.linkedReminderId, reminderEventList)
+            findLastReminderEvent(reminder.linkedReminderId)
         val lastReminderEvent: ReminderEvent? =
-            findLastReminderEvent(reminder.reminderId, reminderEventList)
+            findLastReminderEvent()
         if (lastSourceReminderEvent != null &&
             lastSourceReminderEvent.processedTimestamp != 0L &&
             (lastReminderEvent == null
@@ -24,4 +25,5 @@ class LinkedScheduling(
         }
         return null
     }
+
 }

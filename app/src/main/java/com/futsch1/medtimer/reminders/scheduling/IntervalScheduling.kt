@@ -8,10 +8,10 @@ import java.time.LocalDate
 import kotlin.math.ceil
 
 open class IntervalScheduling(
-    private val reminder: Reminder,
-    private val reminderEventList: List<ReminderEvent>,
-    private val timeAccess: TimeAccess
-) : Scheduling {
+    reminder: Reminder,
+    reminderEventList: List<ReminderEvent>,
+    timeAccess: TimeAccess
+) : SchedulingBase(reminder, reminderEventList, timeAccess) {
 
     override fun getNextScheduledTime(): Instant? {
         return adjustToPeriod(adjustToToday(getNextScheduledTimeInternal()))
@@ -19,7 +19,7 @@ open class IntervalScheduling(
 
     private fun getNextScheduledTimeInternal(): Instant? {
         val lastReminderEvent: ReminderEvent? =
-            findLastReminderEvent(reminder.reminderId, reminderEventList)
+            findLastReminderEvent()
         return if (lastReminderEvent != null) {
             getNextIntervalTimeFromReminderEvent(lastReminderEvent)
         } else {
