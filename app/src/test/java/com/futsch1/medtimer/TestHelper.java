@@ -42,6 +42,10 @@ public class TestHelper {
         return medicineWithReminders;
     }
 
+    public static LocalDate on(long day) {
+        return LocalDate.ofEpochDay(day - 1);
+    }
+
     public static Instant on(long day, long minutes) {
         return Instant.ofEpochSecond((day - 1) * 86400 + minutes * 60);
     }

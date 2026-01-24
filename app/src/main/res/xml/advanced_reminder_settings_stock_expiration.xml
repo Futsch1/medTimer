@@ -9,6 +9,12 @@
         app:key="stock_reminder"
         app:title="@string/out_of_stock_reminder"
         app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        app:entries="@array/expiration_reminder"
+        app:entryValues="@array/values_0_and_1"
+        app:key="expiration_reminder"
+        app:title="@string/expiration_reminder"
+        app:useSimpleSummaryProvider="true" />
     <EditTextPreference
         app:key="expiration_days_before"
         app:title="@string/remind_days_before_expiration" />
