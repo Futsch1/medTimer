@@ -33,15 +33,15 @@ class StockSettingsFragment(
     mapOf(
     ),
     mapOf(
-        "production_date" to { activity, preference -> showDateEdit(activity, preference) },
-        "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
     ),
-    listOf("stock_unit", "production_date", "expiration_date")
+    listOf("stock_unit")
 ) {
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
-            "stock_refill_now" to { _, _ -> refillNow() }
+            "stock_refill_now" to { _, _ -> refillNow() },
+            "production_date" to { activity, preference -> showDateEdit(activity, preference) },
+            "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
         )
 
     override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<Medicine> {
@@ -68,10 +68,21 @@ class StockSettingsFragment(
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
         findPreference<EditTextPreference>("stock_threshold")!!.summary = MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, entity.unit)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.refillSize, entity.unit)
-        if (entity.outOfStockReminder != Medicine.OutOfStockReminderType.OFF && entity.amount <= entity.outOfStockReminderThreshold) {
+        if (entity.isOutOfStock) {
             findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
         } else {
             findPreference<EditTextPreference>("amount")!!.icon = null
+        }
+        if (entity.hasExpired()) {
+            findPreference<Preference>("expiration_date")!!.setIcon(R.drawable.ban)
+        } else {
+            findPreference<Preference>("expiration_date")!!.icon = null
+        }
+        if (entity.productionDate != 0L) {
+            findPreference<Preference>("production_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.productionDate)
+        }
+        if (entity.expirationDate != 0L) {
+            findPreference<Preference>("expiration_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.expirationDate)
         }
     }
 

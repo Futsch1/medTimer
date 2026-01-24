@@ -105,7 +105,7 @@ public class Medicine {
     }
 
     public boolean hasExpired() {
-        return expirationDate != 0L && expirationDate > LocalDate.now().toEpochDay();
+        return expirationDate != 0L && expirationDate < LocalDate.now().toEpochDay();
     }
 
     @Override

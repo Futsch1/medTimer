@@ -43,6 +43,9 @@
             app:title="@string/expiration_date" />
         <ListPreference
             app:key="expiration_reminder"
-            app:title="@string/expiration_reminder" />
+            app:title="@string/expiration_reminder"
+            app:entries="@array/expiration_reminder"
+            app:entryValues="@array/values_0_to_5"
+            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
