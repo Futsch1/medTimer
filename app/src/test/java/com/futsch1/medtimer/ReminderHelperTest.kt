@@ -13,6 +13,7 @@ import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

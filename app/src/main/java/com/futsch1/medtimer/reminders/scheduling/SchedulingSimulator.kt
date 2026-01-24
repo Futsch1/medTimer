@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import android.content.SharedPreferences
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent

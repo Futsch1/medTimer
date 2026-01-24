@@ -58,6 +58,7 @@ public class Medicine {
     @Expose
     public String notes;
     @ColumnInfo(defaultValue = "false")
+    @Expose
     public boolean showNotificationAsAlarm;
     @ColumnInfo(defaultValue = "0")
     @Expose
@@ -65,9 +66,6 @@ public class Medicine {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public long expirationDate;
-    @ColumnInfo(defaultValue = "OFF")
-    @Expose
-    public ExpirationReminderType expirationReminder;
 
     @Ignore
     public Medicine() {
@@ -93,7 +91,6 @@ public class Medicine {
         this.showNotificationAsAlarm = false;
         this.productionDate = 0;
         this.expirationDate = 0;
-        this.expirationReminder = ExpirationReminderType.OFF;
     }
 
     public boolean isOutOfStock() {
@@ -105,7 +102,7 @@ public class Medicine {
     }
 
     public boolean hasExpired() {
-        return expirationDate != 0L && expirationDate < LocalDate.now().toEpochDay();
+        return expirationDate != 0 && expirationDate < LocalDate.now().toEpochDay();
     }
 
     @Override
@@ -134,7 +131,7 @@ public class Medicine {
                 Objects.equals(notes, that.notes) &&
                 showNotificationAsAlarm == that.showNotificationAsAlarm &&
                 expirationDate == that.expirationDate &&
-                expirationReminder == that.expirationReminder;
+                productionDate == that.productionDate;
     }
 
     public double getRefillSize() {

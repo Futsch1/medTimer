@@ -6,9 +6,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant

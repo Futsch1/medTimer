@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder;
 
 import java.time.Instant;
 import java.time.LocalDate;

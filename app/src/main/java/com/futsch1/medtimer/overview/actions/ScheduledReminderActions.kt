@@ -4,7 +4,6 @@ import android.app.Application
 import android.view.View
 import android.widget.PopupWindow
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -12,6 +11,7 @@ import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderNotificationWorker
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

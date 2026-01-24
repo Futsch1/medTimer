@@ -3,11 +3,11 @@ package com.futsch1.medtimer.overview
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.Spanned
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 
 
 enum class OverviewState {

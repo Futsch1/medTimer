@@ -7,6 +7,7 @@ import com.futsch1.medtimer.TestHelper.on
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -81,7 +82,7 @@ class SchedulingSimulatorTest {
         assertRemindedAtIndex(scheduledReminders, on(1, 1200), medicines[0].medicine, medicines[0].reminders[0], 1)
         assertRemindedAtIndex(scheduledReminders, on(2, 360), medicines[0].medicine, medicines[0].reminders[0], 2)
     }
-    
+
     @Test
     fun testWindowedInterval() {
         val medicines = listOf(

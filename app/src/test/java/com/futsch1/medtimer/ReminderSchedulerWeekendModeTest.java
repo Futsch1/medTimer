@@ -13,6 +13,7 @@ import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.preferences.PreferencesNames;
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

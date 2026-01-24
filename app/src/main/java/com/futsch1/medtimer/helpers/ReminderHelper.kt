@@ -9,12 +9,12 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.util.Locale
 import java.util.stream.Collectors
