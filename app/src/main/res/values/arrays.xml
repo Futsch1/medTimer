@@ -168,7 +168,7 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-    <string-array name="expiration_date_reminder_values">
+    <string-array name="expiration_reminder">
         <item>@string/off</item>
         <item>@string/fourteen_days_before</item>
         <item>@string/seven_days_before</item>

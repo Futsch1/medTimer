@@ -27,7 +27,11 @@ fun showDateEdit(activity: FragmentActivity, preference: Preference) {
     val datePickerWrapper = DatePickerWrapper(activity)
     val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
     if (currentDateString != null) {
-        val currentDate = TimeHelper.stringToLocalDate(activity, currentDateString)
+        val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
+            TimeHelper.stringToLocalDate(activity, currentDateString)
+        } else {
+            LocalDate.now()
+        }
         datePickerWrapper.show(currentDate) { daysSinceEpoch: Long ->
             val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
             preference.preferenceDataStore?.putString(preference.key, newDateString)
