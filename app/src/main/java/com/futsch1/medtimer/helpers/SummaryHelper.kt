@@ -29,7 +29,7 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             timeBasedReminderString(reminder, strings, context)
         }
     }
-    if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
+    if (reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)
     }
     strings = strings.filter { it.isNotEmpty() }.toMutableList()

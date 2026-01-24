@@ -53,9 +53,8 @@ class StockSettingsFragment(
     }
 
     override fun customSetup(entity: Medicine) {
-        setupAmountEdit("amount")
-        setupAmountEdit("stock_threshold")
-        setupAmountEdit("stock_refill_size")
+        setupAmountEdit(findPreference("amount")!!)
+        setupAmountEdit(findPreference("stock_refill_size")!!)
 
         calculateRunOutDate(entity)
     }
@@ -66,7 +65,6 @@ class StockSettingsFragment(
         calculateRunOutDate(entity)
 
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
-        findPreference<EditTextPreference>("stock_threshold")!!.summary = MedicineHelper.formatAmount(entity.outOfStockReminderThreshold, entity.unit)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.refillSize, entity.unit)
         if (entity.isOutOfStock) {
             findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
@@ -96,16 +94,6 @@ class StockSettingsFragment(
             this.launch(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
             }
-        }
-    }
-
-
-    private fun setupAmountEdit(editName: String) {
-        findPreference<EditTextPreference>(editName)!!.setOnBindEditTextListener { editText ->
-            val separator = DecimalFormatSymbols.getInstance().decimalSeparator
-            editText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
-            editText.addDoubleValidator()
-            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
     }
 
@@ -150,3 +138,13 @@ fun EditText.addDoubleValidator() {
         }
     })
 }
+
+fun setupAmountEdit(editTextPreference: EditTextPreference) {
+    editTextPreference.setOnBindEditTextListener { editText ->
+        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+        editText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
+        editText.addDoubleValidator()
+        editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+    }
+}
+

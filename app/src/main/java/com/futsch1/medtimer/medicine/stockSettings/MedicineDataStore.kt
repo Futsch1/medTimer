@@ -21,7 +21,6 @@ class MedicineDataStore(
             "stock_refill_size" -> MedicineHelper.formatAmount(entity.refillSize, "")
             "production_date" -> TimeHelper.daysSinceEpochToDateString(context, entity.productionDate)
             "expiration_date" -> TimeHelper.daysSinceEpochToDateString(context, entity.expirationDate)
-            "expiration_reminder" -> entity.expirationReminder.ordinal.toString()
             else -> defValue
         }
     }
@@ -35,7 +34,6 @@ class MedicineDataStore(
             "stock_refill_size" -> MedicineHelper.parseAmount(value)?.let { entity.refillSizes = arrayListOf(it) }
             "production_date" -> entity.productionDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "expiration_date" -> entity.expirationDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
-            "expiration_reminder" -> entity.expirationReminder = Medicine.ExpirationReminderType.entries[value!!.toInt()]
         }
         medicineRepository.updateMedicine(entity)
     }

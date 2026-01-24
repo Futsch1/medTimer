@@ -119,9 +119,9 @@
         <item>60</item>
     </string-array>
     <string-array name="stock_reminder">
-        <item>@string/off</item>
         <item>@string/once_below_threshold</item>
         <item>@string/always_below_threshold</item>
+        <item>@string/daily_below_threshold</item>
     </string-array>
     <string-array name="days_of_month">
         <item>1</item>

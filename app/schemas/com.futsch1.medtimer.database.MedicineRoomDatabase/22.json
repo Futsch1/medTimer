@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 22,
-    "identityHash": "1ad9faa53df4ea61ec8d014fd26da972",
+    "identityHash": "53e764e1d46c252ad77f0f6cde36f7ba",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0, `expirationReminder` TEXT DEFAULT 'OFF')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "name",
@@ -112,12 +112,6 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
-          },
-          {
-            "fieldPath": "expirationReminder",
-            "columnName": "expirationReminder",
-            "affinity": "TEXT",
-            "defaultValue": "'OFF'"
           }
         ],
         "primaryKey": {
@@ -129,7 +123,7 @@
       },
       {
         "tableName": "Reminder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT, `days` TEXT DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF, `linkedReminderId` INTEGER NOT NULL DEFAULT 0, `intervalStart` INTEGER NOT NULL DEFAULT 0, `intervalStartsFromProcessed` INTEGER NOT NULL DEFAULT false, `variableAmount` INTEGER NOT NULL DEFAULT false, `automaticallyTaken` INTEGER NOT NULL DEFAULT false, `intervalStartTimeOfDay` INTEGER NOT NULL DEFAULT 480, `intervalEndTimeOfDay` INTEGER NOT NULL DEFAULT 1320, `windowedInterval` INTEGER NOT NULL DEFAULT false)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineRelId` INTEGER NOT NULL, `reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInMinutes` INTEGER NOT NULL, `createdTimestamp` INTEGER NOT NULL DEFAULT 0, `consecutiveDays` INTEGER NOT NULL DEFAULT 1, `pauseDays` INTEGER NOT NULL DEFAULT 0, `instructions` TEXT NOT NULL DEFAULT '', `cycleStartDay` INTEGER NOT NULL DEFAULT 19823, `amount` TEXT NOT NULL, `days` TEXT NOT NULL DEFAULT '[true, true, true, true, true, true, true]', `active` INTEGER NOT NULL DEFAULT true, `periodStart` INTEGER NOT NULL DEFAULT 0, `periodEnd` INTEGER NOT NULL DEFAULT 0, `activeDaysOfMonth` INTEGER NOT NULL DEFAULT 0xFFFFFFFF, `linkedReminderId` INTEGER NOT NULL DEFAULT 0, `intervalStart` INTEGER NOT NULL DEFAULT 0, `intervalStartsFromProcessed` INTEGER NOT NULL DEFAULT false, `variableAmount` INTEGER NOT NULL DEFAULT false, `automaticallyTaken` INTEGER NOT NULL DEFAULT false, `intervalStartTimeOfDay` INTEGER NOT NULL DEFAULT 480, `intervalEndTimeOfDay` INTEGER NOT NULL DEFAULT 1320, `windowedInterval` INTEGER NOT NULL DEFAULT false, `stockThreshold` REAL NOT NULL DEFAULT 0.0, `stockReminderType` TEXT NOT NULL DEFAULT 'ONCE', `isExpirationReminder` INTEGER NOT NULL DEFAULT false)",
         "fields": [
           {
             "fieldPath": "medicineRelId",
@@ -174,6 +168,7 @@
             "fieldPath": "instructions",
             "columnName": "instructions",
             "affinity": "TEXT",
+            "notNull": true,
             "defaultValue": "''"
           },
           {
@@ -186,12 +181,14 @@
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "days",
             "columnName": "days",
             "affinity": "TEXT",
+            "notNull": true,
             "defaultValue": "'[true, true, true, true, true, true, true]'"
           },
           {
@@ -274,6 +271,27 @@
           {
             "fieldPath": "windowedInterval",
             "columnName": "windowedInterval",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
+          },
+          {
+            "fieldPath": "stockThreshold",
+            "columnName": "stockThreshold",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "stockReminderType",
+            "columnName": "stockReminderType",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'ONCE'"
+          },
+          {
+            "fieldPath": "isExpirationReminder",
+            "columnName": "isExpirationReminder",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
@@ -487,7 +505,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ad9faa53df4ea61ec8d014fd26da972')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '53e764e1d46c252ad77f0f6cde36f7ba')"
     ]
   }
 }
