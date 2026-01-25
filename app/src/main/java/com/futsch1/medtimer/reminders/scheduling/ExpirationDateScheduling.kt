@@ -22,7 +22,7 @@ class ExpirationDateScheduling(
                     return localDateToReminderInstant(LocalDate.ofEpochDay(startRemindDay))
                 }
             } else {
-                return getNextNotRemindedDay(startRemindDay - today())
+                return getNextNotRemindedDay((startRemindDay - today()).coerceAtLeast(0))
             }
         }
         return null

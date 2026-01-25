@@ -16,8 +16,8 @@ class ReminderSchedulerOutOfStockTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.stockThreshold = 10.0
-        reminder.stockReminderType = Reminder.StockReminderType.ONCE
+        reminder.outOfStockThreshold = 10.0
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
 
         medicine.reminders.add(reminder)
 
@@ -33,7 +33,7 @@ class ReminderSchedulerOutOfStockTest {
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         Assertions.assertTrue(scheduledReminders.isEmpty())
 
-        reminder.stockReminderType = Reminder.StockReminderType.ALWAYS
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         Assertions.assertTrue(scheduledReminders.isEmpty())
     }
@@ -45,8 +45,8 @@ class ReminderSchedulerOutOfStockTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.stockThreshold = 10.0
-        reminder.stockReminderType = Reminder.StockReminderType.DAILY
+        reminder.outOfStockThreshold = 10.0
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
 
         medicine.reminders.add(reminder)
 

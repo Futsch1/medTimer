@@ -120,11 +120,4 @@ public class Medicine {
     public double getRefillSize() {
         return refillSizes.isEmpty() ? 0.0 : refillSizes.get(0);
     }
-
-    public enum OutOfStockReminderType {
-        OFF,
-        ONCE,
-        ALWAYS
-    }
-
 }

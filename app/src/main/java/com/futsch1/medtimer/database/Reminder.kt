@@ -113,11 +113,11 @@ class Reminder(@JvmField var medicineRelId: Int) {
 
     @Expose
     @ColumnInfo(defaultValue = "0.0")
-    var stockThreshold: Double = 0.0
+    var outOfStockThreshold: Double = 0.0
 
     @Expose
     @ColumnInfo(defaultValue = "OFF")
-    var stockReminderType: StockReminderType = StockReminderType.OFF
+    var outOfStockReminderType: OutOfStockReminderType = OutOfStockReminderType.OFF
 
     @Expose
     @ColumnInfo(defaultValue = "OFF")
@@ -129,11 +129,11 @@ class Reminder(@JvmField var medicineRelId: Int) {
     val isInterval: Boolean
         get() = this.reminderType == ReminderType.CONTINUOUS_INTERVAL || this.reminderType == ReminderType.WINDOWED_INTERVAL
 
-    val isStockOrExpirationReminder: Boolean
+    val isOutOfStockOrExpirationReminder: Boolean
         get() = this.reminderType == ReminderType.OUT_OF_STOCK || this.reminderType == ReminderType.EXPIRATION_DATE
 
     val usesTimeInMinutes: Boolean
-        get() = !isInterval || this.reminderType == ReminderType.EXPIRATION_DATE || this.stockReminderType == StockReminderType.DAILY
+        get() = !isInterval || this.reminderType == ReminderType.EXPIRATION_DATE || this.outOfStockReminderType == OutOfStockReminderType.DAILY
 
     val reminderType: ReminderType
         get() {
@@ -143,7 +143,7 @@ class Reminder(@JvmField var medicineRelId: Int) {
                 ReminderType.CONTINUOUS_INTERVAL
             } else if (windowedInterval) {
                 ReminderType.WINDOWED_INTERVAL
-            } else if (stockReminderType != StockReminderType.OFF) {
+            } else if (outOfStockReminderType != OutOfStockReminderType.OFF) {
                 ReminderType.OUT_OF_STOCK
             } else if (expirationReminderType != ExpirationReminderType.OFF) {
                 ReminderType.EXPIRATION_DATE
@@ -181,8 +181,8 @@ class Reminder(@JvmField var medicineRelId: Int) {
             intervalStartTimeOfDay,
             intervalEndTimeOfDay,
             windowedInterval,
-            stockThreshold,
-            stockReminderType,
+            outOfStockThreshold,
+            outOfStockReminderType,
             expirationReminderType
         )
     }
@@ -192,7 +192,7 @@ class Reminder(@JvmField var medicineRelId: Int) {
                 instructions == that.instructions && cycleStartDay == that.cycleStartDay &&
                 amount == that.amount &&
                 days == that.days && active == that.active && periodStart == that.periodStart && periodEnd == that.periodEnd && activeDaysOfMonth == that.activeDaysOfMonth && linkedReminderId == that.linkedReminderId && intervalStart == that.intervalStart && intervalStartsFromProcessed == that.intervalStartsFromProcessed && variableAmount == that.variableAmount && intervalStartTimeOfDay == that.intervalStartTimeOfDay && intervalEndTimeOfDay == that.intervalEndTimeOfDay && windowedInterval == that.windowedInterval &&
-                stockThreshold == that.stockThreshold && stockReminderType == that.stockReminderType && expirationReminderType == that.expirationReminderType
+                outOfStockThreshold == that.outOfStockThreshold && outOfStockReminderType == that.outOfStockReminderType && expirationReminderType == that.expirationReminderType
     }
 
     enum class ReminderType {
@@ -204,7 +204,7 @@ class Reminder(@JvmField var medicineRelId: Int) {
         EXPIRATION_DATE
     }
 
-    enum class StockReminderType {
+    enum class OutOfStockReminderType {
         ONCE,
         ALWAYS,
         DAILY,

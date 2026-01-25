@@ -53,7 +53,7 @@ class ReminderViewHolder private constructor(
 
         editAmount.setText(reminder.amount)
 
-        if (reminder.isStockOrExpirationReminder) {
+        if (reminder.isOutOfStockOrExpirationReminder) {
             editAmount.visibility = View.GONE
         }
 
@@ -104,7 +104,7 @@ class ReminderViewHolder private constructor(
     private fun onClickAdvancedSettings(reminder: Reminder) {
         val navController = findNavController(itemView)
         val action =
-            if (reminder.isStockOrExpirationReminder) {
+            if (reminder.isOutOfStockOrExpirationReminder) {
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesStockExpirationFragment(
                     reminder.reminderId
                 )

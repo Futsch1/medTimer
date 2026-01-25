@@ -39,10 +39,18 @@ object MedicineHelper {
                 )
             )
         }
-        if (fullMedicine.isStockManagementActive) {
-            builder.append(" (").append(getStockText(context, fullMedicine.medicine))
-                .append(getOutOfStockText(context, fullMedicine)).append(")")
+        val stockIconText = getStockIcons(context, fullMedicine)
+        val stockText = if (fullMedicine.isStockManagementActive) getStockText(context, fullMedicine.medicine) else ""
+
+        if (stockIconText.isNotEmpty() || stockText.isNotEmpty()) {
+            builder.append(" (")
+            builder.append(stockText)
+            if (stockText.isNotEmpty() && stockIconText.isNotEmpty())
+                builder.append(" ")
+            builder.append(stockIconText)
+            builder.append(")")
         }
+
         return builder
     }
 
@@ -55,18 +63,19 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun getOutOfStockText(
+    fun getStockIcons(
         context: Context,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.isOutOfStock) {
-            builder.append(" ")
-                .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
+            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
         }
         if (fullMedicine.medicine.hasExpired()) {
-            builder.append(" ")
-                .color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
+            if (builder.isNotEmpty()) {
+                builder.append(" ")
+            }
+            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
         }
         return builder
     }
