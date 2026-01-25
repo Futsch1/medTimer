@@ -30,5 +30,8 @@
         <Preference
             app:key="expiration_date"
             app:title="@string/expiration_date" />
+        <Preference
+            app:key="clear_dates"
+            app:title="@string/clear_dates"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

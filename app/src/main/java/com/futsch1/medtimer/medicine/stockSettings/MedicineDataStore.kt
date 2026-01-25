@@ -33,4 +33,12 @@ class MedicineDataStore(
         }
         medicineRepository.updateMedicine(entity.medicine)
     }
+
+    override fun putLong(key: String?, value: Long) {
+        when (key) {
+            "production_date" -> entity.medicine.productionDate = value
+            "expiration_date" -> entity.medicine.expirationDate = value
+        }
+        medicineRepository.updateMedicine(entity.medicine)
+    }
 }

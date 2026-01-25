@@ -42,6 +42,10 @@ class StockSettingsFragment(
             "stock_refill_now" to { _, _ -> refillNow() },
             "production_date" to { activity, preference -> showDateEdit(activity, preference) },
             "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
+            "clear_dates" to { _, _ ->
+                dataStore.putLong("production_date", 0)
+                dataStore.putLong("expiration_date", 0)
+            }
         )
 
     override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
@@ -76,11 +80,15 @@ class StockSettingsFragment(
         } else {
             findPreference<Preference>("expiration_date")!!.icon = null
         }
-        if (entity.medicine.productionDate != 0L) {
-            findPreference<Preference>("production_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.medicine.productionDate)
+        findPreference<Preference>("production_date")!!.summary = if (entity.medicine.productionDate != 0L) {
+            TimeHelper.daysSinceEpochToDateString(context, entity.medicine.productionDate)
+        } else {
+            ""
         }
-        if (entity.medicine.expirationDate != 0L) {
-            findPreference<Preference>("expiration_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.medicine.expirationDate)
+        findPreference<Preference>("expiration_date")!!.summary = if (entity.medicine.expirationDate != 0L) {
+            TimeHelper.daysSinceEpochToDateString(context, entity.medicine.expirationDate)
+        } else {
+            ""
         }
     }
 
