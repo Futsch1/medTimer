@@ -13,15 +13,16 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.getReminderAction
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import java.time.Instant
 import java.util.function.Predicate
 import java.util.stream.Collectors
 
 class Autostart : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
+            restoreNotifications(context)
             Log.i(AUTOSTART, "Requesting reschedule")
             requestScheduleNextNotification(context)
-            restoreNotifications(context)
         }
     }
 
@@ -44,9 +45,17 @@ class Autostart : BroadcastReceiver() {
                     .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
                         Collectors.toUnmodifiableList()
                     )
-                for (reminderEvent in reminderEventList) {
-                    val scheduledReminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    scheduledReminderNotificationData.notificationId = reminderEvent.notificationId
+                val notificationsMap: Map<Int, List<ReminderEvent>> = reminderEventList.groupBy { it.notificationId }
+                for (notificationEntry in notificationsMap) {
+                    val reminderIds = notificationEntry.value.stream().mapToInt { it.reminderId }.toArray()
+                    val reminderEventIds = notificationEntry.value.stream().mapToInt { it.reminderEventId }.toArray()
+                    val scheduledReminderNotificationData =
+                        ReminderNotificationData.fromArrays(
+                            reminderIds,
+                            reminderEventIds,
+                            Instant.ofEpochSecond(notificationEntry.value[0].remindedTimestamp),
+                            notificationEntry.key
+                        )
                     Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
                     val intent = getReminderAction(context)
                     scheduledReminderNotificationData.toIntent(intent)

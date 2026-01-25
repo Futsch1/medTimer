@@ -65,7 +65,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
                     .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
                     .build()
-            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.REPLACE, setAlarmForReminderNotification)
+            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, setAlarmForReminderNotification)
         }
 
         @JvmStatic
