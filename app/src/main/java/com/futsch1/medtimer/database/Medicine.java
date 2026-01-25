@@ -36,15 +36,9 @@ public class Medicine {
     @ColumnInfo(defaultValue = "0")
     @Expose
     public int iconId;
-    @ColumnInfo(defaultValue = "OFF")
-    @Expose
-    public OutOfStockReminderType outOfStockReminder;
     @ColumnInfo(defaultValue = "0")
     @Expose
     public double amount;
-    @ColumnInfo(defaultValue = "0")
-    @Expose
-    public double outOfStockReminderThreshold;
     @ColumnInfo(defaultValue = "[]")
     @Expose
     public ArrayList<Double> refillSizes;
@@ -83,7 +77,6 @@ public class Medicine {
         this.color = Color.DKGRAY;
         this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
         this.iconId = 0;
-        this.outOfStockReminder = OutOfStockReminderType.OFF;
         this.refillSizes = new ArrayList<>();
         this.unit = "";
         this.sortOrder = 1.0;
@@ -91,14 +84,6 @@ public class Medicine {
         this.showNotificationAsAlarm = false;
         this.productionDate = 0;
         this.expirationDate = 0;
-    }
-
-    public boolean isOutOfStock() {
-        return isStockManagementActive() && amount <= outOfStockReminderThreshold;
-    }
-
-    public boolean isStockManagementActive() {
-        return (amount != 0 || outOfStockReminder != OutOfStockReminderType.OFF || outOfStockReminderThreshold != 0);
     }
 
     public boolean hasExpired() {
@@ -113,7 +98,7 @@ public class Medicine {
 
     @Override
     public int hashCode() {
-        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit, notes, showNotificationAsAlarm);
+        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, amount, refillSizes, unit, notes, showNotificationAsAlarm);
     }
 
     private boolean membersEqual(Medicine that) {
@@ -123,9 +108,7 @@ public class Medicine {
                 color == that.color &&
                 notificationImportance == that.notificationImportance &&
                 iconId == that.iconId &&
-                outOfStockReminder == that.outOfStockReminder &&
                 amount == that.amount &&
-                outOfStockReminderThreshold == that.outOfStockReminderThreshold &&
                 Objects.equals(refillSizes, that.refillSizes) &&
                 Objects.equals(unit, that.unit) &&
                 Objects.equals(notes, that.notes) &&

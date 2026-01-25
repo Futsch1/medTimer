@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.DeleteColumn;
 import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -19,7 +20,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 @Database(
-        entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class},
+        entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class, StockEvent.class},
         version = 22,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
@@ -42,7 +43,7 @@ import java.util.concurrent.TimeUnit;
                 @AutoMigration(from = 18, to = 19),
                 @AutoMigration(from = 19, to = 20),
                 @AutoMigration(from = 20, to = 21, spec = MedicineRoomDatabase.AutoMigration20To21.class),
-                @AutoMigration(from = 21, to = 22),
+                @AutoMigration(from = 21, to = 22, spec = MedicineRoomDatabase.AutoMigration21To22.class)
         }
 )
 @TypeConverters({Converters.class})
@@ -82,6 +83,8 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
     }
 
     public abstract MedicineDao medicineDao();
+
+    public abstract StockDao stockDao();
 
     @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")
     static class AutoMigration1To2 implements AutoMigrationSpec {
@@ -129,5 +132,11 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
             database.execSQL("CREATE INDEX IF NOT EXISTS `index_ReminderEvent_remindedTimestamp` ON `ReminderEvent` (`remindedTimestamp`)");
             database.execSQL("CREATE INDEX IF NOT EXISTS `index_ReminderEvent_reminderId` ON `ReminderEvent` (`reminderId`)");
         }
+    }
+
+    @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminderThreshold")
+    @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
+    static class AutoMigration21To22 implements AutoMigrationSpec {
+
     }
 }

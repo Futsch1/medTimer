@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.DecimalFormatSymbols
 
-class NewReminderStockExpirationDialog(
+class NewReminderStockDialog(
     val context: Context,
     val activity: FragmentActivity,
     val medicine: Medicine,
@@ -30,7 +30,7 @@ class NewReminderStockExpirationDialog(
     private val dialog: Dialog = Dialog(context)
 
     init {
-        dialog.setContentView(R.layout.dialog_new_reminder_stock_expiration)
+        dialog.setContentView(R.layout.dialog_new_reminder_stock)
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -51,6 +51,7 @@ class NewReminderStockExpirationDialog(
     private fun setupEditStockThreshold() {
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold)
 
+        textInputEditText.setText(medicine.amount.toString())
         val separator = DecimalFormatSymbols.getInstance().decimalSeparator
         textInputEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
         textInputEditText.addDoubleValidator()
@@ -110,29 +111,10 @@ class NewReminderStockExpirationDialog(
             reminder.timeInMinutes = timeEditor.getMinutes()
 
             if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
-                try {
-                    reminder.stockThreshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
-                } catch (_: NumberFormatException) {
-                    canCreate = false
-                }
-                reminder.stockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-                    R.id.once -> Reminder.StockReminderType.ONCE
-                    R.id.always -> Reminder.StockReminderType.ALWAYS
-                    R.id.daily -> Reminder.StockReminderType.DAILY
-                    else -> Reminder.StockReminderType.OFF
-                }
+                canCreate = fillOutOfStockReminder()
             }
             if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
-                try {
-                    reminder.expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
-                        R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
-                        R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
-                        else -> Reminder.ExpirationReminderType.OFF
-                    }
-                    reminder.periodStart = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
-                } catch (_: NumberFormatException) {
-                    canCreate = false
-                }
+                canCreate = fillExpirationReminder()
             }
 
             if (!canCreate) {
@@ -142,5 +124,36 @@ class NewReminderStockExpirationDialog(
                 dialog.dismiss()
             }
         }
+    }
+
+    private fun fillExpirationReminder(): Boolean {
+        var canCreate = true
+        try {
+            reminder.expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
+                R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
+                R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
+                else -> Reminder.ExpirationReminderType.OFF
+            }
+            reminder.periodStart = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
+        } catch (_: NumberFormatException) {
+            canCreate = false
+        }
+        return canCreate
+    }
+
+    private fun fillOutOfStockReminder(): Boolean {
+        var canCreate = true
+        try {
+            reminder.stockThreshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
+        } catch (_: NumberFormatException) {
+            canCreate = false
+        }
+        reminder.stockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
+            R.id.once -> Reminder.StockReminderType.ONCE
+            R.id.always -> Reminder.StockReminderType.ALWAYS
+            R.id.daily -> Reminder.StockReminderType.DAILY
+            else -> Reminder.StockReminderType.OFF
+        }
+        return canCreate
     }
 }

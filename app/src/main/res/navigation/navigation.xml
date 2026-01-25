@@ -166,7 +166,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesStockExpirationFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockExpirationFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockFragment"
         android:label="@string/advanced_settings">
         <argument
             android:name="reminderId"

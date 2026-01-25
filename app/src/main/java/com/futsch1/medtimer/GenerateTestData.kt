@@ -108,8 +108,6 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             medicine.iconId = iconId
             if (stock > 0) {
                 medicine.amount = stock
-                medicine.outOfStockReminderThreshold = if (stock > 10) stock / 2 else stock * 2
-                medicine.outOfStockReminder = Medicine.OutOfStockReminderType.ONCE
                 medicine.unit = "pills"
             }
             return medicine

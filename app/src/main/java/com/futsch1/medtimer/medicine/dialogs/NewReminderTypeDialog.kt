@@ -7,7 +7,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.google.android.material.button.MaterialButton
 import java.time.Instant
@@ -16,13 +16,13 @@ import java.time.LocalDate
 class NewReminderTypeDialog(
     val context: Context,
     val activity: FragmentActivity,
-    val medicine: Medicine,
+    val fullMedicine: FullMedicine,
     val medicineViewModel: MedicineViewModel
 ) {
     private val dialog: Dialog = Dialog(context)
 
     private fun continueCreate(reminderType: Reminder.ReminderType) {
-        val reminder = Reminder(medicine.medicineId)
+        val reminder = Reminder(fullMedicine.medicine.medicineId)
         setDefaults(reminder)
         when (reminderType) {
             Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
@@ -34,7 +34,7 @@ class NewReminderTypeDialog(
             }
 
             Reminder.ReminderType.OUT_OF_STOCK -> {
-                reminder.stockThreshold = if (medicine.amount > 0.0) medicine.amount else 1.0
+                reminder.stockThreshold = if (fullMedicine.medicine.amount > 0.0) fullMedicine.medicine.amount else 1.0
                 reminder.stockReminderType = Reminder.StockReminderType.ONCE
             }
 
@@ -54,9 +54,9 @@ class NewReminderTypeDialog(
         dialog.dismiss()
 
         if (reminder.isStockOrExpirationReminder) {
-            NewReminderStockExpirationDialog(context, activity, medicine, medicineViewModel, reminder)
+            NewReminderStockDialog(context, activity, fullMedicine.medicine, medicineViewModel, reminder)
         } else {
-            NewReminderDialog(context, activity, medicine, medicineViewModel, reminder)
+            NewReminderDialog(context, activity, fullMedicine, medicineViewModel, reminder)
         }
     }
 

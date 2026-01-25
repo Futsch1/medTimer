@@ -50,8 +50,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     Flow<Reminder> getReminderFlow(int reminderId);
 
+    @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    Flow<Medicine> getMedicineFlow(int medicineId);
+    Flow<FullMedicine> getMedicineFlow(int medicineId);
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
     LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);

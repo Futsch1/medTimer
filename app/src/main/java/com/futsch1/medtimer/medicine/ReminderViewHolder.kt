@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Reminder.ReminderType
@@ -44,7 +44,7 @@ class ReminderViewHolder private constructor(
     private var timeEditor: TimeEditor? = null
 
     @SuppressLint("SetTextI18n")
-    fun bind(reminder: Reminder, medicine: Medicine) {
+    fun bind(reminder: Reminder, fullMedicine: FullMedicine) {
         this.reminder = reminder
 
         setupTimeEditor()
@@ -62,7 +62,7 @@ class ReminderViewHolder private constructor(
             fragmentActivity.runOnUiThread { advancedSettingsSummary.text = summary }
         }
 
-        if (medicine.isStockManagementActive) {
+        if (fullMedicine.isStockManagementActive) {
             editAmount.addTextChangedListener(
                 AmountTextWatcher(
                     editAmount

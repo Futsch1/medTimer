@@ -3,7 +3,6 @@ package com.futsch1.medtimer.reminders.notificationFactory
 import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -40,17 +39,17 @@ class NotificationStringBuilder(
     private fun buildSingleNotificationString(reminderNotificationPart: ReminderNotificationPart, concise: Boolean = false): SpannableStringBuilder {
         val builder =
             SpannableStringBuilder(buildSingleBaseString(reminderNotificationPart))
-        val instructions = getInstructions(reminderNotificationPart.reminder)
+        val instructions = reminderNotificationPart.reminder.instructions
         val separatorChar = if (concise) ", " else "\n"
         if (instructions.isNotEmpty()) {
             builder.append("$separatorChar$instructions")
         }
 
-        if (reminderNotificationPart.medicine.medicine.isStockManagementActive) {
+        if (reminderNotificationPart.medicine.isStockManagementActive) {
             builder.append(separatorChar)
             builder.append(MedicineHelper.getStockText(context, reminderNotificationPart.medicine.medicine))
             if (showOutOfStockIcon) {
-                builder.append(MedicineHelper.getOutOfStockText(context, reminderNotificationPart.medicine.medicine))
+                builder.append(MedicineHelper.getOutOfStockText(context, reminderNotificationPart.medicine))
             }
         }
 
@@ -70,13 +69,5 @@ class NotificationStringBuilder(
     private fun getTagNames(tags: List<Tag>): String {
         val tagNames = tags.stream().map { t: Tag? -> t!!.name }.collect(Collectors.toList())
         return "\n" + java.lang.String.join(", ", tagNames)
-    }
-
-    private fun getInstructions(reminder: Reminder): String {
-        var instructions = reminder.instructions
-        if (instructions == null) {
-            instructions = ""
-        }
-        return instructions
     }
 }
