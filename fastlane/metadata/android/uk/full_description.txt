@@ -1,35 +1,36 @@
-Med reminders and history with full offline privacy
+Нагадування про ліки та історія з повною офлайн-приватністю
 
-Stay In Control of Your Medications with MedTimer
+Керуйте своїми ліками разом із MedTimer
 
-MedTimer is an open-source medication reminder app designed to help you manage your medications and pills effectively and with full control of your sensitive data.
+MedTimer — це застосунок з відкритим кодом для нагадування про прийом ліків, створений, щоб допомогти вам ефективно керувати своїми препаратами та пігулками, з повним контролем над вашими чутливими даними.
 
-Flexible & Personalized Reminders:
+Гнучкі та персоналізовані нагадування
 
-- Manage unlimited medications with customizable reminders per medication (including simple defaults
-  for daily reminders).
-- Create flexible reminders with breaks and specific days (e.g. for birth control pills).
-- Weekend mode: Delay reminders to a defined time on chosen days.
-- Snooze notifications for later reminders or be reminded repeatedly.
-- Add extra doses on the fly.
-- Create interval based reminders or reminders following each other in intervals.
+- Керуйте необмеженою кількістю ліків з індивідуальними нагадуваннями для кожного (у тому числі з простими щоденними шаблонами).
+- Створюйте гнучкі нагадування з перервами та для окремих днів (наприклад, для протизаплідних таблеток).
+- Режим вихідних: відкладайте нагадування на визначений час у вибрані дні.
+- Відкладайте сповіщення (snooze) або отримуйте повторні нагадування.
+- Додавайте додаткові дози на ходу.
+- Створюйте інтервальні нагадування, ланцюжки нагадувань або інтервальні нагадування з обмеженням за часом (початок і кінець дня).
+- Використовуйте нагадування типу “будильник”, щоб отримувати сповіщення навіть у беззвучному режимі.
 
-Simple & Secure Data Management:
+Просте та безпечне керування даними
 
-- Confirm or dismiss reminders to record medication adherence accurately.
-- Get an overview of past doses in a chart and a tabular view.
-- Export your medication history as a CSV file for easy record-keeping or sharing with healthcare professionals.
-- Backup and restore your medication list as JSON file.
-- Medication stock tracking and out of stock reminders.
-- Tag and filter your medication.
+- Підтверджуйте або скасовуйте нагадування, щоб точно фіксувати прийом ліків.
+- Переглядайте історію доз у вигляді графіка та таблиці.
+- Експортуйте історію прийому у форматі CSV для зберігання або передачі лікарю.
+- Створюйте резервні копії та відновлюйте список ліків у форматі JSON.
+- Відстежуйте залишки ліків та отримуйте нагадування про їх закінчення.
+- Додавайте теги й фільтруйте ліки.
 
-Privacy & Offline Accessibility:
+Приватність та офлайн-доступ
 
-- All data is stored securely on your device, ensuring complete privacy and offline accessibility.
-- No internet connection required – your medication reminders are always available.
+- Усі дані зберігаються лише на вашому пристрої, що гарантує повну конфіденційність та роботу без інтернету.
+- Підключення до мережі не потрібне — нагадування завжди доступні.
 
-MedTimer is a free app without adds.
+MedTimer — безкоштовний застосунок без реклами.
 
-See the project page on GitHub: https://github.com/Futsch1/medTimer
+Сторінка проєкту на GitHub:
+https://github.com/Futsch1/medTimer
 
-Feature graphic was created with https://hotpot.ai
+Графічний банер створено за допомогою: https://hotpot.ai
