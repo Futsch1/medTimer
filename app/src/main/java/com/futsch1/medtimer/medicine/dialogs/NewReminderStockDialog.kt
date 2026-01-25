@@ -144,15 +144,15 @@ class NewReminderStockDialog(
     private fun fillOutOfStockReminder(): Boolean {
         var canCreate = true
         try {
-            reminder.stockThreshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
+            reminder.outOfStockThreshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
         } catch (_: NumberFormatException) {
             canCreate = false
         }
-        reminder.stockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-            R.id.once -> Reminder.StockReminderType.ONCE
-            R.id.always -> Reminder.StockReminderType.ALWAYS
-            R.id.daily -> Reminder.StockReminderType.DAILY
-            else -> Reminder.StockReminderType.OFF
+        reminder.outOfStockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
+            R.id.once -> Reminder.OutOfStockReminderType.ONCE
+            R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
+            R.id.daily -> Reminder.OutOfStockReminderType.DAILY
+            else -> Reminder.OutOfStockReminderType.OFF
         }
         return canCreate
     }

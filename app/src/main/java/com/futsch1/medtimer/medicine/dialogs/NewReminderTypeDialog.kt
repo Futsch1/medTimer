@@ -34,8 +34,8 @@ class NewReminderTypeDialog(
             }
 
             Reminder.ReminderType.OUT_OF_STOCK -> {
-                reminder.stockThreshold = if (fullMedicine.medicine.amount > 0.0) fullMedicine.medicine.amount else 1.0
-                reminder.stockReminderType = Reminder.StockReminderType.ONCE
+                reminder.outOfStockThreshold = if (fullMedicine.medicine.amount > 0.0) fullMedicine.medicine.amount else 1.0
+                reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
             }
 
             Reminder.ReminderType.EXPIRATION_DATE -> {
@@ -53,7 +53,7 @@ class NewReminderTypeDialog(
         }
         dialog.dismiss()
 
-        if (reminder.isStockOrExpirationReminder) {
+        if (reminder.isOutOfStockOrExpirationReminder) {
             NewReminderStockDialog(context, activity, fullMedicine.medicine, medicineViewModel, reminder)
         } else {
             NewReminderDialog(context, activity, fullMedicine, medicineViewModel, reminder)

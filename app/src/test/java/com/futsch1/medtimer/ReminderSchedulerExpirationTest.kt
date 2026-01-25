@@ -120,5 +120,14 @@ class ReminderSchedulerExpirationTest {
             medicine.medicine,
             reminder
         )
+
+        reminder.periodStart = 14
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(2, 480),
+            medicine.medicine,
+            reminder
+        )
     }
 }

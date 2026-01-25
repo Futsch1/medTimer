@@ -13,7 +13,7 @@ class OutOfStockScheduling(
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
-        if (reminder.stockReminderType == Reminder.StockReminderType.DAILY && medicine.amount <= reminder.stockThreshold) {
+        if (reminder.outOfStockReminderType == Reminder.OutOfStockReminderType.DAILY && medicine.amount <= reminder.outOfStockThreshold) {
             return getNextNotRemindedDay()
         }
         return null

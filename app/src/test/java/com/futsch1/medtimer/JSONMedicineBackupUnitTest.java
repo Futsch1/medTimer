@@ -199,7 +199,6 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders2.medicine.notificationImportance = 5;
         medicineWithReminders2.medicine.iconId = 7;
         medicineWithReminders2.medicine.amount = 17.0;
-        medicineWithReminders2.medicine.outOfStockReminderThreshold = 17.5;
         medicinesWithReminders.add(medicineWithReminders2);
 
         String result = jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders);

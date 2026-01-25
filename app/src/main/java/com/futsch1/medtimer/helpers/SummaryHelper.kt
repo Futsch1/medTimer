@@ -46,8 +46,8 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
 }
 
 fun outOfStockReminderString(reminder: Reminder, context: Context): String {
-    return context.resources.getStringArray(R.array.stock_reminder)[reminder.stockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
-        reminder.stockThreshold,
+    return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
+        reminder.outOfStockThreshold,
         ""
     )
 }

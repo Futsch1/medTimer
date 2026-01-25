@@ -12,7 +12,7 @@ import java.util.stream.Collectors
 class NotificationStringBuilder(
     val context: Context,
     val reminderNotification: ReminderNotification,
-    val showOutOfStockIcon: Boolean = true
+    val showStockIcons: Boolean = true
 ) {
     val baseString = buildBaseString(reminderNotification.reminderNotificationParts)
     val notificationString = buildNotificationString(reminderNotification.reminderNotificationParts)
@@ -48,8 +48,8 @@ class NotificationStringBuilder(
         if (reminderNotificationPart.medicine.isStockManagementActive) {
             builder.append(separatorChar)
             builder.append(MedicineHelper.getStockText(context, reminderNotificationPart.medicine.medicine))
-            if (showOutOfStockIcon) {
-                builder.append(MedicineHelper.getOutOfStockText(context, reminderNotificationPart.medicine))
+            if (showStockIcons) {
+                builder.append(MedicineHelper.getStockIcons(context, reminderNotificationPart.medicine))
             }
         }
 

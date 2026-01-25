@@ -65,8 +65,8 @@ class ReminderDataStore(
             "interval_start_time" -> TimeHelper.secondsSinceEpochToDateTimeString(context, entity.intervalStart)
             "interval_daily_start_time" -> TimeHelper.minutesToTimeString(context, entity.intervalStartTimeOfDay.toLong())
             "interval_daily_end_time" -> TimeHelper.minutesToTimeString(context, entity.intervalEndTimeOfDay.toLong())
-            "stock_threshold" -> MedicineHelper.formatAmount(entity.stockThreshold, "")
-            "stock_reminder" -> entity.stockReminderType.ordinal.toString()
+            "stock_threshold" -> MedicineHelper.formatAmount(entity.outOfStockThreshold, "")
+            "stock_reminder" -> entity.outOfStockReminderType.ordinal.toString()
             "expiration_days_before" -> entity.periodStart.toString()
             else -> defValue
         }
@@ -85,8 +85,8 @@ class ReminderDataStore(
             "interval_start_time" -> entity.intervalStart = TimeHelper.stringToSecondsSinceEpoch(context, value!!)
             "interval_daily_start_time" -> entity.intervalStartTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
             "interval_daily_end_time" -> entity.intervalEndTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
-            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.stockThreshold = it }
-            "stock_reminder" -> entity.stockReminderType = Reminder.StockReminderType.entries[value!!.toInt()]
+            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.outOfStockThreshold = it }
+            "stock_reminder" -> entity.outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()]
             "expiration_days_before" -> value?.toLongOrNull()?.let { entity.periodStart = it }
         }
         medicineRepository.updateReminder(entity)
