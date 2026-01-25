@@ -108,7 +108,7 @@ class AdvancedReminderPreferencesRootFragment(
     override fun onEntityUpdated(entity: Reminder) {
         super.onEntityUpdated(entity)
 
-        menuProvider.medicineRepository = (preferenceManager.preferenceDataStore as ReminderDataStore).medicineRepository
+        menuProvider.medicineRepository = medicineRepository
         menuProvider.reminder = entity
 
         findPreference<Preference>("reminder_status")?.summary =
