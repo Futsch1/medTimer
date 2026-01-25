@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Nastavení</string>
     <string name="tab_overview">Přehled</string>
@@ -264,5 +264,6 @@
     <string name="ignore_battery_optimization">Ignorovat optimalizaci baterie</string>
     <string name="reschedule_reminder">Přeplánovat připomenutí</string>
     <string name="interval_start_condition">Podmínka začátku intervalu</string>
-<string name="show_taken_time_in_overview">Zobrazit čas v přehledu</string>
-<string name="tag_filter_active">Filtr značek aktivní. Budou exportována pouze data se shodnými značkami.</string></resources>
+    <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
+    <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
+</resources>
