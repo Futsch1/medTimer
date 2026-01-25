@@ -277,4 +277,6 @@
     <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
     <string name="once">Once</string>
     <string name="daily">Daily</string>
+    <string name="medicine_stock_settings">Medicine stock settings</string>
+    <string name="edit_medicine_stock_settings">Edit medicine stock settings</string>
 </resources>

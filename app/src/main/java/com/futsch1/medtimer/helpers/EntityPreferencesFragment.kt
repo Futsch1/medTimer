@@ -11,6 +11,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.medicine.advancedReminderPreferences.ReminderDataStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +36,8 @@ abstract class EntityPreferencesFragment<T>(
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : PreferenceFragmentCompat() {
     lateinit var dataStore: EntityDataStore<T>
+    val medicineRepository: MedicineRepository
+        get() = (preferenceManager.preferenceDataStore as ReminderDataStore).medicineRepository
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()
