@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 @Database(
-        entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class, StockEvent.class},
+        entities = {Medicine.class, Reminder.class, ReminderEvent.class, Tag.class, MedicineToTag.class},
         version = 22,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = MedicineRoomDatabase.AutoMigration1To2.class),
@@ -83,8 +83,6 @@ public abstract class MedicineRoomDatabase extends RoomDatabase {
     }
 
     public abstract MedicineDao medicineDao();
-
-    public abstract StockDao stockDao();
 
     @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")
     static class AutoMigration1To2 implements AutoMigrationSpec {
