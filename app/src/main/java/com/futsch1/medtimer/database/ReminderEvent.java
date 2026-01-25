@@ -52,6 +52,9 @@ public class ReminderEvent {
     @ColumnInfo(defaultValue = "")
     @Expose
     public String notes;
+    @ColumnInfo(defaultValue = "TIME_BASED")
+    @Expose
+    public Reminder.ReminderType type;
 
     public ReminderEvent() {
         medicineName = "";
@@ -70,6 +73,7 @@ public class ReminderEvent {
         tags = List.of();
         lastIntervalReminderTimeInMinutes = 0;
         notes = "";
+        type = Reminder.ReminderType.TIME_BASED;
     }
 
     @Override
@@ -80,7 +84,7 @@ public class ReminderEvent {
 
     @Override
     public int hashCode() {
-        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes, notes);
+        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes, notes, type);
     }
 
     private boolean membersEqual(ReminderEvent o) {
@@ -100,7 +104,8 @@ public class ReminderEvent {
                 askForAmount == o.askForAmount &&
                 Objects.equals(tags, o.tags) &&
                 lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
-                Objects.equals(notes, o.notes);
+                Objects.equals(notes, o.notes) &&
+                type == o.type;
     }
 
     public enum ReminderStatus {

@@ -7,9 +7,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.content.edit
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
 
 /**
@@ -58,14 +56,5 @@ class Notifications(private val context: Context) {
         notificationManager.notify(notificationId, notification)
 
         soundManager.restore()
-    }
-
-    fun showOutOfStockNotification(medicine: Medicine) {
-        val notificationId = this.nextNotificationId
-
-        val factory = OutOfStockNotificationFactory(context, notificationId, medicine)
-
-        notify(notificationId, factory.create())
-        Log.d(LogTags.STOCK_HANDLING, String.format("Show out of stock notification nID %d for mID", notificationId, medicine.medicineId))
     }
 }

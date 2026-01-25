@@ -8,7 +8,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class OutOfStockNotificationFactory(context: Context, val reminderNotification: ReminderNotification) :
+class ExpirationDateNotificationFactory(context: Context, val reminderNotification: ReminderNotification) :
     NotificationFactory(
         context,
         reminderNotification.reminderNotificationData.notificationId,
@@ -25,8 +25,8 @@ class OutOfStockNotificationFactory(context: Context, val reminderNotification: 
             formatAmount(medicine.amount, medicine.unit)
         )
 
-        builder.setSmallIcon(R.drawable.box_seam)
-            .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
+        builder.setSmallIcon(R.drawable.ban)
+            .setContentTitle(context.getString(R.string.expiration_reminder))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)
             .setContentIntent(contentIntent)
