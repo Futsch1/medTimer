@@ -58,7 +58,7 @@ class AlarmFragment(
                     )
 
                 withContext(mainDispatcher) {
-                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.medicine.isOutOfStock })
+                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock })
                     setupButtons(view, intents)
                 }
             }

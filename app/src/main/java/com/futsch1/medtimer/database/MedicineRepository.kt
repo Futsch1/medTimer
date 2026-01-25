@@ -15,6 +15,7 @@ import java.util.stream.Collectors
 
 class MedicineRepository(application: Application?) {
     private val medicineDao: MedicineDao
+    private val stockDao: StockDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 
     // Stream.toList() not available in SDK version selected
@@ -31,6 +32,7 @@ class MedicineRepository(application: Application?) {
 
     init {
         medicineDao = database.medicineDao()
+        stockDao = database.stockDao()
     }
 
     val version: Int
@@ -67,7 +69,7 @@ class MedicineRepository(application: Application?) {
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getMedicineFlow(medicineId: Int): Flow<Medicine> {
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine> {
         return medicineDao.getMedicineFlow(medicineId)
     }
 
@@ -261,6 +263,10 @@ class MedicineRepository(application: Application?) {
 
     fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminderEvents(reminderEvents) }
+    }
+
+    fun insertStockEvent(stockEvent: StockEvent): Long {
+        return internalInsert(stockEvent) { stockEvent -> stockDao.insertStockEvent(stockEvent) }
     }
 
     internal fun interface Insert<T> {

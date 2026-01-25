@@ -52,13 +52,7 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
     }
 
     private fun checkForThreshold(medicine: Medicine, amount: Double) {
-        if (medicine.amount <= medicine.outOfStockReminderThreshold && (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ALWAYS ||
-                    (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ONCE && medicine.amount + amount > medicine.outOfStockReminderThreshold))
-        ) {
-            Notifications(context).showOutOfStockNotification(
-                medicine
-            )
-        }
+        TODO("Implement notification")
     }
 
 

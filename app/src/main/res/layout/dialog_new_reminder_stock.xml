@@ -39,6 +39,7 @@
                 android:id="@+id/once"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="@string/once_below_threshold" />
 
             <RadioButton
@@ -68,6 +69,7 @@
                 android:id="@+id/onceExpiration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="@string/once" />
 
             <RadioButton

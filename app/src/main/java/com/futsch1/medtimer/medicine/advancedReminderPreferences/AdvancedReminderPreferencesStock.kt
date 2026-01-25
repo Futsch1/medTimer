@@ -9,9 +9,9 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 
-class AdvancedReminderPreferencesStockExpirationFragment(
+class AdvancedReminderPreferencesStockFragment(
 ) : AdvancedReminderPreferencesFragment(
-    R.xml.advanced_reminder_settings_stock_expiration,
+    R.xml.advanced_reminder_settings_stock,
     mapOf(
     ),
     mapOf(

@@ -9,6 +9,7 @@ import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.google.android.material.textfield.TextInputEditText
@@ -27,20 +28,20 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
-        medicine: Medicine
+        fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 getMedicineName(
                     context,
-                    medicine,
+                    fullMedicine.medicine,
                     false
                 )
             )
         }
-        if (medicine.isStockManagementActive) {
-            builder.append(" (").append(getStockText(context, medicine))
-                .append(getOutOfStockText(context, medicine)).append(")")
+        if (fullMedicine.isStockManagementActive) {
+            builder.append(" (").append(getStockText(context, fullMedicine.medicine))
+                .append(getOutOfStockText(context, fullMedicine)).append(")")
         }
         return builder
     }
@@ -56,14 +57,14 @@ object MedicineHelper {
     @JvmStatic
     fun getOutOfStockText(
         context: Context,
-        medicine: Medicine
+        fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        if (medicine.isOutOfStock) {
+        if (fullMedicine.isOutOfStock) {
             builder.append(" ")
                 .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
         }
-        if (medicine.hasExpired()) {
+        if (fullMedicine.medicine.hasExpired()) {
             builder.append(" ")
                 .color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
         }
@@ -71,8 +72,8 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, medicine)
+    fun getMedicineNameWithStockText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
+        return getMedicineNameWithStockTextInternal(context, fullMedicine)
     }
 
     @JvmStatic

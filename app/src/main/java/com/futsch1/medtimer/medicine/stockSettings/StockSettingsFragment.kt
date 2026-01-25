@@ -15,7 +15,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
 class StockSettingsFragment(
-) : EntityPreferencesFragment<Medicine>(
+) : EntityPreferencesFragment<FullMedicine>(
     R.xml.stock_settings,
     mapOf(
     ),
@@ -44,50 +44,50 @@ class StockSettingsFragment(
             "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
         )
 
-    override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<Medicine> {
+    override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
         return MedicineDataStore(requireArguments.getInt("medicineId"), requireContext(), getEntityViewModel().medicineRepository)
     }
 
-    override fun getEntityViewModel(): EntityViewModel<Medicine> {
+    override fun getEntityViewModel(): EntityViewModel<FullMedicine> {
         return ViewModelProvider(this)[StockMedicineViewModel::class.java]
     }
 
-    override fun customSetup(entity: Medicine) {
+    override fun customSetup(entity: FullMedicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
 
         calculateRunOutDate(entity)
     }
 
-    override fun onEntityUpdated(entity: Medicine) {
+    override fun onEntityUpdated(entity: FullMedicine) {
         super.onEntityUpdated(entity)
 
         calculateRunOutDate(entity)
 
-        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.amount, entity.unit)
-        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.refillSize, entity.unit)
+        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(entity.medicine.amount, entity.medicine.unit)
+        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(entity.medicine.refillSize, entity.medicine.unit)
         if (entity.isOutOfStock) {
             findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
         } else {
             findPreference<EditTextPreference>("amount")!!.icon = null
         }
-        if (entity.hasExpired()) {
+        if (entity.medicine.hasExpired()) {
             findPreference<Preference>("expiration_date")!!.setIcon(R.drawable.ban)
         } else {
             findPreference<Preference>("expiration_date")!!.icon = null
         }
-        if (entity.productionDate != 0L) {
-            findPreference<Preference>("production_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.productionDate)
+        if (entity.medicine.productionDate != 0L) {
+            findPreference<Preference>("production_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.medicine.productionDate)
         }
-        if (entity.expirationDate != 0L) {
-            findPreference<Preference>("expiration_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.expirationDate)
+        if (entity.medicine.expirationDate != 0L) {
+            findPreference<Preference>("expiration_date")!!.summary = TimeHelper.daysSinceEpochToDateString(context, entity.medicine.expirationDate)
         }
     }
 
-    private fun calculateRunOutDate(entity: Medicine) {
+    private fun calculateRunOutDate(entity: FullMedicine) {
         val viewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicineId, entity.amount)
+            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount)
 
             val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(context, runOutDate) else "---"
 
@@ -100,7 +100,7 @@ class StockSettingsFragment(
     private fun addToCalendar() {
         val date = TimeHelper.stringToLocalDate(context, findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
-            val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.entity.name, date)
+            val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.entity.medicine.name, date)
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {
@@ -110,8 +110,8 @@ class StockSettingsFragment(
     }
 
     private fun refillNow() {
-        var amount = dataStore.entity.amount
-        val refillSize = dataStore.entity.refillSize
+        var amount = dataStore.entity.medicine.amount
+        val refillSize = dataStore.entity.medicine.refillSize
         amount += refillSize
         dataStore.putString("amount", MedicineHelper.formatAmount(amount, ""))
     }

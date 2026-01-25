@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 22,
-    "identityHash": "eadda17e34c123bd21e3aa844358de36",
+    "identityHash": "d8388d4a0dd81a332e1662057c4e317e",
     "entities": [
       {
         "tableName": "Medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `outOfStockReminder` TEXT DEFAULT 'OFF', `amount` REAL NOT NULL DEFAULT 0, `outOfStockReminderThreshold` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicineName` TEXT, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `amount` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT DEFAULT '[]', `unit` TEXT DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "name",
@@ -48,21 +48,8 @@
             "defaultValue": "0"
           },
           {
-            "fieldPath": "outOfStockReminder",
-            "columnName": "outOfStockReminder",
-            "affinity": "TEXT",
-            "defaultValue": "'OFF'"
-          },
-          {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "REAL",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "outOfStockReminderThreshold",
-            "columnName": "outOfStockReminderThreshold",
             "affinity": "REAL",
             "notNull": true,
             "defaultValue": "0"
@@ -501,11 +488,65 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_MedicineToTag_tagId` ON `${TABLE_NAME}` (`tagId`)"
           }
         ]
+      },
+      {
+        "tableName": "StockEvent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stockEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineId` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `type` TEXT NOT NULL, `amount` REAL NOT NULL, `refillSize` REAL NOT NULL, `expirationDate` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "stockEventId",
+            "columnName": "stockEventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medicineId",
+            "columnName": "medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refillSize",
+            "columnName": "refillSize",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expirationDate",
+            "columnName": "expirationDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "stockEventId"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eadda17e34c123bd21e3aa844358de36')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd8388d4a0dd81a332e1662057c4e317e')"
     ]
   }
 }
