@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="tab_overview">Resumen</string>
@@ -206,7 +206,7 @@
     <string name="use_relative_date_time">Fecha/hora relativa</string>
     <string name="invalid_amount">La cantidad debe contener un número para habilitar el seguimiento del stock de medicamentos para este recordatorio.</string>
     <string name="sticky_on_lockscreen">Recordatorios permanentes en la pantalla de bloqueo</string>
-    <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, solo desde el panel de notificaciones\nNota: Es posible que algunos relojes inteligentes ya no muestren notificaciones</string>
+    <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, solo desde el panel de notificaciones\nNota: Es posible que algunos relojes inteligentes dejen de mostrar notificaciones si esta opción está activada</string>
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="please_wait">Por favor, espere…</string>
     <string name="interval_time">Intervalo %s</string>
@@ -234,7 +234,7 @@
     <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
     <string name="time_based_reminder_help">Establezca horas específicas (p. ej., 8:00 a. m.) y configure un patrón recurrente. Esto permite un control preciso sobre días de la semana específicos, días del mes o programaciones periódicas complejas (como \'cada 3 días\').</string>
     <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
-    <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) donde el primer recordatorio es siempre a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta que se alcanza la hora de finalización. El patrón completo se reinicia todos los días.</string>
+    <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) en la que el primer recordatorio siempre se envía a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta alcanzar la hora de finalización. El ciclo completo se restablece cada día.</string>
     <string name="linked_reminder">Recordatorio vinculado</string>
     <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se tome un recordatorio principal. Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
     <string name="add_linked_reminder_summary">Crea un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se genera este recordatorio.</string>
@@ -255,9 +255,10 @@
     <string name="combine_notifications">Combinar notificaciones simultáneas</string>
     <string name="combine_notifications_summary">Si se establece, las notificaciones con la misma hora se combinan en una sola notificación</string>
     <string name="battery_optimization_warning_title">La optimización de la batería está activada</string>
-    <string name="battery_optimization_warning_summary">Si tiene problemas con las notificaciones perdidas, desactive la optimización de la batería para esta aplicación en la configuración de notificaciones.</string>
+    <string name="battery_optimization_warning_summary">Si experimenta problemas con notificaciones que no llegan, considere desactivar la optimización de batería para esta aplicación en la configuración de notificaciones.</string>
     <string name="ignore_battery_optimization">Ignorar la optimización de la batería</string>
     <string name="reschedule_reminder">Reprogramar recordatorio</string>
     <string name="interval_start_condition">Condición de inicio de intervalo</string>
-<string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
-<string name="show_taken_time_in_overview">Mostrar tiempo empleado en resumen</string></resources>
+    <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
+    <string name="show_taken_time_in_overview">Mostrar tiempo empleado en resumen</string>
+</resources>
