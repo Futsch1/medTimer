@@ -139,7 +139,7 @@ class ReminderEvent {
     companion object {
         val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
         val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
-        val statusValuesWithoutAcknowledgedAndDeleted: List<ReminderStatus> =
+        val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
             ReminderStatus.entries.filterNot { it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED }
     }
 }
