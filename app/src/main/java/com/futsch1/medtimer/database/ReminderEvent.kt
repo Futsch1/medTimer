@@ -87,7 +87,10 @@ class ReminderEvent {
     @JvmField
     @ColumnInfo(defaultValue = "TIME_BASED")
     @Expose
-    var type: ReminderType = ReminderType.TIME_BASED
+    var reminderType: ReminderType = ReminderType.TIME_BASED
+
+    val isOutOfStockOrExpirationReminder: Boolean
+        get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE
 
     override fun equals(other: Any?): Boolean {
         if (other == null || javaClass != other.javaClass) return false
@@ -113,7 +116,7 @@ class ReminderEvent {
             tags,
             lastIntervalReminderTimeInMinutes,
             notes,
-            type
+            reminderType
         )
     }
 
@@ -122,7 +125,7 @@ class ReminderEvent {
                 medicineName == o.medicineName &&
                 amount == o.amount && color == o.color && useColor == o.useColor && status == o.status && remindedTimestamp == o.remindedTimestamp && processedTimestamp == o.processedTimestamp && reminderId == o.reminderId && notificationId == o.notificationId && iconId == o.iconId && remainingRepeats == o.remainingRepeats && stockHandled == o.stockHandled && askForAmount == o.askForAmount &&
                 tags == o.tags && lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
-                notes == o.notes && type == o.type
+                notes == o.notes && reminderType == o.reminderType
     }
 
     enum class ReminderStatus {

@@ -155,7 +155,7 @@ class ReminderNotificationWorker(private val context: Context, workerParams: Wor
             reminderEvent.iconId = medicine.medicine.iconId
             reminderEvent.askForAmount = reminder.variableAmount
             reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))
-            reminderEvent.type = reminder.reminderType
+            reminderEvent.reminderType = reminder.reminderType
 
             when (reminder.reminderType) {
                 Reminder.ReminderType.OUT_OF_STOCK -> {
@@ -179,7 +179,6 @@ class ReminderNotificationWorker(private val context: Context, workerParams: Wor
             } else {
                 reminderEvent.lastIntervalReminderTimeInMinutes = 0
             }
-
 
             return reminderEvent
         }

@@ -76,14 +76,15 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
     override val state: OverviewState
         get() = mapReminderEventState(reminderEvent.status)
     override val reminderType: Reminder.ReminderType
-        get() = reminderEvent.type
+        get() = reminderEvent.reminderType
 
     private fun mapReminderEventState(status: ReminderEvent.ReminderStatus): OverviewState {
         return when (status) {
             ReminderEvent.ReminderStatus.RAISED -> OverviewState.RAISED
             ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN
             ReminderEvent.ReminderStatus.SKIPPED -> OverviewState.SKIPPED
-            else -> OverviewState.PENDING
+            ReminderEvent.ReminderStatus.ACKNOWLEDGED -> OverviewState.TAKEN
+            ReminderEvent.ReminderStatus.DELETED -> OverviewState.SKIPPED
         }
     }
 }

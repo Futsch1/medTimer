@@ -25,11 +25,11 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     fun isOutOfStockNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.type == Reminder.ReminderType.OUT_OF_STOCK
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.OUT_OF_STOCK
     }
 
     fun isExpirationDateNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.type == Reminder.ReminderType.EXPIRATION_DATE
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.EXPIRATION_DATE
     }
 
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {

@@ -42,6 +42,14 @@ class ScheduledStockReminderActions(
         reRaiseOrScheduleButton.setText(R.string.reschedule_reminder)
     }
 
+    private fun hideDeleteAndSkipped() {
+        deleteButton.visibility = View.INVISIBLE
+        skippedButton.visibility = View.INVISIBLE
+
+        setAngle(anchorTakenButton, 70f)
+        setAngle(anchorReraiseOrScheduleButton, 110f)
+    }
+
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)

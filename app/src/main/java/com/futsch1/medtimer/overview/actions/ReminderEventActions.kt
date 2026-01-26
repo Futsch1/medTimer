@@ -12,7 +12,7 @@ import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 
-class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
+open class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
     init {
         if (event.state == OverviewState.RAISED) {
             hideDeleteAndReraise()
@@ -61,7 +61,7 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
         }, {})
     }
 
-    private fun processDeleteReminderEvent(context: Context?, reminderEvent: ReminderEvent) {
+    protected fun processDeleteReminderEvent(context: Context?, reminderEvent: ReminderEvent) {
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
             val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
