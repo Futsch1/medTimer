@@ -33,6 +33,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         when (intent.action) {
             ActivityCodes.DISMISSED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorker::class.java))
             ActivityCodes.TAKEN_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorker::class.java))
+            ActivityCodes.ACKNOWLEDGED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, AcknowledgedWorker::class.java))
             ActivityCodes.SNOOZE_ACTION -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)

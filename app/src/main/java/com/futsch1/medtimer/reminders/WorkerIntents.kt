@@ -57,6 +57,10 @@ fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedN
     return buildActionIntent(context, processedNotificationData, ActivityCodes.TAKEN_ACTION)
 }
 
+fun getAcknowledgedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
+    return buildActionIntent(context, processedNotificationData, ActivityCodes.ACKNOWLEDGED_ACTION)
+}
+
 fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
     val intent = Intent(context, MainActivity::class.java)
     intent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
