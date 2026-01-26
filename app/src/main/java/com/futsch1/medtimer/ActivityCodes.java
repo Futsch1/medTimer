@@ -1,7 +1,6 @@
 package com.futsch1.medtimer;
 
 public class ActivityCodes {
-    public static final String EXTRA_REMINDER_EVENT_ID = "com.futsch1.medTimer.REMINDER_EVENT_ID";
     public static final String EXTRA_SNOOZE_TIME = "com.futsch1.medTimer.SNOOZE_TIME";
     public static final String EXTRA_NOTIFICATION_ID = "com.futsch1.medTimer.NOTIFICATION_ID";
     public static final String EXTRA_REPEAT_TIME_SECONDS = "com.futsch1.medTimer.EXTRA_REPEAT_TIME_SECONDS";
@@ -12,7 +11,6 @@ public class ActivityCodes {
     public static final String EXTRA_REMINDER_EVENT_ID_LIST = "com.futsch1.medTimer.REMINDER_EVENT_ID_LIST";
     public static final String EXTRA_REMINDER_ID_LIST = "com.futsch1.medTimer.REMINDER_ID_LIST";
     public static final String EXTRA_REMIND_INSTANT = "com.futsch1.medTimer.REMIND_INSTANT";
-    public static final String EXTRA_MEDICINE_NAME = "com.futsch1.medTimer.EXTRA_MEDICINE_NAME";
 
     public static final String REMINDER_ACTION = "com.futsch1.medTimer.REMINDER_ACTION";
     public static final String DISMISSED_ACTION = "com.futsch1.medTimer.DISMISSED_ACTION";
@@ -20,6 +18,7 @@ public class ActivityCodes {
     public static final String SNOOZE_ACTION = "com.futsch1.medTimer.SNOOZE_ACTION";
     public static final String REMOTE_INPUT_SNOOZE_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION";
     public static final String REMOTE_INPUT_VARIABLE_AMOUNT_ACTION = "com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION";
+    public static final String ACKNOWLEDGED_ACTION = "com.futsch1.medTimer.ACKNOWLEDGED_ACTION";
     public static final String VARIABLE_AMOUNT_ACTIVITY = "com.futsch1.medTimer.VARIABLE_AMOUNT_ACTIVITY";
     public static final String CUSTOM_SNOOZE_ACTIVITY = "com.futsch1.medTimer.CUSTOM_SNOOZE_ACTIVITY";
 

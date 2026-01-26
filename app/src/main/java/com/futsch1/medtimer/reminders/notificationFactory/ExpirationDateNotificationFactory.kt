@@ -24,6 +24,7 @@ class ExpirationDateNotificationFactory(context: Context, val reminderNotificati
             medicineNameString,
             formatAmount(medicine.amount, medicine.unit)
         )
+        val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
         builder.setSmallIcon(R.drawable.ban)
             .setContentTitle(context.getString(R.string.expiration_reminder))
@@ -32,6 +33,7 @@ class ExpirationDateNotificationFactory(context: Context, val reminderNotificati
             .setContentIntent(contentIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(Notification.CATEGORY_REMINDER)
+            .setDeleteIntent(intentBuilder.pendingAcknowledged)
     }
 
     override fun create(): Notification {

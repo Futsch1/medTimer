@@ -24,6 +24,7 @@ class OutOfStockNotificationFactory(context: Context, val reminderNotification: 
             medicineNameString,
             formatAmount(medicine.amount, medicine.unit)
         )
+        val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
         builder.setSmallIcon(R.drawable.box_seam)
             .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
@@ -32,6 +33,7 @@ class OutOfStockNotificationFactory(context: Context, val reminderNotification: 
             .setContentIntent(contentIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(Notification.CATEGORY_REMINDER)
+            .setDeleteIntent(intentBuilder.pendingAcknowledged)
     }
 
     override fun create(): Notification {
