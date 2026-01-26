@@ -3,6 +3,7 @@ package com.futsch1.medtimer.overview
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.Spanned
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
@@ -37,6 +38,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     abstract val icon: Int
     abstract val color: Int?
     abstract val state: OverviewState
+    abstract val reminderType: Reminder.ReminderType
     val updateValue: Long
         get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
@@ -73,6 +75,8 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
         get() = if (reminderEvent.useColor) reminderEvent.color else null
     override val state: OverviewState
         get() = mapReminderEventState(reminderEvent.status)
+    override val reminderType: Reminder.ReminderType
+        get() = reminderEvent.type
 
     private fun mapReminderEventState(status: ReminderEvent.ReminderStatus): OverviewState {
         return when (status) {
@@ -98,6 +102,8 @@ class OverviewScheduledReminderEvent(context: Context, sharedPreferences: Shared
         get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
     override val state: OverviewState
         get() = OverviewState.PENDING
+    override val reminderType: Reminder.ReminderType
+        get() = scheduledReminder.reminder.reminderType
 }
 
 fun create(context: Context, sharedPreferences: SharedPreferences, reminderEvent: ReminderEvent): OverviewEvent {

@@ -116,7 +116,7 @@ fun formatScheduledReminderString(
 
     return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
         append(scheduledReminder.medicine().medicine.name)
-    }.append(getAmountOrStockString(context, scheduledReminder))
+    }.append(getAmountString(scheduledReminder))
 }
 
 fun formatScheduledReminderStringForWidget(
@@ -132,21 +132,14 @@ fun formatScheduledReminderStringForWidget(
         )) + ": "
 
     return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
-        getAmountOrStockString(
-            context,
+        getAmountString(
             scheduledReminder
         )
     )
 }
 
-private fun getAmountOrStockString(context: Context, scheduledReminder: ScheduledReminder): String {
-    return if (scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
-        " " + if (scheduledReminder.reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) context.getString(R.string.out_of_stock_reminder) else context.getString(
-            R.string.expiration_reminder
-        )
-    } else {
-        if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""
-    }
+private fun getAmountString(scheduledReminder: ScheduledReminder): String {
+    return if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""
 }
 
 private fun getLastIntervalTime(context: Context, reminderEvent: ReminderEvent): String =
