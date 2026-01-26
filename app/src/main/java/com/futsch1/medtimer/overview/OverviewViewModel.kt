@@ -22,7 +22,8 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     var initialized = false
     val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
 
-    private val reminderEvents = medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), false)
+    private val reminderEvents =
+        medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), ReminderEvent.statusValuesWithoutDelete)
     private val scheduledReminders = medicineViewModel.scheduledReminders
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)

@@ -15,9 +15,6 @@ class MedicineRepository(val application: Application?) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 
-    private val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
-    private val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
-
     init {
         medicineDao = database.medicineDao()
     }
@@ -61,15 +58,15 @@ class MedicineRepository(val application: Application?) {
     }
 
 
-    fun getLiveReminderEvents(timeStamp: Long, withDeleted: Boolean): LiveData<List<ReminderEvent>> {
-        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, if (withDeleted) allStatusValues else statusValuesWithoutDelete)
+    fun getLiveReminderEvents(timeStamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>> {
+        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, statusValues)
     }
 
     val allReminderEventsWithoutDeleted: List<ReminderEvent>
-        get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
+        get() = medicineDao.getLimitedReminderEvents(0L, ReminderEvent.statusValuesWithoutDelete)
 
     fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
-        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)
+        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), ReminderEvent.allStatusValues)
     }
 
     fun getReminderEventsForScheduling(medicines: List<FullMedicine>): List<ReminderEvent> {
