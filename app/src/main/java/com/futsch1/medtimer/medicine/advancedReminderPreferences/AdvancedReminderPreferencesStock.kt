@@ -42,6 +42,8 @@ class AdvancedReminderPreferencesStockFragment(
 
         menuProvider.medicineRepository = medicineRepository
         menuProvider.reminder = entity
+
+        findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(entity.outOfStockThreshold, fullMedicine?.medicine?.unit ?: "")
     }
 
     override fun customSetup(entity: Reminder) {

@@ -39,15 +39,6 @@ open class ActionsBase(view: View, popupWindow: PopupWindow) {
         setAngle(anchorReraiseOrScheduleButton, 130f)
     }
 
-    fun hideDeleteAndSkipped() {
-        deleteButton.visibility = View.INVISIBLE
-        skippedButton.visibility = View.INVISIBLE
-
-        setAngle(anchorTakenButton, 70f)
-        setAngle(anchorReraiseOrScheduleButton, 110f)
-    }
-
-
     protected fun setAngle(view: View, f: Float) {
         val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.circleAngle = f

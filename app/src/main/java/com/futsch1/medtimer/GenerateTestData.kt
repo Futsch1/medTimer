@@ -171,7 +171,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
         override fun toReminder(medicineId: Int): Reminder {
             val reminder = Reminder(medicineId)
             reminder.outOfStockThreshold = threshold
-            reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+            reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
             return reminder
         }
     }

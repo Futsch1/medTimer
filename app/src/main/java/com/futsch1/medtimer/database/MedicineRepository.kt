@@ -5,29 +5,18 @@ import androidx.lifecycle.LiveData
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
-import java.util.Arrays
 import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import java.util.stream.Collectors
 
 class MedicineRepository(val application: Application?) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 
-    // Stream.toList() not available in SDK version selected
-    private val allStatusValues: List<ReminderStatus> =
-        Arrays.stream(arrayOf(ReminderStatus.DELETED, ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN))
-            .collect(
-                Collectors.toList()
-            )
-
-    private val statusValuesWithoutDelete: List<ReminderStatus> =
-        Arrays.stream(arrayOf(ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN)).collect(
-            Collectors.toList()
-        )
+    private val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
+    private val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
 
     init {
         medicineDao = database.medicineDao()
