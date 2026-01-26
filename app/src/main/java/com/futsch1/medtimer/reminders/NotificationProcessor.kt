@@ -90,7 +90,7 @@ class NotificationProcessor(val context: Context) {
             Log.i(
                 LogTags.REMINDER, String.format(
                     "%s reminder reID %d for %s (%s)",
-                    if (status == ReminderStatus.TAKEN) "Taken" else "Skipped",
+                    status.toString(),
                     reminderEvent.reminderEventId,
                     reminderEvent.medicineName,
                     reminderEvent.amount

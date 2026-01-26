@@ -6,44 +6,34 @@ import android.widget.PopupWindow
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderNotificationWorker
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.ZoneId
 
-open class ScheduledReminderActions(
+class ScheduledStockReminderActions(
     event: OverviewScheduledReminderEvent,
-    val view: View,
+    view: View,
     popupWindow: PopupWindow,
     private val coroutineScope: CoroutineScope,
     private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ActionsBase(view, popupWindow) {
+) : ScheduledReminderActions(event, view, popupWindow, coroutineScope) {
     init {
-        hideDelete()
+        hideDeleteAndSkipped()
 
         takenButton.setOnClickListener {
             // Launch a coroutine in the provided scope
             coroutineScope.launch {
-                processFutureReminder(event.scheduledReminder, true)
+                processFutureReminder(event.scheduledReminder)
             }
             popupWindow.dismiss()
         }
-
-        skippedButton.setOnClickListener {
-            // Launch a coroutine in the provided scope
-            coroutineScope.launch {
-                processFutureReminder(event.scheduledReminder, false)
-            }
-            popupWindow.dismiss()
-        }
+        takenButton.setText(R.string.acknowledged)
 
         reRaiseOrScheduleButton.setOnClickListener {
             scheduleReminder(event.scheduledReminder)
@@ -52,23 +42,10 @@ open class ScheduledReminderActions(
         reRaiseOrScheduleButton.setText(R.string.reschedule_reminder)
     }
 
-    protected fun scheduleReminder(scheduledReminder: ScheduledReminder) {
-        TimeHelper.TimePickerWrapper(view.context as androidx.fragment.app.FragmentActivity)
-            .show(scheduledReminder.reminder.timeInMinutes / 60, scheduledReminder.reminder.timeInMinutes % 60) { minutes ->
-                coroutineScope.launch {
-                    val reminderTimeStamp =
-                        TimeHelper.instantFromDateAndMinutes(minutes, scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).epochSecond
-                    val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
-                    val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderWorkerReceiver.requestShowReminderNotification(view.context, reminderNotificationData)
-                }
-            }
-    }
-
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
-    private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
+    private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderWorkerReceiver.requestReminderAction(view.context, scheduledReminder.reminder, reminderEvent, taken)
+        ReminderWorkerReceiver.requestStockReminderAcknowledged(view.context, reminderEvent)
     }
 
     private suspend fun createReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {

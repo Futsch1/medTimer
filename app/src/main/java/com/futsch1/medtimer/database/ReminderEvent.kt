@@ -1,117 +1,135 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.futsch1.medtimer.database.Reminder.ReminderType
+import com.google.gson.annotations.Expose
+import java.util.Objects
 
-import com.google.gson.annotations.Expose;
-
-import java.util.List;
-import java.util.Objects;
-
-@Entity(indices = {@Index(value = "reminderId"), @Index("remindedTimestamp")})
-public class ReminderEvent {
+@Entity(indices = [Index("reminderId"), Index("remindedTimestamp")])
+class ReminderEvent {
+    @JvmField
     @PrimaryKey(autoGenerate = true)
-    public int reminderEventId;
+    var reminderEventId: Int = 0
+
+    @JvmField
     @Expose
-    public String medicineName;
+    var medicineName: String = ""
+
+    @JvmField
     @Expose
-    public String amount;
+    var amount: String = ""
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int color;
+    var color: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean useColor;
+    var useColor: Boolean = false
+
+    @JvmField
     @Expose
-    public ReminderStatus status;
+    var status: ReminderStatus = ReminderStatus.RAISED
+
+    @JvmField
     @Expose
-    public long remindedTimestamp;
+    var remindedTimestamp: Long = 0
+
+    @JvmField
     @Expose
-    public long processedTimestamp;
+    var processedTimestamp: Long = 0
+
+    @JvmField
     @Expose
-    public int reminderId;
+    var reminderId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
-    public int notificationId;
+    var notificationId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int iconId;
+    var iconId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
-    public int remainingRepeats;
+    var remainingRepeats: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
-    public boolean stockHandled;
+    var stockHandled: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
-    public boolean askForAmount;
+    var askForAmount: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "[]")
     @Expose
-    public List<String> tags;
+    var tags: List<String> = listOf()
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int lastIntervalReminderTimeInMinutes;
+    var lastIntervalReminderTimeInMinutes: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String notes;
+    var notes: String = ""
+
+    @JvmField
     @ColumnInfo(defaultValue = "TIME_BASED")
     @Expose
-    public Reminder.ReminderType type;
+    var type: ReminderType = ReminderType.TIME_BASED
 
-    public ReminderEvent() {
-        medicineName = "";
-        amount = "";
-        color = 0;
-        useColor = false;
-        status = ReminderStatus.RAISED;
-        remindedTimestamp = 0;
-        processedTimestamp = 0;
-        reminderId = 0;
-        notificationId = 0;
-        iconId = 0;
-        remainingRepeats = 0;
-        stockHandled = false;
-        askForAmount = false;
-        tags = List.of();
-        lastIntervalReminderTimeInMinutes = 0;
-        notes = "";
-        type = Reminder.ReminderType.TIME_BASED;
+    override fun equals(other: Any?): Boolean {
+        if (other == null || javaClass != other.javaClass) return false
+        return membersEqual(other as ReminderEvent)
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        return membersEqual((ReminderEvent) o);
+    override fun hashCode(): Int {
+        return Objects.hash(
+            reminderEventId,
+            medicineName,
+            amount,
+            color,
+            useColor,
+            status,
+            remindedTimestamp,
+            processedTimestamp,
+            reminderId,
+            notificationId,
+            iconId,
+            remainingRepeats,
+            stockHandled,
+            askForAmount,
+            tags,
+            lastIntervalReminderTimeInMinutes,
+            notes,
+            type
+        )
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(reminderEventId, medicineName, amount, color, useColor, status, remindedTimestamp, processedTimestamp, reminderId, notificationId, iconId, remainingRepeats, stockHandled, askForAmount, tags, lastIntervalReminderTimeInMinutes, notes, type);
-    }
-
-    private boolean membersEqual(ReminderEvent o) {
+    private fun membersEqual(o: ReminderEvent): Boolean {
         return reminderEventId == o.reminderEventId &&
-                Objects.equals(medicineName, o.medicineName) &&
-                Objects.equals(amount, o.amount) &&
-                color == o.color &&
-                useColor == o.useColor &&
-                status == o.status &&
-                remindedTimestamp == o.remindedTimestamp &&
-                processedTimestamp == o.processedTimestamp &&
-                reminderId == o.reminderId &&
-                notificationId == o.notificationId &&
-                iconId == o.iconId &&
-                remainingRepeats == o.remainingRepeats &&
-                stockHandled == o.stockHandled &&
-                askForAmount == o.askForAmount &&
-                Objects.equals(tags, o.tags) &&
-                lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
-                Objects.equals(notes, o.notes) &&
-                type == o.type;
+                medicineName == o.medicineName &&
+                amount == o.amount && color == o.color && useColor == o.useColor && status == o.status && remindedTimestamp == o.remindedTimestamp && processedTimestamp == o.processedTimestamp && reminderId == o.reminderId && notificationId == o.notificationId && iconId == o.iconId && remainingRepeats == o.remainingRepeats && stockHandled == o.stockHandled && askForAmount == o.askForAmount &&
+                tags == o.tags && lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
+                notes == o.notes && type == o.type
     }
 
-    public enum ReminderStatus {
+    enum class ReminderStatus {
         RAISED,
         TAKEN,
         SKIPPED,
-        DELETED
+        DELETED,
+        ACKNOWLEDGED
     }
 }

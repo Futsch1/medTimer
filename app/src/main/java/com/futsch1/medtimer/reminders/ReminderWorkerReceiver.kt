@@ -149,6 +149,13 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             }
         }
 
+        fun requestStockReminderAcknowledged(context: Context, reminderEvent: ReminderEvent) {
+            val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
+
+            WorkManagerAccess.getWorkManager(context)
+                .enqueue(buildActionWorkRequest(getTakenActionIntent(context, processedNotificationData), AcknowledgedWorker::class.java))
+        }
+
         private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {
             val builder = Data.Builder()
             ProcessedNotificationData.forwardToBuilder(intent.extras!!, builder)

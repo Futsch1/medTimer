@@ -69,6 +69,4 @@ class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWi
             medicineRepository.updateReminderEvent(reminderEvent)
         }, {})
     }
-
-
 }

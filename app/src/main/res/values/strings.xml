@@ -280,4 +280,5 @@
     <string name="medicine_stock_settings">Medicine stock settings</string>
     <string name="edit_medicine_stock_settings">Edit medicine stock settings</string>
     <string name="clear_dates">Clear dates</string>
+    <string name="acknowledged">Acknowledged</string>
 </resources>
