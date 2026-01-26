@@ -15,6 +15,7 @@ import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.filter.Filter;
 import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TableHelper;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.textfield.TextInputEditText;
@@ -42,7 +43,7 @@ public class ReminderTableFragment extends Fragment {
 
         tableView.setAdapter(adapter);
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()));
-        medicineViewModel.getLiveReminderEvents(0, false).observe(getViewLifecycleOwner(), adapter::submitList);
+        medicineViewModel.getLiveReminderEvents(0, ReminderEvent.Companion.getStatusValuesWithoutAcknowledgedAndDeleted()).observe(getViewLifecycleOwner(), adapter::submitList);
 
         // This is a workaround for a recycler view bug that causes random crashes
         tableView.getCellRecyclerView().setItemAnimator(null);
@@ -61,6 +62,11 @@ public class ReminderTableFragment extends Fragment {
         });
         filter.addTextChangedListener(new TextWatcher() {
             @Override
+            public void afterTextChanged(Editable s) {
+                // Intentionally empty
+            }
+
+            @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Intentionally empty
             }
@@ -68,11 +74,6 @@ public class ReminderTableFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tableFilter.set(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Intentionally empty
             }
         });
     }
