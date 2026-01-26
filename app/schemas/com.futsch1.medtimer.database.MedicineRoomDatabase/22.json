@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 22,
-    "identityHash": "457e9810f7ccff60c48daa55fa8ec8cf",
+    "identityHash": "940285e27bd6a03e131bf439ecdabb2c",
     "entities": [
       {
         "tableName": "Medicine",
@@ -293,7 +293,7 @@
       },
       {
         "tableName": "ReminderEvent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT, `amount` TEXT, `color` INTEGER NOT NULL DEFAULT 0, `useColor` INTEGER NOT NULL DEFAULT false, `status` TEXT, `remindedTimestamp` INTEGER NOT NULL, `processedTimestamp` INTEGER NOT NULL, `reminderId` INTEGER NOT NULL, `notificationId` INTEGER NOT NULL DEFAULT 0, `iconId` INTEGER NOT NULL DEFAULT 0, `remainingRepeats` INTEGER NOT NULL DEFAULT 0, `stockHandled` INTEGER NOT NULL DEFAULT false, `askForAmount` INTEGER NOT NULL DEFAULT false, `tags` TEXT DEFAULT '[]', `lastIntervalReminderTimeInMinutes` INTEGER NOT NULL DEFAULT 0, `notes` TEXT DEFAULT '', `type` TEXT DEFAULT 'TIME_BASED')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderEventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT NOT NULL, `amount` TEXT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0, `useColor` INTEGER NOT NULL DEFAULT false, `status` TEXT NOT NULL, `remindedTimestamp` INTEGER NOT NULL, `processedTimestamp` INTEGER NOT NULL, `reminderId` INTEGER NOT NULL, `notificationId` INTEGER NOT NULL DEFAULT 0, `iconId` INTEGER NOT NULL DEFAULT 0, `remainingRepeats` INTEGER NOT NULL DEFAULT 0, `stockHandled` INTEGER NOT NULL DEFAULT false, `askForAmount` INTEGER NOT NULL DEFAULT false, `tags` TEXT NOT NULL DEFAULT '[]', `lastIntervalReminderTimeInMinutes` INTEGER NOT NULL DEFAULT 0, `notes` TEXT NOT NULL DEFAULT '', `type` TEXT NOT NULL DEFAULT 'TIME_BASED')",
         "fields": [
           {
             "fieldPath": "reminderEventId",
@@ -304,12 +304,14 @@
           {
             "fieldPath": "medicineName",
             "columnName": "medicineName",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "color",
@@ -328,7 +330,8 @@
           {
             "fieldPath": "status",
             "columnName": "status",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "remindedTimestamp",
@@ -387,6 +390,7 @@
             "fieldPath": "tags",
             "columnName": "tags",
             "affinity": "TEXT",
+            "notNull": true,
             "defaultValue": "'[]'"
           },
           {
@@ -400,12 +404,14 @@
             "fieldPath": "notes",
             "columnName": "notes",
             "affinity": "TEXT",
+            "notNull": true,
             "defaultValue": "''"
           },
           {
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
+            "notNull": true,
             "defaultValue": "'TIME_BASED'"
           }
         ],
@@ -498,7 +504,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '457e9810f7ccff60c48daa55fa8ec8cf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '940285e27bd6a03e131bf439ecdabb2c')"
     ]
   }
 }
