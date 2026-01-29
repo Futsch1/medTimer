@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.text.Spanned
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.formatReminderString
+import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -63,7 +63,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
 }
 
 class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferences, val reminderEvent: ReminderEvent) : OverviewEvent(sharedPreferences) {
-    override val text: Spanned = formatReminderString(context, reminderEvent, sharedPreferences)
+    override val text: Spanned = formatReminderEventString(context, reminderEvent, sharedPreferences)
 
     override val id: Int
         get() = reminderEvent.reminderEventId

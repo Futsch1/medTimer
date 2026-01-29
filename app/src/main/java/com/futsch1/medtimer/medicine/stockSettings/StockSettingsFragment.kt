@@ -24,6 +24,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
+import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
@@ -118,10 +119,7 @@ class StockSettingsFragment(
     }
 
     private fun refillNow() {
-        var amount = dataStore.entity.medicine.amount
-        val refillSize = dataStore.entity.medicine.refillSize
-        amount += refillSize
-        dataStore.putString("amount", MedicineHelper.formatAmount(amount, ""))
+        ReminderWorkerReceiver.requestRefill(requireContext(), dataStore.entity.medicine.medicineId)
     }
 }
 

@@ -157,6 +157,18 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 .enqueue(buildActionWorkRequest(getTakenActionIntent(context, processedNotificationData), AcknowledgedWorker::class.java))
         }
 
+        fun requestRefill(context: Context, medicineId: Int) {
+            val refillWorker =
+                OneTimeWorkRequest.Builder(RefillWorker::class.java)
+                    .setInputData(
+                        Data.Builder()
+                            .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+                            .build()
+                    )
+                    .build()
+            WorkManagerAccess.getWorkManager(context).enqueue(refillWorker)
+        }
+
         private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {
             val builder = Data.Builder()
             ProcessedNotificationData.forwardToBuilder(intent.extras!!, builder)

@@ -215,7 +215,8 @@ class Reminder(@JvmField var medicineRelId: Int) {
         LINKED(R.drawable.link),
         WINDOWED_INTERVAL(R.drawable.interval),
         OUT_OF_STOCK(R.drawable.box_seam),
-        EXPIRATION_DATE(R.drawable.ban)
+        EXPIRATION_DATE(R.drawable.ban),
+        REFILL(R.drawable.cart2)
     }
 
 

@@ -89,8 +89,8 @@ class ReminderEvent {
     @Expose
     var reminderType: ReminderType = ReminderType.TIME_BASED
 
-    val isOutOfStockOrExpirationReminder: Boolean
-        get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE
+    val isOutOfStockOrExpirationOrRefillReminder: Boolean
+        get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE || reminderType == ReminderType.REFILL
 
     override fun equals(other: Any?): Boolean {
         if (other == null || javaClass != other.javaClass) return false

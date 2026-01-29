@@ -54,7 +54,7 @@ fun setReminderActive(reminder: Reminder, active: Boolean) {
     reminder.active = active
 }
 
-fun formatReminderString(
+fun formatReminderEventString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
     var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
