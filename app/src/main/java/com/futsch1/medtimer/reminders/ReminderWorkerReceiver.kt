@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.WorkManagerAccess
+import com.futsch1.medtimer.WorkerActionCodes
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -28,13 +29,14 @@ import java.time.temporal.ChronoUnit
  * repeating alerts.
  */
 class ReminderWorkerReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)
-        when (intent.action) {
-            ActivityCodes.DISMISSED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorker::class.java))
-            ActivityCodes.TAKEN_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorker::class.java))
-            ActivityCodes.ACKNOWLEDGED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, AcknowledgedWorker::class.java))
-            ActivityCodes.SNOOZE_ACTION -> {
+        val intentAction = WorkerActionCodes.valueOf(intent.action!!)
+        when (intentAction) {
+            WorkerActionCodes.Dismissed -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorker::class.java))
+            WorkerActionCodes.Taken -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorker::class.java))
+            WorkerActionCodes.Acknowledged -> workManager.enqueue(buildActionWorkRequest(intent, AcknowledgedWorker::class.java))
+            WorkerActionCodes.Snooze -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
                 builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
@@ -45,7 +47,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 workManager.enqueue(snoozeWork)
             }
 
-            ActivityCodes.REMINDER_ACTION -> {
+            WorkerActionCodes.Reminder -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
 
@@ -55,6 +57,8 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                         .build()
                 workManager.enqueue(reminderNotificationWorker)
             }
+
+            WorkerActionCodes.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
         }
     }
 

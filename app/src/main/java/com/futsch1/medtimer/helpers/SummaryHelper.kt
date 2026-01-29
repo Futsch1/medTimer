@@ -36,6 +36,10 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
         Reminder.ReminderType.EXPIRATION_DATE -> {
             strings.add(context.getString(R.string.expiration_date))
         }
+
+        Reminder.ReminderType.REFILL -> {
+            strings.add(context.getString(R.string.refill))
+        }
     }
     if (reminder.instructions.isNotEmpty()) {
         strings.add(reminder.instructions)

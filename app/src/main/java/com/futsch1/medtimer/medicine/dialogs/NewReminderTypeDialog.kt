@@ -46,7 +46,7 @@ class NewReminderTypeDialog(
                 // Intentionally empty
             }
 
-            Reminder.ReminderType.LINKED -> {
+            Reminder.ReminderType.LINKED, Reminder.ReminderType.REFILL -> {
                 // May never happen
                 assert(false)
             }

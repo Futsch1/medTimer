@@ -160,6 +160,14 @@ class ReminderViewHolder private constructor(
                 titleText = R.string.expiration_date
                 helpText = R.string.expiration_date_reminder_help
             }
+
+            ReminderType.REFILL -> {
+                // Never created here, so keep empty
+                iconId = 0
+                titleText = 0
+                helpText = 0
+                assert(false)
+            }
         }
         val builder = AlertDialog.Builder(itemView.context)
             .setTitle(titleText)

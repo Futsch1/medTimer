@@ -34,6 +34,11 @@ class OutOfStockNotificationFactory(context: Context, val reminderNotification: 
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(Notification.CATEGORY_REMINDER)
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
+            .addAction(
+                R.drawable.cart2,
+                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
+                intentBuilder.pendingRefill
+            )
     }
 
     override fun create(): Notification {

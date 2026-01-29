@@ -37,7 +37,11 @@ class SchedulingFactory {
             Reminder.ReminderType.EXPIRATION_DATE -> {
                 ExpirationDateScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
+
+            Reminder.ReminderType.REFILL -> {
+                null
+            }
         }
-        return WeekendModeSchedulingDecorator(scheduler, timeAccess, sharedPreferences)
+        return WeekendModeSchedulingDecorator(scheduler!!, timeAccess, sharedPreferences)
     }
 }

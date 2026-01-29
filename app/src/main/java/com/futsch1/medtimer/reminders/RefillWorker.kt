@@ -11,14 +11,21 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.time.Instant
 import java.util.stream.Collectors
 
 class RefillWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
-        val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         val medicineRepository = MedicineRepository(context as Application?)
+
+        var medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
+        if (medicineId == -1) {
+            val reminderEvent = medicineRepository.getReminderEvent(ProcessedNotificationData.fromData(inputData).reminderEventIds[0])
+            val reminder = medicineRepository.getReminder(reminderEvent?.reminderId ?: -1)
+            medicineId = reminder?.medicineRelId ?: -1
+        }
         val medicine = medicineRepository.getMedicine(medicineId)
             ?: return Result.failure()
 
