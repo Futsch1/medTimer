@@ -137,7 +137,7 @@ class ManualDose(
             if (medicineId != -1) {
                 val amount = MedicineHelper.parseAmount(reminderEvent.amount)
                 if (amount != null) {
-                    ReminderWorkerReceiver.requestStockHandling(context, amount, medicineId)
+                    ReminderWorkerReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
                 }
             }
         }

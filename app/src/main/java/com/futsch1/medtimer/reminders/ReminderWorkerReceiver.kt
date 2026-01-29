@@ -97,14 +97,14 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             workManager.enqueue(repeatWork)
         }
 
-        @JvmStatic
-        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int) {
+        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, remindInstant: Long) {
             val workManager = WorkManagerAccess.getWorkManager(context)
             val stockHandlingWorker =
                 OneTimeWorkRequest.Builder(StockHandlingWorker::class.java)
                     .setInputData(
                         Data.Builder()
                             .putDouble(ActivityCodes.EXTRA_AMOUNT, amount)
+                            .putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant)
                             .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
                             .build()
                     )

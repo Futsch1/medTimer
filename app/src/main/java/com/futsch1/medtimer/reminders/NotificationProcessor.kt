@@ -115,7 +115,7 @@ class NotificationProcessor(val context: Context) {
                         amount = -amount
                     }
                     reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-                    requestStockHandling(context, amount, reminder.medicineRelId)
+                    requestStockHandling(context, amount, reminder.medicineRelId, reminderEvent.remindedTimestamp)
                 }
             }
         }
