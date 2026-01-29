@@ -44,6 +44,9 @@ class JSONMedicineBackupUnitTest {
         reminder.automaticallyTaken = true;
         reminder.intervalStartTimeOfDay = 1;
         reminder.intervalEndTimeOfDay = 2;
+        reminder.setOutOfStockThreshold(1.0);
+        reminder.setOutOfStockReminderType(Reminder.OutOfStockReminderType.ONCE);
+        reminder.setExpirationReminderType(Reminder.ExpirationReminderType.DAILY);
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
@@ -52,6 +55,9 @@ class JSONMedicineBackupUnitTest {
         medicineWithReminders.medicine.unit = "pills";
         medicineWithReminders.medicine.sortOrder = 4.5;
         medicineWithReminders.medicine.notes = "Generic ingredient: Dihydrogen monoxide";
+        medicineWithReminders.medicine.showNotificationAsAlarm = true;
+        medicineWithReminders.medicine.productionDate = 1;
+        medicineWithReminders.medicine.expirationDate = 2;
         medicineWithReminders.tags = new ArrayList<>();
         medicineWithReminders.tags.add(new Tag("Tag A"));
         medicinesWithReminders.add(medicineWithReminders);
@@ -72,13 +78,14 @@ class JSONMedicineBackupUnitTest {
         "useColor": true,
         "notificationImportance": 3,
         "iconId": 5,
-        "outOfStockReminder": "OFF",
         "amount": 0.0,
-        "outOfStockReminderThreshold": 0.0,
         "refillSizes": [],
         "unit": "pills",
         "sortOrder": 4.5,
-        "notes": "Generic ingredient: Dihydrogen monoxide"
+        "notes": "Generic ingredient: Dihydrogen monoxide",
+        "showNotificationAsAlarm": true,
+        "productionDate": 1,
+        "expirationDate": 2
       },
       "tags": [
         {
@@ -114,7 +121,10 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": true,
           "intervalStartTimeOfDay": 1,
           "intervalEndTimeOfDay": 2,
-          "windowedInterval": false
+          "windowedInterval": false,
+          "outOfStockThreshold": 1.0,
+          "outOfStockReminderType": "ONCE",
+          "expirationReminderType": "DAILY"
         }
       ]
     }
@@ -217,13 +227,14 @@ class JSONMedicineBackupUnitTest {
         "useColor": true,
         "notificationImportance": 4,
         "iconId": 0,
-        "outOfStockReminder": "OFF",
         "amount": 0.0,
-        "outOfStockReminderThreshold": 0.0,
         "refillSizes": [],
         "unit": "",
         "sortOrder": 3.44,
-        "notes": ""
+        "notes": "",
+        "showNotificationAsAlarm": false,
+        "productionDate": 0,
+        "expirationDate": 0
       },
       "reminders": [
         {
@@ -254,7 +265,10 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "windowedInterval": false
+          "windowedInterval": false,
+          "outOfStockThreshold": 0.0,
+          "outOfStockReminderType": "OFF",
+          "expirationReminderType": "OFF"
         }
       ]
     },
@@ -265,13 +279,14 @@ class JSONMedicineBackupUnitTest {
         "useColor": false,
         "notificationImportance": 5,
         "iconId": 7,
-        "outOfStockReminder": "OFF",
         "amount": 17.0,
-        "outOfStockReminderThreshold": 17.5,
         "refillSizes": [],
         "unit": "",
         "sortOrder": 1.0,
-        "notes": ""
+        "notes": "",
+        "showNotificationAsAlarm": false,
+        "productionDate": 0,
+        "expirationDate": 0
       },
       "reminders": [
         {
@@ -302,7 +317,10 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "windowedInterval": false
+          "windowedInterval": false,
+          "outOfStockThreshold": 0.0,
+          "outOfStockReminderType": "OFF",
+          "expirationReminderType": "OFF"
         },
         {
           "reminderId": 2,
@@ -332,7 +350,10 @@ class JSONMedicineBackupUnitTest {
           "automaticallyTaken": false,
           "intervalStartTimeOfDay": 480,
           "intervalEndTimeOfDay": 1320,
-          "windowedInterval": false
+          "windowedInterval": false,
+          "outOfStockThreshold": 0.0,
+          "outOfStockReminderType": "OFF",
+          "expirationReminderType": "OFF"
         }
       ]
     }
