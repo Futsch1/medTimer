@@ -5,6 +5,7 @@ import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.TestHelper.on
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -189,6 +190,38 @@ class SchedulingSimulatorTest {
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60))
+            }
+            scheduledReminders.size < 3
+        }
+    }
+
+    @Test
+    fun testOutOfStock() {
+        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        medicineWithReminders.medicine.amount = 12.0
+        val reminder = TestHelper.buildReminder(1, 1, "3", 480, 1)
+        medicineWithReminders.reminders.add(reminder)
+        val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 481, 1)
+        outOfStockReminder.outOfStockThreshold = 6.0
+        outOfStockReminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+        medicineWithReminders.reminders.add(outOfStockReminder)
+
+        val medicines = listOf(medicineWithReminders)
+
+        val simulator = buildSchedulingSimulator(medicines, emptyList())
+
+        val scheduledReminders = mutableListOf<ScheduledReminder>()
+
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+            scheduledReminders.add(scheduledReminder)
+            if (scheduledReminders.size == 1) {
+                assertEquals(LocalDate.EPOCH, localDate)
+                assertEquals(9.0, amount)
+            }
+            if (scheduledReminders.size == 3) {
+                assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
+                assertEquals(6.0, amount)
+                assertEquals(scheduledReminder.reminder().reminderType, Reminder.ReminderType.OUT_OF_STOCK)
             }
             scheduledReminders.size < 3
         }
