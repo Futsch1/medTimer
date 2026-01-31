@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.reminders.scheduling;
 
 import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Reminder;

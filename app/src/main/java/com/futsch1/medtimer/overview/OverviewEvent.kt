@@ -3,11 +3,12 @@ package com.futsch1.medtimer.overview
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.Spanned
-import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.formatReminderString
+import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 
 
 enum class OverviewState {
@@ -37,6 +38,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     abstract val icon: Int
     abstract val color: Int?
     abstract val state: OverviewState
+    abstract val reminderType: Reminder.ReminderType
     val updateValue: Long
         get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
@@ -61,7 +63,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
 }
 
 class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferences, val reminderEvent: ReminderEvent) : OverviewEvent(sharedPreferences) {
-    override val text: Spanned = formatReminderString(context, reminderEvent, sharedPreferences)
+    override val text: Spanned = formatReminderEventString(context, reminderEvent, sharedPreferences)
 
     override val id: Int
         get() = reminderEvent.reminderEventId
@@ -73,13 +75,16 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
         get() = if (reminderEvent.useColor) reminderEvent.color else null
     override val state: OverviewState
         get() = mapReminderEventState(reminderEvent.status)
+    override val reminderType: Reminder.ReminderType
+        get() = reminderEvent.reminderType
 
     private fun mapReminderEventState(status: ReminderEvent.ReminderStatus): OverviewState {
         return when (status) {
             ReminderEvent.ReminderStatus.RAISED -> OverviewState.RAISED
             ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN
             ReminderEvent.ReminderStatus.SKIPPED -> OverviewState.SKIPPED
-            else -> OverviewState.PENDING
+            ReminderEvent.ReminderStatus.ACKNOWLEDGED -> OverviewState.TAKEN
+            ReminderEvent.ReminderStatus.DELETED -> OverviewState.SKIPPED
         }
     }
 }
@@ -98,6 +103,8 @@ class OverviewScheduledReminderEvent(context: Context, sharedPreferences: Shared
         get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
     override val state: OverviewState
         get() = OverviewState.PENDING
+    override val reminderType: Reminder.ReminderType
+        get() = scheduledReminder.reminder.reminderType
 }
 
 fun create(context: Context, sharedPreferences: SharedPreferences, reminderEvent: ReminderEvent): OverviewEvent {

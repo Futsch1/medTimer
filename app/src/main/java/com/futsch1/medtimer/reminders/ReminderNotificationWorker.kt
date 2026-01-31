@@ -16,6 +16,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -147,7 +148,6 @@ class ReminderNotificationWorker(private val context: Context, workerParams: Wor
             val reminderEvent = ReminderEvent()
             reminderEvent.reminderId = reminder.reminderId
             reminderEvent.remindedTimestamp = remindedTimeStamp
-            reminderEvent.amount = reminder.amount
             reminderEvent.medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder)
             reminderEvent.color = medicine.medicine.color
             reminderEvent.useColor = medicine.medicine.useColor
@@ -155,6 +155,21 @@ class ReminderNotificationWorker(private val context: Context, workerParams: Wor
             reminderEvent.iconId = medicine.medicine.iconId
             reminderEvent.askForAmount = reminder.variableAmount
             reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))
+            reminderEvent.reminderType = reminder.reminderType
+
+            when (reminder.reminderType) {
+                Reminder.ReminderType.OUT_OF_STOCK -> {
+                    reminderEvent.amount = MedicineHelper.formatAmount(medicine.medicine.amount, medicine.medicine.unit)
+                }
+
+                Reminder.ReminderType.EXPIRATION_DATE -> {
+                    reminderEvent.amount = TimeHelper.daysSinceEpochToDateString(medicineRepository.application, medicine.medicine.expirationDate)
+                }
+
+                else -> {
+                    reminderEvent.amount = reminder.amount
+                }
+            }
             if (reminder.isInterval) {
                 reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(
                     medicineRepository,

@@ -115,9 +115,7 @@ public class TimeHelper {
      * @return Date string in local format
      */
     public static String daysSinceEpochToDateString(Context context, long daysSinceEpoch) {
-        LocalDate date = Instant.ofEpochSecond(daysSinceEpoch * 24 * 60 * 60)
-                .atZone(ZoneOffset.UTC)
-                .toLocalDate();
+        LocalDate date = LocalDate.ofEpochDay(daysSinceEpoch);
         return localDateToString(context, date);
     }
 

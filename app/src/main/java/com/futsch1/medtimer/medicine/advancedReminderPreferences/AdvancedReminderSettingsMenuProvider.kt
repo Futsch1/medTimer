@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.advancedSettings
+package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.view.Menu
 import android.view.MenuInflater
@@ -29,7 +29,7 @@ class AdvancedReminderSettingsMenuProvider(
             if (this::reminder.isInitialized) {
                 LinkedReminderHandling(reminder, medicineRepository, fragment.lifecycleScope).deleteReminder(
                     fragment.requireContext(),
-                    { NavHostFragment.Companion.findNavController(fragment).navigateUp() }, { }
+                    { NavHostFragment.findNavController(fragment).navigateUp() }, { }
                 )
             }
             true

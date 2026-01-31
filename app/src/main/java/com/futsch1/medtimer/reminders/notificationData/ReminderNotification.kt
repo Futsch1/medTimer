@@ -24,6 +24,14 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         return filter { it.reminderEvent.status == ReminderEvent.ReminderStatus.RAISED }
     }
 
+    fun isOutOfStockNotification(): Boolean {
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.OUT_OF_STOCK
+    }
+
+    fun isExpirationDateNotification(): Boolean {
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.EXPIRATION_DATE
+    }
+
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {
         val reminderNotificationParts = mutableListOf<ReminderNotificationPart>()
         val removedReminderEventIds = mutableListOf<Int>()

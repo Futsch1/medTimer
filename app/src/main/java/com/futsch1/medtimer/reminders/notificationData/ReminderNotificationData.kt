@@ -6,9 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.work.Data
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.getReminderAction
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 
 class ReminderNotificationData(

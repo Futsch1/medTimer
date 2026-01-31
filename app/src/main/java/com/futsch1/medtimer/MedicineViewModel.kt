@@ -9,8 +9,10 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.util.stream.Collectors
 
 class MedicineViewModel(application: Application) : AndroidViewModel(application) {
@@ -155,9 +157,9 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
 
     fun getLiveReminderEvents(
         timeStamp: Long,
-        withDeleted: Boolean
+        statusValues: List<ReminderStatus> = ReminderEvent.allStatusValues
     ): LiveData<List<ReminderEvent>> {
-        liveReminderEvents = medicineRepository.getLiveReminderEvents(timeStamp, withDeleted)
+        liveReminderEvents = medicineRepository.getLiveReminderEvents(timeStamp, statusValues)
         filteredReminderEvents.addSource(liveReminderEvents) {
             if (validTagIds.value != null && liveTags.value != null) {
                 filteredReminderEvents.value =

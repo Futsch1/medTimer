@@ -7,12 +7,14 @@ import androidx.preference.PreferenceManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.ScheduledReminder
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -34,10 +36,21 @@ class ScheduleNextReminderNotificationWorker(val context: Context, workerParams:
 
     override fun doWork(): Result {
         val medicineRepository = MedicineRepository(applicationContext as Application)
-        val reminderScheduler = this.reminderScheduler
         val fullMedicines = medicineRepository.medicines
+        val reminderEvents = medicineRepository.getReminderEventsForScheduling(fullMedicines)
+
+        scheduleNextReminder(fullMedicines, reminderEvents)
+
+        return Result.success()
+    }
+
+    private fun scheduleNextReminder(
+        fullMedicines: List<FullMedicine>,
+        reminderEvents: List<ReminderEvent>
+    ) {
+        val reminderScheduler = this.reminderScheduler
         val scheduledReminders: List<ScheduledReminder> =
-            reminderScheduler.schedule(fullMedicines, medicineRepository.getReminderEventsForScheduling(fullMedicines))
+            reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
             val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
             val scheduledReminderNotificationData =
@@ -47,8 +60,6 @@ class ScheduleNextReminderNotificationWorker(val context: Context, workerParams:
             Log.d(LogTags.REMINDER, "No reminders scheduled")
             alarmSetter.cancelNextReminder()
         }
-
-        return Result.success()
     }
 
     private val reminderScheduler: ReminderScheduler

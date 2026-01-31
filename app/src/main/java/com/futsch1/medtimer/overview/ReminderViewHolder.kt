@@ -21,6 +21,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
+    val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
     val stateButton: ImageView = itemView.findViewById(R.id.stateButton)
     val topBar: View = itemView.findViewById(R.id.topBar)
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
@@ -45,6 +46,8 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
         }
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
+        reminderTypeIcon.setImageResource(event.reminderType.icon)
+        ViewColorHelper.setDrawableTint(contentContainer, reminderTypeIcon.drawable)
 
         setStateButton(event.state)
         setupStateMenu()

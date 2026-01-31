@@ -54,11 +54,14 @@
             android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
             app:destination="@id/calendarFragment" />
         <action
-            android:id="@+id/action_editMedicineFragment_to_medicineStockFragment"
-            app:destination="@id/medicineStockFragment" />
-        <action
             android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesRootFragment"
             app:destination="@id/advancedReminderPreferencesRootFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_stockSettingsFragment"
+            app:destination="@id/stockSettingsFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesStockExpirationFragment"
+            app:destination="@id/advancedReminderPreferencesStockFragment" />
     </fragment>
     <argument
         android:name="reminderId"
@@ -89,15 +92,6 @@
             app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/medicineStockFragment"
-        android:name="com.futsch1.medtimer.medicine.MedicineStockFragment"
-        android:label="@string/medicine_stock"
-        tools:layout="@layout/fragment_medicine_stock">
-        <argument
-            android:name="medicineId"
-            app:argType="integer" />
-    </fragment>
-    <fragment
         android:id="@+id/privacyPreferencesFragment"
         android:name="com.futsch1.medtimer.preferences.PrivacyPreferencesFragment"
         android:label="@string/privacy_settings" />
@@ -119,7 +113,7 @@
         android:label="@string/tab_overview" />
     <fragment
         android:id="@+id/advancedReminderPreferencesRootFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesRootFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"
         android:label="@string/advanced_settings">
         <argument
             android:name="reminderId"
@@ -136,7 +130,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesInstructionsFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesInstructionsFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesInstructionsFragment"
         android:label="@string/dosing_instructions">
         <argument
             android:name="reminderId"
@@ -144,7 +138,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesStatusFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesStatusFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStatusFragment"
         android:label="@string/reminder_status">
         <argument
             android:name="reminderId"
@@ -152,7 +146,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesCyclicFragment"
-        android:name="com.futsch1.medtimer.medicine.advancedSettings.AdvancedReminderPreferencesCyclicFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesCyclicFragment"
         android:label="@string/cycle_reminder">
         <argument
             android:name="reminderId"
@@ -162,4 +156,23 @@
         android:id="@+id/alarmSettingsFragment"
         android:name="com.futsch1.medtimer.preferences.AlarmSettingsFragment"
         android:label="@string/alarm_settings" />
+    <fragment
+        android:id="@+id/stockSettingsFragment"
+        android:name="com.futsch1.medtimer.medicine.stockSettings.StockSettingsFragment"
+        android:label="@string/medicine_stock_settings">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesStockFragment"
+        android:name="com.futsch1.medtimer.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockFragment"
+        android:label="@string/advanced_settings">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesStockExpirationFragment_to_stockSettingsFragment"
+            app:destination="@id/stockSettingsFragment" />
+    </fragment>
 </navigation>

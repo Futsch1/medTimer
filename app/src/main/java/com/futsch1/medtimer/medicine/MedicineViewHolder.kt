@@ -37,7 +37,7 @@ class MedicineViewHolder private constructor(
     private val tags: FlexboxLayout = holderItemView.findViewById(R.id.tags)
 
     fun bind(medicine: FullMedicine) {
-        medicineNameView.text = getMedicineNameWithStockText(itemView.context, medicine.medicine)
+        medicineNameView.text = getMedicineNameWithStockText(itemView.context, medicine)
         setupSummary(medicine)
 
         itemView.setOnClickListener { _: View? -> navigateToEditFragment(medicine) }

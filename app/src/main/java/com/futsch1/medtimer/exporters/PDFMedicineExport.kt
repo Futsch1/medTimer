@@ -42,6 +42,9 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
     private fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
         val reminders = LinkedReminderAlgorithms().sortRemindersList(activeReminders)
         for (reminder in reminders) {
+            if (reminder.isOutOfStockOrExpirationReminder) {
+                continue
+            }
             val firstLine =
                 context.getString(R.string.dosage) + ": " + if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount
             val secondLine = getExportReminderSummary(context, reminder)

@@ -17,7 +17,6 @@
     <string name="wednesday">Środa</string>
     <string name="number_of_repetitions">Liczba powtórzeń</string>
     <string name="interval">Odstęp czasu</string>
-    <string name="off">Wył</string>
     <string name="variable_amount">Wprowadź dawkę podczas przyjmowania</string>
     <string name="time">Czas</string>
     <string name="ok">OK</string>
@@ -264,5 +263,23 @@
     <string name="ignore_battery_optimization">Ignoruj optymalizację baterii</string>
     <string name="reschedule_reminder">Zmień termin przypomnienia</string>
     <string name="interval_start_condition">Warunek rozpoczęcia interwału</string>
-<string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
-<string name="show_taken_time_in_overview">Pokaż czas trwania w przeglądzie</string></resources>
+    <string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
+    <string name="show_taken_time_in_overview">Pokaż czas trwania w przeglądzie</string>
+    <string name="refill">Uzupełnienie zapasów</string>
+    <string name="expiration_settings">Ustawienia wygaśnięcia</string>
+    <string name="production_date">Data produkcji</string>
+    <string name="expiration_date">Data wygaśnięcia</string>
+    <string name="expiration_reminder">Przypomnienie o wygaśnięciu</string>
+    <string name="daily_below_threshold">Codziennie poniżej progu</string>
+    <string name="remind_days_before_expiration">Przypomnij dni przed wygaśnięciem</string>
+    <string name="out_of_stock_reminder_help">Przypomina, gdy lek jest niedostępny, po każdym przypomnieniu, raz lub raz dziennie.</string>
+    <string name="expiration_date_reminder_help">Przypomina o upływie terminu ważności leku lub w konfigurowalnym czasie przed tą datą.</string>
+    <string name="once">Raz</string>
+    <string name="daily">Codziennie</string>
+    <string name="medicine_stock_settings">Ustawienia zapasów leków</string>
+    <string name="edit_medicine_stock_settings">Edytuj ustawienia zapasów leków</string>
+    <string name="clear_dates">Wyczyść daty</string>
+    <string name="acknowledged">Potwierdzono</string>
+    <string name="refill_amount">Uzupełnienie (%s)</string>
+    <string name="expiration_date_notification">Lek %1$s ma datę ważności %2$s.\nRozważ wymianę leku.</string>
+</resources>

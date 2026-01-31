@@ -190,7 +190,6 @@
     <string name="interval_start_processed">يبدأ الفاصل الزمني عند أخذه أو تخطيه</string>
     <string name="every_interval">كل %s</string>
     <string name="invalid_input">إدخال غير صالح</string>
-    <string name="off">إيقاف</string>
     <string name="once_below_threshold">مرة واحدة عند الانخفاض عن الحد الأدنى</string>
     <string name="always_below_threshold">دائمًا عند الانخفاض عن الحد الأدنى</string>
     <string name="out_of_stock_notification">تبقى %2$s فقط من %1$s!\nفكر في إعادة تعبئة الدواء قريبًا.</string>
@@ -276,4 +275,21 @@
     <string name="interval_start_condition">حالة بدء الفاصل الزمني</string>
     <string name="tag_filter_active">مرشح العلامات نشط. سيتم تصدير البيانات التي تحتوي على علامات مطابقة فقط.</string>
     <string name="show_taken_time_in_overview">عرض الوقت المستغرق في النظرة العامة</string>
+    <string name="refill">إعادة تعبئة المخزون</string>
+    <string name="expiration_settings">إعدادات انتهاء الصلاحية</string>
+    <string name="production_date">تاريخ الإنتاج</string>
+    <string name="expiration_date">تاريخ انتهاء الصلاحية</string>
+    <string name="expiration_reminder">تذكير بانتهاء الصلاحية</string>
+    <string name="daily_below_threshold">يوميًا عندما يقل عن الحد الأدنى</string>
+    <string name="remind_days_before_expiration">تذكير بالأيام قبل انتهاء الصلاحية</string>
+    <string name="out_of_stock_reminder_help">يقوم بالتذكير عندما ينفد الدواء من المخزون، إما بعد كل تذكير أو مرة واحدة أو مرة واحدة يوميًا.</string>
+    <string name="expiration_date_reminder_help">يذكر عند الوصول إلى تاريخ انتهاء صلاحية الدواء أو في وقت قابل للتكوين قبل ذلك التاريخ.</string>
+    <string name="once">مرة واحدة</string>
+    <string name="daily">يوميًا</string>
+    <string name="medicine_stock_settings">إعدادات مخزون الأدوية</string>
+    <string name="edit_medicine_stock_settings">تعديل إعدادات مخزون الأدوية</string>
+    <string name="clear_dates">مسح التواريخ</string>
+    <string name="acknowledged">تم الإقرار</string>
+    <string name="refill_amount">إعادة التعبئة (%s)</string>
+    <string name="expiration_date_notification">الدواء %1$s له تاريخ انتهاء صلاحية في %2$s.\nفكر في استبدال الدواء.</string>
 </resources>

@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.Medicine;
 import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,6 +40,10 @@ public class TestHelper {
         medicineWithReminders.medicine.medicineId = medicineId;
         medicineWithReminders.reminders = new ArrayList<>();
         return medicineWithReminders;
+    }
+
+    public static LocalDate on(long day) {
+        return LocalDate.ofEpochDay(day - 1);
     }
 
     public static Instant on(long day, long minutes) {

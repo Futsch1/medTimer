@@ -238,7 +238,7 @@ public class OptionsMenu implements EntityEditOptionsMenu {
         if (medicineViewModel.tagFilterActive()) {
             Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show();
         }
-        List<ReminderEvent> reminderEvents = medicineViewModel.filterEvents(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted());
+        List<ReminderEvent> reminderEvents = medicineViewModel.filterEvents(medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeletedAndAcknowledged());
         Export exporter = isCSV ? new CSVEventExport(reminderEvents, fragment.getParentFragmentManager(), context) : new PDFEventExport(reminderEvents, fragment.getParentFragmentManager(), context);
         export(exporter);
     }

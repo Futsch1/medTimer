@@ -176,7 +176,6 @@
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="every_interval">Каждый %s</string>
     <string name="invalid_input">Недопустимый ввод</string>
-    <string name="off">С сайта</string>
     <string name="once_below_threshold">Один раз при падении ниже порога</string>
     <string name="always_below_threshold">Всегда, когда ниже порога</string>
     <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
@@ -261,5 +260,23 @@
     <string name="ignore_battery_optimization">Игнорировать оптимизацию батареи</string>
     <string name="reschedule_reminder">Перенести напоминание</string>
     <string name="interval_start_condition">Условие запуска интервала</string>
-<string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
-<string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string></resources>
+    <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
+    <string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string>
+    <string name="refill">Пополнение запасов</string>
+    <string name="expiration_settings">Настройки срока годности</string>
+    <string name="production_date">Дата производства</string>
+    <string name="expiration_date">Срок годности</string>
+    <string name="expiration_reminder">Напоминание о сроке годности</string>
+    <string name="daily_below_threshold">Ежедневно при уровне ниже порогового</string>
+    <string name="remind_days_before_expiration">Напоминать за дни до истечения срока годности</string>
+    <string name="out_of_stock_reminder_help">Напоминает, когда лекарство заканчивается, либо после каждого напоминания, либо один раз, либо один раз в день.</string>
+    <string name="expiration_date_reminder_help">Напоминает о наступлении срока годности лекарства или за настраиваемое время до этой даты.</string>
+    <string name="once">Один раз</string>
+    <string name="daily">Ежедневно</string>
+    <string name="medicine_stock_settings">Настройки запасов лекарств</string>
+    <string name="edit_medicine_stock_settings">Изменить настройки запасов лекарств</string>
+    <string name="clear_dates">Очистить даты</string>
+    <string name="acknowledged">Подтверждено</string>
+    <string name="refill_amount">Пополнить (%s)</string>
+    <string name="expiration_date_notification">Срок годности лекарства %1$s истекает %2$s.\nРассмотрите возможность замены лекарства.</string>
+</resources>

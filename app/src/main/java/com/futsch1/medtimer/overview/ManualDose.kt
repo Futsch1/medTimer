@@ -85,9 +85,9 @@ class ManualDose(
         reminderEvent.tags = entry.tags
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
             DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
-                .textSink { name: String? ->
+                .textSink { name: String ->
                     reminderEvent.medicineName = name
-                    entry.baseName = name!!
+                    entry.baseName = name
                     getAmountAndContinue(reminderEvent, entry)
                 }.show()
         } else {
@@ -113,7 +113,7 @@ class ManualDose(
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
         var dialog = DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
-                reminderEvent.amount = amount
+                reminderEvent.amount = amount!!
                 if (entry.medicineId == -1) {
                     lastCustomDose = Pair(entry.baseName, amount)
                 }
@@ -137,7 +137,7 @@ class ManualDose(
             if (medicineId != -1) {
                 val amount = MedicineHelper.parseAmount(reminderEvent.amount)
                 if (amount != null) {
-                    ReminderWorkerReceiver.requestStockHandling(context, amount, medicineId)
+                    ReminderWorkerReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
                 }
             }
         }

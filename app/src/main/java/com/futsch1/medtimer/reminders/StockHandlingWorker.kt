@@ -7,8 +7,12 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import java.time.Instant
 
 /**
  * [Worker] implementation responsible for updating medicine stock levels.
@@ -19,45 +23,63 @@ import com.futsch1.medtimer.database.MedicineRepository
  *
  * Input data keys:
  * - [ActivityCodes.EXTRA_MEDICINE_ID]: The ID of the medicine to update.
+ * - [ActivityCodes.EXTRA_REMIND_INSTANT]: The instant of the reminder event that caused the stock handling
  * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
  */
 class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     override fun doWork(): Result {
         val amount = inputData.getDouble(ActivityCodes.EXTRA_AMOUNT, Double.NaN)
+        val processedInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, -1))
         if (amount.isNaN()) {
             return Result.failure()
         }
         val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         val medicineRepository = MedicineRepository(context as Application?)
-        val medicine = medicineRepository.getOnlyMedicine(medicineId)
+        val medicine = medicineRepository.getMedicine(medicineId)
             ?: return Result.failure()
 
-        processStock(medicine, amount)
-        medicineRepository.updateMedicine(medicine)
+        processStock(medicine, amount, processedInstant)
+        medicineRepository.updateMedicine(medicine.medicine)
         // Make sure that the database is flushed to avoid races between subsequent stock handling events
         medicineRepository.flushDatabase()
 
         return Result.success()
     }
 
-    private fun processStock(medicine: Medicine, amount: Double) {
-        medicine.amount -= amount
+    private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+        val medicine = fullMedicine.medicine
+        medicine.amount -= decreaseAmount
         if (medicine.amount < 0) {
             medicine.amount = 0.0
         }
 
-        checkForThreshold(medicine, amount)
-        Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
+        checkForThreshold(fullMedicine, decreaseAmount, processedInstant)
+        Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
     }
 
-    private fun checkForThreshold(medicine: Medicine, amount: Double) {
-        if (medicine.amount <= medicine.outOfStockReminderThreshold && (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ALWAYS ||
-                    (medicine.outOfStockReminder == Medicine.OutOfStockReminderType.ONCE && medicine.amount + amount > medicine.outOfStockReminderThreshold))
-        ) {
-            Notifications(context).showOutOfStockNotification(
-                medicine
-            )
+    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+        for (reminder in fullMedicine.reminders) {
+            if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
+                val showEvent =
+                    when (reminder.outOfStockReminderType) {
+                        Reminder.OutOfStockReminderType.ONCE -> {
+                            fullMedicine.medicine.amount + decreaseAmount > reminder.outOfStockThreshold
+                        }
+
+                        Reminder.OutOfStockReminderType.ALWAYS -> true
+                        else -> {
+                            false
+                        }
+                    }
+
+                if (showEvent) {
+                    Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
+                    val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
+                    val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
+                    ReminderWorkerReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                }
+            }
         }
     }
 

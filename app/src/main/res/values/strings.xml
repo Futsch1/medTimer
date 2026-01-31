@@ -174,7 +174,6 @@
     <string name="interval_start_processed">Interval starts when taken or skipped</string>
     <string name="every_interval">Every %s</string>
     <string name="invalid_input">Invalid input</string>
-    <string name="off">Off</string>
     <string name="once_below_threshold">Once when falling below threshold</string>
     <string name="always_below_threshold">Always when below threshold</string>
     <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
@@ -261,4 +260,21 @@
     <string name="interval_start_condition">Interval start condition</string>
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
+    <string name="refill">Stock refill</string>
+    <string name="expiration_settings">Expiration settings</string>
+    <string name="production_date">Production date</string>
+    <string name="expiration_date">Expiration date</string>
+    <string name="expiration_reminder">Expiration reminder</string>
+    <string name="daily_below_threshold">Daily when below threshold</string>
+    <string name="remind_days_before_expiration">Remind days before expiration</string>
+    <string name="out_of_stock_reminder_help">Reminds when the medicine is out of stock, either after every reminder or once or once per day.</string>
+    <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
+    <string name="once">Once</string>
+    <string name="daily">Daily</string>
+    <string name="medicine_stock_settings">Medicine stock settings</string>
+    <string name="edit_medicine_stock_settings">Edit medicine stock settings</string>
+    <string name="clear_dates">Clear dates</string>
+    <string name="acknowledged">Acknowledged</string>
+    <string name="refill_amount">Refill (%s)</string>
+    <string name="expiration_date_notification">The medicine %1$s has an expiration date of %2$s.\nConsider replacing the medicine.</string>
 </resources>

@@ -203,7 +203,6 @@
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
     <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
-    <string name="off">Desligado</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>
     <string name="icon">Ícone</string>
@@ -259,5 +258,23 @@
     <string name="ignore_battery_optimization">Ignorar a otimização da bateria</string>
     <string name="reschedule_reminder">Reagendar lembrete</string>
     <string name="interval_start_condition">Condição de início do intervalo</string>
-<string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string>
-<string name="show_taken_time_in_overview">Mostrar tempo decorrido na visão geral</string></resources>
+    <string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string>
+    <string name="show_taken_time_in_overview">Mostrar tempo decorrido na visão geral</string>
+    <string name="refill">Reabastecimento de estoque</string>
+    <string name="expiration_settings">Configurações de vencimento</string>
+    <string name="production_date">Data de produção</string>
+    <string name="expiration_date">Data de vencimento</string>
+    <string name="expiration_reminder">Lembrete de vencimento</string>
+    <string name="daily_below_threshold">Diariamente abaixo do limite</string>
+    <string name="remind_days_before_expiration">Lembrar dias antes do vencimento</string>
+    <string name="out_of_stock_reminder_help">Lembra quando o medicamento está em falta, seja após cada lembrete, uma vez ou uma vez ao dia.</string>
+    <string name="expiration_date_reminder_help">Lembra quando a data de validade do medicamento é atingida ou um tempo configurável antes dessa data.</string>
+    <string name="once">Uma vez</string>
+    <string name="daily">Diariamente</string>
+    <string name="medicine_stock_settings">Configurações de estoque de medicamentos</string>
+    <string name="edit_medicine_stock_settings">Editar configurações de estoque de medicamentos</string>
+    <string name="clear_dates">Limpar datas</string>
+    <string name="acknowledged">Confirmado</string>
+    <string name="refill_amount">Recarga (%s)</string>
+    <string name="expiration_date_notification">O medicamento %1$s tem data de validade de %2$s.\nConsidere substituir o medicamento.</string>
+</resources>

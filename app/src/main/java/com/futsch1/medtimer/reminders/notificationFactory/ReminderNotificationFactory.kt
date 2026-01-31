@@ -16,16 +16,28 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 fun getReminderNotificationFactory(
     context: Context,
     reminderNotification: ReminderNotification
-): ReminderNotificationFactory {
-    val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return if (defaultPreferences.getBoolean("big_notifications", false)) {
-        BigReminderNotificationFactory(
-            context, reminderNotification
+): NotificationFactory {
+    return if (reminderNotification.isOutOfStockNotification()) {
+        OutOfStockNotificationFactory(
+            context,
+            reminderNotification
+        )
+    } else if (reminderNotification.isExpirationDateNotification()) {
+        ExpirationDateNotificationFactory(
+            context,
+            reminderNotification
         )
     } else {
-        SimpleReminderNotificationFactory(
-            context, reminderNotification
-        )
+        val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        if (defaultPreferences.getBoolean("big_notifications", false)) {
+            BigReminderNotificationFactory(
+                context, reminderNotification
+            )
+        } else {
+            SimpleReminderNotificationFactory(
+                context, reminderNotification
+            )
+        }
     }
 }
 

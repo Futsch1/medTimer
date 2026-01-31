@@ -3,18 +3,23 @@ package com.futsch1.medtimer
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
 import org.robolectric.annotation.Config
 import tech.apter.junit.jupiter.robolectric.RobolectricExtension
+import java.time.LocalDate
 
 @ExtendWith(RobolectricExtension::class)
 @Config(sdk = [34])
@@ -71,30 +76,52 @@ class MedicineHelperTest {
         val preferencesManager = mockStatic(PreferenceManager::class.java)
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
 
-        Mockito.`when`(contextMock.getString(R.string.medicine_stock_string, "12 pills"))
-            .thenReturn("12 pills left")
+        Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
+            .thenAnswer { invocation ->
+                "${invocation.getArgument(1, String::class.java)} left"
+            }
 
         // Standard case without stock
         val medicine = Medicine("test")
+        val fullMedicine = FullMedicine()
+        fullMedicine.medicine = medicine
+        fullMedicine.reminders = listOf()
         medicine.unit = "pills"
         assertEquals(
             "test",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
         )
+
+        // Expired case
+        medicine.expirationDate = LocalDate.now().toEpochDay() - 1
+        assertEquals(
+            "test (\uD83D\uDEAB)",
+            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+        )
+        medicine.expirationDate = 0
 
         // Standard case with stock
         medicine.amount = 12.0
         assertEquals(
             "test (12 pills left)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
         )
 
         // Out of stock case
-        medicine.outOfStockReminder = Medicine.OutOfStockReminderType.ONCE
-        medicine.outOfStockReminderThreshold = 15.0
+        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
+        reminder.outOfStockThreshold = 15.0
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        fullMedicine.reminders = listOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, medicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+        )
+
+        // Out of stock and expired case
+        medicine.expirationDate = LocalDate.now().toEpochDay() - 1
+        assertEquals(
+            "test (12 pills left ⚠ \uD83D\uDEAB)",
+            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
         )
 
         preferencesManager.close()
@@ -109,8 +136,12 @@ class MedicineHelperTest {
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
 
         val medicine = Medicine("test")
-        medicine.outOfStockReminder = Medicine.OutOfStockReminderType.OFF
-        medicine.outOfStockReminderThreshold = 0.0
+        val fullMedicine = FullMedicine()
+        fullMedicine.medicine = medicine
+        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
+        reminder.outOfStockThreshold = 15.0
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        fullMedicine.reminders = listOf(reminder)
         medicine.amount = 0.0
         assertEquals(
             "t***",

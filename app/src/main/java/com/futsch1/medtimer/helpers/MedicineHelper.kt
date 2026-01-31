@@ -9,6 +9,7 @@ import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.google.android.material.textfield.TextInputEditText
@@ -27,21 +28,29 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
-        medicine: Medicine
+        fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 getMedicineName(
                     context,
-                    medicine,
+                    fullMedicine.medicine,
                     false
                 )
             )
         }
-        if (medicine.isStockManagementActive) {
-            builder.append(" (").append(getStockText(context, medicine))
-                .append(getOutOfStockText(context, medicine)).append(")")
+        val stockIconText = getStockIcons(context, fullMedicine)
+        val stockText = if (fullMedicine.isStockManagementActive) getStockText(context, fullMedicine.medicine) else ""
+
+        if (stockIconText.isNotEmpty() || stockText.isNotEmpty()) {
+            builder.append(" (")
+            builder.append(stockText)
+            if (stockText.isNotEmpty() && stockIconText.isNotEmpty())
+                builder.append(" ")
+            builder.append(stockIconText)
+            builder.append(")")
         }
+
         return builder
     }
 
@@ -54,20 +63,26 @@ object MedicineHelper {
     }
 
     @JvmStatic
-    fun getOutOfStockText(
+    fun getStockIcons(
         context: Context,
-        medicine: Medicine
+        fullMedicine: FullMedicine
     ): SpannableStringBuilder {
-        if (medicine.isOutOfStock) {
-            return SpannableStringBuilder().append(" ")
-                .color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
+        val builder = SpannableStringBuilder()
+        if (fullMedicine.isOutOfStock) {
+            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
         }
-        return SpannableStringBuilder()
+        if (fullMedicine.medicine.hasExpired()) {
+            if (builder.isNotEmpty()) {
+                builder.append(" ")
+            }
+            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
+        }
+        return builder
     }
 
     @JvmStatic
-    fun getMedicineNameWithStockText(context: Context, medicine: Medicine): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, medicine)
+    fun getMedicineNameWithStockText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
+        return getMedicineNameWithStockTextInternal(context, fullMedicine)
     }
 
     @JvmStatic

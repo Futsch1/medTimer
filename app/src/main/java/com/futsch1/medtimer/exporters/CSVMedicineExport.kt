@@ -29,6 +29,9 @@ class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
     private fun exportMedicine(csvFile: FileWriter, medicine: FullMedicine) {
         val reminders = LinkedReminderAlgorithms().sortRemindersList(medicine.reminders)
         for (reminder in reminders) {
+            if (reminder.isOutOfStockOrExpirationReminder) {
+                continue
+            }
             val line = String.format(
                 "%s;%s;%s\n",
                 medicine.medicine.name,

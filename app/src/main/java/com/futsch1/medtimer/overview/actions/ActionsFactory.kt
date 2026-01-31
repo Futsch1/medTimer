@@ -9,8 +9,16 @@ import kotlinx.coroutines.CoroutineScope
 
 fun createActions(event: OverviewEvent, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope) {
     if (event is OverviewReminderEvent) {
-        ReminderEventActions(event, view, popupWindow)
+        if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) {
+            StockEventActions(event, view, popupWindow)
+        } else {
+            ReminderEventActions(event, view, popupWindow)
+        }
     } else if (event is OverviewScheduledReminderEvent) {
-        ScheduledReminderActions(event, view, popupWindow, coroutineScope)
+        if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
+            ScheduledStockReminderActions(event, view, popupWindow, coroutineScope)
+        } else {
+            ScheduledReminderActions(event, view, popupWindow, coroutineScope)
+        }
     }
 }

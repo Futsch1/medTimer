@@ -13,7 +13,7 @@ class ReminderNotificationChannelManager {
             var channelId = 1
             while (true) {
                 val channel = notificationManager.getNotificationChannel(
-                    "com.futsch1.medTimer.NOTIFICATION$channelId"
+                    "com.futsch1.medtimer.NOTIFICATION$channelId"
                 )
                 if (channel == null && channelId > 3) {
                     break

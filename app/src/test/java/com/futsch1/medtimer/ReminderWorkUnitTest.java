@@ -147,6 +147,7 @@ public class ReminderWorkUnitTest {
             FullMedicine medicine = new FullMedicine();
             medicine.medicine = new Medicine("TestMedicine");
             medicine.tags = new ArrayList<>();
+            medicine.reminders = new ArrayList<>();
             when(mock.getMedicine(MEDICINE_ID)).thenReturn(medicine);
             ReminderEvent reminderEvent = new ReminderEvent();
             reminderEvent.reminderId = REMINDER_ID;
@@ -204,6 +205,8 @@ public class ReminderWorkUnitTest {
             medicine.medicine = new Medicine("TestMedicine");
             medicine.medicine.iconId = 16;
             medicine.tags = new ArrayList<>();
+            medicine.reminders = new ArrayList<>();
+            medicine.reminders.add(reminder);
             when(mock.getMedicine(MEDICINE_ID)).thenReturn(medicine);
             when(mock.insertReminderEvent(any())).thenReturn((long) REMINDER_EVENT_ID);
         });

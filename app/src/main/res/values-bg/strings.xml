@@ -224,7 +224,6 @@
     <string name="remind_on_days_of_month">Напомняне в дни от месеца</string>
     <string name="start_date">Начална дата</string>
     <string name="end_date">Крайна дата</string>
-    <string name="off">Изключено</string>
     <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
     <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
     <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Игнориране на оптимизацията на батерията</string>
     <string name="reschedule_reminder">Пренасрочване на напомнянето</string>
     <string name="interval_start_condition">Условие за стартиране на интервала</string>
-<string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
-<string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string></resources>
+    <string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
+    <string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string>
+    <string name="refill">Допълване на запасите</string>
+    <string name="expiration_settings">Настройки за изтичане на срока</string>
+    <string name="production_date">Дата на производство</string>
+    <string name="expiration_date">Срок на годност</string>
+    <string name="expiration_reminder">Напомняне за изтичане на срока</string>
+    <string name="daily_below_threshold">Ежедневно при под прага</string>
+    <string name="remind_days_before_expiration">Напомняне дни преди изтичане</string>
+    <string name="out_of_stock_reminder_help">Напомня, когато лекарството не е на склад, или след всяко напомняне, или веднъж, или веднъж на ден.</string>
+    <string name="expiration_date_reminder_help">Напомня, когато е достигнат срокът на годност на лекарството или конфигурируемо време преди тази дата.</string>
+    <string name="once">Веднъж</string>
+    <string name="daily">Ежедневно</string>
+    <string name="medicine_stock_settings">Настройки на запасите от лекарства</string>
+    <string name="edit_medicine_stock_settings">Редактиране на настройките на запасите от лекарства</string>
+    <string name="clear_dates">Изчистване на датите</string>
+    <string name="acknowledged">Потвърдено</string>
+    <string name="refill_amount">Допълване (%s)</string>
+    <string name="expiration_date_notification">Лекарството %1$s има срок на годност %2$s.\nПомислете за подмяна на лекарството.</string>
+</resources>

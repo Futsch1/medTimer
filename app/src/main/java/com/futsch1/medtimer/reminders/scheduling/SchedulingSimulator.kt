@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import android.content.SharedPreferences
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
@@ -60,7 +59,7 @@ class SchedulingSimulator(
     }
 
     private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(schedulingItem.reminder, totalEvents, timeAccess, sharedPreferences)
+        val scheduler = schedulingFactory.create(schedulingItem.reminder, schedulingItem.medicine.medicine, totalEvents, timeAccess, sharedPreferences)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if (nextScheduledTime?.atZone(timeAccess.systemZone())?.toLocalDate() != currentDay) {

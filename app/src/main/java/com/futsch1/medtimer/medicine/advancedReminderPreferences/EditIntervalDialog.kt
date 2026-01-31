@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.medicine.advancedSettings
+package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.app.AlertDialog
 import android.content.Context
@@ -21,6 +21,7 @@ class EditIntervalDialog(context: Context, reminder: Reminder, val intervalUpdat
 
     private val intervalEditor: IntervalEditor = IntervalEditor(
         dialog.findViewById(R.id.editIntervalTime),
+        dialog.findViewById(R.id.editIntervalTimeLayout),
         dialog.findViewById(R.id.intervalUnit), reminder.timeInMinutes,
         if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
     )
