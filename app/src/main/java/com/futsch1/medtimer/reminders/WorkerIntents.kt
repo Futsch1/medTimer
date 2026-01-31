@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.MainActivity
-import com.futsch1.medtimer.WorkerActionCodes
+import com.futsch1.medtimer.WorkerActionCode
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
@@ -17,7 +17,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
  * Creates an [Intent] for the general reminder action.
  */
 fun getReminderAction(context: Context): Intent {
-    val reminderIntent = Intent(WorkerActionCodes.Reminder.action)
+    val reminderIntent = Intent(WorkerActionCode.Reminder.action)
     reminderIntent.setClass(context, ReminderWorkerReceiver::class.java)
     return reminderIntent
 }
@@ -29,7 +29,7 @@ fun getReminderAction(context: Context): Intent {
  * @param snoozeTime The snooze duration in minutes.
  */
 fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent {
-    val snoozeIntent = Intent(WorkerActionCodes.Snooze.action)
+    val snoozeIntent = Intent(WorkerActionCode.Snooze.action)
     reminderNotificationData.toIntent(snoozeIntent)
     snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
     snoozeIntent.setClass(context, ReminderWorkerReceiver::class.java)
@@ -55,15 +55,15 @@ fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: Rem
  * Creates an [Intent] to mark a reminder as "Taken".
  */
 fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCodes.Taken.action)
+    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Taken.action)
 }
 
 fun getAcknowledgedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCodes.Acknowledged.action)
+    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Acknowledged.action)
 }
 
 fun getRefillActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCodes.Refill.action)
+    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Refill.action)
 }
 
 fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
@@ -78,5 +78,5 @@ fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: 
  * Creates an [Intent] to mark a reminder as "Skipped".
  */
 fun getSkippedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCodes.Dismissed.action)
+    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Dismissed.action)
 }

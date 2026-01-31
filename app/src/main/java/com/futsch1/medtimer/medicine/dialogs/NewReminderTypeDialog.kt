@@ -42,9 +42,7 @@ class NewReminderTypeDialog(
                 reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
             }
 
-            Reminder.ReminderType.TIME_BASED -> {
-                // Intentionally empty
-            }
+            Reminder.ReminderType.TIME_BASED -> Unit
 
             Reminder.ReminderType.LINKED, Reminder.ReminderType.REFILL -> {
                 // May never happen
