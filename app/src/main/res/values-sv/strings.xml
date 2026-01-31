@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
@@ -63,7 +63,7 @@
     <string name="after_meal">efter måltid</string>
     <string name="time_before_meal">x minuter före måltid</string>
     <string name="time_after">x timmar efter intag av läkemedel y</string>
-    <string name="medicine_data">Läkemdelsdata</string>
+    <string name="medicine_data">Läkemedelsdata</string>
     <string name="export_csv">Exportera som CSV</string>
     <string name="export_pdf">Exportera som PDF</string>
     <string name="restore">Återställ</string>
@@ -254,5 +254,6 @@
     <string name="ignore_battery_optimization">Ignorera batterioptimering</string>
     <string name="reschedule_reminder">Schemalägg om påminnelsen</string>
     <string name="interval_start_condition">Intervallets startvillkor</string>
-<string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
-<string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string></resources>
+    <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
+    <string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string>
+</resources>
