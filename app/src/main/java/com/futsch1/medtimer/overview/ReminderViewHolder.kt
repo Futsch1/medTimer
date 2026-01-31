@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 
@@ -46,6 +47,12 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
         }
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
+        reminderTypeIcon.visibility =
+            if (event.reminderType == Reminder.ReminderType.REFILL || event.reminderType == Reminder.ReminderType.OUT_OF_STOCK || event.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         reminderTypeIcon.setImageResource(event.reminderType.icon)
         ViewColorHelper.setDrawableTint(contentContainer, reminderTypeIcon.drawable)
 
