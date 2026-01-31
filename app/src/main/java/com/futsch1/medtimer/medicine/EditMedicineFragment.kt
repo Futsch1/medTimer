@@ -255,7 +255,7 @@ class EditMedicineFragment :
             for (i in 0..<recyclerView.size) {
                 val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder
 
-                this.medicineViewModel.medicineRepository.updateReminder(viewHolder.getReminder())
+                this.medicineViewModel.medicineRepository.updateReminder(viewHolder.getUpdatedReminder())
             }
         }
     }

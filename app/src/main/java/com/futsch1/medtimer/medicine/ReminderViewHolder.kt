@@ -176,7 +176,7 @@ class ReminderViewHolder private constructor(
         reminderTypeIcon.setOnClickListener { _: View? -> builder.create().show() }
     }
 
-    fun getReminder(): Reminder {
+    fun getUpdatedReminder(): Reminder {
         reminder.amount = editAmount.getText().toString().trim()
         if (timeEditor != null) {
             val minutes = timeEditor!!.getMinutes()
