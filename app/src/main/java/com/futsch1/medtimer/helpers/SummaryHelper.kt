@@ -152,8 +152,16 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
         reminders.stream()
             .filter { r: Reminder -> r.isInterval },
         ({ r: Reminder -> intervalBasedReminderString(r, context) })
+    ) + getRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.OUT_OF_STOCK },
+        ({ r: Reminder -> outOfStockReminderString(r, context) })
+    ) + getRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.EXPIRATION_DATE },
+        ({ _: Reminder -> context.getString(R.string.expiration_date) })
     )
-
+    
     val len = reminderTimes.size
     return context.resources.getQuantityString(
         R.plurals.sum_reminders,
@@ -218,5 +226,5 @@ fun getCyclicReminderString(reminder: Reminder, context: Context): String {
 }
 
 private fun firstToLower(string: String): String {
-    return string.substring(0, 1).lowercase(Locale.getDefault()) + string.substring(1)
+    return string.take(1).lowercase(Locale.getDefault()) + string.substring(1)
 }

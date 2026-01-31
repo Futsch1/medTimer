@@ -131,11 +131,14 @@ class Reminder(@JvmField var medicineRelId: Int) {
     val isInterval: Boolean
         get() = this.reminderType == ReminderType.CONTINUOUS_INTERVAL || this.reminderType == ReminderType.WINDOWED_INTERVAL
 
+    val isLinkedOrTimeBased: Boolean
+        get() = this.reminderType == ReminderType.LINKED || this.reminderType == ReminderType.TIME_BASED
+
     val isOutOfStockOrExpirationReminder: Boolean
         get() = this.reminderType == ReminderType.OUT_OF_STOCK || this.reminderType == ReminderType.EXPIRATION_DATE
 
     val usesTimeInMinutes: Boolean
-        get() = !isInterval || this.reminderType == ReminderType.EXPIRATION_DATE || this.outOfStockReminderType == OutOfStockReminderType.DAILY
+        get() = isLinkedOrTimeBased || this.reminderType == ReminderType.EXPIRATION_DATE || this.outOfStockReminderType == OutOfStockReminderType.DAILY
 
     val reminderType: ReminderType
         get() {

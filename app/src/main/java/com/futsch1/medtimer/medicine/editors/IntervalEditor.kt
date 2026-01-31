@@ -7,10 +7,12 @@ import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.IntervalUnit
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 @SuppressLint("SetTextI18n")
 class IntervalEditor(
     private val timeEdit: TextInputEditText,
+    private val timeEditLayout: TextInputLayout,
     private val intervalUnitToggle: MaterialButtonToggleGroup,
     initialValueMinutes: Int,
     private val maxMinutes: Int = Interval.MAX_INTERVAL_MINUTES
@@ -18,6 +20,7 @@ class IntervalEditor(
     init {
         val interval = Interval(initialValueMinutes, maxMinutes)
         var unit = interval.getUnit()
+        setSuffix(unit)
         timeEdit.setText(interval.getValue().toString())
         intervalUnitToggle.check(intervalUnitToggle.getChildAt(unit.ordinal).id)
 
@@ -37,6 +40,7 @@ class IntervalEditor(
                     }
                 }
                 unit = selectedUnit
+                setSuffix(unit)
                 validate()
             }
         }
@@ -45,6 +49,14 @@ class IntervalEditor(
             validate()
         }
         validate()
+    }
+
+    private fun setSuffix(unit: IntervalUnit) {
+        timeEditLayout.suffixText = when (unit) {
+            IntervalUnit.MINUTES -> timeEditLayout.context.getString(R.string.minutes_string)
+            IntervalUnit.HOURS -> timeEditLayout.context.getString(R.string.hours_string)
+            IntervalUnit.DAYS -> timeEditLayout.context.getString(R.string.days_string)
+        }
     }
 
     private fun validate() {

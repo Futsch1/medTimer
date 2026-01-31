@@ -43,12 +43,21 @@ class NewReminderStockDialog(
         }
 
         setupEditStockThreshold()
+        setupEditExpirationDaysBefore()
         setupStockReminderType()
 
         dialog.show()
     }
 
+    private fun setupEditExpirationDaysBefore() {
+        val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
+        textInputLayout.suffixText = context.getString(R.string.days_string)
+    }
+
     private fun setupEditStockThreshold() {
+        val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editStockThresholdLayout)
+        textInputLayout.suffixText = medicine.unit
+
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold)
 
         textInputEditText.setText(medicine.amount.toString())

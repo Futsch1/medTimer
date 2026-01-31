@@ -30,7 +30,7 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
     Worker(context, workerParameters) {
     override fun doWork(): Result {
         val amount = inputData.getDouble(ActivityCodes.EXTRA_AMOUNT, Double.NaN)
-        val remindInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, -1))
+        val processedInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, -1))
         if (amount.isNaN()) {
             return Result.failure()
         }
@@ -39,7 +39,7 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
         val medicine = medicineRepository.getMedicine(medicineId)
             ?: return Result.failure()
 
-        processStock(medicine, amount, remindInstant)
+        processStock(medicine, amount, processedInstant)
         medicineRepository.updateMedicine(medicine.medicine)
         // Make sure that the database is flushed to avoid races between subsequent stock handling events
         medicineRepository.flushDatabase()
@@ -47,18 +47,18 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
         return Result.success()
     }
 
-    private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, remindInstant: Instant) {
+    private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
         val medicine = fullMedicine.medicine
         medicine.amount -= decreaseAmount
         if (medicine.amount < 0) {
             medicine.amount = 0.0
         }
 
-        checkForThreshold(fullMedicine, decreaseAmount, remindInstant)
+        checkForThreshold(fullMedicine, decreaseAmount, processedInstant)
         Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
     }
 
-    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, remindInstant: Instant) {
+    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in fullMedicine.reminders) {
             if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
                 val showEvent =
@@ -74,7 +74,8 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
                     }
 
                 if (showEvent) {
-                    val scheduledReminder = ScheduledReminder(fullMedicine, reminder, remindInstant)
+                    Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
+                    val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
                     ReminderWorkerReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }

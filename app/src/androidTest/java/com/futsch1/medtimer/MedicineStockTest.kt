@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.content.Context
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -25,6 +24,7 @@ import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Calendar
 
 class MedicineStockTest : BaseTestHelper() {
 
@@ -32,6 +32,7 @@ class MedicineStockTest : BaseTestHelper() {
     //@AllowFlaky(attempts = 1)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
 
         AndroidTestHelper.createMedicine("Test")
         // Interval reminder (amount 3.5) 10 minutes from now
@@ -39,8 +40,6 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickOn(R.id.openStockTracking)
         clickOn(R.string.amount)
-        setValue("")
-        clickOn(R.string.reminder_threshold)
         setValue("")
         clickOn(R.string.refill_size)
         setValue("")
@@ -51,13 +50,15 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10.5")
         clickOn(R.string.unit)
         setValue("pills")
-        clickOn(R.string.out_of_stock_reminder)
-        clickOn(R.string.once_below_threshold)
-        clickOn(R.string.reminder_threshold)
-        setValue("4")
         clickOn(R.string.refill_size)
         setValue("10.8")
         pressBack()
+
+        clickOn(R.id.addReminder)
+        clickOn(R.id.stockReminderCard)
+        writeTo(R.id.editStockThreshold, "4")
+        clickOn(R.id.createReminder)
+
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
@@ -66,22 +67,22 @@ class MedicineStockTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        checkOutOfStock(device, context, false)
+        checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark reminder as skipped (10.5 left)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.skippedButton)
-        checkOutOfStock(device, context, false)
+        checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark reminder as taken again, no out of stock reminder expected (7 left)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
-        checkOutOfStock(device, context, false)
+        checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark next instance as taken, out of stock reminder expected (3.5 left)
         clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
-        checkOutOfStock(device, context, true)
+        checkNotificationWithTitle(device, notificationTitle, true)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
@@ -115,10 +116,10 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, "pills")
     }
 
-    private fun checkOutOfStock(device: UiDevice, context: Context, expected: Boolean) {
+    private fun checkNotificationWithTitle(device: UiDevice, notificationTitle: String, expected: Boolean) {
         device.openNotification()
         val o = device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title))),
+            Until.findObject(By.textContains(notificationTitle)),
             1_000
         )
         if (expected) {
@@ -146,11 +147,15 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("120")
         clickOn(R.string.unit)
         setValue("pills")
-        clickOn(R.string.out_of_stock_reminder)
-        clickOn(R.string.once_below_threshold)
         pressBack()
 
         AndroidTestHelper.createIntervalReminder("So many pills - 130", 10)
+
+        clickOn(R.id.addReminder)
+        clickOn(R.id.stockReminderCard)
+        writeTo(R.id.editStockThreshold, "0")
+        clickOn(R.id.createReminder)
+        pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
@@ -176,11 +181,12 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10.5")
         clickOn(R.string.unit)
         setValue("pills")
-        clickOn(R.string.out_of_stock_reminder)
-        clickOn(R.string.once_below_threshold)
-        clickOn(R.string.reminder_threshold)
-        setValue("4")
         pressBack()
+
+        clickOn(R.id.addReminder)
+        clickOn(R.id.stockReminderCard)
+        writeTo(R.id.editStockThreshold, "4")
+        clickOn(R.id.createReminder)
 
         clickOn(R.id.addReminder)
         clickOn(R.id.timeBasedCard)
@@ -253,5 +259,46 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickOn(R.id.openStockTracking)
         assertDisplayed("5")
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun expirationDateTest() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationTitle = context.getString(R.string.expiration_reminder)
+
+        val expirationTime = Calendar.getInstance()
+        val day = expirationTime.get(Calendar.DAY_OF_MONTH)
+        expirationTime.set(Calendar.DAY_OF_MONTH, day + 7)
+
+        AndroidTestHelper.createMedicine("Test")
+        clickOn(R.id.openStockTracking)
+        clickOn(R.string.expiration_date)
+        AndroidTestHelper.setDate(expirationTime.time)
+        clickOn(R.string.clear_dates)
+
+        pressBack()
+
+        clickOn(R.id.addReminder)
+        clickOn(R.id.expirationDateReminderCard)
+        writeTo(R.id.editExpirationDaysBefore, "10")
+        clickOn(R.id.createReminder)
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+
+        checkNotificationWithTitle(device, notificationTitle, false)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        clickOn(R.string.expiration_date)
+        AndroidTestHelper.setDate(expirationTime.time)
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+
+        checkNotificationWithTitle(device, notificationTitle, true)
     }
 }

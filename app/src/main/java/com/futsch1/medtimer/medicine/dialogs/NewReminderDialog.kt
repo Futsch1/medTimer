@@ -105,6 +105,7 @@ class NewReminderDialog(
 
         val intervalEditor = IntervalEditor(
             dialog.findViewById(R.id.editIntervalTime),
+            dialog.findViewById(R.id.editIntervalTimeLayout),
             dialog.findViewById(R.id.intervalUnit), 12 * 60,
             if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )
