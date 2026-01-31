@@ -23,11 +23,11 @@ public class CalendarTest extends BaseTestHelper {
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);
-        clickListItemChild(R.id.reminders, 1, R.id.stateButton);
-        clickOn(R.id.takenButton);
         clickListItemChild(R.id.reminders, 2, R.id.stateButton);
         clickOn(R.id.takenButton);
         clickListItemChild(R.id.reminders, 3, R.id.stateButton);
+        clickOn(R.id.takenButton);
+        clickListItemChild(R.id.reminders, 4, R.id.stateButton);
         clickOn(R.id.takenButton);
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
