@@ -41,7 +41,7 @@ class NotificationStringBuilder(
             SpannableStringBuilder(buildSingleBaseString(reminderNotificationPart))
         val instructions = reminderNotificationPart.reminder.instructions
         val separatorChar = if (concise) ", " else "\n"
-        if (instructions.isNotEmpty()) {
+        if (instructions?.isNotEmpty() == true) {
             builder.append("$separatorChar$instructions")
         }
 

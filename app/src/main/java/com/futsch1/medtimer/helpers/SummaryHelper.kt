@@ -41,8 +41,8 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             strings.add(context.getString(R.string.refill))
         }
     }
-    if (reminder.instructions.isNotEmpty()) {
-        strings.add(reminder.instructions)
+    if (reminder.instructions?.isNotEmpty() == true) {
+        strings.add(reminder.instructions!!)
     }
     strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
@@ -161,7 +161,7 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
             .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.EXPIRATION_DATE },
         ({ _: Reminder -> context.getString(R.string.expiration_date) })
     )
-    
+
     val len = reminderTimes.size
     return context.resources.getQuantityString(
         R.plurals.sum_reminders,

@@ -37,7 +37,7 @@ class Reminder(@JvmField var medicineRelId: Int) {
     @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
-    var instructions: String = ""
+    var instructions: String? = ""
 
     @JvmField
     @ColumnInfo(defaultValue = "19823") // 10.4.24
