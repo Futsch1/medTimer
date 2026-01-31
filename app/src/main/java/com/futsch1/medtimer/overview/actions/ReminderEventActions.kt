@@ -12,7 +12,7 @@ import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 
-open class ReminderEventActions(event: OverviewReminderEvent, val view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
+open class ReminderEventActions(event: OverviewReminderEvent, view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
     init {
         if (event.state == OverviewState.RAISED) {
             hideDeleteAndReraise()

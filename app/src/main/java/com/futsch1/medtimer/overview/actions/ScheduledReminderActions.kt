@@ -1,30 +1,22 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.app.Application
 import android.view.View
 import android.widget.PopupWindow
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
-import com.futsch1.medtimer.reminders.ReminderNotificationWorker
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.ZoneId
 
 open class ScheduledReminderActions(
     event: OverviewScheduledReminderEvent,
-    val view: View,
+    view: View,
     popupWindow: PopupWindow,
-    private val coroutineScope: CoroutineScope,
-    private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val coroutineScope: CoroutineScope
 ) : ActionsBase(view, popupWindow) {
     init {
         hideDelete()
@@ -69,22 +61,5 @@ open class ScheduledReminderActions(
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
         ReminderWorkerReceiver.requestReminderAction(view.context, scheduledReminder.reminder, reminderEvent, taken)
-    }
-
-    private suspend fun createReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
-        return withContext(ioCoroutineDispatcher) {
-            val medicineRepository = MedicineRepository(view.context.applicationContext as Application) // Ensure Application context is not null
-            var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
-            if (reminderEvent == null) {
-                reminderEvent = ReminderNotificationWorker.buildReminderEvent(
-                    reminderTimeStamp,
-                    scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
-                )
-            }
-
-            reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
-
-            return@withContext reminderEvent
-        }
     }
 }
