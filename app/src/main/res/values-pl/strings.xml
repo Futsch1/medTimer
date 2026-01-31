@@ -17,7 +17,6 @@
     <string name="wednesday">Środa</string>
     <string name="number_of_repetitions">Liczba powtórzeń</string>
     <string name="interval">Odstęp czasu</string>
-    <string name="off">Wył</string>
     <string name="variable_amount">Wprowadź dawkę podczas przyjmowania</string>
     <string name="time">Czas</string>
     <string name="ok">OK</string>
@@ -267,11 +266,6 @@
     <string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
     <string name="show_taken_time_in_overview">Pokaż czas trwania w przeglądzie</string>
     <string name="refill">Uzupełnienie zapasów</string>
-    <string name="fourteen_days_before">czternaście dni wcześniej</string>
-    <string name="seven_days_before">siedem dni wcześniej</string>
-    <string name="three_days_before">trzy dni wcześniej</string>
-    <string name="one_day_before">jeden dzień wcześniej</string>
-    <string name="on_expiration">w momencie wygaśnięcia</string>
     <string name="expiration_settings">Ustawienia wygaśnięcia</string>
     <string name="production_date">Data produkcji</string>
     <string name="expiration_date">Data wygaśnięcia</string>

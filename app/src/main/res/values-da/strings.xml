@@ -164,7 +164,6 @@
     <string name="interval_start_processed">Interval starter når taget eller afvist</string>
     <string name="every_interval">Hver %s</string>
     <string name="invalid_input">Ugyldigt indtastning</string>
-    <string name="off">Sluk</string>
     <string name="once_below_threshold">En enkelt gang når under tærskel</string>
     <string name="add_medicine">Tilføj medicin</string>
     <string name="medicine_name">Medicinnavn</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Tagfilter aktivt. Kun data med matchende tags eksporteres.</string>
     <string name="show_taken_time_in_overview">Vis den anvendte tid i oversigten</string>
     <string name="refill">Lageropfyldning</string>
-    <string name="fourteen_days_before">fjorten dage før</string>
-    <string name="seven_days_before">syv dage før</string>
-    <string name="three_days_before">tre dage før</string>
-    <string name="one_day_before">en dag før</string>
-    <string name="on_expiration">ved udløb</string>
     <string name="expiration_settings">Indstillinger for udløbsdato</string>
     <string name="production_date">Produktionsdato</string>
     <string name="expiration_date">Udløbsdato</string>

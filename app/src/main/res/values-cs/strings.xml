@@ -180,7 +180,6 @@
     <string name="interval_start_processed">Interval začne v době užití nebo přeskočení</string>
     <string name="every_interval">Každých %s</string>
     <string name="invalid_input">Neplatný vstup</string>
-    <string name="off">Vypnuto</string>
     <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
     <string name="always_below_threshold">Vždy pod nastavenou mezí</string>
     <string name="out_of_stock_notification">Zbývá pouze %2$s z %1$s!\nZvažte brzy doplnění léků.</string>
@@ -267,11 +266,6 @@
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
     <string name="refill">Doplnění zásob</string>
-    <string name="fourteen_days_before">čtrnáct dní před</string>
-    <string name="seven_days_before">sedm dní před</string>
-    <string name="three_days_before">tři dny před</string>
-    <string name="one_day_before">den před</string>
-    <string name="on_expiration">při vypršení</string>
     <string name="expiration_settings">Nastavení vypršení</string>
     <string name="production_date">Datum výroby</string>
     <string name="expiration_date">Datum vypršení</string>

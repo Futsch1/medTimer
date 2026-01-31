@@ -174,7 +174,6 @@
     <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
     <string name="every_interval">Cada %s</string>
     <string name="invalid_input">Entrada no válida</string>
-    <string name="off">Fuera de</string>
     <string name="once_below_threshold">Una vez al caer por debajo del umbral</string>
     <string name="always_below_threshold">Siempre que esté por debajo del umbral</string>
     <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
@@ -262,11 +261,6 @@
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
     <string name="show_taken_time_in_overview">Mostrar tiempo empleado en resumen</string>
     <string name="refill">Reposición de existencias</string>
-    <string name="fourteen_days_before">catorce días antes</string>
-    <string name="seven_days_before">siete días antes</string>
-    <string name="three_days_before">tres días antes</string>
-    <string name="one_day_before">un día antes</string>
-    <string name="on_expiration">al vencimiento</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
     <string name="production_date">Fecha de producción</string>
     <string name="expiration_date">Fecha de vencimiento</string>

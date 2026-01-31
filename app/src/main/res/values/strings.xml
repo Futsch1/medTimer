@@ -174,7 +174,6 @@
     <string name="interval_start_processed">Interval starts when taken or skipped</string>
     <string name="every_interval">Every %s</string>
     <string name="invalid_input">Invalid input</string>
-    <string name="off">Off</string>
     <string name="once_below_threshold">Once when falling below threshold</string>
     <string name="always_below_threshold">Always when below threshold</string>
     <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
@@ -262,11 +261,6 @@
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
     <string name="refill">Stock refill</string>
-    <string name="fourteen_days_before">Fourteen days before</string>
-    <string name="seven_days_before">Seven days before</string>
-    <string name="three_days_before">Three days before</string>
-    <string name="one_day_before">One day before</string>
-    <string name="on_expiration">On expiration</string>
     <string name="expiration_settings">Expiration settings</string>
     <string name="production_date">Production date</string>
     <string name="expiration_date">Expiration date</string>

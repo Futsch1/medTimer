@@ -203,7 +203,6 @@
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
     <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
-    <string name="off">Desligado</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>
     <string name="icon">Ícone</string>
@@ -262,11 +261,6 @@
     <string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string>
     <string name="show_taken_time_in_overview">Mostrar tempo decorrido na visão geral</string>
     <string name="refill">Reabastecimento de estoque</string>
-    <string name="fourteen_days_before">quatorze dias antes</string>
-    <string name="seven_days_before">sete dias antes</string>
-    <string name="three_days_before">três dias antes</string>
-    <string name="one_day_before">um dia antes</string>
-    <string name="on_expiration">no vencimento</string>
     <string name="expiration_settings">Configurações de vencimento</string>
     <string name="production_date">Data de produção</string>
     <string name="expiration_date">Data de vencimento</string>

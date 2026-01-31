@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Intervall beginnt wenn eingenommen oder übersprungen</string>
     <string name="every_interval">Alle %s</string>
     <string name="invalid_input">Ungültige Eingabe</string>
-    <string name="off">Aus</string>
     <string name="once_below_threshold">Einmal beim Erreichen des Schwellwerts</string>
     <string name="always_below_threshold">Immer, wenn der Schwellwert unterschritten wird</string>
     <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Tag-Filter aktiv. Es werden nur Daten mit übereinstimmenden Tags exportiert.</string>
     <string name="show_taken_time_in_overview">Übersicht über die benötigte Zeit anzeigen</string>
     <string name="refill">Lagerauffüllung</string>
-    <string name="fourteen_days_before">vierzehn Tage vorher</string>
-    <string name="seven_days_before">sieben Tage vorher</string>
-    <string name="three_days_before">drei Tage vorher</string>
-    <string name="one_day_before">einen Tag vorher</string>
-    <string name="on_expiration">bei Ablauf</string>
     <string name="expiration_settings">Ablauf-Einstellungen</string>
     <string name="production_date">Herstellungsdatum</string>
     <string name="expiration_date">Ablaufdatum</string>

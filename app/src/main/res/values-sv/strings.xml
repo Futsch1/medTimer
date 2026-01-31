@@ -172,7 +172,6 @@
     <string name="interval_start_processed">Intervall startar när dosen tas eller hoppas över</string>
     <string name="every_interval">Varje %s</string>
     <string name="invalid_input">Ogiltig inmatning</string>
-    <string name="off">Avstängd</string>
     <string name="once_below_threshold">En gång när tröskelvärdet underskrids</string>
     <string name="always_below_threshold">Alltid när under tröskelvärdet</string>
     <string name="out_of_stock_notification">Bara %2$s av %1$s kvar!\nKolla om du behöver förnya receptet.</string>
@@ -256,11 +255,6 @@
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
     <string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string>
     <string name="refill">Lagerpåfyllning</string>
-    <string name="fourteen_days_before">fjorton dagar före</string>
-    <string name="seven_days_before">sju dagar före</string>
-    <string name="three_days_before">tre dagar före</string>
-    <string name="one_day_before">en dag före</string>
-    <string name="on_expiration">vid utgång</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
     <string name="production_date">Produktionsdatum</string>
     <string name="expiration_date">Utgångsdatum</string>

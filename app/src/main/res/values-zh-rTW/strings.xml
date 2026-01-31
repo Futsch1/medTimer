@@ -163,7 +163,6 @@
     <string name="interval_start_reminded">在提醒發出時開始</string>
     <string name="interval_start_processed">在已服用或路過時時開始</string>
     <string name="every_interval">每 %s</string>
-    <string name="off">關閉</string>
     <string name="invalid_input">輸入無效</string>
     <string name="once_below_threshold">當低於閾值時提醒一次</string>
     <string name="always_below_threshold">只要低於閾值就持續提醒</string>
@@ -252,11 +251,6 @@
     <string name="tag_filter_active">標籤篩選已啟用。僅會匯出具有相符標籤的資料。</string>
     <string name="show_taken_time_in_overview">在總覽中顯示服用時間</string>
     <string name="refill">庫存補充</string>
-    <string name="fourteen_days_before">十四天前</string>
-    <string name="seven_days_before">七天前</string>
-    <string name="three_days_before">三天前</string>
-    <string name="one_day_before">一天前</string>
-    <string name="on_expiration">到期時</string>
     <string name="expiration_settings">到期設定</string>
     <string name="production_date">生產日期</string>
     <string name="expiration_date">到期日期</string>

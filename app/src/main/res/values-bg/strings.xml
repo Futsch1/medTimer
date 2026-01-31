@@ -224,7 +224,6 @@
     <string name="remind_on_days_of_month">Напомняне в дни от месеца</string>
     <string name="start_date">Начална дата</string>
     <string name="end_date">Крайна дата</string>
-    <string name="off">Изключено</string>
     <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
     <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
     <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
     <string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string>
     <string name="refill">Допълване на запасите</string>
-    <string name="fourteen_days_before">четиринадесет дни преди</string>
-    <string name="seven_days_before">седем дни преди</string>
-    <string name="three_days_before">три дни преди</string>
-    <string name="one_day_before">един ден преди</string>
-    <string name="on_expiration">при изтичане</string>
     <string name="expiration_settings">Настройки за изтичане на срока</string>
     <string name="production_date">Дата на производство</string>
     <string name="expiration_date">Срок на годност</string>

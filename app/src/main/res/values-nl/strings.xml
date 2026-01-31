@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
     <string name="every_interval">Elke %s</string>
     <string name="invalid_input">Ongeldige invoer</string>
-    <string name="off">Uit</string>
     <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
     <string name="always_below_threshold">Altijd wanneer onder drempel</string>
     <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
     <string name="show_taken_time_in_overview">Toon benodigde tijd in overzicht</string>
     <string name="refill">Voorraad aanvullen</string>
-    <string name="fourteen_days_before">veertien dagen ervoor</string>
-    <string name="seven_days_before">zeven dagen ervoor</string>
-    <string name="three_days_before">drie dagen ervoor</string>
-    <string name="one_day_before">één dag ervoor</string>
-    <string name="on_expiration">op vervaldatum</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
     <string name="production_date">Productiedatum</string>
     <string name="expiration_date">Vervaldatum</string>

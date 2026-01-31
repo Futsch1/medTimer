@@ -176,7 +176,6 @@
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="every_interval">Каждый %s</string>
     <string name="invalid_input">Недопустимый ввод</string>
-    <string name="off">С сайта</string>
     <string name="once_below_threshold">Один раз при падении ниже порога</string>
     <string name="always_below_threshold">Всегда, когда ниже порога</string>
     <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
@@ -264,11 +263,6 @@
     <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
     <string name="show_taken_time_in_overview">Показать затраченное время в обзоре</string>
     <string name="refill">Пополнение запасов</string>
-    <string name="fourteen_days_before">четырнадцать дней до</string>
-    <string name="seven_days_before">семь дней до</string>
-    <string name="three_days_before">три дня до</string>
-    <string name="one_day_before">один день до</string>
-    <string name="on_expiration">по истечении срока</string>
     <string name="expiration_settings">Настройки срока годности</string>
     <string name="production_date">Дата производства</string>
     <string name="expiration_date">Срок годности</string>

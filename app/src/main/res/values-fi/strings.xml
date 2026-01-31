@@ -170,7 +170,6 @@
     <string name="interval_start_processed">Aikaväli alkaa ottaessa tai ohittaessa</string>
     <string name="every_interval">Joka %s</string>
     <string name="invalid_input">Virheellinen syöte</string>
-    <string name="off">Pois päältä</string>
     <string name="once_below_threshold">Kerran pudottaessa alle rajan</string>
     <string name="always_below_threshold">Aina ollessa alle rajan</string>
     <string name="out_of_stock_notification">Enää %2$s jäljellä lääkettä %1$s!\nHarkitse lääkkeen täyttämistä pian.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
     <string name="refill">Varastotäydennys</string>
-    <string name="fourteen_days_before">neljätoista päivää ennen</string>
-    <string name="seven_days_before">seitsemän päivää ennen</string>
-    <string name="three_days_before">kolme päivää ennen</string>
-    <string name="one_day_before">yksi päivä ennen</string>
-    <string name="on_expiration">vanhentuessa</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
     <string name="production_date">Valmistuspäivä</string>
     <string name="expiration_date">Vanhentumispäivä</string>

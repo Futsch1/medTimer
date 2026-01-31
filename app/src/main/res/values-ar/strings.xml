@@ -190,7 +190,6 @@
     <string name="interval_start_processed">يبدأ الفاصل الزمني عند أخذه أو تخطيه</string>
     <string name="every_interval">كل %s</string>
     <string name="invalid_input">إدخال غير صالح</string>
-    <string name="off">إيقاف</string>
     <string name="once_below_threshold">مرة واحدة عند الانخفاض عن الحد الأدنى</string>
     <string name="always_below_threshold">دائمًا عند الانخفاض عن الحد الأدنى</string>
     <string name="out_of_stock_notification">تبقى %2$s فقط من %1$s!\nفكر في إعادة تعبئة الدواء قريبًا.</string>
@@ -277,11 +276,6 @@
     <string name="tag_filter_active">مرشح العلامات نشط. سيتم تصدير البيانات التي تحتوي على علامات مطابقة فقط.</string>
     <string name="show_taken_time_in_overview">عرض الوقت المستغرق في النظرة العامة</string>
     <string name="refill">إعادة تعبئة المخزون</string>
-    <string name="fourteen_days_before">أربعة عشر يومًا قبل</string>
-    <string name="seven_days_before">سبعة أيام قبل</string>
-    <string name="three_days_before">ثلاثة أيام قبل</string>
-    <string name="one_day_before">يوم واحد قبل</string>
-    <string name="on_expiration">عند انتهاء الصلاحية</string>
     <string name="expiration_settings">إعدادات انتهاء الصلاحية</string>
     <string name="production_date">تاريخ الإنتاج</string>
     <string name="expiration_date">تاريخ انتهاء الصلاحية</string>

@@ -164,7 +164,6 @@
     <string name="interval_start_processed">服药或跳过后才计时下次间隔</string>
     <string name="every_interval">每 %s</string>
     <string name="invalid_input">无效输入</string>
-    <string name="off">关闭</string>
     <string name="once_below_threshold">低于设定值时提醒一次</string>
     <string name="always_below_threshold">低于设定值时总是提醒</string>
     <string name="out_of_stock_notification">%1$s 只剩下 %2$s 了！\n请考虑马上重新配药。</string>
@@ -252,11 +251,6 @@
     <string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
     <string name="show_taken_time_in_overview">在概览中显示所用时间</string>
     <string name="refill">库存补货</string>
-    <string name="fourteen_days_before">十四天前</string>
-    <string name="seven_days_before">七天前</string>
-    <string name="three_days_before">三天前</string>
-    <string name="one_day_before">一天前</string>
-    <string name="on_expiration">到期时</string>
     <string name="expiration_settings">到期设置</string>
     <string name="production_date">生产日期</string>
     <string name="expiration_date">到期日期</string>

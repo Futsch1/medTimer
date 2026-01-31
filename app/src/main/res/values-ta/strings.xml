@@ -157,7 +157,6 @@
     <string name="interval_start_processed">எடுக்கும்போது அல்லது தவிர்க்கும்போது இடைவெளி தொடங்குகிறது</string>
     <string name="every_interval">ஒவ்வொரு %s</string>
     <string name="invalid_input">தவறான உள்ளீடு</string>
-    <string name="off">அணை</string>
     <string name="once_below_threshold">ஒருமுறை வாசலுக்கு கீழே விழும்போது</string>
     <string name="always_below_threshold">எப்போதும் வாசலுக்கு கீழே இருக்கும்போது</string>
     <string name="out_of_stock_notification">%2$s மட்டுமே %1$s உள்ளன!\n விரைவில் மருந்தை மீண்டும் நிரப்புவதைக் கவனியுங்கள்.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">குறிச்சொல் வடிப்பான் செயலில் உள்ளது. பொருந்தும் குறிச்சொற்கள் கொண்ட தரவு மட்டுமே ஏற்றுமதி செய்யப்படும்.</string>
     <string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string>
     <string name="refill">பொருள் நிரப்புதல்</string>
-    <string name="fourteen_days_before">பதினான்கு நாட்களுக்கு முன்</string>
-    <string name="seven_days_before">ஏழு நாட்களுக்கு முன்</string>
-    <string name="three_days_before">மூன்று நாட்களுக்கு முன்</string>
-    <string name="one_day_before">ஒரு நாள் முன்</string>
-    <string name="on_expiration">காலாவதியாகும் போது</string>
     <string name="expiration_settings">காலாவதி அமைப்புகள்</string>
     <string name="production_date">உற்பத்தி தேதி</string>
     <string name="expiration_date">காலாவதி தேதி</string>

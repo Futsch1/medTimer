@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
     <string name="every_interval">Her %s</string>
     <string name="invalid_input">Geçersiz giriş</string>
-    <string name="off">Kapalı</string>
     <string name="once_below_threshold">Eşiğin altına düştüğünde bir kez</string>
     <string name="always_below_threshold">Her zaman eşiğin altında olduğunda</string>
     <string name="out_of_stock_notification">%1$s&amp;apos;dan sadece %2$s kaldı!\nİlacı yakında yeniden doldurmayı düşünün.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
     <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
     <string name="refill">Stok yenileme</string>
-    <string name="fourteen_days_before">on dört gün önce</string>
-    <string name="seven_days_before">yedi gün önce</string>
-    <string name="three_days_before">üç gün önce</string>
-    <string name="one_day_before">bir gün önce</string>
-    <string name="on_expiration">son kullanma tarihinde</string>
     <string name="expiration_settings">Son kullanma ayarları</string>
     <string name="production_date">Üretim tarihi</string>
     <string name="expiration_date">Son kullanma tarihi</string>

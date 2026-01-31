@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Το χρονικό διάστημα ξεκίνα όταν επισημανθεί ότι η αγωγή λήφθηκε ή παραλήφθηκε</string>
     <string name="every_interval">Κάθε %s</string>
     <string name="invalid_input">Μη έγκυρη καταχώριση</string>
-    <string name="off">Ανενεργή</string>
     <string name="once_below_threshold">Άπαξ, όταν υπολειφθεί του ορίου</string>
     <string name="always_below_threshold">Συνεχόμενα, όταν υπολειφθεί του ορίου</string>
     <string name="out_of_stock_notification">Μόνο %2$s από %1$s απομένουν!\nΕξετάστε την προοπτική για αναπλήρωση του φαρμάκου σύντομα.</string>
@@ -257,11 +256,6 @@
     <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
     <string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string>
     <string name="refill">Αναπλήρωση αποθεμάτων</string>
-    <string name="fourteen_days_before">δεκατέσσερις ημέρες πριν</string>
-    <string name="seven_days_before">επτά ημέρες πριν</string>
-    <string name="three_days_before">τρεις ημέρες πριν</string>
-    <string name="one_day_before">μία ημέρα πριν</string>
-    <string name="on_expiration">κατά τη λήξη</string>
     <string name="expiration_settings">Ρυθμίσεις λήξης</string>
     <string name="production_date">Ημερομηνία παραγωγής</string>
     <string name="expiration_date">Ημερομηνία λήξης</string>
