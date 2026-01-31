@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.MedicineHelper.formatAmount
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 class ExpirationDateNotificationFactory(context: Context, val reminderNotification: ReminderNotification) :
@@ -20,9 +20,9 @@ class ExpirationDateNotificationFactory(context: Context, val reminderNotificati
 
         val medicineNameString = MedicineHelper.getMedicineName(context, medicine, true)
         val notificationMessage = context.getString(
-            R.string.out_of_stock_notification,
+            R.string.expiration_date_notification,
             medicineNameString,
-            formatAmount(medicine.amount, medicine.unit)
+            TimeHelper.daysSinceEpochToDateString(context, medicine.expirationDate)
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 

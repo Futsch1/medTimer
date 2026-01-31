@@ -226,4 +226,29 @@ class SchedulingSimulatorTest {
             scheduledReminders.size < 3
         }
     }
+
+    @Test
+    fun testSingleDays() {
+        val medicines = listOf(
+            TestHelper.buildFullMedicine(0, "Test")
+        )
+        val reminder = TestHelper.buildReminder(0, 1, "1", 60, 1)
+        reminder.activeDaysOfMonth = (1 shl 5) or (1 shl 8)
+        medicines[0].reminders.add(reminder)
+        val simulator = buildSchedulingSimulator(medicines, emptyList())
+
+        val scheduledReminders = mutableListOf<ScheduledReminder>()
+
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+            scheduledReminders.add(scheduledReminder)
+            if (scheduledReminders.size == 1) {
+                assertEquals(LocalDate.EPOCH.plusDays(5), localDate)
+                assertEquals(0.0, amount)
+            }
+            if (scheduledReminders.size == 2) {
+                assertEquals(LocalDate.EPOCH.plusDays(8), localDate)
+            }
+            scheduledReminders.size < 2
+        }
+    }
 }

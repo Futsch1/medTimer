@@ -301,4 +301,31 @@ class MedicineStockTest : BaseTestHelper() {
 
         checkNotificationWithTitle(device, notificationTitle, true)
     }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun dailyStockReminderTest() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
+
+        AndroidTestHelper.createMedicine("Test")
+
+        clickOn(R.id.openStockTracking)
+        clickOn(R.string.amount)
+        setValue("10.5")
+        pressBack()
+
+        clickOn(R.id.addReminder)
+        clickOn(R.id.stockReminderCard)
+        writeTo(R.id.editStockThreshold, "14")
+        clickOn(R.string.daily_below_threshold)
+        clickOn(R.id.editReminderTime)
+        AndroidTestHelper.setTime(22, 0, false)
+        clickOn(R.id.createReminder)
+
+        checkNotificationWithTitle(device, notificationTitle, false)
+        ReminderWorkerReceiver.requestScheduleNowForTests(context)
+        checkNotificationWithTitle(device, notificationTitle, true)
+    }
 }
