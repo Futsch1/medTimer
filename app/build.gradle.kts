@@ -1,12 +1,10 @@
 plugins {
     id("com.android.application")
     id("androidx.room")
-    id("com.github.triplet.play") version "3.13.0"
+    id("com.github.triplet.play") version "4.0.0"
     id("androidx.navigation.safeargs")
-    id("org.jetbrains.kotlin.android")
     id("jacoco")
-    //noinspection NewerVersionAvailable,GradleDependency: Version 6 and 7 crashes with an error in apache.commons.compress
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "7.2.2.6593"
     id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
 }
 
@@ -112,7 +110,7 @@ dependencies {
     val preferenceKtxVersion = "1.2.1"
     val lifecycleExtensionsVersion = "2.2.0"
     val lifecycleKtxVersion = "2.10.0"
-    val workRuntimeVersion = "2.11.0"
+    val workRuntimeVersion = "2.11.1"
     val coreKtxVersion = "1.17.0"
     val roomVersion = "2.8.4"
     val colorPickerViewVersion = "3.1.0"
@@ -231,48 +229,46 @@ tasks.withType(Test::class) {
         include("**/*FuzzTest.class")
 }
 
-android {
-    // Define task names for unit tests and Android tests
-    val unitTests = "testDebugUnitTest"
-    val androidTests = "connectedDebugAndroidTest"
-    val exclusions = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Test*.*",
-        "**/*Args.*",
-        "**/*Directions.*"
-    )
+// Define task names for unit tests and Android tests
+val unitTests = "testDebugUnitTest"
+val androidTests = "connectedDebugAndroidTest"
+val exclusions = listOf(
+    "**/R.class",
+    "**/R$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+    "**/*Test*.*",
+    "**/*Args.*",
+    "**/*Directions.*"
+)
 
-    // Register a JacocoReport task for code coverage analysis
-    tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
-        // Depend on unit tests and Android tests tasks
-        dependsOn(listOf(unitTests, androidTests))
-        // Set task grouping and description
-        group = "Reporting"
-        description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
-        // Configure reports to generate both XML and HTML formats
-        reports {
-            xml.required.set(true)
-            html.required.set(true)
-        }
-        // Set source directories to the main source directory
-        sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
-        // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
-        classDirectories.setFrom(
-            files(
-                fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
-                    exclude(exclusions)
-                },
-                fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
-                    exclude(exclusions)
-                }
-            ))
-        // Collect execution data from .exec and .ec files generated during test execution
-        executionData.setFrom(
-            files(
-                fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
-            ))
+// Register a JacocoReport task for code coverage analysis
+tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
+    // Depend on unit tests and Android tests tasks
+    dependsOn(listOf(unitTests, androidTests))
+    // Set task grouping and description
+    group = "Reporting"
+    description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
+    // Configure reports to generate both XML and HTML formats
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
     }
+    // Set source directories to the main source directory
+    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
+    // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
+    classDirectories.setFrom(
+        files(
+            fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+                exclude(exclusions)
+            },
+            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+                exclude(exclusions)
+            }
+        ))
+    // Collect execution data from .exec and .ec files generated during test execution
+    executionData.setFrom(
+        files(
+            fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
+        ))
 }
