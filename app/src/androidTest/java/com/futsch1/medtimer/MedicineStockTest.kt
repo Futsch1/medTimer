@@ -276,6 +276,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.openStockTracking)
         clickOn(R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.clear_dates)
 
         pressBack()
