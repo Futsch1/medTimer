@@ -266,4 +266,16 @@
     <string name="production_date">Gyártási dátum</string>
     <string name="expiration_date">Lejárati dátum</string>
     <string name="expiration_reminder">Lejárati emlékeztető</string>
+    <string name="daily_below_threshold">Naponta a küszöbérték alatt</string>
+    <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
+    <string name="out_of_stock_reminder_help">Emlékeztet, ha a gyógyszer elfogyott, minden emlékeztető után, egyszer, vagy naponta egyszer.</string>
+    <string name="expiration_date_reminder_help">Emlékeztet, amikor a gyógyszer lejárati ideje elérkezik, vagy egy beállítható idővel a dátum előtt.</string>
+    <string name="once">Egyszer</string>
+    <string name="daily">Naponta</string>
+    <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>
+    <string name="edit_medicine_stock_settings">Gyógyszerkészlet beállításainak szerkesztése</string>
+    <string name="clear_dates">Dátumok törlése</string>
+    <string name="acknowledged">Tudomásul véve</string>
+    <string name="refill_amount">Újratöltés (%s)</string>
+    <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
 </resources>

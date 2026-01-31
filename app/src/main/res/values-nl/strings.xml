@@ -266,4 +266,16 @@
     <string name="production_date">Productiedatum</string>
     <string name="expiration_date">Vervaldatum</string>
     <string name="expiration_reminder">Herinnering voor vervaldatum</string>
+    <string name="daily_below_threshold">Dagelijks onder drempel</string>
+    <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
+    <string name="out_of_stock_reminder_help">Herinnert wanneer het medicijn niet meer op voorraad is, hetzij na elke herinnering, eenmaal of eenmaal per dag.</string>
+    <string name="expiration_date_reminder_help">Herinnert wanneer de vervaldatum van het medicijn is bereikt of een configureerbare tijd voor die datum.</string>
+    <string name="once">Eenmaal</string>
+    <string name="daily">Dagelijks</string>
+    <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>
+    <string name="edit_medicine_stock_settings">Instellingen medicijnvoorraad bewerken</string>
+    <string name="clear_dates">Datums wissen</string>
+    <string name="acknowledged">Bevestigd</string>
+    <string name="refill_amount">Bijvullen (%s)</string>
+    <string name="expiration_date_notification">Het medicijn %1$s heeft een vervaldatum van %2$s.\nOverweeg het medicijn te vervangen.</string>
 </resources>

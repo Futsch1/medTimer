@@ -261,4 +261,16 @@
     <string name="production_date">生產日期</string>
     <string name="expiration_date">到期日期</string>
     <string name="expiration_reminder">到期提醒</string>
+    <string name="daily_below_threshold">低於閾值時每日提醒</string>
+    <string name="remind_days_before_expiration">在到期前幾天提醒</string>
+    <string name="out_of_stock_reminder_help">在藥物缺貨時提醒，可以在每次提醒後提醒，也可以只提醒一次，或每天提醒一次。</string>
+    <string name="expiration_date_reminder_help">在達到藥物有效期或在有效期前的可配置時間提醒。</string>
+    <string name="once">一次</string>
+    <string name="daily">每日</string>
+    <string name="medicine_stock_settings">藥品庫存設定</string>
+    <string name="edit_medicine_stock_settings">編輯藥品庫存設定</string>
+    <string name="clear_dates">清除日期</string>
+    <string name="acknowledged">已確認</string>
+    <string name="refill_amount">補充 (%s)</string>
+    <string name="expiration_date_notification">藥品 %1$s 的有效期為 %2$s。\n請考慮更換藥品。</string>
 </resources>

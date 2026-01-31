@@ -271,4 +271,16 @@
     <string name="production_date">תאריך ייצור</string>
     <string name="expiration_date">תאריך תפוגה</string>
     <string name="expiration_reminder">תזכורת תפוגה</string>
+    <string name="daily_below_threshold">יומי מתחת לסף</string>
+    <string name="remind_days_before_expiration">תזכורת ימים לפני תפוגה</string>
+    <string name="out_of_stock_reminder_help">מזכיר כאשר התרופה אזלה מהמלאי, או לאחר כל תזכורת, או פעם אחת, או פעם ביום.</string>
+    <string name="expiration_date_reminder_help">מזכיר כאשר מגיעים לתאריך התפוגה של התרופה או זמן שניתן להגדרה לפני תאריך זה.</string>
+    <string name="once">פעם אחת</string>
+    <string name="daily">יומי</string>
+    <string name="medicine_stock_settings">הגדרות מלאי תרופות</string>
+    <string name="edit_medicine_stock_settings">ערוך הגדרות מלאי תרופות</string>
+    <string name="clear_dates">נקה תאריכים</string>
+    <string name="acknowledged">אשר</string>
+    <string name="refill_amount">מילוי (%s)</string>
+    <string name="expiration_date_notification">לתרופה %1$s יש תאריך תפוגה של %2$s.\nשקול להחליף את התרופה.</string>
 </resources>

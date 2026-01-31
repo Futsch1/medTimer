@@ -266,4 +266,16 @@
     <string name="production_date">Valmistuspäivä</string>
     <string name="expiration_date">Vanhentumispäivä</string>
     <string name="expiration_reminder">Vanhentumismuistutus</string>
+    <string name="daily_below_threshold">Päivittäin, kun alle kynnyksen</string>
+    <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
+    <string name="out_of_stock_reminder_help">Muistuttaa, kun lääke on loppu varastosta, joko jokaisen muistutuksen jälkeen, kerran tai kerran päivässä.</string>
+    <string name="expiration_date_reminder_help">Muistuttaa, kun lääkkeen viimeinen käyttöpäivä on saavutettu tai määritettävissä oleva aika ennen kyseistä päivämäärää.</string>
+    <string name="once">Kerran</string>
+    <string name="daily">Päivittäin</string>
+    <string name="medicine_stock_settings">Lääkevaraston asetukset</string>
+    <string name="edit_medicine_stock_settings">Muokkaa lääkevaraston asetuksia</string>
+    <string name="clear_dates">Tyhjennä päivämäärät</string>
+    <string name="acknowledged">Kuitattu</string>
+    <string name="refill_amount">Täyttö (%s)</string>
+    <string name="expiration_date_notification">Lääkkeen %1$s viimeinen käyttöpäivä on %2$s.\nHarkitse lääkkeen vaihtamista.</string>
 </resources>

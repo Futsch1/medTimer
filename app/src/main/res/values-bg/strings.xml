@@ -266,4 +266,16 @@
     <string name="production_date">Дата на производство</string>
     <string name="expiration_date">Срок на годност</string>
     <string name="expiration_reminder">Напомняне за изтичане на срока</string>
+    <string name="daily_below_threshold">Ежедневно при под прага</string>
+    <string name="remind_days_before_expiration">Напомняне дни преди изтичане</string>
+    <string name="out_of_stock_reminder_help">Напомня, когато лекарството не е на склад, или след всяко напомняне, или веднъж, или веднъж на ден.</string>
+    <string name="expiration_date_reminder_help">Напомня, когато е достигнат срокът на годност на лекарството или конфигурируемо време преди тази дата.</string>
+    <string name="once">Веднъж</string>
+    <string name="daily">Ежедневно</string>
+    <string name="medicine_stock_settings">Настройки на запасите от лекарства</string>
+    <string name="edit_medicine_stock_settings">Редактиране на настройките на запасите от лекарства</string>
+    <string name="clear_dates">Изчистване на датите</string>
+    <string name="acknowledged">Потвърдено</string>
+    <string name="refill_amount">Допълване (%s)</string>
+    <string name="expiration_date_notification">Лекарството %1$s има срок на годност %2$s.\nПомислете за подмяна на лекарството.</string>
 </resources>

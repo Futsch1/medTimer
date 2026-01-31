@@ -276,4 +276,16 @@
     <string name="production_date">Datum výroby</string>
     <string name="expiration_date">Datum vypršení</string>
     <string name="expiration_reminder">Připomenutí vypršení</string>
+    <string name="daily_below_threshold">Denně pod prahem</string>
+    <string name="remind_days_before_expiration">Připomenout dny před vypršením platnosti</string>
+    <string name="out_of_stock_reminder_help">Připomene, když lék není na skladě, buď po každém připomenutí, nebo jednou, nebo jednou denně.</string>
+    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo v konfigurovatelném čase před tímto datem.</string>
+    <string name="once">Jednou</string>
+    <string name="daily">Denně</string>
+    <string name="medicine_stock_settings">Nastavení skladu léků</string>
+    <string name="edit_medicine_stock_settings">Upravit nastavení skladu léků</string>
+    <string name="clear_dates">Vymazat data</string>
+    <string name="acknowledged">Potvrzeno</string>
+    <string name="refill_amount">Doplnit (%s)</string>
+    <string name="expiration_date_notification">Lék %1$s má datum expirace %2$s.\nZvažte výměnu léku.</string>
 </resources>

@@ -271,4 +271,16 @@
     <string name="production_date">Fecha de producción</string>
     <string name="expiration_date">Fecha de vencimiento</string>
     <string name="expiration_reminder">Recordatorio de vencimiento</string>
+    <string name="daily_below_threshold">Diariamente por debajo del umbral</string>
+    <string name="remind_days_before_expiration">Recordar días antes del vencimiento</string>
+    <string name="out_of_stock_reminder_help">Recuerda cuando el medicamento se agota, ya sea después de cada recordatorio, una vez o una vez al día.</string>
+    <string name="expiration_date_reminder_help">Recuerda cuando se alcanza la fecha de vencimiento del medicamento o un tiempo configurable antes de esa fecha.</string>
+    <string name="once">Una vez</string>
+    <string name="daily">Diariamente</string>
+    <string name="medicine_stock_settings">Configuración de existencias de medicamentos</string>
+    <string name="edit_medicine_stock_settings">Editar configuración de existencias de medicamentos</string>
+    <string name="clear_dates">Borrar fechas</string>
+    <string name="acknowledged">Reconocido</string>
+    <string name="refill_amount">Rellenar (%s)</string>
+    <string name="expiration_date_notification">El medicamento %1$s tiene una fecha de vencimiento de %2$s.\nConsidere reemplazar el medicamento.</string>
 </resources>

@@ -266,4 +266,16 @@
     <string name="production_date">உற்பத்தி தேதி</string>
     <string name="expiration_date">காலாவதி தேதி</string>
     <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
+    <string name="daily_below_threshold">தினசரி வாசலுக்குக் கீழே இருக்கும்போது</string>
+    <string name="remind_days_before_expiration">காலாவதியாகும் நாட்களுக்கு முன் நினைவூட்டு</string>
+    <string name="out_of_stock_reminder_help">மருந்து கையிருப்பில் இல்லாதபோது, ஒவ்வொரு நினைவூட்டலுக்குப் பிறகும், ஒரு முறை அல்லது ஒரு நாளைக்கு ஒரு முறை நினைவூட்டுகிறது.</string>
+    <string name="expiration_date_reminder_help">மருந்தின் காலாவதி தேதியை அடைந்ததும் அல்லது அந்தத் தேதிக்கு ముందు உள்ளமைக்கக்கூடிய நேரத்திலும் நினைவூட்டுகிறது.</string>
+    <string name="once">ஒரு முறை</string>
+    <string name="daily">தினசரி</string>
+    <string name="medicine_stock_settings">மருந்து இருப்பு அமைப்புகள்</string>
+    <string name="edit_medicine_stock_settings">மருந்து இருப்பு அமைப்புகளைத் திருத்து</string>
+    <string name="clear_dates">தேதிகளை அழி</string>
+    <string name="acknowledged">ஒப்புக்கொள்ளப்பட்டது</string>
+    <string name="refill_amount">மீள்நிரப்பு (%s)</string>
+    <string name="expiration_date_notification">மருந்து %1$s-க்கு காலாவதி தேதி %2$s உள்ளது.\nமருந்தை மாற்றுவதைக் கவனியுங்கள்.</string>
 </resources>

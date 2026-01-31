@@ -266,4 +266,16 @@
     <string name="production_date">Ημερομηνία παραγωγής</string>
     <string name="expiration_date">Ημερομηνία λήξης</string>
     <string name="expiration_reminder">Υπενθύμιση λήξης</string>
+    <string name="daily_below_threshold">Καθημερινά κάτω από το όριο</string>
+    <string name="remind_days_before_expiration">Υπενθύμιση ημέρες πριν από τη λήξη</string>
+    <string name="out_of_stock_reminder_help">Υπενθυμίζει όταν το φάρμακο εξαντληθεί, είτε μετά από κάθε υπενθύμιση είτε μία φορά είτε μία φορά την ημέρα.</string>
+    <string name="expiration_date_reminder_help">Υπενθυμίζει πότε συμπληρώνεται η ημερομηнία λήξης του φαρμάκου ή ένας διαμορφώσιμος χρόνος πριν από την ημερομηнία αυτή.</string>
+    <string name="once">Μια φορά</string>
+    <string name="daily">Καθημερινά</string>
+    <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>
+    <string name="edit_medicine_stock_settings">Επεξεργασία ρυθμίσεων αποθέματος φαρμάκων</string>
+    <string name="clear_dates">Εκκαθάριση ημερομηнιών</string>
+    <string name="acknowledged">Αναγνωρίστηκε</string>
+    <string name="refill_amount">Αναπλήρωση (%s)</string>
+    <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηнία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
 </resources>

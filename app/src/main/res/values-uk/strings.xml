@@ -276,4 +276,16 @@
     <string name="production_date">Дата виробництва</string>
     <string name="expiration_date">Термін придатності</string>
     <string name="expiration_reminder">Нагадування про термін придатності</string>
+    <string name="daily_below_threshold">Щодня при нижче порогу</string>
+    <string name="remind_days_before_expiration">Нагадувати за дні до закінчення терміну придатності</string>
+    <string name="out_of_stock_reminder_help">Нагадує, коли ліки закінчуються, або після кожного нагадування, або один раз, або один раз на день.</string>
+    <string name="expiration_date_reminder_help">Нагадує, коли настає термін придатності ліків або за налаштований час до цієї дати.</string>
+    <string name="once">Один раз</string>
+    <string name="daily">Щодня</string>
+    <string name="medicine_stock_settings">Налаштування запасу ліків</string>
+    <string name="edit_medicine_stock_settings">Редагувати налаштування запасу ліків</string>
+    <string name="clear_dates">Очистити дати</string>
+    <string name="acknowledged">Підтверджено</string>
+    <string name="refill_amount">Поповнити (%s)</string>
+    <string name="expiration_date_notification">Термін придатності ліків %1$s закінчується %2$s.\nРозгляньте можливість заміни ліків.</string>
 </resources>

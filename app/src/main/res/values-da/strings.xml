@@ -266,4 +266,16 @@
     <string name="production_date">Produktionsdato</string>
     <string name="expiration_date">Udløbsdato</string>
     <string name="expiration_reminder">Påmindelse om udløbsdato</string>
+    <string name="daily_below_threshold">Dagligt under tærskelværdien</string>
+    <string name="remind_days_before_expiration">Mind om dage før udløb</string>
+    <string name="out_of_stock_reminder_help">Minder, når medicinen er udsolgt, enten efter hver påmindelse eller én gang eller én gang dagligt.</string>
+    <string name="expiration_date_reminder_help">Minder, når medicinens udløbsdato er nået, eller en konfigurerbar tid før den dato.</string>
+    <string name="once">Én gang</string>
+    <string name="daily">Dagligt</string>
+    <string name="medicine_stock_settings">Indstillinger for medicinlager</string>
+    <string name="edit_medicine_stock_settings">Rediger indstillinger for medicinlager</string>
+    <string name="clear_dates">Ryd datoer</string>
+    <string name="acknowledged">Anerkendt</string>
+    <string name="refill_amount">Genopfyldning (%s)</string>
+    <string name="expiration_date_notification">Medicinen %1$s har en udløbsdato den %2$s.\nOvervej at udskifte medicinen.</string>
 </resources>

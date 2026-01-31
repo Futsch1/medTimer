@@ -266,4 +266,16 @@
     <string name="production_date">Üretim tarihi</string>
     <string name="expiration_date">Son kullanma tarihi</string>
     <string name="expiration_reminder">Son kullanma hatırlatıcısı</string>
+    <string name="daily_below_threshold">Eşiğin altındayken günlük</string>
+    <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
+    <string name="out_of_stock_reminder_help">İlaç stokta kalmadığında, her hatırlatmadan sonra, bir kez veya günde bir kez hatırlatır.</string>
+    <string name="expiration_date_reminder_help">İlacın son kullanma tarihi geldiğinde veya bu tarihten önce yapılandırılabilir bir zamanda hatırlatır.</string>
+    <string name="once">Bir kez</string>
+    <string name="daily">Günlük</string>
+    <string name="medicine_stock_settings">İlaç stok ayarları</string>
+    <string name="edit_medicine_stock_settings">İlaç stok ayarlarını düzenle</string>
+    <string name="clear_dates">Tarihleri temizle</string>
+    <string name="acknowledged">Onaylandı</string>
+    <string name="refill_amount">Yeniden doldur (%s)</string>
+    <string name="expiration_date_notification">%1$s ilacının son kullanma tarihi %2$s.\nİlacı değiştirmeyi düşünün.</string>
 </resources>

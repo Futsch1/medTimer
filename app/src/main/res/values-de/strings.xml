@@ -266,4 +266,16 @@
     <string name="production_date">Herstellungsdatum</string>
     <string name="expiration_date">Ablaufdatum</string>
     <string name="expiration_reminder">Ablauf-Erinnerung</string>
+    <string name="daily_below_threshold">Täglich bei Unterschreitung des Schwellenwerts</string>
+    <string name="remind_days_before_expiration">Tage vor Ablauf erinnern</string>
+    <string name="out_of_stock_reminder_help">Erinnert, wenn das Medikament nicht mehr vorrätig ist, entweder nach jeder Erinnerung oder einmalig oder einmal pro Tag.</string>
+    <string name="expiration_date_reminder_help">Erinnert, wenn das Verfallsdatum des Medikaments erreicht ist oder eine konfigurierbare Zeit vor diesem Datum.</string>
+    <string name="once">Einmal</string>
+    <string name="daily">Täglich</string>
+    <string name="medicine_stock_settings">Medikamentenvorratseinstellungen</string>
+    <string name="edit_medicine_stock_settings">Medikamentenvorratseinstellungen bearbeiten</string>
+    <string name="clear_dates">Datumswerte löschen</string>
+    <string name="acknowledged">Bestätigt</string>
+    <string name="refill_amount">Nachfüllen (%s)</string>
+    <string name="expiration_date_notification">Das Medikament %1$s hat ein Verfallsdatum von %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
 </resources>
