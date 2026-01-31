@@ -64,6 +64,15 @@ class ReminderSchedulerExpirationTest {
             reminder
         )
 
+        reminder.periodStart = 5
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(1, 480),
+            medicine.medicine,
+            reminder
+        )
+
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         Assertions.assertTrue(scheduledReminders.isEmpty())
