@@ -168,6 +168,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                     .setInputData(
                         Data.Builder()
                             .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+                            .putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, intArrayOf())
                             .build()
                     )
                     .build()

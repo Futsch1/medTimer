@@ -22,9 +22,10 @@ class RefillWorker(val context: Context, workerParameters: WorkerParameters) :
     override fun doWork(): Result {
         val medicineRepository = MedicineRepository(context as Application?)
 
-        val reminderEvent = medicineRepository.getReminderEvent(ProcessedNotificationData.fromData(inputData).reminderEventIds[0])!!
+        var reminderEvent: ReminderEvent? = null
         var medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
         if (medicineId == -1) {
+            reminderEvent = medicineRepository.getReminderEvent(ProcessedNotificationData.fromData(inputData).reminderEventIds[0])!!
             val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
             medicineId = reminder?.medicineRelId ?: -1
         }
@@ -37,14 +38,16 @@ class RefillWorker(val context: Context, workerParameters: WorkerParameters) :
         // Make sure that the database is flushed to avoid races between subsequent stock handling events
         medicineRepository.flushDatabase()
 
-        ReminderWorkerReceiver.requestStockReminderAcknowledged(context, reminderEvent)
+        if (reminderEvent != null) {
+            ReminderWorkerReceiver.requestStockReminderAcknowledged(context, reminderEvent)
+        }
 
         return Result.success()
     }
 
     fun processRefill(medicine: FullMedicine): ReminderEvent {
         medicine.medicine.amount += medicine.medicine.refillSize
-        Log.d(LogTags.REMINDER, "Refill medicine ${medicine.medicine.name} with ${medicine.medicine.refillSize} to amount ${medicine.medicine.amount}")
+        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.medicine.name} with ${medicine.medicine.refillSize} to amount ${medicine.medicine.amount}")
 
         // Create refill reminder event
         return buildReminderEvent(medicine)
