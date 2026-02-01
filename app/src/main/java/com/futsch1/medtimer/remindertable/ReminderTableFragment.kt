@@ -28,18 +28,18 @@ class ReminderTableFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val medicineViewModel = ViewModelProvider(this).get<MedicineViewModel>(MedicineViewModel::class.java)
+        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
         val fragmentView = inflater.inflate(R.layout.fragment_reminder_table, container, false)
         val tableView = fragmentView.findViewById<TableView>(R.id.reminder_table)
-        filter = fragmentView.findViewById<TextInputEditText>(R.id.filter)
-        filterLayout = fragmentView.findViewById<TextInputLayout>(R.id.filterLayout)
+        filter = fragmentView.findViewById(R.id.filter)
+        filterLayout = fragmentView.findViewById(R.id.filterLayout)
         val tableFilter = Filter(tableView)
         setupFilter(tableFilter)
 
         val adapter = ReminderTableAdapter(tableView, medicineViewModel, requireActivity())
 
-        tableView.setAdapter<String?, ReminderTableCellModel?, ReminderTableCellModel?>(adapter)
+        tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
         medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDelete)
             .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> -> adapter.submitList(reminderEvents) })
