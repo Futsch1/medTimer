@@ -1,28 +1,20 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.GsonBuilder
 
-import java.util.List;
-
-public class JSONReminderEventBackup extends JSONBackup<ReminderEvent> {
-
-    public JSONReminderEventBackup() {
-        super(ReminderEvent.class);
+class JSONReminderEventBackup : JSONBackup<ReminderEvent>(ReminderEvent::class.java) {
+    override fun isInvalid(item: ReminderEvent?): Boolean {
+        return item == null || item.medicineName == null
     }
 
-    @Override
-    protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
+    override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
         return builder
-                .registerTypeAdapter(ReminderEvent.class, new FullDeserialize<ReminderEvent>());
+            .registerTypeAdapter(ReminderEvent::class.java, FullDeserialize<ReminderEvent>())
     }
 
-    protected boolean isInvalid(ReminderEvent reminderEvent) {
-        return reminderEvent == null;
-    }
+    override fun applyBackup(list: List<ReminderEvent>, medicineRepository: MedicineRepository) {
+        medicineRepository.deleteReminderEvents()
 
-    public void applyBackup(List<ReminderEvent> listOfReminderEvents, MedicineRepository medicineRepository) {
-        medicineRepository.deleteReminderEvents();
-
-        listOfReminderEvents.forEach(medicineRepository::insertReminderEvent);
+        medicineRepository.insertReminderEvents(list)
     }
 }

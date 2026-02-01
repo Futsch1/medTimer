@@ -1,69 +1,65 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import java.time.Instant
 
-import java.time.Instant;
-import java.util.List;
-
-public class JSONMedicineBackup extends JSONBackup<FullMedicine> {
-
-    public JSONMedicineBackup() {
-        super(FullMedicine.class);
-    }
-
-    @Override
-    public JsonElement createBackup(int databaseVersion, List<FullMedicine> list) {
+class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
+    override fun createBackup(databaseVersion: Int, list: List<FullMedicine>): JsonElement {
         // Fix the medicines where the instructions are null
-        for (FullMedicine FullMedicine : list) {
-            FullMedicine.reminders.stream().filter(reminder -> reminder.instructions == null).forEach(reminder -> reminder.instructions = "");
+        for (fullMedicine in list) {
+            fullMedicine.reminders.stream().filter { reminder: Reminder? -> reminder!!.instructions == null }
+                .forEach { reminder: Reminder? -> reminder!!.instructions = "" }
         }
-        return super.createBackup(databaseVersion, list);
+        return super.createBackup(databaseVersion, list)
     }
 
-    @Override
-    protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
+    override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
         return builder
-                .registerTypeAdapter(Medicine.class, new FullDeserialize<Medicine>())
-                .registerTypeAdapter(Tag.class, new FullDeserialize<>())
-                .registerTypeAdapter(Reminder.class, new FullDeserialize<Reminder>());
+            .registerTypeAdapter(Medicine::class.java, FullDeserialize<Medicine?>())
+            .registerTypeAdapter(Tag::class.java, FullDeserialize<Any?>())
+            .registerTypeAdapter(Reminder::class.java, FullDeserialize<Reminder?>())
     }
 
-    protected boolean isInvalid(FullMedicine fullMedicine) {
-        return fullMedicine == null || fullMedicine.medicine == null || fullMedicine.reminders == null;
+    override fun isInvalid(item: FullMedicine?): Boolean {
+        return item == null || item.medicine == null || item.reminders == null
     }
 
-    public void applyBackup(List<FullMedicine> listOfFullMedicine, MedicineRepository medicineRepository) {
-        medicineRepository.deleteReminders();
-        medicineRepository.deleteMedicines();
-        medicineRepository.deleteTags();
+    override fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
+        medicineRepository.deleteReminders()
+        medicineRepository.deleteMedicines()
+        medicineRepository.deleteTags()
 
-        var sortOrder = 1.0;
+        var sortOrder = 1.0
 
-        for (FullMedicine fullMedicine : listOfFullMedicine) {
+        for (fullMedicine in list) {
             if (fullMedicine.medicine.sortOrder == 0.0) {
-                fullMedicine.medicine.sortOrder = sortOrder++;
+                fullMedicine.medicine.sortOrder = sortOrder++
             }
-            long medicineId = medicineRepository.insertMedicine(fullMedicine.medicine);
-            processReminders(medicineRepository, fullMedicine, (int) medicineId);
-            processTags(medicineRepository, fullMedicine, (int) medicineId);
+            val medicineId = medicineRepository.insertMedicine(fullMedicine.medicine)
+            processReminders(medicineRepository, fullMedicine, medicineId.toInt())
+            processTags(medicineRepository, fullMedicine, medicineId.toInt())
         }
     }
 
-    private static void processReminders(MedicineRepository medicineRepository, FullMedicine fullMedicine, int medicineId) {
-        for (Reminder reminder : fullMedicine.reminders) {
-            if (reminder != null) {
-                reminder.medicineRelId = medicineId;
-                reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000;
-                medicineRepository.insertReminder(reminder);
-            }
+    private fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+        for (tag in fullMedicine.tags) {
+            val tagId = medicineRepository.insertTag(tag).toInt()
+            medicineRepository.insertMedicineToTag(medicineId, tagId)
         }
     }
 
-    private void processTags(MedicineRepository medicineRepository, FullMedicine fullMedicine, int medicineId) {
-        for (Tag tag : fullMedicine.tags) {
-            int tagId = (int) medicineRepository.insertTag(tag);
-            medicineRepository.insertMedicineToTag(medicineId, tagId);
+    companion object {
+        private fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+            val reminders: MutableList<Reminder> = mutableListOf()
+            for (reminder in fullMedicine.reminders) {
+                if (reminder != null) {
+                    reminder.medicineRelId = medicineId
+                    reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+                    reminders.add(reminder)
+                }
+            }
+            medicineRepository.insertReminders(reminders)
         }
     }
 }
