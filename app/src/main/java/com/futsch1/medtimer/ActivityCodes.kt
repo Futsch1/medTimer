@@ -25,7 +25,8 @@ enum class WorkerActionCode(val action: String) {
     Taken("com.futsch1.medtimer.TAKEN_ACTION"),
     Snooze("com.futsch1.medtimer.SNOOZE_ACTION"),
     Acknowledged("com.futsch1.medtimer.ACKNOWLEDGED_ACTION"),
-    Refill("com.futsch1.medtimer.REFILL_ACTION");
+    Refill("com.futsch1.medtimer.REFILL_ACTION"),
+    ShowReminderNotification("com.futsch1.medtimer.SHOW_REMINDER_NOTIFICATION");
 
     companion object {
         private val actionMap = entries.associateBy { it.action }

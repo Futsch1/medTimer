@@ -11,7 +11,7 @@ import com.futsch1.medtimer.LogTags.AUTOSTART
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
-import com.futsch1.medtimer.reminders.getReminderAction
+import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 import java.util.function.Predicate
@@ -45,7 +45,7 @@ class Autostart : BroadcastReceiver() {
                     .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
                         Collectors.toUnmodifiableList()
                     )
-                val notificationsMap: Map<Int, List<ReminderEvent>> = reminderEventList.groupBy { it.notificationId }
+                val notificationsMap: Map<Long, List<ReminderEvent>> = reminderEventList.groupBy { it.remindedTimestamp }
                 for (notificationEntry in notificationsMap) {
                     val reminderIds = notificationEntry.value.stream().mapToInt { it.reminderId }.toArray()
                     val reminderEventIds = notificationEntry.value.stream().mapToInt { it.reminderEventId }.toArray()
@@ -53,12 +53,11 @@ class Autostart : BroadcastReceiver() {
                         ReminderNotificationData.fromArrays(
                             reminderIds,
                             reminderEventIds,
-                            Instant.ofEpochSecond(notificationEntry.value[0].remindedTimestamp),
-                            notificationEntry.key
+                            Instant.ofEpochSecond(notificationEntry.key),
+                            -1
                         )
                     Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
-                    val intent = getReminderAction(context)
-                    scheduledReminderNotificationData.toIntent(intent)
+                    val intent = getShowReminderNotificationIntent(context, scheduledReminderNotificationData)
                     context.sendBroadcast(intent)
                 }
             }

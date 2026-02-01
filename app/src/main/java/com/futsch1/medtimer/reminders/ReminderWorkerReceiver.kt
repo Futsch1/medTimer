@@ -58,6 +58,17 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 workManager.enqueue(reminderNotificationWorker)
             }
 
+            WorkerActionCode.ShowReminderNotification -> {
+                val builder = Data.Builder()
+                ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
+
+                val reminderNotificationWorker: WorkRequest =
+                    OneTimeWorkRequest.Builder(ShowReminderNotificationWorker::class.java)
+                        .setInputData(builder.build())
+                        .build()
+                workManager.enqueue(reminderNotificationWorker)
+            }
+
             WorkerActionCode.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
             null -> Unit
         }
