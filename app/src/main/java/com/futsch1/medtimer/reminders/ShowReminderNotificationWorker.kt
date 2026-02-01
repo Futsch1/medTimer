@@ -28,6 +28,8 @@ class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerP
             alarmSetter.setAlarmForReminderNotification(reminderNotificationData, inputData)
         }
 
+        ReminderWorkerReceiver.requestScheduleNextNotification(context)
+
         return Result.success()
     }
 

@@ -45,7 +45,7 @@ class Autostart : BroadcastReceiver() {
                     .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
                         Collectors.toUnmodifiableList()
                     )
-                val notificationsMap: Map<Int, List<ReminderEvent>> = reminderEventList.groupBy { it.notificationId }
+                val notificationsMap: Map<Long, List<ReminderEvent>> = reminderEventList.groupBy { it.remindedTimestamp }
                 for (notificationEntry in notificationsMap) {
                     val reminderIds = notificationEntry.value.stream().mapToInt { it.reminderId }.toArray()
                     val reminderEventIds = notificationEntry.value.stream().mapToInt { it.reminderEventId }.toArray()
@@ -53,8 +53,8 @@ class Autostart : BroadcastReceiver() {
                         ReminderNotificationData.fromArrays(
                             reminderIds,
                             reminderEventIds,
-                            Instant.ofEpochSecond(notificationEntry.value[0].remindedTimestamp),
-                            notificationEntry.key
+                            Instant.ofEpochSecond(notificationEntry.key),
+                            -1
                         )
                     Log.i(AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
                     val intent = getShowReminderNotificationIntent(context, scheduledReminderNotificationData)
