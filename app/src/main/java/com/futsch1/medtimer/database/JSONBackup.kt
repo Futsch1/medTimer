@@ -24,7 +24,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
         return gson.toJsonTree(content)
     }
 
-    fun parseBackup(jsonFile: String): List<T>? {
+    fun parseBackup(jsonFile: String?): List<T>? {
         // In a first step, parse with the version set to 0
         var gson = registerTypeAdapters(GsonBuilder()).setVersion(0.0).create()
         try {
@@ -71,7 +71,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
             val fields = pojo!!.javaClass.declaredFields
             for (f in fields) {
                 try {
-                    if (f.get(pojo) == null) {
+                    if (f[pojo] == null) {
                         throw JsonParseException("Missing field in JSON: " + f.getName())
                     }
                 } catch (e: IllegalArgumentException) {
