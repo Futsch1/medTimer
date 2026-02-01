@@ -156,4 +156,7 @@ public interface MedicineDao {
 
     @Insert
     void insertReminderEvents(List<@NotNull ReminderEvent> reminderEvents);
+
+    @Insert
+    void insertReminders(List<@NotNull Reminder> reminders);
 }

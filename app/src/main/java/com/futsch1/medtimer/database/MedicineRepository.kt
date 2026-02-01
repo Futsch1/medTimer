@@ -252,6 +252,10 @@ class MedicineRepository(val application: Application?) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminderEvents(reminderEvents) }
     }
 
+    fun insertReminders(reminders: List<Reminder>) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminders(reminders) }
+    }
+
     internal fun interface Insert<T> {
         fun insert(item: T): Long
     }
