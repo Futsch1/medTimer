@@ -42,7 +42,7 @@ class AlarmProcessor(val context: Context) {
         scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant)
 
         // Cancel potentially already running alarm and set new
-        alarmManager.cancel(PendingIntent.getBroadcast(context, 0, Intent(), PendingIntent.FLAG_IMMUTABLE))
+        alarmManager.cancel(PendingIntent.getBroadcast(context, 0, Intent(), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT))
         for (reminderEventId in scheduledReminderNotificationData.reminderEventIds) {
             if (reminderEventId != 0) {
                 cancelPendingReminderNotifications(reminderEventId)
@@ -98,7 +98,14 @@ class AlarmProcessor(val context: Context) {
     }
 
     fun cancelPendingReminderNotifications(reminderEventId: Int) {
-        alarmManager.cancel(PendingIntent.getBroadcast(context, reminderEventId, getReminderAction(context), PendingIntent.FLAG_IMMUTABLE))
+        alarmManager.cancel(
+            PendingIntent.getBroadcast(
+                context,
+                reminderEventId,
+                getReminderAction(context),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        )
         Log.d(LogTags.REMINDER, "Cancel pending reminder notification alarms for reID $reminderEventId")
     }
 
