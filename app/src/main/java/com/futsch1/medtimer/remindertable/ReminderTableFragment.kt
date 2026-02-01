@@ -1,81 +1,76 @@
-package com.futsch1.medtimer.remindertable;
+package com.futsch1.medtimer.remindertable
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.evrencoskun.tableview.TableView
+import com.evrencoskun.tableview.filter.Filter
+import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.statusValuesWithoutDelete
+import com.futsch1.medtimer.helpers.TableHelper
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+class ReminderTableFragment : Fragment() {
+    private var filterLayout: TextInputLayout? = null
+    private var filter: TextInputEditText? = null
 
-import com.evrencoskun.tableview.TableView;
-import com.evrencoskun.tableview.filter.Filter;
-import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TableHelper;
-import com.google.android.material.color.MaterialColors;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val medicineViewModel = ViewModelProvider(this).get<MedicineViewModel>(MedicineViewModel::class.java)
 
-public class ReminderTableFragment extends Fragment {
+        val fragmentView = inflater.inflate(R.layout.fragment_reminder_table, container, false)
+        val tableView = fragmentView.findViewById<TableView>(R.id.reminder_table)
+        filter = fragmentView.findViewById<TextInputEditText>(R.id.filter)
+        filterLayout = fragmentView.findViewById<TextInputLayout>(R.id.filterLayout)
+        val tableFilter = Filter(tableView)
+        setupFilter(tableFilter)
 
-    private TextInputLayout filterLayout;
-    private TextInputEditText filter;
+        val adapter = ReminderTableAdapter(tableView, medicineViewModel, requireActivity())
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        MedicineViewModel medicineViewModel = new ViewModelProvider(this).get(MedicineViewModel.class);
-
-        View fragmentView = inflater.inflate(R.layout.fragment_reminder_table, container, false);
-        TableView tableView = fragmentView.findViewById(R.id.reminder_table);
-        filter = fragmentView.findViewById(R.id.filter);
-        filterLayout = fragmentView.findViewById(R.id.filterLayout);
-        Filter tableFilter = new Filter(tableView);
-        setupFilter(tableFilter);
-
-        ReminderTableAdapter adapter = new ReminderTableAdapter(tableView, medicineViewModel, requireActivity());
-
-        tableView.setAdapter(adapter);
-        adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()));
-        medicineViewModel.getLiveReminderEvents(0, ReminderEvent.Companion.getStatusValuesWithoutDeletedAndAcknowledged()).observe(getViewLifecycleOwner(), adapter::submitList);
+        tableView.setAdapter<String?, ReminderTableCellModel?, ReminderTableCellModel?>(adapter)
+        adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
+        medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDelete)
+            .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> -> adapter.submitList(reminderEvents) })
 
         // This is a workaround for a recycler view bug that causes random crashes
-        tableView.getCellRecyclerView().setItemAnimator(null);
-        tableView.getColumnHeaderRecyclerView().setItemAnimator(null);
-        tableView.getRowHeaderRecyclerView().setItemAnimator(null);
+        tableView.cellRecyclerView.setItemAnimator(null)
+        tableView.columnHeaderRecyclerView.setItemAnimator(null)
+        tableView.rowHeaderRecyclerView.setItemAnimator(null)
 
-        tableView.setUnSelectedColor(MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, "TableView"));
+        tableView.unSelectedColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, "TableView")
 
-        return fragmentView;
+        return fragmentView
     }
 
-    private void setupFilter(Filter tableFilter) {
-        filterLayout.setEndIconOnClickListener(v -> {
-            filter.setText("");
-            tableFilter.set("");
-        });
-        filter.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
+    private fun setupFilter(tableFilter: Filter) {
+        filterLayout!!.setEndIconOnClickListener { _: View? ->
+            filter!!.setText("")
+            tableFilter.set("")
+        }
+        filter!!.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
                 // Intentionally empty
             }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Intentionally empty
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tableFilter.set(s.toString());
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                tableFilter.set(s.toString())
             }
-        });
+        })
     }
-
 }

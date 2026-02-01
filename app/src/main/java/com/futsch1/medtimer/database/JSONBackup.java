@@ -86,7 +86,7 @@ public abstract class JSONBackup<T> {
                         throw new JsonParseException("Missing field in JSON: " + f.getName());
                     }
                 } catch (IllegalArgumentException | IllegalAccessException ex) {
-                    Log.e(LogTags.BACKUP, "Internal error");
+                    Log.e(LogTags.BACKUP, "Internal error: " + ex.getMessage());
                 }
 
             }

@@ -5,8 +5,14 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.futsch1.medtimer.database.Reminder.ReminderType
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.google.gson.annotations.Expose
 import java.util.Objects
+
+val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
+val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
+val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
+    ReminderStatus.entries.filterNot { it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED }
 
 @Entity(indices = [Index("reminderId"), Index("remindedTimestamp")])
 class ReminderEvent {
@@ -134,12 +140,5 @@ class ReminderEvent {
         SKIPPED,
         DELETED,
         ACKNOWLEDGED
-    }
-
-    companion object {
-        val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
-        val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
-        val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
-            ReminderStatus.entries.filterNot { it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED }
     }
 }

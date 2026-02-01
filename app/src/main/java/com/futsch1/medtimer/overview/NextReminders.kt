@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -28,7 +29,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private fun setupScheduleObservers(parentFragment: Fragment) {
         medicineViewModel.medicineRepository.getLiveReminderEvents(
             Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
-            ReminderEvent.allStatusValues
+            allStatusValues
         )
             .observe(parentFragment.viewLifecycleOwner) { reminderEvents: List<ReminderEvent> ->
                 this.changedReminderEvents(

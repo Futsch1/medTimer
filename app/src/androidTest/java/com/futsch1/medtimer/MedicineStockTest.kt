@@ -1,11 +1,15 @@
 package com.futsch1.medtimer
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
@@ -16,11 +20,13 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalTime
@@ -116,7 +122,7 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, "pills")
     }
 
-    private fun checkNotificationWithTitle(device: UiDevice, notificationTitle: String, expected: Boolean) {
+    private fun checkNotificationWithTitle(device: UiDevice, notificationTitle: String, expected: Boolean, dismiss: Boolean = false) {
         device.openNotification()
         val o = device.wait(
             Until.findObject(By.textContains(notificationTitle)),
@@ -127,11 +133,14 @@ class MedicineStockTest : BaseTestHelper() {
         } else {
             internalAssert(o == null)
         }
+        if (dismiss) {
+            o.fling(Direction.RIGHT)
+        }
         device.pressBack()
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     fun hiddenMedicineNameInStockReminder() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -147,6 +156,9 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("120")
         clickOn(R.string.unit)
         setValue("pills")
+        AndroidTestHelper.scrollDown()
+        clickOn(R.string.refill_size)
+        setValue("100")
         pressBack()
 
         AndroidTestHelper.createIntervalReminder("So many pills - 130", 10)
@@ -169,6 +181,14 @@ class MedicineStockTest : BaseTestHelper() {
         )
         internalAssert(device.findObject(By.textContains("T******")) != null)
         internalAssert(device.findObject(By.textContains("TestMed")) == null)
+        clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
+        device.pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(100.0, "pills"))
     }
 
     @Test
@@ -300,7 +320,27 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        checkNotificationWithTitle(device, notificationTitle, true)
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+
+        checkNotificationWithTitle(device, notificationTitle, expected = true, dismiss = true)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+        )
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.deleteButton)
+        clickOn(R.string.yes)
+
+        checkNotificationWithTitle(device, notificationTitle, false)
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.util.stream.Collectors
@@ -157,7 +158,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
 
     fun getLiveReminderEvents(
         timeStamp: Long,
-        statusValues: List<ReminderStatus> = ReminderEvent.allStatusValues
+        statusValues: List<ReminderStatus> = allStatusValues
     ): LiveData<List<ReminderEvent>> {
         liveReminderEvents = medicineRepository.getLiveReminderEvents(timeStamp, statusValues)
         filteredReminderEvents.addSource(liveReminderEvents) {

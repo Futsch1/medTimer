@@ -42,6 +42,7 @@ class OutOfStockNotificationFactory(context: Context, val reminderNotification: 
     }
 
     override fun create(): Notification {
+        reminderNotification.reminderNotificationData.toBundle(builder.extras)
         return builder.build()
     }
 }

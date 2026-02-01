@@ -4,6 +4,7 @@ import android.app.Application
 import android.view.View
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -24,6 +25,9 @@ open class ActionsBase(val view: View, popupWindow: PopupWindow, val ioCoroutine
     val anchorSkippedButton: View = view.findViewById(R.id.anchorSkippedButton)
     val anchorReraiseOrScheduleButton: View = view.findViewById(R.id.anchorReraiseButton)
     val anchorDeleteButton: View = view.findViewById(R.id.anchorDeleteButton)
+
+    val visible: Boolean
+        get() = takenButton.isVisible || skippedButton.isVisible || reRaiseOrScheduleButton.isVisible || deleteButton.isVisible
 
     init {
         view.setOnClickListener {

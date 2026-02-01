@@ -71,8 +71,8 @@ fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
     return button
 }
 
-fun getNotificationText(stringId: Int): String {
-    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId)
+fun getNotificationText(stringId: Int, vararg args: Any): String {
+    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, args)
     return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         s.uppercase()
     } else {

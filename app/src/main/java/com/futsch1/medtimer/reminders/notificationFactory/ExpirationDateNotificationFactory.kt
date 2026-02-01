@@ -37,6 +37,7 @@ class ExpirationDateNotificationFactory(context: Context, val reminderNotificati
     }
 
     override fun create(): Notification {
+        reminderNotification.reminderNotificationData.toBundle(builder.extras)
         return builder.build()
     }
 }

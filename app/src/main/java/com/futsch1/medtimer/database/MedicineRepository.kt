@@ -63,13 +63,13 @@ class MedicineRepository(val application: Application?) {
     }
 
     val allReminderEventsWithoutDeleted: List<ReminderEvent>
-        get() = medicineDao.getLimitedReminderEvents(0L, ReminderEvent.statusValuesWithoutDelete)
+        get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
 
     val allReminderEventsWithoutDeletedAndAcknowledged: List<ReminderEvent>
-        get() = medicineDao.getLimitedReminderEvents(0L, ReminderEvent.statusValuesWithoutDeletedAndAcknowledged)
+        get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDeletedAndAcknowledged)
 
     fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
-        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), ReminderEvent.allStatusValues)
+        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)
     }
 
     fun getReminderEventsForScheduling(medicines: List<FullMedicine>): List<ReminderEvent> {

@@ -159,7 +159,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
 
             WorkManagerAccess.getWorkManager(context)
-                .enqueue(buildActionWorkRequest(getTakenActionIntent(context, processedNotificationData), AcknowledgedWorker::class.java))
+                .enqueue(buildActionWorkRequest(getAcknowledgedActionIntent(context, processedNotificationData), AcknowledgedWorker::class.java))
         }
 
         fun requestRefill(context: Context, medicineId: Int) {

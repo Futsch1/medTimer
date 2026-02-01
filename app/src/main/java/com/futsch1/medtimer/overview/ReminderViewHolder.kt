@@ -83,18 +83,20 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
+        val visible = createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
-        // Position the view at the vertical center of the button
-        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        popupView.measure(widthMeasureSpec, heightMeasureSpec)
+        if (visible) {
+            // Position the view at the vertical center of the button
+            val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            popupView.measure(widthMeasureSpec, heightMeasureSpec)
 
-        val location = IntArray(2)
-        view.getLocationInWindow(location)
+            val location = IntArray(2)
+            view.getLocationInWindow(location)
 
-        val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
+            val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
+        }
     }
 
     private fun setStateButton(state: OverviewState) {

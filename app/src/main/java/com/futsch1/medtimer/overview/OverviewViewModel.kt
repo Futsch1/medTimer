@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.delay
@@ -23,7 +24,7 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
 
     private val reminderEvents =
-        medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), ReminderEvent.statusValuesWithoutDelete)
+        medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
     private val scheduledReminders = medicineViewModel.scheduledReminders
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
