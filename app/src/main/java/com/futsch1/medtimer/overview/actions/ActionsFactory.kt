@@ -7,10 +7,20 @@ import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import kotlinx.coroutines.CoroutineScope
 
-fun createActions(event: OverviewEvent, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope) {
-    if (event is OverviewReminderEvent) {
-        ReminderEventActions(event, view, popupWindow)
+fun createActions(event: OverviewEvent, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope): Boolean {
+    return if (event is OverviewReminderEvent) {
+        if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) {
+            StockEventActions(event, view, popupWindow).visible
+        } else {
+            ReminderEventActions(event, view, popupWindow).visible
+        }
     } else if (event is OverviewScheduledReminderEvent) {
-        ScheduledReminderActions(event, view, popupWindow, coroutineScope)
+        if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
+            ScheduledStockReminderActions(event, view, popupWindow, coroutineScope).visible
+        } else {
+            ScheduledReminderActions(event, view, popupWindow, coroutineScope).visible
+        }
+    } else {
+        false
     }
 }

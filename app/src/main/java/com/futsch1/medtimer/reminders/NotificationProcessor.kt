@@ -85,12 +85,12 @@ class NotificationProcessor(val context: Context) {
     fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
         for (reminderEvent in reminderEvents) {
             reminderEvent.status = status
-            doStockHandling(reminderEvent)
             reminderEvent.processedTimestamp = Instant.now().epochSecond
+            doStockHandling(reminderEvent)
             Log.i(
                 LogTags.REMINDER, String.format(
                     "%s reminder reID %d for %s (%s)",
-                    if (status == ReminderStatus.TAKEN) "Taken" else "Skipped",
+                    status.toString(),
                     reminderEvent.reminderEventId,
                     reminderEvent.medicineName,
                     reminderEvent.amount
@@ -115,7 +115,7 @@ class NotificationProcessor(val context: Context) {
                         amount = -amount
                     }
                     reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-                    requestStockHandling(context, amount, reminder.medicineRelId)
+                    requestStockHandling(context, amount, reminder.medicineRelId, reminderEvent.processedTimestamp)
                 }
             }
         }

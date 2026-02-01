@@ -170,7 +170,6 @@
     <string name="interval_start_processed">Aikaväli alkaa ottaessa tai ohittaessa</string>
     <string name="every_interval">Joka %s</string>
     <string name="invalid_input">Virheellinen syöte</string>
-    <string name="off">Pois päältä</string>
     <string name="once_below_threshold">Kerran pudottaessa alle rajan</string>
     <string name="always_below_threshold">Aina ollessa alle rajan</string>
     <string name="out_of_stock_notification">Enää %2$s jäljellä lääkettä %1$s!\nHarkitse lääkkeen täyttämistä pian.</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Ohita akun optimointi</string>
     <string name="reschedule_reminder">Ajoita muistutus uudelleen</string>
     <string name="interval_start_condition">Intervallin käynnistysehto</string>
-<string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
-<string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string></resources>
+    <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
+    <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
+    <string name="refill">Varastotäydennys</string>
+    <string name="expiration_settings">Vanhentumisasetukset</string>
+    <string name="production_date">Valmistuspäivä</string>
+    <string name="expiration_date">Vanhentumispäivä</string>
+    <string name="expiration_reminder">Vanhentumismuistutus</string>
+    <string name="daily_below_threshold">Päivittäin, kun alle kynnyksen</string>
+    <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
+    <string name="out_of_stock_reminder_help">Muistuttaa, kun lääke on loppu varastosta, joko jokaisen muistutuksen jälkeen, kerran tai kerran päivässä.</string>
+    <string name="expiration_date_reminder_help">Muistuttaa, kun lääkkeen viimeinen käyttöpäivä on saavutettu tai määritettävissä oleva aika ennen kyseistä päivämäärää.</string>
+    <string name="once">Kerran</string>
+    <string name="daily">Päivittäin</string>
+    <string name="medicine_stock_settings">Lääkevaraston asetukset</string>
+    <string name="edit_medicine_stock_settings">Muokkaa lääkevaraston asetuksia</string>
+    <string name="clear_dates">Tyhjennä päivämäärät</string>
+    <string name="acknowledged">Kuitattu</string>
+    <string name="refill_amount">Täyttö (%s)</string>
+    <string name="expiration_date_notification">Lääkkeen %1$s viimeinen käyttöpäivä on %2$s.\nHarkitse lääkkeen vaihtamista.</string>
+</resources>

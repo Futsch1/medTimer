@@ -25,16 +25,35 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
             strings.add(intervalBasedReminderString(reminder, context))
         }
 
-        else -> {
+        Reminder.ReminderType.TIME_BASED -> {
             timeBasedReminderString(reminder, strings, context)
         }
+
+        Reminder.ReminderType.OUT_OF_STOCK -> {
+            strings.add(outOfStockReminderString(reminder, context))
+        }
+
+        Reminder.ReminderType.EXPIRATION_DATE -> {
+            strings.add(context.getString(R.string.expiration_date))
+        }
+
+        Reminder.ReminderType.REFILL -> {
+            strings.add(context.getString(R.string.refill))
+        }
     }
-    if (reminder.instructions != null && reminder.instructions.isNotEmpty()) {
-        strings.add(reminder.instructions)
+    if (reminder.instructions?.isNotEmpty() == true) {
+        strings.add(reminder.instructions!!)
     }
     strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
     return java.lang.String.join(", ", strings)
+}
+
+fun outOfStockReminderString(reminder: Reminder, context: Context): String {
+    return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
+        reminder.outOfStockThreshold,
+        ""
+    )
 }
 
 fun intervalBasedReminderString(
@@ -133,6 +152,14 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
         reminders.stream()
             .filter { r: Reminder -> r.isInterval },
         ({ r: Reminder -> intervalBasedReminderString(r, context) })
+    ) + getRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.OUT_OF_STOCK },
+        ({ r: Reminder -> outOfStockReminderString(r, context) })
+    ) + getRemindersSummary(
+        reminders.stream()
+            .filter { r: Reminder -> r.reminderType == Reminder.ReminderType.EXPIRATION_DATE },
+        ({ _: Reminder -> context.getString(R.string.expiration_date) })
     )
 
     val len = reminderTimes.size
@@ -199,5 +226,5 @@ fun getCyclicReminderString(reminder: Reminder, context: Context): String {
 }
 
 private fun firstToLower(string: String): String {
-    return string.substring(0, 1).lowercase(Locale.getDefault()) + string.substring(1)
+    return string.take(1).lowercase(Locale.getDefault()) + string.substring(1)
 }

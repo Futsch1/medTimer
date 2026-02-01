@@ -16,7 +16,9 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             TestMedicine(
                 "Omega 3 (EPA/DHA 500mg)", null, 1, 10.0, arrayOf(
                     testReminderOmega3,
-                    TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3)
+                    TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3),
+                    TestReminderOutOfStock(12.0),
+                    TestReminderExpirationDate(10 * 60, 10)
                 ), arrayOf("Supplements")
             ),
             TestMedicine(
@@ -108,9 +110,9 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             medicine.iconId = iconId
             if (stock > 0) {
                 medicine.amount = stock
-                medicine.outOfStockReminderThreshold = if (stock > 10) stock / 2 else stock * 2
-                medicine.outOfStockReminder = Medicine.OutOfStockReminderType.ONCE
                 medicine.unit = "pills"
+                medicine.refillSizes.add(20.0)
+                medicine.expirationDate = LocalDate.now().toEpochDay() + 7
             }
             return medicine
         }
@@ -162,6 +164,28 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             reminder.intervalStart = Instant.now().epochSecond - 60
             return reminder
         }
+    }
 
+    private class TestReminderOutOfStock(
+        val threshold: Double
+    ) : TestReminder() {
+        override fun toReminder(medicineId: Int): Reminder {
+            val reminder = Reminder(medicineId)
+            reminder.outOfStockThreshold = threshold
+            reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+            return reminder
+        }
+    }
+
+    private class TestReminderExpirationDate(
+        val time: Int, val daysBefore: Long
+    ) : TestReminder() {
+        override fun toReminder(medicineId: Int): Reminder {
+            val reminder = Reminder(medicineId)
+            reminder.timeInMinutes = time
+            reminder.periodStart = daysBefore
+            reminder.expirationReminderType = Reminder.ExpirationReminderType.DAILY
+            return reminder
+        }
     }
 }

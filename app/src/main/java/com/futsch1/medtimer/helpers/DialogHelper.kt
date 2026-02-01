@@ -23,7 +23,7 @@ class DialogHelper(var context: Context) {
     private var inputType: Int? = null
 
     fun interface TextSink {
-        fun consumeText(text: String?)
+        fun consumeText(text: String)
     }
 
     fun interface CancelCallback {

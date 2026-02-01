@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
     <string name="every_interval">Elke %s</string>
     <string name="invalid_input">Ongeldige invoer</string>
-    <string name="off">Uit</string>
     <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
     <string name="always_below_threshold">Altijd wanneer onder drempel</string>
     <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Batterijoptimalisatie negeren</string>
     <string name="reschedule_reminder">Herinnering opnieuw plannen</string>
     <string name="interval_start_condition">Interval startvoorwaarde</string>
-<string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
-<string name="show_taken_time_in_overview">Toon benodigde tijd in overzicht</string></resources>
+    <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
+    <string name="show_taken_time_in_overview">Toon benodigde tijd in overzicht</string>
+    <string name="refill">Voorraad aanvullen</string>
+    <string name="expiration_settings">Instellingen voor vervaldatum</string>
+    <string name="production_date">Productiedatum</string>
+    <string name="expiration_date">Vervaldatum</string>
+    <string name="expiration_reminder">Herinnering voor vervaldatum</string>
+    <string name="daily_below_threshold">Dagelijks onder drempel</string>
+    <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
+    <string name="out_of_stock_reminder_help">Herinnert wanneer het medicijn niet meer op voorraad is, hetzij na elke herinnering, eenmaal of eenmaal per dag.</string>
+    <string name="expiration_date_reminder_help">Herinnert wanneer de vervaldatum van het medicijn is bereikt of een configureerbare tijd voor die datum.</string>
+    <string name="once">Eenmaal</string>
+    <string name="daily">Dagelijks</string>
+    <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>
+    <string name="edit_medicine_stock_settings">Instellingen medicijnvoorraad bewerken</string>
+    <string name="clear_dates">Datums wissen</string>
+    <string name="acknowledged">Bevestigd</string>
+    <string name="refill_amount">Bijvullen (%s)</string>
+    <string name="expiration_date_notification">Het medicijn %1$s heeft een vervaldatum van %2$s.\nOverweeg het medicijn te vervangen.</string>
+</resources>

@@ -4,11 +4,12 @@ import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -28,7 +29,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private fun setupScheduleObservers(parentFragment: Fragment) {
         medicineViewModel.medicineRepository.getLiveReminderEvents(
             Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
-            true
+            allStatusValues
         )
             .observe(parentFragment.viewLifecycleOwner) { reminderEvents: List<ReminderEvent> ->
                 this.changedReminderEvents(

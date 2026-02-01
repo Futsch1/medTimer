@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 
@@ -21,6 +22,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
+    val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
     val stateButton: ImageView = itemView.findViewById(R.id.stateButton)
     val topBar: View = itemView.findViewById(R.id.topBar)
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
@@ -45,6 +47,14 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
         }
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
+        reminderTypeIcon.visibility =
+            if (event.reminderType == Reminder.ReminderType.REFILL || event.reminderType == Reminder.ReminderType.OUT_OF_STOCK || event.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        reminderTypeIcon.setImageResource(event.reminderType.icon)
+        ViewColorHelper.setDrawableTint(contentContainer, reminderTypeIcon.drawable)
 
         setStateButton(event.state)
         setupStateMenu()
@@ -73,18 +83,20 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
+        val visible = createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
-        // Position the view at the vertical center of the button
-        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        popupView.measure(widthMeasureSpec, heightMeasureSpec)
+        if (visible) {
+            // Position the view at the vertical center of the button
+            val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            popupView.measure(widthMeasureSpec, heightMeasureSpec)
 
-        val location = IntArray(2)
-        view.getLocationInWindow(location)
+            val location = IntArray(2)
+            view.getLocationInWindow(location)
 
-        val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
-        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
+            val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
+            popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
+        }
     }
 
     private fun setStateButton(state: OverviewState) {

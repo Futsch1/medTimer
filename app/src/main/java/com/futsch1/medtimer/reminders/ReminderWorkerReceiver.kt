@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.WorkManagerAccess
+import com.futsch1.medtimer.WorkerActionCode
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -28,12 +29,14 @@ import java.time.temporal.ChronoUnit
  * repeating alerts.
  */
 class ReminderWorkerReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)
-        when (intent.action) {
-            ActivityCodes.DISMISSED_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorker::class.java))
-            ActivityCodes.TAKEN_ACTION -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorker::class.java))
-            ActivityCodes.SNOOZE_ACTION -> {
+        val intentAction = WorkerActionCode.fromAction(intent.action!!)
+        when (intentAction) {
+            WorkerActionCode.Dismissed -> workManager.enqueue(buildActionWorkRequest(intent, SkippedWorker::class.java))
+            WorkerActionCode.Taken -> workManager.enqueue(buildActionWorkRequest(intent, TakenWorker::class.java))
+            WorkerActionCode.Acknowledged -> workManager.enqueue(buildActionWorkRequest(intent, AcknowledgedWorker::class.java))
+            WorkerActionCode.Snooze -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
                 builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
@@ -44,7 +47,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 workManager.enqueue(snoozeWork)
             }
 
-            ActivityCodes.REMINDER_ACTION -> {
+            WorkerActionCode.Reminder -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
 
@@ -54,6 +57,9 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                         .build()
                 workManager.enqueue(reminderNotificationWorker)
             }
+
+            WorkerActionCode.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
+            null -> Unit
         }
     }
 
@@ -96,14 +102,14 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             workManager.enqueue(repeatWork)
         }
 
-        @JvmStatic
-        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int) {
+        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, processedInstant: Long) {
             val workManager = WorkManagerAccess.getWorkManager(context)
             val stockHandlingWorker =
                 OneTimeWorkRequest.Builder(StockHandlingWorker::class.java)
                     .setInputData(
                         Data.Builder()
                             .putDouble(ActivityCodes.EXTRA_AMOUNT, amount)
+                            .putLong(ActivityCodes.EXTRA_REMIND_INSTANT, processedInstant)
                             .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
                             .build()
                     )
@@ -147,6 +153,26 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 WorkManagerAccess.getWorkManager(context)
                     .enqueue(buildActionWorkRequest(getSkippedActionIntent(context, processedNotificationData), SkippedWorker::class.java))
             }
+        }
+
+        fun requestStockReminderAcknowledged(context: Context, reminderEvent: ReminderEvent) {
+            val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
+
+            WorkManagerAccess.getWorkManager(context)
+                .enqueue(buildActionWorkRequest(getAcknowledgedActionIntent(context, processedNotificationData), AcknowledgedWorker::class.java))
+        }
+
+        fun requestRefill(context: Context, medicineId: Int) {
+            val refillWorker =
+                OneTimeWorkRequest.Builder(RefillWorker::class.java)
+                    .setInputData(
+                        Data.Builder()
+                            .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+                            .putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, intArrayOf())
+                            .build()
+                    )
+                    .build()
+            WorkManagerAccess.getWorkManager(context).enqueue(refillWorker)
         }
 
         private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {

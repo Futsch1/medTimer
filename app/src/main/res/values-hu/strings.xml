@@ -170,7 +170,6 @@
     <string name="interval_start_processed">Az idő a gyógyszer bevételétől vagy kihagyásától számolva</string>
     <string name="every_interval">Minden %s</string>
     <string name="invalid_input">Érvénytelen érték</string>
-    <string name="off">Kikapcsolva</string>
     <string name="once_below_threshold">Egyszer, ha a készlet alacsony</string>
     <string name="always_below_threshold">Mindig, ha a készlet alacsony</string>
     <string name="out_of_stock_notification">Már csak %2$s maradt a(z) %1$s készletéből!\nTöltsd fel hamarosan.</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Az akkumulátor optimalizálásának figyelmen kívül hagyása</string>
     <string name="reschedule_reminder">Emlékeztető átütemezése</string>
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
-<string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
-<string name="show_taken_time_in_overview">Az elvett idő áttekintése</string></resources>
+    <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
+    <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
+    <string name="refill">Raktárkészlet feltöltése</string>
+    <string name="expiration_settings">Lejárati beállítások</string>
+    <string name="production_date">Gyártási dátum</string>
+    <string name="expiration_date">Lejárati dátum</string>
+    <string name="expiration_reminder">Lejárati emlékeztető</string>
+    <string name="daily_below_threshold">Naponta a küszöbérték alatt</string>
+    <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
+    <string name="out_of_stock_reminder_help">Emlékeztet, ha a gyógyszer elfogyott, minden emlékeztető után, egyszer, vagy naponta egyszer.</string>
+    <string name="expiration_date_reminder_help">Emlékeztet, amikor a gyógyszer lejárati ideje elérkezik, vagy egy beállítható idővel a dátum előtt.</string>
+    <string name="once">Egyszer</string>
+    <string name="daily">Naponta</string>
+    <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>
+    <string name="edit_medicine_stock_settings">Gyógyszerkészlet beállításainak szerkesztése</string>
+    <string name="clear_dates">Dátumok törlése</string>
+    <string name="acknowledged">Tudomásul véve</string>
+    <string name="refill_amount">Újratöltés (%s)</string>
+    <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
+</resources>

@@ -9,12 +9,12 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ScheduledReminder
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.util.Locale
 import java.util.stream.Collectors
@@ -54,7 +54,7 @@ fun setReminderActive(reminder: Reminder, active: Boolean) {
     reminder.active = active
 }
 
-fun formatReminderString(
+fun formatReminderEventString(
     context: Context, reminderEvent: ReminderEvent, sharedPreferences: SharedPreferences
 ): Spanned {
     var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
@@ -116,7 +116,7 @@ fun formatScheduledReminderString(
 
     return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
         append(scheduledReminder.medicine().medicine.name)
-    }.append(getAmountString(scheduledReminder))
+    }.append(getAmountOrStockString(context, scheduledReminder))
 }
 
 fun formatScheduledReminderStringForWidget(
@@ -131,12 +131,31 @@ fun formatScheduledReminderStringForWidget(
             context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
         )) + ": "
 
-    return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(getAmountString(scheduledReminder))
+    return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
+        getAmountOrStockString(
+            context,
+            scheduledReminder
+        )
+    )
 }
 
-private fun getAmountString(scheduledReminder: ScheduledReminder): String =
-    if (scheduledReminder.reminder().amount.isNotEmpty()) " (${scheduledReminder.reminder().amount})" else ""
+private fun getAmountOrStockString(context: Context, scheduledReminder: ScheduledReminder): String {
+    val amount =
+        when (scheduledReminder.reminder.reminderType) {
+            Reminder.ReminderType.OUT_OF_STOCK -> {
+                MedicineHelper.formatAmount(scheduledReminder.medicine.medicine.amount, scheduledReminder.medicine.medicine.unit)
+            }
 
+            Reminder.ReminderType.EXPIRATION_DATE -> {
+                TimeHelper.daysSinceEpochToDateString(context, scheduledReminder.medicine.medicine.expirationDate)
+            }
+
+            else -> {
+                scheduledReminder.reminder.amount
+            }
+        }
+    return if (amount.isNotEmpty()) " (${amount})" else ""
+}
 
 private fun getLastIntervalTime(context: Context, reminderEvent: ReminderEvent): String =
     if (reminderEvent.lastIntervalReminderTimeInMinutes > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && calcLastIntervalTime(reminderEvent) >= 0) {

@@ -86,7 +86,8 @@ public class StatisticsProvider {
             final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
             if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
                 medicineToDayCount.get(medicineName)[daysInThePast]++;
-            }
+            }    // Stream.toList() not available in SDK version selected
+
         }
     }
 

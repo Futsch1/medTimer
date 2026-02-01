@@ -180,7 +180,6 @@
     <string name="interval_start_processed">Interval začne v době užití nebo přeskočení</string>
     <string name="every_interval">Každých %s</string>
     <string name="invalid_input">Neplatný vstup</string>
-    <string name="off">Vypnuto</string>
     <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
     <string name="always_below_threshold">Vždy pod nastavenou mezí</string>
     <string name="out_of_stock_notification">Zbývá pouze %2$s z %1$s!\nZvažte brzy doplnění léků.</string>
@@ -266,4 +265,21 @@
     <string name="interval_start_condition">Podmínka začátku intervalu</string>
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
+    <string name="refill">Doplnění zásob</string>
+    <string name="expiration_settings">Nastavení vypršení</string>
+    <string name="production_date">Datum výroby</string>
+    <string name="expiration_date">Datum vypršení</string>
+    <string name="expiration_reminder">Připomenutí vypršení</string>
+    <string name="daily_below_threshold">Denně pod prahem</string>
+    <string name="remind_days_before_expiration">Připomenout dny před vypršením platnosti</string>
+    <string name="out_of_stock_reminder_help">Připomene, když lék není na skladě, buď po každém připomenutí, nebo jednou, nebo jednou denně.</string>
+    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo v konfigurovatelném čase před tímto datem.</string>
+    <string name="once">Jednou</string>
+    <string name="daily">Denně</string>
+    <string name="medicine_stock_settings">Nastavení skladu léků</string>
+    <string name="edit_medicine_stock_settings">Upravit nastavení skladu léků</string>
+    <string name="clear_dates">Vymazat data</string>
+    <string name="acknowledged">Potvrzeno</string>
+    <string name="refill_amount">Doplnit (%s)</string>
+    <string name="expiration_date_notification">Lék %1$s má datum expirace %2$s.\nZvažte výměnu léku.</string>
 </resources>

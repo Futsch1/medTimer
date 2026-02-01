@@ -18,10 +18,11 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatabaseEntityEditFragment
-import com.futsch1.medtimer.helpers.MedicineEntityInterface
+import com.futsch1.medtimer.helpers.FullMedicineEntityInterface
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.futsch1.medtimer.helpers.ViewColorHelper
@@ -42,7 +43,7 @@ import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 
 class EditMedicineFragment :
-    DatabaseEntityEditFragment<Medicine>(MedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment::class.java.getName()),
+    DatabaseEntityEditFragment<FullMedicine>(FullMedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment::class.java.getName()),
     IconDialog.Callback {
     var iconId: Int = 0
     var adapter: ReminderViewAdapter? = null
@@ -57,23 +58,25 @@ class EditMedicineFragment :
         optionsMenu = EditMedicineMenuProvider(getEntityId(), this.thread, this.medicineViewModel, navController)
     }
 
-    override fun onEntityLoaded(entity: Medicine, fragmentView: View): Boolean {
-        color = entity.color
-        iconId = entity.iconId
-        notes = entity.notes
+    override fun onEntityLoaded(entity: FullMedicine, fragmentView: View): Boolean {
+        val medicine = entity.medicine
 
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = entity.name
-        (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).setText(entity.name)
+        color = medicine.color
+        iconId = medicine.iconId
+        notes = medicine.notes
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = medicine.name
+        (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).setText(medicine.name)
 
         setupSelectIcon(fragmentView)
-        setupEnableColor(fragmentView, entity.useColor)
-        setupColorButton(fragmentView, entity.useColor)
+        setupEnableColor(fragmentView, medicine.useColor)
+        setupColorButton(fragmentView, medicine.useColor)
 
-        setupNotificationImportance(fragmentView, entity)
+        setupNotificationImportance(fragmentView, medicine)
         setupNotesButton(fragmentView)
         setupOpenCalendarButton(fragmentView)
         setupStockButton(fragmentView)
-        setupTagsButton(fragmentView, entity.medicineId)
+        setupTagsButton(fragmentView, medicine.medicineId)
 
         val recyclerView = setupMedicineList(fragmentView)
         setupSwiping(recyclerView)
@@ -182,7 +185,7 @@ class EditMedicineFragment :
         openStockTracking.setOnClickListener { _: View? ->
             val navController = findNavController(openStockTracking)
             val action =
-                EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineStockFragment(getEntityId())
+                EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(getEntityId())
             navController.navigate(action)
         }
     }
@@ -213,9 +216,9 @@ class EditMedicineFragment :
             .attachToRecyclerView(recyclerView)
     }
 
-    private fun setupAddReminderButton(fragmentView: View, medicine: Medicine) {
+    private fun setupAddReminderButton(fragmentView: View, fullMedicine: FullMedicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireContext(), requireActivity(), medicine, this.medicineViewModel) }
+        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireContext(), requireActivity(), fullMedicine, this.medicineViewModel) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {
@@ -234,13 +237,14 @@ class EditMedicineFragment :
         }
     }
 
-    override fun fillEntityData(entity: Medicine, fragmentView: View) {
-        entity.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim()
-        entity.useColor = enableColor!!.isChecked
-        entity.color = color
-        importanceIndexToMedicine(notificationImportance!!.selectedItemPosition, entity)
-        entity.iconId = iconId
-        entity.notes = notes
+    override fun fillEntityData(entity: FullMedicine, fragmentView: View) {
+        val medicine = entity.medicine
+        medicine.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim()
+        medicine.useColor = enableColor!!.isChecked
+        medicine.color = color
+        importanceIndexToMedicine(notificationImportance!!.selectedItemPosition, medicine)
+        medicine.iconId = iconId
+        medicine.notes = notes
 
         updateReminders(fragmentView)
     }
@@ -251,7 +255,7 @@ class EditMedicineFragment :
             for (i in 0..<recyclerView.size) {
                 val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder
 
-                this.medicineViewModel.medicineRepository.updateReminder(viewHolder.getReminder())
+                this.medicineViewModel.medicineRepository.updateReminder(viewHolder.getUpdatedReminder())
             }
         }
     }

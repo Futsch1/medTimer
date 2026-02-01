@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
@@ -28,7 +28,7 @@ import java.time.Instant
 class NewReminderDialog(
     val context: Context,
     val activity: FragmentActivity,
-    val medicine: Medicine,
+    val fullMedicine: FullMedicine,
     val medicineViewModel: MedicineViewModel,
     val reminder: Reminder
 ) {
@@ -59,7 +59,7 @@ class NewReminderDialog(
                 getSystemService(context, InputMethodManager::class.java)
             imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
-        if (medicine.isStockManagementActive) {
+        if (fullMedicine.isStockManagementActive) {
             textInputEditText.addTextChangedListener(
                 AmountTextWatcher(
                     textInputEditText
@@ -105,6 +105,7 @@ class NewReminderDialog(
 
         val intervalEditor = IntervalEditor(
             dialog.findViewById(R.id.editIntervalTime),
+            dialog.findViewById(R.id.editIntervalTimeLayout),
             dialog.findViewById(R.id.intervalUnit), 12 * 60,
             if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )

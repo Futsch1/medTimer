@@ -7,12 +7,13 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.formatReminderString
+import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -66,7 +67,7 @@ class ReminderHelperTest {
         reminderEvent.amount = "5"
 
         var result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
-        var resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        var resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesMock)
         assertEquals("1:00 AM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result =
@@ -84,7 +85,7 @@ class ReminderHelperTest {
         reminder.amount = ""
         reminderEvent.amount = ""
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
-        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesMock)
         assertEquals("1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, false)
@@ -97,7 +98,7 @@ class ReminderHelperTest {
         scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
         reminderEvent.remindedTimestamp = instantLater.toEpochMilli() / 1000
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesMock)
-        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesMock)
         assertEquals("In 1 hour, 1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesMock, false)
@@ -127,11 +128,11 @@ class ReminderHelperTest {
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
         reminderEvent.remindedTimestamp = instantZero.toEpochMilli() / 1000
         reminderEvent.processedTimestamp = instantLater.toEpochMilli() / 1000
-        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesMock)
         assertEquals("1:00 AM ➡ 2:00 AM\nTest (6)", resultReminder.toString())
 
         reminderEvent.processedTimestamp = instantOneDayLater.toEpochMilli() / 1000
-        resultReminder = formatReminderString(contextMock, reminderEvent, preferencesMock)
+        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesMock)
         assertEquals("1:00 AM ➡ 1/2/70 1:00 AM\nTest (6)", resultReminder.toString())
 
         // Cleanup

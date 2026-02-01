@@ -13,17 +13,17 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicine
 import com.google.gson.Gson
 
 
-class MedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<Medicine> {
-    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): Medicine? {
-        return medicineViewModel.medicineRepository.getOnlyMedicine(id)
+class FullMedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<FullMedicine> {
+    override fun getEntity(medicineViewModel: MedicineViewModel, id: Int): FullMedicine? {
+        return medicineViewModel.medicineRepository.getMedicine(id)
     }
 
-    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: Medicine) {
-        medicineViewModel.medicineRepository.updateMedicine(entity)
+    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: FullMedicine) {
+        medicineViewModel.medicineRepository.updateMedicine(entity.medicine)
     }
 }
 

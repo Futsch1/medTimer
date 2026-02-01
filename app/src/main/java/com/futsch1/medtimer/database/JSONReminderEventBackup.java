@@ -10,14 +10,14 @@ public class JSONReminderEventBackup extends JSONBackup<ReminderEvent> {
         super(ReminderEvent.class);
     }
 
-    protected boolean isInvalid(ReminderEvent reminderEvent) {
-        return reminderEvent == null || reminderEvent.medicineName == null;
-    }
-
     @Override
     protected GsonBuilder registerTypeAdapters(GsonBuilder builder) {
         return builder
                 .registerTypeAdapter(ReminderEvent.class, new FullDeserialize<ReminderEvent>());
+    }
+
+    protected boolean isInvalid(ReminderEvent reminderEvent) {
+        return reminderEvent == null;
     }
 
     public void applyBackup(List<ReminderEvent> listOfReminderEvents, MedicineRepository medicineRepository) {

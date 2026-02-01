@@ -5,29 +5,15 @@ import androidx.lifecycle.LiveData
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
-import java.util.Arrays
 import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import java.util.stream.Collectors
 
-class MedicineRepository(application: Application?) {
+class MedicineRepository(val application: Application?) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
-
-    // Stream.toList() not available in SDK version selected
-    private val allStatusValues: List<ReminderStatus> =
-        Arrays.stream(arrayOf(ReminderStatus.DELETED, ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN))
-            .collect(
-                Collectors.toList()
-            )
-
-    private val statusValuesWithoutDelete: List<ReminderStatus> =
-        Arrays.stream(arrayOf(ReminderStatus.RAISED, ReminderStatus.SKIPPED, ReminderStatus.TAKEN)).collect(
-            Collectors.toList()
-        )
 
     init {
         medicineDao = database.medicineDao()
@@ -67,12 +53,20 @@ class MedicineRepository(application: Application?) {
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getLiveReminderEvents(timeStamp: Long, withDeleted: Boolean): LiveData<List<ReminderEvent>> {
-        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, if (withDeleted) allStatusValues else statusValuesWithoutDelete)
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine> {
+        return medicineDao.getMedicineFlow(medicineId)
+    }
+
+
+    fun getLiveReminderEvents(timeStamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>> {
+        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, statusValues)
     }
 
     val allReminderEventsWithoutDeleted: List<ReminderEvent>
         get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
+
+    val allReminderEventsWithoutDeletedAndAcknowledged: List<ReminderEvent>
+        get() = medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDeletedAndAcknowledged)
 
     fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
         return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)

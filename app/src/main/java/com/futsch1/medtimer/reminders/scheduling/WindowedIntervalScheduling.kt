@@ -7,9 +7,9 @@ import java.time.Instant
 import java.time.LocalDate
 
 class WindowedIntervalScheduling(
-    private val reminder: Reminder,
-    private val reminderEventList: List<ReminderEvent>,
-    private val timeAccess: TimeAccess
+    reminder: Reminder,
+    reminderEventList: List<ReminderEvent>,
+    timeAccess: TimeAccess
 ) : IntervalScheduling(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
         return adjustToPeriod(getNextScheduledTimeInternal())
@@ -17,7 +17,7 @@ class WindowedIntervalScheduling(
 
     fun getNextScheduledTimeInternal(): Instant? {
         val lastReminderEvent: ReminderEvent? =
-            findLastReminderEvent(reminder.reminderId, reminderEventList)
+            findLastReminderEvent()
         val todayStart = getStartInstant(timeAccess.localDate())
         val todayEnd = getEndInstant(todayStart)
 

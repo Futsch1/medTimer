@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Το χρονικό διάστημα ξεκίνα όταν επισημανθεί ότι η αγωγή λήφθηκε ή παραλήφθηκε</string>
     <string name="every_interval">Κάθε %s</string>
     <string name="invalid_input">Μη έγκυρη καταχώριση</string>
-    <string name="off">Ανενεργή</string>
     <string name="once_below_threshold">Άπαξ, όταν υπολειφθεί του ορίου</string>
     <string name="always_below_threshold">Συνεχόμενα, όταν υπολειφθεί του ορίου</string>
     <string name="out_of_stock_notification">Μόνο %2$s από %1$s απομένουν!\nΕξετάστε την προοπτική για αναπλήρωση του φαρμάκου σύντομα.</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Παράβλεψη βελτιστοποίησης μπαταρίας</string>
     <string name="reschedule_reminder">Επαναπρογραμματισμός υπενθύμισης</string>
     <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
-<string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
-<string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string></resources>
+    <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
+    <string name="show_taken_time_in_overview">Εμφάνιση χρόνου που απαιτήθηκε σε επισκόπηση</string>
+    <string name="refill">Αναπλήρωση αποθεμάτων</string>
+    <string name="expiration_settings">Ρυθμίσεις λήξης</string>
+    <string name="production_date">Ημερομηνία παραγωγής</string>
+    <string name="expiration_date">Ημερομηνία λήξης</string>
+    <string name="expiration_reminder">Υπενθύμιση λήξης</string>
+    <string name="daily_below_threshold">Καθημερινά κάτω από το όριο</string>
+    <string name="remind_days_before_expiration">Υπενθύμιση ημέρες πριν από τη λήξη</string>
+    <string name="out_of_stock_reminder_help">Υπενθυμίζει όταν το φάρμακο εξαντληθεί, είτε μετά από κάθε υπενθύμιση είτε μία φορά είτε μία φορά την ημέρα.</string>
+    <string name="expiration_date_reminder_help">Υπενθυμίζει πότε συμπληρώνεται η ημερομηнία λήξης του φαρμάκου ή ένας διαμορφώσιμος χρόνος πριν από την ημερομηнία αυτή.</string>
+    <string name="once">Μια φορά</string>
+    <string name="daily">Καθημερινά</string>
+    <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>
+    <string name="edit_medicine_stock_settings">Επεξεργασία ρυθμίσεων αποθέματος φαρμάκων</string>
+    <string name="clear_dates">Εκκαθάριση ημερομηнιών</string>
+    <string name="acknowledged">Αναγνωρίστηκε</string>
+    <string name="refill_amount">Αναπλήρωση (%s)</string>
+    <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηнία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
+</resources>

@@ -29,12 +29,12 @@ class LinkedReminderHandling(
             .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
                 this.createReminder(
                     fragmentActivity,
-                    amount
+                    amount!!
                 )
             }.show()
     }
 
-    private fun createReminder(fragmentActivity: FragmentActivity, amount: String?) {
+    private fun createReminder(fragmentActivity: FragmentActivity, amount: String) {
         val linkedReminder = Reminder(reminder.medicineRelId)
         linkedReminder.amount = amount
         linkedReminder.createdTimestamp = Instant.now().toEpochMilli() / 1000

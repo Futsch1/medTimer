@@ -164,7 +164,6 @@
     <string name="interval_start_processed">Interval starter når taget eller afvist</string>
     <string name="every_interval">Hver %s</string>
     <string name="invalid_input">Ugyldigt indtastning</string>
-    <string name="off">Sluk</string>
     <string name="once_below_threshold">En enkelt gang når under tærskel</string>
     <string name="add_medicine">Tilføj medicin</string>
     <string name="medicine_name">Medicinnavn</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Ignorer batterioptimering</string>
     <string name="reschedule_reminder">Flyt påmindelse</string>
     <string name="interval_start_condition">Intervallets starttilstand</string>
-<string name="tag_filter_active">Tagfilter aktivt. Kun data med matchende tags eksporteres.</string>
-<string name="show_taken_time_in_overview">Vis den anvendte tid i oversigten</string></resources>
+    <string name="tag_filter_active">Tagfilter aktivt. Kun data med matchende tags eksporteres.</string>
+    <string name="show_taken_time_in_overview">Vis den anvendte tid i oversigten</string>
+    <string name="refill">Lageropfyldning</string>
+    <string name="expiration_settings">Indstillinger for udløbsdato</string>
+    <string name="production_date">Produktionsdato</string>
+    <string name="expiration_date">Udløbsdato</string>
+    <string name="expiration_reminder">Påmindelse om udløbsdato</string>
+    <string name="daily_below_threshold">Dagligt under tærskelværdien</string>
+    <string name="remind_days_before_expiration">Mind om dage før udløb</string>
+    <string name="out_of_stock_reminder_help">Minder, når medicinen er udsolgt, enten efter hver påmindelse eller én gang eller én gang dagligt.</string>
+    <string name="expiration_date_reminder_help">Minder, når medicinens udløbsdato er nået, eller en konfigurerbar tid før den dato.</string>
+    <string name="once">Én gang</string>
+    <string name="daily">Dagligt</string>
+    <string name="medicine_stock_settings">Indstillinger for medicinlager</string>
+    <string name="edit_medicine_stock_settings">Rediger indstillinger for medicinlager</string>
+    <string name="clear_dates">Ryd datoer</string>
+    <string name="acknowledged">Anerkendt</string>
+    <string name="refill_amount">Genopfyldning (%s)</string>
+    <string name="expiration_date_notification">Medicinen %1$s har en udløbsdato den %2$s.\nOvervej at udskifte medicinen.</string>
+</resources>

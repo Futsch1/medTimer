@@ -169,7 +169,6 @@
     <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
     <string name="every_interval">Her %s</string>
     <string name="invalid_input">Geçersiz giriş</string>
-    <string name="off">Kapalı</string>
     <string name="once_below_threshold">Eşiğin altına düştüğünde bir kez</string>
     <string name="always_below_threshold">Her zaman eşiğin altında olduğunda</string>
     <string name="out_of_stock_notification">%1$s&amp;apos;dan sadece %2$s kaldı!\nİlacı yakında yeniden doldurmayı düşünün.</string>
@@ -254,5 +253,23 @@
     <string name="ignore_battery_optimization">Pil optimizasyonunu yoksay</string>
     <string name="reschedule_reminder">Hatırlatıcıyı yeniden planla</string>
     <string name="interval_start_condition">Aralık başlangıç koşulu</string>
-<string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
-<string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string></resources>
+    <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
+    <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
+    <string name="refill">Stok yenileme</string>
+    <string name="expiration_settings">Son kullanma ayarları</string>
+    <string name="production_date">Üretim tarihi</string>
+    <string name="expiration_date">Son kullanma tarihi</string>
+    <string name="expiration_reminder">Son kullanma hatırlatıcısı</string>
+    <string name="daily_below_threshold">Eşiğin altındayken günlük</string>
+    <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
+    <string name="out_of_stock_reminder_help">İlaç stokta kalmadığında, her hatırlatmadan sonra, bir kez veya günde bir kez hatırlatır.</string>
+    <string name="expiration_date_reminder_help">İlacın son kullanma tarihi geldiğinde veya bu tarihten önce yapılandırılabilir bir zamanda hatırlatır.</string>
+    <string name="once">Bir kez</string>
+    <string name="daily">Günlük</string>
+    <string name="medicine_stock_settings">İlaç stok ayarları</string>
+    <string name="edit_medicine_stock_settings">İlaç stok ayarlarını düzenle</string>
+    <string name="clear_dates">Tarihleri temizle</string>
+    <string name="acknowledged">Onaylandı</string>
+    <string name="refill_amount">Yeniden doldur (%s)</string>
+    <string name="expiration_date_notification">%1$s ilacının son kullanma tarihi %2$s.\nİlacı değiştirmeyi düşünün.</string>
+</resources>

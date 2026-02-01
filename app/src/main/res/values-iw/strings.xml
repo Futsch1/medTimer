@@ -171,7 +171,6 @@
     <string name="interval_start_processed">מחזור מתחיל אחרי נטילה או דילוג</string>
     <string name="every_interval">כל %s</string>
     <string name="invalid_input">קלט לא חוקי</string>
-    <string name="off">כבוי</string>
     <string name="once_below_threshold">פעם אחת כשיורד מתחת לסף</string>
     <string name="always_below_threshold">כל הזמן כשמתחת לסף</string>
     <string name="out_of_stock_notification">נותרו רק %2$s מתוך %1$s!\nשקלו למלא מחדש את התרופות בקרוב.</string>
@@ -261,4 +260,21 @@
     <string name="interval_start_condition">תנאי התחלת מחזור</string>
     <string name="tag_filter_active">מסנן התגיות פעיל. רק נתונים עם תגיות תואמות ייוצאו.</string>
     <string name="show_taken_time_in_overview">הצג את שעת הנטילה בסקירה הכללית</string>
+    <string name="refill">מילוי מלאי</string>
+    <string name="expiration_settings">הגדרות תפוגה</string>
+    <string name="production_date">תאריך ייצור</string>
+    <string name="expiration_date">תאריך תפוגה</string>
+    <string name="expiration_reminder">תזכורת תפוגה</string>
+    <string name="daily_below_threshold">יומי מתחת לסף</string>
+    <string name="remind_days_before_expiration">תזכורת ימים לפני תפוגה</string>
+    <string name="out_of_stock_reminder_help">מזכיר כאשר התרופה אזלה מהמלאי, או לאחר כל תזכורת, או פעם אחת, או פעם ביום.</string>
+    <string name="expiration_date_reminder_help">מזכיר כאשר מגיעים לתאריך התפוגה של התרופה או זמן שניתן להגדרה לפני תאריך זה.</string>
+    <string name="once">פעם אחת</string>
+    <string name="daily">יומי</string>
+    <string name="medicine_stock_settings">הגדרות מלאי תרופות</string>
+    <string name="edit_medicine_stock_settings">ערוך הגדרות מלאי תרופות</string>
+    <string name="clear_dates">נקה תאריכים</string>
+    <string name="acknowledged">אשר</string>
+    <string name="refill_amount">מילוי (%s)</string>
+    <string name="expiration_date_notification">לתרופה %1$s יש תאריך תפוגה של %2$s.\nשקול להחליף את התרופה.</string>
 </resources>

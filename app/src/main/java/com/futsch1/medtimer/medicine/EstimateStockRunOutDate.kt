@@ -25,7 +25,7 @@ fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: In
             return LocalDate.now()
         }
     }, PreferenceManager.getDefaultSharedPreferences(medicineViewModel.getApplication()))
-    val endDate = LocalDate.now().plusDays(365)
+    val endDate = LocalDate.now().plusDays(365 * 2)
     var runOutDate: LocalDate? = null
 
     schedulingSimulator.simulate { _, scheduledDate: LocalDate, amount: Double ->

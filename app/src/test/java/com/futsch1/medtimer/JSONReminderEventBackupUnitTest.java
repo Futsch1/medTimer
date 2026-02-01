@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import android.graphics.Color;
 
 import com.futsch1.medtimer.database.JSONReminderEventBackup;
+import com.futsch1.medtimer.database.Reminder;
 import com.futsch1.medtimer.database.ReminderEvent;
 
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ class JSONReminderEventBackupUnitTest {
         reminderEvent.tags.add("Tag A");
         reminderEvent.lastIntervalReminderTimeInMinutes = 12;
         reminderEvent.notes = "Notes";
+        reminderEvent.reminderType = Reminder.ReminderType.LINKED;
         reminderEvents.add(reminderEvent);
 
         String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
@@ -59,7 +61,8 @@ class JSONReminderEventBackupUnitTest {
         "Tag A"
       ],
       "lastIntervalReminderTimeInMinutes": 12,
-      "notes": "Notes"
+      "notes": "Notes",
+      "reminderType": "LINKED"
     }
   ]
 }""", result);
@@ -87,6 +90,10 @@ class JSONReminderEventBackupUnitTest {
         assertEquals(reminderEvent1.processedTimestamp, reminderEvent2.processedTimestamp);
         assertEquals(reminderEvent1.reminderId, reminderEvent2.reminderId);
         assertEquals(reminderEvent1.iconId, reminderEvent2.iconId);
+        assertEquals(reminderEvent1.tags, reminderEvent2.tags);
+        assertEquals(reminderEvent1.lastIntervalReminderTimeInMinutes, reminderEvent2.lastIntervalReminderTimeInMinutes);
+        assertEquals(reminderEvent1.notes, reminderEvent2.notes);
+        assertEquals(reminderEvent1.reminderType, reminderEvent2.reminderType);
     }
 }
 
