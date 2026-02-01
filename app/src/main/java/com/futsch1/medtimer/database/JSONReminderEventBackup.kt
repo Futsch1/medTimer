@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder
 
 class JSONReminderEventBackup : JSONBackup<ReminderEvent>(ReminderEvent::class.java) {
     override fun isInvalid(item: ReminderEvent?): Boolean {
-        return item == null || item.medicineName == null
+        return item == null
     }
 
     override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
