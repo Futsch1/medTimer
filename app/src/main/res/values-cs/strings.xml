@@ -198,7 +198,7 @@
     <string name="unit">Jednotka</string>
     <string name="unlimited">Neomezeno</string>
     <string name="override_dnd">Vždy přehrát zvuk notifikace</string>
-    <string name="override_dnd_summary">Přehrává zvuk notifikací, i když jsou zapnuté pouze vibrace, tichý režim, nebo režim nerušit bez vibrací.</string>
+    <string name="override_dnd_summary">Přehrává zvuk notifikací, i když jsou zapnuté pouze vibrace, tichý režim, nebo režim nerušit bez vibrací</string>
     <string name="enable_dnd_dialog">Pro možnost vždy přehrávat zvuky notifikací povolte přístup k režimu Nerušit pro MedTimer v následujícím menu</string>
     <string name="app_authentication">Požadovat autentikaci pro otevření aplikace</string>
     <string name="login">Přihlásit se do MedTimer s použitím biometrie</string>
@@ -276,8 +276,8 @@
     <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo v konfigurovatelném čase před tímto datem.</string>
     <string name="once">Jednou</string>
     <string name="daily">Denně</string>
-    <string name="medicine_stock_settings">Nastavení skladu léků</string>
-    <string name="edit_medicine_stock_settings">Upravit nastavení skladu léků</string>
+    <string name="medicine_stock_settings">Nastavení zásob léků</string>
+    <string name="edit_medicine_stock_settings">Upravit nastavení zásob léků</string>
     <string name="clear_dates">Vymazat data</string>
     <string name="acknowledged">Potvrzeno</string>
     <string name="refill_amount">Doplnit (%s)</string>
