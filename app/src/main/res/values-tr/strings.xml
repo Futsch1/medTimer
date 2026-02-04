@@ -101,7 +101,6 @@
     <string name="name">Ad</string>
     <string name="event_data">Etkinlik verisi</string>
     <string name="backup">Yedekle</string>
-    <string name="event_name">Etkinlik adı</string>
     <string name="edit_event">Etkinliği düzenle</string>
     <string name="intro_welcome">MedTimer\'a hoş geldiniz!</string>
     <string name="intro_welcome_description">MedTimer, gizliliğe odaklanan ücretsiz ve açık kaynaklı bir ilaç hatırlatma uygulamasıdır.\n\nİlaç hatırlatıcı bildirimlerini gösterebilmesi için izne ihtiyaç duyar.</string>

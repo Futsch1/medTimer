@@ -90,7 +90,6 @@
     <string name="name">Nome</string>
     <string name="event_data">Registro dos eventos</string>
     <string name="backup">Backup</string>
-    <string name="event_name">Nome do evento</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
     <string name="intro_analysis_description">O aplicativo armazena todos os eventos de lembrete. Você pode analisar suas doses anteriores na tela de análise e exportar seu histórico através do menu kebab (três pontos). O histórico permanecerá mesmo que medicamentos ou lembretes sejam excluídos ou renomeados.</string>
     <string name="show_intro">Mostrar introdução do aplicativo</string>

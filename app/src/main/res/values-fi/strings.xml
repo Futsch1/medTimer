@@ -102,7 +102,6 @@
     <string name="name">Nimi</string>
     <string name="event_data">Tapahtumatiedot</string>
     <string name="backup">Varmuuskopiointi</string>
-    <string name="event_name">Tapahtuman nimi</string>
     <string name="edit_event">Muokkaa tapahtumaa</string>
     <string name="intro_welcome">Tervetuloa MedTimeriin!</string>
     <string name="intro_welcome_description">MedTimer on ilmainen ja avoimen lähdekoodin lääkemuistutussovellus, joka keskittyy yksityisyyteen.\n\nSe vaatii luvan näyttää ilmoituksia lääkemuistutuksille.</string>

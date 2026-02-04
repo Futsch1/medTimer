@@ -34,7 +34,7 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
         }
 
         Reminder.ReminderType.EXPIRATION_DATE -> {
-            strings.add(context.getString(R.string.expiration_date))
+            strings.add(expirationDateReminderString(reminder, context))
         }
 
         Reminder.ReminderType.REFILL -> {
@@ -47,6 +47,11 @@ fun reminderSummary(reminder: Reminder, context: Context): String {
     strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
     return java.lang.String.join(", ", strings)
+}
+
+fun expirationDateReminderString(reminder: Reminder, context: Context): String {
+    return context.getString(R.string.expiration_date) + ", " +
+            context.resources.getStringArray(R.array.expiration_reminder)[reminder.expirationReminderType.ordinal]
 }
 
 fun outOfStockReminderString(reminder: Reminder, context: Context): String {

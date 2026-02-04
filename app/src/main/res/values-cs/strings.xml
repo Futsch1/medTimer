@@ -106,7 +106,6 @@
     <string name="name">Název</string>
     <string name="event_data">Data událostí</string>
     <string name="backup">Záloha</string>
-    <string name="event_name">Název události</string>
     <string name="edit_event">Upravit událost</string>
     <string name="intro_welcome">Vítejte v MedTimer!</string>
     <string name="intro_welcome_description">MedTimer je svobodná a open source aplikace pro připomínání léků se zaměřením na soukromí.\n\nPro připomínání léků vyžaduje oprávnění pro zobrazení notifikací.</string>

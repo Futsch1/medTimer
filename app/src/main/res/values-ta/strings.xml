@@ -103,7 +103,6 @@
     <string name="name">பெயர்</string>
     <string name="event_data">நிகழ்வு தரவு</string>
     <string name="backup">காப்புப்பிரதி</string>
-    <string name="event_name">நிகழ்வு பெயர்</string>
     <string name="edit_event">நிகழ்வைத் திருத்து</string>
     <string name="intro_welcome">மெட்டிமருக்கு வருக!</string>
     <string name="intro_welcome_description">மெட்டிமர் என்பது தனியுரிமையை மையமாகக் கொண்ட ஒரு இலவச மற்றும் திறந்த மூல மருந்து நினைவூட்டல் பயன்பாடாகும்.\n\n மருந்து நினைவூட்டல்களுக்கான அறிவிப்புகளைக் காட்ட இதற்கு இசைவு தேவை.</string>

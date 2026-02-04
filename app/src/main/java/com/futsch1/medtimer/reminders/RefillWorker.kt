@@ -57,10 +57,11 @@ class RefillWorker(val context: Context, workerParameters: WorkerParameters) :
         val reminderEvent = ReminderEvent()
         reminderEvent.reminderId = -1
         reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000
+        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
         reminderEvent.medicineName = medicine.medicine.name
         reminderEvent.color = medicine.medicine.color
         reminderEvent.useColor = medicine.medicine.useColor
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+        reminderEvent.status = ReminderEvent.ReminderStatus.ACKNOWLEDGED
         reminderEvent.iconId = medicine.medicine.iconId
         reminderEvent.askForAmount = false
         reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))

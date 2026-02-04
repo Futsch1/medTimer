@@ -103,7 +103,6 @@
     <string name="name">Nome</string>
     <string name="event_data">Dati degli eventi</string>
     <string name="backup">Backup</string>
-    <string name="event_name">Nome dell\'evento</string>
     <string name="edit_event">Modifica l\'evento</string>
     <string name="intro_welcome">Benvenuto su MedTimer!</string>
     <string name="intro_welcome_description">MedTimer è un\'applicazione gratuita e open-source per i promemoria dei farmaci con particolare attenzione alla privacy.\n\nRichiede il permesso di mostrare le notifiche dei promemoria dei farmaci.</string>

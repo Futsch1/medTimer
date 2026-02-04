@@ -104,7 +104,6 @@
     <string name="name">Name</string>
     <string name="event_data">Event data</string>
     <string name="backup">Backup</string>
-    <string name="event_name">Event name</string>
     <string name="edit_event">Edit event</string>
     <string name="intro_welcome">Welcome to MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is a free and open source medication reminder app with a focus on privacy.\n\nIt requires permission to show notifications for medication reminders.</string>

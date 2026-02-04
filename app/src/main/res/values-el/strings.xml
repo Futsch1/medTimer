@@ -101,7 +101,6 @@
     <string name="name">Όνομα</string>
     <string name="event_data">Δεδομένα συμβάντων</string>
     <string name="backup">Αντίγραφο ασφαλείας</string>
-    <string name="event_name">Ονομασία συμβάντος</string>
     <string name="edit_event">Επεξεργασία συμβάντος</string>
     <string name="intro_welcome">Καλοσήρθατε στο MedTimer!</string>
     <string name="intro_welcome_description">Το MedTimer είναι μία δωρεάν και ελεύθερη, ανοιχτού κώδικα εφαρμογή υπενθύμισης φαρμακευτικών αγωγών με έμφαση στην ιδιωτικότητα.\n\nΑπαιτεί την άδεια να εμφανίζει ειδοποιήσεις για την υπενθύμιση των φαρμακευτικών αγωγών.</string>

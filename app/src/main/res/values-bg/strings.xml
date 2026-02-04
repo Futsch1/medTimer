@@ -102,7 +102,6 @@
     <string name="name">Название</string>
     <string name="event_data">Данни за събитието</string>
     <string name="backup">Резервно копие</string>
-    <string name="event_name">Название на събитието</string>
     <string name="edit_event">Промени събитието</string>
     <string name="intro_welcome">Добре дошли в MedTimer!</string>
     <string name="intro_welcome_description">MedTimer е безплатено приложение с отворен код за напомняне за прием на лекарства с фокус върху личното пространство.\n\nТо изисква разрешения, за да показва напомняния за лекарства.</string>
