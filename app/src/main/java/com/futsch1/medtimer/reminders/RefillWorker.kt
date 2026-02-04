@@ -57,6 +57,7 @@ class RefillWorker(val context: Context, workerParameters: WorkerParameters) :
         val reminderEvent = ReminderEvent()
         reminderEvent.reminderId = -1
         reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000
+        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
         reminderEvent.medicineName = medicine.medicine.name
         reminderEvent.color = medicine.medicine.color
         reminderEvent.useColor = medicine.medicine.useColor
