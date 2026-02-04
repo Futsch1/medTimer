@@ -13,6 +13,7 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
 import com.google.android.material.button.MaterialButton
@@ -60,7 +61,7 @@ class NewReminderStockDialog(
 
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold)
 
-        textInputEditText.setText(medicine.amount.toString())
+        textInputEditText.setText(MedicineHelper.formatAmount(medicine.amount, ""))
         val separator = DecimalFormatSymbols.getInstance().decimalSeparator
         textInputEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
         textInputEditText.addDoubleValidator()
