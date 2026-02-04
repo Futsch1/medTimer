@@ -106,7 +106,6 @@
     <string name="name">Namn</string>
     <string name="event_data">Händelsedata</string>
     <string name="backup">Backup</string>
-    <string name="event_name">Händelsenamn</string>
     <string name="edit_event">Ändra händelse</string>
     <string name="intro_welcome">Välkommen till MedTimer!</string>
     <string name="intro_welcome_description">MedTimer är en gratis app med öppen källkod för påminnelser för intag av läkemdel med fokus på integritet.\n\nDet krävs tillstånd för att visa meddelanden om medicinpåminnelser.</string>

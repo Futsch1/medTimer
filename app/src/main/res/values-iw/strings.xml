@@ -104,7 +104,6 @@
     <string name="name">שם</string>
     <string name="event_data">נתוני אירוע</string>
     <string name="backup">גיבוי</string>
-    <string name="event_name">שם אירוע</string>
     <string name="edit_event">ערכו אירוע</string>
     <string name="intro_welcome">ברוכים הבאים למדטיימר!</string>
     <string name="intro_welcome_description">מדטיימר היא אפליקצית תזכורות לנטילת תרופות חינמית וקוד פתוח עם דגש על פרטיות.\n\nהיא דורשת הרשאה כדי להראות התראות לתזכורות התרופות.</string>

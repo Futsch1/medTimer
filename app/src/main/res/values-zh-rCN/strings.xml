@@ -99,7 +99,6 @@
     <string name="name">药品名称</string>
     <string name="event_data">服药记录数据</string>
     <string name="backup">备份</string>
-    <string name="event_name">药品名称</string>
     <string name="edit_event">编辑服药记录</string>
     <string name="intro_welcome">欢迎使用 MedTimer!</string>
     <string name="intro_welcome_description">MedTimer 注重隐私、开源免费，提醒你按时服药。\n\n请授予权限以显示服药提醒通知。</string>

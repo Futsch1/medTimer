@@ -91,7 +91,6 @@
     <string name="name">Nazwa</string>
     <string name="event_data">Dane zdarzeń</string>
     <string name="backup">Kopia zapasowa</string>
-    <string name="event_name">Nazwa zdarzenia</string>
     <string name="intro_medicine_description">Użyj zakładki „Lekarstwa”, aby utworzyć lek, który przyjmujesz i chcesz otrzymać przypomnienie. Możesz przypisać tagi do leków i skonfigurować ich zapasy.</string>
     <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia dla różnych dawek, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub odstępach oraz ograniczone do określonych dni.</string>
     <string name="show_intro">Pokaż intro aplikacji</string>

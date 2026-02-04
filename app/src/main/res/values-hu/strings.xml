@@ -102,7 +102,6 @@
     <string name="name">Név</string>
     <string name="event_data">Eseményadatok</string>
     <string name="backup">Biztonsági mentés</string>
-    <string name="event_name">Esemény neve</string>
     <string name="edit_event">Esemény szerkesztése</string>
     <string name="intro_welcome">Üdvözlünk a MedTimerben!</string>
     <string name="intro_welcome_description">A MedTimer egy ingyenes és nyílt forráskódú gyógyszeremlékeztető alkalmazás, amely a magánszféra védelmét helyezi előtérbe.\n\nAz alkalmazásnak engedélyre van szüksége, hogy értesítéseket jeleníthessen meg a gyógyszeremlékeztetőkhöz.</string>

@@ -99,7 +99,6 @@
     <string name="name">Ім\'я</string>
     <string name="event_data">Дані про подію</string>
     <string name="backup">Підкріплення</string>
-    <string name="event_name">Назва події</string>
     <string name="edit_event">Редагувати подію</string>
     <string name="intro_welcome">Ласкаво просимо до MedTimer!</string>
     <string name="intro_welcome_description">MedTimer - це безкоштовна програма з відкритим вихідним кодом для нагадування про прийом ліків з акцентом на конфіденційність.\n\nДля показу сповіщень про нагадування про прийом ліків потрібен дозвіл.</string>

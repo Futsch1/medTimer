@@ -98,7 +98,6 @@
     <string name="name">名稱</string>
     <string name="event_data">事件資料</string>
     <string name="backup">備份</string>
-    <string name="event_name">事件名稱</string>
     <string name="edit_event">編輯時間</string>
     <string name="intro_welcome">歡迎來到 MedTimer！</string>
     <string name="intro_welcome_description">MedTimer 是一款免費且開放原始碼的用藥提醒應用程式，注重隱私保護。\n\n它需要通知權限才能顯示用藥提醒。</string>

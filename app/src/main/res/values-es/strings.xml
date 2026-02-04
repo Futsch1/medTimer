@@ -103,7 +103,6 @@
     <string name="name">Nombre</string>
     <string name="event_data">Datos del evento</string>
     <string name="backup">Copia de seguridad</string>
-    <string name="event_name">Nombre del evento</string>
     <string name="edit_event">Editar evento</string>
     <string name="intro_welcome">¡Bienvenido a MedTimer!</string>
     <string name="intro_welcome_description">MedTimer es una aplicación de recordatorio de medicación gratuita y de código abierto centrada en la privacidad.\n\nRequiere permiso para mostrar notificaciones de recordatorios de medicación.</string>

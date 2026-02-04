@@ -16,6 +16,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.sidesheet.SideSheetDialog
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -102,7 +103,6 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
             editEventTakenTimestamp.visibility = View.GONE
             editEventTakenDate.visibility = View.GONE
         }
-
         editEventNotes.setText(reminderEvent.notes)
     }
 
@@ -129,12 +129,23 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
 
     private fun configureTakenText(fragmentView: View, entity: ReminderEvent) {
         val takenText = fragmentView.findViewById<TextView>(R.id.takenText)
-        if (entity.status == ReminderEvent.ReminderStatus.TAKEN) {
-            takenText.setText(R.string.taken)
-        } else if (entity.status == ReminderEvent.ReminderStatus.SKIPPED) {
-            takenText.setText(R.string.skipped)
-        } else {
-            takenText.visibility = View.GONE
+        when (entity.status) {
+            ReminderEvent.ReminderStatus.TAKEN -> {
+                takenText.setText(R.string.taken)
+            }
+
+            ReminderEvent.ReminderStatus.SKIPPED -> {
+                takenText.setText(R.string.skipped)
+            }
+
+            ReminderEvent.ReminderStatus.ACKNOWLEDGED -> {
+                takenText.setText(R.string.acknowledged)
+                fragmentView.findViewById<TextInputLayout>(R.id.editEventAmountLayout).hint = ""
+            }
+
+            else -> {
+                takenText.visibility = View.GONE
+            }
         }
     }
 

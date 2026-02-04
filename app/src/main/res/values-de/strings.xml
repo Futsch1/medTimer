@@ -101,7 +101,6 @@
     <string name="name">Name</string>
     <string name="event_data">Ereignisdaten</string>
     <string name="backup">Backup</string>
-    <string name="event_name">Ereignisname</string>
     <string name="edit_event">Ereignis bearbeiten</string>
     <string name="intro_welcome">Willkommen bei MedTimer!</string>
     <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen, um an Medikamente zu erinnern.</string>
