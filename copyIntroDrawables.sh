@@ -7,7 +7,7 @@ for i in $(seq 0 4); do
 	cp -f -r ./fastlane/metadata/android/en-US/images/phoneScreenshots/"${screenshots[$i]}".png ./app/src/main/res/drawable/intro_"${names[$i]}".png
 done
 
-locales=('ar' 'bg' 'cs' 'da-DK' 'de-DE' 'es-ES' 'el-GR' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
+locales=('ar' 'bg' 'cs-CZ' 'da-DK' 'de-DE' 'es-ES' 'el-GR' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
 
 for l in "${locales[@]}"; do
 	mkdir ./app/src/main/res/drawable-"${l:0:2}" 2>/dev/null
