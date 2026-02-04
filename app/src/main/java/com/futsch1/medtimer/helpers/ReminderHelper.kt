@@ -60,7 +60,7 @@ fun formatReminderEventString(
     var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp, false
     )
-    if (reminderEvent.processedTimestamp != 0L && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN &&
+    if (reminderEvent.processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
         sharedPreferences.getBoolean(SHOW_TAKEN_TIME_IN_OVERVIEW, true)
     ) {
         val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
