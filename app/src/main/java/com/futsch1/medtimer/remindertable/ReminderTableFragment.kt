@@ -14,7 +14,7 @@ import com.evrencoskun.tableview.filter.Filter
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.statusValuesWithoutDelete
+import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
 import com.futsch1.medtimer.helpers.TableHelper
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.textfield.TextInputEditText
@@ -41,7 +41,7 @@ class ReminderTableFragment : Fragment() {
 
         tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
-        medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDelete)
+        medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
             .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> -> adapter.submitList(reminderEvents) })
 
         // This is a workaround for a recycler view bug that causes random crashes
