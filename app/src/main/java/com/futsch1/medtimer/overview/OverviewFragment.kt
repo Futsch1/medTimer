@@ -4,10 +4,14 @@ import FilterToggleGroup
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.view.ActionMode
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,7 +26,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-class OverviewFragment : Fragment(), OnFragmentReselectedListener {
+class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -33,6 +37,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     private lateinit var fragmentOverview: FragmentSwipeLayout
     private lateinit var thread: HandlerThread
     private var onceStable = false
+    private var actionMode: ActionMode? = null
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +57,13 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
 
         thread = HandlerThread("LogManualDose")
         thread.start()
+
+        onBackPressedCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                actionMode?.finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -95,6 +108,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
         adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
+        adapter.clickListener = this
 
         overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
             adapter.submitList(list) {
@@ -145,5 +159,57 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
 
     override fun onFragmentReselected() {
         daySelector.setDay(LocalDate.now())
+    }
+
+    override fun onItemClick(position: Int) {
+        if (actionMode != null) {
+            adapter.toggleSelection(position)
+            val selectedCount = adapter.getSelectedCount()
+            if (selectedCount == 0) {
+                actionMode?.finish()
+            } else {
+                actionMode?.title = selectedCount.toString()
+            }
+        }
+    }
+
+    override fun onItemLongClick(position: Int) {
+        if (actionMode == null) {
+            actionMode = requireActivity().startActionMode(ActionModeCallback())
+            adapter.selectionMode = true
+            onBackPressedCallback.isEnabled = true
+        }
+        adapter.toggleSelection(position)
+        actionMode?.title = adapter.getSelectedCount().toString()
+    }
+
+    inner class ActionModeCallback : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            mode?.menuInflater?.inflate(R.menu.menu_multi_selection, menu)
+            mode?.title = "1"
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            return when (item?.itemId) {
+                R.id.action_delete -> {
+                    // Action for delete, currently empty
+                    mode?.finish()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            adapter.selectionMode = false
+            actionMode = null
+            onBackPressedCallback.isEnabled = false
+        }
     }
 }

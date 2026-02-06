@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,11 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
+import com.google.android.material.color.MaterialColors
 
 
-class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity) : RecyclerView.ViewHolder(itemView) {
+class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity, val clickDelegate: ClickDelegate) :
+    RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
@@ -30,10 +33,10 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     lateinit var event: OverviewEvent
 
     companion object {
-        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity): ReminderViewHolder {
+        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity, clickDelegate: ClickDelegate): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity)
+            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate)
         }
     }
 
@@ -62,9 +65,13 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     }
 
     private fun setupEditEvent() {
-        this.contentContainer.setOnClickListener { _ ->
-            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
-                EditEventSideSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
+        this.contentContainer.setOnClickListener {
+            if (!clickDelegate.onItemClick(layoutPosition)) {
+                if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
+                    EditEventSideSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
+                } else {
+                    popupStateMenu(it)
+                }
             }
         }
     }
@@ -73,7 +80,6 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         stateButton.setOnClickListener { view ->
             popupStateMenu(view)
         }
-        contentContainer.setOnLongClickListener { view -> popupStateMenu(view); true }
     }
 
     @SuppressLint("InflateParams")
@@ -133,5 +139,20 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             topBar.visibility = View.GONE
             bottomBar.visibility = View.GONE
         }
+    }
+
+    fun setSelected(selected: Boolean) {
+        if (selected) {
+            contentContainer.backgroundTintList =
+                ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
+            stateButton.backgroundTintList = contentContainer.backgroundTintList
+        } else {
+            contentContainer.backgroundTintList = null
+            stateButton.backgroundTintList = null
+        }
+    }
+
+    fun interface ClickDelegate {
+        fun onItemClick(position: Int): Boolean
     }
 }
