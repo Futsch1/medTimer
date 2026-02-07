@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:hint="@string/filter"
             android:maxLines="1"
+            android:singleLine="true"
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
