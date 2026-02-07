@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -15,6 +16,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +26,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 @SuppressLint("InflateParams")
-class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent: ReminderEvent, val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: ReminderEvent, val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
     private val editEventTakenDate: EditText
     private val editEventTakenTimestamp: EditText
     private val editEventRemindedDate: EditText
@@ -34,8 +36,9 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
     private val editEventNotes: EditText
 
     init {
-        val editEventSideSheet = SideSheetDialog(activity)
-        val editEventView: View = LayoutInflater.from(activity).inflate(R.layout.sidesheet_edit_event, null)
+        val editEventSheetDialog =
+            if (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) BottomSheetDialog(activity) else SideSheetDialog(activity)
+        val editEventView: View = LayoutInflater.from(activity).inflate(R.layout.sheet_edit_event, null)
         editEventName = editEventView.findViewById(R.id.editEventName)
         editEventAmount = editEventView.findViewById(R.id.editEventAmount)
         editEventRemindedTimestamp = editEventView.findViewById(R.id.editEventRemindedTimestamp)
@@ -44,17 +47,17 @@ class EditEventSideSheetDialog(val activity: FragmentActivity, val reminderEvent
         editEventTakenDate = editEventView.findViewById(R.id.editEventTakenDate)
         editEventNotes = editEventView.findViewById(R.id.editEventNotes)
 
-        editEventSideSheet.setContentView(editEventView)
+        editEventSheetDialog.setContentView(editEventView)
         setupData(editEventView)
 
-        editEventSideSheet.setOnDismissListener {
+        editEventSheetDialog.setOnDismissListener {
             saveData()
         }
         editEventView.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar).setNavigationOnClickListener {
             saveData()
-            editEventSideSheet.dismiss()
+            editEventSheetDialog.dismiss()
         }
-        editEventSideSheet.show()
+        editEventSheetDialog.show()
     }
 
     private fun saveData() {
