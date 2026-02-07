@@ -5,14 +5,12 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import kotlinx.coroutines.CoroutineScope
 
 class ScheduledStockReminderActions(
     event: OverviewScheduledReminderEvent,
     medicineRepository: MedicineRepository,
-    coroutineScope: CoroutineScope,
     fragmentActivity: FragmentActivity
-) : ScheduledReminderActions(event, medicineRepository, coroutineScope, fragmentActivity) {
+) : ScheduledReminderActions(event, medicineRepository, fragmentActivity) {
     init {
         visibleButtons.clear()
         visibleButtons.add(Button.ACKNOWLEDGED)

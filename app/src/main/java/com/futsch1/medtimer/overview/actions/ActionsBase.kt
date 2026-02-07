@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview.actions
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderNotificationWorker
@@ -11,25 +12,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
+enum class Button(val associatedId: Int) {
+    TAKEN(R.id.takenButton),
+    ACKNOWLEDGED(R.id.acknowledgedButton),
+    SKIPPED(R.id.skippedButton),
+    RERAISE(R.id.reraiseButton),
+    RESCHEDULE(R.id.rescheduleButton),
+    DELETE(R.id.deleteButton);
+
+    companion object {
+        fun fromId(id: Int): Button {
+            return Button.entries.find { it.associatedId == id } ?: throw IllegalArgumentException("No button with id $id")
+        }
+    }
+}
+
+interface Actions {
+    suspend fun buttonClicked(button: Button)
+
+    var visibleButtons: MutableList<Button>
+
+}
+
 abstract class ActionsBase(
     val medicineRepository: MedicineRepository,
     fragmentActivity: FragmentActivity,
     val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
+) : Actions {
     val context: Context = fragmentActivity
 
-    enum class Button {
-        TAKEN,
-        ACKNOWLEDGED,
-        SKIPPED,
-        RERAISE,
-        RESCHEDULE,
-        DELETE
-    }
-
-    var visibleButtons: MutableList<Button> = mutableListOf()
-
-    abstract suspend fun buttonClicked(button: Button)
+    override var visibleButtons: MutableList<Button> = mutableListOf()
 
     protected suspend fun createReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
         return withContext(ioCoroutineDispatcher) {

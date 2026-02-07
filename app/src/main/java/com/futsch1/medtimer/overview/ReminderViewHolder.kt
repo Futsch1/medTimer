@@ -17,6 +17,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
+import com.futsch1.medtimer.overview.actions.createActionsView
 import com.google.android.material.color.MaterialColors
 
 
@@ -89,7 +90,8 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val visible = createActions(event, popupView, popupWindow, fragmentActivity.lifecycleScope)
+        val actions = createActions(event, fragmentActivity)
+        val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {
             // Position the view at the vertical center of the button

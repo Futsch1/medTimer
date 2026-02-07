@@ -14,6 +14,7 @@ import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,9 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.overview.actions.ActionsMenu
+import com.futsch1.medtimer.overview.actions.MultipleActions
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -38,6 +42,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     private lateinit var thread: HandlerThread
     private var onceStable = false
     private var actionMode: ActionMode? = null
+    private var actionsMenu: ActionsMenu? = null
     private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,12 +169,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     override fun onItemClick(position: Int) {
         if (actionMode != null) {
             adapter.toggleSelection(position)
-            val selectedCount = adapter.getSelectedCount()
-            if (selectedCount == 0) {
-                actionMode?.finish()
-            } else {
-                actionMode?.title = selectedCount.toString()
-            }
+            updateActionMode()
         }
     }
 
@@ -180,10 +180,24 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             onBackPressedCallback.isEnabled = true
         }
         adapter.toggleSelection(position)
-        actionMode?.title = adapter.getSelectedCount().toString()
+        updateActionMode()
+    }
+
+    fun updateActionMode() {
+        val selectedCount = adapter.getSelectedCount()
+        if (selectedCount == 0) {
+            actionMode?.finish()
+            actionsMenu = null
+        } else {
+            actionMode?.title = selectedCount.toString()
+            val multipleActions = MultipleActions(adapter.getSelectedItems(), this.requireActivity())
+            actionsMenu = ActionsMenu(actionMode!!.menu, multipleActions)
+        }
+
     }
 
     inner class ActionModeCallback : ActionMode.Callback {
+
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             mode?.menuInflater?.inflate(R.menu.overview_multi_selection, menu)
             mode?.title = "1"
@@ -195,11 +209,14 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return when (item?.itemId) {
-
-
-                else -> false
+            if (actionsMenu != null) {
+                val button = com.futsch1.medtimer.overview.actions.Button.fromId(item?.itemId ?: return false)
+                lifecycleScope.launch {
+                    actionsMenu?.actions?.buttonClicked(button)
+                    mode?.finish()
+                }
             }
+            return true
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {

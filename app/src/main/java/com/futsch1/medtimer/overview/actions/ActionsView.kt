@@ -12,14 +12,8 @@ class ActionsView(
     val view: View,
     popupWindow: PopupWindow?,
     coroutineScope: CoroutineScope,
-    actions: ActionsBase
+    actions: Actions
 ) {
-    val takenButton: View = view.findViewById(R.id.takenButton)
-    val acknowledgedButton: View = view.findViewById(R.id.acknowledgedButton)
-    val skippedButton: View = view.findViewById(R.id.skippedButton)
-    val reRaiseButton: View = view.findViewById(R.id.reraiseButton)
-    val rescheduleButton: View = view.findViewById(R.id.rescheduleButton)
-    val deleteButton: View = view.findViewById(R.id.deleteButton)
     val anchorTakenButton: View? = view.findViewById(R.id.anchorTakenButton)
     val anchorAcknowledgedButton: View? = view.findViewById(R.id.anchorAcknowledgedButton)
     val anchorSkippedButton: View? = view.findViewById(R.id.anchorSkippedButton)
@@ -27,27 +21,17 @@ class ActionsView(
     val anchorRescheduleButton: View? = view.findViewById(R.id.anchorRescheduleButton)
     val anchorDeleteButton: View? = view.findViewById(R.id.anchorDeleteButton)
 
-    val mapButtonToView = mapOf(
-        ActionsBase.Button.TAKEN to takenButton,
-        ActionsBase.Button.ACKNOWLEDGED to acknowledgedButton,
-        ActionsBase.Button.SKIPPED to skippedButton,
-        ActionsBase.Button.RERAISE to reRaiseButton,
-        ActionsBase.Button.RESCHEDULE to rescheduleButton,
-        ActionsBase.Button.DELETE to deleteButton
-    )
     val mapButtonToAnchor = mapOf(
-        ActionsBase.Button.TAKEN to anchorTakenButton,
-        ActionsBase.Button.ACKNOWLEDGED to anchorAcknowledgedButton,
-        ActionsBase.Button.SKIPPED to anchorSkippedButton,
-        ActionsBase.Button.RERAISE to anchorReraiseButton,
-        ActionsBase.Button.RESCHEDULE to anchorRescheduleButton,
-        ActionsBase.Button.DELETE to anchorDeleteButton
+        Button.TAKEN to anchorTakenButton,
+        Button.ACKNOWLEDGED to anchorAcknowledgedButton,
+        Button.SKIPPED to anchorSkippedButton,
+        Button.RERAISE to anchorReraiseButton,
+        Button.RESCHEDULE to anchorRescheduleButton,
+        Button.DELETE to anchorDeleteButton
     )
-
 
     val visible: Boolean
-        get() = ActionsBase.Button.entries.any { mapButtonToView[it]?.isVisible == true }
-
+        get() = Button.entries.any { view.findViewById<View>(it.associatedId)?.isVisible == true }
 
     init {
         view.setOnClickListener {
@@ -68,15 +52,16 @@ class ActionsView(
         )
         val angles = angleLists[visibleButtons.size]
         var anglesIndex = 0
-        for (button in ActionsBase.Button.entries) {
-            mapButtonToView[button]?.setOnClickListener {
+        for (button in Button.entries) {
+            val view = view.findViewById<View>(button.associatedId)
+            view.setOnClickListener {
                 coroutineScope.launch {
                     actions.buttonClicked(button)
                 }
                 popupWindow?.dismiss()
             }
             val visibility = if (visibleButtons.contains(button)) View.VISIBLE else View.INVISIBLE
-            mapButtonToView[button]?.visibility = visibility
+            view.visibility = visibility
             if (visibility == View.VISIBLE) {
                 setAngle(mapButtonToAnchor[button], angles!![anglesIndex++])
             }
