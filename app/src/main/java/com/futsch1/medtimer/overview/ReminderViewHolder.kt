@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
     val contentContainer: View = itemView.findViewById(R.id.overviewContentContainer)
     lateinit var event: OverviewEvent
+    var selected: Boolean = false
 
     companion object {
         fun create(parent: ViewGroup, fragmentActivity: FragmentActivity, clickDelegate: ClickDelegate): ReminderViewHolder {
@@ -41,15 +43,13 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         }
     }
 
-    fun bind(event: OverviewEvent) {
+    fun bind(event: OverviewEvent, selected: Boolean) {
         this.event = event
+        this.selected = selected
+
         reminderText.text = event.text
         setBarsVisibility(event.eventPosition)
-        if (event.color != null) {
-            ViewColorHelper.setViewBackground(contentContainer, listOf(reminderText), event.color!!)
-        } else {
-            ViewColorHelper.setDefaultColors(contentContainer, listOf(reminderText))
-        }
+        setBackgrounds()
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
         reminderTypeIcon.visibility =
             if (event.reminderType == Reminder.ReminderType.REFILL || event.reminderType == Reminder.ReminderType.OUT_OF_STOCK || event.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
@@ -63,6 +63,29 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         setStateButton(event.state)
         setupStateMenu()
         setupEditEvent()
+    }
+
+    private fun setBackgrounds() {
+        if (event.color != null) {
+            ViewColorHelper.setViewBackground(contentContainer, listOf(reminderText), event.color!!)
+        } else {
+            ViewColorHelper.setDefaultColors(contentContainer, listOf(reminderText))
+        }
+        if (selected) {
+            contentContainer.backgroundTintList =
+                ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
+            stateButton.backgroundTintList = contentContainer.backgroundTintList
+        } else {
+            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.color != null) {
+                contentContainer.backgroundTintList =
+                    ColorStateList.valueOf(0x20000000)
+                contentContainer.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+            } else {
+                contentContainer.backgroundTintList = null
+                contentContainer.backgroundTintMode = null
+            }
+            stateButton.backgroundTintList = null
+        }
     }
 
     private fun setupEditEvent() {
@@ -140,17 +163,6 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         if (position == EventPosition.ONLY) {
             topBar.visibility = View.GONE
             bottomBar.visibility = View.GONE
-        }
-    }
-
-    fun setSelected(selected: Boolean) {
-        if (selected) {
-            contentContainer.backgroundTintList =
-                ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
-            stateButton.backgroundTintList = contentContainer.backgroundTintList
-        } else {
-            contentContainer.backgroundTintList = null
-            stateButton.backgroundTintList = null
         }
     }
 
