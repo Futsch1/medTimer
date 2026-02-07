@@ -17,18 +17,26 @@ class ExpirationDateScheduling(
     override fun getNextScheduledTime(): Instant? {
         val firstRemindedDay = medicine.expirationDate - reminder.periodStart
 
-        if (firstRemindedDay <= today()) {
+        if (medicine.expirationDate != 0L) {
             return if (reminder.expirationReminderType == Reminder.ExpirationReminderType.ONCE) {
-                for (day in (medicine.expirationDate - reminder.periodStart..today()))
-                    if (isRaisedOn(day)) {
-                        return null
-                    }
-                localDateToReminderInstant(LocalDate.ofEpochDay(today()))
+                scheduleOnce(firstRemindedDay)
             } else {
                 val startRemindDay = max(medicine.expirationDate - reminder.periodStart, today())
                 getNextNotRemindedDay((startRemindDay - today()).coerceAtLeast(0))
             }
         }
         return null
+    }
+
+    private fun scheduleOnce(firstRemindedDay: Long): Instant? {
+        return if (firstRemindedDay <= today()) {
+            for (day in (medicine.expirationDate - reminder.periodStart..today()))
+                if (isRaisedOn(day)) {
+                    return null
+                }
+            localDateToReminderInstant(LocalDate.ofEpochDay(today()))
+        } else {
+            null
+        }
     }
 }
