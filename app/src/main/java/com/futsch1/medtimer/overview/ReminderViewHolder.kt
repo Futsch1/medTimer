@@ -83,8 +83,8 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
             } else {
                 contentContainer.backgroundTintList = null
                 contentContainer.backgroundTintMode = null
-                stateButton.backgroundTintList = null
             }
+            stateButton.backgroundTintList = null
         }
     }
 
