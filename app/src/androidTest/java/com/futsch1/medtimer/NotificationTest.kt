@@ -544,6 +544,22 @@ class NotificationTest : BaseTestHelper() {
             R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
+
+        AndroidTestHelper.longClickListItem(R.id.reminders, 0)
+        clickOn(R.id.skippedButton)
+
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.x_circle)))
+        )
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            1,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.x_circle)))
+        )
     }
 
     @Test
