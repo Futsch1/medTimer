@@ -15,15 +15,18 @@ class ExpirationDateScheduling(
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
-        if (medicine.expirationDate != 0L) {
-            val startRemindDay = max(medicine.expirationDate - reminder.periodStart, today())
+        val firstRemindedDay = medicine.expirationDate - reminder.periodStart
 
-            if (reminder.expirationReminderType == Reminder.ExpirationReminderType.ONCE) {
-                if (!isRaisedOn(startRemindDay)) {
-                    return localDateToReminderInstant(LocalDate.ofEpochDay(startRemindDay))
-                }
+        if (firstRemindedDay <= today()) {
+            return if (reminder.expirationReminderType == Reminder.ExpirationReminderType.ONCE) {
+                for (day in (medicine.expirationDate - reminder.periodStart..today()))
+                    if (isRaisedOn(day)) {
+                        return null
+                    }
+                localDateToReminderInstant(LocalDate.ofEpochDay(today()))
             } else {
-                return getNextNotRemindedDay((startRemindDay - today()).coerceAtLeast(0))
+                val startRemindDay = max(medicine.expirationDate - reminder.periodStart, today())
+                getNextNotRemindedDay((startRemindDay - today()).coerceAtLeast(0))
             }
         }
         return null
