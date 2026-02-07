@@ -271,4 +271,5 @@
     <string name="acknowledged">Onaylandı</string>
     <string name="refill_amount">Yeniden doldur (%s)</string>
     <string name="expiration_date_notification">%1$s ilacının son kullanma tarihi %2$s.\nİlacı değiştirmeyi düşünün.</string>
+    <string name="select_all">Tümünü seç</string>
 </resources>

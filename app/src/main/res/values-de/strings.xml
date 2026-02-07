@@ -271,4 +271,5 @@
     <string name="acknowledged">Bestätigt</string>
     <string name="refill_amount">Nachfüllen (%s)</string>
     <string name="expiration_date_notification">Das Medikament %1$s hat ein Verfallsdatum von %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
+    <string name="select_all">Alle auswählen</string>
 </resources>

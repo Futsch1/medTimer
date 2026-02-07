@@ -271,4 +271,5 @@
     <string name="acknowledged">Потвърдено</string>
     <string name="refill_amount">Допълване (%s)</string>
     <string name="expiration_date_notification">Лекарството %1$s има срок на годност %2$s.\nПомислете за подмяна на лекарството.</string>
+    <string name="select_all">Избери всички</string>
 </resources>

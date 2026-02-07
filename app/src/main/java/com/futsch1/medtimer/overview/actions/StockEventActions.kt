@@ -1,40 +1,27 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.view.View
-import android.widget.PopupWindow
+import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 
 class StockEventActions(
     event: OverviewReminderEvent,
-    view: View,
-    popupWindow: PopupWindow
-) : ReminderEventActions(event, view, popupWindow) {
+    medicineRepository: MedicineRepository,
+    fragmentActivity: FragmentActivity
+) : ReminderEventActions(event, medicineRepository, fragmentActivity) {
     init {
-        if (event.state == OverviewState.RAISED) {
-            hideAll()
+        visibleButtons.clear()
+        if (event.state != OverviewState.RAISED) {
+            visibleButtons.add(Button.DELETE)
         }
-        hideTakenSkippedReraise()
-
-        deleteButton.setOnClickListener {
-            processDeleteReminderEvent(view.context, event.reminderEvent)
-            popupWindow.dismiss()
-        }
-
     }
 
-    private fun hideTakenSkippedReraise() {
-        takenButton.visibility = View.INVISIBLE
-        skippedButton.visibility = View.INVISIBLE
-        reRaiseOrScheduleButton.visibility = View.INVISIBLE
+    override suspend fun buttonClicked(button: Button) {
+        when (button) {
+            Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
+            else -> Unit
+        }
 
-        setAngle(anchorDeleteButton, 90f)
-    }
-
-    private fun hideAll() {
-        takenButton.visibility = View.INVISIBLE
-        skippedButton.visibility = View.INVISIBLE
-        deleteButton.visibility = View.INVISIBLE
-        reRaiseOrScheduleButton.visibility = View.INVISIBLE
     }
 }

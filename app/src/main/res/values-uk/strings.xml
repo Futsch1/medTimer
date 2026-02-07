@@ -281,4 +281,5 @@
     <string name="acknowledged">Підтверджено</string>
     <string name="refill_amount">Поповнити (%s)</string>
     <string name="expiration_date_notification">Термін придатності ліків %1$s закінчується %2$s.\nРозгляньте можливість заміни ліків.</string>
+    <string name="select_all">Вибрати все</string>
 </resources>

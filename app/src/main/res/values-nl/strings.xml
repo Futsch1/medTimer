@@ -271,4 +271,5 @@
     <string name="acknowledged">Bevestigd</string>
     <string name="refill_amount">Bijvullen (%s)</string>
     <string name="expiration_date_notification">Het medicijn %1$s heeft een vervaldatum van %2$s.\nOverweeg het medicijn te vervangen.</string>
+    <string name="select_all">Alles selecteren</string>
 </resources>

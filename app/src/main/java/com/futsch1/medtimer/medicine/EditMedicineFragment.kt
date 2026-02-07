@@ -122,11 +122,11 @@ class EditMedicineFragment :
 
     private fun setupColorButton(fragmentView: View, useColor: Boolean) {
         colorButton = fragmentView.findViewById(R.id.selectColor)
-        ViewColorHelper.setButtonBackground(colorButton, color)
+        ViewColorHelper.setButtonBackground(colorButton!!, color)
         colorButton!!.setOnClickListener { _: View? ->
             ColorPickerDialog(requireContext(), requireActivity(), color) { newColor: Int? ->
                 color = newColor!!
-                ViewColorHelper.setButtonBackground(colorButton, color)
+                ViewColorHelper.setButtonBackground(colorButton!!, color)
                 Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show()
             }
         }

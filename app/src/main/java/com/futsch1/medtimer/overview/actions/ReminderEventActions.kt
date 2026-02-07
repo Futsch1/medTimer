@@ -1,9 +1,6 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.app.Application
-import android.content.Context
-import android.view.View
-import android.widget.PopupWindow
+import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -12,59 +9,51 @@ import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
 
-open class ReminderEventActions(event: OverviewReminderEvent, view: View, popupWindow: PopupWindow) : ActionsBase(view, popupWindow) {
+open class ReminderEventActions(val event: OverviewReminderEvent, medicineRepository: MedicineRepository, fragmentActivity: FragmentActivity) :
+    ActionsBase(medicineRepository, fragmentActivity) {
+
     init {
-        if (event.state == OverviewState.RAISED) {
-            hideDeleteAndReraise()
+        if (event.state != OverviewState.TAKEN) {
+            visibleButtons.add(Button.TAKEN)
+        }
+        if (event.state != OverviewState.SKIPPED) {
+            visibleButtons.add(Button.SKIPPED)
+        }
+
+        if (event.state != OverviewState.RAISED) {
+            visibleButtons.add(Button.RERAISE)
+            visibleButtons.add(Button.DELETE)
         }
         if (event.reminderEvent.reminderId == -1) {
-            hideReraise()
-        }
-        takenButton.setOnClickListener {
-            processTakenOrSkipped(event.reminderEvent, true)
-            popupWindow.dismiss()
-        }
-
-        skippedButton.setOnClickListener {
-            processTakenOrSkipped(event.reminderEvent, false)
-            popupWindow.dismiss()
-        }
-
-        reRaiseOrScheduleButton.setOnClickListener {
-            processDeleteReRaiseReminderEvent(event.reminderEvent)
-            popupWindow.dismiss()
-        }
-
-        deleteButton.setOnClickListener {
-            processDeleteReminderEvent(view.context, event.reminderEvent)
-            popupWindow.dismiss()
+            visibleButtons.remove(Button.RERAISE)
         }
     }
 
-    private fun hideReraise() {
-        reRaiseOrScheduleButton.visibility = View.INVISIBLE
-
-        setAngle(anchorTakenButton, 50f)
-        setAngle(anchorSkippedButton, 90f)
-        setAngle(anchorDeleteButton, 130f)
+    override suspend fun buttonClicked(button: Button) {
+        when (button) {
+            Button.TAKEN -> processTakenOrSkipped(event.reminderEvent, true)
+            Button.SKIPPED -> processTakenOrSkipped(event.reminderEvent, false)
+            Button.RERAISE -> processDeleteReRaiseReminderEvent(event.reminderEvent)
+            Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
+            Button.RESCHEDULE -> Unit
+            Button.ACKNOWLEDGED -> Unit
+        }
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderWorkerReceiver.requestReminderAction(view.context, null, reminderEvent, taken)
+        ReminderWorkerReceiver.requestReminderAction(context, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper(view.context).deleteItem(R.string.delete_re_raise_event, {
-            val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
+        DeleteHelper(context).deleteItem(R.string.delete_re_raise_event, {
             medicineRepository.deleteReminderEvent(reminderEvent)
-            ReminderWorkerReceiver.requestScheduleNextNotification(view.context)
+            ReminderWorkerReceiver.requestScheduleNextNotification(context)
         }, {})
     }
 
-    protected fun processDeleteReminderEvent(context: Context?, reminderEvent: ReminderEvent) {
+    protected fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
-            val medicineRepository = MedicineRepository(view.context.applicationContext as Application?)
             reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
             medicineRepository.updateReminderEvent(reminderEvent)
         }, {})

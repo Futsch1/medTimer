@@ -1,65 +1,50 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.app.Application
-import android.view.View
-import android.widget.PopupWindow
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
+import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderNotificationWorker
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-open class ActionsBase(val view: View, popupWindow: PopupWindow, val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO) {
-    val takenButton: ExtendedFloatingActionButton = view.findViewById(R.id.takenButton)
-    val skippedButton: ExtendedFloatingActionButton = view.findViewById(R.id.skippedButton)
-    val reRaiseOrScheduleButton: ExtendedFloatingActionButton = view.findViewById(R.id.reraiseOrScheduleButton)
-    val deleteButton: ExtendedFloatingActionButton = view.findViewById(R.id.deleteButton)
-    val anchorTakenButton: View = view.findViewById(R.id.anchorTakenButton)
-    val anchorSkippedButton: View = view.findViewById(R.id.anchorSkippedButton)
-    val anchorReraiseOrScheduleButton: View = view.findViewById(R.id.anchorReraiseButton)
-    val anchorDeleteButton: View = view.findViewById(R.id.anchorDeleteButton)
+enum class Button(val associatedId: Int) {
+    TAKEN(R.id.takenButton),
+    ACKNOWLEDGED(R.id.acknowledgedButton),
+    SKIPPED(R.id.skippedButton),
+    RERAISE(R.id.reraiseButton),
+    RESCHEDULE(R.id.rescheduleButton),
+    DELETE(R.id.deleteButton);
 
-    val visible: Boolean
-        get() = takenButton.isVisible || skippedButton.isVisible || reRaiseOrScheduleButton.isVisible || deleteButton.isVisible
-
-    init {
-        view.setOnClickListener {
-            popupWindow.dismiss()
+    companion object {
+        fun fromId(id: Int): Button {
+            return Button.entries.find { it.associatedId == id } ?: throw IllegalArgumentException("No button with id $id")
         }
     }
+}
 
-    fun hideDeleteAndReraise() {
-        deleteButton.visibility = View.INVISIBLE
-        reRaiseOrScheduleButton.visibility = View.INVISIBLE
+interface Actions {
+    suspend fun buttonClicked(button: Button)
 
-        setAngle(anchorTakenButton, 70f)
-        setAngle(anchorSkippedButton, 110f)
-    }
+    var visibleButtons: MutableList<Button>
 
-    fun hideDelete() {
-        deleteButton.visibility = View.INVISIBLE
+}
 
-        setAngle(anchorTakenButton, 50f)
-        setAngle(anchorSkippedButton, 90f)
-        setAngle(anchorReraiseOrScheduleButton, 130f)
-    }
+abstract class ActionsBase(
+    val medicineRepository: MedicineRepository,
+    fragmentActivity: FragmentActivity,
+    val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : Actions {
+    val context: Context = fragmentActivity
 
-    protected fun setAngle(view: View, f: Float) {
-        val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
-        layoutParams.circleAngle = f
-        view.setLayoutParams(layoutParams)
-    }
+    override var visibleButtons: MutableList<Button> = mutableListOf()
 
     protected suspend fun createReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
         return withContext(ioCoroutineDispatcher) {
-            val medicineRepository = MedicineRepository(view.context.applicationContext as Application)
             var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
             if (reminderEvent == null) {
                 reminderEvent = ReminderNotificationWorker.buildReminderEvent(

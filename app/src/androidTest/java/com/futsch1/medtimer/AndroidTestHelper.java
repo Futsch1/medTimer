@@ -1,9 +1,12 @@
 package com.futsch1.medtimer;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
@@ -14,6 +17,7 @@ import static org.hamcrest.Matchers.is;
 
 import android.icu.util.Calendar;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -151,13 +155,17 @@ public class AndroidTestHelper {
         }
     }
 
-
     public static void closeNotifications(UiDevice device) {
         device.swipe(device.getDisplayWidth() / 2, device.getDisplayHeight(), device.getDisplayWidth() / 2, device.getDisplayHeight() / 2, 20);
         device.waitForIdle(200);
         if (!device.findObjects(By.res("android:id/expand_button")).isEmpty() || !device.findObjects(By.descContains("Expand")).isEmpty()) {
             device.pressBack();
         }
+    }
+
+    public static void longClickListItem(@IdRes int id, int position) {
+        onView(withId(id))
+                .perform(actionOnItemAtPosition(position, longClick()));
     }
 
     public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}

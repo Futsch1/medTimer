@@ -276,4 +276,5 @@
     <string name="acknowledged">אשר</string>
     <string name="refill_amount">מילוי (%s)</string>
     <string name="expiration_date_notification">לתרופה %1$s יש תאריך תפוגה של %2$s.\nשקול להחליף את התרופה.</string>
+    <string name="select_all">בחר הכל</string>
 </resources>
