@@ -210,10 +210,15 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             if (actionsMenu != null) {
-                val button = com.futsch1.medtimer.overview.actions.Button.fromId(item?.itemId ?: return false)
-                lifecycleScope.launch {
-                    actionsMenu?.actions?.buttonClicked(button)
-                    mode?.finish()
+                if (item?.itemId == R.id.selectAll) {
+                    adapter.selectAll()
+                    updateActionMode()
+                } else {
+                    val button = com.futsch1.medtimer.overview.actions.Button.fromId(item?.itemId ?: return false)
+                    lifecycleScope.launch {
+                        actionsMenu?.actions?.buttonClicked(button)
+                        mode?.finish()
+                    }
                 }
             }
             return true

@@ -70,12 +70,17 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
     }
 
     override fun onItemClick(position: Int): Boolean {
-        if (selectionMode) {
+        return if (selectionMode) {
             clickListener?.onItemClick(position)
-            return true
+            true
         } else {
-            return false
+            false
         }
+    }
+
+    fun selectAll() {
+        selectedItems.addAll((0 until itemCount).toList())
+        notifyItemRangeChanged(0, itemCount)
     }
 
     class OverviewEventDiff : DiffUtil.ItemCallback<OverviewEvent>() {
