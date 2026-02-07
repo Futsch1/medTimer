@@ -53,6 +53,16 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
         notifyItemChanged(position)
     }
 
+    fun selectSameTimeEvents(position: Int) {
+        val selectedItem = getItem(position)
+        val time = selectedItem.timestamp
+        for ((index, event) in currentList.withIndex()) {
+            if (event.timestamp == time) {
+                toggleSelection(index)
+            }
+        }
+    }
+
     fun clearSelection() {
         val selection = ArrayList(selectedItems)
         selectedItems.clear()

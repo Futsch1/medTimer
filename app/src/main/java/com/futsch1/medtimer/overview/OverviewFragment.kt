@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
@@ -24,6 +25,7 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
+import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -179,7 +181,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             adapter.selectionMode = true
             onBackPressedCallback.isEnabled = true
         }
-        adapter.toggleSelection(position)
+
+        if (PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean(COMBINE_NOTIFICATIONS, false)) {
+            adapter.selectSameTimeEvents(position)
+        } else {
+            adapter.toggleSelection(position)
+        }
         updateActionMode()
     }
 
