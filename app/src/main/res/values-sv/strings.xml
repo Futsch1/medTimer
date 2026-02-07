@@ -270,4 +270,5 @@
     <string name="acknowledged">Bekräftad</string>
     <string name="refill_amount">Fyll på (%s)</string>
     <string name="expiration_date_notification">Medicinen %1$s har ett utgångsdatum den %2$s.\nÖverväg att byta ut medicinen.</string>
+    <string name="select_all">Välj alla</string>
 </resources>

@@ -281,4 +281,5 @@
     <string name="acknowledged">Potvrzeno</string>
     <string name="refill_amount">Doplnit (%s)</string>
     <string name="expiration_date_notification">Lék %1$s má datum expirace %2$s.\nZvažte výměnu léku.</string>
+    <string name="select_all">Vybrat vše</string>
 </resources>

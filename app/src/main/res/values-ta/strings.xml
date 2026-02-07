@@ -271,4 +271,5 @@
     <string name="acknowledged">ஒப்புக்கொள்ளப்பட்டது</string>
     <string name="refill_amount">மீள்நிரப்பு (%s)</string>
     <string name="expiration_date_notification">மருந்து %1$s-க்கு காலாவதி தேதி %2$s உள்ளது.\nமருந்தை மாற்றுவதைக் கவனியுங்கள்.</string>
+    <string name="select_all">அனைத்தையும் தேர்ந்தெடு</string>
 </resources>

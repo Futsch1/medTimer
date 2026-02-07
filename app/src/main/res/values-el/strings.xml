@@ -271,4 +271,5 @@
     <string name="acknowledged">Αναγνωρίστηκε</string>
     <string name="refill_amount">Αναπλήρωση (%s)</string>
     <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηнία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
+    <string name="select_all">Επιλογή όλων</string>
 </resources>

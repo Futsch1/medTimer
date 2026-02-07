@@ -271,4 +271,5 @@
     <string name="acknowledged">Anerkendt</string>
     <string name="refill_amount">Genopfyldning (%s)</string>
     <string name="expiration_date_notification">Medicinen %1$s har en udløbsdato den %2$s.\nOvervej at udskifte medicinen.</string>
+    <string name="select_all">Vælg alle</string>
 </resources>

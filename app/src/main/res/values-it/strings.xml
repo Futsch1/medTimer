@@ -276,4 +276,5 @@
     <string name="acknowledged">Confermato</string>
     <string name="refill_amount">Ricarica (%s)</string>
     <string name="expiration_date_notification">Il medicinale %1$s ha una data di scadenza del %2$s.\nPrendi in considerazione la sostituzione del medicinale.</string>
+    <string name="select_all">Seleziona tutto</string>
 </resources>

@@ -271,4 +271,5 @@
     <string name="acknowledged">Tudomásul véve</string>
     <string name="refill_amount">Újratöltés (%s)</string>
     <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
+    <string name="select_all">Az összes kijelölése</string>
 </resources>

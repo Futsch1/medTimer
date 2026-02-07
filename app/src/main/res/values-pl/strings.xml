@@ -281,4 +281,5 @@
     <string name="acknowledged">Potwierdzono</string>
     <string name="refill_amount">Uzupełnienie (%s)</string>
     <string name="expiration_date_notification">Lek %1$s ma datę ważności %2$s.\nRozważ wymianę leku.</string>
+    <string name="select_all">Zaznacz wszystko</string>
 </resources>
