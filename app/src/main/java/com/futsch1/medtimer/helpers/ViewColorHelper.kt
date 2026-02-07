@@ -1,116 +1,116 @@
-package com.futsch1.medtimer.helpers;
+package com.futsch1.medtimer.helpers
 
-import android.content.res.ColorStateList;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.R
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.elevation.SurfaceColors
 
-import androidx.annotation.ColorInt;
-import androidx.core.graphics.ColorUtils;
-import androidx.core.graphics.drawable.DrawableCompat;
+object ViewColorHelper {
+    fun setViewBackground(view: View, textViews: List<TextView>, @ColorInt backgroundColor: Int) {
+        val defaultTextViewColor = getColorOnSurface(view)
+        val contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor or -0x1000000)
+        val cardDefaultBackground = SurfaceColors.getColorForElevation(view.context, view.elevation)
+        val contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor or -0x1000000)
 
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.color.MaterialColors;
-import com.google.android.material.elevation.SurfaceColors;
-
-import java.util.List;
-
-public class ViewColorHelper {
-
-    private ViewColorHelper() {
-        // Intentionally empty
-    }
-
-    public static void setViewBackground(View view, List<TextView> textViews, @ColorInt int backgroundColor) {
-        int defaultTextViewColor = getColorOnSurface(view);
-        double contrastTextView = ColorUtils.calculateContrast(defaultTextViewColor, backgroundColor | 0xFF000000);
-        int cardDefaultBackground = SurfaceColors.getColorForElevation(view.getContext(), view.getElevation());
-        double contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor | 0xFF000000);
-
-        setTextColor(textViews, contrastTextView < contrastBackground ? cardDefaultBackground : defaultTextViewColor);
-        if (view instanceof MaterialCardView materialCardView) {
-            materialCardView.setCardBackgroundColor(backgroundColor);
-        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
-            shapeDrawable.setColor(backgroundColor);
+        setTextColor(textViews, if (contrastTextView < contrastBackground) cardDefaultBackground else defaultTextViewColor)
+        if (view is MaterialCardView) {
+            view.setCardBackgroundColor(backgroundColor)
+        } else if (view.background is GradientDrawable) {
+            (view.background as GradientDrawable).setColor(backgroundColor)
         } else {
-            view.setBackgroundColor(backgroundColor);
+            view.setBackgroundColor(backgroundColor)
         }
     }
 
-    private static int getColorOnSurface(View cardView) {
-        return MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorOnSurface);
+    private fun getColorOnSurface(cardView: View): Int {
+        return MaterialColors.getColor(cardView, R.attr.colorOnSurface)
     }
 
-    private static void setTextColor(List<TextView> textViews, @ColorInt int color) {
-        for (TextView textView : textViews) {
-            textView.setTextColor(color);
+    private fun setTextColor(textViews: List<TextView>, @ColorInt color: Int) {
+        for (textView in textViews) {
+            textView.setTextColor(color)
         }
     }
 
-    public static void setIconToImageView(View view, ImageView imageView, int iconId) {
+    fun setIconToImageView(view: View, imageView: ImageView, iconId: Int) {
         if (iconId != 0) {
-            Drawable iconDrawable = new MedicineIcons(view.getContext()).getIconDrawable(iconId);
-            setDrawableTint(view, iconDrawable);
-            imageView.setImageDrawable(iconDrawable);
-            imageView.setVisibility(View.VISIBLE);
+            val iconDrawable = MedicineIcons(view.context).getIconDrawable(iconId)
+            setDrawableTint(view, iconDrawable)
+            imageView.setImageDrawable(iconDrawable)
+            imageView.setVisibility(View.VISIBLE)
         } else {
-            imageView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE)
         }
     }
 
-    public static void setDrawableTint(View view, Drawable drawable) {
-        int backgroundColor = getBackground(view);
-        DrawableCompat.setTint(drawable, getColorOnView(view, backgroundColor));
+    fun setDrawableTint(view: View, drawable: Drawable) {
+        val backgroundColor = getBackground(view)
+        DrawableCompat.setTint(drawable, getColorOnView(view, backgroundColor))
     }
 
-    private static int getBackground(View view) {
-        int defaultColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
-        if (view instanceof MaterialCardView materialCardView) {
-            return materialCardView.getCardBackgroundColor().getDefaultColor();
-        } else if (view.getBackground() instanceof ColorDrawable colorDrawable) {
-            return colorDrawable.getColor();
-        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
-            ColorStateList colorStateList = shapeDrawable.getColor();
-            return colorStateList != null ? colorStateList.getDefaultColor() : defaultColor;
-        } else {
-            return defaultColor;
+    private fun getBackground(view: View): Int {
+        val defaultColor = MaterialColors.getColor(view, R.attr.colorSurface)
+        return when {
+            view is MaterialCardView -> {
+                view.cardBackgroundColor.defaultColor
+            }
+
+            view.background is ColorDrawable -> {
+                (view.background as ColorDrawable).color
+            }
+
+            view.background is GradientDrawable -> {
+                val colorStateList: ColorStateList? = (view.background as GradientDrawable).color
+                colorStateList?.defaultColor ?: defaultColor
+            }
+
+            else -> {
+                defaultColor
+            }
         }
     }
 
-    private static int getColorOnView(View view, @ColorInt int backgroundColor) {
-        int primaryColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnSurface);
-        int onPrimaryColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnPrimary);
-        double primaryContrast = ColorUtils.calculateContrast(primaryColor, backgroundColor | 0xFF000000);
-        double onPrimaryContrast = ColorUtils.calculateContrast(onPrimaryColor, backgroundColor | 0xFF000000);
-        return primaryContrast > onPrimaryContrast ? primaryColor : onPrimaryColor;
+    private fun getColorOnView(view: View, @ColorInt backgroundColor: Int): Int {
+        val primaryColor = MaterialColors.getColor(view, R.attr.colorOnSurface)
+        val onPrimaryColor = MaterialColors.getColor(view, R.attr.colorOnPrimary)
+        val primaryContrast = ColorUtils.calculateContrast(primaryColor, backgroundColor or -0x1000000)
+        val onPrimaryContrast = ColorUtils.calculateContrast(onPrimaryColor, backgroundColor or -0x1000000)
+        return if (primaryContrast > onPrimaryContrast) primaryColor else onPrimaryColor
     }
 
-    public static void setButtonBackground(Button button, @ColorInt int backgroundColor) {
-        setTextColor(button, getColorOnView(button, backgroundColor));
-        button.setBackgroundColor(backgroundColor);
+    fun setButtonBackground(button: Button, @ColorInt backgroundColor: Int) {
+        setTextColor(button, getColorOnView(button, backgroundColor))
+        button.setBackgroundColor(backgroundColor)
     }
 
-    private static void setTextColor(Button button, @ColorInt int buttonTextColor) {
-        button.setTextColor(buttonTextColor);
+    private fun setTextColor(button: Button, @ColorInt buttonTextColor: Int) {
+        button.setTextColor(buttonTextColor)
     }
 
-    public static void setDefaultColors(View view, List<TextView> textViews) {
-        int defaultTextViewColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnSurface);
+    fun setDefaultColors(view: View, textViews: List<TextView>) {
+        val defaultTextViewColor = MaterialColors.getColor(view, R.attr.colorOnSurface)
 
-        setTextColor(textViews, defaultTextViewColor);
-        if (view instanceof MaterialCardView materialCardView) {
-            int cardDefaultBackground = SurfaceColors.getColorForElevation(view.getContext(), view.getElevation());
-            materialCardView.setCardBackgroundColor(cardDefaultBackground);
-        } else if (view.getBackground() instanceof GradientDrawable shapeDrawable) {
-            int defaultBackground = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
-            shapeDrawable.setColor(defaultBackground);
+        setTextColor(textViews, defaultTextViewColor)
+        if (view is MaterialCardView) {
+            val cardDefaultBackground = SurfaceColors.getColorForElevation(view.context, view.elevation)
+            view.setCardBackgroundColor(cardDefaultBackground)
+        } else if (view.background is GradientDrawable) {
+            val defaultBackground = MaterialColors.getColor(view, R.attr.colorSurface)
+            (view.background as GradientDrawable).setColor(defaultBackground)
         } else {
-            int defaultBackground = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
-            view.setBackgroundColor(defaultBackground);
+            val defaultBackground = MaterialColors.getColor(view, R.attr.colorSurface)
+            view.setBackgroundColor(defaultBackground)
         }
     }
 }

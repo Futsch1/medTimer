@@ -185,7 +185,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     inner class ActionModeCallback : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            mode?.menuInflater?.inflate(R.menu.menu_multi_selection, menu)
+            mode?.menuInflater?.inflate(R.menu.overview_multi_selection, menu)
             mode?.title = "1"
             return true
         }
@@ -196,11 +196,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             return when (item?.itemId) {
-                R.id.action_delete -> {
-                    // Action for delete, currently empty
-                    mode?.finish()
-                    true
-                }
+
 
                 else -> false
             }

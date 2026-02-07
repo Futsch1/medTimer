@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/takenButton"
+        android:icon="@drawable/check2_circle"
+        android:title="@string/taken"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/acknowledgedButton"
+        android:icon="@drawable/check2_circle"
+        android:title="@string/acknowledged"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/skippedButton"
+        android:icon="@drawable/x_circle"
+        android:title="@string/skipped"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/reraiseButton"
+        android:icon="@drawable/bell"
+        android:title="@string/re_raise_event"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/rescheduleButton"
+        android:icon="@drawable/bell"
+        android:title="@string/reschedule_reminder"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/deleteButton"
+        android:icon="@drawable/trash"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
+</menu>

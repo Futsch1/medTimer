@@ -45,9 +45,9 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         reminderText.text = event.text
         setBarsVisibility(event.eventPosition)
         if (event.color != null) {
-            ViewColorHelper.setViewBackground(contentContainer, mutableListOf<TextView?>(reminderText), event.color!!)
+            ViewColorHelper.setViewBackground(contentContainer, listOf(reminderText), event.color!!)
         } else {
-            ViewColorHelper.setDefaultColors(contentContainer, mutableListOf<TextView?>(reminderText))
+            ViewColorHelper.setDefaultColors(contentContainer, listOf(reminderText))
         }
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
         reminderTypeIcon.visibility =

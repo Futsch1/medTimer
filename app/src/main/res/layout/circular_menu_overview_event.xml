@@ -24,6 +24,15 @@
         tools:ignore="MissingConstraints" />
 
     <View
+        android:id="@+id/anchorAcknowledgedButton"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintCircle="@id/centerCircle"
+        app:layout_constraintCircleAngle="30"
+        app:layout_constraintCircleRadius="128dp"
+        tools:ignore="MissingConstraints" />
+
+    <View
         android:id="@+id/anchorSkippedButton"
         android:layout_width="1dp"
         android:layout_height="1dp"
@@ -34,6 +43,15 @@
 
     <View
         android:id="@+id/anchorReraiseButton"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintCircle="@id/centerCircle"
+        app:layout_constraintCircleAngle="110"
+        app:layout_constraintCircleRadius="128dp"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/anchorRescheduleButton"
         android:layout_width="1dp"
         android:layout_height="1dp"
         app:layout_constraintCircle="@id/centerCircle"
@@ -62,6 +80,17 @@
         app:layout_constraintTop_toTopOf="@id/anchorTakenButton" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/acknowledgedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="@string/acknowledged"
+        app:icon="@drawable/check2_circle"
+        app:layout_constraintBottom_toBottomOf="@id/anchorAcknowledgedButton"
+        app:layout_constraintStart_toStartOf="@id/anchorAcknowledgedButton"
+        app:layout_constraintTop_toTopOf="@id/anchorAcknowledgedButton" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/skippedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +102,7 @@
         app:layout_constraintTop_toTopOf="@id/anchorSkippedButton" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/reraiseOrScheduleButton"
+        android:id="@+id/reraiseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -82,6 +111,17 @@
         app:layout_constraintBottom_toBottomOf="@id/anchorReraiseButton"
         app:layout_constraintStart_toStartOf="@id/anchorReraiseButton"
         app:layout_constraintTop_toTopOf="@id/anchorReraiseButton" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/rescheduleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="@string/reschedule_reminder"
+        app:icon="@drawable/bell"
+        app:layout_constraintBottom_toBottomOf="@id/anchorRescheduleButton"
+        app:layout_constraintStart_toStartOf="@id/anchorRescheduleButton"
+        app:layout_constraintTop_toTopOf="@id/anchorRescheduleButton" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/deleteButton"
