@@ -42,7 +42,10 @@ class ReminderTableFragment : Fragment() {
         tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
         medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
-            .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> -> adapter.submitList(reminderEvents) })
+            .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> ->
+                adapter.submitList(reminderEvents)
+                tableFilter.set(filter?.text.toString())
+            })
 
         // This is a workaround for a recycler view bug that causes random crashes
         tableView.cellRecyclerView.setItemAnimator(null)
@@ -56,7 +59,7 @@ class ReminderTableFragment : Fragment() {
 
     private fun setupFilter(tableFilter: Filter) {
         filterLayout!!.setEndIconOnClickListener { _: View? ->
-            filter!!.setText("")
+            filter?.setText("")
             tableFilter.set("")
         }
         filter!!.addTextChangedListener(object : TextWatcher {
