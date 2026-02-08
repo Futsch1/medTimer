@@ -36,8 +36,7 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current)
-        holder.setSelected(selectedItems.contains(position))
+        holder.bind(current, selectedItems.contains(position))
     }
 
     override fun getItemId(position: Int): Long {

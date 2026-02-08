@@ -10,6 +10,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
@@ -326,6 +327,8 @@ class MedicineStockTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.bell)))
         )
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        assertDisplayed(R.id.acknowledgedButton)
+        pressBack()
 
         checkNotificationWithTitle(device, notificationTitle, expected = true, dismiss = true)
 
@@ -340,6 +343,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.string.yes)
 
         checkNotificationWithTitle(device, notificationTitle, false)
+        assertListItemCount(R.id.reminders, 0)
     }
 
     @Test
