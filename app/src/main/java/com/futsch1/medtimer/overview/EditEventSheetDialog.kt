@@ -1,12 +1,11 @@
 package com.futsch1.medtimer.overview
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
@@ -25,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-@SuppressLint("InflateParams")
 class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: ReminderEvent, val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
     private val editEventTakenDate: EditText
     private val editEventTakenTimestamp: EditText
@@ -38,22 +36,22 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
     init {
         val editEventSheetDialog =
             if (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) BottomSheetDialog(activity) else SideSheetDialog(activity)
-        val editEventView: View = LayoutInflater.from(activity).inflate(R.layout.sheet_edit_event, null)
-        editEventName = editEventView.findViewById(R.id.editEventName)
-        editEventAmount = editEventView.findViewById(R.id.editEventAmount)
-        editEventRemindedTimestamp = editEventView.findViewById(R.id.editEventRemindedTimestamp)
-        editEventRemindedDate = editEventView.findViewById(R.id.editEventRemindedDate)
-        editEventTakenTimestamp = editEventView.findViewById(R.id.editEventTakenTimestamp)
-        editEventTakenDate = editEventView.findViewById(R.id.editEventTakenDate)
-        editEventNotes = editEventView.findViewById(R.id.editEventNotes)
+        editEventSheetDialog.setContentView(R.layout.sheet_edit_event)
 
-        editEventSheetDialog.setContentView(editEventView)
-        setupData(editEventView)
+        editEventName = editEventSheetDialog.findViewById<EditText>(R.id.editEventName)!!
+        editEventAmount = editEventSheetDialog.findViewById<EditText>(R.id.editEventAmount)!!
+        editEventRemindedTimestamp = editEventSheetDialog.findViewById<EditText>(R.id.editEventRemindedTimestamp)!!
+        editEventRemindedDate = editEventSheetDialog.findViewById<EditText>(R.id.editEventRemindedDate)!!
+        editEventTakenTimestamp = editEventSheetDialog.findViewById<EditText>(R.id.editEventTakenTimestamp)!!
+        editEventTakenDate = editEventSheetDialog.findViewById<EditText>(R.id.editEventTakenDate)!!
+        editEventNotes = editEventSheetDialog.findViewById<EditText>(R.id.editEventNotes)!!
+
+        setupData(editEventSheetDialog)
 
         editEventSheetDialog.setOnDismissListener {
             saveData()
         }
-        editEventView.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar).setNavigationOnClickListener {
+        editEventSheetDialog.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar)?.setNavigationOnClickListener {
             saveData()
             editEventSheetDialog.dismiss()
         }
@@ -91,7 +89,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
         return timestamp
     }
 
-    private fun setupData(editEventView: View) {
+    private fun setupData(editEventView: AppCompatDialog) {
         editEventName.setText(reminderEvent.medicineName)
         editEventAmount.setText(reminderEvent.amount)
 
@@ -130,8 +128,8 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
         editText.visibility = View.VISIBLE
     }
 
-    private fun configureTakenText(fragmentView: View, entity: ReminderEvent) {
-        val takenText = fragmentView.findViewById<TextView>(R.id.takenText)
+    private fun configureTakenText(dialog: AppCompatDialog, entity: ReminderEvent) {
+        val takenText = dialog.findViewById<TextView>(R.id.takenText)!!
         when (entity.status) {
             ReminderEvent.ReminderStatus.TAKEN -> {
                 takenText.setText(R.string.taken)
@@ -143,7 +141,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
 
             ReminderEvent.ReminderStatus.ACKNOWLEDGED -> {
                 takenText.setText(R.string.acknowledged)
-                fragmentView.findViewById<TextInputLayout>(R.id.editEventAmountLayout).hint = ""
+                dialog.findViewById<TextInputLayout>(R.id.editEventAmountLayout)?.hint = ""
             }
 
             else -> {

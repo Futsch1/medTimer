@@ -2,6 +2,7 @@ package com.futsch1.medtimer;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -19,8 +20,10 @@ import static junit.framework.TestCase.assertEquals;
 import android.widget.TextView;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 
+import com.adevinta.android.barista.rule.flaky.AllowFlaky;
 import com.evrencoskun.tableview.TableView;
 
 import org.junit.ClassRule;
@@ -37,13 +40,17 @@ public class ScreenshotsTest extends BaseTestHelper {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 1)
     public void screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
         UiDevice device = UiDevice.getInstance(getInstrumentation());
 
         openMenu();
         clickOn(R.string.generate_test_data);
+
+        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer);
+        internalAssert(device.findObject(By.textContains("Some note")) != null);
+        pressBack();
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton);
         clickOn(R.id.takenButton);

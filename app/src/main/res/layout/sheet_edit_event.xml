@@ -2,17 +2,18 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.BottomSheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
-        style="@style/Widget.Material3.BottomSheet"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="vertical"
-        android:padding="5dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        android:padding="5dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/editEventSideSheetToolbar"
@@ -53,11 +54,9 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:id="@+id/divider5"
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="1dp" />
 
         <TextView
             android:id="@+id/timeText"
@@ -106,11 +105,9 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider6"
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="1dp" />
 
         <TextView
             android:id="@+id/takenText"
@@ -160,10 +157,9 @@
 
         </LinearLayout>
 
-        <View
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="1dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
