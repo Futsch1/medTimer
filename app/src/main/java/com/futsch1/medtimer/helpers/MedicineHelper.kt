@@ -105,7 +105,9 @@ object MedicineHelper {
         }
         val expiredIcon = getExpiredIcon(context, fullMedicine)
         if (expiredIcon.isNotEmpty()) {
-            builder.append(" ")
+            if (builder.isNotEmpty()) {
+                builder.append(" ")
+            }
             builder.append(expiredIcon)
         }
         return builder
