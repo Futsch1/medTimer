@@ -16,7 +16,7 @@ import com.futsch1.medtimer.MedicineViewModel;
 import com.futsch1.medtimer.R;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.overview.EditEventSideSheetDialog;
+import com.futsch1.medtimer.overview.EditEventSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
     private void navigateToEditEvent(long eventId) {
         ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
         if (reminderEvent != null) {
-            activity.runOnUiThread(() -> new EditEventSideSheetDialog(activity, reminderEvent, Dispatchers.getIO()));
+            activity.runOnUiThread(() -> new EditEventSheetDialog(activity, reminderEvent, Dispatchers.getIO()));
         }
     }
 
