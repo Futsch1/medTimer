@@ -39,6 +39,7 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     abstract val color: Int?
     abstract val state: OverviewState
     abstract val reminderType: Reminder.ReminderType
+    abstract val reminderId: Int
     val updateValue: Long
         get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
@@ -77,6 +78,8 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
         get() = mapReminderEventState(reminderEvent.status)
     override val reminderType: Reminder.ReminderType
         get() = reminderEvent.reminderType
+    override val reminderId: Int
+        get() = reminderEvent.reminderId
 
     private fun mapReminderEventState(status: ReminderEvent.ReminderStatus): OverviewState {
         return when (status) {
@@ -105,6 +108,8 @@ class OverviewScheduledReminderEvent(context: Context, sharedPreferences: Shared
         get() = OverviewState.PENDING
     override val reminderType: Reminder.ReminderType
         get() = scheduledReminder.reminder.reminderType
+    override val reminderId: Int
+        get() = scheduledReminder.reminder.reminderId
 }
 
 fun create(context: Context, sharedPreferences: SharedPreferences, reminderEvent: ReminderEvent): OverviewEvent {

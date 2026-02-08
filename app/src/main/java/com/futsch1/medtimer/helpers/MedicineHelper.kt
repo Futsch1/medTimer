@@ -39,6 +39,14 @@ object MedicineHelper {
                 )
             )
         }
+        builder.append(getStockTextWithIcons(context, fullMedicine))
+
+        return builder
+    }
+
+    private fun getStockTextWithIcons(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
+        val builder = SpannableStringBuilder()
+
         val stockIconText = getStockIcons(context, fullMedicine)
         val stockText = if (fullMedicine.isStockManagementActive) getStockText(context, fullMedicine.medicine) else ""
 
@@ -50,8 +58,32 @@ object MedicineHelper {
             builder.append(stockIconText)
             builder.append(")")
         }
-
         return builder
+    }
+
+    fun getDatesText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
+        val s = SpannableStringBuilder()
+        val medicine = fullMedicine.medicine
+
+        if (medicine.productionDate != 0L) {
+            s.append(context.getString(R.string.production_date))
+            s.append(": ")
+            s.append(TimeHelper.daysSinceEpochToDateString(context, medicine.productionDate))
+        }
+        if (medicine.expirationDate != 0L) {
+            if (s.isNotEmpty()) {
+                s.append(", ")
+            }
+            s.append(context.getString(R.string.expiration_date))
+            s.append(": ")
+            s.append(TimeHelper.daysSinceEpochToDateString(context, medicine.expirationDate))
+            val expiredIcon = getExpiredIcon(context, fullMedicine)
+            if (expiredIcon.isNotEmpty()) {
+                s.append(" ")
+                s.append(expiredIcon)
+            }
+        }
+        return s
     }
 
     @JvmStatic
@@ -71,10 +103,20 @@ object MedicineHelper {
         if (fullMedicine.isOutOfStock) {
             builder.color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
         }
+        val expiredIcon = getExpiredIcon(context, fullMedicine)
+        if (expiredIcon.isNotEmpty()) {
+            builder.append(" ")
+            builder.append(expiredIcon)
+        }
+        return builder
+    }
+
+    fun getExpiredIcon(
+        context: Context,
+        fullMedicine: FullMedicine
+    ): SpannableStringBuilder {
+        val builder = SpannableStringBuilder()
         if (fullMedicine.medicine.hasExpired()) {
-            if (builder.isNotEmpty()) {
-                builder.append(" ")
-            }
             builder.color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
         }
         return builder

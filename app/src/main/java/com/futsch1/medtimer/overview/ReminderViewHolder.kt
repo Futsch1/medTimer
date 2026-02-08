@@ -94,7 +94,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
                 if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
                     EditEventSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
                 } else {
-                    popupStateMenu(it)
+                    ShowMedicineSheetDialog(fragmentActivity, event.reminderId)
                 }
             }
         }
