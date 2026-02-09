@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -12,7 +11,6 @@ import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.WorkManagerAccess
 import com.futsch1.medtimer.WorkerActionCode
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -34,13 +32,30 @@ import java.time.temporal.ChronoUnit
  * repeating alerts.
  */
 class ReminderWorkerReceiver : BroadcastReceiver() {
+    val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
+
     override fun onReceive(context: Context, intent: Intent) {
         val workManager = WorkManagerAccess.getWorkManager(context)
         val intentAction = WorkerActionCode.fromAction(intent.action!!)
         when (intentAction) {
-            WorkerActionCode.Dismissed -> workManager.enqueue(buildActionWorkRequest(intent, NotificationSkippedWorker::class.java))
-            WorkerActionCode.Taken -> workManager.enqueue(buildActionWorkRequest(intent, NotificationTakenWorker::class.java))
-            WorkerActionCode.Acknowledged -> workManager.enqueue(buildActionWorkRequest(intent, NotificationAcknowledgedWorker::class.java))
+            WorkerActionCode.Dismissed -> processNotificationAsync(
+                context,
+                ProcessedNotificationData.fromBundle(intent.extras!!),
+                ReminderEvent.ReminderStatus.SKIPPED
+            )
+
+            WorkerActionCode.Taken -> processNotificationAsync(
+                context,
+                ProcessedNotificationData.fromBundle(intent.extras!!),
+                ReminderEvent.ReminderStatus.TAKEN
+            )
+
+            WorkerActionCode.Acknowledged -> processNotificationAsync(
+                context,
+                ProcessedNotificationData.fromBundle(intent.extras!!),
+                ReminderEvent.ReminderStatus.ACKNOWLEDGED
+            )
+
             WorkerActionCode.Snooze -> {
                 val builder = Data.Builder()
                 ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
@@ -53,7 +68,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             }
 
             WorkerActionCode.Reminder -> {
-                processNotificationReminderAsync(context, ReminderNotificationData.fromBundle(intent.extras!!), DebugRescheduleData.fromData(intent.extras!!))
+                processReminderNotificationAsync(context, ReminderNotificationData.fromBundle(intent.extras!!))
             }
 
             WorkerActionCode.ShowReminderNotification -> {
@@ -72,23 +87,35 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processNotificationReminderAsync(
+    private fun processReminderNotificationAsync(
         context: Context,
-        reminderNotificationData: ReminderNotificationData,
-        debugRescheduleData: DebugRescheduleData
+        reminderNotificationData: ReminderNotificationData
     ) {
         val pendingIntent = goAsync()
-        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            ReminderNotificationProcessor(reminderNotificationData, context, medicineRepository).processReminders()
-            ScheduleNextReminderNotificationProcessor(context, debugRescheduleData).scheduleNextReminder()
+        scope.launch {
+            ReminderNotificationProcessor(reminderNotificationData, context).processReminders()
             pendingIntent.finish()
         }
+    }
 
+    private fun processNotificationAsync(
+        context: Context,
+        processedNotificationData: ProcessedNotificationData,
+        status: ReminderEvent.ReminderStatus
+    ) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            NotificationProcessor(context).processReminderEventsInNotification(processedNotificationData, status)
+
+            pendingIntent.finish()
+        }
     }
 
     companion object {
+        const val RECEIVER_PERMISSION = "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
+
         @JvmStatic
         fun requestScheduleNextNotification(context: Context) {
             val workManager = WorkManagerAccess.getWorkManager(context)
@@ -102,6 +129,9 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         @JvmStatic
         @JvmOverloads
         fun requestScheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
+            AlarmProcessor.delay = delay
+            AlarmProcessor.repeats = repeats
+
             val workManager = WorkManagerAccess.getWorkManager(context)
             val setAlarmForReminderNotification =
                 OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
@@ -143,25 +173,13 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         }
 
         fun requestShowReminderNotification(context: Context, reminderNotificationData: ReminderNotificationData) {
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val builder = Data.Builder()
-            reminderNotificationData.toBuilder(builder)
-            val scheduleWork =
-                OneTimeWorkRequest.Builder(ShowReminderNotificationWorker::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            workManager.enqueue(scheduleWork)
+            val intent = getShowReminderNotificationIntent(context, reminderNotificationData)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
         fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val builder = Data.Builder()
-            reminderNotificationData.toBuilder(builder)
-            builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
-            val snoozeWork = OneTimeWorkRequest.Builder(SnoozeWorker::class.java)
-                .setInputData(builder.build())
-                .build()
-            workManager.enqueue(snoozeWork)
+            val intent = getSnoozeIntent(context, reminderNotificationData, snoozeTime)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
         fun requestReminderAction(context: Context, reminder: Reminder?, reminderEvent: ReminderEvent, taken: Boolean) {
@@ -171,33 +189,22 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
                 if (reminder?.variableAmount == true) {
                     context.startActivity(getVariableAmountActivityIntent(context, ReminderNotificationData.fromReminderEvent(reminderEvent)))
                 } else {
-                    WorkManagerAccess.getWorkManager(context)
-                        .enqueue(buildActionWorkRequest(getTakenActionIntent(context, processedNotificationData), NotificationTakenWorker::class.java))
+                    context.sendBroadcast(getTakenActionIntent(context, processedNotificationData), RECEIVER_PERMISSION)
                 }
             } else {
-                WorkManagerAccess.getWorkManager(context)
-                    .enqueue(buildActionWorkRequest(getSkippedActionIntent(context, processedNotificationData), NotificationSkippedWorker::class.java))
+                context.sendBroadcast(getSkippedActionIntent(context, processedNotificationData), RECEIVER_PERMISSION)
             }
         }
 
         fun requestStockReminderAcknowledged(context: Context, reminderEvent: ReminderEvent) {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
-
-            WorkManagerAccess.getWorkManager(context)
-                .enqueue(buildActionWorkRequest(getAcknowledgedActionIntent(context, processedNotificationData), NotificationAcknowledgedWorker::class.java))
+            context.sendBroadcast(getAcknowledgedActionIntent(context, processedNotificationData), RECEIVER_PERMISSION)
         }
 
         fun requestRefill(context: Context, medicineId: Int) {
-            val refillWorker =
-                OneTimeWorkRequest.Builder(RefillWorker::class.java)
-                    .setInputData(
-                        Data.Builder()
-                            .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
-                            .putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, intArrayOf())
-                            .build()
-                    )
-                    .build()
-            WorkManagerAccess.getWorkManager(context).enqueue(refillWorker)
+            val intent = getRefillActionIntent(context, ProcessedNotificationData(listOf()))
+            intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
         private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {

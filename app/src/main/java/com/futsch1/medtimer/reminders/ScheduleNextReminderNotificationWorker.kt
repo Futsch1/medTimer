@@ -22,7 +22,7 @@ import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 class ScheduleNextReminderNotificationWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
 
-        ScheduleNextReminderNotificationProcessor(context, DebugRescheduleData.fromData(inputData)).scheduleNextReminder()
+        ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
 
         return Result.success()
     }

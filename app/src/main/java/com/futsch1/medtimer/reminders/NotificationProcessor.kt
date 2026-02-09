@@ -9,7 +9,6 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -44,9 +43,10 @@ class NotificationProcessor(val context: Context) {
         }
 
         setReminderEventStatus(status, reminderEventsToUpdate)
+        medicineRepository.flushDatabase()
 
         // Reschedule since the trigger condition for a linked reminder might have changed
-        requestScheduleNextNotification(context)
+        ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
     }
 
     fun cancelNotification(notificationId: Int) {

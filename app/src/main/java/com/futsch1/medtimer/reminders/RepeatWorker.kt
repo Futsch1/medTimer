@@ -32,7 +32,7 @@ class RepeatWorker(context: Context, workerParams: WorkerParameters) : Worker(co
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(repeatTimeSeconds.toLong())
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
-        alarmSetter.setAlarmForReminderNotification(reminderNotificationData, DebugRescheduleData.fromData(inputData))
+        alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
 
         for (reminderEventId in reminderNotificationData.reminderEventIds) {
             decreaseRemainingRepeats(reminderEventId)

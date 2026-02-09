@@ -30,7 +30,7 @@ import java.time.ZoneId
  *
  * If no future reminders are found, any existing next reminder alarm is cancelled.
  */
-class ScheduleNextReminderNotificationProcessor(val context: Context, val debugRescheduleData: DebugRescheduleData) {
+class ScheduleNextReminderNotificationProcessor(val context: Context) {
     val alarmSetter = AlarmProcessor(context)
 
     fun scheduleNextReminder() {
@@ -52,7 +52,7 @@ class ScheduleNextReminderNotificationProcessor(val context: Context, val debugR
             val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(if (combinedReminders) scheduledReminders else listOf(scheduledReminders[0]))
-            alarmSetter.setAlarmForReminderNotification(scheduledReminderNotificationData, debugRescheduleData)
+            alarmSetter.setAlarmForReminderNotification(scheduledReminderNotificationData)
         } else {
             Log.d(LogTags.REMINDER, "No reminders scheduled")
             alarmSetter.cancelNextReminder()

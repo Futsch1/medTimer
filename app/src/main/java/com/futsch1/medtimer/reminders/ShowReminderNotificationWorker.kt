@@ -25,7 +25,7 @@ class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerP
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {
-            alarmSetter.setAlarmForReminderNotification(reminderNotificationData, DebugRescheduleData.fromData(inputData))
+            alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
         }
 
         ReminderWorkerReceiver.requestScheduleNextNotification(context)

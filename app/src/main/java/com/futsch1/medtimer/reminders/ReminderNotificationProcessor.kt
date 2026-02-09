@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders
 
 import android.Manifest
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -21,14 +22,18 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotificationData, val context: Context, val medicineRepository: MedicineRepository) {
+class ReminderNotificationProcessor(
+    val reminderNotificationData: ReminderNotificationData,
+    val context: Context
+) {
+    val medicineRepository = MedicineRepository(context.applicationContext as Application)
 
     fun processReminders(): Boolean {
         var r = false
 
         // Create reminder events and filter those that are already processed
         var reminderNotification =
-            ReminderNotification.Companion.fromReminderNotificationData(context, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
+            ReminderNotification.fromReminderNotificationData(context, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 
         medicineRepository.flushDatabase()
 
@@ -43,6 +48,8 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
             }
             r = true
         }
+
+        ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
 
         return r
     }

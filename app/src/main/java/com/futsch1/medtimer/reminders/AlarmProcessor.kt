@@ -7,11 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.preference.PreferenceManager
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkRequest
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.WorkManagerAccess
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
@@ -33,11 +29,10 @@ import java.time.Instant
 class AlarmProcessor(val context: Context) {
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
-    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, debugRescheduleData: DebugRescheduleData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         var scheduledInstant = scheduledReminderNotificationData.remindInstant
-        val debugReschedule = DebugReschedule(context, debugRescheduleData)
-        scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant)
+        scheduledInstant = adjustTimestamp(scheduledInstant)
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(
@@ -82,16 +77,10 @@ class AlarmProcessor(val context: Context) {
                     scheduledReminderNotificationData
                 )
             )
-            val builder = Data.Builder()
-            scheduledReminderNotificationData.toBuilder(builder)
-            val reminderNotificationWorker: WorkRequest =
-                OneTimeWorkRequest.Builder(ReminderNotificationWorker::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            WorkManagerAccess.getWorkManager(context).enqueue(reminderNotificationWorker)
+            ReminderNotificationProcessor(scheduledReminderNotificationData, context).processReminders()
         }
 
-        debugReschedule.scheduleRepeat()
+        scheduleRepeat(context)
     }
 
     fun cancelNextReminder() {
@@ -131,6 +120,26 @@ class AlarmProcessor(val context: Context) {
         val intent = Intent(context, WidgetUpdateReceiver::class.java)
         intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
         context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+    }
+
+    companion object {
+        fun adjustTimestamp(instant: Instant): Instant {
+            return if (delay >= 0) {
+                Instant.now().plusMillis(delay)
+            } else {
+                instant
+            }
+        }
+
+        fun scheduleRepeat(context: Context) {
+            if (delay >= 0 && repeats > 0) {
+                repeats -= 1
+                ReminderWorkerReceiver.requestScheduleNowForTests(context)
+            }
+        }
+
+        var delay: Long = -1
+        var repeats: Int = -1
     }
 
 }
