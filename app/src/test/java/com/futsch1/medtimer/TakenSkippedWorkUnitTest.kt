@@ -15,8 +15,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
-import com.futsch1.medtimer.reminders.SkippedWorker
-import com.futsch1.medtimer.reminders.TakenWorker
+import com.futsch1.medtimer.reminders.NotificationSkippedWorker
+import com.futsch1.medtimer.reminders.NotificationTakenWorker
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -64,7 +64,7 @@ class TakenSkippedWorkUnitTest {
         val builder = Data.Builder()
         processedNotificationData.toBuilder(builder)
         Mockito.`when`(workerParams.inputData).thenReturn(builder.build())
-        val takenWork = TakenWorker(mockApplication!!, workerParams)
+        val takenWork = NotificationTakenWorker(mockApplication!!, workerParams)
 
         testWork(takenWork, ReminderStatus.TAKEN)
     }
@@ -106,7 +106,7 @@ class TakenSkippedWorkUnitTest {
 
                 if (status == ReminderStatus.TAKEN) {
                     val captor2 = ArgumentCaptor.forClass(WorkRequest::class.java)
-                    val dummyWorkRequest = OneTimeWorkRequest.Builder(TakenWorker::class.java).build()
+                    val dummyWorkRequest = OneTimeWorkRequest.Builder(NotificationTakenWorker::class.java).build()
                     // Use Elvis operator to avoid NPE from Kotlin's null-safety check on non-nullable parameter
                     Mockito.verify(mockWorkManager, Mockito.times(1)).enqueue(captor2.capture() ?: dummyWorkRequest)
                     Assertions.assertInstanceOf(OneTimeWorkRequest::class.java, captor2.getValue())
@@ -125,7 +125,7 @@ class TakenSkippedWorkUnitTest {
         val builder = Data.Builder()
         processedNotificationData.toBuilder(builder)
         Mockito.`when`(workerParams.inputData).thenReturn(builder.build())
-        val skippedWork = SkippedWorker(mockApplication!!, workerParams)
+        val skippedWork = NotificationSkippedWorker(mockApplication!!, workerParams)
 
         testWork(skippedWork, ReminderStatus.SKIPPED)
     }

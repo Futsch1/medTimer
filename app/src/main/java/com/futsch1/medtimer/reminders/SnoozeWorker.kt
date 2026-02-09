@@ -29,7 +29,7 @@ open class SnoozeWorker(val context: Context, workerParams: WorkerParameters) : 
         // Cancel a potential repeat alarm
         AlarmProcessor(context).cancelPendingReminderNotifications(reminderNotificationData)
 
-        alarmSetter.setAlarmForReminderNotification(reminderNotificationData, inputData)
+        alarmSetter.setAlarmForReminderNotification(reminderNotificationData, DebugRescheduleData.fromData(inputData))
 
         NotificationProcessor(context).cancelNotification(reminderNotificationData.notificationId)
 
