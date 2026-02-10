@@ -85,7 +85,20 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
 
             WorkerActionCode.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
             WorkerActionCode.StockHandling -> processStockHandlingAsync(context, intent)
+            WorkerActionCode.Repeat -> processRepeatAsync(context, intent)
             null -> Unit
+        }
+    }
+
+    private fun processRepeatAsync(context: Context, intent: Intent) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            RepeatProcessor(context).processRepeat(
+                ReminderNotificationData.fromBundle(intent.extras!!),
+                intent.getIntExtra(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
+            )
+            pendingIntent.finish()
         }
     }
 
@@ -162,15 +175,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         }
 
         fun requestRepeat(context: Context, reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val builder = Data.Builder()
-            reminderNotificationData.toBuilder(builder)
-            builder.putInt(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
-            val repeatWork =
-                OneTimeWorkRequest.Builder(RepeatWorker::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            workManager.enqueue(repeatWork)
+            context.sendBroadcast(getRepeatIntent(context, reminderNotificationData, repeatTimeSeconds), RECEIVER_PERMISSION)
         }
 
         fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, processedEpochSeconds: Long) {

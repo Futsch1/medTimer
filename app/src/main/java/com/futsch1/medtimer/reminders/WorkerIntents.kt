@@ -90,6 +90,14 @@ fun getStockHandlingIntent(context: Context, amount: Double, medicineId: Int, pr
     return intent
 }
 
+fun getRepeatIntent(context: Context, reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int): Intent {
+    val intent = Intent(context, ReminderWorkerReceiver::class.java)
+    intent.setAction(WorkerActionCode.Repeat.action)
+    reminderNotificationData.toIntent(intent)
+    intent.putExtra(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, repeatTimeSeconds)
+    return intent
+}
+
 /**
  * Creates an [Intent] to mark a reminder as "Skipped".
  */
