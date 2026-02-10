@@ -79,8 +79,6 @@ class AlarmProcessor(val context: Context) {
             )
             ReminderNotificationProcessor(scheduledReminderNotificationData, context).processReminders()
         }
-
-        scheduleRepeat(context)
     }
 
     fun cancelNextReminder() {
@@ -125,16 +123,14 @@ class AlarmProcessor(val context: Context) {
     companion object {
         fun adjustTimestamp(instant: Instant): Instant {
             return if (delay >= 0) {
+                Log.d(LogTags.REMINDER, "Debug schedule reminder in $delay milliseconds")
+                repeats -= 1
+                if (repeats < 0) {
+                    delay = -1
+                }
                 Instant.now().plusMillis(delay)
             } else {
                 instant
-            }
-        }
-
-        fun scheduleRepeat(context: Context) {
-            if (delay >= 0 && repeats > 0) {
-                repeats -= 1
-                ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
             }
         }
 

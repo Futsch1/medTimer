@@ -30,8 +30,6 @@ class RefillProcessor(val context: Context) {
         val refillEvent = processRefillInternal(medicine)
         medicineRepository.updateMedicine(medicine.medicine)
         medicineRepository.insertReminderEvent(refillEvent)
-        // Make sure that the database is flushed to avoid races between subsequent stock handling events
-        medicineRepository.flushDatabase()
 
         if (reminderEvent != null) {
             ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(context, reminderEvent)

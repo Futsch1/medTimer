@@ -60,8 +60,18 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             ProcessorCode.Refill -> processRefillAsync(context, intent)
             ProcessorCode.StockHandling -> processStockHandlingAsync(context, intent)
             ProcessorCode.Repeat -> processRepeatAsync(context, intent)
-            ProcessorCode.Schedule -> ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
+            ProcessorCode.Schedule -> processRescheduleAsync(context)
             null -> Unit
+        }
+    }
+
+    private fun processRescheduleAsync(context: Context) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
+
+            pendingIntent.finish()
         }
     }
 

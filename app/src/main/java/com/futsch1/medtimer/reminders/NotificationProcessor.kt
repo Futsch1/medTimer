@@ -43,7 +43,6 @@ class NotificationProcessor(val context: Context) {
         }
 
         setReminderEventStatus(status, reminderEventsToUpdate)
-        medicineRepository.flushDatabase()
 
         // Reschedule since the trigger condition for a linked reminder might have changed
         ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()

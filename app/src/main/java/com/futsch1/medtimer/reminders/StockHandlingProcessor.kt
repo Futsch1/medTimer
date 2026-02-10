@@ -26,14 +26,13 @@ import java.time.Instant
  * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
  */
 class StockHandlingProcessor(val context: Context) {
+    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+
     fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
-        val medicineRepository = MedicineRepository(context as Application?)
         val medicine = medicineRepository.getMedicine(medicineId) ?: return
 
         processStock(medicine, amount, processedInstant)
         medicineRepository.updateMedicine(medicine.medicine)
-        // Make sure that the database is flushed to avoid races between subsequent stock handling events
-        medicineRepository.flushDatabase()
 
     }
 

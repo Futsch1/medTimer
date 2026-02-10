@@ -35,8 +35,6 @@ class ReminderNotificationProcessor(
         var reminderNotification =
             ReminderNotification.fromReminderNotificationData(context, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
 
-        medicineRepository.flushDatabase()
-
         if (reminderNotification != null) {
             reminderNotification = handleAutomaticallyTaken(reminderNotification)
             if (reminderNotification.reminderNotificationParts.isEmpty()) {
@@ -44,7 +42,6 @@ class ReminderNotificationProcessor(
             } else {
                 Log.d(LogTags.REMINDER, "Processing reminder notification $reminderNotification")
                 notificationAction(reminderNotification)
-                medicineRepository.flushDatabase()
             }
             r = true
         }
