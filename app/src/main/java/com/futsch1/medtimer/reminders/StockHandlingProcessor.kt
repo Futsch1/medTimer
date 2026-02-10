@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.work.Worker
-import androidx.work.WorkerParameters
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
@@ -26,25 +25,16 @@ import java.time.Instant
  * - [ActivityCodes.EXTRA_REMIND_INSTANT]: The instant of the reminder event that caused the stock handling
  * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
  */
-class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
-    Worker(context, workerParameters) {
-    override fun doWork(): Result {
-        val amount = inputData.getDouble(ActivityCodes.EXTRA_AMOUNT, Double.NaN)
-        val processedInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, -1))
-        if (amount.isNaN()) {
-            return Result.failure()
-        }
-        val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
+class StockHandlingProcessor(val context: Context) {
+    fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
         val medicineRepository = MedicineRepository(context as Application?)
-        val medicine = medicineRepository.getMedicine(medicineId)
-            ?: return Result.failure()
+        val medicine = medicineRepository.getMedicine(medicineId) ?: return
 
         processStock(medicine, amount, processedInstant)
         medicineRepository.updateMedicine(medicine.medicine)
         // Make sure that the database is flushed to avoid races between subsequent stock handling events
         medicineRepository.flushDatabase()
 
-        return Result.success()
     }
 
     private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {

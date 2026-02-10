@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 /**
@@ -83,7 +84,22 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             }
 
             WorkerActionCode.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
+            WorkerActionCode.StockHandling -> processStockHandlingAsync(context, intent)
             null -> Unit
+        }
+    }
+
+    private fun processStockHandlingAsync(context: Context, intent: Intent) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            val amount = intent.getDoubleExtra(ActivityCodes.EXTRA_AMOUNT, 0.0)
+            val medicineId = intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0)
+            val processedInstant = Instant.ofEpochSecond(intent.getLongExtra(ActivityCodes.EXTRA_REMIND_INSTANT, 0))
+
+            StockHandlingProcessor(context).processStock(amount, medicineId, processedInstant)
+
+            pendingIntent.finish()
         }
     }
 
@@ -157,19 +173,9 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             workManager.enqueue(repeatWork)
         }
 
-        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, processedInstant: Long) {
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val stockHandlingWorker =
-                OneTimeWorkRequest.Builder(StockHandlingWorker::class.java)
-                    .setInputData(
-                        Data.Builder()
-                            .putDouble(ActivityCodes.EXTRA_AMOUNT, amount)
-                            .putLong(ActivityCodes.EXTRA_REMIND_INSTANT, processedInstant)
-                            .putInt(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
-                            .build()
-                    )
-                    .build()
-            workManager.enqueue(stockHandlingWorker)
+        fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, processedEpochSeconds: Long) {
+            val intent = getStockHandlingIntent(context!!, amount, medicineId, processedEpochSeconds)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
         fun requestShowReminderNotification(context: Context, reminderNotificationData: ReminderNotificationData) {

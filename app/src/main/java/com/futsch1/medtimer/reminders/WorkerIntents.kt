@@ -81,6 +81,15 @@ fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: 
     return intent
 }
 
+fun getStockHandlingIntent(context: Context, amount: Double, medicineId: Int, processedEpochSeconds: Long): Intent {
+    val intent = Intent(context, ReminderWorkerReceiver::class.java)
+    intent.setAction(WorkerActionCode.StockHandling.action)
+    intent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
+    intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+    intent.putExtra(ActivityCodes.EXTRA_REMIND_INSTANT, processedEpochSeconds)
+    return intent
+}
+
 /**
  * Creates an [Intent] to mark a reminder as "Skipped".
  */
