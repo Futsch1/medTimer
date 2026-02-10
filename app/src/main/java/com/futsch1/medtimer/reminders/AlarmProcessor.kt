@@ -134,7 +134,7 @@ class AlarmProcessor(val context: Context) {
         fun scheduleRepeat(context: Context) {
             if (delay >= 0 && repeats > 0) {
                 repeats -= 1
-                ReminderWorkerReceiver.requestScheduleNowForTests(context)
+                ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
             }
         }
 

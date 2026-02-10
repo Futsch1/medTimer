@@ -9,7 +9,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestStockHandling
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestStockHandling
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData

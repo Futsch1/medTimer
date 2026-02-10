@@ -4,10 +4,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import androidx.work.Worker
-import androidx.work.WorkerParameters
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
 /**
  * [Worker] responsible for triggering the display of a medication reminder notification.
@@ -16,11 +14,10 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.
  * specific reminder events is already active to prevent duplicates, and delegates
  * the actual notification scheduling to [AlarmProcessor].
  */
-class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class ShowReminderNotificationProcessor(val context: Context) {
     val alarmSetter = AlarmProcessor(context)
 
-    override fun doWork(): Result {
-        val reminderNotificationData = fromInputData(inputData)
+    fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Scheduling reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
@@ -28,9 +25,7 @@ class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerP
             alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
         }
 
-        ReminderWorkerReceiver.requestScheduleNextNotification(context)
-
-        return Result.success()
+        ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
     }
 
     private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {

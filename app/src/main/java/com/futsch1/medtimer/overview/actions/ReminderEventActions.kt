@@ -7,7 +7,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 
 open class ReminderEventActions(val event: OverviewReminderEvent, medicineRepository: MedicineRepository, fragmentActivity: FragmentActivity) :
     ActionsBase(medicineRepository, fragmentActivity) {
@@ -41,13 +41,13 @@ open class ReminderEventActions(val event: OverviewReminderEvent, medicineReposi
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderWorkerReceiver.requestReminderAction(context, null, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(context, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper(context).deleteItem(R.string.delete_re_raise_event, {
             medicineRepository.deleteReminderEvent(reminderEvent)
-            ReminderWorkerReceiver.requestScheduleNextNotification(context)
+            ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
         }, {})
     }
 

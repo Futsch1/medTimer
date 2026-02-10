@@ -8,7 +8,7 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.AlarmProcessor
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
@@ -28,7 +28,7 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         .textSink { snoozeTime: String? ->
             val snoozeTimeInt = snoozeTime?.toIntOrNull()
             if (snoozeTimeInt != null) {
-                ReminderWorkerReceiver.requestSnooze(activity, reminderNotificationData, snoozeTimeInt)
+                ReminderProcessorBroadcastReceiver.requestSnooze(activity, reminderNotificationData, snoozeTimeInt)
             }
         }
         .cancelCallback {

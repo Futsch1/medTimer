@@ -10,7 +10,7 @@ import android.util.Log
 import com.futsch1.medtimer.LogTags.AUTOSTART
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant

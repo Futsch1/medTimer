@@ -3,14 +3,8 @@ package com.futsch1.medtimer.reminders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.ListenableWorker
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkRequest
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.WorkManagerAccess
-import com.futsch1.medtimer.WorkerActionCode
+import com.futsch1.medtimer.ProcessorCode
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -18,68 +12,82 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Duration
 import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 /**
  * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
- *
- * This class handles incoming intents from notifications (like Dismiss, Taken, Snooze, or Reminder actions)
- * and delegates them to the appropriate [androidx.work.ListenableWorker] via [androidx.work.WorkManager].
  *
  * It also provides static utility methods in its [companion object] to programmatically schedule
  * various reminder tasks such as rescheduling notifications, handling stock updates, and
  * repeating alerts.
  */
-class ReminderWorkerReceiver : BroadcastReceiver() {
+class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
 
     override fun onReceive(context: Context, intent: Intent) {
-        val workManager = WorkManagerAccess.getWorkManager(context)
-        val intentAction = WorkerActionCode.fromAction(intent.action!!)
+        val intentAction = ProcessorCode.fromAction(intent.action!!)
         when (intentAction) {
-            WorkerActionCode.Dismissed -> processNotificationAsync(
+            ProcessorCode.Dismissed -> processNotificationAsync(
                 context,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.SKIPPED
             )
 
-            WorkerActionCode.Taken -> processNotificationAsync(
+            ProcessorCode.Taken -> processNotificationAsync(
                 context,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.TAKEN
             )
 
-            WorkerActionCode.Acknowledged -> processNotificationAsync(
+            ProcessorCode.Acknowledged -> processNotificationAsync(
                 context,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )
 
-            WorkerActionCode.Snooze -> {
+            ProcessorCode.Snooze -> {
                 processSnoozeAsync(context, intent)
             }
 
-            WorkerActionCode.Reminder -> {
+            ProcessorCode.Reminder -> {
                 processReminderNotificationAsync(context, ReminderNotificationData.fromBundle(intent.extras!!))
             }
 
-            WorkerActionCode.ShowReminderNotification -> {
-                val builder = Data.Builder()
-                ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
-
-                val reminderNotificationWorker: WorkRequest =
-                    OneTimeWorkRequest.Builder(ShowReminderNotificationWorker::class.java)
-                        .setInputData(builder.build())
-                        .build()
-                workManager.enqueue(reminderNotificationWorker)
+            ProcessorCode.ShowReminderNotification -> {
+                processShowReminderNotificationAsync(context, ReminderNotificationData.fromBundle(intent.extras!!))
             }
 
-            WorkerActionCode.Refill -> workManager.enqueue(buildActionWorkRequest(intent, RefillWorker::class.java))
-            WorkerActionCode.StockHandling -> processStockHandlingAsync(context, intent)
-            WorkerActionCode.Repeat -> processRepeatAsync(context, intent)
+            ProcessorCode.Refill -> processRefillAsync(context, intent)
+            ProcessorCode.StockHandling -> processStockHandlingAsync(context, intent)
+            ProcessorCode.Repeat -> processRepeatAsync(context, intent)
+            ProcessorCode.Schedule -> ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
             null -> Unit
+        }
+    }
+
+    private fun processShowReminderNotificationAsync(
+        context: Context,
+        reminderNotificationData: ReminderNotificationData
+    ) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            ShowReminderNotificationProcessor(context).showReminder(reminderNotificationData)
+
+            pendingIntent.finish()
+        }
+    }
+
+    private fun processRefillAsync(context: Context, intent: Intent) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            if (intent.hasExtra(ActivityCodes.EXTRA_MEDICINE_ID)) {
+                RefillProcessor(context).processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
+            } else {
+                RefillProcessor(context).processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
+            }
+            pendingIntent.finish()
         }
     }
 
@@ -152,12 +160,8 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
 
         @JvmStatic
         fun requestScheduleNextNotification(context: Context) {
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val setAlarmForReminderNotification =
-                OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
-                    .setInitialDelay(Duration.of(500, ChronoUnit.MILLIS))
-                    .build()
-            workManager.enqueueUniqueWork("reschedule", ExistingWorkPolicy.KEEP, setAlarmForReminderNotification)
+            val intent = getRequestScheduleIntent(context)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
         @JvmStatic
@@ -166,17 +170,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             AlarmProcessor.delay = delay
             AlarmProcessor.repeats = repeats
 
-            val workManager = WorkManagerAccess.getWorkManager(context)
-            val setAlarmForReminderNotification =
-                OneTimeWorkRequest.Builder(ScheduleNextReminderNotificationWorker::class.java)
-                    .setInputData(
-                        Data.Builder()
-                            .putLong(ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS, delay)
-                            .putInt(ActivityCodes.EXTRA_REMAINING_REPEATS, repeats)
-                            .build()
-                    )
-                    .build()
-            workManager.enqueue(setAlarmForReminderNotification)
+            requestScheduleNextNotification(context)
         }
 
         fun requestRepeat(context: Context, reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
@@ -218,17 +212,8 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
         }
 
         fun requestRefill(context: Context, medicineId: Int) {
-            val intent = getRefillActionIntent(context, ProcessedNotificationData(listOf()))
-            intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+            val intent = getRefillIntent(context, medicineId)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
-        }
-
-        private fun <T : ListenableWorker> buildActionWorkRequest(intent: Intent, workerClass: Class<T>): WorkRequest {
-            val builder = Data.Builder()
-            ProcessedNotificationData.forwardToBuilder(intent.extras!!, builder)
-            return OneTimeWorkRequest.Builder(workerClass)
-                .setInputData(builder.build())
-                .build()
         }
     }
 }

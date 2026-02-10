@@ -85,7 +85,7 @@ class ReminderNotificationProcessor(
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
-            ReminderWorkerReceiver.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
+            ReminderProcessorBroadcastReceiver.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
     }
 

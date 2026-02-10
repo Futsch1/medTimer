@@ -79,7 +79,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".reminders.ReminderWorkerReceiver"
+            android:name=".reminders.ReminderProcessorBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
             android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
@@ -93,11 +93,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove" />
 
         <receiver
             android:name=".widgets.NextRemindersWidgetProvider"
