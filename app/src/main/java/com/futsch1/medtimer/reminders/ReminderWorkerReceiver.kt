@@ -58,14 +58,7 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             )
 
             WorkerActionCode.Snooze -> {
-                val builder = Data.Builder()
-                ReminderNotificationData.forwardToBuilder(intent.extras!!, builder)
-                builder.putInt(ActivityCodes.EXTRA_SNOOZE_TIME, intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 15))
-                val snoozeWork: WorkRequest =
-                    OneTimeWorkRequest.Builder(SnoozeWorker::class.java)
-                        .setInputData(builder.build())
-                        .build()
-                workManager.enqueue(snoozeWork)
+                processSnoozeAsync(context, intent)
             }
 
             WorkerActionCode.Reminder -> {
@@ -87,6 +80,18 @@ class ReminderWorkerReceiver : BroadcastReceiver() {
             WorkerActionCode.StockHandling -> processStockHandlingAsync(context, intent)
             WorkerActionCode.Repeat -> processRepeatAsync(context, intent)
             null -> Unit
+        }
+    }
+
+    private fun processSnoozeAsync(context: Context, intent: Intent) {
+        val pendingIntent = goAsync()
+
+        scope.launch {
+            SnoozeProcessor(context).processSnooze(
+                ReminderNotificationData.fromBundle(intent.extras!!),
+                intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 0)
+            )
+            pendingIntent.finish()
         }
     }
 
