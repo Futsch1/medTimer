@@ -10,11 +10,9 @@ import androidx.preference.PreferenceManager
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkRequest
-import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.WorkManagerAccess
 import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver.Companion.requestScheduleNowForTests
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
@@ -35,10 +33,10 @@ import java.time.Instant
 class AlarmProcessor(val context: Context) {
     private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
-    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, inputData: Data) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, debugRescheduleData: DebugRescheduleData) {
         // Apply debug rescheduling
         var scheduledInstant = scheduledReminderNotificationData.remindInstant
-        val debugReschedule = DebugReschedule(context, inputData)
+        val debugReschedule = DebugReschedule(context, debugRescheduleData)
         scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant)
 
         // Cancel potentially already running alarm and set new
@@ -135,22 +133,4 @@ class AlarmProcessor(val context: Context) {
         context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
     }
 
-    private class DebugReschedule(var context: Context, inputData: Data) {
-        var delay: Long = inputData.getLong(ActivityCodes.EXTRA_SCHEDULE_FOR_TESTS, -1)
-        var repeats: Int = inputData.getInt(ActivityCodes.EXTRA_REMAINING_REPEATS, -1)
-
-        fun adjustTimestamp(instant: Instant): Instant {
-            return if (delay >= 0) {
-                Instant.now().plusMillis(delay)
-            } else {
-                instant
-            }
-        }
-
-        fun scheduleRepeat() {
-            if (delay >= 0 && repeats > 0) {
-                requestScheduleNowForTests(context, delay, repeats - 1)
-            }
-        }
-    }
 }

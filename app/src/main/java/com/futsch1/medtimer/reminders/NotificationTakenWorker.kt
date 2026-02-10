@@ -13,7 +13,7 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
  * corresponding reminder events to the [ReminderEvent.ReminderStatus.TAKEN] status
  * using the [NotificationProcessor].
  */
-class TakenWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class NotificationTakenWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
         NotificationProcessor(applicationContext).processReminderEventsInNotification(fromData(inputData), ReminderEvent.ReminderStatus.TAKEN)
         return Result.success()

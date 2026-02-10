@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.ReminderNotificationWorker
+import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +47,7 @@ abstract class ActionsBase(
         return withContext(ioCoroutineDispatcher) {
             var reminderEvent = medicineRepository.getReminderEvent(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
             if (reminderEvent == null) {
-                reminderEvent = ReminderNotificationWorker.buildReminderEvent(
+                reminderEvent = ReminderNotificationProcessor.buildReminderEvent(
                     reminderTimeStamp,
                     scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
                 )

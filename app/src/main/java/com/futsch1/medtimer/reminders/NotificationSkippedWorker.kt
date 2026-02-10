@@ -13,9 +13,9 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
  * corresponding reminder events to the [ReminderEvent.ReminderStatus.SKIPPED] status
  * using the [NotificationProcessor].
  */
-class AcknowledgedWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class NotificationSkippedWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
-        NotificationProcessor(applicationContext).processReminderEventsInNotification(fromData(inputData), ReminderEvent.ReminderStatus.ACKNOWLEDGED)
+        NotificationProcessor(applicationContext).processReminderEventsInNotification(fromData(inputData), ReminderEvent.ReminderStatus.SKIPPED)
         return Result.success()
     }
 }
