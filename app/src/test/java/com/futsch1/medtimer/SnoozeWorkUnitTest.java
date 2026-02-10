@@ -1,6 +1,5 @@
 package com.futsch1.medtimer;
 
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -18,9 +17,6 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
-import androidx.work.Data;
-import androidx.work.ListenableWorker;
-import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.reminders.SnoozeProcessor;
@@ -79,10 +75,6 @@ public class SnoozeWorkUnitTest {
         Instant zero = Instant.ofEpochSecond(0);
 
         ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, zero, notificationId);
-        WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data.Builder inputData = new Data.Builder();
-        data.toBuilder(inputData);
-        when(workerParams.getInputData()).thenReturn(inputData.build());
         Instant snooze = Instant.ofEpochSecond(15L * 60);
 
         try (MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
@@ -92,11 +84,7 @@ public class SnoozeWorkUnitTest {
             mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60)).thenReturn(snooze);
             mockedInstant.when(() -> Instant.ofEpochSecond(15 * 60, 0)).thenReturn(snooze);
-            SnoozeProcessor snoozeWork = new SnoozeProcessor(mockApplication, workerParams);
-
-            // Expected to pass
-            ListenableWorker.Result result = snoozeWork.doWork();
-            assertInstanceOf(ListenableWorker.Result.Success.class, result);
+            new SnoozeProcessor(mockApplication).processSnooze(data, 15 * 60);
 
             // Check if reminder event was updated with the generated notification ID
             verify(mockNotificationManager, times(1)).cancel(notificationId);

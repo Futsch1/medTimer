@@ -1,8 +1,6 @@
 package com.futsch1.medtimer;
 
-import static com.futsch1.medtimer.ActivityCodes.EXTRA_REPEAT_TIME_SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,9 +18,6 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
-import androidx.work.Data;
-import androidx.work.ListenableWorker;
-import androidx.work.WorkerParameters;
 
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
@@ -80,11 +75,6 @@ public class RepeatReminderWorkUnitTest {
 
         Instant zero = Instant.ofEpochSecond(0);
         ReminderNotificationData data = ReminderNotificationData.Companion.fromArrays(new int[]{reminderId}, new int[]{reminderEventId}, zero, reminderEvent.notificationId);
-        WorkerParameters workerParams = mock(WorkerParameters.class);
-        Data.Builder builder = new Data.Builder();
-        data.toBuilder(builder);
-        builder.putInt(EXTRA_REPEAT_TIME_SECONDS, 15);
-        when(workerParams.getInputData()).thenReturn(builder.build());
         Instant repeat = Instant.ofEpochSecond(15);
 
         try (MockedStatic<PreferenceManager> mockedPreferencesManager = mockStatic(PreferenceManager.class);
@@ -95,11 +85,8 @@ public class RepeatReminderWorkUnitTest {
             mockedInstant.when(Instant::now).thenReturn(zero);
             mockedInstant.when(() -> Instant.ofEpochSecond(0)).thenReturn(zero);
             when(zero.plusSeconds(15)).thenReturn(repeat);
-            RepeatProcessor repeatReminderWork = new RepeatProcessor(mockApplication, workerParams);
 
-            // Expected to pass
-            ListenableWorker.Result result = repeatReminderWork.doWork();
-            assertInstanceOf(ListenableWorker.Result.Success.class, result);
+            new RepeatProcessor(mockApplication).processRepeat(data, 15);
 
             verify(mockAlarmManager, times(2)).cancel((PendingIntent) any());
             verify(mockAlarmManager, times(1)).setAndAllowWhileIdle(eq(AlarmManager.RTC_WAKEUP), eq(repeat.toEpochMilli()), any());

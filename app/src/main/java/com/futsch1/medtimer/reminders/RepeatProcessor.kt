@@ -12,9 +12,6 @@ import java.time.Instant
  * [RepeatProcessor] is a background worker responsible for rescheduling a reminder notification
  * after a specified delay.
  *
- * It retrieves the reminder data and repeat interval from the [inputData], calculates the
- * next trigger time, and schedules a new alarm using [AlarmProcessor]. Additionally, it
- * decrements the remaining repeat count for each associated reminder event in the database.
  *
  */
 class RepeatProcessor(context: Context) {
