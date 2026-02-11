@@ -228,6 +228,10 @@ class MedicineRepository(val application: Application?) {
         medicineDao.updateMedicine(medicine)
     }
 
+    fun updateMedicineFromMain(medicine: Medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
+    }
+
     fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminderEvents(reminderEvents) }
     }

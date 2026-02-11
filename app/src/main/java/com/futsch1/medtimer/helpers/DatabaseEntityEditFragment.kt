@@ -23,7 +23,7 @@ class FullMedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<F
     }
 
     override fun updateEntity(medicineViewModel: MedicineViewModel, entity: FullMedicine) {
-        medicineViewModel.medicineRepository.updateMedicine(entity.medicine)
+        medicineViewModel.medicineRepository.updateMedicineFromMain(entity.medicine)
     }
 }
 
