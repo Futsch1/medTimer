@@ -32,7 +32,10 @@ class RefillProcessor(val context: Context) {
         medicineRepository.insertReminderEvent(refillEvent)
 
         if (reminderEvent != null) {
-            ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(context, reminderEvent)
+            NotificationProcessor(context).processReminderEventsInNotification(
+                ProcessedNotificationData.fromReminderEvents(listOf(reminderEvent)),
+                ReminderEvent.ReminderStatus.ACKNOWLEDGED
+            )
         }
     }
 

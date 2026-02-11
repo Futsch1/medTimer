@@ -25,7 +25,7 @@ class ShowReminderNotificationProcessor(val context: Context) {
             alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
         }
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
+        ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
     }
 
     private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {

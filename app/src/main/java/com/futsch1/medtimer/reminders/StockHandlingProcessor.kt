@@ -66,7 +66,7 @@ class StockHandlingProcessor(val context: Context) {
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
                     val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ShowReminderNotificationProcessor(context).showReminder(reminderNotificationData)
                 }
             }
         }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.work.Data
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.database.ReminderEvent
 
 class ProcessedNotificationData(val reminderEventIds: List<Int>) {
     fun toIntent(actionIntent: Intent) {
@@ -36,6 +37,10 @@ class ProcessedNotificationData(val reminderEventIds: List<Int>) {
             if (reminderEventIds != null) {
                 builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
             }
+        }
+
+        fun fromReminderEvents(reminderEvents: List<ReminderEvent>): com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData {
+            return ProcessedNotificationData(reminderEvents.map { it.reminderEventId })
         }
     }
 }
