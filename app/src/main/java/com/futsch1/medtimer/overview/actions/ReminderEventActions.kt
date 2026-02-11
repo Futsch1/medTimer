@@ -55,7 +55,7 @@ open class ReminderEventActions(val event: OverviewReminderEvent, medicineReposi
         val deleteHelper = DeleteHelper(context)
         deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
             reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
-            medicineRepository.updateReminderEvent(reminderEvent)
+            medicineRepository.updateReminderEventFromMain(reminderEvent)
         }, {})
     }
 }

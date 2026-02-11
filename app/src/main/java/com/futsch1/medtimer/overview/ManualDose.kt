@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -16,6 +17,9 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -24,7 +28,8 @@ class ManualDose(
     private val context: Context,
     private val medicineViewModel: MedicineViewModel,
     private val activity: FragmentActivity,
-    private val date: LocalDate
+    private val date: LocalDate,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
     private val sharedPreferences: SharedPreferences =
@@ -132,7 +137,9 @@ class ManualDose(
             reminderEvent.remindedTimestamp =
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-            medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
+            activity.lifecycleScope.launch(ioDispatcher) {
+                medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
+            }
 
             if (medicineId != -1) {
                 val amount = MedicineHelper.parseAmount(reminderEvent.amount)
