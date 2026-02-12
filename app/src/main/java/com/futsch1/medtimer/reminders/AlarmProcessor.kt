@@ -18,7 +18,7 @@ import java.time.Instant
  *
  * This class is responsible for:
  * - Setting exact or inexact alarms based on user preferences and Android version constraints.
- * - Processing [ReminderNotificationData] to determine if a notification should be shown immediately via a worker
+ * - Processing [ReminderNotificationData] to determine if a notification should be shown immediately
  *   or scheduled for a future time.
  * - Managing the cancellation of pending reminders to prevent duplicate or obsolete notifications.
  * - Updating widgets when reminder schedules change.

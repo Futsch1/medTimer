@@ -8,9 +8,9 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 /**
- * [Worker] responsible for triggering the display of a medication reminder notification.
+ * Responsible for triggering the display of a medication reminder notification.
  *
- * This worker retrieves reminder data from its input, checks if a notification for the
+ * This class retrieves reminder data from its input, checks if a notification for the
  * specific reminder events is already active to prevent duplicates, and delegates
  * the actual notification scheduling to [AlarmProcessor].
  */

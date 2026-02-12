@@ -8,10 +8,11 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 
 /**
- * [Worker] implementation that handles the snooze functionality for reminders.
+ * Handles the snooze functionality for reminders.
  *
- * This worker calculates a new reminder time based on the provided snooze duration,
+ * This class calculates a new reminder time based on the provided snooze duration,
  * cancels any existing notifications or pending alarms for the reminder, and
+
  * schedules a new alarm for the future.
  */
 open class SnoozeProcessor(val context: Context) {

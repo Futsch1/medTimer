@@ -18,9 +18,9 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 /**
- * [Worker] responsible for calculating and scheduling the next medicine reminder notification.
+ * Responsible for calculating and scheduling the next medicine reminder notification.
  *
- * This worker retrieves all medicines and their history from the [MedicineRepository],
+ * This class retrieves all medicines and their history from the [MedicineRepository],
  * determines the next upcoming reminder(s) using [ReminderScheduler], and updates the
  * system alarm via [AlarmProcessor].
  *

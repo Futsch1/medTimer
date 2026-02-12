@@ -9,7 +9,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 
 /**
- * [RepeatProcessor] is a background worker responsible for rescheduling a reminder notification
+ * [RepeatProcessor] is responsible for rescheduling a reminder notification
  * after a specified delay.
  *
  *

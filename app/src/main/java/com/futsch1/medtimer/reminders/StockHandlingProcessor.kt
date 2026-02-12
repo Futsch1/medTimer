@@ -14,9 +14,9 @@ import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 
 /**
- * [Worker] implementation responsible for updating medicine stock levels.
+ * Responsible for updating medicine stock levels.
  *
- * This worker retrieves the medicine ID and the amount to subtract from the input data.
+ * This class retrieves the medicine ID and the amount to subtract from the input data.
  * It updates the stock in the database, ensures the amount does not drop below zero,
  * and triggers a notification if the stock level crosses the configured threshold.
  *
