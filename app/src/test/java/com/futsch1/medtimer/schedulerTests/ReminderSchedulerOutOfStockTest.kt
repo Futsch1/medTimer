@@ -1,17 +1,16 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulerTests
 
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
-import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class ReminderSchedulerOutOfStockTest {
     @Test
     fun testScheduleOutOfStockReminderNotDaily() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.amount = 12.0
@@ -40,7 +39,7 @@ class ReminderSchedulerOutOfStockTest {
 
     @Test
     fun testScheduleOutOfStockReminderDaily() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.amount = 12.0

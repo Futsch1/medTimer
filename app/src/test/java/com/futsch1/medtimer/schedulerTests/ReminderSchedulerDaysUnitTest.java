@@ -1,7 +1,7 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.schedulerTests;
 
-import static com.futsch1.medtimer.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.TestHelper.on;
+import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulerTests.TestHelper.on;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.futsch1.medtimer.database.FullMedicine;

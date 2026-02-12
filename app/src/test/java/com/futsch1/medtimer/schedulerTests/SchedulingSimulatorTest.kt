@@ -1,15 +1,15 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulerTests
 
 import android.content.SharedPreferences
-import com.futsch1.medtimer.TestHelper.assertReminded
-import com.futsch1.medtimer.TestHelper.assertRemindedAtIndex
-import com.futsch1.medtimer.TestHelper.on
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
+import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
+import com.futsch1.medtimer.schedulerTests.TestHelper.assertRemindedAtIndex
+import com.futsch1.medtimer.schedulerTests.TestHelper.on
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers

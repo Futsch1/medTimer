@@ -1,10 +1,9 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulerTests
 
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
-import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -13,7 +12,7 @@ import java.time.LocalDate
 class ReminderSchedulerExpirationTest {
     @Test
     fun testScheduleExpirationReminderDisabled() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = 0
@@ -34,7 +33,7 @@ class ReminderSchedulerExpirationTest {
 
     @Test
     fun testScheduleExpirationReminderOnce() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()
@@ -89,7 +88,7 @@ class ReminderSchedulerExpirationTest {
 
     @Test
     fun testScheduleExpirationReminderDaily() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()

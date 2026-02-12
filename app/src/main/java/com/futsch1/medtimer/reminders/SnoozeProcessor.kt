@@ -2,7 +2,6 @@ package com.futsch1.medtimer.reminders
 
 import android.content.Context
 import android.util.Log
-import androidx.work.Worker
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant

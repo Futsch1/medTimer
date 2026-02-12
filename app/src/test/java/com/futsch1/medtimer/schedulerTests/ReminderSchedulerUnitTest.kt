@@ -1,4 +1,4 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulerTests
 
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.ReminderEvent

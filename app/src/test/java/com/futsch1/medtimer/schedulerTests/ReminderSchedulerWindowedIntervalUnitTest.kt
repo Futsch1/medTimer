@@ -1,9 +1,8 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulerTests
 
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
-import com.futsch1.medtimer.TestHelper.assertReminded
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -12,7 +11,7 @@ import java.time.LocalDate
 class ReminderSchedulerWindowedIntervalUnitTest {
     @Test
     fun testScheduleWindowedIntervalReminder() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -81,7 +80,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
 
     @Test
     fun testScheduleWindowedIntervalReminder_Pause() {
-        val scheduler = getScheduler(3)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(3)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -108,7 +107,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
 
     @Test
     fun testScheduleWindowedIntervalReminder_Created() {
-        val scheduler = getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)

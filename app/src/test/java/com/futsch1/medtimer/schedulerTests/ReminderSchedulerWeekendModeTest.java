@@ -1,9 +1,9 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.schedulerTests;
 
-import static com.futsch1.medtimer.ReminderSchedulerUnitTest.TEST_1;
-import static com.futsch1.medtimer.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.TestHelper.assertReminded;
-import static com.futsch1.medtimer.TestHelper.on;
+import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.TEST_1;
+import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded;
+import static com.futsch1.medtimer.schedulerTests.TestHelper.on;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
