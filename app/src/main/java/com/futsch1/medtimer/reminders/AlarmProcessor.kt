@@ -124,11 +124,12 @@ class AlarmProcessor(val context: Context) {
         fun adjustTimestamp(instant: Instant): Instant {
             return if (delay >= 0) {
                 Log.d(LogTags.REMINDER, "Debug schedule reminder in $delay milliseconds")
+                val instantDebug = Instant.now().plusMillis(delay)
                 repeats -= 1
                 if (repeats < 0) {
                     delay = -1
                 }
-                Instant.now().plusMillis(delay)
+                instantDebug
             } else {
                 instant
             }
