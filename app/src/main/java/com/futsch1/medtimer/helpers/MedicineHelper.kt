@@ -12,6 +12,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
 import java.text.ParseException
@@ -47,7 +48,7 @@ object MedicineHelper {
     private fun getStockTextWithIcons(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
 
-        val stockIconText = getStockIcons(context, fullMedicine)
+        val stockIconText = getStockIcons(fullMedicine)
         val stockText = if (fullMedicine.isStockManagementActive) getStockText(context, fullMedicine.medicine) else ""
 
         if (stockIconText.isNotEmpty() || stockText.isNotEmpty()) {
@@ -77,13 +78,21 @@ object MedicineHelper {
             s.append(context.getString(R.string.expiration_date))
             s.append(": ")
             s.append(TimeHelper.daysSinceEpochToDateString(context, medicine.expirationDate))
-            val expiredIcon = getExpiredIcon(context, fullMedicine)
+            val expiredIcon = getExpiredIcon(fullMedicine)
             if (expiredIcon.isNotEmpty()) {
                 s.append(" ")
                 s.append(expiredIcon)
             }
         }
         return s
+    }
+
+    @JvmStatic
+    fun getStockText(reminderContext: ReminderContext, medicine: Medicine): String {
+        return reminderContext.getString(
+            R.string.medicine_stock_string,
+            formatAmount(medicine.amount, medicine.unit)
+        )
     }
 
     @JvmStatic
@@ -94,16 +103,16 @@ object MedicineHelper {
         )
     }
 
+
     @JvmStatic
     fun getStockIcons(
-        context: Context,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.isOutOfStock) {
-            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("⚠") }
+            builder.color(0xffcc0000.toInt()) { append("⚠") }
         }
-        val expiredIcon = getExpiredIcon(context, fullMedicine)
+        val expiredIcon = getExpiredIcon(fullMedicine)
         if (expiredIcon.isNotEmpty()) {
             if (builder.isNotEmpty()) {
                 builder.append(" ")
@@ -114,12 +123,11 @@ object MedicineHelper {
     }
 
     fun getExpiredIcon(
-        context: Context,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.medicine.hasExpired()) {
-            builder.color(context.getColor(android.R.color.holo_red_dark)) { append("\uD83D\uDEAB") }
+            builder.color(0xffcc0000.toInt()) { append("\uD83D\uDEAB") }
         }
         return builder
     }
@@ -137,6 +145,20 @@ object MedicineHelper {
     ): String {
         return if (PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(HIDE_MED_NAME, false) && notification
+        ) {
+            medicine.name[0] + "*".repeat(medicine.name.length - 1)
+        } else {
+            medicine.name
+        }
+    }
+
+    @JvmStatic
+    fun getMedicineName(
+        reminderContext: ReminderContext,
+        medicine: Medicine,
+        notification: Boolean
+    ): String {
+        return if (reminderContext.preferences.getBoolean(HIDE_MED_NAME, false) && notification
         ) {
             medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {

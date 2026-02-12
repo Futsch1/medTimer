@@ -1,9 +1,6 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.NotificationManager
-import android.content.Context
 import android.util.Log
-import androidx.work.Worker
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
@@ -14,8 +11,8 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
  * specific reminder events is already active to prevent duplicates, and delegates
  * the actual notification scheduling to [AlarmProcessor].
  */
-class ShowReminderNotificationProcessor(val context: Context) {
-    val alarmSetter = AlarmProcessor(context)
+class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
+    val alarmSetter = AlarmProcessor(reminderContext)
 
     fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Scheduling reminder: $reminderNotificationData")
@@ -25,12 +22,12 @@ class ShowReminderNotificationProcessor(val context: Context) {
             alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
         }
 
-        ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
+        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
     }
 
     private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
         if (reminderNotificationData.notificationId != -1) {
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            val notificationManager = reminderContext.notificationManager
             for (notification in notificationManager.activeNotifications) {
                 if (notification.id == reminderNotificationData.notificationId) {
                     val notificationData = ReminderNotificationData.fromBundle(notification.notification.extras)

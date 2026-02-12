@@ -25,87 +25,88 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
 
     override fun onReceive(context: Context, intent: Intent) {
+        val reminderContext = ReminderContext(context)
         val intentAction = ProcessorCode.fromAction(intent.action!!)
         when (intentAction) {
             ProcessorCode.Dismissed -> processNotificationAsync(
-                context,
+                reminderContext,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.SKIPPED
             )
 
             ProcessorCode.Taken -> processNotificationAsync(
-                context,
+                reminderContext,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.TAKEN
             )
 
             ProcessorCode.Acknowledged -> processNotificationAsync(
-                context,
+                reminderContext,
                 ProcessedNotificationData.fromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )
 
             ProcessorCode.Snooze -> {
-                processSnoozeAsync(context, intent)
+                processSnoozeAsync(reminderContext, intent)
             }
 
             ProcessorCode.Reminder -> {
-                processReminderNotificationAsync(context, ReminderNotificationData.fromBundle(intent.extras!!))
+                processReminderNotificationAsync(reminderContext, ReminderNotificationData.fromBundle(intent.extras!!))
             }
 
             ProcessorCode.ShowReminderNotification -> {
-                processShowReminderNotificationAsync(context, ReminderNotificationData.fromBundle(intent.extras!!))
+                processShowReminderNotificationAsync(reminderContext, ReminderNotificationData.fromBundle(intent.extras!!))
             }
 
-            ProcessorCode.Refill -> processRefillAsync(context, intent)
-            ProcessorCode.StockHandling -> processStockHandlingAsync(context, intent)
-            ProcessorCode.Repeat -> processRepeatAsync(context, intent)
-            ProcessorCode.Schedule -> processRescheduleAsync(context)
+            ProcessorCode.Refill -> processRefillAsync(reminderContext, intent)
+            ProcessorCode.StockHandling -> processStockHandlingAsync(reminderContext, intent)
+            ProcessorCode.Repeat -> processRepeatAsync(reminderContext, intent)
+            ProcessorCode.Schedule -> processRescheduleAsync(reminderContext)
             null -> Unit
         }
     }
 
-    private fun processRescheduleAsync(context: Context) {
+    private fun processRescheduleAsync(reminderContext: ReminderContext) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            ScheduleNextReminderNotificationProcessor(context).scheduleNextReminder()
+            ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
 
             pendingIntent.finish()
         }
     }
 
     private fun processShowReminderNotificationAsync(
-        context: Context,
+        reminderContext: ReminderContext,
         reminderNotificationData: ReminderNotificationData
     ) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            ShowReminderNotificationProcessor(context).showReminder(reminderNotificationData)
+            ShowReminderNotificationProcessor(reminderContext).showReminder(reminderNotificationData)
 
             pendingIntent.finish()
         }
     }
 
-    private fun processRefillAsync(context: Context, intent: Intent) {
+    private fun processRefillAsync(reminderContext: ReminderContext, intent: Intent) {
         val pendingIntent = goAsync()
 
         scope.launch {
             if (intent.hasExtra(ActivityCodes.EXTRA_MEDICINE_ID)) {
-                RefillProcessor(context).processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
+                RefillProcessor(reminderContext).processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
             } else {
-                RefillProcessor(context).processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
+                RefillProcessor(reminderContext).processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
             }
             pendingIntent.finish()
         }
     }
 
-    private fun processSnoozeAsync(context: Context, intent: Intent) {
+    private fun processSnoozeAsync(reminderContext: ReminderContext, intent: Intent) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            SnoozeProcessor(context).processSnooze(
+            SnoozeProcessor(reminderContext).processSnooze(
                 ReminderNotificationData.fromBundle(intent.extras!!),
                 intent.getIntExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 0)
             )
@@ -113,11 +114,11 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processRepeatAsync(context: Context, intent: Intent) {
+    private fun processRepeatAsync(reminderContext: ReminderContext, intent: Intent) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            RepeatProcessor(context).processRepeat(
+            RepeatProcessor(reminderContext).processRepeat(
                 ReminderNotificationData.fromBundle(intent.extras!!),
                 intent.getIntExtra(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
             )
@@ -125,7 +126,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processStockHandlingAsync(context: Context, intent: Intent) {
+    private fun processStockHandlingAsync(reminderContext: ReminderContext, intent: Intent) {
         val pendingIntent = goAsync()
 
         scope.launch {
@@ -133,33 +134,33 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             val medicineId = intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0)
             val processedInstant = Instant.ofEpochSecond(intent.getLongExtra(ActivityCodes.EXTRA_REMIND_INSTANT, 0))
 
-            StockHandlingProcessor(context).processStock(amount, medicineId, processedInstant)
+            StockHandlingProcessor(reminderContext).processStock(amount, medicineId, processedInstant)
 
             pendingIntent.finish()
         }
     }
 
     private fun processReminderNotificationAsync(
-        context: Context,
+        reminderContext: ReminderContext,
         reminderNotificationData: ReminderNotificationData
     ) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            ReminderNotificationProcessor(reminderNotificationData, context).processReminders()
+            ReminderNotificationProcessor(reminderContext).processReminders(reminderNotificationData)
             pendingIntent.finish()
         }
     }
 
     private fun processNotificationAsync(
-        context: Context,
+        reminderContext: ReminderContext,
         processedNotificationData: ProcessedNotificationData,
         status: ReminderEvent.ReminderStatus
     ) {
         val pendingIntent = goAsync()
 
         scope.launch {
-            NotificationProcessor(context).processReminderEventsInNotification(processedNotificationData, status)
+            NotificationProcessor(reminderContext).processReminderEventsInNotification(processedNotificationData, status)
 
             pendingIntent.finish()
         }
@@ -181,10 +182,6 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             AlarmProcessor.repeats = repeats
 
             requestScheduleNextNotification(context)
-        }
-
-        fun requestRepeat(context: Context, reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
-            context.sendBroadcast(getRepeatIntent(context, reminderNotificationData, repeatTimeSeconds), RECEIVER_PERMISSION)
         }
 
         fun requestStockHandling(context: Context?, amount: Double, medicineId: Int, processedEpochSeconds: Long) {

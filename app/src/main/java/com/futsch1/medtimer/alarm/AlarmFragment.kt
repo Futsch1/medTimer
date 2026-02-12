@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.LogTags.ALARM
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
@@ -43,18 +43,19 @@ class AlarmFragment(
         val view = inflater.inflate(R.layout.fragment_alarm, container, false)
 
         lifecycleScope.launch {
+            val reminderContext = ReminderContext(requireContext())
+
             withContext(ioCoroutineDispatcher) {
                 val reminderNotification = ReminderNotification.fromReminderNotificationData(
-                    requireActivity().application,
-                    MedicineRepository(requireActivity().application),
+                    ReminderContext(requireContext()),
                     reminderNotificationData
                 )!!
                 Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
 
-                val notificationStrings = NotificationStringBuilder(requireContext(), reminderNotification, false)
+                val notificationStrings = NotificationStringBuilder(reminderContext, reminderNotification, false)
                 val intents =
                     NotificationIntentBuilder(
-                        requireContext(), reminderNotification
+                        reminderContext, reminderNotification
                     )
 
                 withContext(mainDispatcher) {

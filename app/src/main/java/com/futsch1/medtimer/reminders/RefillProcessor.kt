@@ -1,11 +1,8 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
@@ -14,8 +11,8 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.time.Instant
 import java.util.stream.Collectors
 
-class RefillProcessor(val context: Context) {
-    private val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+class RefillProcessor(val reminderContext: ReminderContext) {
+    private val medicineRepository = reminderContext.medicineRepository
 
     fun processRefill(processedNotificationData: ProcessedNotificationData) {
         val reminderEvent = medicineRepository.getReminderEvent(processedNotificationData.reminderEventIds[0])!!
@@ -32,7 +29,7 @@ class RefillProcessor(val context: Context) {
         medicineRepository.insertReminderEvent(refillEvent)
 
         if (reminderEvent != null) {
-            NotificationProcessor(context).processReminderEventsInNotification(
+            NotificationProcessor(reminderContext).processReminderEventsInNotification(
                 ProcessedNotificationData.fromReminderEvents(listOf(reminderEvent)),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )

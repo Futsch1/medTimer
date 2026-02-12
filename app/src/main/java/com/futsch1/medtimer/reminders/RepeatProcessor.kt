@@ -1,10 +1,7 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 
@@ -14,9 +11,8 @@ import java.time.Instant
  *
  *
  */
-class RepeatProcessor(context: Context) {
-    private val medicineRepository = MedicineRepository(context.applicationContext as Application?)
-    val alarmSetter = AlarmProcessor(context)
+class RepeatProcessor(val reminderContext: ReminderContext) {
+    val alarmSetter = AlarmProcessor(reminderContext)
 
     fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(repeatTimeSeconds.toLong())
@@ -30,10 +26,10 @@ class RepeatProcessor(context: Context) {
     }
 
     private fun decreaseRemainingRepeats(reminderEventId: Int) {
-        val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
+        val reminderEvent = reminderContext.medicineRepository.getReminderEvent(reminderEventId)
         if (reminderEvent != null) {
             reminderEvent.remainingRepeats = reminderEvent.remainingRepeats - 1
-            medicineRepository.updateReminderEvent(reminderEvent)
+            reminderContext.medicineRepository.updateReminderEvent(reminderEvent)
         }
     }
 }

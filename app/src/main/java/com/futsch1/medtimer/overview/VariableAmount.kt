@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,10 +24,10 @@ fun variableAmountDialog(
     val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
     activity.lifecycleScope.launch(dispatcher) {
+        val reminderContext = ReminderContext(activity)
         val medicineRepository = MedicineRepository(activity.application)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(
-            activity,
-            medicineRepository,
+            reminderContext,
             reminderNotificationData
         ) ?: return@launch
 
@@ -44,7 +45,7 @@ fun variableAmountDialog(
                         amountLocal?.let {
                             reminderNotificationPart.reminderEvent.amount = it
                             activity.lifecycleScope.launch(dispatcher) {
-                                NotificationProcessor(activity).setReminderEventStatus(
+                                NotificationProcessor(reminderContext).setReminderEventStatus(
                                     ReminderEvent.ReminderStatus.TAKEN,
                                     listOf(reminderNotificationPart.reminderEvent)
                                 )
@@ -56,7 +57,7 @@ fun variableAmountDialog(
             }
         }
 
-        NotificationProcessor(activity).setReminderEventStatus(
+        NotificationProcessor(reminderContext).setReminderEventStatus(
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvents,
         )

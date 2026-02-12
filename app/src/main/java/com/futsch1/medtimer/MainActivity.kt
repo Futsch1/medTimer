@@ -33,6 +33,7 @@ import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         this.enableEdgeToEdge()
 
-        initialize(this)
+        initialize(ReminderContext(this))
 
         TimeHelper.onChangedUseSystemLocale()
 

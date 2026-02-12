@@ -1,13 +1,8 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.work.Worker
-import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -19,14 +14,9 @@ import java.time.Instant
  * This class retrieves the medicine ID and the amount to subtract from the input data.
  * It updates the stock in the database, ensures the amount does not drop below zero,
  * and triggers a notification if the stock level crosses the configured threshold.
- *
- * Input data keys:
- * - [ActivityCodes.EXTRA_MEDICINE_ID]: The ID of the medicine to update.
- * - [ActivityCodes.EXTRA_REMIND_INSTANT]: The instant of the reminder event that caused the stock handling
- * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
  */
-class StockHandlingProcessor(val context: Context) {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+class StockHandlingProcessor(val reminderContext: ReminderContext) {
+    val medicineRepository = reminderContext.medicineRepository
 
     fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
         val medicine = medicineRepository.getMedicine(medicineId) ?: return
@@ -66,7 +56,7 @@ class StockHandlingProcessor(val context: Context) {
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
                     val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ShowReminderNotificationProcessor(context).showReminder(reminderNotificationData)
+                    ShowReminderNotificationProcessor(reminderContext).showReminder(reminderNotificationData)
                 }
             }
         }

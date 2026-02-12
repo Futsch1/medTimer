@@ -1,10 +1,6 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.preference.PreferenceManager
-import androidx.work.Worker
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -30,13 +26,12 @@ import java.time.ZoneId
  *
  * If no future reminders are found, any existing next reminder alarm is cancelled.
  */
-class ScheduleNextReminderNotificationProcessor(val context: Context) {
-    val alarmSetter = AlarmProcessor(context)
+class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderContext) {
+    val alarmSetter = AlarmProcessor(reminderContext)
 
     fun scheduleNextReminder() {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application)
-        val fullMedicines = medicineRepository.medicines
-        val reminderEvents = medicineRepository.getReminderEventsForScheduling(fullMedicines)
+        val fullMedicines = reminderContext.medicineRepository.medicines
+        val reminderEvents = reminderContext.medicineRepository.getReminderEventsForScheduling(fullMedicines)
 
         scheduleNextReminderInternal(fullMedicines, reminderEvents)
     }
@@ -49,7 +44,7 @@ class ScheduleNextReminderNotificationProcessor(val context: Context) {
         val scheduledReminders: List<ScheduledReminder> =
             reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
-            val combinedReminders = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
+            val combinedReminders = reminderContext.preferences.getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(if (combinedReminders) scheduledReminders else listOf(scheduledReminders[0]))
             alarmSetter.setAlarmForReminderNotification(scheduledReminderNotificationData)
@@ -68,6 +63,6 @@ class ScheduleNextReminderNotificationProcessor(val context: Context) {
             override fun localDate(): LocalDate {
                 return LocalDate.now()
             }
-        }, PreferenceManager.getDefaultSharedPreferences(context))
+        }, reminderContext.preferences)
 
 }

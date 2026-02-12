@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.reminders
 
-import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -14,8 +13,8 @@ import java.time.Instant
 
  * schedules a new alarm for the future.
  */
-open class SnoozeProcessor(val context: Context) {
-    val alarmSetter = AlarmProcessor(context)
+open class SnoozeProcessor(val reminderContext: ReminderContext) {
+    val alarmSetter = AlarmProcessor(reminderContext)
 
     fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
@@ -26,6 +25,6 @@ open class SnoozeProcessor(val context: Context) {
 
         alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
 
-        NotificationProcessor(context).cancelNotification(reminderNotificationData.notificationId)
+        NotificationProcessor(reminderContext).cancelNotification(reminderNotificationData.notificationId)
     }
 }
