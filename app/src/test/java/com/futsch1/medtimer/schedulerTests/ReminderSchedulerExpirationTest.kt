@@ -12,7 +12,7 @@ import java.time.LocalDate
 class ReminderSchedulerExpirationTest {
     @Test
     fun testScheduleExpirationReminderDisabled() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = 0
@@ -33,7 +33,7 @@ class ReminderSchedulerExpirationTest {
 
     @Test
     fun testScheduleExpirationReminderOnce() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()
@@ -88,7 +88,7 @@ class ReminderSchedulerExpirationTest {
 
     @Test
     fun testScheduleExpirationReminderDaily() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()

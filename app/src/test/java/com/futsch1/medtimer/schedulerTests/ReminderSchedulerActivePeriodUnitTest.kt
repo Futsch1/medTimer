@@ -11,7 +11,7 @@ import java.time.LocalDate
 internal class ReminderSchedulerActivePeriodUnitTest {
     @Test
     fun testScheduleInactive() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(1)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -27,7 +27,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
 
     @Test
     fun testScheduleActive() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.scheduler
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -54,7 +54,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
 
     @Test
     fun testScheduleActiveInterval() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.scheduler
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -82,7 +82,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
 
     @Test
     fun testScheduleActiveWindowedInterval() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.scheduler
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)

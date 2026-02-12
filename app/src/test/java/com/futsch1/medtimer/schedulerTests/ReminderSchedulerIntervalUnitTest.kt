@@ -11,7 +11,7 @@ import java.time.LocalDate
 class ReminderSchedulerIntervalUnitTest {
     @Test
     fun testScheduleIntervalReminder() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -58,7 +58,7 @@ class ReminderSchedulerIntervalUnitTest {
 
     @Test
     fun test_scheduleIntervalReminder_Pause() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(3)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(3)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -83,7 +83,7 @@ class ReminderSchedulerIntervalUnitTest {
 
     @Test
     fun test_scheduleIntervalReminder_NotTaken() {
-        val scheduler = ReminderSchedulerUnitTest.Companion.getScheduler(0)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 24 * 60 * 3, 1)
