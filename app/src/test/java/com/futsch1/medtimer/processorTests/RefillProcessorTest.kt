@@ -17,7 +17,7 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.medicines[0].refillSizes.add(10.0)
         reminderContext.medicineRepositoryFake.medicines[0].amount = 100.0
 
-        RefillProcessor(reminderContext.reminderContextMock).processRefill(1)
+        RefillProcessor(reminderContext.mock).processRefill(1)
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
         assertEquals("100 ➡ 110", reminderContext.medicineRepositoryFake.reminderEvents[0].amount)
@@ -34,7 +34,7 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1))
         reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
 
-        RefillProcessor(reminderContext.reminderContextMock).processRefill(ProcessedNotificationData(listOf(1)))
+        RefillProcessor(reminderContext.mock).processRefill(ProcessedNotificationData(listOf(1)))
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
         assertEquals(ReminderEvent.ReminderStatus.ACKNOWLEDGED, reminderContext.medicineRepositoryFake.reminderEvents[0].status)

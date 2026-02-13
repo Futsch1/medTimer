@@ -95,13 +95,14 @@ class TestReminderContext {
     val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock(NotificationChannel::class.java)
     val preferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
-    val reminderContextMock: ReminderContext = mock(ReminderContext::class.java)
+    val mock: ReminderContext = mock(ReminderContext::class.java)
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderMock: NotificationCompat.Builder = mock(NotificationCompat.Builder::class.java)
     val localPreferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
 
     val preferencesMap = mutableMapOf(
-        PreferencesNames.NUMBER_OF_REPETITIONS to "3"
+        PreferencesNames.NUMBER_OF_REPETITIONS to "3",
+        PreferencesNames.SNOOZE_DURATION to "15"
     )
     val stringList = mapOf(
         R.string.high to "High",
@@ -112,15 +113,15 @@ class TestReminderContext {
     val instant: Instant = Instant.ofEpochSecond(0)
 
     init {
-        `when`(reminderContextMock.alarmManager).thenReturn(alarmManagerMock)
-        `when`(reminderContextMock.notificationManager).thenReturn(notificationManagerFake.mock)
-        `when`(reminderContextMock.preferences).thenReturn(preferencesMock)
-        `when`(reminderContextMock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
-        `when`(reminderContextMock.localPreferences).thenReturn(localPreferencesMock)
-        `when`(reminderContextMock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
-        `when`(reminderContextMock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] }
-        `when`(reminderContextMock.getNotificationBuilder(anyString())).thenReturn(notificationBuilderMock)
-        `when`(reminderContextMock.timeAccess).thenReturn(object : TimeAccess {
+        `when`(mock.alarmManager).thenReturn(alarmManagerMock)
+        `when`(mock.notificationManager).thenReturn(notificationManagerFake.mock)
+        `when`(mock.preferences).thenReturn(preferencesMock)
+        `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
+        `when`(mock.localPreferences).thenReturn(localPreferencesMock)
+        `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
+        `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] }
+        `when`(mock.getNotificationBuilder(anyString())).thenReturn(notificationBuilderMock)
+        `when`(mock.timeAccess).thenReturn(object : TimeAccess {
             override fun systemZone(): ZoneId = ZoneId.of("UTC")
             override fun localDate(): LocalDate = localDate
             override fun now(): Instant = instant
@@ -136,6 +137,6 @@ class TestReminderContext {
         `when`(notificationChannelMock.id).thenReturn("channel")
 
         val intentMock = mock(Intent::class.java)
-        `when`(reminderContextMock.getIntent(anyString())).thenReturn(intentMock)
+        `when`(mock.getIntent(anyString())).thenReturn(intentMock)
     }
 }

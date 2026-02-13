@@ -27,7 +27,7 @@ class SchedulingSimulator(
     val schedulingFactory = SchedulingFactory()
     var currentDay: LocalDate = timeAccess.localDate()
     val timeAccess = object : TimeAccess {
-        override fun systemZone(): ZoneId = ZoneId.systemDefault()
+        override fun systemZone(): ZoneId = timeAccess.systemZone()
         override fun localDate(): LocalDate = currentDay
         override fun now(): Instant = Instant.now()
     }

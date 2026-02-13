@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PreferencesNames.SNOOZE_DURATION
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
@@ -69,7 +70,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
+        val snoozeTime = defaultSharedPreferences.getString(SNOOZE_DURATION, "15")!!.toInt()
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = getCustomSnoozeActionIntent(
