@@ -63,6 +63,14 @@ public class TestHelper {
         return reminderEvent;
     }
 
+    public static ReminderEvent buildReminderEvent(int reminderId, long remindedTimestamp, int reminderEventId) {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.remindedTimestamp = remindedTimestamp;
+        reminderEvent.reminderEventId = reminderEventId;
+        return reminderEvent;
+    }
+
     public static void assertReminded(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder) {
         assertRemindedAtIndex(scheduledReminders, timestamp, medicine, reminder, 0);
     }

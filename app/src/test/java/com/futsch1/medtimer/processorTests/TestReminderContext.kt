@@ -1,10 +1,12 @@
 package com.futsch1.medtimer.processorTests
 
 import android.app.AlarmManager
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.content.SharedPreferences
+import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -36,6 +38,7 @@ class MedicineRepositoryFake {
     init {
         `when`(mock.medicines).thenAnswer { buildFullMedicines() }
         `when`(mock.getReminderEventsForScheduling(anyList())).thenAnswer { reminderEvents }
+        `when`(mock.getReminderEvent(anyInt())).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
         `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
             val reminderEvent = it.arguments[0] as ReminderEvent
             reminderEvent.reminderEventId = reminderEvents.size + 1
@@ -44,6 +47,11 @@ class MedicineRepositoryFake {
         }
         `when`(mock.getReminder(anyInt())).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
         `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(mock.updateMedicine(anyNotNull())).thenAnswer {
+            val medicine = it.arguments[0] as Medicine
+            val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
+            medicines[index] = medicine
+        }
     }
 
     fun buildFullMedicines(): List<FullMedicine> {
@@ -62,9 +70,29 @@ class MedicineRepositoryFake {
     fun <T> anyNotNull(): T = any()
 }
 
+class NotificationManagerFake {
+    val activeNotifications = mutableListOf<Notification>()
+
+    val mock: NotificationManager = mock(NotificationManager::class.java)
+
+    init {
+        `when`(mock.activeNotifications).thenReturn(getNotifications())
+    }
+
+    fun getNotifications(): Array<StatusBarNotification> {
+        val statusBarNotifications = mutableListOf<StatusBarNotification>()
+        for (activeNotification in activeNotifications) {
+            val statusBarNotificationMock = mock(StatusBarNotification::class.java)
+            `when`(statusBarNotificationMock.notification).thenReturn(activeNotification)
+            statusBarNotifications.add(statusBarNotificationMock)
+        }
+        return statusBarNotifications.toTypedArray()
+    }
+}
+
 class TestReminderContext {
     val alarmManagerMock: AlarmManager = mock(AlarmManager::class.java)
-    val notificationManagerMock: NotificationManager = mock(NotificationManager::class.java)
+    val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock(NotificationChannel::class.java)
     val preferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
     val reminderContextMock: ReminderContext = mock(ReminderContext::class.java)
@@ -85,7 +113,7 @@ class TestReminderContext {
 
     init {
         `when`(reminderContextMock.alarmManager).thenReturn(alarmManagerMock)
-        `when`(reminderContextMock.notificationManager).thenReturn(notificationManagerMock)
+        `when`(reminderContextMock.notificationManager).thenReturn(notificationManagerFake.mock)
         `when`(reminderContextMock.preferences).thenReturn(preferencesMock)
         `when`(reminderContextMock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
         `when`(reminderContextMock.localPreferences).thenReturn(localPreferencesMock)
