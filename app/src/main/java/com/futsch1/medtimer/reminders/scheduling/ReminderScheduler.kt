@@ -3,8 +3,7 @@ package com.futsch1.medtimer.reminders.scheduling
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import java.time.LocalDate
-import java.time.ZoneId
+import com.futsch1.medtimer.reminders.TimeAccess
 
 class ReminderScheduler(val timeAccess: TimeAccess, val sharedPreferences: SharedPreferences) {
     fun schedule(fullMedicineWithTagsAndReminders: List<FullMedicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {
@@ -31,9 +30,4 @@ class ReminderScheduler(val timeAccess: TimeAccess, val sharedPreferences: Share
         return scheduledReminders
     }
 
-    interface TimeAccess {
-        fun systemZone(): ZoneId
-
-        fun localDate(): LocalDate
-    }
 }

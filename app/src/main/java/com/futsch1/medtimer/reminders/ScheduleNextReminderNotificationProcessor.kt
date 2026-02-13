@@ -8,10 +8,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import java.time.LocalDate
-import java.time.ZoneId
 
 /**
  * Responsible for calculating and scheduling the next medicine reminder notification.
@@ -40,7 +37,7 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
         fullMedicines: List<FullMedicine>,
         reminderEvents: List<ReminderEvent>
     ) {
-        val reminderScheduler = this.reminderScheduler
+        val reminderScheduler = ReminderScheduler(reminderContext.timeAccess, reminderContext.preferences)
         val scheduledReminders: List<ScheduledReminder> =
             reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
@@ -53,16 +50,4 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
             alarmSetter.cancelNextReminder()
         }
     }
-
-    private val reminderScheduler: ReminderScheduler
-        get() = ReminderScheduler(object : TimeAccess {
-            override fun systemZone(): ZoneId {
-                return ZoneId.systemDefault()
-            }
-
-            override fun localDate(): LocalDate {
-                return LocalDate.now()
-            }
-        }, reminderContext.preferences)
-
 }

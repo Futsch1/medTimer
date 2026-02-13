@@ -20,7 +20,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
     fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         var scheduledInstant = scheduledReminderNotificationData.remindInstant
-        scheduledInstant = adjustTimestamp(scheduledInstant)
+        scheduledInstant = adjustTimestamp(reminderContext, scheduledInstant)
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(
@@ -37,7 +37,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         }
 
         // If the alarm is in the future, schedule with alarm manager
-        if (scheduledInstant.isAfter(Instant.now())) {
+        if (scheduledInstant.isAfter(reminderContext.timeAccess.now())) {
             val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
 
             if (canScheduleExactAlarms(alarmManager)) {
@@ -106,10 +106,10 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
     }
 
     companion object {
-        fun adjustTimestamp(instant: Instant): Instant {
+        fun adjustTimestamp(reminderContext: ReminderContext, instant: Instant): Instant {
             return if (delay >= 0) {
                 Log.d(LogTags.REMINDER, "Debug schedule reminder in $delay milliseconds")
-                val instantDebug = Instant.now().plusMillis(delay)
+                val instantDebug = reminderContext.timeAccess.now().plusMillis(delay)
                 repeats -= 1
                 if (repeats < 0) {
                     delay = -1

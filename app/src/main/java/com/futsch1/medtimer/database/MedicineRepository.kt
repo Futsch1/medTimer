@@ -9,7 +9,7 @@ import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 
-class MedicineRepository(val application: Application?) {
+open class MedicineRepository(val application: Application?) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 

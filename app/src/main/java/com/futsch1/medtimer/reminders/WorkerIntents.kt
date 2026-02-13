@@ -17,7 +17,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
  * Creates an [Intent] for the general reminder action.
  */
 fun getReminderAction(reminderContext: ReminderContext): Intent {
-    val reminderIntent = Intent(ProcessorCode.Reminder.action)
+    val reminderIntent = reminderContext.getIntent(ProcessorCode.Reminder.action)
     reminderContext.setIntentClass(reminderIntent, ReminderProcessorBroadcastReceiver::class.java)
     return reminderIntent
 }
@@ -29,7 +29,7 @@ fun getReminderAction(reminderContext: ReminderContext): Intent {
  * @param snoozeTime The snooze duration in minutes.
  */
 fun getSnoozeIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent {
-    val snoozeIntent = Intent(ProcessorCode.Snooze.action)
+    val snoozeIntent = reminderContext.getIntent(ProcessorCode.Snooze.action)
     reminderNotificationData.toIntent(snoozeIntent)
     snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
     reminderContext.setIntentClass(snoozeIntent, ReminderProcessorBroadcastReceiver::class.java)
@@ -41,7 +41,7 @@ fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotifica
 
 
 fun getShowReminderNotificationIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
-    val reminderIntent = Intent(ProcessorCode.ShowReminderNotification.action)
+    val reminderIntent = reminderContext.getIntent(ProcessorCode.ShowReminderNotification.action)
     reminderNotificationData.toIntent(reminderIntent)
     reminderContext.setIntentClass(reminderIntent, ReminderProcessorBroadcastReceiver::class.java)
     return reminderIntent
@@ -51,15 +51,15 @@ fun getShowReminderNotificationIntent(context: Context, reminderNotificationData
     getShowReminderNotificationIntent(ReminderContext(context), reminderNotificationData)
 
 
-private fun buildActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData, actionName: String?): Intent {
-    val actionIntent = Intent(actionName)
+private fun buildActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData, actionName: String): Intent {
+    val actionIntent = reminderContext.getIntent(actionName)
     reminderContext.setIntentClass(actionIntent, ReminderProcessorBroadcastReceiver::class.java)
     processedNotificationData.toIntent(actionIntent)
     return actionIntent
 }
 
 fun getCustomSnoozeActionIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
-    val actionIntent = Intent(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
+    val actionIntent = reminderContext.getIntent(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
     reminderContext.setIntentClass(actionIntent, MainActivity::class.java)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     reminderNotificationData.toIntent(actionIntent)
@@ -87,7 +87,7 @@ fun getRefillActionIntent(reminderContext: ReminderContext, processedNotificatio
 }
 
 fun getRefillIntent(reminderContext: ReminderContext, medicineId: Int): Intent {
-    val intent = Intent(ProcessorCode.Refill.action)
+    val intent = reminderContext.getIntent(ProcessorCode.Refill.action)
     reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
     intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
     return intent
@@ -97,7 +97,7 @@ fun getRefillIntent(context: Context, medicineId: Int): Intent = getRefillIntent
 
 
 fun getVariableAmountActivityIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
-    val intent = Intent(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
+    val intent = reminderContext.getIntent(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
     reminderContext.setIntentClass(intent, MainActivity::class.java)
     reminderNotificationData.toIntent(intent)
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -109,7 +109,7 @@ fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: 
 
 
 fun getStockHandlingIntent(reminderContext: ReminderContext, amount: Double, medicineId: Int, processedEpochSeconds: Long): Intent {
-    val intent = Intent(ProcessorCode.StockHandling.action)
+    val intent = reminderContext.getIntent(ProcessorCode.StockHandling.action)
     reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
     intent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
     intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
@@ -130,7 +130,7 @@ fun getSkippedActionIntent(context: Context, processedNotificationData: Processe
 
 
 fun getRequestScheduleIntent(reminderContext: ReminderContext): Intent {
-    val intent = Intent(ProcessorCode.Schedule.action)
+    val intent = reminderContext.getIntent(ProcessorCode.Schedule.action)
     reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
     return intent
 }

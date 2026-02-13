@@ -3,9 +3,10 @@ package com.futsch1.medtimer.reminders.scheduling
 import android.content.SharedPreferences
 import android.util.ArraySet
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
-class WeekendModeSchedulingDecorator(val scheduler: Scheduling, val timeAccess: ReminderScheduler.TimeAccess, private val preferences: SharedPreferences) :
+class WeekendModeSchedulingDecorator(val scheduler: Scheduling, val timeAccess: TimeAccess, private val preferences: SharedPreferences) :
     Scheduling {
     fun adjustInstant(instant: Instant): Instant {
         var instant = instant

@@ -25,7 +25,7 @@ class ReminderNotificationChannel(
 
     private fun createChannel(): NotificationChannel {
         val notificationChannel =
-            NotificationChannel(importance.toString(), reminderContext.getString(nameId), importance)
+            reminderContext.buildNotificationChannel(importance.toString(), reminderContext.getString(nameId), importance)
         notificationChannel.description = reminderContext.getString(R.string.notification_title)
 
         notificationManager.createNotificationChannel(notificationChannel)

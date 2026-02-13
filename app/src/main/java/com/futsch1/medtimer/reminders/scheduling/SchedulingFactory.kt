@@ -4,13 +4,14 @@ import android.content.SharedPreferences
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.TimeAccess
 
 class SchedulingFactory {
     fun create(
         reminder: Reminder,
         medicine: Medicine,
         reminderEvents: List<ReminderEvent>,
-        timeAccess: ReminderScheduler.TimeAccess,
+        timeAccess: TimeAccess,
         sharedPreferences: SharedPreferences
     ): Scheduling {
         val scheduler = when (reminder.reminderType) {

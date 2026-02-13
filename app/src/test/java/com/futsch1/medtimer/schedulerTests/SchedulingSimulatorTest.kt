@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded

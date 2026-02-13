@@ -7,8 +7,8 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.allStatusValues
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
@@ -58,13 +58,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             return
         }
         val scheduler = ReminderScheduler(object : TimeAccess {
-            override fun systemZone(): ZoneId {
-                return ZoneId.systemDefault()
-            }
-
-            override fun localDate(): LocalDate {
-                return LocalDate.now()
-            }
+            override fun systemZone(): ZoneId = ZoneId.systemDefault()
+            override fun localDate(): LocalDate = LocalDate.now()
+            override fun now(): Instant = Instant.now()
         }, PreferenceManager.getDefaultSharedPreferences(medicineViewModel.getApplication()))
 
         val reminders: List<ScheduledReminder> = scheduler.schedule(
