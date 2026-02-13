@@ -16,22 +16,22 @@ class ScheduleNextReminderNotificationProcessorTest {
 
     @Test
     fun noReminder() {
-        val testReminderContext = TestReminderContext()
+        val reminderContext = TestReminderContext()
 
-        ScheduleNextReminderNotificationProcessor(testReminderContext.reminderContextMock).scheduleNextReminder()
+        ScheduleNextReminderNotificationProcessor(reminderContext.reminderContextMock).scheduleNextReminder()
 
-        verify(testReminderContext.alarmManagerMock, times(1)).cancel(any<PendingIntent>())
-        verify(testReminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), anyLong(), any())
+        verify(reminderContext.alarmManagerMock, times(1)).cancel(any<PendingIntent>())
+        verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), anyLong(), any())
     }
 
     @Test
     fun scheduleReminder() {
-        val testReminderContext = TestReminderContext()
-        testReminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
-        testReminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
+        val reminderContext = TestReminderContext()
+        reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
 
-        ScheduleNextReminderNotificationProcessor(testReminderContext.reminderContextMock).scheduleNextReminder()
+        ScheduleNextReminderNotificationProcessor(reminderContext.reminderContextMock).scheduleNextReminder()
 
-        verify(testReminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(600 * 60 * 1000L), any())
+        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(600 * 60 * 1000L), any())
     }
 }
