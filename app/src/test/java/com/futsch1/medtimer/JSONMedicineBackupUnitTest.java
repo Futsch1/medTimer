@@ -44,9 +44,9 @@ class JSONMedicineBackupUnitTest {
         reminder.automaticallyTaken = true;
         reminder.intervalStartTimeOfDay = 1;
         reminder.intervalEndTimeOfDay = 2;
-        reminder.setOutOfStockThreshold(1.0);
-        reminder.setOutOfStockReminderType(Reminder.OutOfStockReminderType.ONCE);
-        reminder.setExpirationReminderType(Reminder.ExpirationReminderType.DAILY);
+        reminder.outOfStockThreshold = 1.0;
+        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE;
+        reminder.expirationReminderType = Reminder.ExpirationReminderType.DAILY;
         medicineWithReminders.reminders = Collections.singletonList(reminder);
         medicineWithReminders.medicine = new Medicine("Medicine A");
         medicineWithReminders.medicine.useColor = true;
