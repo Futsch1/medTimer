@@ -18,6 +18,7 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -427,6 +428,26 @@ class ReminderTest : BaseTestHelper() {
             clickOn(R.string.delete)
             BaristaDialogInteractions.clickDialogPositiveButton()
         }
+    }
+
+    @Test
+    @AllowFlaky(attempts = 1)
+    fun weekendMode() {
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.weekend_mode)
+        clickOn(R.string.active)
+        clickOn(R.string.days_string)
+        clickOn(R.string.friday)
+        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickOn(R.string.time)
+        AndroidTestHelper.setTime(21, 0, false)
+
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+
+        AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
+        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 21 * 60))
     }
 
     private class CyclicReminderInfo(var consecutiveDays: Int, var pauseDays: Int, var shouldHaveInfo: Boolean)
