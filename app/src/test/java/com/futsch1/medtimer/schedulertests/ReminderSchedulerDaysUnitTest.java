@@ -1,7 +1,7 @@
-package com.futsch1.medtimer.schedulerTests;
+package com.futsch1.medtimer.schedulertests;
 
-import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.on;
+import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulertests.TestHelper.on;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.futsch1.medtimer.database.FullMedicine;
@@ -17,7 +17,7 @@ import java.util.List;
 
 class ReminderSchedulerDaysUnitTest {
     @Test
-    void testScheduleSkipWeekdays() {
+    void scheduleSkipWeekdays() {
         ReminderScheduler scheduler = getScheduler(1);
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
@@ -40,7 +40,7 @@ class ReminderSchedulerDaysUnitTest {
     }
 
     @Test
-    void test_scheduleWeekdaysWithDaysBetweenReminders() {
+    void scheduleWeekdaysWithDaysBetweenReminders() {
         ReminderScheduler scheduler = getScheduler();
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");

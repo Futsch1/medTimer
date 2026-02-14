@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.schedulerTests
+package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
@@ -10,7 +10,7 @@ import java.time.LocalDate
 
 internal class ReminderSchedulerActivePeriodUnitTest {
     @Test
-    fun testScheduleInactive() {
+    fun scheduleInactive() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
@@ -26,7 +26,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActive() {
+    fun scheduleActive() {
         val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
@@ -53,7 +53,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActiveInterval() {
+    fun scheduleActiveInterval() {
         val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
@@ -81,7 +81,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActiveWindowedInterval() {
+    fun scheduleActiveWindowedInterval() {
         val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")

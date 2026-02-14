@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.processorTests
+package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
 import org.junit.jupiter.api.Test

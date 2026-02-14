@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.schedulerTests;
+package com.futsch1.medtimer.schedulertests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

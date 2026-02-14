@@ -1,7 +1,7 @@
-package com.futsch1.medtimer.processorTests
+package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.schedulerTests.TestHelper
+import com.futsch1.medtimer.schedulertests.TestHelper
 import java.time.Instant
 
 fun fillWithTwoReminders(reminderContext: TestReminderContext): ReminderNotificationData {

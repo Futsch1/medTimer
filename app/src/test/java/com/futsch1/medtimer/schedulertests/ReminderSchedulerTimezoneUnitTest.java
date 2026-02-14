@@ -1,9 +1,9 @@
-package com.futsch1.medtimer.schedulerTests;
+package com.futsch1.medtimer.schedulertests;
 
-import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.on;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.onTZ;
+import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulertests.TestHelper.assertReminded;
+import static com.futsch1.medtimer.schedulertests.TestHelper.on;
+import static com.futsch1.medtimer.schedulertests.TestHelper.onTZ;
 import static org.mockito.Mockito.when;
 
 import com.futsch1.medtimer.database.FullMedicine;
@@ -21,7 +21,7 @@ import java.util.List;
 class ReminderSchedulerTimezoneUnitTest {
 
     @Test
-    void testScheduleWithEvents() {
+    void scheduleWithEvents() {
         ReminderScheduler scheduler = getScheduler(1);
 
         FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, "Test1");

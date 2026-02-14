@@ -1,10 +1,10 @@
-package com.futsch1.medtimer.processorTests
+package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
-import com.futsch1.medtimer.schedulerTests.TestHelper
+import com.futsch1.medtimer.schedulertests.TestHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

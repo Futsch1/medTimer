@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
-import com.futsch1.medtimer.schedulerTests.TestHelper
+import com.futsch1.medtimer.schedulertests.TestHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test

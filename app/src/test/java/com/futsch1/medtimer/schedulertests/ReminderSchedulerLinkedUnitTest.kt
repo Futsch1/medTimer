@@ -1,15 +1,15 @@
-package com.futsch1.medtimer.schedulerTests
+package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
-import com.futsch1.medtimer.schedulerTests.TestHelper.assertRemindedAtIndex
+import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
+import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ReminderSchedulerLinkedUnitTest {
     @Test
-    fun testSourceReminderNotRemindedYet() {
+    fun sourceReminderNotRemindedYet() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
@@ -30,7 +30,7 @@ class ReminderSchedulerLinkedUnitTest {
     }
 
     @Test
-    fun test_scheduleLinkedReminder() {
+    fun scheduleLinkedReminder() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
@@ -96,7 +96,7 @@ class ReminderSchedulerLinkedUnitTest {
     }
 
     @Test
-    fun test_scheduleTwoLinkedReminders() {
+    fun scheduleTwoLinkedReminders() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")

@@ -1,8 +1,8 @@
-package com.futsch1.medtimer.schedulerTests
+package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
+import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -10,7 +10,7 @@ import java.time.LocalDate
 
 class ReminderSchedulerIntervalUnitTest {
     @Test
-    fun testScheduleIntervalReminder() {
+    fun scheduleIntervalReminder() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
@@ -57,7 +57,7 @@ class ReminderSchedulerIntervalUnitTest {
     }
 
     @Test
-    fun test_scheduleIntervalReminder_Pause() {
+    fun scheduleIntervalReminderPause() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(3)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
@@ -82,7 +82,7 @@ class ReminderSchedulerIntervalUnitTest {
     }
 
     @Test
-    fun test_scheduleIntervalReminder_NotTaken() {
+    fun scheduleIntervalReminderNotTaken() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")

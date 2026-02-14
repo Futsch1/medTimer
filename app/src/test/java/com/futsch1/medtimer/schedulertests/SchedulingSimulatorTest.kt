@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.schedulerTests
+package com.futsch1.medtimer.schedulertests
 
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
@@ -7,9 +7,9 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
-import com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded
-import com.futsch1.medtimer.schedulerTests.TestHelper.assertRemindedAtIndex
-import com.futsch1.medtimer.schedulerTests.TestHelper.on
+import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
+import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
+import com.futsch1.medtimer.schedulertests.TestHelper.on
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
@@ -30,7 +30,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testStandard() {
+    fun standard() {
         val medicines = listOf(
             TestHelper.buildFullMedicine(0, "Test"),
             TestHelper.buildFullMedicine(1, "Test2")
@@ -62,7 +62,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testInterval() {
+    fun interval() {
         val medicines = listOf(
             TestHelper.buildFullMedicine(0, "Test")
         )
@@ -85,7 +85,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testWindowedInterval() {
+    fun windowedInterval() {
         val medicines = listOf(
             TestHelper.buildFullMedicine(0, "Test")
         )
@@ -111,7 +111,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testLinkedAndAmount() {
+    fun linkedAndAmount() {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         medicineWithReminders.medicine.amount = 12.0
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -149,7 +149,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testNoReminders() {
+    fun noReminders() {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val medicines = listOf(medicineWithReminders)
 
@@ -161,7 +161,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testDailyReminders() {
+    fun dailyReminders() {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
         reminder.intervalStart = 1
@@ -196,7 +196,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testOutOfStock() {
+    fun outOfStock() {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         medicineWithReminders.medicine.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "3", 480, 1)
@@ -228,7 +228,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun testSingleDays() {
+    fun singleDays() {
         val medicines = listOf(
             TestHelper.buildFullMedicine(0, "Test")
         )

@@ -1,9 +1,9 @@
-package com.futsch1.medtimer.schedulerTests;
+package com.futsch1.medtimer.schedulertests;
 
-import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.TEST_1;
-import static com.futsch1.medtimer.schedulerTests.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.assertReminded;
-import static com.futsch1.medtimer.schedulerTests.TestHelper.on;
+import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.TEST_1;
+import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulertests.TestHelper.assertReminded;
+import static com.futsch1.medtimer.schedulertests.TestHelper.on;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -27,7 +27,7 @@ import java.util.Set;
 
 class ReminderSchedulerWeekendModeTest {
     @Test
-    void testWeekendDaysEmpty() {
+    void weekendDaysEmpty() {
         ReminderScheduler scheduler = getScheduler();
 
         Mockito.when(scheduler.getSharedPreferences().getBoolean(PreferencesNames.WEEKEND_MODE, false)).thenReturn(true);
@@ -44,7 +44,7 @@ class ReminderSchedulerWeekendModeTest {
     }
 
     @Test
-    void testWeekendMode() {
+    void weekendMode() {
         // 1.1.1970 is a Thursday
         ReminderScheduler scheduler = getScheduler();
 

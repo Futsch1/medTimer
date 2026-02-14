@@ -1,8 +1,8 @@
-package com.futsch1.medtimer.processorTests
+package com.futsch1.medtimer.processortests
 
 import android.app.PendingIntent
 import com.futsch1.medtimer.reminders.ScheduleNextReminderNotificationProcessor
-import com.futsch1.medtimer.schedulerTests.TestHelper
+import com.futsch1.medtimer.schedulertests.TestHelper
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
