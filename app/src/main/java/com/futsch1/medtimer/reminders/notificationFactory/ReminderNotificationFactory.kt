@@ -59,8 +59,11 @@ abstract class ReminderNotificationFactory(
     init {
         val contentIntent: PendingIntent = getStartAppIntent()
 
-        builder.setSmallIcon(R.drawable.capsule).setContentTitle(reminderContext.getString(R.string.notification_title))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
+        builder.setSmallIcon(R.drawable.capsule)
+        builder.setContentTitle(reminderContext.getString(R.string.notification_title))
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
+        builder.setContentIntent(contentIntent)
 
         builder.setDeleteIntent(intents.pendingDismiss)
 

@@ -15,7 +15,7 @@ class SimpleReminderNotificationFactory(
         val notificationMessage = notificationStrings.notificationString
 
         builder.setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
-            .setContentText(notificationMessage)
+        builder.setContentText(notificationMessage)
 
         buildActions()
     }

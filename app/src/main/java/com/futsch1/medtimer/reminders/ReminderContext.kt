@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
@@ -42,7 +43,7 @@ class ReminderContext(private val context: Context) {
         return PendingIntent.getActivity(context, requestCode, intent, flags)
     }
 
-    fun getIntent(action: String): Intent = Intent(action)
+    fun getIntent(action: String? = null): Intent = Intent(action)
 
     fun setIntentClass(intent: Intent, cls: Class<*>) {
         intent.setClass(context, cls)
@@ -59,6 +60,8 @@ class ReminderContext(private val context: Context) {
     fun getString(id: Int, vararg formatArgs: Any): String = context.getString(id, *formatArgs)
 
     fun getNotificationBuilder(channel: String): NotificationCompat.Builder = NotificationCompat.Builder(context, channel)
+    fun getStringBuilder(): SpannableStringBuilder = SpannableStringBuilder()
+
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
 }

@@ -15,7 +15,7 @@ class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
     fun showReminder(reminderNotificationData: ReminderNotificationData) {
-        Log.d(LogTags.REMINDER, "Show notification for reminder: $reminderNotificationData")
+        Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {

@@ -3,9 +3,12 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.media.AudioManager
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Manages notification sound settings and "Do Not Disturb" overrides for reminders.
@@ -21,7 +24,10 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
         reminderContext.audioManager
 
     init {
-        if (notificationManager.isNotificationPolicyAccessGranted() && reminderContext.preferences.getBoolean(PreferencesNames.OVERRIDE_DND, false)
+        if (notificationManager.isNotificationPolicyAccessGranted() && reminderContext.preferences.getBoolean(
+                PreferencesNames.OVERRIDE_DND,
+                false
+            )
         ) {
             loadPendingRingerMode(audioManager, notificationManager)
         }
@@ -34,8 +40,8 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
     companion object {
         private var pending = false
         private var pendingWasMuted = false
-        private var scheduledRunnable: Runnable? = null
-        private val handler = Handler(Looper.getMainLooper())
+        private var restoreJob: Job? = null
+        private val scope = CoroutineScope(Dispatchers.Default)
 
         @Synchronized
         fun loadPendingRingerMode(
@@ -66,16 +72,17 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
         fun restorePendingRingerMode(
             audioManager: AudioManager
         ) {
-            if (pending && scheduledRunnable == null) {
-                scheduledRunnable = createRunnable(audioManager)
-            }
-            if (scheduledRunnable != null) {
-                handler.removeCallbacks(scheduledRunnable!!)
-                handler.postDelayed(scheduledRunnable!!, 5000)
+            if (pending) {
+                restoreJob?.cancel()
+                restoreJob = scope.launch {
+                    delay(5000)
+                    performRestore(audioManager)
+                }
             }
         }
 
-        private fun createRunnable(audioManager: AudioManager) = Runnable {
+        @Synchronized
+        private fun performRestore(audioManager: AudioManager) {
             if (pendingWasMuted) {
                 audioManager.adjustStreamVolume(
                     AudioManager.STREAM_RING,
@@ -87,7 +94,7 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
                 }
             }
             pending = false
-            scheduledRunnable = null
+            pendingWasMuted = false
         }
     }
 }
