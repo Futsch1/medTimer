@@ -40,7 +40,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         if (scheduledInstant.isAfter(reminderContext.timeAccess.now())) {
             val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
 
-            if (canScheduleExactAlarms(alarmManager)) {
+            if (canScheduleExactAlarms()) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
             } else {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
@@ -93,10 +93,14 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         }
     }
 
-    private fun canScheduleExactAlarms(alarmManager: AlarmManager): Boolean {
+    private fun canScheduleExactAlarms(): Boolean {
         val exactReminders = reminderContext.preferences.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
 
-        return exactReminders && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            exactReminders && (reminderContext.sdkInt >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+        } else {
+            exactReminders
+        }
     }
 
     private fun updateNextReminderWidget() {

@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
@@ -22,6 +23,7 @@ import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
@@ -127,9 +129,12 @@ class TestReminderContext {
     val localPreferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
     val audioManagerMock: AudioManager = mock(AudioManager::class.java)
 
-    val preferencesMap = mutableMapOf(
+    val stringPreferencesMap = mutableMapOf(
         PreferencesNames.NUMBER_OF_REPETITIONS to "3",
         PreferencesNames.SNOOZE_DURATION to "15"
+    )
+    val boolPreferencesMap = mutableMapOf(
+        PreferencesNames.EXACT_REMINDERS to false
     )
     val stringList = mapOf(
         R.string.high to "High",
@@ -154,8 +159,12 @@ class TestReminderContext {
             override fun now(): Instant = instant
         })
         `when`(mock.audioManager).thenReturn(audioManagerMock)
+        `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
 
-        `when`(preferencesMock.getString(anyString(), anyString())).thenAnswer { preferencesMap[it.arguments[0]] }
+        `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
+
+        `when`(preferencesMock.getString(anyString(), anyString())).thenAnswer { stringPreferencesMap[it.arguments[0]] }
+        `when`(preferencesMock.getBoolean(anyString(), anyBoolean())).thenAnswer { boolPreferencesMap[it.arguments[0]] }
 
         `when`(localPreferencesMock.getInt(eq("notificationId"), anyInt())).thenAnswer { notificationId }
         val editMock = mock(SharedPreferences.Editor::class.java)

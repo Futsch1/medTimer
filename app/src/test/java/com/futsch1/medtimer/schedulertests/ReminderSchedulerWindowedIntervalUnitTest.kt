@@ -79,7 +79,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
     }
 
     @Test
-    fun scheduleWindowedIntervalReminder_Pause() {
+    fun scheduleWindowedIntervalReminderPause() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(3)
 
         val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
@@ -106,7 +106,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
     }
 
     @Test
-    fun scheduleWindowedIntervalReminder_Created() {
+    fun scheduleWindowedIntervalReminderCreated() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")

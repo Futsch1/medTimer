@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.Build
 import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
@@ -34,6 +35,7 @@ class ReminderContext(private val context: Context) {
         override fun localDate(): LocalDate = LocalDate.now(systemZone())
         override fun now(): Instant = Instant.now()
     }
+    val sdkInt = Build.VERSION.SDK_INT
 
     fun getPendingIntentBroadcast(requestCode: Int, intent: Intent, flags: Int): PendingIntent {
         return PendingIntent.getBroadcast(context, requestCode, intent, flags)
