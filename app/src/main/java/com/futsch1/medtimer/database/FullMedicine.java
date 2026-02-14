@@ -42,7 +42,7 @@ public class FullMedicine {
     }
 
     public boolean isOutOfStock() {
-        return isStockManagementActive() && reminders.stream().anyMatch(reminder -> reminder.getReminderType() == Reminder.ReminderType.OUT_OF_STOCK && reminder.getOutOfStockThreshold() >= medicine.amount);
+        return isStockManagementActive() && reminders.stream().anyMatch(reminder -> reminder.getReminderType() == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount);
     }
 
     public boolean isStockManagementActive() {

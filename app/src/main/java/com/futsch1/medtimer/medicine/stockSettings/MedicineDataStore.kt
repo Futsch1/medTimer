@@ -31,7 +31,7 @@ class MedicineDataStore(
             "production_date" -> entity.medicine.productionDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "expiration_date" -> entity.medicine.expirationDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
         }
-        medicineRepository.updateMedicine(entity.medicine)
+        medicineRepository.updateMedicineFromMain(entity.medicine)
     }
 
     override fun putLong(key: String?, value: Long) {
@@ -39,6 +39,6 @@ class MedicineDataStore(
             "production_date" -> entity.medicine.productionDate = value
             "expiration_date" -> entity.medicine.expirationDate = value
         }
-        medicineRepository.updateMedicine(entity.medicine)
+        medicineRepository.updateMedicineFromMain(entity.medicine)
     }
 }

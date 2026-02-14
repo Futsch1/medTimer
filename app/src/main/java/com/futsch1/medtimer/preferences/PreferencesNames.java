@@ -15,6 +15,7 @@ public class PreferencesNames {
     public static final String SYSTEM_LOCALE = "system_locale";
     public static final String COMBINE_NOTIFICATIONS = "combine_notifications";
     public static final String SHOW_TAKEN_TIME_IN_OVERVIEW = "show_taken_time_in_overview";
+    public static final String SNOOZE_DURATION = "snooze_duration";
 
 
     private PreferencesNames() {

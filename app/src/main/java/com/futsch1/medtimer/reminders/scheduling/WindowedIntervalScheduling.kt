@@ -2,7 +2,7 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
+import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 

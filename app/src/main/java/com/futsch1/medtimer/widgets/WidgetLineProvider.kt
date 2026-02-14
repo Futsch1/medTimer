@@ -10,6 +10,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -33,14 +35,10 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
         val medicineRepository = MedicineRepository(context.applicationContext as Application?)
         val medicinesWithReminders = medicineRepository.medicines
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
-        val reminderScheduler = ReminderScheduler(object : ReminderScheduler.TimeAccess {
-            override fun systemZone(): ZoneId {
-                return ZoneId.systemDefault()
-            }
-
-            override fun localDate(): LocalDate {
-                return LocalDate.now()
-            }
+        val reminderScheduler = ReminderScheduler(object : TimeAccess {
+            override fun systemZone(): ZoneId = ZoneId.systemDefault()
+            override fun localDate(): LocalDate = LocalDate.now()
+            override fun now(): Instant = Instant.now()
         }, PreferenceManager.getDefaultSharedPreferences(context))
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)

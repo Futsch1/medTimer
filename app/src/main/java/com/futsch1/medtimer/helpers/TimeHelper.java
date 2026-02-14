@@ -36,6 +36,7 @@ import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -54,19 +55,22 @@ public class TimeHelper {
      */
     public static String minutesToTimeString(Context context, long minutes) {
         try {
-            Date date = localTimeToDate(LocalTime.of((int) (minutes / 60), (int) (minutes % 60)));
-            return DateFormat.getTimeFormat(new LocaleContextWrapper(context)).format(date);
+            Date time = minutesToDate((int) minutes);
+            return DateFormat.getTimeFormat(new LocaleContextWrapper(context)).format(time);
         } catch (DateTimeException e) {
             return minutesToDurationString(minutes);
         }
     }
 
     /**
-     * @param localTime Local time
+     * @param minutes Minutes since midnight
      * @return Date of local time on epoch day 0
      */
-    public static Date localTimeToDate(LocalTime localTime) {
-        return Date.from(localTime.atDate(LocalDate.ofEpochDay(0)).toInstant(EPOCH_OFFSET));
+    public static Date minutesToDate(int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
     }
 
     /**

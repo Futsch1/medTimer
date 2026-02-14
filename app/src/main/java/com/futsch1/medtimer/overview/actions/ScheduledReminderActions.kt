@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.launch
@@ -42,7 +42,7 @@ open class ScheduledReminderActions(
                     val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
 
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderWorkerReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }
             }
     }
@@ -50,6 +50,6 @@ open class ScheduledReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderWorkerReceiver.requestReminderAction(context, scheduledReminder.reminder, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(context, scheduledReminder.reminder, reminderEvent, taken)
     }
 }

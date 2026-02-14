@@ -1,7 +1,5 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.getScheduler
-import com.futsch1.medtimer.ReminderSchedulerUnitTest.Companion.scheduler
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -12,8 +10,8 @@ import java.time.LocalDate
 
 internal class ReminderSchedulerActivePeriodUnitTest {
     @Test
-    fun testScheduleInactive() {
-        val scheduler = getScheduler(1)
+    fun scheduleInactive() {
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -28,8 +26,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActive() {
-        val scheduler = scheduler
+    fun scheduleActive() {
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -55,8 +53,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActiveInterval() {
-        val scheduler = scheduler
+    fun scheduleActiveInterval() {
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -83,8 +81,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
     }
 
     @Test
-    fun testScheduleActiveWindowedInterval() {
-        val scheduler = scheduler
+    fun scheduleActiveWindowedInterval() {
+        val scheduler = ReminderSchedulerUnitTest.scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)

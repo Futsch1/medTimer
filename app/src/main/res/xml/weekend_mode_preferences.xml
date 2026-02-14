@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:defaultValue="false"
         app:key="weekend_mode"
-        app:title="@string/weekend_mode" />
+        app:title="@string/active" />
     <MultiSelectListPreference
         app:defaultValue="@array/default_weekend_days"
         app:entries="@array/days"

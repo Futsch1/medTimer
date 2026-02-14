@@ -1,19 +1,19 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
-import android.content.Context
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 class BigReminderNotificationFactory(
-    context: Context,
+    reminderContext: ReminderContext,
     reminderNotification: ReminderNotification
 ) : ReminderNotificationFactory(
-    context,
+    reminderContext,
     reminderNotification
 ) {
-    val views: RemoteViews = RemoteViews(context.packageName, R.layout.notification)
+    val views: RemoteViews = RemoteViews(reminderContext.packageName, R.layout.notification)
 
     override fun build() {
         views.setTextViewText(

@@ -1,12 +1,11 @@
 package com.futsch1.medtimer.reminders.notificationData
 
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.work.Data
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.getReminderAction
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
@@ -47,11 +46,11 @@ class ReminderNotificationData(
         )
     }
 
-    fun getPendingIntent(context: Context): PendingIntent {
-        val reminderIntent = getReminderAction(context)
+    fun getPendingIntent(reminderContext: ReminderContext): PendingIntent {
+        val reminderIntent = getReminderAction(reminderContext)
         toIntent(reminderIntent)
         // Use the reminderEventId as request code to ensure unique PendingIntent for each reminder event
-        return PendingIntent.getBroadcast(context, reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        return reminderContext.getPendingIntentBroadcast(reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     fun toIntent(intent: Intent) {
@@ -59,13 +58,6 @@ class ReminderNotificationData(
         intent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
         intent.putExtra(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
         intent.putExtra(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
-    }
-
-    fun toBuilder(builder: Data.Builder) {
-        builder.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds)
-        builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
-        builder.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
-        builder.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
     }
 
     override fun toString(): String {
@@ -88,13 +80,6 @@ class ReminderNotificationData(
             val notificationId = bundle.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1)
 
             return fromArrays(reminderIds, reminderEventIds, remindInstant, notificationId)
-        }
-
-        fun forwardToBuilder(bundle: Bundle, builder: Data.Builder) {
-            builder.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, getReminderIds(bundle))
-            builder.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, getReminderEventIds(bundle))
-            builder.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, bundle.getLong(ActivityCodes.EXTRA_REMIND_INSTANT))
-            builder.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, bundle.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1))
         }
 
         fun getReminderIds(bundle: Bundle): IntArray {
@@ -139,21 +124,6 @@ class ReminderNotificationData(
             return ReminderNotificationData(
                 remindInstant, reminderIds, reminderEventIds
             )
-        }
-
-        fun fromInputData(inputData: Data): ReminderNotificationData {
-            val reminderIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)!!
-            val reminderEventIds = inputData.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)!!
-            val remindInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, 0))
-            val notificationId = inputData.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1)
-            val reminderNotificationData =
-                ReminderNotificationData(
-                    remindInstant,
-                    reminderIds,
-                    reminderEventIds,
-                    notificationId
-                )
-            return reminderNotificationData
         }
     }
 }

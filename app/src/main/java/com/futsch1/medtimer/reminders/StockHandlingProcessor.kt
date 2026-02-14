@@ -1,50 +1,29 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.work.Worker
-import androidx.work.WorkerParameters
-import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 
 /**
- * [Worker] implementation responsible for updating medicine stock levels.
+ * Responsible for updating medicine stock levels.
  *
- * This worker retrieves the medicine ID and the amount to subtract from the input data.
+ * This class retrieves the medicine ID and the amount to subtract from the input data.
  * It updates the stock in the database, ensures the amount does not drop below zero,
  * and triggers a notification if the stock level crosses the configured threshold.
- *
- * Input data keys:
- * - [ActivityCodes.EXTRA_MEDICINE_ID]: The ID of the medicine to update.
- * - [ActivityCodes.EXTRA_REMIND_INSTANT]: The instant of the reminder event that caused the stock handling
- * - [ActivityCodes.EXTRA_AMOUNT]: The amount to decrease from the current stock.
  */
-class StockHandlingWorker(val context: Context, workerParameters: WorkerParameters) :
-    Worker(context, workerParameters) {
-    override fun doWork(): Result {
-        val amount = inputData.getDouble(ActivityCodes.EXTRA_AMOUNT, Double.NaN)
-        val processedInstant = Instant.ofEpochSecond(inputData.getLong(ActivityCodes.EXTRA_REMIND_INSTANT, -1))
-        if (amount.isNaN()) {
-            return Result.failure()
-        }
-        val medicineId = inputData.getInt(ActivityCodes.EXTRA_MEDICINE_ID, -1)
-        val medicineRepository = MedicineRepository(context as Application?)
-        val medicine = medicineRepository.getMedicine(medicineId)
-            ?: return Result.failure()
+class StockHandlingProcessor(val reminderContext: ReminderContext) {
+    val medicineRepository = reminderContext.medicineRepository
+
+    fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
+        val medicine = medicineRepository.getMedicine(medicineId) ?: return
 
         processStock(medicine, amount, processedInstant)
         medicineRepository.updateMedicine(medicine.medicine)
-        // Make sure that the database is flushed to avoid races between subsequent stock handling events
-        medicineRepository.flushDatabase()
 
-        return Result.success()
     }
 
     private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
@@ -77,7 +56,7 @@ class StockHandlingWorker(val context: Context, workerParameters: WorkerParamete
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
                     val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ReminderWorkerReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ShowReminderNotificationProcessor(reminderContext).showReminder(reminderNotificationData)
                 }
             }
         }

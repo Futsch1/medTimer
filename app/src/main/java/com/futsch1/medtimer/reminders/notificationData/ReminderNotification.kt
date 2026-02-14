@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.reminders.notificationData
 
-import android.content.Context
 import android.util.Log
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -10,6 +8,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import java.time.Instant
 import java.time.LocalTime
@@ -53,9 +52,9 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         return TimeHelper.secondsSinceEpochToLocalTime(remindedTimestamp, ZoneId.systemDefault())
     }
 
-    fun getRemindTime(context: Context): String {
+    fun getRemindTime(reminderContext: ReminderContext): String {
         val remindTime = getRemindedTime()
-        return TimeHelper.minutesToTimeString(context, remindTime.hour * 60L + remindTime.minute)
+        return reminderContext.minutesToTimeString(remindTime.hour * 60L + remindTime.minute)
     }
 
     override fun toString(): String {
@@ -64,8 +63,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
 
     companion object {
         fun fromReminderNotificationData(
-            context: Context,
-            medicineRepository: MedicineRepository,
+            reminderContext: ReminderContext,
             reminderNotificationData: ReminderNotificationData
         ): ReminderNotification? {
             if (!reminderNotificationData.valid) {
@@ -74,24 +72,31 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
 
             val result = mutableListOf<ReminderNotificationPart>()
 
-            val numberOfRepeats = getNumberOfRepeats(context)
+            val numberOfRepeats = getNumberOfRepeats(reminderContext)
             for (i in reminderNotificationData.reminderIds.indices) {
-                val reminder = medicineRepository.getReminder(reminderNotificationData.reminderIds[i])
+                val reminder = reminderContext.medicineRepository.getReminder(reminderNotificationData.reminderIds[i])
                 if (reminder == null) {
                     Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderNotificationData.reminderIds[i]))
                     return null
                 }
 
-                val medicine = medicineRepository.getMedicine(reminder.medicineRelId)
+                val medicine = reminderContext.medicineRepository.getMedicine(reminder.medicineRelId)
                 if (medicine == null) {
                     Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
                     return null
                 }
 
-                var reminderEvent = getEvent(medicineRepository, reminderNotificationData.reminderEventIds[i], reminder, reminderNotificationData.remindInstant)
+                var reminderEvent =
+                    getEvent(reminderContext.medicineRepository, reminderNotificationData.reminderEventIds[i], reminder, reminderNotificationData.remindInstant)
                 if (reminderEvent == null) {
                     reminderEvent =
-                        buildAndInsertReminderEvent(medicineRepository, medicine, reminder, reminderNotificationData.remindInstant, numberOfRepeats)
+                        buildAndInsertReminderEvent(
+                            reminderContext.medicineRepository,
+                            medicine,
+                            reminder,
+                            reminderNotificationData.remindInstant,
+                            numberOfRepeats
+                        )
                     reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
                 } else {
                     reminderNotificationData.notificationId = reminderEvent.notificationId
@@ -121,9 +126,8 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
             return reminderEvent
         }
 
-        private fun getNumberOfRepeats(context: Context): Int {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            return sharedPref.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")!!.toInt()
+        private fun getNumberOfRepeats(reminderContext: ReminderContext): Int {
+            return reminderContext.preferences.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")!!.toInt()
         }
 
     }

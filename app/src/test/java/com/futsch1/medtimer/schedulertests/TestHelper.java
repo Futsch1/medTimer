@@ -1,4 +1,4 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.schedulertests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,6 +60,14 @@ public class TestHelper {
         ReminderEvent reminderEvent = new ReminderEvent();
         reminderEvent.reminderId = reminderId;
         reminderEvent.remindedTimestamp = remindedTimestamp;
+        return reminderEvent;
+    }
+
+    public static ReminderEvent buildReminderEvent(int reminderId, long remindedTimestamp, int reminderEventId) {
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.reminderId = reminderId;
+        reminderEvent.remindedTimestamp = remindedTimestamp;
+        reminderEvent.reminderEventId = reminderEventId;
         return reminderEvent;
     }
 

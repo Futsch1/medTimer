@@ -1,11 +1,8 @@
 package com.futsch1.medtimer.reminders
 
 import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -21,16 +18,15 @@ import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
 
-class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotificationData, val context: Context, val medicineRepository: MedicineRepository) {
-
-    fun processReminders(): Boolean {
+class ReminderNotificationProcessor(
+    val reminderContext: ReminderContext
+) {
+    fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
         var r = false
 
         // Create reminder events and filter those that are already processed
         var reminderNotification =
-            ReminderNotification.Companion.fromReminderNotificationData(context, medicineRepository, reminderNotificationData)?.filterAlreadyProcessed()
-
-        medicineRepository.flushDatabase()
+            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed()
 
         if (reminderNotification != null) {
             reminderNotification = handleAutomaticallyTaken(reminderNotification)
@@ -39,10 +35,11 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
             } else {
                 Log.d(LogTags.REMINDER, "Processing reminder notification $reminderNotification")
                 notificationAction(reminderNotification)
-                medicineRepository.flushDatabase()
             }
             r = true
         }
+
+        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
 
         return r
     }
@@ -50,7 +47,7 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
     private fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
-                NotificationProcessor(context).setReminderEventStatus(
+                NotificationProcessor(reminderContext).setReminderEventStatus(
                     ReminderEvent.ReminderStatus.TAKEN,
                     listOf(reminderNotificationPart.reminderEvent)
                 )
@@ -69,7 +66,7 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
 
     private fun notificationAction(reminderNotification: ReminderNotification) {
         if (reminderNotification.reminderNotificationData.notificationId != -1) {
-            NotificationProcessor(context).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
+            NotificationProcessor(reminderContext).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
         }
 
         // Show notifications for all reminders
@@ -78,13 +75,13 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && this.isRepeatReminders) {
-            ReminderWorkerReceiver.requestRepeat(context, reminderNotification.reminderNotificationData, repeatTimeSeconds)
+            RepeatProcessor(reminderContext).processRepeat(reminderNotification.reminderNotificationData, repeatTimeSeconds)
         }
     }
 
     private fun showNotification(reminderNotification: ReminderNotification) {
         if (canShowNotifications()) {
-            val notifications = Notifications(context)
+            val notifications = Notifications(reminderContext)
             val notificationId =
                 notifications.showNotification(
                     reminderNotification
@@ -92,25 +89,23 @@ class ReminderNotificationProcessor(val reminderNotificationData: ReminderNotifi
 
             for (notificationReminderEvent in reminderNotification.reminderNotificationParts) {
                 notificationReminderEvent.reminderEvent.notificationId = notificationId
-                medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
+                reminderContext.medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
             }
         }
     }
 
     private val isRepeatReminders: Boolean
         get() {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            return sharedPref.getBoolean(PreferencesNames.REPEAT_REMINDERS, false)
+            return reminderContext.preferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, false)
         }
 
     private fun canShowNotifications(): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || reminderContext.hasPermission(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     private val repeatTimeSeconds: Int
         get() {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            return sharedPref.getString(PreferencesNames.REPEAT_DELAY, "10")!!.toInt() * 60
+            return reminderContext.preferences.getString(PreferencesNames.REPEAT_DELAY, "10")!!.toInt() * 60
         }
 
     companion object {

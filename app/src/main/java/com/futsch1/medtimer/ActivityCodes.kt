@@ -19,18 +19,21 @@ object ActivityCodes {
     const val CUSTOM_SNOOZE_ACTIVITY: String = "com.futsch1.medtimer.CUSTOM_SNOOZE_ACTIVITY"
 }
 
-enum class WorkerActionCode(val action: String) {
+enum class ProcessorCode(val action: String) {
     Reminder("com.futsch1.medtimer.REMINDER_ACTION"),
     Dismissed("com.futsch1.medtimer.DISMISSED_ACTION"),
     Taken("com.futsch1.medtimer.TAKEN_ACTION"),
     Snooze("com.futsch1.medtimer.SNOOZE_ACTION"),
     Acknowledged("com.futsch1.medtimer.ACKNOWLEDGED_ACTION"),
     Refill("com.futsch1.medtimer.REFILL_ACTION"),
-    ShowReminderNotification("com.futsch1.medtimer.SHOW_REMINDER_NOTIFICATION");
+    ShowReminderNotification("com.futsch1.medtimer.SHOW_REMINDER_NOTIFICATION"),
+    StockHandling("com.futsch1.medtimer.STOCK_HANDLING"),
+    Repeat("com.futsch1.medtimer.REPEAT"),
+    Schedule("com.futsch1.medtimer.SCHEDULE");
 
     companion object {
         private val actionMap = entries.associateBy { it.action }
 
-        fun fromAction(action: String?): WorkerActionCode? = actionMap[action]
+        fun fromAction(action: String?): ProcessorCode? = actionMap[action]
     }
 }

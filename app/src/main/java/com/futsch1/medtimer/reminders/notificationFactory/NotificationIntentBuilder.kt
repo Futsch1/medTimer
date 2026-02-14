@@ -1,14 +1,14 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PreferencesNames.SNOOZE_DURATION
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
@@ -18,8 +18,8 @@ import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class NotificationIntentBuilder(val context: Context, val reminderNotification: ReminderNotification) {
-    val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+class NotificationIntentBuilder(val reminderContext: ReminderContext, val reminderNotification: ReminderNotification) {
+    val defaultSharedPreferences: SharedPreferences = reminderContext.preferences
 
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
@@ -44,17 +44,15 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getVariableAmountActivityIntent(context, reminderNotification.reminderNotificationData)
-            PendingIntent.getActivity(
-                context,
+            val notifyTaken = getVariableAmountActivityIntent(reminderContext, reminderNotification.reminderNotificationData)
+            reminderContext.getPendingIntentActivity(
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         } else {
-            val notifyTaken = getTakenActionIntent(context, processedNotificationData)
-            PendingIntent.getBroadcast(
-                context,
+            val notifyTaken = getTakenActionIntent(reminderContext, processedNotificationData)
+            reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -63,9 +61,8 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
-        return PendingIntent.getBroadcast(
-            context,
+        val notifySkipped = getSkippedActionIntent(reminderContext, processedNotificationData)
+        return reminderContext.getPendingIntentBroadcast(
             reminderNotification.reminderNotificationData.notificationId,
             notifySkipped,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -73,23 +70,23 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
+        val snoozeTime = defaultSharedPreferences.getString(SNOOZE_DURATION, "15")!!.toInt()
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = getCustomSnoozeActionIntent(
-                context, reminderNotification.reminderNotificationData
+                reminderContext, reminderNotification.reminderNotificationData
             )
-            return PendingIntent.getActivity(
-                context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
+            return reminderContext.getPendingIntentActivity(
+                reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
         }
 
         fun getStandardSnoozeIntent(): PendingIntent {
             val snooze = getSnoozeIntent(
-                context, reminderNotification.reminderNotificationData, snoozeTime
+                reminderContext, reminderNotification.reminderNotificationData, snoozeTime
             )
-            return PendingIntent.getBroadcast(
-                context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            return reminderContext.getPendingIntentBroadcast(
+                reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
 
@@ -105,20 +102,20 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         if (snoozeTime != -1) {
             return null
         }
-        val resultIntent = Intent(context, RemoteInputReceiver::class.java)
+        val resultIntent = Intent()
+        reminderContext.setIntentClass(resultIntent, RemoteInputReceiver::class.java)
         resultIntent.action = ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
         val resultPendingIntent =
-            PendingIntent.getBroadcast(
-                context,
+            reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId,
                 resultIntent,
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-        val remoteInput = RemoteInput.Builder("snooze_time").setLabel(context.getString(R.string.snooze_duration)).build()
+        val remoteInput = RemoteInput.Builder("snooze_time").setLabel(reminderContext.getString(R.string.snooze_duration)).build()
         val action = NotificationCompat.Action.Builder(
-            R.drawable.hourglass_split, context.getString(R.string.snooze), resultPendingIntent
+            R.drawable.hourglass_split, reminderContext.getString(R.string.snooze), resultPendingIntent
         ).addRemoteInput(remoteInput).build()
 
         return action
@@ -128,19 +125,19 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
         if (reminderNotification.reminderNotificationParts.none { it.reminder.variableAmount }) {
             return null
         }
-        val resultIntent = Intent(context, RemoteInputReceiver::class.java)
+        val resultIntent = Intent()
+        reminderContext.setIntentClass(resultIntent, RemoteInputReceiver::class.java)
         resultIntent.action = ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
-        val resultPendingIntent = PendingIntent.getBroadcast(
-            context,
+        val resultPendingIntent = reminderContext.getPendingIntentBroadcast(
             reminderNotification.reminderNotificationData.notificationId + 1000,
             resultIntent,
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val action = NotificationCompat.Action.Builder(
-            R.drawable.check2_circle, context.getString(R.string.taken), resultPendingIntent
+            R.drawable.check2_circle, reminderContext.getString(R.string.taken), resultPendingIntent
         )
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
@@ -149,7 +146,7 @@ class NotificationIntentBuilder(val context: Context, val reminderNotification: 
             }
             val remoteInput =
                 RemoteInput.Builder("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
-                    .setLabel("${context.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
+                    .setLabel("${reminderContext.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
             action.addRemoteInput(remoteInput)
         }
 

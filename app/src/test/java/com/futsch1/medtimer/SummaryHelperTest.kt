@@ -25,7 +25,6 @@ import org.mockito.Mockito.mockConstruction
 import org.mockito.Mockito.mockStatic
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 
@@ -162,9 +161,9 @@ class SummaryHelperTest {
         val dateFormat = mock(java.text.DateFormat::class.java)
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
-        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
+        Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(2)))
             .thenReturn("0:02")
-        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(1, 3))))
+        Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(63)))
             .thenReturn("1:03")
 
         val reminder = Reminder(1)
@@ -194,11 +193,11 @@ class SummaryHelperTest {
         val dateFormat = mock(java.text.DateFormat::class.java)
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
-        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(0, 2))))
+        Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(2)))
             .thenReturn("0:02")
-        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(1, 3))))
+        Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(63)))
             .thenReturn("1:03")
-        Mockito.`when`(dateFormat.format(TimeHelper.localTimeToDate(LocalTime.of(2, 24))))
+        Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(144)))
             .thenReturn("2:24")
 
         val reminder = Reminder(1)

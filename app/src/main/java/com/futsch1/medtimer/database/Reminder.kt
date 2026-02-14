@@ -113,14 +113,17 @@ class Reminder(@JvmField var medicineRelId: Int) {
     @ColumnInfo(defaultValue = "false")
     var windowedInterval: Boolean = false
 
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "0.0")
     var outOfStockThreshold: Double = 0.0
 
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "OFF")
     var outOfStockReminderType: OutOfStockReminderType = OutOfStockReminderType.OFF
 
+    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "OFF")
     var expirationReminderType: ExpirationReminderType = ExpirationReminderType.OFF

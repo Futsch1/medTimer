@@ -5,6 +5,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -16,7 +17,7 @@ typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double)
 class SchedulingSimulator(
     medicines: List<FullMedicine>,
     recentReminders: List<ReminderEvent>,
-    timeAccess: ReminderScheduler.TimeAccess,
+    timeAccess: TimeAccess,
     private val sharedPreferences: SharedPreferences
 ) {
     val maxSimulationDays = 400
@@ -25,14 +26,10 @@ class SchedulingSimulator(
     var schedulingItems = medicines.map { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.flatten().filter { it.reminder.active }
     val schedulingFactory = SchedulingFactory()
     var currentDay: LocalDate = timeAccess.localDate()
-    val timeAccess = object : ReminderScheduler.TimeAccess {
-        override fun systemZone(): ZoneId {
-            return timeAccess.systemZone()
-        }
-
-        override fun localDate(): LocalDate {
-            return currentDay
-        }
+    val timeAccess = object : TimeAccess {
+        override fun systemZone(): ZoneId = timeAccess.systemZone()
+        override fun localDate(): LocalDate = currentDay
+        override fun now(): Instant = Instant.now()
     }
 
     fun simulate(scheduledReminderConsumer: scheduledReminderConsumerType) {

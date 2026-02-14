@@ -1,7 +1,7 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer.schedulertests;
 
-import static com.futsch1.medtimer.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.TestHelper.on;
+import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
+import static com.futsch1.medtimer.schedulertests.TestHelper.on;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 class ReminderSchedulerActiveDayOfMonthUnitTest {
     @Test
-    void testScheduleDayOfMonth() {
+    void scheduleDayOfMonth() {
         ReminderScheduler scheduler = getScheduler(1);
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");

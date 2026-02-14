@@ -79,18 +79,10 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".reminders.ReminderWorkerReceiver"
+            android:name=".reminders.ReminderProcessorBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
-            android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.futsch1.medtimer.REMINDER_ACTION" />
-                <action android:name="com.futsch1.medtimer.RESCHEDULE_ACTION" />
-                <action android:name="com.futsch1.medtimer.DISMISSED_ACTION" />
-                <action android:name="com.futsch1.medtimer.TAKEN_ACTION" />
-            </intent-filter>
-        </receiver>
+            android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -101,11 +93,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove" />
 
         <receiver
             android:name=".widgets.NextRemindersWidgetProvider"

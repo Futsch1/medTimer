@@ -8,10 +8,8 @@ import java.time.Instant
 import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
-class MedicineRepository(val application: Application?) {
+open class MedicineRepository(val application: Application?) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
 
@@ -123,7 +121,7 @@ class MedicineRepository(val application: Application?) {
     }
 
     fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
-        return internalInsert(reminderEvent) { reminderEvent -> medicineDao.insertReminderEvent(reminderEvent) }
+        return medicineDao.insertReminderEvent(reminderEvent)
     }
 
     fun getReminderEvent(reminderEventId: Int): ReminderEvent? {
@@ -135,11 +133,15 @@ class MedicineRepository(val application: Application?) {
     }
 
     fun updateReminderEvent(reminderEvent: ReminderEvent) {
+        medicineDao.updateReminderEvent(reminderEvent)
+    }
+
+    fun updateReminderEventFromMain(reminderEvent: ReminderEvent) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminderEvent(reminderEvent) }
     }
 
     fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminderEvents(reminderEvents) }
+        medicineDao.updateReminderEvents(reminderEvents)
     }
 
     fun deleteAll() {
@@ -226,26 +228,12 @@ class MedicineRepository(val application: Application?) {
     val medicines: List<FullMedicine>
         get() = medicineDao.getMedicines()
 
-    fun updateMedicine(medicine: Medicine?) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
+    fun updateMedicine(medicine: Medicine) {
+        medicineDao.updateMedicine(medicine)
     }
 
-    fun flushDatabase() {
-        if (MedicineRoomDatabase.databaseWriteExecutor.isShutdown) {
-            return
-        }
-        try {
-            // Submit an empty task and wait for its completion.
-            // This guarantees all prior submitted tasks have completed.
-            val future = MedicineRoomDatabase.databaseWriteExecutor.submit {}
-            future[10, TimeUnit.SECONDS] // Wait with a timeout
-        } catch (_: InterruptedException) {
-            Thread.currentThread().interrupt() // Restore interrupt status
-        } catch (_: ExecutionException) {
-            // Intentionally left blank
-        } catch (_: TimeoutException) {
-            // Intentionally left blank
-        }
+    fun updateMedicineFromMain(medicine: Medicine) {
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
     }
 
     fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {

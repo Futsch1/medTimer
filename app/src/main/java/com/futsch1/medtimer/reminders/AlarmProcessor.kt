@@ -2,16 +2,10 @@ package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import androidx.preference.PreferenceManager
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkRequest
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.WorkManagerAccess
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
@@ -19,32 +13,20 @@ import java.time.Instant
 
 /**
  * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
- *
- * This class is responsible for:
- * - Setting exact or inexact alarms based on user preferences and Android version constraints.
- * - Processing [ReminderNotificationData] to determine if a notification should be shown immediately via a worker
- *   or scheduled for a future time.
- * - Managing the cancellation of pending reminders to prevent duplicate or obsolete notifications.
- * - Updating widgets when reminder schedules change.
- * - Supporting debug rescheduling for testing purposes.
- *
- * @property context The application context used to access system services and shared preferences.
  */
-class AlarmProcessor(val context: Context) {
-    private val alarmManager: AlarmManager = context.getSystemService(AlarmManager::class.java)
+class AlarmProcessor(val reminderContext: ReminderContext) {
+    private val alarmManager: AlarmManager = reminderContext.alarmManager
 
-    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, debugRescheduleData: DebugRescheduleData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         var scheduledInstant = scheduledReminderNotificationData.remindInstant
-        val debugReschedule = DebugReschedule(context, debugRescheduleData)
-        scheduledInstant = debugReschedule.adjustTimestamp(scheduledInstant)
+        scheduledInstant = adjustTimestamp(reminderContext, scheduledInstant)
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(
-            PendingIntent.getBroadcast(
-                context,
+            reminderContext.getPendingIntentBroadcast(
                 0,
-                getReminderAction(context),
+                getReminderAction(reminderContext),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -55,10 +37,10 @@ class AlarmProcessor(val context: Context) {
         }
 
         // If the alarm is in the future, schedule with alarm manager
-        if (scheduledInstant.isAfter(Instant.now())) {
-            val pendingIntent = scheduledReminderNotificationData.getPendingIntent(context)
+        if (scheduledInstant.isAfter(reminderContext.timeAccess.now())) {
+            val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
 
-            if (canScheduleExactAlarms(alarmManager)) {
+            if (canScheduleExactAlarms()) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
             } else {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
@@ -82,32 +64,23 @@ class AlarmProcessor(val context: Context) {
                     scheduledReminderNotificationData
                 )
             )
-            val builder = Data.Builder()
-            scheduledReminderNotificationData.toBuilder(builder)
-            val reminderNotificationWorker: WorkRequest =
-                OneTimeWorkRequest.Builder(ReminderNotificationWorker::class.java)
-                    .setInputData(builder.build())
-                    .build()
-            WorkManagerAccess.getWorkManager(context).enqueue(reminderNotificationWorker)
+            ReminderNotificationProcessor(reminderContext).processReminders(scheduledReminderNotificationData)
         }
-
-        debugReschedule.scheduleRepeat()
     }
 
     fun cancelNextReminder() {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
-        val intent = getReminderAction(context)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent = getReminderAction(reminderContext)
+        val pendingIntent = reminderContext.getPendingIntentBroadcast(0, intent, PendingIntent.FLAG_IMMUTABLE)
         alarmManager.cancel(pendingIntent)
     }
 
     fun cancelPendingReminderNotifications(reminderEventId: Int) {
         alarmManager.cancel(
-            PendingIntent.getBroadcast(
-                context,
+            reminderContext.getPendingIntentBroadcast(
                 reminderEventId,
-                getReminderAction(context),
+                getReminderAction(reminderContext),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -120,17 +93,39 @@ class AlarmProcessor(val context: Context) {
         }
     }
 
-    private fun canScheduleExactAlarms(alarmManager: AlarmManager): Boolean {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val exactReminders = sharedPref.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
+    private fun canScheduleExactAlarms(): Boolean {
+        val exactReminders = reminderContext.preferences.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
 
-        return exactReminders && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            exactReminders && (reminderContext.sdkInt >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+        } else {
+            exactReminders
+        }
     }
 
     private fun updateNextReminderWidget() {
-        val intent = Intent(context, WidgetUpdateReceiver::class.java)
-        intent.setAction("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
-        context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+        val intent = Intent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
+        reminderContext.setIntentClass(intent, WidgetUpdateReceiver::class.java)
+        reminderContext.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+    }
+
+    companion object {
+        fun adjustTimestamp(reminderContext: ReminderContext, instant: Instant): Instant {
+            return if (delay >= 0) {
+                Log.d(LogTags.REMINDER, "Debug schedule reminder in $delay milliseconds")
+                val instantDebug = reminderContext.timeAccess.now().plusMillis(delay)
+                repeats -= 1
+                if (repeats < 0) {
+                    delay = -1
+                }
+                instantDebug
+            } else {
+                instant
+            }
+        }
+
+        var delay: Long = -1
+        var repeats: Int = -1
     }
 
 }

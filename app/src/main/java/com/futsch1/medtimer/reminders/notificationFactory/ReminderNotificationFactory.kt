@@ -2,73 +2,75 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
 fun getReminderNotificationFactory(
-    context: Context,
+    reminderContext: ReminderContext,
     reminderNotification: ReminderNotification
 ): NotificationFactory {
     return if (reminderNotification.isOutOfStockNotification()) {
         OutOfStockNotificationFactory(
-            context,
+            reminderContext,
             reminderNotification
         )
     } else if (reminderNotification.isExpirationDateNotification()) {
         ExpirationDateNotificationFactory(
-            context,
+            reminderContext,
             reminderNotification
         )
     } else {
-        val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        if (defaultPreferences.getBoolean("big_notifications", false)) {
+        if (reminderContext.preferences.getBoolean("big_notifications", false)) {
             BigReminderNotificationFactory(
-                context, reminderNotification
+                reminderContext, reminderNotification
             )
         } else {
             SimpleReminderNotificationFactory(
-                context, reminderNotification
+                reminderContext, reminderNotification
             )
         }
     }
 }
 
 abstract class ReminderNotificationFactory(
-    context: Context,
+    reminderContext: ReminderContext,
     val reminderNotification: ReminderNotification
 ) : NotificationFactory(
-    context,
+    reminderContext,
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
-    val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    val defaultSharedPreferences: SharedPreferences = reminderContext.preferences
 
     val intents = NotificationIntentBuilder(
-        context, reminderNotification
+        reminderContext, reminderNotification
     )
     val notificationStrings =
         NotificationStringBuilder(
-            context,
+            reminderContext,
             reminderNotification
         )
 
     init {
-        val contentIntent: PendingIntent? = getStartAppIntent()
+        val contentIntent: PendingIntent = getStartAppIntent()
 
-        builder.setSmallIcon(R.drawable.capsule).setContentTitle(context.getString(R.string.notification_title))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_REMINDER).setContentIntent(contentIntent)
+        builder.setSmallIcon(R.drawable.capsule)
+        builder.setContentTitle(reminderContext.getString(R.string.notification_title))
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
+        builder.setContentIntent(contentIntent)
 
         builder.setDeleteIntent(intents.pendingDismiss)
 
         // Set group key to reminder notification time string so that same time reminders are grouped
-        builder.setGroup(TimeHelper.secondsSinceEpochToTimeString(context, reminderNotification.reminderNotificationData.remindInstant.epochSecond))
+        builder.setGroup(
+            reminderNotification.reminderNotificationData.remindInstant.epochSecond.toString()
+        )
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
@@ -85,10 +87,10 @@ abstract class ReminderNotificationFactory(
 
     @SuppressLint("FullScreenIntentPolicy")
     private fun addFullScreenIntent() {
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0,
+        val pendingIntent = reminderContext.getPendingIntentActivity(
+            0,
             ReminderAlarmActivity.getIntent(
-                context, reminderNotification.reminderNotificationData
+                reminderContext, reminderNotification.reminderNotificationData
             ),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -131,7 +133,7 @@ abstract class ReminderNotificationFactory(
 
     private fun addSkippedAction() {
         builder.addAction(
-            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
+            R.drawable.x_circle, reminderContext.getString(R.string.skipped), intents.pendingSkipped
         )
     }
 
@@ -141,7 +143,7 @@ abstract class ReminderNotificationFactory(
             builder.addAction(action)
         } else {
             builder.addAction(
-                R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
+                R.drawable.hourglass_split, reminderContext.getString(R.string.snooze), intents.pendingSnooze
             )
         }
     }
@@ -152,7 +154,7 @@ abstract class ReminderNotificationFactory(
             builder.addAction(action)
         } else {
             builder.addAction(
-                R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
+                R.drawable.check2_circle, reminderContext.getString(R.string.taken), intents.pendingTaken
             )
         }
     }

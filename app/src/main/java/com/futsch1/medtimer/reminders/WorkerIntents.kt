@@ -4,21 +4,21 @@ import android.content.Context
 import android.content.Intent
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.MainActivity
-import com.futsch1.medtimer.WorkerActionCode
+import com.futsch1.medtimer.ProcessorCode
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 
 /**
  * Provides factory methods for creating [Intent]s used to trigger reminder-related actions
- * via [ReminderWorkerReceiver] or to navigate to specific screens in [MainActivity].
+ * via [ReminderProcessorBroadcastReceiver] or to navigate to specific screens in [MainActivity].
  */
 
 /**
  * Creates an [Intent] for the general reminder action.
  */
-fun getReminderAction(context: Context): Intent {
-    val reminderIntent = Intent(WorkerActionCode.Reminder.action)
-    reminderIntent.setClass(context, ReminderWorkerReceiver::class.java)
+fun getReminderAction(reminderContext: ReminderContext): Intent {
+    val reminderIntent = reminderContext.getIntent(ProcessorCode.Reminder.action)
+    reminderContext.setIntentClass(reminderIntent, ReminderProcessorBroadcastReceiver::class.java)
     return reminderIntent
 }
 
@@ -28,62 +28,111 @@ fun getReminderAction(context: Context): Intent {
  * @param reminderNotificationData The data of the reminder to be snoozed.
  * @param snoozeTime The snooze duration in minutes.
  */
-fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent {
-    val snoozeIntent = Intent(WorkerActionCode.Snooze.action)
+fun getSnoozeIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent {
+    val snoozeIntent = reminderContext.getIntent(ProcessorCode.Snooze.action)
     reminderNotificationData.toIntent(snoozeIntent)
     snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
-    snoozeIntent.setClass(context, ReminderWorkerReceiver::class.java)
+    reminderContext.setIntentClass(snoozeIntent, ReminderProcessorBroadcastReceiver::class.java)
     return snoozeIntent
 }
 
-fun getShowReminderNotificationIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
-    val reminderIntent = Intent(WorkerActionCode.ShowReminderNotification.action)
+fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent =
+    getSnoozeIntent(ReminderContext(context), reminderNotificationData, snoozeTime)
+
+
+fun getShowReminderNotificationIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
+    val reminderIntent = reminderContext.getIntent(ProcessorCode.ShowReminderNotification.action)
     reminderNotificationData.toIntent(reminderIntent)
-    reminderIntent.setClass(context, ReminderWorkerReceiver::class.java)
+    reminderContext.setIntentClass(reminderIntent, ReminderProcessorBroadcastReceiver::class.java)
     return reminderIntent
 }
 
-private fun buildActionIntent(context: Context, processedNotificationData: ProcessedNotificationData, actionName: String?): Intent {
-    val actionIntent = Intent(context, ReminderWorkerReceiver::class.java)
+fun getShowReminderNotificationIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent =
+    getShowReminderNotificationIntent(ReminderContext(context), reminderNotificationData)
+
+
+private fun buildActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData, actionName: String): Intent {
+    val actionIntent = reminderContext.getIntent(actionName)
+    reminderContext.setIntentClass(actionIntent, ReminderProcessorBroadcastReceiver::class.java)
     processedNotificationData.toIntent(actionIntent)
-    actionIntent.setAction(actionName)
     return actionIntent
 }
 
-fun getCustomSnoozeActionIntent(context: Context?, reminderNotificationData: ReminderNotificationData): Intent {
-    val actionIntent = Intent(context, MainActivity::class.java)
-    actionIntent.setAction(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
+fun getCustomSnoozeActionIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
+    val actionIntent = reminderContext.getIntent(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
+    reminderContext.setIntentClass(actionIntent, MainActivity::class.java)
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     reminderNotificationData.toIntent(actionIntent)
     return actionIntent
 }
 
-/**
- * Creates an [Intent] to mark a reminder as "Taken".
- */
-fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Taken.action)
+fun getTakenActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData): Intent {
+    return buildActionIntent(reminderContext, processedNotificationData, ProcessorCode.Taken.action)
 }
 
-fun getAcknowledgedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Acknowledged.action)
+fun getTakenActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent =
+    getTakenActionIntent(ReminderContext(context), processedNotificationData)
+
+
+fun getAcknowledgedActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData): Intent {
+    return buildActionIntent(reminderContext, processedNotificationData, ProcessorCode.Acknowledged.action)
 }
 
-fun getRefillActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Refill.action)
+fun getAcknowledgedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent =
+    getAcknowledgedActionIntent(ReminderContext(context), processedNotificationData)
+
+
+fun getRefillActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData): Intent {
+    return buildActionIntent(reminderContext, processedNotificationData, ProcessorCode.Refill.action)
 }
 
-fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
-    val intent = Intent(context, MainActivity::class.java)
-    intent.setAction(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
+fun getRefillIntent(reminderContext: ReminderContext, medicineId: Int): Intent {
+    val intent = reminderContext.getIntent(ProcessorCode.Refill.action)
+    reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
+    intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+    return intent
+}
+
+fun getRefillIntent(context: Context, medicineId: Int): Intent = getRefillIntent(ReminderContext(context), medicineId)
+
+
+fun getVariableAmountActivityIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
+    val intent = reminderContext.getIntent(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
+    reminderContext.setIntentClass(intent, MainActivity::class.java)
     reminderNotificationData.toIntent(intent)
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     return intent
 }
 
-/**
- * Creates an [Intent] to mark a reminder as "Skipped".
- */
-fun getSkippedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent {
-    return buildActionIntent(context, processedNotificationData, WorkerActionCode.Dismissed.action)
+fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent =
+    getVariableAmountActivityIntent(ReminderContext(context), reminderNotificationData)
+
+
+fun getStockHandlingIntent(reminderContext: ReminderContext, amount: Double, medicineId: Int, processedEpochSeconds: Long): Intent {
+    val intent = reminderContext.getIntent(ProcessorCode.StockHandling.action)
+    reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
+    intent.putExtra(ActivityCodes.EXTRA_AMOUNT, amount)
+    intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+    intent.putExtra(ActivityCodes.EXTRA_REMIND_INSTANT, processedEpochSeconds)
+    return intent
 }
+
+fun getStockHandlingIntent(context: Context, amount: Double, medicineId: Int, processedEpochSeconds: Long): Intent =
+    getStockHandlingIntent(ReminderContext(context), amount, medicineId, processedEpochSeconds)
+
+
+fun getSkippedActionIntent(reminderContext: ReminderContext, processedNotificationData: ProcessedNotificationData): Intent {
+    return buildActionIntent(reminderContext, processedNotificationData, ProcessorCode.Dismissed.action)
+}
+
+fun getSkippedActionIntent(context: Context, processedNotificationData: ProcessedNotificationData): Intent =
+    getSkippedActionIntent(ReminderContext(context), processedNotificationData)
+
+
+fun getRequestScheduleIntent(reminderContext: ReminderContext): Intent {
+    val intent = reminderContext.getIntent(ProcessorCode.Schedule.action)
+    reminderContext.setIntentClass(intent, ReminderProcessorBroadcastReceiver::class.java)
+    return intent
+}
+
+fun getRequestScheduleIntent(context: Context): Intent = getRequestScheduleIntent(ReminderContext(context))

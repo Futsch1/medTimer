@@ -1,41 +1,33 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.NotificationManager
-import android.content.Context
 import android.util.Log
-import androidx.work.Worker
-import androidx.work.WorkerParameters
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData.Companion.fromInputData
 
 /**
- * [Worker] responsible for triggering the display of a medication reminder notification.
+ * Responsible for triggering the display of a medication reminder notification.
  *
- * This worker retrieves reminder data from its input, checks if a notification for the
+ * This class retrieves reminder data from its input, checks if a notification for the
  * specific reminder events is already active to prevent duplicates, and delegates
  * the actual notification scheduling to [AlarmProcessor].
  */
-class ShowReminderNotificationWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
-    val alarmSetter = AlarmProcessor(context)
+class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
+    val alarmSetter = AlarmProcessor(reminderContext)
 
-    override fun doWork(): Result {
-        val reminderNotificationData = fromInputData(inputData)
-        Log.d(LogTags.REMINDER, "Scheduling reminder: $reminderNotificationData")
+    fun showReminder(reminderNotificationData: ReminderNotificationData) {
+        Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {
-            alarmSetter.setAlarmForReminderNotification(reminderNotificationData, DebugRescheduleData.fromData(inputData))
+            alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
         }
 
-        ReminderWorkerReceiver.requestScheduleNextNotification(context)
-
-        return Result.success()
+        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
     }
 
     private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
         if (reminderNotificationData.notificationId != -1) {
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            val notificationManager = reminderContext.notificationManager
             for (notification in notificationManager.activeNotifications) {
                 if (notification.id == reminderNotificationData.notificationId) {
                     val notificationData = ReminderNotificationData.fromBundle(notification.notification.extras)

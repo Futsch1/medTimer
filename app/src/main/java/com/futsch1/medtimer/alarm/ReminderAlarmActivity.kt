@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.alarm
 
-import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
@@ -19,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -166,8 +166,9 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
-            val intent = Intent(context, ReminderAlarmActivity::class.java)
+        fun getIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
+            val intent = Intent()
+            reminderContext.setIntentClass(intent, ReminderAlarmActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             reminderNotificationData.toIntent(intent)

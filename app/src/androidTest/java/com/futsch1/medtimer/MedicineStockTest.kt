@@ -25,7 +25,7 @@ import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.reminders.ReminderWorkerReceiver
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
@@ -269,7 +269,7 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10")
         pressBack()
 
-        ReminderWorkerReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().context, 0, 1)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0, 1)
         sleep(2_000)
         device.openNotification()
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
@@ -369,7 +369,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.createReminder)
 
         checkNotificationWithTitle(device, notificationTitle, false)
-        ReminderWorkerReceiver.requestScheduleNowForTests(context)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         checkNotificationWithTitle(device, notificationTitle, true)
     }
 }

@@ -1,9 +1,9 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.schedulertests
 
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ import java.time.ZoneId
 
 internal class ReminderSchedulerUnitTest {
     @Test
-    fun testScheduleEmptyLists() {
+    fun scheduleEmptyLists() {
         val scheduler: ReminderScheduler = scheduler
 
         // Two empty lists
@@ -36,7 +36,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testScheduleReminders() {
+    fun scheduleReminders() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
@@ -57,7 +57,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testScheduleWithEvents() {
+    fun scheduleWithEvents() {
         val scheduler: ReminderScheduler = getScheduler(1)
 
         val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
@@ -121,7 +121,7 @@ internal class ReminderSchedulerUnitTest {
 
     // schedules a reminder for the same day
     @Test
-    fun testscheduleSameDayReminder() {
+    fun scheduleSameDayReminder() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -140,7 +140,7 @@ internal class ReminderSchedulerUnitTest {
 
     // schedules a reminder for a different medicine
     @Test
-    fun testScheduleDifferentMedicineReminder() {
+    fun scheduleDifferentMedicineReminder() {
         val scheduler: ReminderScheduler = getScheduler(1)
 
         val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)
@@ -162,7 +162,7 @@ internal class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    fun testScheduleReminderWithOneDayPause() {
+    fun scheduleReminderWithOneDayPause() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -185,7 +185,7 @@ internal class ReminderSchedulerUnitTest {
 
     // schedules a reminder for every two days
     @Test
-    fun testScheduleTwoDayReminderVsOneDay() {
+    fun scheduleTwoDayReminderVsOneDay() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -205,7 +205,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testScheduleReminderWithOneDayPauseVsThreeDaysPause() {
+    fun scheduleReminderWithOneDayPauseVsThreeDaysPause() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -247,7 +247,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testScheduleCycleInFuture() {
+    fun scheduleCycleInFuture() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -282,7 +282,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testScheduleLongCycleInFuture() {
+    fun scheduleLongCycleInFuture() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -313,7 +313,7 @@ internal class ReminderSchedulerUnitTest {
 
 
     @Test
-    fun testReminderOverMidnight() {
+    fun reminderOverMidnight() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
@@ -332,7 +332,7 @@ internal class ReminderSchedulerUnitTest {
     }
 
     @Test
-    fun testReminderTomorrow() {
+    fun reminderTomorrow() {
         val scheduler: ReminderScheduler = scheduler
 
         val medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1)

@@ -28,7 +28,6 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -144,16 +143,15 @@ class CSVExportUnitTest {
         // Create a mock File
         File file = mock(File.class);
         TimeZone utc = TimeZone.getTimeZone("UTC");
-        ZoneId utcId = ZoneId.of("UTC");
         java.text.DateFormat usTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT, Locale.US);
         usTimeFormat.setTimeZone(utc);
 
         try (MockedConstruction<FileWriter> fileWriterMockedConstruction = Mockito.mockConstruction(FileWriter.class);
              MockedStatic<DateFormat> dateAccessMockedStatic = mockStatic(DateFormat.class);
-             MockedStatic<ZoneId> zoneIdMockedStatic = mockStatic(ZoneId.class)) {
+             MockedStatic<TimeZone> timeZoneMockedStatic = mockStatic(TimeZone.class)) {
             FragmentManager fragmentManager = mock(FragmentManager.class);
             dateAccessMockedStatic.when(() -> DateFormat.getTimeFormat(any())).thenReturn(usTimeFormat);
-            zoneIdMockedStatic.when(ZoneId::systemDefault).thenReturn(utcId);
+            timeZoneMockedStatic.when(TimeZone::getDefault).thenReturn(utc);
 
             // Create the CSVCreator object
             CSVMedicineExport csvExport = new CSVMedicineExport(medicines, fragmentManager, context);
