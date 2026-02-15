@@ -19,6 +19,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
@@ -160,6 +161,7 @@ class TestReminderContext {
         })
         `when`(mock.audioManager).thenReturn(audioManagerMock)
         `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
+        `when`(mock.icons).thenReturn(mock(MedicineIcons::class.java))
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 
