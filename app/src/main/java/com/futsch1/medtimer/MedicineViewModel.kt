@@ -102,7 +102,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun filterEvents(events: List<ReminderEvent>): List<ReminderEvent> {
-        return getFilteredEvents(events, validTagIds.value!!, liveTags.value!!)
+        return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value ?: listOf())
     }
 
     fun filterMedicines(medicines: List<FullMedicine>): List<FullMedicine> {

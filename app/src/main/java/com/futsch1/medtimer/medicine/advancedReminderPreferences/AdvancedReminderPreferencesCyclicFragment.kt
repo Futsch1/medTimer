@@ -18,8 +18,10 @@ class AdvancedReminderPreferencesCyclicFragment(
 
     override fun customSetup(entity: Reminder) {
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
-            editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
+            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
         }
-        findPreference<EditTextPreference>("cycle_pause_days")?.setOnBindEditTextListener { editText -> editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED }
+        findPreference<EditTextPreference>("cycle_pause_days")?.setOnBindEditTextListener { editText ->
+            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+        }
     }
 }

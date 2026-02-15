@@ -75,6 +75,9 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
     }
 
     fun getSelectedItems(): List<OverviewEvent> {
+        if (selectedItems.size > itemCount) {
+            selectAll()
+        }
         return selectedItems.map { position -> getItem(position) }
     }
 
@@ -88,6 +91,7 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
     }
 
     fun selectAll() {
+        selectedItems.clear()
         selectedItems.addAll((0 until itemCount).toList())
         notifyItemRangeChanged(0, itemCount)
     }
