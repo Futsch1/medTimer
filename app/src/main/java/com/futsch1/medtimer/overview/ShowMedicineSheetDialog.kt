@@ -28,13 +28,14 @@ class ShowMedicineSheetDialog(
             val medicineRepository = MedicineRepository(activity.application)
             val reminder = medicineRepository.getReminder(reminderId)
             val fullMedicine = medicineRepository.getMedicine(reminder!!.medicineRelId)!!
+            val reminderSummary = reminderSummary(reminder, activity)
             launch(mainDispatcher) {
-                showMedicine(fullMedicine, reminder)
+                showMedicine(fullMedicine, reminder, reminderSummary)
             }
         }
     }
 
-    private fun showMedicine(fullMedicine: FullMedicine, reminder: Reminder) {
+    private fun showMedicine(fullMedicine: FullMedicine, reminder: Reminder, reminderSummary: String) {
 
         val showMedicineSheetDialog =
             if (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) BottomSheetDialog(activity) else SideSheetDialog(activity)
@@ -50,7 +51,7 @@ class ShowMedicineSheetDialog(
         checkIfTextElseGone(notesTextView)
 
         val reminderTextView = showMedicineSheetDialog.findViewById<TextView>(R.id.reminderText)
-        reminderTextView?.text = reminderSummary(reminder, activity)
+        reminderTextView?.text = reminderSummary
         reminderTextView?.setCompoundDrawablesWithIntrinsicBounds(reminder.reminderType.icon, 0, 0, 0)
 
         showMedicineSheetDialog.show()
