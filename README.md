@@ -1,8 +1,8 @@
 [![Build](https://github.com/Futsch1/medTimer/actions/workflows/build.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/build.yml)
 [![Unit test](https://github.com/Futsch1/medTimer/actions/workflows/test.yml/badge.svg)](https://github.com/Futsch1/medTimer/actions/workflows/test.yml)
 [![Maintainability](https://qlty.sh/badges/f4b5a014-c24a-47d9-9ca8-89b806c98943/maintainability.svg)](https://qlty.sh/gh/Futsch1/projects/medTimer)
+[![Code Coverage](https://qlty.sh/gh/Futsch1/projects/medTimer/coverage.svg)](https://qlty.sh/gh/Futsch1/projects/medTimer)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Futsch1_medTimer&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Futsch1_medTimer)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Futsch1/medTimer/badge)](https://scorecard.dev/viewer/?uri=github.com/Futsch1/medTimer)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9439/badge)](https://www.bestpractices.dev/projects/9439)
 
@@ -30,7 +30,7 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
 
 **Med reminders and history with full offline privacy**
 
-<p float="left">
+<p>
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="150" />
   &nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" />
@@ -64,6 +64,7 @@ Flexible & Personalized Reminders:
 - Create interval based reminders, reminders following each other in intervals or interval reminders
   constrained with a start and end time per day.
 - Use alarm type reminders to ensure notification even when the device is set to silent mode.
+- Be reminded when the medication stock runs out or the medicine's expiration date has passed.
 
 Simple & Secure Data Management:
 

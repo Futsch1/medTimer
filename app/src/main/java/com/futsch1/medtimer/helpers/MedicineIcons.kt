@@ -15,6 +15,7 @@ import com.google.android.material.color.MaterialColors
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
+import kotlin.math.ceil
 
 
 class MedicineIcons(context: Context) {
@@ -62,6 +63,34 @@ class MedicineIcons(context: Context) {
         drawable.draw(canvas)
 
         return bit
+    }
+
+    fun getIconsBitmap(ids: List<Int>): Bitmap? {
+        if (ids.isEmpty()) {
+            return null
+        }
+        if (ids.size == 1) {
+            return getIconBitmap(ids[0])
+        }
+
+        val iconBitmaps = ids.map { getIconBitmap(it) }
+        val iconWidth = iconBitmaps.maxOfOrNull { it.width }!!
+        val iconHeight = iconBitmaps.maxOfOrNull { it.height }!!
+
+        val numIcons = ids.size
+        val numCols = ceil(kotlin.math.sqrt(numIcons.toDouble())).toInt()
+        val numRows = ceil(numIcons.toDouble() / numCols).toInt()
+
+        val resultBitmap = createBitmap(numCols * iconWidth, numRows * iconHeight)
+        val canvas = Canvas(resultBitmap)
+
+        for ((index, bitmap) in iconBitmaps.withIndex()) {
+            val row = index / numCols
+            val col = index % numCols
+            canvas.drawBitmap(bitmap, (col * iconWidth).toFloat(), (row * iconHeight).toFloat(), null)
+        }
+
+        return resultBitmap
     }
 
     fun getIconPack(): IconPack {

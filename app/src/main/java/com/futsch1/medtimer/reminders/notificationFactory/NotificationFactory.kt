@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders.notificationFactory
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.MainActivity
@@ -19,7 +20,7 @@ import kotlin.time.Instant
 abstract class NotificationFactory(
     val reminderContext: ReminderContext,
     val notificationId: Int,
-    medicines: List<Medicine?>
+    medicines: List<Medicine>
 ) {
     val builder: NotificationCompat.Builder
 
@@ -29,10 +30,10 @@ abstract class NotificationFactory(
         builder = reminderContext.getNotificationBuilder(notificationChannelId)
 
         val color = getColor(medicines)
-        val iconId = getIconId(medicines)
+        val icon = getIcon(medicines)
 
-        if (iconId != 0) {
-            builder.setLargeIcon(reminderContext.icons.getIconBitmap(iconId))
+        if (icon != null) {
+            builder.setLargeIcon(icon)
         }
         if (color != null) {
             builder.setColor(color.toArgb()).setColorized(true)
@@ -40,28 +41,31 @@ abstract class NotificationFactory(
         builder.setSilent(shouldBeSilent())
     }
 
-    private fun getIconId(medicines: List<Medicine?>): Int {
-        for (medicine in medicines) {
-            if (medicine?.iconId != 0)
-                return medicine!!.iconId
-        }
-        return 0
+    private fun getIcon(medicines: List<Medicine>): Bitmap? {
+        val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.toList()
+        return reminderContext.icons.getIconsBitmap(iconIds)
     }
 
-    private fun getHighestImportance(medicines: List<Medicine?>): Importance {
+    private fun getHighestImportance(medicines: List<Medicine>): Importance {
         for (medicine in medicines) {
-            if (medicine?.notificationImportance == Importance.HIGH.value)
+            if (medicine.notificationImportance == Importance.HIGH.value)
                 return Importance.HIGH
         }
         return Importance.DEFAULT
     }
 
-    private fun getColor(medicines: List<Medicine?>): Color? {
+    private fun getColor(medicines: List<Medicine>): Color? {
+        var color: Color? = null
         for (medicine in medicines) {
-            if (medicine?.useColor == true)
-                return Color.valueOf(medicine.color)
+            if (medicine.useColor) {
+                if (color != null) {
+                    // If more than one medicine is colored, do not use a color at all
+                    return null
+                }
+                color = Color.valueOf(medicine.color)
+            }
         }
-        return null
+        return color
     }
 
     fun getStartAppIntent(): PendingIntent {
