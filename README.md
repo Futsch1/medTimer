@@ -30,7 +30,7 @@ the [Releases Section](https://github.com/Futsch1/medTimer/releases/latest).
 
 **Med reminders and history with full offline privacy**
 
-<p float="left">
+<p>
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="150" />
   &nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="150" />
@@ -64,6 +64,7 @@ Flexible & Personalized Reminders:
 - Create interval based reminders, reminders following each other in intervals or interval reminders
   constrained with a start and end time per day.
 - Use alarm type reminders to ensure notification even when the device is set to silent mode.
+- Be reminded when the medication stock runs out or the medicine's expiration date has passed.
 
 Simple & Secure Data Management:
 
