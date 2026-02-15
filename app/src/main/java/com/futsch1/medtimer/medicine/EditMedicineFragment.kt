@@ -96,15 +96,15 @@ class EditMedicineFragment :
     private fun setupSelectIcon(fragmentView: View) {
         selectIconButton = fragmentView.findViewById(R.id.selectIcon)
         selectIconButton!!.setIcon(MedicineIcons(requireContext()).getIconDrawable(iconId))
-
-        val fragmentManager = getChildFragmentManager()
-        val dialog = fragmentManager.findFragmentByTag(ICON_DIALOG_TAG) as IconDialog?
-        val builder = IconDialogSettings.Builder()
-        builder.showClearBtn = true
-        builder.showSelectBtn = false
-        val iconDialog = dialog ?: IconDialog.newInstance(builder.build())
-
+        
         selectIconButton!!.setOnClickListener { _: View? ->
+            val fragmentManager = getChildFragmentManager()
+            val dialog = fragmentManager.findFragmentByTag(ICON_DIALOG_TAG) as IconDialog?
+            val builder = IconDialogSettings.Builder()
+            builder.showClearBtn = true
+            builder.showSelectBtn = false
+
+            val iconDialog = dialog ?: IconDialog.newInstance(builder.build())
             iconDialog.selectedIconIds = listOf(iconId)
             iconDialog.show(fragmentManager, ICON_DIALOG_TAG)
         }
