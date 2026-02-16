@@ -23,10 +23,10 @@ class EditMedicineMenuProvider(
         menuInflater.inflate(R.menu.edit_medicine, menu)
         menu.setGroupDividerEnabled(true)
 
-        MedicinesMenu.setupActivateMenu(menu, R.id.activate_all) {
+        MedicinesMenu.setupMenu(menu, R.id.activate_all) {
             setRemindersActive(true)
         }
-        MedicinesMenu.setupActivateMenu(menu, R.id.deactivate_all) {
+        MedicinesMenu.setupMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
         }
         setupDeleteMenu(menu)

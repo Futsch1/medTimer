@@ -277,4 +277,7 @@
     <string name="refill_amount">Rellenar (%s)</string>
     <string name="expiration_date_notification">El medicamento %1$s tiene una fecha de vencimiento de %2$s.\nConsidere reemplazar el medicamento.</string>
     <string name="select_all">Seleccionar todo</string>
+    <string name="by_name">Por nombre</string>
+    <string name="by_creation_date_ascending">Ascendente por fecha de creación</string>
+    <string name="by_creation_date_descending">Descendente por fecha de creación</string>
 </resources>

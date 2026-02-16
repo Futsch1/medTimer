@@ -272,4 +272,7 @@
     <string name="refill_amount">Täyttö (%s)</string>
     <string name="expiration_date_notification">Lääkkeen %1$s viimeinen käyttöpäivä on %2$s.\nHarkitse lääkkeen vaihtamista.</string>
     <string name="select_all">Valitse kaikki</string>
+    <string name="by_name">Nimen mukaan</string>
+    <string name="by_creation_date_ascending">Nouseva luontipäivämäärän mukaan</string>
+    <string name="by_creation_date_descending">Laskeva luontipäivämäärän mukaan</string>
 </resources>

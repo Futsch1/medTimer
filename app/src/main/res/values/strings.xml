@@ -277,5 +277,8 @@
     <string name="refill_amount">Refill (%s)</string>
     <string name="expiration_date_notification">The medicine %1$s expires on %2$s.\nConsider replacing the medicine.</string>
     <string name="select_all">Select all</string>
+    <string name="by_name">By name</string>
+    <string name="by_creation_date_ascending">Ascending by creation date</string>
+    <string name="by_creation_date_descending">Descending by creation date</string>
 </resources>
 

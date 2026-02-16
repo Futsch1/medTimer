@@ -272,4 +272,7 @@
     <string name="refill_amount">Yeniden doldur (%s)</string>
     <string name="expiration_date_notification">%1$s ilacının son kullanma tarihi %2$s.\nİlacı değiştirmeyi düşünün.</string>
     <string name="select_all">Tümünü seç</string>
+    <string name="by_name">İsme göre</string>
+    <string name="by_creation_date_ascending">Oluşturma tarihine göre artan</string>
+    <string name="by_creation_date_descending">Oluşturma tarihine göre azalan</string>
 </resources>

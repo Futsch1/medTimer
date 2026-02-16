@@ -267,4 +267,7 @@
     <string name="refill_amount">補充 (%s)</string>
     <string name="expiration_date_notification">藥品 %1$s 的有效期為 %2$s。\n請考慮更換藥品。</string>
     <string name="select_all">全選</string>
+    <string name="by_name">按名稱</string>
+    <string name="by_creation_date_ascending">按創建日期升序</string>
+    <string name="by_creation_date_descending">按創建日期降序</string>
 </resources>

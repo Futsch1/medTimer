@@ -292,4 +292,7 @@
     <string name="refill_amount">إعادة التعبئة (%s)</string>
     <string name="expiration_date_notification">الدواء %1$s له تاريخ انتهاء صلاحية في %2$s.\nفكر في استبدال الدواء.</string>
     <string name="select_all">تحديد الكل</string>
+    <string name="by_name">بواسطة الاسم</string>
+    <string name="by_creation_date_ascending">تصاعدي حسب تاريخ الإنشاء</string>
+    <string name="by_creation_date_descending">تنازلي حسب تاريخ الإنشاء</string>
 </resources>
