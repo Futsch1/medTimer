@@ -51,9 +51,9 @@ abstract class ActionsBase(
                     reminderTimeStamp,
                     scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
                 )
-            }
 
-            reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
+                reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
+            }
 
             return@withContext reminderEvent
         }

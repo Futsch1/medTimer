@@ -19,8 +19,8 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
 
     fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
-        var scheduledInstant = scheduledReminderNotificationData.remindInstant
-        scheduledInstant = adjustTimestamp(reminderContext, scheduledInstant)
+        val originalInstant = scheduledReminderNotificationData.remindInstant
+        scheduledReminderNotificationData.remindInstant = adjustTimestamp(reminderContext, originalInstant)
 
         // Cancel potentially already running alarm and set new
         alarmManager.cancel(
@@ -37,13 +37,13 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         }
 
         // If the alarm is in the future, schedule with alarm manager
-        if (scheduledInstant.isAfter(reminderContext.timeAccess.now())) {
+        if (scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
             val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
 
             if (canScheduleExactAlarms()) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
             } else {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledInstant.toEpochMilli(), pendingIntent)
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
             }
 
             Log.i(

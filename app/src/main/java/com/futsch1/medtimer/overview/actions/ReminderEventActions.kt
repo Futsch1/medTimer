@@ -57,6 +57,9 @@ open class ReminderEventActions(val event: OverviewReminderEvent, medicineReposi
                 fragmentActivity.lifecycleScope.launch(ioCoroutineDispatcher) {
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
                     reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
+                    reminderNotificationData.notificationId = reminderEvent.notificationId
+                    reminderEvent.remindedTimestamp = newReminderTime
+                    medicineRepository.updateReminderEvent(reminderEvent)
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }
             }

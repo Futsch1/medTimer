@@ -2,8 +2,9 @@ package com.futsch1.medtimer
 
 import android.widget.TextView
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
@@ -17,21 +18,27 @@ import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.clos
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import junit.framework.TestCase
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
+import java.time.format.TextStyle
 import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
 
 class ReminderTest : BaseTestHelper() {
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun activeReminderTest() {
         val futureTime = Calendar.getInstance()
         val year = futureTime.get(Calendar.YEAR)
@@ -110,7 +117,8 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(R.id.reminders, 1)
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun activeIntervalReminderTest() {
         val futureTime = Calendar.getInstance()
         val year = futureTime.get(Calendar.YEAR)
@@ -166,7 +174,8 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(R.id.reminderList, 0)
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun reminderTypeTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -219,7 +228,7 @@ class ReminderTest : BaseTestHelper() {
             R.id.reminderList,
             0,
             R.id.reminderCardLayout,
-            ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
+            matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
         )
 
         expectedString = TimeHelper.minutesToTimeString(context, (reminder1Time.toSecondOfDay() / 60).toLong())
@@ -239,7 +248,7 @@ class ReminderTest : BaseTestHelper() {
             R.id.reminderList,
             3,
             R.id.reminderCardLayout,
-            ViewAssertions.matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
+            matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
         )
 
         clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings)
@@ -269,7 +278,8 @@ class ReminderTest : BaseTestHelper() {
         assertContains("Test (2)")
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun editReminderTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -324,7 +334,8 @@ class ReminderTest : BaseTestHelper() {
         TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken), view.getText())
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun deleteReminderTest() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
@@ -341,7 +352,8 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(R.id.reminders, 0)
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    //@AllowFlaky(attempts = 1)
     fun intervalReminderTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -359,7 +371,7 @@ class ReminderTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
 
-        BaristaSleepInteractions.sleep(1000)
+        sleep(1000)
         assertContains(context.getString(R.string.interval_time, "0 min"))
     }
 
@@ -447,6 +459,43 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
         assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 21 * 60))
+    }
+
+    @Test
+    //@AllowFlaky(attempts = 1)
+    fun reschedule() {
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+
+        AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
+        sleep(1000)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.rescheduleButton)
+        AndroidTestHelper.setTime(19, 0, false)
+
+        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 19 * 60))
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.alarm)))
+        )
+
+        val secondDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
+        clickOn(secondDay)
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.rescheduleButton)
+        AndroidTestHelper.setTime(23, 0, false)
+
+        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 23 * 60))
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.alarm)))
+        )
     }
 
     private class CyclicReminderInfo(var consecutiveDays: Int, var pauseDays: Int, var shouldHaveInfo: Boolean)

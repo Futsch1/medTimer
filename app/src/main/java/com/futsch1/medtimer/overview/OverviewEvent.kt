@@ -9,6 +9,7 @@ import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import java.time.Instant
 
 
 enum class OverviewState {
@@ -75,15 +76,18 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
     override val color: Int?
         get() = if (reminderEvent.useColor) reminderEvent.color else null
     override val state: OverviewState
-        get() = mapReminderEventState(reminderEvent.status)
+        get() = mapReminderEventState(reminderEvent)
     override val reminderType: Reminder.ReminderType
         get() = reminderEvent.reminderType
     override val reminderId: Int
         get() = reminderEvent.reminderId
 
-    private fun mapReminderEventState(status: ReminderEvent.ReminderStatus): OverviewState {
-        return when (status) {
-            ReminderEvent.ReminderStatus.RAISED -> OverviewState.RAISED
+    private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
+        return when (reminderEvent.status) {
+            ReminderEvent.ReminderStatus.RAISED -> {
+                if (reminderEvent.remindedTimestamp <= Instant.now().toEpochMilli() / 1000) OverviewState.RAISED else OverviewState.PENDING
+            }
+
             ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN
             ReminderEvent.ReminderStatus.SKIPPED -> OverviewState.SKIPPED
             ReminderEvent.ReminderStatus.ACKNOWLEDGED -> OverviewState.TAKEN
