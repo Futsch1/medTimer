@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tab_settings">设置</string>
     <string name="tab_overview">主页</string>
@@ -265,6 +265,6 @@
     <string name="clear_dates">清除日期</string>
     <string name="acknowledged">已确认</string>
     <string name="refill_amount">补充 (%s)</string>
-    <string name="expiration_date_notification">药品 %1$s 的有效期为 %2$s。\n请考虑更换药品。</string>
+    <string name="expiration_date_notification">药品 %1$s 过期日为 %2$s。\n请考虑更换药品。</string>
     <string name="select_all">全选</string>
 </resources>

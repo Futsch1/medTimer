@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="taken">تم التناول</string>
     <string name="skipped">تم التخطي</string>
@@ -290,6 +290,6 @@
     <string name="clear_dates">مسح التواريخ</string>
     <string name="acknowledged">تم الإقرار</string>
     <string name="refill_amount">إعادة التعبئة (%s)</string>
-    <string name="expiration_date_notification">الدواء %1$s له تاريخ انتهاء صلاحية في %2$s.\nفكر في استبدال الدواء.</string>
+    <string name="expiration_date_notification">الدواء %1$s ينتهي في %2$s.\nفكر في استبدال الدواء.</string>
     <string name="select_all">تحديد الكل</string>
 </resources>

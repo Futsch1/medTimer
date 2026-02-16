@@ -275,6 +275,6 @@
     <string name="clear_dates">Effacer les dates</string>
     <string name="acknowledged">Confirmé</string>
     <string name="refill_amount">Recharge (%s)</string>
-    <string name="expiration_date_notification">Le médicament %1$s a une date d\'expiration au %2$s.\nPensez à remplacer le médicament.</string>
+    <string name="expiration_date_notification">Le médicament %1$s se périme le %2$s.\nPensez à remplacer ce médicament.</string>
     <string name="select_all">Tout sélectionner</string>
 </resources>
