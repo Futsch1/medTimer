@@ -80,7 +80,7 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
     fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
         for (reminderEvent in reminderEvents) {
             reminderEvent.status = status
-            reminderEvent.processedTimestamp = Instant.now().epochSecond
+            reminderEvent.processedTimestamp = reminderContext.timeAccess.now().epochSecond
             doStockHandling(reminderEvent)
             Log.i(
                 LogTags.REMINDER, String.format(

@@ -30,7 +30,7 @@ class ShowReminderNotificationProcessorTest {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
         reminderNotificationData.notificationId = 1
-        reminderContext.notificationManagerFake.add(1, intArrayOf(1, 2))
+        reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1, 2), remindTimestamp = 10)
 
         ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
 
@@ -51,7 +51,7 @@ class ShowReminderNotificationProcessorTest {
         reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
         reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
         reminderContext.notificationId = 2
-        reminderContext.notificationManagerFake.add(1, intArrayOf(2))
+        reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(2))
 
         ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
 
@@ -74,7 +74,7 @@ class ShowReminderNotificationProcessorTest {
 
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
         reminderNotificationData.notificationId = 1
-        reminderContext.notificationManagerFake.add(1, intArrayOf(1, 2))
+        reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1, 2))
 
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
 

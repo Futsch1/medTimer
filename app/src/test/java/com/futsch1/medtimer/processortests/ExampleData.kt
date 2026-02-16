@@ -17,3 +17,15 @@ fun fillWithTwoReminders(reminderContext: TestReminderContext): ReminderNotifica
         intArrayOf(1, 2)
     )
 }
+
+fun fillWithOneReminder(reminderContext: TestReminderContext): ReminderNotificationData {
+    reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+    reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
+    reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
+
+    return ReminderNotificationData(
+        Instant.ofEpochSecond(0),
+        intArrayOf(1),
+        intArrayOf(1)
+    )
+}

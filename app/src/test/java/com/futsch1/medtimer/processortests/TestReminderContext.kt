@@ -98,11 +98,13 @@ class NotificationManagerFake {
         return statusBarNotifications.toTypedArray()
     }
 
-    fun add(id: Int, reminderIds: IntArray) {
+    fun add(id: Int, reminderIds: IntArray = intArrayOf(), reminderEventIds: IntArray = intArrayOf(), remindTimestamp: Long = 0) {
         val notificationMock = mock(Notification::class.java)
         val bundleMock = mock(Bundle::class.java)
         notificationMock.extras = bundleMock
-        `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)).thenReturn(reminderIds)
+        `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)).thenReturn(reminderIds)
+        `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)).thenReturn(reminderEventIds)
+        `when`(bundleMock.getLong(ActivityCodes.EXTRA_REMIND_INSTANT)).thenReturn(remindTimestamp)
         `when`(bundleMock.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID)).thenReturn(id)
         activeNotifications[id] = notificationMock
     }
@@ -143,7 +145,7 @@ class TestReminderContext {
     )
     var notificationId: Int = 1
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
-    val instant: Instant = Instant.ofEpochSecond(0)
+    var instant: Instant = Instant.ofEpochSecond(0)
 
     init {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)

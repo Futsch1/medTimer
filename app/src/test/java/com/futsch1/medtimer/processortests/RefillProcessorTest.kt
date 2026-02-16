@@ -7,11 +7,13 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class RefillProcessorTest {
     @Test
     fun directRefill() {
         val reminderContext = TestReminderContext()
+        reminderContext.instant = Instant.ofEpochSecond(10)
 
         reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
         reminderContext.medicineRepositoryFake.medicines[0].refillSizes.add(10.0)
@@ -20,6 +22,8 @@ class RefillProcessorTest {
         RefillProcessor(reminderContext.mock).processRefill(1)
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
+        assertEquals(10, reminderContext.medicineRepositoryFake.reminderEvents[0].processedTimestamp)
+        assertEquals(10, reminderContext.medicineRepositoryFake.reminderEvents[0].remindedTimestamp)
         assertEquals("100 ➡ 110", reminderContext.medicineRepositoryFake.reminderEvents[0].amount)
         assertEquals(Reminder.ReminderType.REFILL, reminderContext.medicineRepositoryFake.reminderEvents[0].reminderType)
     }
