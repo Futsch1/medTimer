@@ -26,24 +26,40 @@ class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
     }
 
     private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
-        if (reminderNotificationData.notificationId != -1) {
-            val notificationManager = reminderContext.notificationManager
-            for (notification in notificationManager.activeNotifications) {
-                if (notification.id == reminderNotificationData.notificationId) {
-                    val notificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
-                    // Check if all reminder event IDs from the notification are also in the reminder notification data
-                    val reminderEventIds = reminderNotificationData.reminderEventIds.toList()
-                    val notificationReminderEventIds = notificationData.reminderEventIds.toList()
-                    if (notificationReminderEventIds.containsAll(reminderEventIds)) {
-                        Log.d(
-                            LogTags.REMINDER,
-                            "Notification nID ${reminderNotificationData.notificationId} found, reminder event IDs $reminderEventIds are in covered IDs $notificationReminderEventIds"
-                        )
-                        return true
-                    }
-                }
+        val notificationData = getNotificationData(reminderNotificationData.notificationId)
+        if (notificationData != null) {
+            // Check if all reminder event IDs from the notification are also in the reminder notification data
+            val reminderEventIds = reminderNotificationData.reminderEventIds.toList()
+            val notificationReminderEventIds = notificationData.reminderEventIds.toList()
+            if (notificationData.remindInstant != reminderNotificationData.remindInstant) {
+                Log.d(
+                    LogTags.REMINDER,
+                    "Notification nID ${reminderNotificationData.notificationId} found, but reminder was rescheduled"
+                )
+                NotificationProcessor(reminderContext).removeRemindersFromNotification(
+                    reminderNotificationData.notificationId,
+                    reminderNotificationData.reminderEventIds.toList()
+                )
+                return false
+            }
+            if (notificationReminderEventIds.containsAll(reminderEventIds)) {
+                Log.d(
+                    LogTags.REMINDER,
+                    "Notification nID ${reminderNotificationData.notificationId} found, reminder event IDs $reminderEventIds are in covered IDs $notificationReminderEventIds"
+                )
+                return true
             }
         }
         return false
+    }
+
+    private fun getNotificationData(notificationId: Int): ReminderNotificationData? {
+        val notificationManager = reminderContext.notificationManager
+        for (notification in notificationManager.activeNotifications) {
+            if (notification.id == notificationId) {
+                return ReminderNotificationData.fromBundle(notification.notification.extras)
+            }
+        }
+        return null
     }
 }
