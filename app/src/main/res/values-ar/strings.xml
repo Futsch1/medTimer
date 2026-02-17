@@ -295,4 +295,7 @@
     <string name="by_name">بواسطة الاسم</string>
     <string name="by_creation_date_ascending">تصاعدي حسب تاريخ الإنشاء</string>
     <string name="by_creation_date_descending">تنازلي حسب تاريخ الإنشاء</string>
+    <string name="create_out_of_stock_reminder">إنشاء تذكير بنفاد المخزون</string>
+    <string name="successfully_created_reminder">تم إنشاء تذكير جديد بنجاح</string>
+    <string name="create_expiration_date_reminder">إنشاء تذكير بتاريخ انتهاء الصلاحية</string>
 </resources>

@@ -285,4 +285,7 @@
     <string name="by_name">За назвою</string>
     <string name="by_creation_date_ascending">За зростанням дати створення</string>
     <string name="by_creation_date_descending">За спаданням дати створення</string>
+    <string name="create_out_of_stock_reminder">Створити нагадування про відсутність ліків</string>
+    <string name="successfully_created_reminder">Нове нагадування успішно створено</string>
+    <string name="create_expiration_date_reminder">Створити нагадування про термін придатності</string>
 </resources>

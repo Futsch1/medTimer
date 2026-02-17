@@ -285,4 +285,7 @@
     <string name="by_name">Podle jména</string>
     <string name="by_creation_date_ascending">Vzestupně podle data vytvoření</string>
     <string name="by_creation_date_descending">Sestupně podle data vytvoření</string>
+    <string name="create_out_of_stock_reminder">Vytvořit připomenutí vyčerpání zásob</string>
+    <string name="successfully_created_reminder">Úspěšně vytvořeno nové připomenutí</string>
+    <string name="create_expiration_date_reminder">Vytvořit připomenutí data vypršení</string>
 </resources>

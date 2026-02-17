@@ -280,4 +280,7 @@
     <string name="by_name">Por nome</string>
     <string name="by_creation_date_ascending">Ascendente por data de criação</string>
     <string name="by_creation_date_descending">Descendente por data de criação</string>
+    <string name="create_out_of_stock_reminder">Criar lembrete de estoque esgotado</string>
+    <string name="successfully_created_reminder">Novo lembrete criado com sucesso</string>
+    <string name="create_expiration_date_reminder">Criar lembrete de data de vencimento</string>
 </resources>

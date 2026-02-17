@@ -7,7 +7,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.futsch1.medtimer.OptionsMenu.enableOptionalIcons
+import com.futsch1.medtimer.OptionsMenu.Companion.enableOptionalIcons
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder

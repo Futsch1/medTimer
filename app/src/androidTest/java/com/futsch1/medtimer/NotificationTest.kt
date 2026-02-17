@@ -109,7 +109,7 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createReminder(
             "1",
-            AndroidTestHelper.getNextNotificationTime().toLocalTime()
+            AndroidTestHelper.nextNotificationTime.toLocalTime()
         )
 
         clickOn(R.id.openAdvancedSettings)
@@ -415,7 +415,7 @@ class NotificationTest : BaseTestHelper() {
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
-        makeNotificationExpanded(device, TEST_MED)
+        makeNotificationExpanded(device, getNotificationText(R.string.skipped))
         internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
         internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
@@ -478,7 +478,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        makeNotificationExpanded(device, TEST_MED)
+        makeNotificationExpanded(device, getNotificationText(R.string.taken))
         internalAssert(
             device.wait(
                 Until.hasObject(By.res(packageName, "takenButton")),
@@ -510,7 +510,7 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.combine_notifications)
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
+        val notificationTime = AndroidTestHelper.nextNotificationTime.toLocalTime()
 
         AndroidTestHelper.createReminder(
             "1",
@@ -567,7 +567,7 @@ class NotificationTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        val notificationTime = AndroidTestHelper.getNextNotificationTime().toLocalTime()
+        val notificationTime = AndroidTestHelper.nextNotificationTime.toLocalTime()
 
         AndroidTestHelper.createReminder("1", notificationTime)
         clickOn(R.id.openAdvancedSettings)

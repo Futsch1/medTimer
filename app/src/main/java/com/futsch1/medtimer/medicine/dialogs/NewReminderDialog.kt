@@ -1,16 +1,15 @@
 package com.futsch1.medtimer.medicine.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
@@ -26,13 +25,12 @@ import java.time.Instant
 
 
 class NewReminderDialog(
-    val context: Context,
     val activity: FragmentActivity,
     val fullMedicine: FullMedicine,
-    val medicineViewModel: MedicineViewModel,
+    val medicineRepository: MedicineRepository,
     val reminder: Reminder
 ) {
-    private val dialog: Dialog = Dialog(context)
+    private val dialog: Dialog = Dialog(activity)
 
     init {
         dialog.setContentView(R.layout.dialog_new_reminder)
@@ -56,7 +54,7 @@ class NewReminderDialog(
         textInputEditText.requestFocus()
         textInputEditText.postDelayed({
             val imm: InputMethodManager? =
-                getSystemService(context, InputMethodManager::class.java)
+                getSystemService(activity, InputMethodManager::class.java)
             imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
         if (fullMedicine.isStockManagementActive) {
@@ -168,10 +166,11 @@ class NewReminderDialog(
                 reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
             }
             if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
-                medicineViewModel.medicineRepository.insertReminder(reminder)
+                medicineRepository.insertReminder(reminder)
+                Toast.makeText(activity, R.string.successfully_created_reminder, Toast.LENGTH_LONG).show()
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -8,7 +8,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 
 class MedicineDataStore(
-    override val entityId: Int, val context: Context, val medicineRepository: MedicineRepository,
+    override val entityId: Int, val context: Context, override val medicineRepository: MedicineRepository,
 ) : EntityDataStore<FullMedicine>() {
     override var entity: FullMedicine = medicineRepository.getMedicine(entityId)!!
 

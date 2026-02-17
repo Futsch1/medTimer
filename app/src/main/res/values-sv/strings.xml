@@ -274,4 +274,7 @@
     <string name="by_name">Efter namn</string>
     <string name="by_creation_date_ascending">Stigande efter skapelsedatum</string>
     <string name="by_creation_date_descending">Fallande efter skapelsedatum</string>
+    <string name="create_out_of_stock_reminder">Skapa påminnelse om slut i lager</string>
+    <string name="successfully_created_reminder">Ny påminnelse skapad</string>
+    <string name="create_expiration_date_reminder">Skapa påminnelse om utgångsdatum</string>
 </resources>

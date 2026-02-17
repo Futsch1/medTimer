@@ -30,4 +30,7 @@
     <string name="by_name">Etter navn</string>
     <string name="by_creation_date_ascending">Stigende etter opprettelsesdato</string>
     <string name="by_creation_date_descending">Synkende etter opprettelsesdato</string>
+    <string name="create_out_of_stock_reminder">Opprett påminnelse om tomt lager</string>
+    <string name="successfully_created_reminder">Ny påminnelse er opprettet</string>
+    <string name="create_expiration_date_reminder">Opprett påminnelse om utløpsdato</string>
 </resources>

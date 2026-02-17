@@ -5,12 +5,14 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.Button
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.google.android.material.textfield.TextInputEditText
 
 class NotesDialog(
     val context: Context,
-    val notes: String,
-    val noteUpdatedCallback: (String) -> Unit
+    val medicine: Medicine,
+    val medicineRepository: MedicineRepository
 ) {
     private val dialog: Dialog = Dialog(context)
     private val notesEditText: TextInputEditText
@@ -23,7 +25,7 @@ class NotesDialog(
         )
 
         notesEditText = dialog.findViewById(R.id.notes)
-        notesEditText.setText(notes)
+        notesEditText.setText(medicine.notes)
 
         setupButtons()
         dialog.show()
@@ -33,7 +35,8 @@ class NotesDialog(
         dialog.findViewById<Button>(R.id.cancelSaveNotes)
             .setOnClickListener { _ -> dialog.dismiss() }
         dialog.findViewById<Button>(R.id.confirmSaveNotes).setOnClickListener {
-            noteUpdatedCallback(notesEditText.getText().toString())
+            medicine.notes = notesEditText.getText().toString()
+            medicineRepository.updateMedicineFromMain(medicine)
             dialog.dismiss()
         }
     }

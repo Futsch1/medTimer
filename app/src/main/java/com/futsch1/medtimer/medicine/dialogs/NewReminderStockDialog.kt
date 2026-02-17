@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.medicine.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
@@ -9,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
@@ -22,13 +21,12 @@ import com.google.android.material.textfield.TextInputLayout
 import java.text.DecimalFormatSymbols
 
 class NewReminderStockDialog(
-    val context: Context,
     val activity: FragmentActivity,
     val medicine: Medicine,
-    val medicineViewModel: MedicineViewModel,
+    val medicineRepository: MedicineRepository,
     val reminder: Reminder
 ) {
-    private val dialog: Dialog = Dialog(context)
+    private val dialog: Dialog = Dialog(activity)
 
     init {
         dialog.setContentView(R.layout.dialog_new_reminder_stock)
@@ -52,7 +50,7 @@ class NewReminderStockDialog(
 
     private fun setupEditExpirationDaysBefore() {
         val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
-        textInputLayout.suffixText = context.getString(R.string.days_string)
+        textInputLayout.suffixText = activity.getString(R.string.days_string)
     }
 
     private fun setupEditStockThreshold() {
@@ -128,9 +126,10 @@ class NewReminderStockDialog(
             }
 
             if (!canCreate) {
-                Toast.makeText(context, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
             } else {
-                medicineViewModel.medicineRepository.insertReminder(reminder)
+                medicineRepository.insertReminder(reminder)
+                Toast.makeText(activity, R.string.successfully_created_reminder, Toast.LENGTH_LONG).show()
                 dialog.dismiss()
             }
         }

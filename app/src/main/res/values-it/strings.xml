@@ -280,4 +280,7 @@
     <string name="by_name">Per nome</string>
     <string name="by_creation_date_ascending">Ascendente per data di creazione</string>
     <string name="by_creation_date_descending">Discendente per data di creazione</string>
+    <string name="create_out_of_stock_reminder">Crea promemoria di esaurimento scorte</string>
+    <string name="successfully_created_reminder">Nuovo promemoria creato con successo</string>
+    <string name="create_expiration_date_reminder">Crea promemoria data di scadenza</string>
 </resources>

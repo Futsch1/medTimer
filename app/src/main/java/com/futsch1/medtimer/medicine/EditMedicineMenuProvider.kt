@@ -1,26 +1,33 @@
 package com.futsch1.medtimer.medicine
 
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class EditMedicineMenuProvider(
-    private val medicineId: Int,
-    private val thread: HandlerThread,
+    private val medicine: Medicine,
+    private val fragment: Fragment,
     private val medicineViewModel: MedicineViewModel,
-    private val navController: NavController
+    private val navController: NavController,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : EntityEditOptionsMenu {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_medicine, menu)
+        OptionsMenu.enableOptionalIcons(menu)
         menu.setGroupDividerEnabled(true)
 
         MedicinesMenu.setupMenu(menu, R.id.activate_all) {
@@ -30,13 +37,14 @@ class EditMedicineMenuProvider(
             setRemindersActive(false)
         }
         setupDeleteMenu(menu)
+        setupLinksMenu(menu)
     }
 
     private fun setupDeleteMenu(menu: Menu) {
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             val deleteHelper = DeleteHelper(navController.context)
             deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
-                medicineViewModel.medicineRepository.deleteMedicine(medicineId)
+                medicineViewModel.medicineRepository.deleteMedicine(medicine.medicineId)
                 navController.navigateUp()
             }, {
                 // do nothing
@@ -45,15 +53,27 @@ class EditMedicineMenuProvider(
         }
     }
 
-    private fun setRemindersActive(active: Boolean) {
-        @Suppress("kotlin:S6619", "SENSELESS_COMPARISON") // This actually happens due to a race condition
-        if (thread.looper.queue == null) {
-            return
+    private fun setupLinksMenu(menu: Menu) {
+        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineViewModel.medicineRepository)
+        val idToSubmenu: Map<Int, EditMedicineSubmenus.Submenu> = mapOf(
+            R.id.openCalendar to EditMedicineSubmenus.Submenu.CALENDAR,
+            R.id.openStockTracking to EditMedicineSubmenus.Submenu.STOCK_TRACKING,
+            R.id.openTags to EditMedicineSubmenus.Submenu.TAGS,
+            R.id.openNotes to EditMedicineSubmenus.Submenu.NOTES
+        )
+
+        for ((id, submenu) in idToSubmenu) {
+            menu.findItem(id).setOnMenuItemClickListener { _: MenuItem? ->
+                subMenus.open(submenu, navController)
+                true
+            }
         }
-        val handler = Handler(thread.looper)
-        handler.post {
+    }
+
+    private fun setRemindersActive(active: Boolean) {
+        fragment.lifecycleScope.launch(dispatcher) {
             val reminders: List<Reminder> =
-                medicineViewModel.medicineRepository.getReminders(medicineId)
+                medicineViewModel.medicineRepository.getReminders(medicine.medicineId)
             com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineViewModel.medicineRepository, active)
         }
     }

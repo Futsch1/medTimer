@@ -275,4 +275,7 @@
     <string name="by_name">Κατά όνομα</string>
     <string name="by_creation_date_ascending">Αύξουσα κατά ημερομηνία δημιουργίας</string>
     <string name="by_creation_date_descending">Φθίνουσα κατά ημερομηνία δημιουργίας</string>
+    <string name="create_out_of_stock_reminder">Δημιουργία υπενθύμισης εξάντλησης αποθέματος</string>
+    <string name="successfully_created_reminder">Η νέα υπενθύμιση δημιουργήθηκε επιτυχώς</string>
+    <string name="create_expiration_date_reminder">Δημιουργία υπενθύμισης ημερομηνίας λήξης</string>
 </resources>

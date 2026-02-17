@@ -64,7 +64,7 @@ class AdvancedReminderPreferencesStockFragment(
                         MedicineHelper.formatAmount(fullMedicine!!.medicine.amount, fullMedicine!!.medicine.unit)
                     findPreference<Preference>("medicine_expiration_date")?.summary = if (fullMedicine!!.medicine.expirationDate != 0L) {
 
-                        TimeHelper.daysSinceEpochToDateString(context, fullMedicine!!.medicine.expirationDate)
+                        TimeHelper.daysSinceEpochToDateString(requireContext(), fullMedicine!!.medicine.expirationDate)
                     } else {
                         context?.getString(R.string.never)
                     }

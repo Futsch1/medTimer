@@ -275,4 +275,7 @@
     <string name="by_name">Efter navn</string>
     <string name="by_creation_date_ascending">Stigende efter oprettelsesdato</string>
     <string name="by_creation_date_descending">Faldende efter oprettelsesdato</string>
+    <string name="create_out_of_stock_reminder">Opret påmindelse om lav beholdning</string>
+    <string name="successfully_created_reminder">Nyt påmindelse oprettet</string>
+    <string name="create_expiration_date_reminder">Opret påmindelse om udløbsdato</string>
 </resources>

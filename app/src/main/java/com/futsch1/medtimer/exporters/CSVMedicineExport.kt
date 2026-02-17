@@ -45,13 +45,6 @@ class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         }
     }
 
-
-    override fun getExtension(): String {
-        return "csv"
-    }
-
-    override fun getType(): String {
-        return "Medicine"
-    }
-
+    override val extension = "csv"
+    override val type = "Medicine"
 }

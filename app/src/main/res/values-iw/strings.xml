@@ -280,4 +280,7 @@
     <string name="by_name">לפי שם</string>
     <string name="by_creation_date_ascending">עולה לפי תאריך יצירה</string>
     <string name="by_creation_date_descending">יורד לפי תאריך יצירה</string>
+    <string name="create_out_of_stock_reminder">יצירת תזכורת על חוסר מלאי</string>
+    <string name="successfully_created_reminder">תזכורת חדשה נוצרה בהצלחה</string>
+    <string name="create_expiration_date_reminder">יצירת תזכורת תאריך תפוגה</string>
 </resources>

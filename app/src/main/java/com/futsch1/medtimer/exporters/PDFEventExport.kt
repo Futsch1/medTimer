@@ -17,7 +17,7 @@ import java.util.LinkedList
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-class PDFEventExport(private val reminderEvents: MutableList<ReminderEvent>, fragmentManager: FragmentManager?, private val context: Context) :
+class PDFEventExport(private val reminderEvents: List<ReminderEvent>, fragmentManager: FragmentManager, private val context: Context) :
     Export(fragmentManager) {
 
     private val tableProperties = TableProperties().apply()
@@ -80,11 +80,6 @@ class PDFEventExport(private val reminderEvents: MutableList<ReminderEvent>, fra
         return row
     }
 
-    override fun getExtension(): String {
-        return "pdf"
-    }
-
-    override fun getType(): String {
-        return "Events"
-    }
+    override val extension = "pdf"
+    override val type = "Events"
 }
