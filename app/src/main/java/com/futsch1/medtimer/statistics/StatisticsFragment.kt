@@ -1,151 +1,151 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import static com.futsch1.medtimer.statistics.ActiveStatisticsFragment.StatisticFragmentType;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.OptionsMenu
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.remindertable.ReminderTableFragment
+import com.futsch1.medtimer.statistics.ActiveStatisticsFragment.StatisticFragmentType
+import com.google.android.material.chip.ChipGroup
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Spinner;
+class StatisticsFragment : Fragment() {
+    private var timeSpinner: Spinner? = null
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
+    private var chartsFragment: ChartsFragment? = null
+    private var analysisDays: AnalysisDays? = null
+    private var activeStatisticsFragment: ActiveStatisticsFragment? = null
+    private var optionsMenu: OptionsMenu? = null
 
-import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.OptionsMenu;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.remindertable.ReminderTableFragment;
-import com.google.android.material.chip.ChipGroup;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-public class StatisticsFragment extends Fragment {
-    private Spinner timeSpinner;
+        analysisDays = AnalysisDays(requireContext())
+        activeStatisticsFragment = ActiveStatisticsFragment(requireContext())
 
-    private ChartsFragment chartsFragment;
-    private AnalysisDays analysisDays;
-    private ActiveStatisticsFragment activeStatisticsFragment;
-    private OptionsMenu optionsMenu = null;
+        chartsFragment = ChartsFragment()
+        chartsFragment!!.setDays(analysisDays!!.days)
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        analysisDays = new AnalysisDays(requireContext());
-        activeStatisticsFragment = new ActiveStatisticsFragment(requireContext());
-
-        chartsFragment = new ChartsFragment();
-        chartsFragment.setDays(analysisDays.getDays());
-
-        optionsMenu = new OptionsMenu(this,
-                new ViewModelProvider(this).get(MedicineViewModel.class),
-                NavHostFragment.findNavController(this), true);
+        optionsMenu = OptionsMenu(
+            this,
+            ViewModelProvider(this)[MedicineViewModel::class.java],
+            NavHostFragment.findNavController(this), true
+        )
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View statisticsView = inflater.inflate(R.layout.fragment_statistics, container, false);
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val statisticsView = inflater.inflate(R.layout.fragment_statistics, container, false)
 
-        timeSpinner = statisticsView.findViewById(R.id.timeSpinner);
+        timeSpinner = statisticsView.findViewById(R.id.timeSpinner)
 
-        setupTimeSpinner();
+        setupTimeSpinner()
 
-        setupFragmentButtons(statisticsView);
+        setupFragmentButtons(statisticsView)
 
-        loadActiveFragment(activeStatisticsFragment.getActiveFragment());
+        loadActiveFragment(activeStatisticsFragment!!.activeFragment)
 
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner());
+        requireActivity().addMenuProvider(optionsMenu!!, getViewLifecycleOwner())
 
-        return statisticsView;
+        return statisticsView
     }
 
-    @Override
-    public void onPause() {
+    override fun onPause() {
         try {
-            requireActivity().getSupportFragmentManager().executePendingTransactions();
-        } catch (IllegalStateException | IllegalArgumentException e) {
+            requireActivity().supportFragmentManager.executePendingTransactions()
+        } catch (_: IllegalStateException) {
+            // Intentionally empty
+        } catch (_: IllegalArgumentException) {
             // Intentionally empty
         }
-        super.onPause();
+        super.onPause()
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    override fun onDestroy() {
+        super.onDestroy()
         if (optionsMenu != null) {
-            optionsMenu.onDestroy();
+            optionsMenu!!.onDestroy()
         }
         try {
-            requireActivity().getSupportFragmentManager().executePendingTransactions();
-        } catch (IllegalStateException | IllegalArgumentException e) {
+            requireActivity().supportFragmentManager.executePendingTransactions()
+        } catch (_: IllegalStateException) {
+            // Intentionally empty
+        } catch (_: IllegalArgumentException) {
             // Intentionally empty
         }
     }
 
-    private void setupFragmentButtons(View statisticsView) {
-        ChipGroup chipGroup = statisticsView.findViewById(R.id.analysisView);
-        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (!checkedIds.isEmpty()) {
-                int checkedId = checkedIds.get(0);
+    private fun setupFragmentButtons(statisticsView: View) {
+        val chipGroup = statisticsView.findViewById<ChipGroup>(R.id.analysisView)
+        chipGroup.setOnCheckedStateChangeListener { _, checkedIds: MutableList<Int?>? ->
+            if (!checkedIds!!.isEmpty()) {
+                val checkedId: Int = checkedIds[0]!!
                 if (R.id.chartChip == checkedId) {
-                    loadActiveFragment(StatisticFragmentType.CHARTS);
+                    loadActiveFragment(StatisticFragmentType.CHARTS)
                 } else if (R.id.tableChip == checkedId) {
-                    loadActiveFragment(StatisticFragmentType.TABLE);
+                    loadActiveFragment(StatisticFragmentType.TABLE)
                 } else {
-                    loadActiveFragment(StatisticFragmentType.CALENDAR);
+                    loadActiveFragment(StatisticFragmentType.CALENDAR)
                 }
             }
-        });
-        chipGroup.check(switch (activeStatisticsFragment.getActiveFragment()) {
-            case TABLE -> R.id.tableChip;
-            case CALENDAR -> R.id.calendarChip;
-            default -> R.id.chartChip;
-        });
+        }
+        chipGroup.check(
+            when (activeStatisticsFragment!!.activeFragment) {
+                StatisticFragmentType.TABLE -> R.id.tableChip
+                StatisticFragmentType.CALENDAR -> R.id.calendarChip
+                else -> R.id.chartChip
+            }
+        )
     }
 
-    private void loadActiveFragment(StatisticFragmentType fragmentType) {
-        Fragment fragment = switch (fragmentType) {
-            case TABLE -> new ReminderTableFragment();
-            case CALENDAR -> new CalendarFragment();
-            default -> chartsFragment;
-        };
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
+    private fun loadActiveFragment(fragmentType: StatisticFragmentType) {
+        val fragment = when (fragmentType) {
+            StatisticFragmentType.TABLE -> ReminderTableFragment()
+            StatisticFragmentType.CALENDAR -> CalendarFragment()
+            else -> chartsFragment
+        }!!
+        val transaction = getChildFragmentManager().beginTransaction()
+        transaction.replace(R.id.container, fragment)
         try {
-            transaction.commit();
-            activeStatisticsFragment.setActiveFragment(fragmentType);
-            checkTimeSpinnerVisibility();
-        } catch (IllegalStateException e) {
+            transaction.commit()
+            activeStatisticsFragment!!.activeFragment = fragmentType
+            checkTimeSpinnerVisibility()
+        } catch (_: IllegalStateException) {
             // Intentionally empty
         }
     }
 
-    private void checkTimeSpinnerVisibility() {
-        if (activeStatisticsFragment.getActiveFragment() == ActiveStatisticsFragment.StatisticFragmentType.CHARTS) {
-            timeSpinner.setVisibility(View.VISIBLE);
+    private fun checkTimeSpinnerVisibility() {
+        if (activeStatisticsFragment!!.activeFragment == StatisticFragmentType.CHARTS) {
+            timeSpinner!!.visibility = View.VISIBLE
         } else {
-            timeSpinner.setVisibility(View.INVISIBLE);
+            timeSpinner!!.visibility = View.INVISIBLE
         }
     }
 
-    private void setupTimeSpinner() {
-        timeSpinner.setSelection(analysisDays.getPosition());
-        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != analysisDays.getPosition()) {
-                    analysisDays.setPosition(position);
+    private fun setupTimeSpinner() {
+        timeSpinner!!.setSelection(analysisDays!!.position)
+        timeSpinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position != analysisDays!!.position) {
+                    analysisDays!!.position = position
 
-                    chartsFragment.setDays(analysisDays.getDays());
+                    chartsFragment!!.setDays(analysisDays!!.days)
                 }
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Intentionally empty
             }
-        });
+        }
     }
 }
