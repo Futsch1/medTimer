@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class FullMedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<FullMedicine> {
@@ -78,7 +79,7 @@ abstract class DatabaseEntityEditFragment<T>(
             if (entity != null) {
                 setupMenu(navController, entity!!)
 
-                lifecycleScope.launch(mainDispatcher) {
+                withContext(mainDispatcher) {
                     if (::optionsMenu.isInitialized) {
                         requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
                     }

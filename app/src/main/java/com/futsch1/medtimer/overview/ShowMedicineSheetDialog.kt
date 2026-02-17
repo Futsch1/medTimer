@@ -16,6 +16,7 @@ import com.google.android.material.sidesheet.SideSheetDialog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ShowMedicineSheetDialog(
     val activity: FragmentActivity,
@@ -29,7 +30,7 @@ class ShowMedicineSheetDialog(
             val reminder = medicineRepository.getReminder(reminderId) ?: return@launch
             val fullMedicine = medicineRepository.getMedicine(reminder.medicineRelId) ?: return@launch
             val reminderSummary = reminderSummary(reminder, activity)
-            launch(mainDispatcher) {
+            withContext(mainDispatcher) {
                 showMedicine(fullMedicine, reminder, reminderSummary)
             }
         }

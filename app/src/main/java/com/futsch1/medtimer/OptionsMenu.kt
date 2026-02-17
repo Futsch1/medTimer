@@ -6,8 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -21,6 +19,7 @@ import androidx.core.view.MenuCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
@@ -38,6 +37,9 @@ import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 
@@ -48,7 +50,6 @@ class OptionsMenu(
     private val hideFilter: Boolean
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
-    private val backgroundThread: HandlerThread
     private val openFileLauncher: ActivityResultLauncher<Intent?>
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
     private var menu: Menu? = null
@@ -61,13 +62,13 @@ class OptionsMenu(
                     this.fileSelected(result.data!!.data)
                 }
             }
-        backgroundThread = HandlerThread("Export")
-        backgroundThread.start()
         idlingResource.setIdle()
     }
 
     fun fileSelected(data: Uri?) {
-        Handler(backgroundThread.getLooper()).post { backupManager!!.fileSelected(data) }
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
+            backupManager!!.fileSelected(data)
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -75,7 +76,7 @@ class OptionsMenu(
         MenuCompat.setGroupDividerEnabled(menu, true)
         enableOptionalIcons(menu)
 
-        this.backupManager = BackupManager(context, fragment.getParentFragmentManager(), menu, medicineViewModel, openFileLauncher)
+        this.backupManager = BackupManager(context, fragment, menu, medicineViewModel, openFileLauncher)
         this.menu = menu
         setupSettings()
         setupVersion()
@@ -132,26 +133,24 @@ class OptionsMenu(
     }
 
     private fun setupExport() {
-        val handler = Handler(backgroundThread.getLooper())
-
         var item = menu!!.findItem(R.id.export_csv)
         item.setOnMenuItemClickListener { _ ->
-            handler.post { eventExport(true) }
+            fragment.lifecycleScope.launch(Dispatchers.IO) { eventExport(true) }
             true
         }
         item = menu!!.findItem(R.id.export_pdf)
         item.setOnMenuItemClickListener { _ ->
-            handler.post { eventExport(false) }
+            fragment.lifecycleScope.launch(Dispatchers.IO) { eventExport(false) }
             true
         }
         item = menu!!.findItem(R.id.export_medicine_csv)
         item.setOnMenuItemClickListener { _ ->
-            handler.post { medicineExport(true) }
+            fragment.lifecycleScope.launch(Dispatchers.IO) { medicineExport(true) }
             true
         }
         item = menu!!.findItem(R.id.export_medicine_pdf)
         item.setOnMenuItemClickListener { _ ->
-            handler.post { medicineExport(false) }
+            fragment.lifecycleScope.launch(Dispatchers.IO) { medicineExport(false) }
             true
         }
     }
@@ -164,8 +163,7 @@ class OptionsMenu(
             item.isVisible = true
             val menuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem: MenuItem? ->
                 idlingResource.setBusy()
-                val handler = Handler(backgroundThread.getLooper())
-                handler.post {
+                fragment.lifecycleScope.launch(Dispatchers.IO) {
                     medicineViewModel.medicineRepository.deleteAll()
                     val generateTestData = GenerateTestData(medicineViewModel, menuItem === itemWithEvents)
                     generateTestData.generateTestMedicine()
@@ -197,10 +195,12 @@ class OptionsMenu(
 
     private fun handleTagFilter() {
         if (!hideFilter) {
-            Handler(backgroundThread.getLooper()).post {
+            fragment.lifecycleScope.launch(Dispatchers.IO) {
                 if (medicineViewModel.medicineRepository.hasTags()) {
                     try {
-                        fragment.requireActivity().runOnUiThread { this.setupTagFilter() }
+                        withContext(Dispatchers.Main) {
+                            setupTagFilter()
+                        }
                     } catch (_: IllegalStateException) {
                         // Intentionally empty, do nothing
                     }
@@ -275,7 +275,6 @@ class OptionsMenu(
     }
 
     override fun onDestroy() {
-        backgroundThread.quit()
         idlingResource.destroy()
     }
 
