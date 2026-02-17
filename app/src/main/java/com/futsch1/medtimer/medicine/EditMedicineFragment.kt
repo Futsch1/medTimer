@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.medicine
 
-import android.os.Handler
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -10,7 +9,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -28,12 +26,9 @@ import com.futsch1.medtimer.helpers.SwipeHelper
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
-import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
 import com.futsch1.medtimer.medicine.editMedicine.showEnablePermissionsDialog
-import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine
-import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -41,6 +36,7 @@ import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
+import kotlinx.coroutines.launch
 
 class EditMedicineFragment :
     DatabaseEntityEditFragment<FullMedicine>(FullMedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment::class.java.getName()),
@@ -54,8 +50,8 @@ class EditMedicineFragment :
     private var selectIconButton: MaterialButton? = null
     private var notes: String? = null
 
-    override fun setupMenu(navController: NavController) {
-        optionsMenu = EditMedicineMenuProvider(getEntityId(), this.thread, this.medicineViewModel, navController)
+    override fun setupMenu(navController: NavController, entity: FullMedicine) {
+        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController)
     }
 
     override fun onEntityLoaded(entity: FullMedicine, fragmentView: View): Boolean {
@@ -68,15 +64,17 @@ class EditMedicineFragment :
         (requireActivity() as AppCompatActivity).supportActionBar?.title = medicine.name
         (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).setText(medicine.name)
 
+        val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository)
+
         setupSelectIcon(fragmentView)
         setupEnableColor(fragmentView, medicine.useColor)
         setupColorButton(fragmentView, medicine.useColor)
 
         setupNotificationImportance(fragmentView, medicine)
-        setupNotesButton(fragmentView)
-        setupOpenCalendarButton(fragmentView)
-        setupStockButton(fragmentView)
-        setupTagsButton(fragmentView, medicine.medicineId)
+        setupNotesButton(fragmentView, subMenus)
+        setupOpenCalendarButton(fragmentView, subMenus)
+        setupStockButton(fragmentView, subMenus)
+        setupTagsButton(fragmentView, subMenus)
 
         val recyclerView = setupMedicineList(fragmentView)
         setupSwiping(recyclerView)
@@ -153,49 +151,31 @@ class EditMedicineFragment :
         }
     }
 
-    private fun setupNotesButton(fragmentView: View) {
+    private fun setupNotesButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
         val openNotes = fragmentView.findViewById<MaterialButton>(R.id.openNotes)
         openNotes.setOnClickListener { _: View? ->
-            NotesDialog(requireContext(), notes!!) { newNote: String ->
-                notes = newNote
-            }
+            subMenus.open(EditMedicineSubmenus.Submenu.NOTES, findNavController(openNotes))
         }
     }
 
-    private fun setupOpenCalendarButton(fragmentView: View) {
+    private fun setupOpenCalendarButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
         val openCalendar = fragmentView.findViewById<MaterialButton>(R.id.openCalendar)
         openCalendar.setOnClickListener { _: View? ->
-            val navController = findNavController(openCalendar)
-            val action =
-                EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
-                    getEntityId(),
-                    1,
-                    9
-                )
-            try {
-                navController.navigate(action)
-            } catch (_: IllegalArgumentException) {
-                // Intentionally empty
-            }
+            subMenus.open(EditMedicineSubmenus.Submenu.CALENDAR, findNavController(openCalendar))
         }
     }
 
-    private fun setupStockButton(fragmentView: View) {
+    private fun setupStockButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
         val openStockTracking = fragmentView.findViewById<MaterialButton>(R.id.openStockTracking)
         openStockTracking.setOnClickListener { _: View? ->
-            val navController = findNavController(openStockTracking)
-            val action =
-                EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(getEntityId())
-            navController.navigate(action)
+            subMenus.open(EditMedicineSubmenus.Submenu.STOCK_TRACKING, findNavController(openStockTracking))
         }
     }
 
-    private fun setupTagsButton(fragmentView: View, medicineId: Int) {
+    private fun setupTagsButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
         val openTags = fragmentView.findViewById<MaterialButton>(R.id.openTags)
         openTags.setOnClickListener { _: View? ->
-            val tagDataFromMedicine = TagDataFromMedicine(this, medicineId)
-            val dialog: DialogFragment = TagsFragment(tagDataFromMedicine)
-            dialog.show(getParentFragmentManager(), "tags")
+            subMenus.open(EditMedicineSubmenus.Submenu.TAGS, findNavController(openTags))
         }
     }
 
@@ -226,11 +206,10 @@ class EditMedicineFragment :
     }
 
     private fun deleteItem(itemId: Long, adapterPosition: Int) {
-        val threadHandler = Handler(thread.getLooper())
-        threadHandler.post {
-            val reminder = this.medicineViewModel.medicineRepository.getReminder(itemId.toInt())
+        lifecycleScope.launch(ioDispatcher) {
+            val reminder = medicineViewModel.medicineRepository.getReminder(itemId.toInt())
             if (reminder != null) {
-                LinkedReminderHandling(reminder, this.medicineViewModel.medicineRepository, this.lifecycleScope).deleteReminder(requireContext(), { }, {
+                LinkedReminderHandling(reminder, medicineViewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
                     adapter!!.notifyItemChanged(adapterPosition)
                 })
             }

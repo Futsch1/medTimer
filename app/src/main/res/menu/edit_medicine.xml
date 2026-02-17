@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/activate_group" >
+    <group android:id="@+id/activate_group">
         <item
             android:id="@+id/activate_all"
             android:title="@string/activate_all" />
@@ -7,7 +7,28 @@
             android:id="@+id/deactivate_all"
             android:title="@string/deactivate_all" />
     </group>
-    <item
-        android:id="@+id/delete_medicine"
-        android:title="@string/delete" />
+    <group>
+        <item
+            android:id="@+id/openNotes"
+            android:icon="@drawable/journal_text"
+            android:title="@string/notes" />
+        <item
+            android:id="@+id/openTags"
+            android:icon="@drawable/tag"
+            android:title="@string/tags" />
+        <item
+            android:id="@+id/openStockTracking"
+            android:icon="@drawable/box_seam"
+            android:title="@string/medicine_stock_settings" />
+        <item
+            android:id="@+id/openCalendar"
+            android:icon="@drawable/calendar_week"
+            android:title="@string/calendar" />
+    </group>
+    <group>
+        <item
+            android:id="@+id/delete_medicine"
+            android:icon="@drawable/trash"
+            android:title="@string/delete" />
+    </group>
 </menu>

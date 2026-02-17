@@ -1,20 +1,22 @@
 package com.futsch1.medtimer.helpers
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.database.FullMedicine
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class FullMedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<FullMedicine> {
@@ -34,7 +36,9 @@ interface EntityEditOptionsMenu : MenuProvider {
 abstract class DatabaseEntityEditFragment<T>(
     private val entityInterface: EntityInterface<T>,
     private val layoutId: Int,
-    val name: String
+    val name: String,
+    val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
     Fragment() {
 
@@ -43,7 +47,6 @@ abstract class DatabaseEntityEditFragment<T>(
         fun updateEntity(medicineViewModel: MedicineViewModel, entity: T)
     }
 
-    protected val thread = HandlerThread("DatabaseEntityEditFragment_$name")
     private var entity: T? = null
     private var fragmentView: View? = null
     protected lateinit var medicineViewModel: MedicineViewModel
@@ -54,7 +57,6 @@ abstract class DatabaseEntityEditFragment<T>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.thread.start()
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
     }
 
@@ -65,20 +67,22 @@ abstract class DatabaseEntityEditFragment<T>(
         idlingResource.setBusy()
         fragmentView = inflater.inflate(layoutId, container, false)
 
-        setupMenu(this.findNavController())
-
-        if (::optionsMenu.isInitialized) {
-            requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
-        }
-
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
 
-        val handler = Handler(thread.looper)
-        handler.post {
+        val navController = findNavController()
+
+        lifecycleScope.launch(ioDispatcher) {
             entity = entityInterface.getEntity(medicineViewModel, getEntityId())
+
             if (entity != null) {
-                requireActivity().runOnUiThread {
+                setupMenu(navController, entity!!)
+
+                lifecycleScope.launch(mainDispatcher) {
+                    if (::optionsMenu.isInitialized) {
+                        requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
+                    }
+
                     // Signal that entity was loaded
                     if (activity != null && onEntityLoaded(entity!!, fragmentView!!)) {
                         setFragmentReady()
@@ -98,7 +102,7 @@ abstract class DatabaseEntityEditFragment<T>(
         startPostponedEnterTransition()
     }
 
-    protected open fun setupMenu(navController: NavController) {
+    protected open fun setupMenu(navController: NavController, entity: T) {
         optionsMenu = OptionsMenu(
             this,
             ViewModelProvider(this)[MedicineViewModel::class.java],
@@ -109,7 +113,6 @@ abstract class DatabaseEntityEditFragment<T>(
 
     override fun onDestroy() {
         super.onDestroy()
-        thread.quit()
         idlingResource.destroy()
         if (::optionsMenu.isInitialized) {
             optionsMenu.onDestroy()
