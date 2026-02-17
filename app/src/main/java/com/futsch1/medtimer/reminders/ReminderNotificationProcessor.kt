@@ -128,7 +128,8 @@ class ReminderNotificationProcessor(
                 }
 
                 Reminder.ReminderType.EXPIRATION_DATE -> {
-                    reminderEvent.amount = TimeHelper.daysSinceEpochToDateString(medicineRepository.application, medicine.medicine.expirationDate)
+                    reminderEvent.amount =
+                        TimeHelper.daysSinceEpochToDateString(medicineRepository.application!!.applicationContext, medicine.medicine.expirationDate)
                 }
 
                 else -> {

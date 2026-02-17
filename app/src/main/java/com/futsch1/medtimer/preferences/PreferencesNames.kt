@@ -1,24 +1,19 @@
-package com.futsch1.medtimer.preferences;
+package com.futsch1.medtimer.preferences
 
-public class PreferencesNames {
-    public static final String WEEKEND_TIME = "weekend_time";
-    public static final String WEEKEND_MODE = "weekend_mode";
-    public static final String WEEKEND_DAYS = "weekend_days";
-    public static final String EXACT_REMINDERS = "exact_reminders";
-    public static final String REPEAT_REMINDERS = "repeat_reminders";
-    public static final String NUMBER_OF_REPETITIONS = "repeat_reminders_repetitions";
-    public static final String REPEAT_DELAY = "repeat_reminders_delay";
-    public static final String OVERRIDE_DND = "override_dnd";
-    public static final String HIDE_MED_NAME = "hide_med_name";
-    public static final String SECURE_WINDOW = "window_flag_secure";
-    public static final String USE_RELATIVE_DATE_TIME = "use_relative_date_time";
-    public static final String SYSTEM_LOCALE = "system_locale";
-    public static final String COMBINE_NOTIFICATIONS = "combine_notifications";
-    public static final String SHOW_TAKEN_TIME_IN_OVERVIEW = "show_taken_time_in_overview";
-    public static final String SNOOZE_DURATION = "snooze_duration";
-
-
-    private PreferencesNames() {
-        // Intended empty
-    }
+object PreferencesNames {
+    const val WEEKEND_TIME: String = "weekend_time"
+    const val WEEKEND_MODE: String = "weekend_mode"
+    const val WEEKEND_DAYS: String = "weekend_days"
+    const val EXACT_REMINDERS: String = "exact_reminders"
+    const val REPEAT_REMINDERS: String = "repeat_reminders"
+    const val NUMBER_OF_REPETITIONS: String = "repeat_reminders_repetitions"
+    const val REPEAT_DELAY: String = "repeat_reminders_delay"
+    const val OVERRIDE_DND: String = "override_dnd"
+    const val HIDE_MED_NAME: String = "hide_med_name"
+    const val SECURE_WINDOW: String = "window_flag_secure"
+    const val USE_RELATIVE_DATE_TIME: String = "use_relative_date_time"
+    const val SYSTEM_LOCALE: String = "system_locale"
+    const val COMBINE_NOTIFICATIONS: String = "combine_notifications"
+    const val SHOW_TAKEN_TIME_IN_OVERVIEW: String = "show_taken_time_in_overview"
+    const val SNOOZE_DURATION: String = "snooze_duration"
 }

@@ -90,12 +90,12 @@ class StockSettingsFragment(
             findPreference<Preference>("expiration_date")!!.icon = null
         }
         findPreference<Preference>("production_date")!!.summary = if (entity.medicine.productionDate != 0L) {
-            TimeHelper.daysSinceEpochToDateString(context, entity.medicine.productionDate)
+            TimeHelper.daysSinceEpochToDateString(requireContext(), entity.medicine.productionDate)
         } else {
             ""
         }
         findPreference<Preference>("expiration_date")!!.summary = if (entity.medicine.expirationDate != 0L) {
-            TimeHelper.daysSinceEpochToDateString(context, entity.medicine.expirationDate)
+            TimeHelper.daysSinceEpochToDateString(requireContext(), entity.medicine.expirationDate)
         } else {
             ""
         }
@@ -106,7 +106,7 @@ class StockSettingsFragment(
         this.lifecycleScope.launch(ioDispatcher) {
             val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount)
 
-            val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(context, runOutDate) else "---"
+            val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
 
             this.launch(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
@@ -115,7 +115,7 @@ class StockSettingsFragment(
     }
 
     private fun addToCalendar() {
-        val date = TimeHelper.stringToLocalDate(context, findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
+        val date = TimeHelper.stringToLocalDate(requireContext(), findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.entity.medicine.name, date)
             try {

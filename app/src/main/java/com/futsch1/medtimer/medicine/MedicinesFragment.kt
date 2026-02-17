@@ -47,7 +47,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
 
         optionsMenu = OptionsMenu(
             this,
-            medicineViewModel,
+            medicineViewModel!!,
             NavHostFragment.findNavController(this), false
         )
 

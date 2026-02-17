@@ -1,182 +1,188 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Log
+import android.view.Menu
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.fragment.app.FragmentManager
+import com.futsch1.medtimer.database.JSONBackup
+import com.futsch1.medtimer.database.JSONMedicineBackup
+import com.futsch1.medtimer.database.JSONReminderEventBackup
+import com.futsch1.medtimer.helpers.FileHelper
+import com.futsch1.medtimer.helpers.PathHelper.backupFilename
+import com.futsch1.medtimer.helpers.ProgressDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import com.google.gson.JsonSyntaxException
+import java.io.File
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.fragment.app.FragmentManager;
+class BackupManager(
+    private val context: Context,
+    private val fragmentManager: FragmentManager,
+    private val menu: Menu,
+    private val medicineViewModel: MedicineViewModel,
+    private val openFileLauncher: ActivityResultLauncher<Intent?>
+) {
+    private val backgroundThread: HandlerThread = HandlerThread("Backup")
 
-import com.futsch1.medtimer.database.JSONBackup;
-import com.futsch1.medtimer.database.JSONMedicineBackup;
-import com.futsch1.medtimer.database.JSONReminderEventBackup;
-import com.futsch1.medtimer.helpers.FileHelper;
-import com.futsch1.medtimer.helpers.PathHelper;
-import com.futsch1.medtimer.helpers.ProgressDialogFragment;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+    init {
+        backgroundThread.start()
 
-import java.io.File;
-import java.util.List;
-
-public class BackupManager {
-    private static final String MEDICINE_KEY = "medicines";
-    private static final String EVENT_KEY = "events";
-    private final Context context;
-    private final HandlerThread backgroundThread;
-    private final Menu menu;
-    private final MedicineViewModel medicineViewModel;
-    private final ActivityResultLauncher<Intent> openFileLauncher;
-    private final FragmentManager fragmentManager;
-
-
-    public BackupManager(Context context, FragmentManager fragmentManager, Menu menu, MedicineViewModel medicineViewModel, ActivityResultLauncher<Intent> openFileLauncher) {
-        this.context = context;
-        this.fragmentManager = fragmentManager;
-        this.menu = menu;
-        this.medicineViewModel = medicineViewModel;
-        this.openFileLauncher = openFileLauncher;
-        backgroundThread = new HandlerThread("Backup");
-        backgroundThread.start();
-
-        setupBackup();
+        setupBackup()
     }
 
-    private void setupBackup() {
-        MenuItem item = menu.findItem(R.id.create_backup);
-        item.setOnMenuItemClickListener(menuItem -> {
-            selectBackupType();
-            return true;
-        });
+    private fun setupBackup() {
+        var item = menu.findItem(R.id.create_backup)
+        item.setOnMenuItemClickListener { _ ->
+            selectBackupType()
+            true
+        }
 
-        item = menu.findItem(R.id.restore_backup);
-        item.setOnMenuItemClickListener(menuItem -> {
-            new AlertDialog.Builder(context)
-                    .setTitle(R.string.restore)
-                    .setMessage(R.string.restore_start)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> openBackup())
-                    .setNegativeButton(R.string.cancel, (dialog, which) -> { // Intentionally left empty
-                    }).show();
-            return true;
-        });
+        item = menu.findItem(R.id.restore_backup)
+        item.setOnMenuItemClickListener { _ ->
+            AlertDialog.Builder(context)
+                .setTitle(R.string.restore)
+                .setMessage(R.string.restore_start)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok) { _, _ -> openBackup() }
+                .setNegativeButton(R.string.cancel) { _, _ -> }.show()
+            true
+        }
     }
 
-    private void selectBackupType() {
-        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(context);
-        alertDialogBuilder.setTitle(R.string.backup);
-        boolean[] checkedItems = {true, true};
-        alertDialogBuilder.setMultiChoiceItems(R.array.backup_types, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
-        alertDialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
-            Handler handler = new Handler(backgroundThread.getLooper());
-            handler.post(() -> performBackup(checkedItems));
-        });
-        alertDialogBuilder.show();
+    private fun selectBackupType() {
+        val alertDialogBuilder = MaterialAlertDialogBuilder(context)
+        alertDialogBuilder.setTitle(R.string.backup)
+        val checkedItems = booleanArrayOf(true, true)
+        alertDialogBuilder.setMultiChoiceItems(
+            R.array.backup_types,
+            checkedItems
+        ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
+        alertDialogBuilder.setPositiveButton(R.string.ok) { _, _ ->
+            val handler = Handler(backgroundThread.getLooper())
+            handler.post { performBackup(checkedItems) }
+        }
+        alertDialogBuilder.show()
     }
 
-    private void openBackup() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/json");
-        openFileLauncher.launch(intent);
+    private fun openBackup() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.setType("application/json")
+        openFileLauncher.launch(intent)
     }
 
-    private void performBackup(boolean[] checkedItems) {
-        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-        progressDialogFragment.show(fragmentManager, "backup");
+    private fun performBackup(checkedItems: BooleanArray) {
+        val progressDialogFragment = ProgressDialogFragment()
+        progressDialogFragment.show(fragmentManager, "backup")
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonObject jsonObject = new JsonObject();
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonObject = JsonObject()
         if (checkedItems[0]) {
-            jsonObject.add(MEDICINE_KEY, createBackup(new JSONMedicineBackup(),
-                    medicineViewModel.medicineRepository.getMedicines()));
+            jsonObject.add(
+                MEDICINE_KEY, createBackup(
+                    JSONMedicineBackup(),
+                    medicineViewModel.medicineRepository.medicines
+                )
+            )
         }
         if (checkedItems[1]) {
-            jsonObject.add(EVENT_KEY, createBackup(new JSONReminderEventBackup(),
-                    medicineViewModel.medicineRepository.getAllReminderEventsWithoutDeleted()));
+            jsonObject.add(
+                EVENT_KEY, createBackup(
+                    JSONReminderEventBackup(),
+                    medicineViewModel.medicineRepository.allReminderEventsWithoutDeleted
+                )
+            )
         }
         if (checkedItems[0] || checkedItems[1]) {
-            createAndSave(gson.toJson(jsonObject));
+            createAndSave(gson.toJson(jsonObject))
         }
-        progressDialogFragment.dismiss();
+        progressDialogFragment.dismiss()
     }
 
-    private <T> JsonElement createBackup(JSONBackup<T> jsonBackup, List<T> backupData) {
-        return jsonBackup.createBackup(medicineViewModel.medicineRepository.getVersion(),
-                backupData);
+    private fun <T> createBackup(jsonBackup: JSONBackup<T>, backupData: List<T>): JsonElement {
+        return jsonBackup.createBackup(
+            medicineViewModel.medicineRepository.version,
+            backupData
+        )
     }
 
-    private void createAndSave(String fileContent) {
-        File file = new File(context.getCacheDir(), PathHelper.getBackupFilename());
+    private fun createAndSave(fileContent: String?) {
+        val file = File(context.cacheDir, backupFilename)
         if (FileHelper.saveToFile(file, fileContent)) {
-            FileHelper.shareFile(context, file);
+            FileHelper.shareFile(context, file)
         } else {
-            Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()
         }
     }
 
-    public void fileSelected(Uri data) {
-        String json = FileHelper.readFromUri(data, context.getContentResolver());
+    fun fileSelected(data: Uri?) {
+        val json = FileHelper.readFromUri(data, context.contentResolver)
 
-        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-        progressDialogFragment.show(fragmentManager, "restore");
-        boolean restoreSuccessful = false;
+        val progressDialogFragment = ProgressDialogFragment()
+        progressDialogFragment.show(fragmentManager, "restore")
+        var restoreSuccessful = false
         if (json != null) {
-            Log.d(LogTags.BACKUP, "Starting backup restore: " + data);
-            restoreSuccessful = restoreCombinedBackup(json);
+            Log.d(LogTags.BACKUP, "Starting backup restore: $data")
+            restoreSuccessful = restoreCombinedBackup(json)
         }
 
-        if (!restoreSuccessful) {
+        if (!restoreSuccessful && json != null) {
             // Try legacy backup formats
-            restoreSuccessful = restoreBackup(json, new JSONMedicineBackup()) || restoreBackup(json, new JSONReminderEventBackup());
+            restoreSuccessful = restoreBackup(json, JSONMedicineBackup()) || restoreBackup(json, JSONReminderEventBackup())
         }
-        Log.d(LogTags.BACKUP, "Backup restore finished");
-        progressDialogFragment.dismiss();
+        Log.d(LogTags.BACKUP, "Backup restore finished")
+        progressDialogFragment.dismiss()
 
-        new AlertDialog.Builder(context)
-                .setMessage(restoreSuccessful ? R.string.restore_successful : R.string.restore_failed)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    // Intentionally empty
-                })
-                .show();
+        AlertDialog.Builder(context)
+            .setMessage(if (restoreSuccessful) R.string.restore_successful else R.string.restore_failed)
+            .setPositiveButton(R.string.ok) { _, _ -> }
+            .show()
     }
 
-    private boolean restoreCombinedBackup(String json) {
-        boolean restoreSuccessful = false;
+    private fun restoreCombinedBackup(json: String): Boolean {
+        var restoreSuccessful = false
         try {
-            JsonObject rootElement = JsonParser.parseString(json).getAsJsonObject();
+            val rootElement = JsonParser.parseString(json).getAsJsonObject()
             if (rootElement.has(MEDICINE_KEY)) {
-                restoreSuccessful = restoreBackup(rootElement.get(MEDICINE_KEY).toString(),
-                        new JSONMedicineBackup());
+                restoreSuccessful = restoreBackup(
+                    rootElement.get(MEDICINE_KEY).toString(),
+                    JSONMedicineBackup()
+                )
             }
             if (rootElement.has(EVENT_KEY)) {
-                restoreSuccessful = restoreSuccessful && restoreBackup(rootElement.get(EVENT_KEY).toString(),
-                        new JSONReminderEventBackup());
+                restoreSuccessful = restoreSuccessful && restoreBackup(
+                    rootElement.get(EVENT_KEY).toString(),
+                    JSONReminderEventBackup()
+                )
             }
-        } catch (JsonSyntaxException e) {
-            restoreSuccessful = false;
+        } catch (_: JsonSyntaxException) {
+            restoreSuccessful = false
         }
-        return restoreSuccessful;
+        return restoreSuccessful
     }
 
-    private <T> boolean restoreBackup(String json, JSONBackup<T> backup) {
-        List<T> backupData = backup.parseBackup(json);
+    private fun <T> restoreBackup(json: String, backup: JSONBackup<T>): Boolean {
+        val backupData: List<T>? = backup.parseBackup(json)
         if (backupData != null) {
-            backup.applyBackup(backupData, medicineViewModel.medicineRepository);
-            return true;
+            backup.applyBackup(backupData, medicineViewModel.medicineRepository)
+            return true
         }
-        return false;
+        return false
+    }
+
+    companion object {
+        private const val MEDICINE_KEY = "medicines"
+        private const val EVENT_KEY = "events"
     }
 }

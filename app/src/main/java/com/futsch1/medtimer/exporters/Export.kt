@@ -1,31 +1,23 @@
-package com.futsch1.medtimer.exporters;
+package com.futsch1.medtimer.exporters
 
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentManager
+import com.futsch1.medtimer.helpers.ProgressDialogFragment
+import java.io.File
 
-import com.futsch1.medtimer.helpers.ProgressDialogFragment;
-
-import java.io.File;
-
-public abstract class Export {
-    private final FragmentManager fragmentManager;
-
-    Export(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+abstract class Export internal constructor(private val fragmentManager: FragmentManager) {
+    @Throws(ExporterException::class)
+    fun export(file: File) {
+        val progressDialog = ProgressDialogFragment()
+        progressDialog.show(fragmentManager, "exporting")
+        exportInternal(file)
+        progressDialog.dismiss()
     }
 
-    public void export(File file) throws ExporterException {
-        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
-        progressDialog.show(fragmentManager, "exporting");
-        exportInternal(file);
-        progressDialog.dismiss();
-    }
+    @Throws(ExporterException::class)
+    protected abstract fun exportInternal(file: File)
 
-    protected abstract void exportInternal(File file) throws ExporterException;
+    abstract val extension: String
+    abstract val type: String
 
-    public abstract String getExtension();
-
-    public abstract String getType();
-
-    public static class ExporterException extends Exception {
-    }
+    class ExporterException : Exception()
 }

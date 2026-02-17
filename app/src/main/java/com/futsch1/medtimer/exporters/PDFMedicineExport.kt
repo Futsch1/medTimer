@@ -53,11 +53,6 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         }
     }
 
-    override fun getExtension(): String {
-        return "pdf"
-    }
-
-    override fun getType(): String {
-        return "Medicine"
-    }
+    override val extension = "pdf"
+    override val type = "Medicine"
 }

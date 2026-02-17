@@ -1,62 +1,49 @@
-package com.futsch1.medtimer.exporters;
+package com.futsch1.medtimer.exporters
 
-import android.content.Context;
+import android.content.Context
+import androidx.fragment.app.FragmentManager
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.TableHelper.getTableHeadersForEventExport
+import com.futsch1.medtimer.helpers.TimeHelper.minutesToDurationString
+import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToDateTimeString
+import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToISO8601DatetimeString
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 
-import androidx.fragment.app.FragmentManager;
+class CSVEventExport(private val reminderEvents: List<ReminderEvent>, fragmentManager: FragmentManager, private val context: Context) :
+    Export(fragmentManager) {
 
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TableHelper;
-import com.futsch1.medtimer.helpers.TimeHelper;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-
-public class CSVEventExport extends Export {
-    private final List<ReminderEvent> reminderEvents;
-    private final Context context;
-
-    public CSVEventExport(List<ReminderEvent> reminderEvents, FragmentManager fragmentManager, Context context) {
-        super(fragmentManager);
-        this.reminderEvents = reminderEvents;
-        this.context = context;
-    }
-
-    @SuppressWarnings({"java:S6300", "java:S3457"}) // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
-    public void exportInternal(File file) throws ExporterException {
-        try (FileWriter csvFile = new FileWriter(file)) {
-            List<String> headerTexts = TableHelper.getTableHeadersForEventExport(context);
-            csvFile.write(String.join(";", headerTexts) + "\n");
-
-            for (ReminderEvent reminderEvent : reminderEvents) {
-                String line = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                        TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.remindedTimestamp),
+    @Throws(ExporterException::class)  // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
+    public override fun exportInternal(file: File) {
+        try {
+            FileWriter(file).use { csvFile ->
+                val headerTexts: List<String> = getTableHeadersForEventExport(context)
+                csvFile.write(headerTexts.joinToString(";") + "\n")
+                for (reminderEvent in reminderEvents) {
+                    val line = String.format(
+                        "%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+                        secondsSinceEpochToDateTimeString(context, reminderEvent.remindedTimestamp),
                         reminderEvent.medicineName,
                         reminderEvent.amount,
-                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.processedTimestamp) : "",
-                        String.join(", ", reminderEvent.tags),
-                        TimeHelper.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
+                        if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToDateTimeString(
+                            context,
+                            reminderEvent.processedTimestamp
+                        ) else "",
+                        reminderEvent.tags.joinToString(", "),
+                        minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes.toLong()),
                         reminderEvent.notes,
-                        TimeHelper.secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
-                        reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN ?
-                                TimeHelper.secondsSinceEpochToISO8601DatetimeString(reminderEvent.processedTimestamp) : ""
-                );
-                csvFile.write(line);
+                        secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
+                        if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(reminderEvent.processedTimestamp) else ""
+                    )
+                    csvFile.write(line)
+                }
             }
-        } catch (IOException e) {
-            throw new ExporterException();
+        } catch (_: IOException) {
+            throw ExporterException()
         }
     }
 
-    @Override
-    public String getExtension() {
-        return "csv";
-    }
-
-    @Override
-    public String getType() {
-        return "Events";
-    }
+    override val extension = "csv"
+    override val type = "Events"
 }

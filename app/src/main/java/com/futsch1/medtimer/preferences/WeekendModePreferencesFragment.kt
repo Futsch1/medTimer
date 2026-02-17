@@ -1,78 +1,71 @@
-package com.futsch1.medtimer.preferences;
+package com.futsch1.medtimer.preferences
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.core.content.edit
+import androidx.preference.MultiSelectListPreference
+import androidx.preference.Preference
+import androidx.preference.Preference.SummaryProvider
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
+import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import java.util.stream.Collectors
 
-import androidx.preference.MultiSelectListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
+class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.weekend_mode_preferences, rootKey)
 
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class WeekendModePreferencesFragment extends PreferenceFragmentCompat {
-
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.weekend_mode_preferences, rootKey);
-
-        setupWeekendMode();
-        setupTimePicker();
-        setupDays();
+        setupWeekendMode()
+        setupTimePicker()
+        setupDays()
     }
 
-    private void setupWeekendMode() {
-        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_MODE);
-        if (preference != null) {
-            preference.setOnPreferenceChangeListener((preference1, newValue) -> {
-                requestReschedule();
-                return true;
-            });
+    private fun setupWeekendMode() {
+        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_MODE)
+        preference?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+            requestReschedule()
+            true
         }
     }
 
-    private void setupTimePicker() {
-        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_TIME);
+    private fun setupTimePicker() {
+        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
         if (preference != null) {
-            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            preference.setSummary(TimeHelper.minutesToTimeString(requireContext(), defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540)));
-            preference.setOnPreferenceClickListener(preference1 -> {
-                int weekendTime = defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540);
-                new TimeHelper.TimePickerWrapper(getActivity()).show(weekendTime / 60, weekendTime % 60, minutes -> {
-                    defaultSharedPreferences.edit().putInt(PreferencesNames.WEEKEND_TIME, minutes).apply();
-                    preference1.setSummary(TimeHelper.minutesToTimeString(requireContext(), minutes));
-                    requestReschedule();
-                });
-                return true;
-            });
+            val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            preference.setSummary(minutesToTimeString(requireContext(), defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540).toLong()))
+            preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
+                val weekendTime = defaultSharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540)
+                TimePickerWrapper(requireActivity()).show(weekendTime / 60, weekendTime % 60) { minutes: Int ->
+                    defaultSharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, minutes) }
+                    preference1!!.setSummary(minutesToTimeString(requireContext(), minutes.toLong()))
+                    requestReschedule()
+                }
+                true
+            }
         }
     }
 
-    private void setupDays() {
-        Preference preference = getPreferenceScreen().findPreference(PreferencesNames.WEEKEND_DAYS);
+    private fun setupDays() {
+        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_DAYS)
         if (preference != null) {
-            preference.setSummaryProvider((Preference.SummaryProvider<MultiSelectListPreference>) preference1 -> {
-                @SuppressWarnings("java:S6204") // Using SDK 33
-                List<CharSequence> values = preference1.getValues().stream().map(s -> preference1.getEntries()[Integer.parseInt(s) - 1]).collect(Collectors.toList());
-                return String.join(", ", values);
-            });
-            preference.setOnPreferenceChangeListener((preference12, newValue) -> {
-                requestReschedule();
-                return true;
-            });
+            preference.setSummaryProvider(SummaryProvider { preference1: MultiSelectListPreference? ->
+                preference1!!.values.stream().map { s: String? -> preference1.entries[s!!.toInt() - 1] }
+                    .collect(Collectors.toList()).joinToString(", ")
+
+            })
+            preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+                requestReschedule()
+                true
+            }
         }
     }
 
-    private void requestReschedule() {
-        Context context = getContext();
+    private fun requestReschedule() {
+        val context = getContext()
         if (context != null) {
-            ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context);
+            requestScheduleNextNotification(context)
         }
     }
 }
