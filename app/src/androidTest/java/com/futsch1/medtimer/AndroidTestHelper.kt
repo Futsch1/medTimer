@@ -1,172 +1,186 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
-import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo;
-import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
+import android.icu.util.Calendar
+import android.text.format.DateFormat
+import androidx.annotation.IdRes
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObjectNotFoundException
+import androidx.test.uiautomator.UiScrollable
+import androidx.test.uiautomator.UiSelector
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
+import com.google.android.material.textfield.TextInputEditText
+import org.hamcrest.Matchers
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.Date
+import java.util.Locale
 
-import android.icu.util.Calendar;
-
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
-import androidx.test.uiautomator.UiSelector;
-
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
-import java.util.Locale;
-
-@SuppressWarnings("java:S2925")
-public class AndroidTestHelper {
-    public static void createReminder(String amount, LocalTime time) {
-        clickOn(R.id.addReminder);
-        clickOn(R.id.timeBasedCard);
-        writeTo(R.id.editAmount, amount);
+object AndroidTestHelper {
+    @JvmStatic
+    fun createReminder(amount: String, time: LocalTime?) {
+        clickOn(R.id.addReminder)
+        clickOn(R.id.timeBasedCard)
+        writeTo(R.id.editAmount, amount)
 
         if (time != null) {
-            clickOn(R.id.editReminderTime);
-            setTime(time.getHour(), time.getMinute(), false);
+            clickOn(R.id.editReminderTime)
+            setTime(time.hour, time.minute, false)
         }
-        closeKeyboard();
+        closeKeyboard()
 
-        clickOn(R.id.createReminder);
+        clickOn(R.id.createReminder)
     }
 
-    public static void setTime(int hour, int minute, boolean isDeltaTime) {
-        if (!android.text.format.DateFormat.is24HourFormat(getInstrumentation().getTargetContext()) && !isDeltaTime) {
-            clickOn(com.google.android.material.R.id.material_clock_period_am_button);
+    fun setTime(hour: Int, minute: Int, isDeltaTime: Boolean) {
+        var hour = hour
+        if (!DateFormat.is24HourFormat(InstrumentationRegistry.getInstrumentation().targetContext) && !isDeltaTime) {
+            clickOn(com.google.android.material.R.id.material_clock_period_am_button)
             if (hour == 12) {
-                clickOn(com.google.android.material.R.id.material_clock_period_pm_button);
+                clickOn(com.google.android.material.R.id.material_clock_period_pm_button)
             }
             if (hour > 12) {
-                hour -= 12;
-                clickOn(com.google.android.material.R.id.material_clock_period_pm_button);
+                hour -= 12
+                clickOn(com.google.android.material.R.id.material_clock_period_pm_button)
             }
             if (hour == 0) {
-                hour = 12;
+                hour = 12
             }
         }
 
-        clickOn(com.google.android.material.R.id.material_timepicker_mode_button);
-        writeTo(com.google.android.material.R.id.material_hour_text_input, String.valueOf(hour));
-        clickOn(com.google.android.material.R.id.material_minute_text_input);
-        onView(allOf(isDisplayed(), withClassName(is(TextInputEditText.class.getName())))).perform(replaceText(String.valueOf(minute)));
-        closeKeyboard();
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button);
+        clickOn(com.google.android.material.R.id.material_timepicker_mode_button)
+        writeTo(com.google.android.material.R.id.material_hour_text_input, hour.toString())
+        clickOn(com.google.android.material.R.id.material_minute_text_input)
+        Espresso.onView(
+            Matchers.allOf(
+                ViewMatchers.isDisplayed(),
+                ViewMatchers.withClassName(Matchers.`is`(TextInputEditText::class.java.getName()))
+            )
+        ).perform(ViewActions.replaceText(minute.toString()))
+        closeKeyboard()
+        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
     }
 
-    public static void setDate(Date date) {
-        String dateString = dateToStringForDateEdit(date);
-        clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle);
-        writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString);
-        clickOn(com.google.android.material.R.id.confirm_button);
+    @JvmStatic
+    fun setDate(date: Date) {
+        val dateString = dateToStringForDateEdit(date)
+        clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
+        writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString)
+        clickOn(com.google.android.material.R.id.confirm_button)
     }
 
-    private static String dateToStringForDateEdit(Date date) {
-        return getDefaultTextInputFormat().format(date);
+    private fun dateToStringForDateEdit(date: Date): String {
+        return defaultTextInputFormat.format(date)
     }
 
-    // Taken from UtcDates in Material DatePicker
-    static SimpleDateFormat getDefaultTextInputFormat() {
-        String defaultFormatPattern =
-                ((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()))
-                        .toPattern();
-        defaultFormatPattern = getDatePatternAsInputFormat(defaultFormatPattern);
-        SimpleDateFormat format = new SimpleDateFormat(defaultFormatPattern, Locale.getDefault());
-        format.setLenient(false);
-        return format;
-    }
+    val defaultTextInputFormat: SimpleDateFormat
+        // Taken from UtcDates in Material DatePicker
+        get() {
+            var defaultFormatPattern =
+                (java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.getDefault()) as SimpleDateFormat)
+                    .toPattern()
+            defaultFormatPattern = getDatePatternAsInputFormat(defaultFormatPattern)
+            val format = SimpleDateFormat(defaultFormatPattern, Locale.getDefault())
+            format.isLenient = false
+            return format
+        }
 
-    @NonNull
-    @SuppressWarnings("java:S5361")
-    static String getDatePatternAsInputFormat(@NonNull String localeFormat) {
+    fun getDatePatternAsInputFormat(localeFormat: String): String {
         return localeFormat
-                .replaceAll("[^dMy/\\-.]", "")
-                .replaceAll("d{1,2}", "dd")
-                .replaceAll("M{1,2}", "MM")
-                .replaceAll("y{1,4}", "yyyy")
-                .replaceAll("\\.$", "") // Removes a dot suffix that appears in some formats
-                .replaceAll("My", "M/y"); // Edge case for the Kako locale
+            .replace("[^dMy/\\-.]".toRegex(), "")
+            .replace("d{1,2}".toRegex(), "dd")
+            .replace("M{1,2}".toRegex(), "MM")
+            .replace("y{1,4}".toRegex(), "yyyy")
+            .replace("\\.$".toRegex(), "") // Removes a dot suffix that appears in some formats
+            .replace("My".toRegex(), "M/y") // Edge case for the Kako locale
     }
 
-    public static void setValue(String value) {
-        writeTo(android.R.id.edit, value);
-        clickDialogPositiveButton();
+    @JvmStatic
+    fun setValue(value: String) {
+        writeTo(android.R.id.edit, value)
+        BaristaDialogInteractions.clickDialogPositiveButton()
     }
 
-    public static void createIntervalReminder(String amount, int intervalMinutes) {
-        clickOn(R.id.addReminder);
-        clickOn(R.id.continuousIntervalCard);
-        writeTo(R.id.editAmount, amount);
+    @JvmStatic
+    fun createIntervalReminder(amount: String, intervalMinutes: Int) {
+        clickOn(R.id.addReminder)
+        clickOn(R.id.continuousIntervalCard)
+        writeTo(R.id.editAmount, amount)
 
-        clickOn(R.id.intervalMinutes);
-        writeTo(R.id.editIntervalTime, String.valueOf(intervalMinutes));
+        clickOn(R.id.intervalMinutes)
+        writeTo(R.id.editIntervalTime, intervalMinutes.toString())
 
-        closeKeyboard();
-        clickOn(R.id.createReminder);
+        closeKeyboard()
+        clickOn(R.id.createReminder)
     }
 
-    public static void createMedicine(String name) {
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
+    @JvmStatic
+    fun createMedicine(name: String) {
+        navigateTo(MainMenu.MEDICINES)
 
-        clickOn(R.id.addMedicine);
-        writeTo(R.id.medicineName, name);
+        clickOn(R.id.addMedicine)
+        writeTo(R.id.medicineName, name)
 
-        clickDialogPositiveButton();
+        BaristaDialogInteractions.clickDialogPositiveButton()
     }
 
-    public static void navigateTo(MainMenu mainMenu) {
-        int[] menuIds = {R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment};
-        clickOn(menuIds[mainMenu.ordinal()]);
-        clickOn(menuIds[mainMenu.ordinal()]);
+    @JvmStatic
+    fun navigateTo(mainMenu: MainMenu) {
+        val menuIds =
+            intArrayOf(R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
+        clickOn(menuIds[mainMenu.ordinal])
+        clickOn(menuIds[mainMenu.ordinal])
     }
 
-    public static LocalDateTime getNextNotificationTime() {
-        Calendar rightNow = Calendar.getInstance();
-        LocalDateTime dateTime = LocalDateTime.of(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.DAY_OF_MONTH), rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), 0);
-        return dateTime.plusMinutes(10);
-    }
+    val nextNotificationTime: LocalDateTime
+        get() {
+            val rightNow = Calendar.getInstance()
+            val dateTime = LocalDateTime.of(
+                rightNow.get(Calendar.YEAR),
+                rightNow.get(Calendar.MONTH) + 1,
+                rightNow.get(Calendar.DAY_OF_MONTH),
+                rightNow.get(Calendar.HOUR_OF_DAY),
+                rightNow.get(Calendar.MINUTE),
+                0
+            )
+            return dateTime.plusMinutes(10)
+        }
 
-    public static void scrollDown() {
-        UiScrollable appViews = new UiScrollable(
-                new UiSelector().scrollable(true));
+    fun scrollDown() {
+        val appViews = UiScrollable(
+            UiSelector().scrollable(true)
+        )
         try {
-            appViews.scrollForward();
-        } catch (UiObjectNotFoundException e) {
+            appViews.scrollForward()
+        } catch (_: UiObjectNotFoundException) {
             // Intentionally empty
         }
     }
 
-    public static void closeNotifications(UiDevice device) {
-        device.swipe(device.getDisplayWidth() / 2, device.getDisplayHeight(), device.getDisplayWidth() / 2, device.getDisplayHeight() / 2, 20);
-        device.waitForIdle(200);
+    fun closeNotifications(device: UiDevice) {
+        device.swipe(device.displayWidth / 2, device.displayHeight, device.displayWidth / 2, device.displayHeight / 2, 20)
+        device.waitForIdle(200)
         if (!device.findObjects(By.res("android:id/expand_button")).isEmpty() || !device.findObjects(By.descContains("Expand")).isEmpty()) {
-            device.pressBack();
+            device.pressBack()
         }
     }
 
-    public static void longClickListItem(@IdRes int id, int position) {
-        onView(withId(id))
-                .perform(actionOnItemAtPosition(position, longClick()));
+    fun longClickListItem(@IdRes id: Int, position: Int) {
+        Espresso.onView(ViewMatchers.withId(id))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder?>(position, ViewActions.longClick()))
     }
 
-    public enum MainMenu {OVERVIEW, MEDICINES, ANALYSIS}
+    enum class MainMenu {
+        OVERVIEW, MEDICINES, ANALYSIS
+    }
 }
