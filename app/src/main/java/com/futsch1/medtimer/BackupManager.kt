@@ -71,7 +71,7 @@ class BackupManager(
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
         alertDialogBuilder.setPositiveButton(R.string.ok) { _, _ ->
-            fragment.lifecycleScope.launch {
+            fragment.lifecycleScope.launch(ioDispatcher) {
                 performBackup(checkedItems)
             }
         }
@@ -85,9 +85,9 @@ class BackupManager(
         openFileLauncher.launch(intent)
     }
 
-    private suspend fun performBackup(checkedItems: BooleanArray) {
+    private fun performBackup(checkedItems: BooleanArray) {
         val progressDialogFragment = ProgressDialogFragment()
-        withContext(mainDispatcher) {
+        fragment.lifecycleScope.launch(mainDispatcher) {
             progressDialogFragment.show(fragment.getParentFragmentManager(), "backup")
         }
 
@@ -112,7 +112,7 @@ class BackupManager(
         if (checkedItems[0] || checkedItems[1]) {
             createAndSave(gson.toJson(jsonObject))
         }
-        withContext(mainDispatcher) {
+        fragment.lifecycleScope.launch(mainDispatcher) {
             progressDialogFragment.dismiss()
         }
     }
@@ -124,12 +124,12 @@ class BackupManager(
         )
     }
 
-    private suspend fun createAndSave(fileContent: String?) {
+    private fun createAndSave(fileContent: String?) {
         val file = File(context.cacheDir, backupFilename)
         if (FileHelper.saveToFile(file, fileContent)) {
             FileHelper.shareFile(context, file)
         } else {
-            withContext(mainDispatcher) {
+            fragment.lifecycleScope.launch(mainDispatcher) {
                 Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()
             }
         }
