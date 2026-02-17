@@ -280,4 +280,7 @@
     <string name="by_name">Par nom</string>
     <string name="by_creation_date_ascending">Croissant par date de création</string>
     <string name="by_creation_date_descending">Décroissant par date de création</string>
+    <string name="create_out_of_stock_reminder">Créer un rappel de la réserve</string>
+    <string name="successfully_created_reminder">Nouveau rappel créé avec succès</string>
+    <string name="create_expiration_date_reminder">Créer un rappel de date d\'expiration</string>
 </resources>

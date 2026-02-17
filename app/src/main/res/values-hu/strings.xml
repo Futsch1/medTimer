@@ -275,4 +275,7 @@
     <string name="by_name">Név szerint</string>
     <string name="by_creation_date_ascending">Növekvő a létrehozás dátuma szerint</string>
     <string name="by_creation_date_descending">Csökkenő a létrehozás dátuma szerint</string>
+    <string name="create_out_of_stock_reminder">Készletfigyelmeztetés létrehozása</string>
+    <string name="successfully_created_reminder">Új emlékeztető sikeresen létrehozva</string>
+    <string name="create_expiration_date_reminder">Lejárati dátum emlékeztető létrehozása</string>
 </resources>

@@ -96,7 +96,7 @@ class EditMedicineFragment :
     private fun setupSelectIcon(fragmentView: View) {
         selectIconButton = fragmentView.findViewById(R.id.selectIcon)
         selectIconButton!!.setIcon(MedicineIcons(requireContext()).getIconDrawable(iconId))
-        
+
         selectIconButton!!.setOnClickListener { _: View? ->
             val fragmentManager = getChildFragmentManager()
             val dialog = fragmentManager.findFragmentByTag(ICON_DIALOG_TAG) as IconDialog?
@@ -218,7 +218,7 @@ class EditMedicineFragment :
 
     private fun setupAddReminderButton(fragmentView: View, fullMedicine: FullMedicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireContext(), requireActivity(), fullMedicine, this.medicineViewModel) }
+        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireActivity(), fullMedicine, this.medicineViewModel.medicineRepository) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {

@@ -275,4 +275,7 @@
     <string name="by_name">İsme göre</string>
     <string name="by_creation_date_ascending">Oluşturma tarihine göre artan</string>
     <string name="by_creation_date_descending">Oluşturma tarihine göre azalan</string>
+    <string name="create_out_of_stock_reminder">Stokta yok hatırlatıcısı oluştur</string>
+    <string name="successfully_created_reminder">Yeni hatırlatıcı başarıyla oluşturuldu</string>
+    <string name="create_expiration_date_reminder">Son kullanma tarihi hatırlatıcısı oluştur</string>
 </resources>

@@ -10,7 +10,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import java.time.LocalDate
 
 class ReminderDataStore(
-    override val entityId: Int, val context: Context, val medicineRepository: MedicineRepository,
+    override val entityId: Int, val context: Context, override val medicineRepository: MedicineRepository,
 ) : EntityDataStore<Reminder>() {
     override var entity: Reminder = medicineRepository.getReminder(entityId)!!
 

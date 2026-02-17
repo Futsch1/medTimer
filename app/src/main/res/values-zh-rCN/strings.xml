@@ -270,4 +270,7 @@
     <string name="by_name">按名称</string>
     <string name="by_creation_date_ascending">按创建日期升序</string>
     <string name="by_creation_date_descending">按创建日期降序</string>
+    <string name="create_out_of_stock_reminder">创建低余量提醒</string>
+    <string name="successfully_created_reminder">成功创建新提醒</string>
+    <string name="create_expiration_date_reminder">创建到期日期提醒</string>
 </resources>

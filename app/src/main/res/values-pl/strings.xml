@@ -285,4 +285,7 @@
     <string name="by_name">Według nazwy</string>
     <string name="by_creation_date_ascending">Rosnąco według daty utworzenia</string>
     <string name="by_creation_date_descending">Malejąco według daty utworzenia</string>
+    <string name="create_out_of_stock_reminder">Utwórz przypomnienie o wyczerpaniu zapasów</string>
+    <string name="successfully_created_reminder">Pomyślnie utworzono nowe przypomnienie</string>
+    <string name="create_expiration_date_reminder">Utwórz przypomnienie o dacie wygaśnięcia</string>
 </resources>

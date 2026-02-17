@@ -275,4 +275,7 @@
     <string name="by_name">பெயர் மூலம்</string>
     <string name="by_creation_date_ascending">உருவாக்கிய தேதி மூலம் ஏறுவரிசை</string>
     <string name="by_creation_date_descending">உருவாக்கிய தேதி மூலம் இறங்குவரிசை</string>
+    <string name="create_out_of_stock_reminder">பங்கு நினைவூட்டலை உருவாக்கவும்</string>
+    <string name="successfully_created_reminder">புதிய நினைவூட்டல் வெற்றிகரமாக உருவாக்கப்பட்டது</string>
+    <string name="create_expiration_date_reminder">காலாவதி தேதி நினைவூட்டலை உருவாக்கவும்</string>
 </resources>

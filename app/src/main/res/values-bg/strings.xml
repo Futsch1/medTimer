@@ -275,4 +275,7 @@
     <string name="by_name">По име</string>
     <string name="by_creation_date_ascending">Възходящо по дата на създаване</string>
     <string name="by_creation_date_descending">Низходящо по дата на създаване</string>
+    <string name="create_out_of_stock_reminder">Създаване на напомняне за липса на наличност</string>
+    <string name="successfully_created_reminder">Успешно създадено ново напомняне</string>
+    <string name="create_expiration_date_reminder">Създаване на напомняне за срок на годност</string>
 </resources>

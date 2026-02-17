@@ -14,6 +14,10 @@
         app:icon="@drawable/calendar_event"
         app:key="stock_run_out_to_calendar"
         app:title="@string/create_calendar_entry" />
+    <Preference
+        app:icon="@drawable/alarm"
+        app:key="create_out_of_stock_reminder"
+        app:title="@string/create_out_of_stock_reminder" />
     <PreferenceCategory app:title="@string/refill">
         <EditTextPreference
             app:key="stock_refill_size"
@@ -32,6 +36,11 @@
             app:title="@string/expiration_date" />
         <Preference
             app:key="clear_dates"
+            app:icon="@drawable/trash"
             app:title="@string/clear_dates"/>
+        <Preference
+            app:icon="@drawable/alarm"
+            app:key="create_expiration_date_reminder"
+            app:title="@string/create_expiration_date_reminder"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

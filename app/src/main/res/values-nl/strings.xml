@@ -275,4 +275,7 @@
     <string name="by_name">Op naam</string>
     <string name="by_creation_date_ascending">Oplopend op aanmaakdatum</string>
     <string name="by_creation_date_descending">Aflopend op aanmaakdatum</string>
+    <string name="create_out_of_stock_reminder">Voorraadherinnering aanmaken</string>
+    <string name="successfully_created_reminder">Nieuwe herinnering succesvol aangemaakt</string>
+    <string name="create_expiration_date_reminder">Vervaldatumherinnering aanmaken</string>
 </resources>
