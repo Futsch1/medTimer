@@ -269,7 +269,7 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10")
         pressBack()
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0, 1)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         sleep(2_000)
         device.openNotification()
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
