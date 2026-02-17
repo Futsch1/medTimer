@@ -70,6 +70,8 @@ abstract class BaseTestHelper {
             ) + device.findObjects(
                 By.textContains("Clear all")
             ) + device.findObjects(
+                By.textContains("CLEAR ALL")
+            ) + device.findObjects(
                 By.descContains("Clear all")
             )
             for (clearAllButton in clearAllButtons) {

@@ -294,6 +294,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine("Test")
         clickOn(R.id.openStockTracking)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
         AndroidTestHelper.scrollDown()
@@ -314,6 +315,7 @@ class MedicineStockTest : BaseTestHelper() {
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
         pressBack()
