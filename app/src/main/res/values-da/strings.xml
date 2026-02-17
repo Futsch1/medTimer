@@ -272,4 +272,7 @@
     <string name="refill_amount">Genopfyldning (%s)</string>
     <string name="expiration_date_notification">Medicinen %1$s har en udløbsdato den %2$s.\nOvervej at udskifte medicinen.</string>
     <string name="select_all">Vælg alle</string>
+    <string name="by_name">Efter navn</string>
+    <string name="by_creation_date_ascending">Stigende efter oprettelsesdato</string>
+    <string name="by_creation_date_descending">Faldende efter oprettelsesdato</string>
 </resources>

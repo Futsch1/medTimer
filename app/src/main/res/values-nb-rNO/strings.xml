@@ -27,4 +27,7 @@
     <string name="production_date">Produksjonsdato</string>
     <string name="expiration_date">Utløpsdato</string>
     <string name="expiration_reminder">Påminnelse om utløpsdato</string>
+    <string name="by_name">Etter navn</string>
+    <string name="by_creation_date_ascending">Stigende etter opprettelsesdato</string>
+    <string name="by_creation_date_descending">Synkende etter opprettelsesdato</string>
 </resources>

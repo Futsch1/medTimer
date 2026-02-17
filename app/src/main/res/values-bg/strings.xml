@@ -272,4 +272,7 @@
     <string name="refill_amount">Допълване (%s)</string>
     <string name="expiration_date_notification">Лекарството %1$s има срок на годност %2$s.\nПомислете за подмяна на лекарството.</string>
     <string name="select_all">Избери всички</string>
+    <string name="by_name">По име</string>
+    <string name="by_creation_date_ascending">Възходящо по дата на създаване</string>
+    <string name="by_creation_date_descending">Низходящо по дата на създаване</string>
 </resources>

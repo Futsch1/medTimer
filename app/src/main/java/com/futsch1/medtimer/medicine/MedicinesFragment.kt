@@ -89,7 +89,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
         // Connect view model to recycler view adapter
         medicineViewModel!!.medicines.observe(getViewLifecycleOwner(), Observer { l: List<FullMedicine> ->
             adapter!!.submitList(l)
-            medicinesMenu.medicinesIdList = l.stream().map { obj: FullMedicine -> obj.medicine.medicineId }.toList()
+            medicinesMenu.medicines = l
             startPostponedEnterTransition()
             idlingResource!!.setIdle()
         })

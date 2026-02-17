@@ -277,4 +277,7 @@
     <string name="refill_amount">Recharge (%s)</string>
     <string name="expiration_date_notification">Le médicament %1$s se périme le %2$s.\nPensez à remplacer ce médicament.</string>
     <string name="select_all">Tout sélectionner</string>
+    <string name="by_name">Par nom</string>
+    <string name="by_creation_date_ascending">Croissant par date de création</string>
+    <string name="by_creation_date_descending">Décroissant par date de création</string>
 </resources>

@@ -5,5 +5,13 @@
         android:title="@string/activate_all" />
     <item
         android:id="@+id/deactivate_all"
-        android:title="@string/deactivate_all" />
+        android:title="@string/deactivate_all" >
+    </item>
+    <item android:title="@string/sort" >
+        <menu >
+            <item android:id="@+id/sortByName" android:title="@string/by_name" />
+            <item android:id="@+id/sortByCreationDateAsc" android:title="@string/by_creation_date_ascending" />
+            <item android:id="@+id/sortByCreationDateDesc" android:title="@string/by_creation_date_descending" />
+        </menu>
+    </item>
 </menu>

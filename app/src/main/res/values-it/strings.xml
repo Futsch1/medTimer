@@ -277,4 +277,7 @@
     <string name="refill_amount">Ricarica (%s)</string>
     <string name="expiration_date_notification">Il medicinale %1$s scade il %2$\nValuta la possibilità di sostituirlo.</string>
     <string name="select_all">Seleziona tutto</string>
+    <string name="by_name">Per nome</string>
+    <string name="by_creation_date_ascending">Ascendente per data di creazione</string>
+    <string name="by_creation_date_descending">Discendente per data di creazione</string>
 </resources>

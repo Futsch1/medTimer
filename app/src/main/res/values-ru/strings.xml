@@ -279,4 +279,7 @@
     <string name="refill_amount">Пополнить (%s)</string>
     <string name="expiration_date_notification">Срок годности лекарства %1$s истекает %2$s.\nРассмотрите возможность замены лекарства.</string>
     <string name="select_all">Выбрать все</string>
+    <string name="by_name">По имени</string>
+    <string name="by_creation_date_ascending">По возрастанию даты создания</string>
+    <string name="by_creation_date_descending">По убыванию даты создания</string>
 </resources>

@@ -232,6 +232,10 @@ open class MedicineRepository(val application: Application?) {
         medicineDao.updateMedicine(medicine)
     }
 
+    fun updateMedicines(medicines: List<Medicine>) {
+        medicineDao.updateMedicines(medicines)
+    }
+
     fun updateMedicineFromMain(medicine: Medicine) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
     }

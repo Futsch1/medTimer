@@ -272,4 +272,7 @@
     <string name="refill_amount">Nachfüllen (%s)</string>
     <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
     <string name="select_all">Alle auswählen</string>
+    <string name="by_name">Nach Name</string>
+    <string name="by_creation_date_ascending">Aufsteigend nach Erstellungsdatum</string>
+    <string name="by_creation_date_descending">Absteigend nach Erstellungsdatum</string>
 </resources>
