@@ -86,9 +86,9 @@ class StatisticsFragment : Fragment() {
 
     private fun setupFragmentButtons(statisticsView: View) {
         val chipGroup = statisticsView.findViewById<ChipGroup>(R.id.analysisView)
-        chipGroup.setOnCheckedStateChangeListener { _, checkedIds: MutableList<Int?>? ->
-            if (!checkedIds!!.isEmpty()) {
-                val checkedId: Int = checkedIds[0]!!
+        chipGroup.setOnCheckedStateChangeListener { _, checkedIds: List<Int> ->
+            if (checkedIds.isNotEmpty()) {
+                val checkedId: Int = checkedIds[0]
                 if (R.id.chartChip == checkedId) {
                     loadActiveFragment(StatisticFragmentType.CHARTS)
                 } else if (R.id.tableChip == checkedId) {
