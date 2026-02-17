@@ -37,6 +37,7 @@ import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,7 +48,9 @@ class OptionsMenu(
     private val fragment: Fragment,
     private val medicineViewModel: MedicineViewModel,
     private val navController: NavController,
-    private val hideFilter: Boolean
+    private val hideFilter: Boolean,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent?>
@@ -66,7 +69,7 @@ class OptionsMenu(
     }
 
     fun fileSelected(data: Uri?) {
-        fragment.lifecycleScope.launch(Dispatchers.IO) {
+        fragment.lifecycleScope.launch(ioDispatcher) {
             backupManager!!.fileSelected(data)
         }
     }
@@ -135,22 +138,22 @@ class OptionsMenu(
     private fun setupExport() {
         var item = menu!!.findItem(R.id.export_csv)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) { eventExport(true) }
+            fragment.lifecycleScope.launch(ioDispatcher) { eventExport(true) }
             true
         }
         item = menu!!.findItem(R.id.export_pdf)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) { eventExport(false) }
+            fragment.lifecycleScope.launch(ioDispatcher) { eventExport(false) }
             true
         }
         item = menu!!.findItem(R.id.export_medicine_csv)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) { medicineExport(true) }
+            fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(true) }
             true
         }
         item = menu!!.findItem(R.id.export_medicine_pdf)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) { medicineExport(false) }
+            fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(false) }
             true
         }
     }
@@ -163,7 +166,7 @@ class OptionsMenu(
             item.isVisible = true
             val menuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem: MenuItem? ->
                 idlingResource.setBusy()
-                fragment.lifecycleScope.launch(Dispatchers.IO) {
+                fragment.lifecycleScope.launch(ioDispatcher) {
                     medicineViewModel.medicineRepository.deleteAll()
                     val generateTestData = GenerateTestData(medicineViewModel, menuItem === itemWithEvents)
                     generateTestData.generateTestMedicine()
@@ -195,10 +198,10 @@ class OptionsMenu(
 
     private fun handleTagFilter() {
         if (!hideFilter) {
-            fragment.lifecycleScope.launch(Dispatchers.IO) {
+            fragment.lifecycleScope.launch(ioDispatcher) {
                 if (medicineViewModel.medicineRepository.hasTags()) {
                     try {
-                        withContext(Dispatchers.Main) {
+                        withContext(mainDispatcher) {
                             setupTagFilter()
                         }
                     } catch (_: IllegalStateException) {

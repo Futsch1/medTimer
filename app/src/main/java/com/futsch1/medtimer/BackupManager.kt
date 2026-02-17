@@ -23,6 +23,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,7 +34,9 @@ class BackupManager(
     private val fragment: Fragment,
     private val menu: Menu,
     private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent?>
+    private val openFileLauncher: ActivityResultLauncher<Intent?>,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
 
     init {
@@ -68,7 +71,7 @@ class BackupManager(
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
         alertDialogBuilder.setPositiveButton(R.string.ok) { _, _ ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) {
+            fragment.lifecycleScope.launch {
                 performBackup(checkedItems)
             }
         }
@@ -84,7 +87,7 @@ class BackupManager(
 
     private suspend fun performBackup(checkedItems: BooleanArray) {
         val progressDialogFragment = ProgressDialogFragment()
-        withContext(Dispatchers.Main) {
+        withContext(mainDispatcher) {
             progressDialogFragment.show(fragment.getParentFragmentManager(), "backup")
         }
 
@@ -109,7 +112,7 @@ class BackupManager(
         if (checkedItems[0] || checkedItems[1]) {
             createAndSave(gson.toJson(jsonObject))
         }
-        withContext(Dispatchers.Main) {
+        withContext(mainDispatcher) {
             progressDialogFragment.dismiss()
         }
     }
@@ -126,18 +129,18 @@ class BackupManager(
         if (FileHelper.saveToFile(file, fileContent)) {
             FileHelper.shareFile(context, file)
         } else {
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()
             }
         }
     }
 
     fun fileSelected(data: Uri?) {
-        fragment.lifecycleScope.launch(Dispatchers.IO) {
+        fragment.lifecycleScope.launch(ioDispatcher) {
             val json = FileHelper.readFromUri(data, context.contentResolver)
 
             val progressDialogFragment = ProgressDialogFragment()
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 progressDialogFragment.show(fragment.getParentFragmentManager(), "restore")
             }
             var restoreSuccessful = false
@@ -151,7 +154,7 @@ class BackupManager(
                 restoreSuccessful = restoreBackup(json, JSONMedicineBackup()) || restoreBackup(json, JSONReminderEventBackup())
             }
             Log.d(LogTags.BACKUP, "Backup restore finished")
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 progressDialogFragment.dismiss()
 
                 AlertDialog.Builder(context)
@@ -168,13 +171,13 @@ class BackupManager(
             val rootElement = JsonParser.parseString(json).getAsJsonObject()
             if (rootElement.has(MEDICINE_KEY)) {
                 restoreSuccessful = restoreBackup(
-                    rootElement.get(MEDICINE_KEY).toString(),
+                    rootElement[MEDICINE_KEY].toString(),
                     JSONMedicineBackup()
                 )
             }
             if (rootElement.has(EVENT_KEY)) {
                 restoreSuccessful = restoreSuccessful && restoreBackup(
-                    rootElement.get(EVENT_KEY).toString(),
+                    rootElement[EVENT_KEY].toString(),
                     JSONReminderEventBackup()
                 )
             }

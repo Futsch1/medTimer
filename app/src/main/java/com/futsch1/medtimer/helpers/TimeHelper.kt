@@ -80,7 +80,7 @@ object TimeHelper {
     fun durationStringToMinutes(timeString: String): Int {
         try {
             val accessor = DateTimeFormatter.ofPattern("H:mm").parse(timeString)
-            return accessor.get(ChronoField.HOUR_OF_DAY) * 60 + accessor.get(ChronoField.MINUTE_OF_HOUR)
+            return accessor[ChronoField.HOUR_OF_DAY] * 60 + accessor[ChronoField.MINUTE_OF_HOUR]
         } catch (_: DateTimeParseException) {
             return -1
         }
@@ -129,9 +129,9 @@ object TimeHelper {
     private fun getLocale(context: Context): Locale {
         val localeList = context.resources.configuration.getLocales()
         val locale = if (useSystemLocale(context) && localeList.size() > 1) {
-            localeList.get(1)
+            localeList[1]
         } else {
-            localeList.get(0)
+            localeList[0]
         }
         return locale
     }
