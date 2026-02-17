@@ -290,7 +290,9 @@ class OptionsMenu(
                 } catch (_: NoSuchMethodException) {
                     // Intentionally empty
                 } catch (_: IllegalAccessException) {
+                    // Intentionally empty
                 } catch (_: InvocationTargetException) {
+                    // Intentionally empty
                 }
             }
         }
