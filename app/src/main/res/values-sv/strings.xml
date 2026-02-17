@@ -271,4 +271,7 @@
     <string name="refill_amount">Fyll på (%s)</string>
     <string name="expiration_date_notification">Medicinen %1$s har ett utgångsdatum den %2$s.\nÖverväg att byta ut medicinen.</string>
     <string name="select_all">Välj alla</string>
+    <string name="by_name">Efter namn</string>
+    <string name="by_creation_date_ascending">Stigande efter skapelsedatum</string>
+    <string name="by_creation_date_descending">Fallande efter skapelsedatum</string>
 </resources>

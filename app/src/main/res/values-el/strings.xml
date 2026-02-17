@@ -272,4 +272,7 @@
     <string name="refill_amount">Αναπλήρωση (%s)</string>
     <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηнία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
     <string name="select_all">Επιλογή όλων</string>
+    <string name="by_name">Κατά όνομα</string>
+    <string name="by_creation_date_ascending">Αύξουσα κατά ημερομηνία δημιουργίας</string>
+    <string name="by_creation_date_descending">Φθίνουσα κατά ημερομηνία δημιουργίας</string>
 </resources>

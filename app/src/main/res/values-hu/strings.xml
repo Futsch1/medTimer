@@ -272,4 +272,7 @@
     <string name="refill_amount">Újratöltés (%s)</string>
     <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
     <string name="select_all">Az összes kijelölése</string>
+    <string name="by_name">Név szerint</string>
+    <string name="by_creation_date_ascending">Növekvő a létrehozás dátuma szerint</string>
+    <string name="by_creation_date_descending">Csökkenő a létrehozás dátuma szerint</string>
 </resources>

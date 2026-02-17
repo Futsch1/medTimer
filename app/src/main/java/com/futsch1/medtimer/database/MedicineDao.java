@@ -159,4 +159,7 @@ public interface MedicineDao {
 
     @Insert
     void insertReminders(List<@NotNull Reminder> reminders);
+
+    @Update
+    void updateMedicines(List<@NotNull Medicine> medicines);
 }
