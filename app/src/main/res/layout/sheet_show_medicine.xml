@@ -14,18 +14,23 @@
             android:id="@+id/medicineName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/medicine_name" />
+            android:paddingVertical="6dp"
+            android:text="@string/medicine_name"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/medicineDates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
             android:text="@string/production_date" />
 
         <TextView
             android:id="@+id/medicineNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
             android:text="@string/notes" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -37,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="4dp"
+            android:paddingVertical="6dp"
             android:text="@string/reminder_status"
             app:drawableStartCompat="@drawable/calendar_event" />
 

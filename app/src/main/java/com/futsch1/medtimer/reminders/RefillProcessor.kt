@@ -8,7 +8,6 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
-import java.time.Instant
 import java.util.stream.Collectors
 
 class RefillProcessor(val reminderContext: ReminderContext) {
@@ -47,7 +46,7 @@ class RefillProcessor(val reminderContext: ReminderContext) {
     fun buildReminderEvent(medicine: FullMedicine): ReminderEvent {
         val reminderEvent = ReminderEvent()
         reminderEvent.reminderId = -1
-        reminderEvent.remindedTimestamp = Instant.now().toEpochMilli() / 1000
+        reminderEvent.remindedTimestamp = reminderContext.timeAccess.now().toEpochMilli() / 1000
         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
         reminderEvent.medicineName = medicine.medicine.name
         reminderEvent.color = medicine.medicine.color

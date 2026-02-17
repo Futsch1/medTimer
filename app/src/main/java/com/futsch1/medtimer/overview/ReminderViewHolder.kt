@@ -76,7 +76,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
                 ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
             stateButton.backgroundTintList = contentContainer.backgroundTintList
         } else {
-            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.color != null) {
+            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.color != null) {
                 contentContainer.backgroundTintList =
                     ColorStateList.valueOf(0x20000000)
                 contentContainer.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
