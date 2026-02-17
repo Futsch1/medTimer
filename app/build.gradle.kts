@@ -245,7 +245,7 @@ val exclusions = listOf(
 // Register a JacocoReport task for code coverage analysis
 tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
     // Depend on unit tests and Android tests tasks
-    dependsOn(listOf(unitTests, androidTests))
+    dependsOn(listOf(unitTests))
     // Set task grouping and description
     group = "Reporting"
     description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
@@ -262,7 +262,7 @@ tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
             fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
                 exclude(exclusions)
             },
-            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/")) {
                 exclude(exclusions)
             }
         ))

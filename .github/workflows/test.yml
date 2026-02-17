@@ -55,6 +55,9 @@ jobs:
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
+      - name: Run fuzzing tests
+        run: ./gradlew testDebug -Dfuzzing=true
+
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b # v2.35.0
         with:
@@ -74,9 +77,6 @@ jobs:
             adb shell su 0 toybox date 0801160025
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
-
-      - name: Run fuzzing tests
-        run: ./gradlew testDebug -Dfuzzing=true
 
       - name: Android lint
         run: ./gradlew lint -PnoGradleDeps
