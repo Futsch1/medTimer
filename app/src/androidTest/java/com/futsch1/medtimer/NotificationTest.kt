@@ -508,6 +508,8 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.tab_settings)
         clickOn(R.string.display_settings)
         clickOn(R.string.combine_notifications)
+        pressBack()
+        pressBack()
 
         AndroidTestHelper.createMedicine(TEST_MED)
         val notificationTime = AndroidTestHelper.nextNotificationTime.toLocalTime()
