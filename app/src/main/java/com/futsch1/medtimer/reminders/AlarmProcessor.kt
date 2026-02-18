@@ -2,7 +2,6 @@ package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
@@ -104,7 +103,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
     }
 
     private fun updateNextReminderWidget() {
-        val intent = Intent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
+        val intent = reminderContext.getIntent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
         reminderContext.setIntentClass(intent, WidgetUpdateReceiver::class.java)
         reminderContext.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
     }

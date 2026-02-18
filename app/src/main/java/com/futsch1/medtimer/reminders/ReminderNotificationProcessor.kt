@@ -37,9 +37,9 @@ class ReminderNotificationProcessor(
                 notificationAction(reminderNotification)
             }
             r = true
-        }
 
-        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
+            ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
+        }
 
         return r
     }
