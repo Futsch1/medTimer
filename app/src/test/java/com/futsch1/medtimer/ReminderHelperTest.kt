@@ -28,7 +28,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 @ExtendWith(RobolectricExtension::class)
-@Config(sdk = [34])
+@Config(sdk = [36])
 class ReminderHelperTest {
 
     @Test

@@ -23,7 +23,7 @@ import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 import java.time.LocalDate
 
 @ExtendWith(RobolectricExtension::class)
-@Config(sdk = [34])
+@Config(sdk = [36])
 class MedicineHelperTest {
     @Test
     fun testParse() {
