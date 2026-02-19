@@ -94,12 +94,12 @@ class CSVExportUnitTest {
                 // Call the create method
                 csvEventExport.exportInternal(file);
 
-                FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
+                FileWriter fileWriter = fileWriterMockedConstruction.constructed().getFirst();
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n");
-                verify(fileWriter).write("5/3/21 1:00 AM;Medicine 1;10mg;5/3/21 1:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
-                verify(fileWriter).write("5/3/21 1:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n");
+                verify(fileWriter).write("5/3/21 1:00\u202FAM;Medicine 1;10mg;5/3/21 1:02\u202FAM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n");
+                verify(fileWriter).write("5/3/21 1:30\u202FAM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n");
             } catch (Export.ExporterException | IOException e) {
                 fail(EXCEPTION_OCCURRED);
             }
@@ -160,13 +160,13 @@ class CSVExportUnitTest {
                 // Call the create method
                 csvExport.exportInternal(file);
 
-                FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
+                FileWriter fileWriter = fileWriterMockedConstruction.constructed().getFirst();
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Medicine;Amount;Time\n");
-                verify(fileWriter).write("Medicine 1;1;1:00 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;2;1:01 AM, Every day\n");
-                verify(fileWriter).write("Medicine 2;three;1:02 AM, Every day\n");
+                verify(fileWriter).write("Medicine 1;1;1:00\u202FAM, Every day\n");
+                verify(fileWriter).write("Medicine 2;2;1:01\u202FAM, Every day\n");
+                verify(fileWriter).write("Medicine 2;three;1:02\u202FAM, Every day\n");
             } catch (Export.ExporterException | IOException e) {
                 fail(EXCEPTION_OCCURRED);
             }
@@ -202,7 +202,7 @@ class CSVExportUnitTest {
                 // Call the create method
                 csvEventExport.exportInternal(file);
 
-                FileWriter fileWriter = fileWriterMockedConstruction.constructed().get(0);
+                FileWriter fileWriter = fileWriterMockedConstruction.constructed().getFirst();
 
                 // Verify that the FileWriter wrote the correct data to the file
                 verify(fileWriter).write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n");

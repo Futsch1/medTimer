@@ -21,8 +21,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 156
-        versionName = "1.22.4"
+        versionCode = 157
+        versionName = "1.22.5"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -52,8 +52,8 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         buildConfig = true
@@ -198,7 +198,7 @@ play {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 tasks.withType<JavaCompile> {
@@ -262,7 +262,7 @@ tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
             fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
                 exclude(exclusions)
             },
-            fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/")) {
                 exclude(exclusions)
             }
         ))

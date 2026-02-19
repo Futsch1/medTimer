@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
-          java-version: "17"
+          java-version: "21"
           distribution: temurin
           cache: gradle
       - uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
@@ -55,6 +55,9 @@ jobs:
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
+      - name: Run fuzzing tests
+        run: ./gradlew testDebug -Dfuzzing=true
+
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b # v2.35.0
         with:
@@ -74,9 +77,6 @@ jobs:
             adb shell su 0 toybox date 0801160025
             EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
-
-      - name: Run fuzzing tests
-        run: ./gradlew testDebug -Dfuzzing=true
 
       - name: Android lint
         run: ./gradlew lint -PnoGradleDeps
