@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 
+private val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
+
 /**
  * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
  *
@@ -22,7 +24,6 @@ import java.time.Instant
  * repeating alerts.
  */
 class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
-    val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
 
     override fun onReceive(context: Context, intent: Intent) {
         val reminderContext = ReminderContext(context)
