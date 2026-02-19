@@ -227,7 +227,7 @@
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
     <string name="time_based_reminder_help">Indstil specifikke tidspunkter (f.eks. 8:00) og konfigurer et tilbagevendende mønster. Dette giver præcis kontrol over specifikke ugedage, månedsdage eller komplekse periodiske tidsplaner (som \'hver 3. dag\').</string>
     <string name="continuous_interval_reminder_help">Start en påmindelse baseret på et tidsinterval (f.eks. hver 6. time) fra et bestemt tidspunkt. Dette mønster er kontinuerligt og ignorerer begrænsninger for tid på dagen, indtil det deaktiveres manuelt.</string>
-    <string name="windowed_interval_reminder_help">Angiv et dagligt aktivt tidsrum (fx 09.00-21.00), hvor første påmindelse altid sendes ved starttidspunktet. Derefter udsendes påmindelser med faste intervaller frem til sluttidspunktet. Mønstret nulstilles hver dag.</string>
+    <string name="windowed_interval_reminder_help">Angiv et dagligt aktivt tidsrum (fx 09.00–21.00), hvor første påmindelse altid sendes ved starttidspunktet. Derefter udsendes påmindelser med faste intervaller frem til sluttidspunktet. Mønstret nulstilles hver dag.</string>
     <string name="linked_reminder">Linket påmindelse</string>
     <string name="linked_reminder_help">En forbundet påmindelse er en opfølgende påmindelse, der er planlagt til et bestemt tidspunkt efter en primær påmindelse. Dette er nyttigt for medicin, der skal tages i rækkefølge med et bestemt interval imellem.</string>
     <string name="add_linked_reminder_summary">Opretter en opfølgende påmindelse, der planlægges et bestemt tidsrum efter, at denne påmindelse er udløst.</string>
