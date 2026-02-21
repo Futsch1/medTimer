@@ -3,11 +3,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/widgetLine1"
+    <TextView
+        android:id="@+id/widgetLine1Text"
         style="@style/Widget.MedTimer.InnerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:orientation="horizontal"
+        android:textColor="?attr/colorOnPrimary" />
 </LinearLayout>

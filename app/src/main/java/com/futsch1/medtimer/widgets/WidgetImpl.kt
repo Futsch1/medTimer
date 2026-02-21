@@ -25,7 +25,7 @@ class WidgetImpl(
     private val lineProvider: WidgetLineProvider,
     private val widgetIds: WidgetIds
 ) {
-    internal fun updateAppWidget(
+    fun updateAppWidget(
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
@@ -97,16 +97,14 @@ class WidgetImpl(
         isShort: Boolean
     ) {
         val viewIds = intArrayOf(
-            R.id.widgetLine1,
-            R.id.widgetLine2,
-            R.id.widgetLine3,
-            R.id.widgetLine4
+            R.id.widgetLine1Text,
+            R.id.widgetLine2Text,
+            R.id.widgetLine3Text,
+            R.id.widgetLine4Text
         )
         for (i in 0..<numLines) {
-            val views = RemoteViews(context.packageName, R.layout.widget_line)
             val text = lineProvider.getWidgetLine(i, isShort)
-            views.setTextViewText(R.id.widgetLineText, text)
-            containerViews.addView(viewIds[i], views)
+            containerViews.setTextViewText(viewIds[i], text)
             containerViews.setViewVisibility(
                 viewIds[i],
                 if (text.isNotEmpty()) View.VISIBLE else View.INVISIBLE
