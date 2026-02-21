@@ -12,7 +12,8 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"
         android:orientation="horizontal"
-        android:textColor="?attr/colorOnPrimary" />
+        android:textColor="?attr/colorOnPrimary"
+        tools:ignore="InconsistentLayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +28,8 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"
         android:orientation="horizontal"
-        android:textColor="?attr/colorOnPrimary" />
+        android:textColor="?attr/colorOnPrimary"
+        tools:ignore="InconsistentLayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +44,8 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"
         android:orientation="horizontal"
-        android:textColor="?attr/colorOnPrimary" />
+        android:textColor="?attr/colorOnPrimary"
+        tools:ignore="InconsistentLayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,5 +60,6 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"
         android:orientation="horizontal"
-        android:textColor="?attr/colorOnPrimary" />
+        android:textColor="?attr/colorOnPrimary"
+        tools:ignore="InconsistentLayout" />
 </LinearLayout>
