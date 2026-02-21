@@ -37,6 +37,7 @@ import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditMedicineFragment :
     DatabaseEntityEditFragment<FullMedicine>(FullMedicineEntityInterface(), R.layout.fragment_edit_medicine, EditMedicineFragment::class.java.getName()),
@@ -209,9 +210,11 @@ class EditMedicineFragment :
         lifecycleScope.launch(ioDispatcher) {
             val reminder = medicineViewModel.medicineRepository.getReminder(itemId.toInt())
             if (reminder != null) {
-                LinkedReminderHandling(reminder, medicineViewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
-                    adapter!!.notifyItemChanged(adapterPosition)
-                })
+                withContext(mainDispatcher) {
+                    LinkedReminderHandling(reminder, medicineViewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
+                        adapter!!.notifyItemChanged(adapterPosition)
+                    })
+                }
             }
         }
     }

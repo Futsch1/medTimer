@@ -39,7 +39,7 @@ abstract class DatabaseEntityEditFragment<T>(
     private val layoutId: Int,
     val name: String,
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+    val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
     Fragment() {
 

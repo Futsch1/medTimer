@@ -110,7 +110,7 @@ object MedicineHelper {
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.isOutOfStock) {
-            builder.color(0xffcc0000.toInt()) { append("⚠") }
+            builder.color(0xffcc0000.toInt()) { bold { append("⚠") } }
         }
         val expiredIcon = getExpiredIcon(fullMedicine)
         if (expiredIcon.isNotEmpty()) {
@@ -127,7 +127,7 @@ object MedicineHelper {
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.medicine.hasExpired()) {
-            builder.color(0xffcc0000.toInt()) { append("\uD83D\uDEAB") }
+            builder.color(0xffcc0000.toInt()) { bold { append("\uD83D\uDEAB") } }
         }
         return builder
     }

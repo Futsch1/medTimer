@@ -69,5 +69,5 @@ private fun touchReminderEvent(
     reminderEvent: ReminderEvent
 ) {
     reminderEvent.processedTimestamp = Instant.now().epochSecond
-    medicineRepository.updateReminderEvent(reminderEvent)
+    medicineRepository.updateReminderEventFromMain(reminderEvent)
 }
