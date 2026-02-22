@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.medicine
 
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -9,7 +8,7 @@ import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 
-class EditMedicineSubmenus(val fragment: Fragment, val medicine: Medicine, val medicineRepository: MedicineRepository) {
+class EditMedicineSubmenus(val editMedicineFragment: EditMedicineFragment, val medicine: Medicine, val medicineRepository: MedicineRepository) {
     enum class Submenu {
         NOTES,
         TAGS,
@@ -19,11 +18,11 @@ class EditMedicineSubmenus(val fragment: Fragment, val medicine: Medicine, val m
 
     fun open(submenu: Submenu, navController: NavController) {
         when (submenu) {
-            Submenu.NOTES -> NotesDialog(fragment.requireContext(), medicine, medicineRepository)
+            Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
-                val tagDataFromMedicine = TagDataFromMedicine(fragment, medicine.medicineId)
+                val tagDataFromMedicine = TagDataFromMedicine(editMedicineFragment, medicine.medicineId)
                 val dialog: DialogFragment = TagsFragment(tagDataFromMedicine)
-                dialog.show(fragment.getParentFragmentManager(), "tags")
+                dialog.show(editMedicineFragment.getParentFragmentManager(), "tags")
             }
 
             Submenu.STOCK_TRACKING -> {
