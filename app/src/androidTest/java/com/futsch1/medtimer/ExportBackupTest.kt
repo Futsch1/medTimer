@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
@@ -8,13 +9,20 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import org.junit.Test
 
 class ExportBackupTest : BaseTestHelper() {
     @Test
+    @AllowFlaky(attempts = 1)
     fun testTriggerExport() {
         openMenu()
         clickOn(R.string.generate_test_data)
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickOn(R.id.tag_filter)
+        clickOn("Supplements")
+        pressBack()
 
         openMenu()
         clickOn(R.string.event_data)
