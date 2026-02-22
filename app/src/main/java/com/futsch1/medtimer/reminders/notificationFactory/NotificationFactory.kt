@@ -38,6 +38,7 @@ abstract class NotificationFactory(
         if (color != null) {
             builder.setColor(color.toArgb()).setColorized(true)
         }
+        builder.setGroup(notificationId.toString())
         builder.setSilent(shouldBeSilent())
     }
 
