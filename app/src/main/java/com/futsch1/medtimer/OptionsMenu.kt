@@ -216,7 +216,9 @@ class OptionsMenu(
 
     private fun eventExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
-            Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+            fragment.lifecycleScope.launch(mainDispatcher) {
+                Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+            }
         }
         val reminderEvents: List<ReminderEvent> =
             medicineViewModel.filterEvents(medicineViewModel.medicineRepository.allReminderEventsWithoutDeletedAndAcknowledged)
@@ -230,7 +232,9 @@ class OptionsMenu(
 
     private fun medicineExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
-            Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+            fragment.lifecycleScope.launch(mainDispatcher) {
+                Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+            }
         }
         val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineViewModel.medicineRepository.medicines)
         val exporter = if (isCSV) CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context) else PDFMedicineExport(
