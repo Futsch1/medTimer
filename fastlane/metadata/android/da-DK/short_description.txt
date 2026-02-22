@@ -1,1 +1,1 @@
-Medikationspåmindelser og -historik med fuldt offline privatliv
+Medicin- og pillepåmindelse med log, offline og privat.
