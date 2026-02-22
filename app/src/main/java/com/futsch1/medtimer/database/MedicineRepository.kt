@@ -84,7 +84,9 @@ open class MedicineRepository(val application: Application?) {
 
     private fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEvent> {
         var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2)
-        if (lastReminderEvents.stream().allMatch { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }) {
+        if (lastReminderEvents.isNotEmpty() && lastReminderEvents.stream()
+                .allMatch { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
+        ) {
             lastReminderEvents = medicineDao.getReminderEvents(reminderId)
         }
         return lastReminderEvents
