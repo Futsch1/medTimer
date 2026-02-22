@@ -97,10 +97,10 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
                             reminderNotificationData.remindInstant,
                             numberOfRepeats
                         )
-                    reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
                 } else {
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                 }
+                reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
                 result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
             }
 

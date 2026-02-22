@@ -75,12 +75,23 @@ open class MedicineRepository(val application: Application?) {
         for (medicine in medicines) {
             for (reminder in medicine.reminders) {
                 if (reminder.active) {
-                    reminderEvents.addAll(medicineDao.getLastReminderEvents(reminder.reminderId, 2))
+                    reminderEvents.addAll(getLastReminderEventsForScheduling(reminder.reminderId))
                 }
             }
         }
         return reminderEvents
     }
+
+    private fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEvent> {
+        var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2)
+        if (lastReminderEvents.isNotEmpty() && lastReminderEvents.stream()
+                .allMatch { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
+        ) {
+            lastReminderEvents = medicineDao.getReminderEvents(reminderId)
+        }
+        return lastReminderEvents
+    }
+
 
     fun getLastReminderEvent(reminderId: Int): ReminderEvent? {
         return medicineDao.getLastReminderEvent(reminderId)
