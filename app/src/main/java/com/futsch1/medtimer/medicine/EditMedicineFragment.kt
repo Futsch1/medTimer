@@ -49,7 +49,7 @@ class EditMedicineFragment :
     private var color = 0
     private var notificationImportance: Spinner? = null
     private var selectIconButton: MaterialButton? = null
-    private var notes: String? = null
+    var notes: String? = null
 
     override fun setupMenu(navController: NavController, entity: FullMedicine) {
         optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController)

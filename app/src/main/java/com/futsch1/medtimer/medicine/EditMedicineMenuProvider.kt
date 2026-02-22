@@ -3,7 +3,6 @@ package com.futsch1.medtimer.medicine
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.MedicineViewModel
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class EditMedicineMenuProvider(
     private val medicine: Medicine,
-    private val fragment: Fragment,
+    private val fragment: EditMedicineFragment,
     private val medicineViewModel: MedicineViewModel,
     private val navController: NavController,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO

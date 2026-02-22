@@ -142,6 +142,9 @@ public class BasicUITest extends BaseTestHelper {
         closeKeyboard();
         clickOn(R.id.confirmSaveNotes);
 
+        pressBack();
+        clickListItem(R.id.medicineList, 0);
+
         // Check if the note is saved
         clickOn(R.id.openNotes);
         assertDisplayed(R.id.notes, notes);
