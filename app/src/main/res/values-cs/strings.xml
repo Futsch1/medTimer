@@ -11,8 +11,8 @@
     <string name="dosage">Dávka</string>
     <string name="yes">Ano</string>
     <string name="ok">OK</string>
-    <string name="cancel">Storno</string>
-    <string name="confirm">Potvrit</string>
+    <string name="cancel">Zrušit</string>
+    <string name="confirm">Potvrdit</string>
     <string name="are_you_sure_delete_medicine">Opravdu chcete smazat lék?</string>
     <string name="no_reminders">Nenastavena žádná připomenutí</string>
     <plurals name="sum_reminders">
@@ -265,14 +265,14 @@
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
     <string name="refill">Doplnění zásob</string>
-    <string name="expiration_settings">Nastavení vypršení</string>
+    <string name="expiration_settings">Nastavení expirace</string>
     <string name="production_date">Datum výroby</string>
-    <string name="expiration_date">Datum vypršení</string>
-    <string name="expiration_reminder">Připomenutí vypršení</string>
-    <string name="daily_below_threshold">Denně pod prahem</string>
-    <string name="remind_days_before_expiration">Připomenout dny před vypršením platnosti</string>
-    <string name="out_of_stock_reminder_help">Připomene, když lék není na skladě, buď po každém připomenutí, nebo jednou, nebo jednou denně.</string>
-    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo v konfigurovatelném čase před tímto datem.</string>
+    <string name="expiration_date">Datum expirace</string>
+    <string name="expiration_reminder">Připomenutí expirace</string>
+    <string name="daily_below_threshold">Denně, pokud je pod nastavenou mezí</string>
+    <string name="remind_days_before_expiration">Připomenout dny před expirací</string>
+    <string name="out_of_stock_reminder_help">Připomene, když lék došel, buď po každém připomenutí, jednorázově, nebo jednou denně.</string>
+    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo nastavitelného času před tímto datem.</string>
     <string name="once">Jednou</string>
     <string name="daily">Denně</string>
     <string name="medicine_stock_settings">Nastavení zásob léků</string>
@@ -280,12 +280,12 @@
     <string name="clear_dates">Vymazat data</string>
     <string name="acknowledged">Potvrzeno</string>
     <string name="refill_amount">Doplnit (%s)</string>
-    <string name="expiration_date_notification">Lék %1$s má datum expirace %2$s.\nZvažte výměnu léku.</string>
+    <string name="expiration_date_notification">Lék %1$s expiruje %2$s.\nZvažte výměnu léku.</string>
     <string name="select_all">Vybrat vše</string>
     <string name="by_name">Podle jména</string>
     <string name="by_creation_date_ascending">Vzestupně podle data vytvoření</string>
     <string name="by_creation_date_descending">Sestupně podle data vytvoření</string>
     <string name="create_out_of_stock_reminder">Vytvořit připomenutí vyčerpání zásob</string>
     <string name="successfully_created_reminder">Úspěšně vytvořeno nové připomenutí</string>
-    <string name="create_expiration_date_reminder">Vytvořit připomenutí data vypršení</string>
+    <string name="create_expiration_date_reminder">Vytvořit připomenutí data expirace</string>
 </resources>
