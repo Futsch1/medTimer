@@ -1,11 +1,11 @@
 plugins {
-    id("com.android.application")
-    id("androidx.room")
-    id("com.github.triplet.play") version "4.0.0"
-    id("androidx.navigation.safeargs")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.triplet.play)
+    alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
-    id("org.sonarqube") version "7.2.2.6593"
-    id("tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin") version "0.9.0"
+    alias(libs.plugins.sonarqube)
+    alias(libs.plugins.robolectric.junit5)
 }
 
 room {
@@ -103,92 +103,53 @@ android {
 }
 
 dependencies {
-    val appcompatVersion = "1.7.1"
-    val materialVersion = "1.13.0"
-    val constraintLayoutVersion = "2.2.1"
-    val androidXNavigationVersion = "2.9.7"
-    val preferenceKtxVersion = "1.2.1"
-    val lifecycleExtensionsVersion = "2.2.0"
-    val lifecycleKtxVersion = "2.10.0"
-    val workRuntimeVersion = "2.11.1"
-    val coreKtxVersion = "1.17.0"
-    val roomVersion = "2.8.4"
-    val colorPickerViewVersion = "3.1.0"
-    val simplyPDFVersion = "2.1.1"
-    val gsonVersion = "2.13.2"
-    val tableViewVersion = "0.8.9.4"
-    val androidPlotVersion = "1.5.11"
-    val appIntroVersion = "6.3.1"
-    val calendarVersion = "2.10.0"
-    val iconDialogVersion = "3.3.0"
-    val flexboxVersion = "3.0.0"
-    val biometricVersion = "1.1.0"
-    val preferenceExtendedVersion = "1.1.0"
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.lifecycle.extensions)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.color.picker)
+    implementation(libs.simply.pdf)
+    implementation(libs.gson)
+    implementation(libs.tableview)
+    implementation(libs.androidplot)
+    implementation(libs.appintro)
+    implementation(libs.calendar)
+    implementation(libs.icondialog)
+    implementation(libs.espresso.idling.resource)
+    implementation(libs.espresso.idling.concurrent)
+    implementation(libs.flexbox)
+    implementation(libs.androidx.biometric)
+    implementation(libs.preferencex.ringtone)
+    implementation(libs.preferencex)
 
-    val junitVersion = "6.0.3"
-    val mockitoCoreVersion = "5.21.0"
-    val mockitoInlineVersion = "5.2.0"
-    val robolectricVersion = "4.16.1"
-    val jazzerVersion = "0.29.1"
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.jazzer.junit)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 
-    val androidTestJunitVersion = "1.3.0"
-    val androidTestEspressoVersion = "3.7.0"
-    val androidTestRulesVersion = "1.7.0"
-    val screengrabVersion = "2.1.1"
-    val uiautomatorVersion = "2.3.0"
-    val androidTestRunnerVersion = "1.7.0"
-    val androidTestOrchestratorVersion = "1.6.1"
-    val baristaVersion = "4.3.0"
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.contrib)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.screengrab)
+    androidTestImplementation(libs.uiautomator)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.barista)
+    androidTestUtil(libs.androidx.test.orchestrator)
 
-    val desugarJdkVersion = "2.1.5"
+    annotationProcessor(libs.androidx.room.compiler)
 
-    implementation("androidx.appcompat:appcompat:$appcompatVersion")
-    implementation("com.google.android.material:material:$materialVersion")
-    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
-    implementation("androidx.navigation:navigation-fragment-ktx:$androidXNavigationVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$androidXNavigationVersion")
-    implementation("androidx.preference:preference-ktx:$preferenceKtxVersion")
-    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleKtxVersion}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleKtxVersion}")
-    implementation("androidx.work:work-runtime:$workRuntimeVersion")
-    implementation("androidx.core:core-ktx:$coreKtxVersion")
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("com.github.martin-stone:hsv-alpha-color-picker-android:$colorPickerViewVersion")
-    implementation("com.github.wwdablu:SimplyPDF:$simplyPDFVersion")
-    implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("com.github.evrencoskun:TableView:v$tableViewVersion")
-    implementation("com.androidplot:androidplot-core:$androidPlotVersion")
-    implementation("com.github.AppIntro:AppIntro:$appIntroVersion")
-    implementation("com.kizitonwose.calendar:view:$calendarVersion")
-    implementation("com.maltaisn:icondialog:$iconDialogVersion")
-    implementation("androidx.test.espresso:espresso-idling-resource:$androidTestEspressoVersion")
-    implementation("androidx.test.espresso.idling:idling-concurrent:$androidTestEspressoVersion")
-    implementation("com.google.android.flexbox:flexbox:$flexboxVersion")
-    implementation("androidx.biometric:biometric:$biometricVersion")
-    implementation("com.takisoft.preferencex:preferencex-ringtone:$preferenceExtendedVersion")
-    implementation("com.takisoft.preferencex:preferencex:$preferenceExtendedVersion")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
-    testImplementation("org.mockito:mockito-inline:$mockitoInlineVersion")
-    testImplementation("org.robolectric:robolectric:$robolectricVersion")
-    testImplementation("com.code-intelligence:jazzer-junit:$jazzerVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-
-    androidTestImplementation("androidx.test.ext:junit:$androidTestJunitVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:$androidTestEspressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:$androidTestEspressoVersion")
-    androidTestImplementation("androidx.test:rules:$androidTestRulesVersion")
-    androidTestImplementation("tools.fastlane:screengrab:$screengrabVersion")
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:$uiautomatorVersion")
-    androidTestImplementation("androidx.test:runner:$androidTestRunnerVersion")
-    androidTestImplementation("com.adevinta.android:barista:$baristaVersion")
-    androidTestUtil("androidx.test:orchestrator:$androidTestOrchestratorVersion")
-
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkVersion")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
 play {
