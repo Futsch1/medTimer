@@ -1,1 +1,1 @@
-MedTimer
+MedTimer: Med & Pill Reminder

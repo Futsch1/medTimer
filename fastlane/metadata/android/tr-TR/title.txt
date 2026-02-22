@@ -1,1 +1,1 @@
-MedTimer
+MedTimer: İlaç Hatırlatıcı

@@ -1,1 +1,1 @@
-MedTimer
+MedTimer: 药物和药丸提醒
