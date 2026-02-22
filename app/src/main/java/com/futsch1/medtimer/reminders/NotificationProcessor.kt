@@ -50,10 +50,13 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
 
     fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
         val notificationId = reminderEvents.firstOrNull()?.notificationId
-        removeRemindersFromNotification(notificationId ?: -1, reminderEvents.map { it.reminderEventId })
+        if (notificationId != null && notificationId != -1) {
+            removeRemindersFromNotification(notificationId, reminderEvents.map { it.reminderEventId })
+        }
     }
 
     fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
+        Log.d(LogTags.REMINDER, "Remove reminders from notification nID $notificationId")
         for (notification in reminderContext.notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
