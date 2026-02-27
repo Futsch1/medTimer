@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">נלקחה</string>
     <string name="skipped">דולגה</string>
+    <string name="filter">סננו</string>
 </resources>

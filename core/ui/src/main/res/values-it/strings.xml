@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Preso</string>
     <string name="skipped">Saltato</string>
+    <string name="filter">Filtro</string>
 </resources>

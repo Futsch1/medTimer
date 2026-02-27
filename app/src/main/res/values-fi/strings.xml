@@ -88,7 +88,6 @@
     <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="reminders">Muistutukset</string>
     <string name="sort">Lajittelu</string>
-    <string name="filter">Suodatus</string>
     <string name="seven_days">7 päivää</string>
     <string name="analysis">Analyysi</string>
     <string name="tabular_view">Taulukkonäkymä</string>

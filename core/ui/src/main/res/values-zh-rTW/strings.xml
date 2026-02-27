@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">已服用</string>
     <string name="skipped">已略過</string>
+    <string name="filter">篩選</string>
 </resources>

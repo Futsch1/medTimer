@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Bevéve</string>
     <string name="skipped">Kihagyva</string>
+    <string name="filter">Szűrés</string>
 </resources>

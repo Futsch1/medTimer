@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Užito</string>
     <string name="skipped">Přeskočeno</string>
+    <string name="filter">Filtr</string>
 </resources>

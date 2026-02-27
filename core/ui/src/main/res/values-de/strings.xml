@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Eingenommen</string>
     <string name="skipped">Übersprungen</string>
+    <string name="filter">Filter</string>
 </resources>

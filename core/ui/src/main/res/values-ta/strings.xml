@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">எடுக்கப்பட்டது</string>
     <string name="skipped">தவிர்க்கப்பட்டது</string>
+    <string name="filter">வடிப்பி</string>
 </resources>

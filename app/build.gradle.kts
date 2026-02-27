@@ -145,6 +145,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -161,7 +162,6 @@ dependencies {
     implementation(libs.color.picker)
     implementation(libs.simply.pdf)
     implementation(libs.gson)
-    implementation(libs.tableview)
     implementation(libs.appintro)
     implementation(libs.calendar)
     implementation(libs.icondialog)

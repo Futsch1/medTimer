@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Alındı</string>
     <string name="skipped">Atlandı</string>
+    <string name="filter">Filtre</string>
 </resources>

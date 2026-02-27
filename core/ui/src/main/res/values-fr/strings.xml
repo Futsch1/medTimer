@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Pris</string>
     <string name="skipped">Sauté</string>
+    <string name="filter">Filtre</string>
 </resources>

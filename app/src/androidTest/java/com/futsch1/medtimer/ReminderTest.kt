@@ -1,6 +1,6 @@
 package com.futsch1.medtimer
 
-import android.widget.TextView
+
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -19,11 +19,12 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.evrencoskun.tableview.TableView
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-import junit.framework.TestCase
+
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
@@ -33,10 +34,12 @@ import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
 
 
 class ReminderTest : BaseTestHelper() {
+    @get:org.junit.Rule
+    val composeTestRule = createEmptyComposeRule()
+
     @Test
     //@AllowFlaky(attempts = 1)
     fun activeReminderTest() {
@@ -325,13 +328,8 @@ class ReminderTest : BaseTestHelper() {
 
         clickOn(R.id.tableChip)
 
-        val tableView = AtomicReference<TableView?>()
-        tableView.set(baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table))
-
-        var view = tableView.get()!!.cellRecyclerView.findViewWithTag<TextView>("time")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded), view.getText())
-        view = tableView.get()!!.cellRecyclerView.findViewWithTag("taken")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken), view.getText())
+        composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded)).assertExists()
+        composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken)).assertExists()
     }
 
     @Test

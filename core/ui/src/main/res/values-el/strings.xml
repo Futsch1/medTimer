@@ -2,4 +2,5 @@
 <resources>
     <string name="taken">Ελήφθη</string>
     <string name="skipped">Παραλείφθηκε</string>
+    <string name="filter">Κριτήρια αναζήτησης</string>
 </resources>

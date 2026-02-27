@@ -107,8 +107,10 @@ private fun MedicinePerDayBarChartContent(
         }
     }
 
-    val bottomAxisValueFormatter = CartesianValueFormatter { _, value, _ ->
-        LocalDate.ofEpochDay(value.toLong()).format(dateFormat)
+    val bottomAxisValueFormatter = remember(dateFormat) {
+        CartesianValueFormatter { _, value, _ ->
+            LocalDate.ofEpochDay(value.toLong()).format(dateFormat)
+        }
     }
 
     val legendItemLabelComponent = rememberTextComponent(TextStyle(vicoTheme.textColor))
