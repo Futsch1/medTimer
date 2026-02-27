@@ -1,6 +1,7 @@
 import java.net.URI
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -8,7 +9,9 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    @Suppress("UnstableApiUsage")
     repositories {
         google()
         mavenCentral()
@@ -20,4 +23,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MedTimer"
 include(":app")
+include(":core:ui")
+include(":core:testing")
  

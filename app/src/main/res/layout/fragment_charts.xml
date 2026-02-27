@@ -45,14 +45,14 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <com.androidplot.pie.PieChart
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/takenSkippedChartTotal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:ignore="NestedWeights" />
 
-        <com.androidplot.pie.PieChart
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/takenSkippedChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

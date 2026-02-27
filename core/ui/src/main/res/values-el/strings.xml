@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Ελήφθη</string>
+    <string name="skipped">Παραλείφθηκε</string>
+</resources>

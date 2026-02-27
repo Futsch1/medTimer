@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.compose.ui.platform.ComposeView;
+import androidx.compose.ui.platform.ViewCompositionStrategy;
 import androidx.fragment.app.Fragment;
 
-import com.androidplot.pie.PieChart;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.core.ui.TakenSkippedData;
 import com.futsch1.medtimer.database.MedicineRepository;
 
 import java.util.List;
@@ -21,11 +23,9 @@ public class ChartsFragment extends Fragment {
     private HandlerThread backgroundThread;
     private MedicineRepository medicineRepository;
 
-    private PieChart takenSkippedChartView;
-    private PieChart takenSkippedTotalChartView;
+    private ComposeView takenSkippedChartView;
+    private ComposeView takenSkippedTotalChartView;
     private XYPlot medicinesPerDayChartView;
-    private TakenSkippedChart takenSkippedChart;
-    private TakenSkippedChart takenSkippedTotalChart;
     private MedicinePerDayChart medicinesPerDayChart;
 
     private int days = 0;
@@ -47,16 +47,13 @@ public class ChartsFragment extends Fragment {
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
         medicineRepository = new MedicineRepository(requireActivity().getApplication());
 
-        setupTakenSkippedCharts();
+        takenSkippedChartView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed.INSTANCE);
+        takenSkippedTotalChartView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed.INSTANCE);
+
         Handler handler = new Handler(backgroundThread.getLooper());
         handler.post(this::setupMedicinesPerDayChart);
 
         return statisticsView;
-    }
-
-    private void setupTakenSkippedCharts() {
-        this.takenSkippedChart = new TakenSkippedChart(takenSkippedChartView, requireContext());
-        this.takenSkippedTotalChart = new TakenSkippedChart(takenSkippedTotalChartView, requireContext());
     }
 
     private void setupMedicinesPerDayChart() {
@@ -84,13 +81,25 @@ public class ChartsFragment extends Fragment {
             requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
 
             StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
-            requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
+            requireActivity().runOnUiThread(() -> updateTakenSkippedChart(takenSkippedChartView, data, days));
 
             StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
-            requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
+            requireActivity().runOnUiThread(() -> updateTakenSkippedChart(takenSkippedTotalChartView, dataTotal, 0));
         } catch (IllegalStateException e) {
             // Intentionally empty - just don't do anything
         }
+    }
+
+    private void updateTakenSkippedChart(ComposeView composeView, StatisticsProvider.TakenSkipped data, int chartDays) {
+        String title;
+        if (chartDays != 0) {
+            title = getResources().getQuantityString(R.plurals.last_n_days, chartDays, chartDays);
+        } else {
+            title = getString(R.string.total);
+        }
+
+        TakenSkippedData chartData = new TakenSkippedData(data.taken(), data.skipped(), title);
+        TakenSkippedChartBridge.setChartContent(composeView, chartData);
     }
 
     @Override

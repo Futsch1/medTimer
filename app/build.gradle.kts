@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.triplet.play)
     alias(libs.plugins.androidx.navigation.safeargs)
@@ -57,6 +58,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     @Suppress("UnstableApiUsage")
     androidResources {
@@ -103,6 +105,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:ui"))
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
@@ -137,6 +146,7 @@ dependencies {
     testImplementation(libs.jazzer.junit)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
+    androidTestImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)
