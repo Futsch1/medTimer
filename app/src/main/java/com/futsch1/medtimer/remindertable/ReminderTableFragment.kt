@@ -19,7 +19,6 @@ import com.futsch1.medtimer.overview.EditEventSheetDialog
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ReminderTableFragment : Fragment() {
@@ -43,7 +42,7 @@ class ReminderTableFragment : Fragment() {
                         takenAt = if (event.status == ReminderEvent.ReminderStatus.TAKEN)
                             Instant.ofEpochSecond(event.processedTimestamp).atZone(zone).toLocalDateTime()
                         else null,
-                        takenStatus = getStatusString(event),
+                        takenStatus = event.status,
                         medicineName = event.medicineName,
                         dosage = event.amount,
                         remindedAt = Instant.ofEpochSecond(event.remindedTimestamp).atZone(zone).toLocalDateTime(),
@@ -71,10 +70,4 @@ class ReminderTableFragment : Fragment() {
         }
     }
 
-    private fun getStatusString(event: ReminderEvent): String {
-        return when (event.status) {
-            ReminderEvent.ReminderStatus.RAISED -> " "
-            else -> "-"
-        }
-    }
 }

@@ -26,4 +26,4 @@ include(":app")
 include(":core:designsystem")
 include(":core:ui")
 include(":core:testing")
- 
+include(":core:database")

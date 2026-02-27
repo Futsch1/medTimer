@@ -7,6 +7,7 @@ import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.core.ui.ReminderTable
 import com.futsch1.medtimer.core.ui.ReminderTableData
 import com.futsch1.medtimer.core.ui.ReminderTableRowData
+import com.futsch1.medtimer.database.ReminderEvent
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -24,8 +25,8 @@ class ReminderTableInstrumentedTest {
                 ReminderTable(
                     data = ReminderTableData(
                         rows = persistentListOf(
-                            ReminderTableRowData(1, LocalDateTime.of(2024, 1, 15, 8, 0), "01/15 08:00", "Aspirin", "100mg", LocalDateTime.of(2024, 1, 15, 7, 55)),
-                            ReminderTableRowData(2, null, " ", "Ibuprofen", "200mg", LocalDateTime.of(2024, 1, 15, 9, 0)),
+                            ReminderTableRowData(1, LocalDateTime.of(2024, 1, 15, 8, 0), ReminderEvent.ReminderStatus.TAKEN, "Aspirin", "100mg", LocalDateTime.of(2024, 1, 15, 7, 55)),
+                            ReminderTableRowData(2, null, ReminderEvent.ReminderStatus.RAISED, "Ibuprofen", "200mg", LocalDateTime.of(2024, 1, 15, 9, 0)),
                         ),
                         columnHeaders = persistentListOf("Taken", "Name", "Dosage", "Reminded")
                     ),
@@ -42,7 +43,7 @@ class ReminderTableInstrumentedTest {
         val mutableData = androidx.compose.runtime.mutableStateOf(
             ReminderTableData(
                 rows = persistentListOf(
-                    ReminderTableRowData(1, LocalDateTime.of(2024, 1, 15, 8, 0), "01/15 08:00", "Aspirin", "100mg", LocalDateTime.of(2024, 1, 15, 7, 55)),
+                    ReminderTableRowData(1, LocalDateTime.of(2024, 1, 15, 8, 0), ReminderEvent.ReminderStatus.TAKEN, "Aspirin", "100mg", LocalDateTime.of(2024, 1, 15, 7, 55)),
                 ),
                 columnHeaders = persistentListOf("Taken", "Name", "Dosage", "Reminded")
             )
@@ -57,7 +58,7 @@ class ReminderTableInstrumentedTest {
 
         mutableData.value = ReminderTableData(
             rows = persistentListOf(
-                ReminderTableRowData(2, null, "-", "Vitamin D", "1000IU", LocalDateTime.of(2024, 1, 15, 12, 0)),
+                ReminderTableRowData(2, null, ReminderEvent.ReminderStatus.SKIPPED, "Vitamin D", "1000IU", LocalDateTime.of(2024, 1, 15, 12, 0)),
             ),
             columnHeaders = persistentListOf("Taken", "Name", "Dosage", "Reminded")
         )

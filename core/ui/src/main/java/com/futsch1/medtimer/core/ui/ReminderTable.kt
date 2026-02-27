@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
+import com.futsch1.medtimer.database.ReminderEvent
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalDateTime
@@ -26,7 +27,12 @@ private val columns = persistentListOf(
     ColumnDefinition<ReminderTableRowData>(
         header = "",
         minWidth = 120.dp,
-        text = { it.takenAt?.format(DATE_TIME_FORMATTER) ?: it.takenStatus },
+        text = {
+            it.takenAt?.format(DATE_TIME_FORMATTER) ?: when (it.takenStatus) {
+                ReminderEvent.ReminderStatus.RAISED -> " "
+                else -> "-"
+            }
+        },
         sortKey = { it.takenAt ?: LocalDateTime.MIN },
     ),
     ColumnDefinition(
@@ -100,7 +106,7 @@ private fun ReminderTablePreview() {
                         ReminderTableRowData(
                             eventId = 1,
                             takenAt = LocalDateTime.of(2024, 1, 15, 8, 0),
-                            takenStatus = "01/15 08:00",
+                            takenStatus = ReminderEvent.ReminderStatus.TAKEN,
                             medicineName = "Aspirin",
                             dosage = "100mg",
                             remindedAt = LocalDateTime.of(2024, 1, 15, 7, 55),
@@ -108,7 +114,7 @@ private fun ReminderTablePreview() {
                         ReminderTableRowData(
                             eventId = 2,
                             takenAt = null,
-                            takenStatus = " ",
+                            takenStatus = ReminderEvent.ReminderStatus.RAISED,
                             medicineName = "Ibuprofen",
                             dosage = "200mg",
                             remindedAt = LocalDateTime.of(2024, 1, 15, 9, 0),
@@ -116,7 +122,7 @@ private fun ReminderTablePreview() {
                         ReminderTableRowData(
                             eventId = 3,
                             takenAt = null,
-                            takenStatus = "-",
+                            takenStatus = ReminderEvent.ReminderStatus.SKIPPED,
                             medicineName = "Vitamin D",
                             dosage = "1000IU",
                             remindedAt = LocalDateTime.of(2024, 1, 15, 12, 0),

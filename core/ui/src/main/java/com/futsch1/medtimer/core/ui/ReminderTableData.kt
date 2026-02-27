@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.core.ui
 
+import com.futsch1.medtimer.database.ReminderEvent
 import kotlinx.collections.immutable.ImmutableList
 import java.time.LocalDateTime
 
@@ -11,8 +12,8 @@ data class ReminderTableData(
 data class ReminderTableRowData(
     val eventId: Int,
     val takenAt: LocalDateTime?,
-    // TODO: extract database types into a separate module and use proper type here
-    val takenStatus: String,
+    // TODO: database types should not be used directly, they should be translated into domain types
+    val takenStatus: ReminderEvent.ReminderStatus,
     val medicineName: String,
     val dosage: String,
     val remindedAt: LocalDateTime,

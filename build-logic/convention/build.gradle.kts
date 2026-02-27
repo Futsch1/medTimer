@@ -28,5 +28,9 @@ gradlePlugin {
             id = "medtimer.compose.library"
             implementationClass = "ComposeLibraryConventionPlugin"
         }
+        register("androidRoom") {
+            id = "medtimer.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
     }
 }

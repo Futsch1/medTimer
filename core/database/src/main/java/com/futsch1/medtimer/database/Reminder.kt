@@ -1,11 +1,9 @@
 package com.futsch1.medtimer.database
 
-import androidx.annotation.DrawableRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.R
 import com.google.gson.annotations.Expose
 import java.util.Objects
 
@@ -215,14 +213,14 @@ class Reminder(@JvmField var medicineRelId: Int) {
                 outOfStockThreshold == that.outOfStockThreshold && outOfStockReminderType == that.outOfStockReminderType && expirationReminderType == that.expirationReminderType
     }
 
-    enum class ReminderType(@param:DrawableRes val icon: Int) {
-        TIME_BASED(R.drawable.calendar_event),
-        CONTINUOUS_INTERVAL(R.drawable.repeat),
-        LINKED(R.drawable.link),
-        WINDOWED_INTERVAL(R.drawable.interval),
-        OUT_OF_STOCK(R.drawable.box_seam),
-        EXPIRATION_DATE(R.drawable.ban),
-        REFILL(R.drawable.cart2)
+    enum class ReminderType {
+        TIME_BASED,
+        CONTINUOUS_INTERVAL,
+        LINKED,
+        WINDOWED_INTERVAL,
+        OUT_OF_STOCK,
+        EXPIRATION_DATE,
+        REFILL
     }
 
 

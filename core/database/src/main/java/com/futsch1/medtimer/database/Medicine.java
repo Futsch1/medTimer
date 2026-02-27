@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database;
 
+import android.app.NotificationManager;
 import android.graphics.Color;
 
 import androidx.room.ColumnInfo;
@@ -7,7 +8,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
 import com.google.gson.annotations.Expose;
 
 import java.time.LocalDate;
@@ -75,7 +75,7 @@ public class Medicine {
         this.medicineId = id;
         this.useColor = false;
         this.color = Color.DKGRAY;
-        this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
+        this.notificationImportance = NotificationManager.IMPORTANCE_DEFAULT;
         this.iconId = 0;
         this.refillSizes = new ArrayList<>();
         this.unit = "";
