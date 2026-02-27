@@ -25,9 +25,37 @@ android {
         versionCode = 159
         versionName = "1.22.7"
         base.archivesName = "MedTimer"
-        // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
-        @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
+
+        androidResources {
+            @Suppress("UnstableApiUsage")
+            localeFilters.addAll(
+                listOf(
+                    "en",
+                    "ar",
+                    "bg",
+                    "cs",
+                    "da",
+                    "de",
+                    "el",
+                    "es",
+                    "fi",
+                    "fr",
+                    "hu",
+                    "it",
+                    "iw",
+                    "nl",
+                    "pl",
+                    "pt",
+                    "ru",
+                    "sv",
+                    "ta",
+                    "tr",
+                    "uk",
+                    "zh-rCN",
+                    "zh-rTW"
+                )
+            )
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -100,7 +128,12 @@ android {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
-        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
+        disable.addAll(
+            elements = if (project.hasProperty("noGradleDeps")) listOf(
+                "GradleDependency",
+                "AndroidGradlePluginVersion"
+            ) else listOf()
+        )
     }
 }
 
