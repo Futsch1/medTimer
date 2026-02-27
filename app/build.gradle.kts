@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -161,7 +162,6 @@ dependencies {
     implementation(libs.simply.pdf)
     implementation(libs.gson)
     implementation(libs.tableview)
-    implementation(libs.androidplot)
     implementation(libs.appintro)
     implementation(libs.calendar)
     implementation(libs.icondialog)

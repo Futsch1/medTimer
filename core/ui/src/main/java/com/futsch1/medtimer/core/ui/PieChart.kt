@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -98,7 +98,7 @@ fun PieChart(
         }
 
         if (showLegend) {
-            Spacer(modifier = Modifier.size(4.dp))
+            Spacer(modifier = Modifier.size(16.dp))
             PieLegend(segments = segments)
         }
     }
@@ -124,8 +124,8 @@ private fun LegendItem(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
-                .size(12.dp)
-                .clip(RoundedCornerShape(2.dp))
+                .size(8.dp)
+                .clip(CircleShape)
                 .background(color)
         )
         Spacer(modifier = Modifier.width(4.dp))

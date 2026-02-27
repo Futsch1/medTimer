@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.statistics
 
-import androidx.compose.material3.MaterialTheme
+import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -17,7 +17,7 @@ class TakenSkippedPieChartInstrumentedTest {
     @Test
     fun chartRendersWithRealisticData() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(
                     data = TakenSkippedData(
                         taken = 42,
@@ -33,7 +33,7 @@ class TakenSkippedPieChartInstrumentedTest {
     @Test
     fun chartRendersTitle() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(
                     data = TakenSkippedData(
                         taken = 10,
@@ -59,7 +59,7 @@ class TakenSkippedPieChartInstrumentedTest {
         )
 
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = mutableData.value)
             }
         }

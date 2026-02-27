@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -67,7 +68,6 @@ fun TakenSkippedPieChart(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp)
             .semantics { contentDescription = data.title },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -87,7 +87,7 @@ fun TakenSkippedPieChart(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             PieChart(
                 segments = segments,
@@ -101,7 +101,7 @@ fun TakenSkippedPieChart(
 @PreviewLightDark
 @Composable
 private fun TakenSkippedPieChartPreview() {
-    MaterialTheme {
+    MedTimerTheme {
         Surface {
             TakenSkippedPieChart(
                 data = TakenSkippedData(
@@ -117,7 +117,7 @@ private fun TakenSkippedPieChartPreview() {
 @PreviewLightDark
 @Composable
 private fun TakenSkippedPieChartAllTakenPreview() {
-    MaterialTheme {
+    MedTimerTheme {
         Surface {
             TakenSkippedPieChart(
                 data = TakenSkippedData(
@@ -133,7 +133,7 @@ private fun TakenSkippedPieChartAllTakenPreview() {
 @PreviewLightDark
 @Composable
 private fun TakenSkippedPieChartEmptyPreview() {
-    MaterialTheme {
+    MedTimerTheme {
         Surface {
             TakenSkippedPieChart(
                 data = TakenSkippedData(

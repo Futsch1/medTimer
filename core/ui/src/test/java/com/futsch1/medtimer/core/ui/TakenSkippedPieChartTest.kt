@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.core.ui
 
-import androidx.compose.material3.MaterialTheme
+import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -28,7 +28,7 @@ class TakenSkippedPieChartTest {
     @Test
     fun `chart displays title`() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = data(taken = 7, skipped = 3))
             }
         }
@@ -38,7 +38,7 @@ class TakenSkippedPieChartTest {
     @Test
     fun `chart renders with normal data`() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = data(taken = 7, skipped = 3))
             }
         }
@@ -48,7 +48,7 @@ class TakenSkippedPieChartTest {
     @Test
     fun `chart renders with both zero`() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = data(taken = 0, skipped = 0, title = "Total"))
             }
         }
@@ -58,7 +58,7 @@ class TakenSkippedPieChartTest {
     @Test
     fun `chart renders with 100 percent taken`() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = data(taken = 10, skipped = 0, title = "Total"))
             }
         }
@@ -68,7 +68,7 @@ class TakenSkippedPieChartTest {
     @Test
     fun `chart renders with 100 percent skipped`() {
         composeTestRule.setContent {
-            MaterialTheme {
+            MedTimerTheme {
                 TakenSkippedPieChart(data = data(taken = 0, skipped = 5))
             }
         }

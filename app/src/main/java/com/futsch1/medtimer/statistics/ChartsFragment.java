@@ -11,22 +11,34 @@ import androidx.compose.ui.platform.ComposeView;
 import androidx.compose.ui.platform.ViewCompositionStrategy;
 import androidx.fragment.app.Fragment;
 
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYPlot;
 import com.futsch1.medtimer.R;
+import com.futsch1.medtimer.core.ui.MedicinePerDayData;
+import com.futsch1.medtimer.core.ui.MedicineSeriesData;
 import com.futsch1.medtimer.core.ui.TakenSkippedData;
+import com.futsch1.medtimer.database.FullMedicine;
 import com.futsch1.medtimer.database.MedicineRepository;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ChartsFragment extends Fragment {
+    private static final int[] FALLBACK_COLORS = {
+            0xFF003f5c, 0xFF2f4b7c, 0xFF665191, 0xFFa05195,
+            0xFFd45087, 0xFFf95d6a, 0xFFff7c43, 0xFFffa600,
+            0xFF004c6d, 0xFF295d7d, 0xFF436f8e, 0xFF5b829f,
+            0xFF7295b0, 0xFF89a8c2, 0xFFa1bcd4, 0xFFb8d0e6,
+            0xFFd0e5f8
+    };
+
     private HandlerThread backgroundThread;
     private MedicineRepository medicineRepository;
 
     private ComposeView takenSkippedChartView;
     private ComposeView takenSkippedTotalChartView;
-    private XYPlot medicinesPerDayChartView;
-    private MedicinePerDayChart medicinesPerDayChart;
+    private ComposeView medicinesPerDayChartView;
 
     private int days = 0;
 
@@ -47,21 +59,11 @@ public class ChartsFragment extends Fragment {
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
         medicineRepository = new MedicineRepository(requireActivity().getApplication());
 
+        medicinesPerDayChartView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed.INSTANCE);
         takenSkippedChartView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed.INSTANCE);
         takenSkippedTotalChartView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed.INSTANCE);
 
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(this::setupMedicinesPerDayChart);
-
         return statisticsView;
-    }
-
-    private void setupMedicinesPerDayChart() {
-        try {
-            this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView, requireContext(), medicineRepository.getMedicines());
-        } catch (IllegalStateException e) {
-            // Intentionally empty
-        }
     }
 
     @Override
@@ -77,8 +79,11 @@ public class ChartsFragment extends Fragment {
         statisticsProvider = new StatisticsProvider(medicineRepository);
 
         try {
-            List<SimpleXYSeries> series = statisticsProvider.getLastDaysReminders(days);
-            requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
+            List<StatisticsProvider.MedicinePerDaySeries> seriesList = statisticsProvider.getLastDaysReminders(days);
+            List<FullMedicine> medicines = medicineRepository.getMedicines();
+            MedicinePerDayData chartData = buildMedicinePerDayData(seriesList, medicines);
+            requireActivity().runOnUiThread(() ->
+                    MedicinePerDayChartBridge.setChartContent(medicinesPerDayChartView, chartData));
 
             StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
             requireActivity().runOnUiThread(() -> updateTakenSkippedChart(takenSkippedChartView, data, days));
@@ -88,6 +93,37 @@ public class ChartsFragment extends Fragment {
         } catch (IllegalStateException e) {
             // Intentionally empty - just don't do anything
         }
+    }
+
+    private MedicinePerDayData buildMedicinePerDayData(
+            List<StatisticsProvider.MedicinePerDaySeries> seriesList,
+            List<FullMedicine> medicines) {
+        List<LocalDate> days = seriesList.isEmpty()
+                ? List.of()
+                : seriesList.get(0).xValues().stream()
+                        .map(LocalDate::ofEpochDay)
+                        .collect(Collectors.toList());
+
+        Map<String, FullMedicine> medicineMap = medicines.stream()
+                .collect(Collectors.toMap(fm -> fm.medicine.name, fm -> fm, (a, b) -> a));
+
+        List<MedicineSeriesData> series = new ArrayList<>();
+        int colorIndex = 0;
+        for (StatisticsProvider.MedicinePerDaySeries s : seriesList) {
+            Integer color = null;
+            FullMedicine fm = medicineMap.get(s.name());
+            if (fm != null && fm.medicine.useColor) {
+                color = fm.medicine.color;
+            }
+            if (color == null) {
+                color = FALLBACK_COLORS[colorIndex % FALLBACK_COLORS.length];
+            }
+            colorIndex++;
+            series.add(new MedicineSeriesData(s.name(), s.yValues(), color));
+        }
+
+        String title = "";
+        return new MedicinePerDayData(title, days, series);
     }
 
     private void updateTakenSkippedChart(ComposeView composeView, StatisticsProvider.TakenSkipped data, int chartDays) {

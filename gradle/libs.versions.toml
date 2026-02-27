@@ -11,6 +11,7 @@ robolectric-junit5 = "0.9.0"
 # Compose
 compose-bom = "2026.02.00"
 kotlinx-collections-immutable = "0.4.0"
+vico = "3.0.1"
 
 # AndroidX
 appcompat = "1.7.1"
@@ -30,7 +31,6 @@ material = "1.13.0"
 color-picker = "3.1.0"
 simply-pdf = "2.1.1"
 gson = "2.13.2"
-androidplot = "1.5.11"
 appintro = "6.3.1"
 calendar = "2.10.0"
 icondialog = "3.3.0"
@@ -71,6 +71,8 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
+vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
 
 # AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -93,7 +95,6 @@ color-picker = { module = "com.github.martin-stone:hsv-alpha-color-picker-androi
 simply-pdf = { module = "com.github.wwdablu:SimplyPDF", version.ref = "simply-pdf" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 tableview = { module = "com.github.evrencoskun:TableView", version = "v0.8.9.4" }
-androidplot = { module = "com.androidplot:androidplot-core", version.ref = "androidplot" }
 appintro = { module = "com.github.AppIntro:AppIntro", version.ref = "appintro" }
 calendar = { module = "com.kizitonwose.calendar:view", version.ref = "calendar" }
 icondialog = { module = "com.maltaisn:icondialog", version.ref = "icondialog" }

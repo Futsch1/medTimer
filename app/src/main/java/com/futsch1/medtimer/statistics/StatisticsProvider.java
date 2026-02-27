@@ -2,7 +2,6 @@ package com.futsch1.medtimer.statistics;
 
 import androidx.annotation.NonNull;
 
-import com.androidplot.xy.SimpleXYSeries;
 import com.futsch1.medtimer.database.MedicineRepository;
 import com.futsch1.medtimer.database.ReminderEvent;
 import com.futsch1.medtimer.helpers.MedicineHelper;
@@ -37,7 +36,7 @@ public class StatisticsProvider {
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
     }
 
-    public List<SimpleXYSeries> getLastDaysReminders(int days) {
+    public List<MedicinePerDaySeries> getLastDaysReminders(int days) {
         Map<String, int[]> medicineToDayCount = calculateMedicineToDayMap(days);
         return calculateDataEntries(days, medicineToDayCount);
     }
@@ -56,8 +55,8 @@ public class StatisticsProvider {
      * @noinspection DataFlowIssue
      */
     @NonNull
-    private static List<SimpleXYSeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
-        List<SimpleXYSeries> data = new ArrayList<>();
+    private static List<MedicinePerDaySeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
+        List<MedicinePerDaySeries> data = new ArrayList<>();
         int seriesCount = medicineToDayCount.size();
         if (seriesCount == 0) {
             return data;
@@ -65,13 +64,13 @@ public class StatisticsProvider {
 
         List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
         for (int j = 0; j < seriesCount; j++) {
-            List<Number> xValues = new ArrayList<>();
-            List<Number> yValues = new ArrayList<>();
+            List<Long> xValues = new ArrayList<>();
+            List<Integer> yValues = new ArrayList<>();
             for (int i = days - 1; i >= 0; i--) {
                 xValues.add(LocalDate.now().toEpochDay() - i);
                 yValues.add(medicineToDayCount.get(medicineNames.get(j))[i]);
             }
-            data.add(new SimpleXYSeries(xValues, yValues, medicineNames.get(j)));
+            data.add(new MedicinePerDaySeries(medicineNames.get(j), xValues, yValues));
         }
         return data;
     }
@@ -97,6 +96,10 @@ public class StatisticsProvider {
     }
 
     public record TakenSkipped(long taken, long skipped) {
+        // Standard record, no content required
+    }
+
+    public record MedicinePerDaySeries(String name, List<Long> xValues, List<Integer> yValues) {
         // Standard record, no content required
     }
 }

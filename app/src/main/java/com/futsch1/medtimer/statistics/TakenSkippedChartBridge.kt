@@ -1,13 +1,10 @@
 package com.futsch1.medtimer.statistics
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.core.ui.TakenSkippedData
 import com.futsch1.medtimer.core.ui.TakenSkippedPieChart
 
@@ -15,22 +12,9 @@ object TakenSkippedChartBridge {
     @JvmStatic
     fun setChartContent(composeView: ComposeView, data: TakenSkippedData) {
         composeView.setContent {
-            DynamicMaterialTheme {
-                TakenSkippedPieChart(data = data)
+            MedTimerTheme {
+                TakenSkippedPieChart(data = data, modifier = Modifier.padding(16.dp))
             }
         }
     }
-}
-
-@Composable
-private fun DynamicMaterialTheme(content: @Composable () -> Unit) {
-    val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val context = LocalContext.current
-        if (isSystemInDarkTheme()) dynamicDarkColorScheme(context)
-        else dynamicLightColorScheme(context)
-    } else {
-        MaterialTheme.colorScheme
-    }
-
-    MaterialTheme(colorScheme = colorScheme, content = content)
 }

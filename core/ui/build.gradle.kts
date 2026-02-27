@@ -8,9 +8,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
 
     testImplementation(libs.junit4)
     testImplementation(libs.robolectric)

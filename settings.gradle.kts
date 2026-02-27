@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "MedTimer"
 include(":app")
+include(":core:designsystem")
 include(":core:ui")
 include(":core:testing")
  
