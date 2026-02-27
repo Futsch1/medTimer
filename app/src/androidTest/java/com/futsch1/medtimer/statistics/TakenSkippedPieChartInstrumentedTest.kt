@@ -53,8 +53,6 @@ class TakenSkippedPieChartInstrumentedTest {
                 taken = 5,
                 skipped = 5,
                 title = "Last 7 days",
-                takenLabel = "Taken",
-                skippedLabel = "Skipped"
             )
         )
 
@@ -69,8 +67,6 @@ class TakenSkippedPieChartInstrumentedTest {
             taken = 10,
             skipped = 2,
             title = "Total",
-            takenLabel = "Taken",
-            skippedLabel = "Skipped"
         )
         composeTestRule.onNodeWithText("Total").assertIsDisplayed()
     }
