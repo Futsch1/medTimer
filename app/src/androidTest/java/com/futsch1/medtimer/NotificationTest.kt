@@ -276,10 +276,12 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
+        openMenu()
         clickOn(R.string.duplicate_including_reminders)
 
         clickListItem(R.id.medicineList, 1)
         writeTo(R.id.editMedicineName, SECOND_ONE)
+        pressBack()
 
         device.openNotification()
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
@@ -330,6 +332,7 @@ class NotificationTest : BaseTestHelper() {
 
         clickListItem(R.id.medicineList, 1)
         writeTo(R.id.editMedicineName, SECOND_ONE)
+        pressBack()
 
         navigateTo(MainMenu.ANALYSIS)
 
