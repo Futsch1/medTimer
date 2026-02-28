@@ -22,7 +22,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     override fun isInvalid(item: FullMedicine?): Boolean {
-        return item == null || item.medicine == null || item.reminders == null
+        return item == null || item.medicine == null || item.reminders == null || item.tags == null
     }
 
     override fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
