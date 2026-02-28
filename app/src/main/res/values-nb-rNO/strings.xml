@@ -33,4 +33,6 @@
     <string name="create_out_of_stock_reminder">Opprett påminnelse om tomt lager</string>
     <string name="successfully_created_reminder">Ny påminnelse er opprettet</string>
     <string name="create_expiration_date_reminder">Opprett påminnelse om utløpsdato</string>
+    <string name="duplicate">Dupliser</string>
+    <string name="duplicate_including_reminders">Dupliser inkludert påminnelser</string>
 </resources>

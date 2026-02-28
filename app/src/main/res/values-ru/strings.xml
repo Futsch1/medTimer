@@ -285,4 +285,6 @@
     <string name="create_out_of_stock_reminder">Создать напоминание об отсутствии на складе</string>
     <string name="successfully_created_reminder">Новое напоминание успешно создано</string>
     <string name="create_expiration_date_reminder">Создать напоминание о сроке годности</string>
+    <string name="duplicate">Дублировать</string>
+    <string name="duplicate_including_reminders">Дублировать вместе с напоминаниями</string>
 </resources>

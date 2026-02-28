@@ -34,10 +34,10 @@ preference-extended = "1.1.0"
 
 # Testing
 junit = "6.0.3"
-mockito-core = "5.21.0"
+mockito-core = "5.22.0"
 mockito-inline = "5.2.0"
 robolectric = "4.16.1"
-jazzer = "0.29.1"
+jazzer = "0.30.0"
 android-test-junit = "1.3.0"
 android-test-rules = "1.7.0"
 android-test-runner = "1.7.0"

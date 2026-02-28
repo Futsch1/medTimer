@@ -288,4 +288,6 @@
     <string name="create_out_of_stock_reminder">Utwórz przypomnienie o wyczerpaniu zapasów</string>
     <string name="successfully_created_reminder">Pomyślnie utworzono nowe przypomnienie</string>
     <string name="create_expiration_date_reminder">Utwórz przypomnienie o dacie wygaśnięcia</string>
+    <string name="duplicate">Duplikuj</string>
+    <string name="duplicate_including_reminders">Duplikuj wraz z przypomnieniami</string>
 </resources>

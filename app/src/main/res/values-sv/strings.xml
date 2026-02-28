@@ -277,4 +277,6 @@
     <string name="create_out_of_stock_reminder">Skapa påminnelse om slut i lager</string>
     <string name="successfully_created_reminder">Ny påminnelse skapad</string>
     <string name="create_expiration_date_reminder">Skapa påminnelse om utgångsdatum</string>
+    <string name="duplicate">Duplicera</string>
+    <string name="duplicate_including_reminders">Duplicera inklusive påminnelser</string>
 </resources>

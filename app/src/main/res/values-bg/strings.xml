@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Създаване на напомняне за липса на наличност</string>
     <string name="successfully_created_reminder">Успешно създадено ново напомняне</string>
     <string name="create_expiration_date_reminder">Създаване на напомняне за срок на годност</string>
+    <string name="duplicate">Дублиране</string>
+    <string name="duplicate_including_reminders">Дублиране, включително напомнянията</string>
 </resources>

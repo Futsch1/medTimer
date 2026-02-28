@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Opret påmindelse om lav beholdning</string>
     <string name="successfully_created_reminder">Nyt påmindelse oprettet</string>
     <string name="create_expiration_date_reminder">Opret påmindelse om udløbsdato</string>
+    <string name="duplicate">Dupler</string>
+    <string name="duplicate_including_reminders">Dupler inklusiv påmindelser</string>
 </resources>

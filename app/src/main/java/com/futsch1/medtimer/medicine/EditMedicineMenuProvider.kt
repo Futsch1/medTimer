@@ -25,7 +25,7 @@ class EditMedicineMenuProvider(
 ) : EntityEditOptionsMenu {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.edit_medicine, menu)
+        menuInflater.inflate(R.menu.edit_medicine_settings, menu)
         OptionsMenu.enableOptionalIcons(menu)
         menu.setGroupDividerEnabled(true)
 
@@ -35,8 +35,43 @@ class EditMedicineMenuProvider(
         MedicinesMenu.setupMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
         }
+        MedicinesMenu.setupMenu(menu, R.id.duplicate) {
+            fragment.lifecycleScope.launch(dispatcher) {
+                val oldMedicineId = medicine.medicineId
+                medicine.medicineId = 0
+                val newMedicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+                assignTags(oldMedicineId, newMedicineId)
+            }
+            navController.navigateUp()
+        }
+        MedicinesMenu.setupMenu(menu, R.id.duplicate_including_reminders) {
+            fragment.lifecycleScope.launch(dispatcher) {
+                duplicateIncludingReminders()
+            }
+            navController.navigateUp()
+        }
         setupDeleteMenu(menu)
         setupLinksMenu(menu)
+    }
+
+    private fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
+        val oldFullMedicine = medicineViewModel.medicineRepository.getMedicine(oldMedicineId)!!
+        for (oldTag in oldFullMedicine.tags) {
+            medicineViewModel.medicineRepository.insertMedicineToTag(newMedicineId, oldTag.tagId)
+        }
+    }
+
+    private fun duplicateIncludingReminders() {
+        val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicine.medicineId)!!
+        val oldMedicineId = medicine.medicineId
+        medicine.medicineId = 0
+        val newMedicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+        for (reminder in fullMedicine.reminders) {
+            reminder.reminderId = 0
+            reminder.medicineRelId = newMedicineId
+            medicineViewModel.medicineRepository.insertReminder(reminder)
+        }
+        assignTags(oldMedicineId, newMedicineId)
     }
 
     private fun setupDeleteMenu(menu: Menu) {

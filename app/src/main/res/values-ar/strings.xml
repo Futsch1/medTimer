@@ -298,4 +298,6 @@
     <string name="create_out_of_stock_reminder">إنشاء تذكير بنفاد المخزون</string>
     <string name="successfully_created_reminder">تم إنشاء تذكير جديد بنجاح</string>
     <string name="create_expiration_date_reminder">إنشاء تذكير بتاريخ انتهاء الصلاحية</string>
+    <string name="duplicate">تكرار</string>
+    <string name="duplicate_including_reminders">تكرار بما في ذلك التذكيرات</string>
 </resources>

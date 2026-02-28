@@ -283,4 +283,6 @@
     <string name="create_out_of_stock_reminder">Crear recordatorio de existencias agotadas</string>
     <string name="successfully_created_reminder">Recordatorio creado con éxito</string>
     <string name="create_expiration_date_reminder">Crear recordatorio de fecha de vencimiento</string>
+    <string name="duplicate">Duplicar</string>
+    <string name="duplicate_including_reminders">Duplicar incluyendo recordatorios</string>
 </resources>

@@ -283,4 +283,6 @@
     <string name="create_out_of_stock_reminder">Criar lembrete de estoque esgotado</string>
     <string name="successfully_created_reminder">Novo lembrete criado com sucesso</string>
     <string name="create_expiration_date_reminder">Criar lembrete de data de vencimento</string>
+    <string name="duplicate">Duplicar</string>
+    <string name="duplicate_including_reminders">Duplicar incluindo lembretes</string>
 </resources>

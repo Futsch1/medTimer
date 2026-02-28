@@ -288,4 +288,6 @@
     <string name="create_out_of_stock_reminder">Vytvořit připomenutí vyčerpání zásob</string>
     <string name="successfully_created_reminder">Úspěšně vytvořeno nové připomenutí</string>
     <string name="create_expiration_date_reminder">Vytvořit připomenutí data expirace</string>
+    <string name="duplicate">Duplikovat</string>
+    <string name="duplicate_including_reminders">Duplikovat včetně připomínek</string>
 </resources>

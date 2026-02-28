@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Készletfigyelmeztetés létrehozása</string>
     <string name="successfully_created_reminder">Új emlékeztető sikeresen létrehozva</string>
     <string name="create_expiration_date_reminder">Lejárati dátum emlékeztető létrehozása</string>
+    <string name="duplicate">Duplikálás</string>
+    <string name="duplicate_including_reminders">Duplikálás emlékeztetőkkel együtt</string>
 </resources>

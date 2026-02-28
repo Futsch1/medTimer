@@ -62,7 +62,12 @@ public class BasicUITest extends BaseTestHelper {
 
         clickListItem(R.id.medicineList, 0);
         assertDisplayed(R.id.editAmount, "2");
+        clickOn(R.id.openAdvancedSettings);
+        openMenu();
+        clickOn(R.string.duplicate);
         pressBack();
+
+        assertContains(R.id.remindersSummary, ";");
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
         assertContains(TEST_2);

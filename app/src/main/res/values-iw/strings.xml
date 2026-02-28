@@ -283,4 +283,6 @@
     <string name="create_out_of_stock_reminder">יצירת תזכורת על חוסר מלאי</string>
     <string name="successfully_created_reminder">תזכורת חדשה נוצרה בהצלחה</string>
     <string name="create_expiration_date_reminder">יצירת תזכורת תאריך תפוגה</string>
+    <string name="duplicate">שכפול</string>
+    <string name="duplicate_including_reminders">שכפול כולל תזכורות</string>
 </resources>
