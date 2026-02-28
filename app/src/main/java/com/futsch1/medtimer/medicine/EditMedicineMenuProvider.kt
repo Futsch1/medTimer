@@ -25,7 +25,7 @@ class EditMedicineMenuProvider(
 ) : EntityEditOptionsMenu {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.edit_medicine, menu)
+        menuInflater.inflate(R.menu.edit_medicine_settings, menu)
         OptionsMenu.enableOptionalIcons(menu)
         menu.setGroupDividerEnabled(true)
 

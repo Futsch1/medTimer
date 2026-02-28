@@ -7,6 +7,12 @@
             android:id="@+id/deactivate_all"
             android:title="@string/deactivate_all" />
     </group>
+    <group android:id="@+id/duplicate_group">
+        <item
+            android:id="@+id/duplicate"
+            android:title="@string/duplicate"
+            android:icon="@drawable/copy"/>
+    </group>
     <group>
         <item
             android:id="@+id/openNotes"

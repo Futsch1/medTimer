@@ -283,5 +283,6 @@
     <string name="create_out_of_stock_reminder">Create out of stock reminder</string>
     <string name="successfully_created_reminder">Successfully created new reminder</string>
     <string name="create_expiration_date_reminder">Create expiration date reminder</string>
+    <string name="duplicate">Duplicate</string>
 </resources>
 
