@@ -283,4 +283,6 @@
     <string name="create_out_of_stock_reminder">Créer un rappel de la réserve</string>
     <string name="successfully_created_reminder">Nouveau rappel créé avec succès</string>
     <string name="create_expiration_date_reminder">Créer un rappel de date d\'expiration</string>
+    <string name="duplicate">Dupliquer</string>
+    <string name="duplicate_including_reminders">Dupliquer y compris les rappels</string>
 </resources>

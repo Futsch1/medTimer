@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Luo muistutus loppumisesta</string>
     <string name="successfully_created_reminder">Uusi muistutus luotu onnistuneesti</string>
     <string name="create_expiration_date_reminder">Luo vanhentumispäivämäärämuistutus</string>
+    <string name="duplicate">Monista</string>
+    <string name="duplicate_including_reminders">Monista muistutukset mukaan lukien</string>
 </resources>

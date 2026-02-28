@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Stokta yok hatırlatıcısı oluştur</string>
     <string name="successfully_created_reminder">Yeni hatırlatıcı başarıyla oluşturuldu</string>
     <string name="create_expiration_date_reminder">Son kullanma tarihi hatırlatıcısı oluştur</string>
+    <string name="duplicate">Çoğalt</string>
+    <string name="duplicate_including_reminders">Hatırlatıcılarla birlikte çoğalt</string>
 </resources>

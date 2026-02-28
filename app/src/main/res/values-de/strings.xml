@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Vorratserinnerung erstellen</string>
     <string name="successfully_created_reminder">Neue Erinnerung erfolgreich erstellt</string>
     <string name="create_expiration_date_reminder">Ablaufdatum-Erinnerung erstellen</string>
+    <string name="duplicate">Duplizieren</string>
+    <string name="duplicate_including_reminders">Duplizieren inklusive Erinnerungen</string>
 </resources>

@@ -288,4 +288,6 @@
     <string name="create_out_of_stock_reminder">Створити нагадування про відсутність ліків</string>
     <string name="successfully_created_reminder">Нове нагадування успішно створено</string>
     <string name="create_expiration_date_reminder">Створити нагадування про термін придатності</string>
+    <string name="duplicate">Дублювати</string>
+    <string name="duplicate_including_reminders">Дублювати разом із нагадуваннями</string>
 </resources>

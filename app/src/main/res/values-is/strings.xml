@@ -176,4 +176,6 @@
     <string name="out_of_stock_notification_title">Áminning um að lyf sé ekki til</string>
     <string name="medicine_stock">Lyfjastaða</string>
     <string name="amount">Magn</string>
+    <string name="duplicate">Afrita</string>
+    <string name="duplicate_including_reminders">Afrita ásamt áminningum</string>
 </resources>

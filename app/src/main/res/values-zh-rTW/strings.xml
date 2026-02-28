@@ -273,4 +273,6 @@
     <string name="create_out_of_stock_reminder">建立庫存不足提醒</string>
     <string name="successfully_created_reminder">已成功建立新提醒</string>
     <string name="create_expiration_date_reminder">建立到期日期提醒</string>
+    <string name="duplicate">複製</string>
+    <string name="duplicate_including_reminders">複製（包括提醒）</string>
 </resources>

@@ -283,4 +283,6 @@
     <string name="create_out_of_stock_reminder">Crea promemoria di esaurimento scorte</string>
     <string name="successfully_created_reminder">Nuovo promemoria creato con successo</string>
     <string name="create_expiration_date_reminder">Crea promemoria data di scadenza</string>
+    <string name="duplicate">Duplica</string>
+    <string name="duplicate_including_reminders">Duplica inclusi i promemoria</string>
 </resources>

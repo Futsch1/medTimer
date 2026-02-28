@@ -278,4 +278,6 @@
     <string name="create_out_of_stock_reminder">Δημιουργία υπενθύμισης εξάντλησης αποθέματος</string>
     <string name="successfully_created_reminder">Η νέα υπενθύμιση δημιουργήθηκε επιτυχώς</string>
     <string name="create_expiration_date_reminder">Δημιουργία υπενθύμισης ημερομηνίας λήξης</string>
+    <string name="duplicate">Δημιουργία αντιγράφου</string>
+    <string name="duplicate_including_reminders">Δημιουργία αντιγράφου συμπεριλαμβανομένων των υπενθυμίσεων</string>
 </resources>
