@@ -22,7 +22,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     override fun isInvalid(item: FullMedicine?): Boolean {
-        return item == null || item.medicine == null || item.reminders == null || item.tags == null
+        return item == null || item.medicine == null || item.reminders == null
     }
 
     override fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
@@ -43,7 +43,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     private fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
-        for (tag in fullMedicine.tags) {
+        for (tag in fullMedicine.tags ?: emptyList<Tag>()) {
             val tagId = medicineRepository.insertTag(tag).toInt()
             medicineRepository.insertMedicineToTag(medicineId, tagId)
         }

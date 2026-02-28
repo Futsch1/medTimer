@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="tab_settings">Stillingar</string>
     <string name="tab_overview">Yfirlit</string>
     <string name="tab_medicine">Lyf</string>
@@ -95,7 +95,7 @@
     <string name="thirty_days">30 daga</string>
     <string name="total">Samtals</string>
     <plurals name="last_n_days">
-        <item quantity="one">Síðasta sólarhring</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Síðasta sólarhring</item>
         <item quantity="other">Síðustu %1$d daga</item>
     </plurals>
     <string name="name">Nafn</string>
@@ -148,17 +148,17 @@
     <string name="time_based_reminder">Tímatengdar áminningar</string>
     <string name="interval_based_reminder">Tímabils-tengdar áminningar</string>
     <plurals name="minutes">
-        <item quantity="one">mínúta</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">mínúta</item>
         <item quantity="other">mínútur</item>
     </plurals>
     <string name="minutes_string">Mínútur</string>
     <plurals name="hours">
-        <item quantity="one">klukkustund</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">klukkustund</item>
         <item quantity="other">klukkustundir</item>
     </plurals>
     <string name="hours_string">Klukkustundir</string>
     <plurals name="days">
-        <item quantity="one">dagur</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">dagur</item>
         <item quantity="other">dagar</item>
     </plurals>
     <string name="days_string">Dagar</string>
