@@ -25,6 +25,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
@@ -275,12 +276,10 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
+        clickOn(R.string.duplicate_including_reminders)
 
-        AndroidTestHelper.createMedicine(SECOND_ONE)
-        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
-        clickOn(R.id.openAdvancedSettings)
-        clickOn(R.string.variable_amount)
-        pressBack()
+        clickListItem(R.id.medicineList, 1)
+        writeTo(R.id.editMedicineName, SECOND_ONE)
 
         device.openNotification()
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
@@ -323,13 +322,14 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.id.openAdvancedSettings)
         clickOn(R.string.variable_amount)
         pressBack()
+        openMenu()
+        clickOn(R.string.duplicate_including_reminders)
+        clickListItem(R.id.medicineList, 0)
         AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
-
-        AndroidTestHelper.createMedicine(SECOND_ONE)
-        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
-        clickOn(R.id.openAdvancedSettings)
-        clickOn(R.string.variable_amount)
         pressBack()
+
+        clickListItem(R.id.medicineList, 1)
+        writeTo(R.id.editMedicineName, SECOND_ONE)
 
         navigateTo(MainMenu.ANALYSIS)
 

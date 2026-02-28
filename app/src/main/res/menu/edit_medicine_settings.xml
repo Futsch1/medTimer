@@ -12,6 +12,10 @@
             android:id="@+id/duplicate"
             android:title="@string/duplicate"
             android:icon="@drawable/copy"/>
+        <item
+            android:id="@+id/duplicate_including_reminders"
+            android:title="@string/duplicate_including_reminders"
+            android:icon="@drawable/copy"/>
     </group>
     <group>
         <item

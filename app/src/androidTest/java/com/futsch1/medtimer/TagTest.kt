@@ -13,6 +13,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
@@ -71,6 +72,14 @@ class TagTest : BaseTestHelper() {
 
         clickOn(R.id.openTags)
         assertNotContains(ANOTHER_TAG)
+        clickOn(NEW_TAG)
+        clickOn(R.id.ok)
+
+        openMenu()
+        clickOn(R.string.duplicate)
+        clickListItem(R.id.medicineList, 2)
+        clickOn(R.id.openTags)
+        assertChecked(NEW_TAG)
     }
 
     @Test

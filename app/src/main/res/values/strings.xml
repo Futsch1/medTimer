@@ -284,5 +284,6 @@
     <string name="successfully_created_reminder">Successfully created new reminder</string>
     <string name="create_expiration_date_reminder">Create expiration date reminder</string>
     <string name="duplicate">Duplicate</string>
+    <string name="duplicate_including_reminders">Duplicate including reminders</string>
 </resources>
 
