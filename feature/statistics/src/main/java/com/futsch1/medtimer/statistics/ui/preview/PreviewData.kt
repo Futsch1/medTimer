@@ -108,16 +108,16 @@ object PreviewData {
     // Chart data
     val sampleMedicinePerDayData = MedicinePerDayData(
         title = "7 days",
-        days = listOf(
+        days = persistentListOf(
             LocalDate.of(2023, 12, 1),
             LocalDate.of(2023, 12, 2),
             LocalDate.of(2023, 12, 3),
             LocalDate.of(2023, 12, 4),
             LocalDate.of(2023, 12, 5),
         ),
-        series = listOf(
-            MedicineSeriesData("Aspirin", listOf(1, 2, 1, 0, 2), Color(0xFF003f5c)),
-            MedicineSeriesData("Ibuprofen", listOf(0, 1, 1, 1, 0), Color(0xFF2f4b7c)),
+        series = persistentListOf(
+            MedicineSeriesData("Aspirin", persistentListOf(1, 2, 1, 0, 2), Color(0xFF003f5c)),
+            MedicineSeriesData("Ibuprofen", persistentListOf(0, 1, 1, 1, 0), Color(0xFF2f4b7c)),
         ),
     )
 

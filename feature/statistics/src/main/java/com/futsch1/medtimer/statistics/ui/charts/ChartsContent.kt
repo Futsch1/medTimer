@@ -13,6 +13,7 @@ import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.statistics.model.MedicinePerDayData
 import com.futsch1.medtimer.statistics.model.TakenSkippedData
 import com.futsch1.medtimer.statistics.ui.preview.PreviewData
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ChartsContent(
@@ -68,7 +69,7 @@ private fun ChartsContentEmptyPreview() {
     MedTimerTheme {
         Surface {
             ChartsContent(
-                medicinePerDayData = MedicinePerDayData("7 days", emptyList(), emptyList()),
+                medicinePerDayData = MedicinePerDayData("7 days", persistentListOf(), persistentListOf()),
                 takenSkippedData = PreviewData.sampleTakenSkippedData,
                 takenSkippedTotalData = PreviewData.sampleTakenSkippedTotalData,
             )

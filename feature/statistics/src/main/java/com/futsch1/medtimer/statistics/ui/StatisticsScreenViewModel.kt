@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -33,7 +34,6 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.stream.Collectors
 
 interface StatisticsScreenState {
     val medicinePerDayData: MedicinePerDayData?
@@ -74,6 +74,7 @@ class StatisticsScreenViewModel(application: Application) : AndroidViewModel(app
     private val _state = MutableStatisticsScreenState()
     val state: StatisticsScreenState get() = _state
 
+    private var chartLoadJob: Job? = null
     private val searchQueryFlow = MutableStateFlow("")
 
     init {
@@ -116,7 +117,8 @@ class StatisticsScreenViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun loadChartData(days: Int, periodTitle: String, totalTitle: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        chartLoadJob?.cancel()
+        chartLoadJob = viewModelScope.launch(Dispatchers.IO) {
             val statisticsProvider = StatisticsProvider(repository)
 
             val seriesList = statisticsProvider.getLastDaysReminders(days)
@@ -157,21 +159,19 @@ class StatisticsScreenViewModel(application: Application) : AndroidViewModel(app
         medicines: List<FullMedicine>,
     ): MedicinePerDayData {
         val dates = seriesList.firstOrNull()?.xValues
-            ?.map { LocalDate.ofEpochDay(it) } ?: emptyList()
+            ?.map { LocalDate.ofEpochDay(it) }?.toImmutableList() ?: persistentListOf()
 
-        val medicineMap = medicines.stream()
-            .collect(Collectors.toMap({ it.medicine.name }, { it }, { a, _ -> a }))
+        val medicineMap = medicines.associateBy { it.medicine.name }
 
-        val series = mutableListOf<MedicineSeriesData>()
-        seriesList.forEachIndexed { index, s ->
+        val series = seriesList.mapIndexed { index, s ->
             val fm = medicineMap[s.name]
             val resolvedColor = if (fm != null && fm.medicine.useColor) {
                 Color(fm.medicine.color)
             } else {
                 FALLBACK_COLORS[index % FALLBACK_COLORS.size]
             }
-            series.add(MedicineSeriesData(s.name, s.yValues, resolvedColor))
-        }
+            MedicineSeriesData(s.name, s.yValues.toImmutableList(), resolvedColor)
+        }.toImmutableList()
 
         return MedicinePerDayData("", dates, series)
     }

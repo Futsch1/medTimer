@@ -3,6 +3,7 @@ package com.futsch1.medtimer.statistics.ui.charts
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.statistics.model.TakenSkippedData
 import org.junit.Rule
@@ -74,6 +75,28 @@ class TakenSkippedPieChartTest {
             }
         }
         composeTestRule.onNodeWithText("Last 7 days").assertIsDisplayed()
+    }
+
+    @Test
+    fun `chart displays legend labels`() {
+        composeTestRule.setContent {
+            MedTimerTheme {
+                TakenSkippedPieChart(data = data(taken = 7, skipped = 3))
+            }
+        }
+        composeTestRule.onNodeWithText("Taken").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Skipped").assertIsDisplayed()
+    }
+
+    @Test
+    fun `null data renders empty placeholder without title`() {
+        composeTestRule.setContent {
+            MedTimerTheme {
+                TakenSkippedPieChart(data = null)
+            }
+        }
+        composeTestRule.onRoot().assertExists()
+        composeTestRule.onNodeWithText("Last 7 days").assertDoesNotExist()
     }
 
 }

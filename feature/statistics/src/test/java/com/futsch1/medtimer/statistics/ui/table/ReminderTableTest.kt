@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.statistics.ui.table
 
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -82,10 +83,29 @@ class ReminderTableTest {
     }
 
     @Test
-    fun `sort toggles on header click`() {
+    fun `sort by name reorders visible rows`() {
         setContent()
-        // Click on "Name" header to sort by name
+        // Click on "Name" header to sort by name descending
         composeTestRule.onNodeWithText("Name").performClick()
-        composeTestRule.onRoot().assertExists()
+
+        // Descending by normalizedMedicineName: vitamin d > ibuprofen > aspirin
+        val vitaminBounds = composeTestRule.onNodeWithText("Vitamin D").getUnclippedBoundsInRoot()
+        val ibuprofenBounds = composeTestRule.onNodeWithText("Ibuprofen").getUnclippedBoundsInRoot()
+        val aspirinBounds = composeTestRule.onNodeWithText("Aspirin").getUnclippedBoundsInRoot()
+        assert(vitaminBounds.top < ibuprofenBounds.top) {
+            "Vitamin D should appear before Ibuprofen when sorted by name descending"
+        }
+        assert(ibuprofenBounds.top < aspirinBounds.top) {
+            "Ibuprofen should appear before Aspirin when sorted by name descending"
+        }
+
+        // Click again to toggle to ascending
+        composeTestRule.onNodeWithText("Name").performClick()
+
+        val aspirinBoundsAsc = composeTestRule.onNodeWithText("Aspirin").getUnclippedBoundsInRoot()
+        val vitaminBoundsAsc = composeTestRule.onNodeWithText("Vitamin D").getUnclippedBoundsInRoot()
+        assert(aspirinBoundsAsc.top < vitaminBoundsAsc.top) {
+            "Aspirin should appear before Vitamin D when sorted by name ascending"
+        }
     }
 }

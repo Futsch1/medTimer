@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onRoot
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.statistics.model.MedicinePerDayData
 import com.futsch1.medtimer.statistics.model.MedicineSeriesData
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,14 +32,14 @@ class MedicinePerDayBarChartTest {
         setChartContent(
             MedicinePerDayData(
                 title = "Last 7 days",
-                days = listOf(
+                days = persistentListOf(
                     LocalDate.of(2023, 12, 1),
                     LocalDate.of(2023, 12, 2),
                     LocalDate.of(2023, 12, 3),
                 ),
-                series = listOf(
-                    MedicineSeriesData("Aspirin", listOf(1, 2, 1), Color(0xFF003f5c)),
-                    MedicineSeriesData("Ibuprofen", listOf(0, 1, 1), Color(0xFF2f4b7c)),
+                series = persistentListOf(
+                    MedicineSeriesData("Aspirin", persistentListOf(1, 2, 1), Color(0xFF003f5c)),
+                    MedicineSeriesData("Ibuprofen", persistentListOf(0, 1, 1), Color(0xFF2f4b7c)),
                 ),
             )
         )
@@ -50,8 +51,8 @@ class MedicinePerDayBarChartTest {
         setChartContent(
             MedicinePerDayData(
                 title = "Last 7 days",
-                days = emptyList(),
-                series = emptyList(),
+                days = persistentListOf(),
+                series = persistentListOf(),
             )
         )
         composeTestRule.onRoot().assertExists()
@@ -62,15 +63,15 @@ class MedicinePerDayBarChartTest {
         setChartContent(
             MedicinePerDayData(
                 title = "Last 7 days",
-                days = listOf(
+                days = persistentListOf(
                     LocalDate.of(2023, 12, 1),
                     LocalDate.of(2023, 12, 2),
                     LocalDate.of(2023, 12, 3),
                     LocalDate.of(2023, 12, 4),
                     LocalDate.of(2023, 12, 5),
                 ),
-                series = listOf(
-                    MedicineSeriesData("Aspirin", listOf(1, 2, 0, 3, 1), Color(0xFF003f5c)),
+                series = persistentListOf(
+                    MedicineSeriesData("Aspirin", persistentListOf(1, 2, 0, 3, 1), Color(0xFF003f5c)),
                 ),
             )
         )
@@ -82,18 +83,28 @@ class MedicinePerDayBarChartTest {
         setChartContent(
             MedicinePerDayData(
                 title = "Last 7 days",
-                days = listOf(
+                days = persistentListOf(
                     LocalDate.of(2023, 12, 1),
                     LocalDate.of(2023, 12, 2),
                     LocalDate.of(2023, 12, 3),
                 ),
-                series = listOf(
-                    MedicineSeriesData("Med A", listOf(1, 2, 1), Color(0xFF003f5c)),
-                    MedicineSeriesData("Med B", listOf(2, 1, 0), Color(0xFF2f4b7c)),
-                    MedicineSeriesData("Med C", listOf(0, 1, 3), Color(0xFF665191)),
+                series = persistentListOf(
+                    MedicineSeriesData("Med A", persistentListOf(1, 2, 1), Color(0xFF003f5c)),
+                    MedicineSeriesData("Med B", persistentListOf(2, 1, 0), Color(0xFF2f4b7c)),
+                    MedicineSeriesData("Med C", persistentListOf(0, 1, 3), Color(0xFF665191)),
                 ),
             )
         )
+        composeTestRule.onRoot().assertExists()
+    }
+
+    @Test
+    fun `null data renders empty placeholder`() {
+        composeTestRule.setContent {
+            MedTimerTheme {
+                MedicinePerDayBarChart(data = null)
+            }
+        }
         composeTestRule.onRoot().assertExists()
     }
 }
