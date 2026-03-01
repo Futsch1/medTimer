@@ -22,8 +22,6 @@ class StockHandlingProcessor(val reminderContext: ReminderContext) {
         val medicine = medicineRepository.getMedicine(medicineId) ?: return
 
         processStock(medicine, amount, processedInstant)
-        medicineRepository.updateMedicine(medicine.medicine)
-
     }
 
     private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
@@ -32,6 +30,7 @@ class StockHandlingProcessor(val reminderContext: ReminderContext) {
         if (medicine.amount < 0) {
             medicine.amount = 0.0
         }
+        medicineRepository.updateMedicine(medicine)
 
         checkForThreshold(fullMedicine, decreaseAmount, processedInstant)
         Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
