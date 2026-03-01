@@ -88,7 +88,7 @@ class MedicineStockTest : BaseTestHelper() {
         // Mark next instance as taken, out of stock reminder expected (3.5 left)
         clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
-        checkNotificationWithTitle(device, notificationTitle, true)
+        checkNotificationWithTitle(device, notificationTitle, true, dismiss = false, additionalExpectedString = "3.5")
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
@@ -122,7 +122,13 @@ class MedicineStockTest : BaseTestHelper() {
         assertContains(R.id.medicineName, "pills")
     }
 
-    private fun checkNotificationWithTitle(device: UiDevice, notificationTitle: String, expected: Boolean, dismiss: Boolean = false) {
+    private fun checkNotificationWithTitle(
+        device: UiDevice,
+        notificationTitle: String,
+        expected: Boolean,
+        dismiss: Boolean = false,
+        additionalExpectedString: String? = null
+    ) {
         device.openNotification()
         val o = device.wait(
             Until.findObject(By.textContains(notificationTitle)),
@@ -133,6 +139,10 @@ class MedicineStockTest : BaseTestHelper() {
         } else {
             internalAssert(o == null)
         }
+        if (additionalExpectedString != null) {
+            internalAssert(device.findObject(By.textContains(additionalExpectedString)) != null)
+        }
+
         if (dismiss) {
             o.fling(Direction.RIGHT)
         }
