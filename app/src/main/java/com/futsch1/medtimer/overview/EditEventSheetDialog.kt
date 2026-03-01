@@ -6,6 +6,7 @@ import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
@@ -16,6 +17,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,6 +34,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
     private val editEventAmount: EditText
     private val editEventName: EditText
     private val editEventNotes: EditText
+    private val editEventToggleGroup: MaterialButtonToggleGroup
 
     init {
         val editEventSheetDialog =
@@ -45,6 +48,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
         editEventTakenTimestamp = editEventSheetDialog.findViewById<EditText>(R.id.editEventTakenTimestamp)!!
         editEventTakenDate = editEventSheetDialog.findViewById<EditText>(R.id.editEventTakenDate)!!
         editEventNotes = editEventSheetDialog.findViewById<EditText>(R.id.editEventNotes)!!
+        editEventToggleGroup = editEventSheetDialog.findViewById<MaterialButtonToggleGroup>(R.id.editEventToggleGroup)!!
 
         setupData(editEventSheetDialog)
 
@@ -66,6 +70,13 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
         reminderEvent.processedTimestamp = processDateTimeEdits(reminderEvent.processedTimestamp, editEventTakenTimestamp, editEventTakenDate)
 
         reminderEvent.notes = editEventNotes.getText().toString()
+        if (editEventToggleGroup.isVisible) {
+            reminderEvent.status = if (editEventToggleGroup.checkedButtonId == R.id.takenToggleButton) {
+                ReminderEvent.ReminderStatus.TAKEN
+            } else {
+                ReminderEvent.ReminderStatus.SKIPPED
+            }
+        }
 
         activity.lifecycleScope.launch {
             withContext(ioDispatcher) {
@@ -105,6 +116,23 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
             editEventTakenDate.visibility = View.GONE
         }
         editEventNotes.setText(reminderEvent.notes)
+        setupToggleGroup(reminderEvent)
+    }
+
+    private fun setupToggleGroup(entity: ReminderEvent) {
+        when (entity.status) {
+            ReminderEvent.ReminderStatus.TAKEN -> {
+                editEventToggleGroup.check(R.id.takenToggleButton)
+            }
+
+            ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> {
+                editEventToggleGroup.check(R.id.skippedToggleButton)
+            }
+
+            else -> {
+                editEventToggleGroup.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupEditTime(timestamp: Long, editText: EditText) {
