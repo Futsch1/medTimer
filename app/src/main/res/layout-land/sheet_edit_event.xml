@@ -21,6 +21,29 @@
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="@string/edit_event" />
 
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/editEventToggleGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/takenToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/taken"
+                app:icon="@drawable/check2_circle" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/skippedToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/skipped"
+                app:icon="@drawable/x_circle" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
