@@ -305,10 +305,18 @@ class ReminderTest : BaseTestHelper() {
         assertContains(R.id.editEventTakenDate, TimeHelper.secondSinceEpochToDateString(context, now))
         assertContains(R.id.editEventNotes, "")
 
+        clickOn(R.string.skipped)
         writeTo(R.id.editEventNotes, "Test notes")
         Espresso.pressBack()
 
+        assertCustomAssertionAtPosition(
+            R.id.reminders,
+            0,
+            R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.x_circle)))
+        )
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
+        clickOn(R.string.taken)
         assertContains(R.id.editEventNotes, "Test notes")
 
         val newReminded = now + 60 * 60 * 24 + 120
