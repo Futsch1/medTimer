@@ -3,27 +3,23 @@ package com.futsch1.medtimer.core.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,11 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 data class ColumnDefinition<T>(
@@ -53,7 +51,7 @@ data class ColumnDefinition<T>(
 enum class SortDirection { DESCENDING, ASCENDING, UNSORTED }
 
 @Composable
-fun <T : Any> SortableFilterTable(
+fun <T : Any> SortableTable(
     rows: ImmutableList<T>,
     columns: ImmutableList<ColumnDefinition<T>>,
     rowKey: (T) -> Any,
@@ -62,118 +60,83 @@ fun <T : Any> SortableFilterTable(
     defaultSortDirection: SortDirection = SortDirection.DESCENDING,
     cellContent: @Composable ((row: T, columnIndex: Int, columnWidth: Dp) -> Unit)? = null,
 ) {
-    var filterText by remember { mutableStateOf("") }
     var sortColumnIndex by remember { mutableIntStateOf(defaultSortColumnIndex) }
     var sortDirection by remember { mutableStateOf(defaultSortDirection) }
 
-    val filtered = remember(rows, filterText) {
-        if (filterText.isBlank()) {
-            rows
-        } else {
-            val lower = filterText.lowercase()
-            rows.filter { row ->
-                columns.any { col -> col.text(row).lowercase().contains(lower) }
-            }
-        }
-    }
-
-    val sorted = remember(filtered, sortColumnIndex, sortDirection) {
+    val sorted = remember(rows, sortColumnIndex, sortDirection) {
         if (sortDirection == SortDirection.UNSORTED) {
-            filtered
+            rows
         } else {
             @Suppress("UNCHECKED_CAST")
             val selector = columns[sortColumnIndex].sortKey as (T) -> Comparable<Any>
             val base = compareBy(selector)
             val comparator =
                 if (sortDirection == SortDirection.DESCENDING) base.reversed() else base
-            filtered.sortedWith(comparator)
+            rows.sortedWith(comparator)
         }
     }
 
-    Card(
-        modifier = modifier.fillMaxSize(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
     ) {
-        OutlinedTextField(
-            value = filterText,
-            onValueChange = { filterText = it },
-            label = { Text(stringResource(R.string.filter)) },
-            singleLine = true,
-            trailingIcon = {
-                if (filterText.isNotEmpty()) {
-                    IconButton(onClick = { filterText = "" }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null
-                        )
+        val availableWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
+        val totalMinWidth = columns.sumOf { it.minWidth.value.toDouble() }.dp
+        val columnWidths = remember(columns, availableWidth) {
+            columns.map { col ->
+                if (col.fill && availableWidth > totalMinWidth) {
+                    col.minWidth + (availableWidth - totalMinWidth)
+                } else {
+                    col.minWidth
+                }
+            }.toImmutableList()
+        }
+
+        Column(
+            modifier = Modifier.horizontalScroll(rememberScrollState())
+        ) {
+            val totalWidth = columnWidths.sumOf { it.value.toDouble() }.dp
+
+            HeaderRow(
+                columns = columns,
+                columnWidths = columnWidths,
+                sortColumnIndex = sortColumnIndex,
+                sortDirection = sortDirection,
+                onHeaderClick = { index ->
+                    if (sortColumnIndex == index) {
+                        sortDirection = when (sortDirection) {
+                            SortDirection.DESCENDING -> SortDirection.ASCENDING
+                            SortDirection.ASCENDING -> SortDirection.UNSORTED
+                            SortDirection.UNSORTED -> SortDirection.DESCENDING
+                        }
+                    } else {
+                        sortColumnIndex = index
+                        sortDirection = SortDirection.DESCENDING
                     }
                 }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp)
-        )
+            )
 
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val availableWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
-            val totalMinWidth = columns.sumOf { it.minWidth.value.toDouble() }.dp
-            val columnWidths = remember(columns, availableWidth) {
-                columns.map { col ->
-                    if (col.fill && availableWidth > totalMinWidth) {
-                        col.minWidth + (availableWidth - totalMinWidth)
-                    } else {
-                        col.minWidth
-                    }
-                }.toImmutableList()
-            }
+            HorizontalDivider(modifier = Modifier.width(totalWidth))
 
-            Column(
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .padding(8.dp)
-            ) {
-                HeaderRow(
-                    columns = columns,
-                    columnWidths = columnWidths,
-                    sortColumnIndex = sortColumnIndex,
-                    sortDirection = sortDirection,
-                    onHeaderClick = { index ->
-                        if (sortColumnIndex == index) {
-                            sortDirection = when (sortDirection) {
-                                SortDirection.DESCENDING -> SortDirection.ASCENDING
-                                SortDirection.ASCENDING -> SortDirection.UNSORTED
-                                SortDirection.UNSORTED -> SortDirection.DESCENDING
-                            }
-                        } else {
-                            sortColumnIndex = index
-                            sortDirection = SortDirection.DESCENDING
-                        }
-                    }
-                )
-
-                HorizontalDivider()
-
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(sorted, key = rowKey) { row ->
-                        Row(
-                            modifier = Modifier.padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            columns.forEachIndexed { colIndex, col ->
-                                if (cellContent != null) {
-                                    cellContent(row, colIndex, columnWidths[colIndex])
-                                } else {
-                                    DefaultDataCell(
-                                        text = col.text(row),
-                                        width = columnWidths[colIndex]
-                                    )
-                                }
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(sorted, key = rowKey) { row ->
+                    Row(
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        columns.forEachIndexed { colIndex, col ->
+                            if (cellContent != null) {
+                                cellContent(row, colIndex, columnWidths[colIndex])
+                            } else {
+                                DefaultDataCell(
+                                    text = col.text(row),
+                                    width = columnWidths[colIndex]
+                                )
                             }
                         }
-                        HorizontalDivider()
                     }
+                    HorizontalDivider(modifier = Modifier.width(totalWidth))
                 }
             }
         }
@@ -243,7 +206,7 @@ private fun HeaderCell(
 }
 
 @Composable
-internal fun DefaultDataCell(text: String, width: Dp) {
+fun DefaultDataCell(text: String, width: Dp) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodySmall,
@@ -254,4 +217,45 @@ internal fun DefaultDataCell(text: String, width: Dp) {
             .width(width)
             .padding(horizontal = 4.dp)
     )
+}
+
+private data class SampleRow(val id: Int, val name: String, val value: String)
+
+@PreviewLightDark
+@Composable
+private fun SortableTablePreview() {
+    MedTimerTheme {
+        Surface {
+            SortableTable(
+                rows = persistentListOf(
+                    SampleRow(1, "Alpha", "100"),
+                    SampleRow(2, "Beta", "200"),
+                    SampleRow(3, "Gamma", "50"),
+                ),
+                columns = persistentListOf(
+                    ColumnDefinition(
+                        header = "ID",
+                        minWidth = 60.dp,
+                        text = { it.id.toString() },
+                        sortKey = { it.id },
+                    ),
+                    ColumnDefinition(
+                        header = "Name",
+                        minWidth = 120.dp,
+                        text = { it.name },
+                        sortKey = { it.name },
+                        fill = true,
+                    ),
+                    ColumnDefinition(
+                        header = "Value",
+                        minWidth = 80.dp,
+                        text = { it.value },
+                        sortKey = { it.value },
+                    ),
+                ),
+                rowKey = { it.id },
+                modifier = Modifier.padding(8.dp),
+            )
+        }
+    }
 }

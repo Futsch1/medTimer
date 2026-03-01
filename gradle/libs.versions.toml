@@ -71,6 +71,7 @@ androidx-compose-material-icons-extended = { module = "androidx.compose.material
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
 vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
@@ -98,6 +99,7 @@ simply-pdf = { module = "com.github.wwdablu:SimplyPDF", version.ref = "simply-pd
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 appintro = { module = "com.github.AppIntro:AppIntro", version.ref = "appintro" }
 calendar = { module = "com.kizitonwose.calendar:view", version.ref = "calendar" }
+calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "calendar" }
 icondialog = { module = "com.maltaisn:icondialog", version.ref = "icondialog" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preference-extended" }

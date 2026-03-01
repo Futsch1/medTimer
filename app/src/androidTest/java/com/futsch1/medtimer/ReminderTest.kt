@@ -1,6 +1,10 @@
 package com.futsch1.medtimer
 
 
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -19,12 +23,10 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-
+import com.futsch1.medtimer.statistics.ui.StatisticsTestTags
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
@@ -326,7 +328,7 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.ANALYSIS)
 
-        clickOn(R.id.tableChip)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.TABLE_CHIP).performClick()
 
         composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded)).assertExists()
         composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken)).assertExists()

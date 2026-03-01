@@ -32,5 +32,9 @@ gradlePlugin {
             id = "medtimer.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
+        register("androidFeature") {
+            id = "medtimer.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
     }
 }

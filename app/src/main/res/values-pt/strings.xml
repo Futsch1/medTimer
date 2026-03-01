@@ -29,8 +29,6 @@
     <string name="clear_events">Limpar eventos</string>
     <string name="app_version">Versão do aplicativo</string>
     <string name="show_notifications">Mostrar notificações</string>
-    <string name="twenty_four_hours">24 horas</string>
-    <string name="three_days">3 dias</string>
     <string name="app_url">MedTimer no GitHub</string>
     <string name="color">Cor</string>
     <string name="select_color">Selecionar cor</string>
@@ -76,16 +74,8 @@
     <string name="cycle_pause_days">Dias de pausa</string>
     <string name="cycle_reminder">Lembrete cíclico</string>
     <string name="reminders">Lembretes</string>
-    <string name="seven_days">7 dias</string>
     <string name="analysis">Análise</string>
     <string name="tabular_view">Visualização em tabela</string>
-    <string name="fourteen_days">14 dias</string>
-    <string name="thirty_days">30 dias</string>
-    <plurals name="last_n_days">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
-        <item quantity="many">Últimos %1$d dias</item>
-        <item quantity="other">Últimos %1$d dias</item>
-    </plurals>
     <string name="name">Nome</string>
     <string name="event_data">Registro dos eventos</string>
     <string name="backup">Backup</string>
@@ -154,7 +144,6 @@
     <string name="sticky_on_lockscreen">Lembretes persistentes na tela de bloqueio</string>
     <string name="big_notifications">Botões de notificação grandes</string>
     <string name="please_wait">Por favor, aguarde…</string>
-    <string name="two_days">2 dias</string>
     <string name="cycle_start_date">Início do primeiro ciclo</string>
     <string name="restore_start">Isso substituirá todas as configurações de medicamentos e/ou eventos de lembrete.\n\nContinuar?</string>
     <string name="minutes_10">10 minutos</string>
@@ -208,7 +197,6 @@
     <string name="interval_time">Intervalo %s</string>
     <string name="reminded">Notificado</string>
     <string name="all_taken">Todos tomados (%s)</string>
-    <string name="total">Total</string>
     <string name="estimated_run_out_date">Data prevista para o fim do estoque</string>
     <string name="create_calendar_entry">Criar entrada na agenda</string>
     <string name="notes">Anotações</string>

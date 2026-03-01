@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">அளவு</string>
+    <string name="taken">எடுக்கப்பட்டது</string>
+    <string name="skipped">தவிர்க்கப்பட்டது</string>
+    <string name="twenty_four_hours">24 மணி நேரம்</string>
+    <string name="two_days">2 நாட்கள்</string>
+    <string name="three_days">3 நாட்கள்</string>
+    <string name="seven_days">7 நாட்கள்</string>
+    <string name="fourteen_days">14 நாட்கள்</string>
+    <string name="thirty_days">30 நாட்கள்</string>
+    <string name="total">மொத்தம்</string>
+    <string name="name">பெயர்</string>
+    <string name="reminded">நினைவூட்டப்பட்டது</string>
+    <plurals name="last_n_days">
+        <item quantity="one">கடைசி 24 மணி நேரம்</item>
+        <item quantity="other">கடைசி %1$d நாட்கள்</item>
+    </plurals>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Tatt</string>
+    <string name="skipped">Hoppet over</string>
+    <string name="name">Navn</string>
+    <string name="dosage">Dose</string>
+    <string name="reminded">Påminnet</string>
+    <string name="total">Totalt</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Siste dag</item>
+        <item quantity="other">Siste %d dager</item>
+    </plurals>
+    <string name="twenty_four_hours">24 timer</string>
+    <string name="two_days">2 dager</string>
+    <string name="three_days">3 dager</string>
+    <string name="seven_days">7 dager</string>
+    <string name="fourteen_days">14 dager</string>
+    <string name="thirty_days">30 dager</string>
+</resources>

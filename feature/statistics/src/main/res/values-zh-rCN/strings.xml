@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">用药剂量</string>
+    <string name="taken">已服用</string>
+    <string name="skipped">已跳过</string>
+    <string name="twenty_four_hours">24 小时</string>
+    <string name="two_days">2 天</string>
+    <string name="three_days">3 天</string>
+    <string name="seven_days">7 天</string>
+    <string name="fourteen_days">14 天</string>
+    <string name="thirty_days">30 天</string>
+    <string name="total">全部记录</string>
+    <string name="name">药品名称</string>
+    <string name="reminded">已提醒</string>
+    <plurals name="last_n_days">
+        <item quantity="other">%1$d 天内记录</item>
+    </plurals>
+</resources>

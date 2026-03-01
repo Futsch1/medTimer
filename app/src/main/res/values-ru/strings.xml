@@ -32,9 +32,6 @@
     <string name="app_version">Версия приложения</string>
     <string name="are_you_sure_delete_events">Вы точно хотите удалить все события?</string>
     <string name="show_notifications">Показать уведомления</string>
-    <string name="twenty_four_hours">24 часа</string>
-    <string name="two_days">2 дня</string>
-    <string name="three_days">3 дня</string>
     <string name="app_url">MedTimer на GitHub</string>
     <string name="color">Цвет</string>
     <string name="select_color">Выбрать цвет</string>
@@ -89,18 +86,8 @@
     <string name="cycle_reminder">Цикличные напоминания</string>
     <string name="weekday_limited">Ограничено до некоторых дней недели</string>
     <string name="reminders">Напоминания</string>
-    <string name="seven_days">7 дней</string>
     <string name="analysis">Анализ</string>
     <string name="tabular_view">Табличный вид</string>
-    <string name="fourteen_days">14 дней</string>
-    <string name="thirty_days">30 дней</string>
-    <string name="total">Всего</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Последний %1$d день</item>
-        <item quantity="few">Последние %1$d дня</item>
-        <item quantity="many">Последние %1$d дней</item>
-        <item quantity="other">Последние %1$d дней</item>
-    </plurals>
     <string name="name">Название</string>
     <string name="event_data">Данные события</string>
     <string name="backup">Резервное копирование</string>

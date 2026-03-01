@@ -34,24 +34,12 @@
         <item quantity="other">%1$d تذكير\n%2$s</item>
     </plurals>
     <string name="notification_title">تذكير دواء</string>
-    <string name="twenty_four_hours">24 ساعة</string>
-    <string name="two_days">يومان</string>
     <string name="medicine_data">بيانات الدواء</string>
     <string name="export_csv">تصدير كملف CSV</string>
     <string name="export_pdf">تصدير كملف PDF</string>
     <string name="restore">استعادة</string>
-    <string name="total">الإجمالي</string>
-    <plurals name="last_n_days">
-        <item quantity="zero">آخر 24 ساعة</item>
-        <item quantity="one">آخر 24 ساعة</item>
-        <item quantity="two">آخر يومين</item>
-        <item quantity="few">آخر %1$d أيام</item>
-        <item quantity="many">آخر %1$d يوما</item>
-        <item quantity="other">آخر %1$d يوم</item>
-    </plurals>
     <string name="name">الاسم</string>
     <string name="please_wait">يُرجى الانتظار…</string>
-    <string name="three_days">3 أيام</string>
     <string name="app_url">منبه الدواء على GitHub</string>
     <string name="color">اللون</string>
     <string name="select_color">تحديد اللون</string>
@@ -102,11 +90,8 @@
     <string name="cycle_reminder">تذكيرات دورية</string>
     <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
     <string name="reminders">التذكيرات</string>
-    <string name="seven_days">7 أيام</string>
     <string name="analysis">تحليل</string>
     <string name="tabular_view">عرض جدولي</string>
-    <string name="fourteen_days">14 يومًا</string>
-    <string name="thirty_days">30 يومًا</string>
     <string name="event_data">بيانات الحدث</string>
     <string name="backup">نسخ احتياطي</string>
     <string name="edit_event">عدّل الحدث</string>

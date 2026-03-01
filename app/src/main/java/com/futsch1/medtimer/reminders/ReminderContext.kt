@@ -67,11 +67,3 @@ class ReminderContext(private val context: Context) {
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
 }
-
-interface TimeAccess {
-    fun systemZone(): ZoneId
-
-    fun localDate(): LocalDate
-
-    fun now(): Instant
-}

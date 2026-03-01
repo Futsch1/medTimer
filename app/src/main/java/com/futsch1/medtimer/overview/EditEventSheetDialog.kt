@@ -18,13 +18,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: ReminderEvent, val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: ReminderEvent) {
     private val editEventTakenDate: EditText
     private val editEventTakenTimestamp: EditText
     private val editEventRemindedDate: EditText
@@ -68,7 +67,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
         reminderEvent.notes = editEventNotes.getText().toString()
 
         activity.lifecycleScope.launch {
-            withContext(ioDispatcher) {
+            withContext(Dispatchers.IO) {
                 val medicineRepository = MedicineRepository(activity.application)
 
                 medicineRepository.updateReminderEvent(reminderEvent)

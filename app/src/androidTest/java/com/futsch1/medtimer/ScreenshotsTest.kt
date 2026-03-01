@@ -1,7 +1,9 @@
 package com.futsch1.medtimer
 
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
@@ -12,10 +14,10 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.futsch1.medtimer.statistics.ui.StatisticsTestTags
 import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
@@ -74,14 +76,13 @@ class ScreenshotsTest : BaseTestHelper() {
         Screengrab.screenshot("4")
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
-        clickOn(R.id.chartChip)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.CHART_CHIP).performClick()
         Screengrab.screenshot("6")
 
-        clickOn(R.id.timeSpinner)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.DAYS_DROPDOWN).performClick()
+        composeTestRule.onNodeWithText("2 days").performClick()
 
-        clickListItem(position = 1)
-
-        clickOn(R.id.tableChip)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.TABLE_CHIP).performClick()
         Screengrab.screenshot("7")
 
         composeTestRule.onNodeWithText("Selen (200 µg)").assertExists()
@@ -90,7 +91,7 @@ class ScreenshotsTest : BaseTestHelper() {
 
         composeTestRule.onNodeWithText("B12 (500µg)").assertExists()
 
-        clickOn(R.id.calendarChip)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.CALENDAR_CHIP).performClick()
         Screengrab.screenshot("8")
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)

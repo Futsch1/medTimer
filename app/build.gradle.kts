@@ -136,12 +136,16 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
     implementation(project(":core:database"))
+    implementation(project(":core:domain"))
+    implementation(project(":feature:statistics"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -173,6 +177,9 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.jazzer.junit)
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit4)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     androidTestImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.test.junit)

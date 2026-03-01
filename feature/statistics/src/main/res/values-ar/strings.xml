@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">تم التناول</string>
+    <string name="skipped">تم التخطي</string>
+    <string name="dosage">الجرعة</string>
+    <string name="twenty_four_hours">24 ساعة</string>
+    <string name="two_days">يومان</string>
+    <string name="total">الإجمالي</string>
+    <string name="name">الاسم</string>
+    <string name="three_days">3 أيام</string>
+    <string name="seven_days">7 أيام</string>
+    <string name="fourteen_days">14 يومًا</string>
+    <string name="thirty_days">30 يومًا</string>
+    <string name="reminded">ذُكِر</string>
+    <plurals name="last_n_days">
+        <item quantity="zero">آخر 24 ساعة</item>
+        <item quantity="one">آخر 24 ساعة</item>
+        <item quantity="two">آخر يومين</item>
+        <item quantity="few">آخر %1$d أيام</item>
+        <item quantity="many">آخر %1$d يوما</item>
+        <item quantity="other">آخر %1$d يوم</item>
+    </plurals>
+</resources>

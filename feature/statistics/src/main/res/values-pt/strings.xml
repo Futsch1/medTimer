@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Dosagem</string>
+    <string name="skipped">Pulado</string>
+    <string name="taken">Tomado</string>
+    <string name="twenty_four_hours">24 horas</string>
+    <string name="three_days">3 dias</string>
+    <string name="seven_days">7 dias</string>
+    <string name="fourteen_days">14 dias</string>
+    <string name="thirty_days">30 dias</string>
+    <string name="name">Nome</string>
+    <string name="two_days">2 dias</string>
+    <string name="reminded">Notificado</string>
+    <string name="total">Total</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Últimas 24 horas</item>
+        <item quantity="many">Últimos %1$d dias</item>
+        <item quantity="other">Últimos %1$d dias</item>
+    </plurals>
+</resources>

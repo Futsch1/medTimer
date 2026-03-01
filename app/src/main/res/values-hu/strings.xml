@@ -30,9 +30,6 @@
     <string name="app_version">Alkalmazás verziója</string>
     <string name="are_you_sure_delete_events">Biztosan törölni szeretnéd az összes eseményt?</string>
     <string name="show_notifications">Értesítések megjelenítése</string>
-    <string name="twenty_four_hours">24 óra</string>
-    <string name="two_days">2 nap</string>
-    <string name="three_days">3 nap</string>
     <string name="app_url">MedTimer a GitHubon</string>
     <string name="color">Szín</string>
     <string name="select_color">Válasszon színt</string>
@@ -88,16 +85,8 @@
     <string name="weekday_limited">Csak bizonyos hétköznapokra korlátozva</string>
     <string name="reminders">Emlékezők</string>
     <string name="sort">Rendezés</string>
-    <string name="seven_days">7 nap</string>
     <string name="analysis">Elemzés</string>
     <string name="tabular_view">Táblázatos nézet</string>
-    <string name="fourteen_days">14 nap</string>
-    <string name="thirty_days">30 nap</string>
-    <string name="total">Összesen</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Az elmúlt 24 óra</item>
-        <item quantity="other">Az elmúlt %1$d nap</item>
-    </plurals>
     <string name="name">Név</string>
     <string name="event_data">Eseményadatok</string>
     <string name="backup">Biztonsági mentés</string>

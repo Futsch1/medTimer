@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">מינון</string>
+    <string name="taken">נלקחה</string>
+    <string name="skipped">דולגה</string>
+    <string name="twenty_four_hours">24 שעות</string>
+    <string name="two_days">יומיים</string>
+    <string name="three_days">3 ימים</string>
+    <string name="seven_days">7 ימים</string>
+    <string name="fourteen_days">14 ימים</string>
+    <string name="thirty_days">30 ימים</string>
+    <string name="total">סך הכל</string>
+    <string name="name">שם</string>
+    <string name="reminded">הוזכר</string>
+    <plurals name="last_n_days">
+        <item quantity="one">24 שעות אחרונות</item>
+        <item quantity="two">יומיים אחרונים</item>
+        <item quantity="other">%1$d ימים אחרונים</item>
+    </plurals>
+</resources>

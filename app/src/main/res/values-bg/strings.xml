@@ -30,9 +30,6 @@
     <string name="app_version">Версия на приложението</string>
     <string name="are_you_sure_delete_events">Наистина ли искате да изтриете всички събития?</string>
     <string name="show_notifications">Покажи известията</string>
-    <string name="twenty_four_hours">24 часа</string>
-    <string name="two_days">2 дена</string>
-    <string name="three_days">3 дена</string>
     <string name="app_url">MedTimer в GitHub</string>
     <string name="color">Цвят</string>
     <string name="select_color">Изберете цвят</string>
@@ -88,16 +85,8 @@
     <string name="weekday_limited">Ограничено до определени дни</string>
     <string name="reminders">Напомняния</string>
     <string name="sort">Сортиране</string>
-    <string name="seven_days">7 дни</string>
     <string name="analysis">Анализ</string>
     <string name="tabular_view">Табличен вид</string>
-    <string name="fourteen_days">14 дни</string>
-    <string name="thirty_days">30 дни</string>
-    <string name="total">Общо</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Последните 24 часа</item>
-        <item quantity="other">Последните %1$d дни</item>
-    </plurals>
     <string name="name">Название</string>
     <string name="event_data">Данни за събитието</string>
     <string name="backup">Резервно копие</string>

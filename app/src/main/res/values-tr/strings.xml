@@ -30,9 +30,6 @@
     <string name="app_version">Uygulama versiyonu</string>
     <string name="are_you_sure_delete_events">Tüm etkinlikleri silmek istediğinizden emin misiniz?</string>
     <string name="show_notifications">Bildirimleri göster</string>
-    <string name="twenty_four_hours">24 saat</string>
-    <string name="two_days">2 gün</string>
-    <string name="three_days">3 gün</string>
     <string name="app_url">MedTimer GitHub\'da</string>
     <string name="color">Renk</string>
     <string name="select_color">Renk seç</string>
@@ -87,16 +84,8 @@
     <string name="cycle_reminder">Döngüsel hatırlatıcılar</string>
     <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
     <string name="reminders">Hatırlatıcılar</string>
-    <string name="seven_days">7 gün</string>
     <string name="analysis">Analiz</string>
     <string name="tabular_view">Tablolu görünüm</string>
-    <string name="fourteen_days">14 gün</string>
-    <string name="thirty_days">30 gün</string>
-    <string name="total">Toplam</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Son 24 saat</item>
-        <item quantity="other">Son %1$d gün</item>
-    </plurals>
     <string name="name">Ad</string>
     <string name="event_data">Etkinlik verisi</string>
     <string name="backup">Yedekle</string>

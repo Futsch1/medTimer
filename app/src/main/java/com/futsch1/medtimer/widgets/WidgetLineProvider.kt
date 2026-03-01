@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.widgets
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.SpannableStringBuilder
@@ -32,7 +31,7 @@ fun interface WidgetLineProvider {
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
     lateinit var scheduledReminders: List<ScheduledReminder>
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+        val medicineRepository = MedicineRepository(context.applicationContext)
         val medicinesWithReminders = medicineRepository.medicines
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
         val reminderScheduler = ReminderScheduler(object : TimeAccess {
@@ -78,7 +77,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
     lateinit var reminderEvents: List<ReminderEvent>
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+        val medicineRepository = MedicineRepository(context.applicationContext)
         reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
     val sharedPreferences: SharedPreferences? =

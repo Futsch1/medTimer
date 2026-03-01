@@ -3,13 +3,6 @@
     <string name="are_you_sure_delete_reminder">Är du säker på att du vill ta bort påminnelsen?</string>
     <string name="app_version">Appversion</string>
     <string name="tabular_view">Tabellvy</string>
-    <string name="fourteen_days">14 dagar</string>
-    <string name="thirty_days">30 dagar</string>
-    <string name="total">Total</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Senaste 24h</item>
-        <item quantity="other">Senaste %1$d dagarna</item>
-    </plurals>
     <string name="delay">Fördröjning</string>
     <string name="unlimited">Obegränsad</string>
     <string name="override_dnd">Spela alltid aviseringsljud</string>
@@ -43,9 +36,6 @@
     <string name="clear_events">Rensa händelser</string>
     <string name="are_you_sure_delete_events">Är du säker på att du vill ta bort alla händelser?</string>
     <string name="show_notifications">Visa aviseringar</string>
-    <string name="twenty_four_hours">24 timmar</string>
-    <string name="two_days">2 dagar</string>
-    <string name="three_days">3 dagar</string>
     <string name="app_url">MedTimer på GitHub</string>
     <string name="color">Färg</string>
     <string name="select_color">Välj färg</string>
@@ -100,7 +90,6 @@
     <string name="cycle_reminder">Återkommande påminnelser</string>
     <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="reminders">Påminnelser</string>
-    <string name="seven_days">7 dagar</string>
     <string name="analysis">Analys</string>
     <string name="name">Namn</string>
     <string name="event_data">Händelsedata</string>
@@ -144,6 +133,7 @@
     <string name="time_between_repetitions">Tid mellan upprepningar</string>
     <string name="repeat_reminders_summary">Upprepar automatiskt en påminnelse tills den markeras som tagen eller överhoppad</string>
     <string name="add_linked_reminder">Lägg till påminnelse för kommande dos</string>
+    <string name="linked_reminder_delay">Fördröjning för efterföljande dos</string>
     <string name="linked_reminder_summary">Efter påminnelse på %1$s</string>
     <string name="delete_re_raise_event">Vill du ta bort den här händelsen och skapa en ny?</string>
     <string name="time_based_reminder">Tidsbaserad påminnelse</string>
