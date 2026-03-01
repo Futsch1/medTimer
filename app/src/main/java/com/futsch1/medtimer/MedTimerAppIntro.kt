@@ -5,6 +5,12 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
@@ -15,6 +21,10 @@ class MedTimerAppIntro : AppIntro() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Applying fix mentioned here: https://github.com/AppIntro/AppIntro/issues/1263#issuecomment-2661393509
+        enableEdgeToEdge(navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT))
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         addSlide(
             getString(R.string.intro_welcome),
@@ -85,6 +95,17 @@ class MedTimerAppIntro : AppIntro() {
                 Color.WHITE
             )
         )
+
+        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBarsInsets.top, 0, systemBarsInsets.bottom)
+            insets
+        }
+
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = false // Or true if you want light status bar icons
+        // Make navigation bar transparent
+        windowInsetsController.isAppearanceLightNavigationBars = false
     }
 
     private fun addSlide(title: String, description: String, image: Int) {
