@@ -26,6 +26,10 @@ class FragmentSwipeLayout @JvmOverloads constructor(
     private var swipeVelocityThreshold = ViewConfiguration.get(context).scaledMinimumFlingVelocity
     var onSwipeListener: OnSwipeListener? = null
 
+    private var startX = 0f
+    private var startY = 0f
+    private var isIntercepting = false
+
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(
@@ -76,9 +80,35 @@ class FragmentSwipeLayout @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        if (gestureDetector.onTouchEvent(ev!!)) {
+        val event = ev ?: return false
+        
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+                isIntercepting = false
+                gestureDetector.onTouchEvent(event)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val diffX = abs(event.x - startX)
+                val diffY = abs(event.y - startY)
+                
+                // If horizontal movement is dominant and exceeds threshold, intercept
+                if (diffX > swipeThreshold && diffX > diffY) {
+                    isIntercepting = true
+                }
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                isIntercepting = false
+            }
+        }
+        
+        if (isIntercepting) {
             return true
         }
+
+        // Still feed the gesture detector so it can detect flings if we decide to intercept later
+        gestureDetector.onTouchEvent(event)
         return super.onInterceptTouchEvent(ev)
     }
 }
