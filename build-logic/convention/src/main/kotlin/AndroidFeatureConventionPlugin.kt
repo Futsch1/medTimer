@@ -8,12 +8,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "medtimer.android.library")
             apply(plugin = "medtimer.compose.library")
+            apply(plugin = "medtimer.android.hilt")
 
             dependencies {
                 "implementation"(project(":core:database"))
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:designsystem"))
                 "implementation"(project(":core:domain"))
+                "implementation"(project(":core:preferences"))
             }
         }
     }

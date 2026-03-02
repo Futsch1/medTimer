@@ -1,17 +1,15 @@
 package com.futsch1.medtimer.statistics.domain
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import javax.inject.Inject
 
-class AnalysisDaysPreference(context: Context) {
+class AnalysisDaysPreference @Inject constructor(
+    private val sharedPref: SharedPreferences,
+) {
     private companion object {
         const val PREF_KEY = "analysis_days"
     }
-
-    private val sharedPref: SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
 
     var analysisDays: AnalysisDays
         get() {

@@ -142,6 +142,7 @@ object PreviewData {
         override val tableRows: ImmutableList<ReminderTableRowData> = persistentListOf()
         override val selectedTab: StatisticsTabType = StatisticsTabType.CHARTS
         override val selectedDays: AnalysisDays = AnalysisDays.SEVEN_DAYS
+        override val dayEvents: ImmutableMap<LocalDate, List<CalendarDayEvent>> = persistentMapOf()
     }
 
     val chartsStatisticsScreenState: StatisticsScreenState = object : StatisticsScreenState {
@@ -152,5 +153,6 @@ object PreviewData {
         override val tableRows: ImmutableList<ReminderTableRowData> = sampleTableRows
         override val selectedTab: StatisticsTabType = StatisticsTabType.CHARTS
         override val selectedDays: AnalysisDays = AnalysisDays.SEVEN_DAYS
+        override val dayEvents: ImmutableMap<LocalDate, List<CalendarDayEvent>> = sampleDayEvents
     }
 }

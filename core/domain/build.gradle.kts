@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(project(":core:database"))
+    implementation(project(":core:preferences"))
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)

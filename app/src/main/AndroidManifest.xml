@@ -28,6 +28,7 @@
         android:tag="audioPlayback" />
 
     <application
+        android:name=".MedTimerApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"

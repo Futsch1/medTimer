@@ -7,9 +7,11 @@ room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.2.2.6593"
 robolectric-junit5 = "0.9.0"
+hilt = "2.59.2"
+ksp = "2.3.6"
 
 # Compose
-compose-bom = "2026.02.00"
+compose-bom = "2026.02.01"
 kotlinx-collections-immutable = "0.4.0"
 vico = "3.0.1"
 
@@ -60,6 +62,11 @@ desugar-jdk = "2.1.5"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 # Compose (BOM-managed)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
@@ -141,3 +148,5 @@ androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.re
 triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 robolectric-junit5 = { id = "tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin", version.ref = "robolectric-junit5" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

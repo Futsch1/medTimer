@@ -19,9 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,15 +26,12 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.statistics.R
 import com.futsch1.medtimer.statistics.domain.AnalysisDays
 import com.futsch1.medtimer.statistics.domain.StatisticsTabType
 import com.futsch1.medtimer.statistics.ui.calendar.CalendarContent
 import com.futsch1.medtimer.statistics.ui.calendar.CalendarDayEvent
-import com.futsch1.medtimer.statistics.ui.calendar.CalendarEventsViewModel
 import com.futsch1.medtimer.statistics.ui.charts.ChartsContent
 import com.futsch1.medtimer.statistics.ui.charts.DaysDropdown
 import com.futsch1.medtimer.statistics.ui.preview.PreviewData
@@ -45,13 +39,10 @@ import com.futsch1.medtimer.statistics.ui.table.ReminderTable
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import java.time.LocalDate
-import java.time.ZoneId
 
 @Composable
 fun StatisticsScreen(
     viewModel: StatisticsScreenViewModel,
-    calendarViewModel: CalendarEventsViewModel,
-    reminderEvents: LiveData<List<ReminderEvent>>,
     onEditReminderEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,18 +55,6 @@ fun StatisticsScreen(
         viewModel.loadChartData(days, periodTitle, totalTitle)
     }
 
-    val zone = remember { ZoneId.systemDefault() }
-    val events by reminderEvents.observeAsState(emptyList())
-
-    LaunchedEffect(events) {
-        viewModel.loadTableData(events, zone)
-    }
-
-    LaunchedEffect(Unit) {
-        calendarViewModel.getEventForMonths(-1, 3, 0)
-    }
-    val dayEvents = calendarViewModel.state.dayEvents
-
     StatisticsScreen(
         selectedTab = state.selectedTab,
         onTabSelected = viewModel::selectTab,
@@ -84,7 +63,7 @@ fun StatisticsScreen(
         tableState = state,
         onFilterTextChanged = viewModel::updateFilterText,
         onEditReminderEvent = onEditReminderEvent,
-        dayEvents = dayEvents,
+        dayEvents = state.dayEvents,
         modifier = modifier,
     )
 }

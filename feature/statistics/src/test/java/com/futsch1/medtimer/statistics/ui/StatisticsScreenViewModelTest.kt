@@ -1,33 +1,52 @@
 package com.futsch1.medtimer.statistics.ui
 
-import android.app.Application
 import androidx.compose.ui.graphics.Color
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
+import com.futsch1.medtimer.statistics.domain.AnalysisDays
+import com.futsch1.medtimer.statistics.domain.AnalysisDaysPreference
+import com.futsch1.medtimer.statistics.domain.GetCalendarEventsUseCase
 import com.futsch1.medtimer.statistics.domain.MedicinePerDaySeries
+import com.futsch1.medtimer.statistics.domain.StatisticsTabPreference
+import com.futsch1.medtimer.statistics.domain.StatisticsTabType
+import kotlinx.coroutines.flow.emptyFlow
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-@RunWith(RobolectricTestRunner::class)
 class StatisticsScreenViewModelTest {
 
     private lateinit var viewModel: StatisticsScreenViewModel
 
     @Before
     fun setUp() {
-        val application = RuntimeEnvironment.getApplication() as Application
-        viewModel = StatisticsScreenViewModel(application)
+        val mockAnalysisDaysPreference = mock(AnalysisDaysPreference::class.java)
+        `when`(mockAnalysisDaysPreference.analysisDays).thenReturn(AnalysisDays.DEFAULT)
+
+        val mockStatisticsTabPreference = mock(StatisticsTabPreference::class.java)
+        `when`(mockStatisticsTabPreference.activeFragment).thenReturn(StatisticsTabType.CHARTS)
+
+        val mockRepository = mock(MedicineRepository::class.java)
+        `when`(mockRepository.getReminderEventsFlow(0, statusValuesWithoutDeletedAndAcknowledged))
+            .thenReturn(emptyFlow())
+
+        viewModel = StatisticsScreenViewModel(
+            repository = mockRepository,
+            analysisDaysPreference = mockAnalysisDaysPreference,
+            statisticsTabPreference = mockStatisticsTabPreference,
+            getCalendarEvents = mock(GetCalendarEventsUseCase::class.java),
+        )
     }
 
     // --- loadTableData tests ---
@@ -47,7 +66,7 @@ class StatisticsScreenViewModelTest {
             this.processedTimestamp = processedTimestamp
         }
 
-        viewModel.loadTableData(listOf(event), zone)
+        invokeLoadTableData(listOf(event), zone)
 
         val rows = viewModel.state.tableRows
         assertEquals(1, rows.size)
@@ -80,7 +99,7 @@ class StatisticsScreenViewModelTest {
             processedTimestamp = 1705312800L
         }
 
-        viewModel.loadTableData(listOf(event), zone)
+        invokeLoadTableData(listOf(event), zone)
 
         val row = viewModel.state.tableRows[0]
         assertNull(row.takenAt)
@@ -99,7 +118,7 @@ class StatisticsScreenViewModelTest {
             processedTimestamp = 0L
         }
 
-        viewModel.loadTableData(listOf(event), zone)
+        invokeLoadTableData(listOf(event), zone)
 
         assertNull(viewModel.state.tableRows[0].takenAt)
     }
@@ -160,6 +179,19 @@ class StatisticsScreenViewModelTest {
         val result = invokeBuildMedicinePerDayData(emptyList(), emptyList())
         assertEquals(0, result.series.size)
         assertEquals(0, result.days.size)
+    }
+
+    /**
+     * Uses reflection to call the private loadTableData method.
+     */
+    private fun invokeLoadTableData(events: List<ReminderEvent>, zone: ZoneId) {
+        val method = StatisticsScreenViewModel::class.java.getDeclaredMethod(
+            "loadTableData",
+            List::class.java,
+            ZoneId::class.java,
+        )
+        method.isAccessible = true
+        method.invoke(viewModel, events, zone)
     }
 
     /**

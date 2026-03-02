@@ -10,12 +10,15 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
 import com.futsch1.medtimer.statistics.ui.calendar.CalendarContent
 import com.futsch1.medtimer.statistics.ui.calendar.CalendarEventsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CalendarFragment : Fragment() {
+    private val calendarViewModel: CalendarEventsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,8 +33,6 @@ class CalendarFragment : Fragment() {
         } else {
             CalendarFragmentArgs.Builder(-1, 3, 0).build()
         }
-
-        val calendarViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
 
         composeView.setContent {
             MedTimerTheme {

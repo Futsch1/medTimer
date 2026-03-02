@@ -1,168 +1,176 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import static androidx.room.OnConflictStrategy.IGNORE;
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import kotlinx.coroutines.flow.Flow
 
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Transaction;
-import androidx.room.Update;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
-import kotlinx.coroutines.flow.Flow;
-
+// TODO: this Dao is mixing concerns; it should manage only the Medicine entity, all other entities should have their own DAOs
 @Dao
-public interface MedicineDao {
+interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
-    LiveData<List<FullMedicine>> getLiveMedicines();
+    fun getLiveMedicines(): LiveData<List<FullMedicine>>
 
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
-    List<FullMedicine> getMedicines();
+    fun getMedicines(): List<FullMedicine>
 
+    // If this names is used because of FullMedicine, then the full medicine method should be getFullMedicineById
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    Medicine getOnlyMedicine(int medicineId);
-
-    @Transaction
-    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    FullMedicine getMedicine(int medicineId);
+    fun getOnlyMedicine(medicineId: Int): Medicine?
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    LiveData<FullMedicine> getLiveMedicine(int medicineId);
+    fun getMedicine(medicineId: Int): FullMedicine?
+
+    @Transaction
+    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
+    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine?>
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
-    LiveData<List<Reminder>> getLiveReminders(int medicineId);
+    fun getLiveReminders(medicineId: Int): LiveData<List<Reminder>>
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId")
-    List<Reminder> getReminders(int medicineId);
+    fun getReminders(medicineId: Int): List<Reminder>
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
-    Reminder getReminder(int reminderId);
+    fun getReminder(reminderId: Int): Reminder?
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
-    Flow<Reminder> getReminderFlow(int reminderId);
+    fun getReminderFlow(reminderId: Int): Flow<Reminder?>
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    Flow<FullMedicine> getMedicineFlow(int medicineId);
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    LiveData<List<ReminderEvent>> getLiveReminderEventsStartingFrom(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
+    fun getLiveReminderEventsStartingFrom(
+        fromTimestamp: Long,
+        statusValues: List<ReminderStatus>
+    ): LiveData<List<ReminderEvent>>
+
+    @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
+    fun getReminderEventsFlow(
+        fromTimestamp: Long,
+        statusValues: List<ReminderStatus>
+    ): Flow<List<ReminderEvent>>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
-    List<ReminderEvent> getLimitedReminderEvents(long fromTimestamp, List<ReminderEvent.ReminderStatus> statusValues);
+    fun getLimitedReminderEvents(
+        fromTimestamp: Long,
+        statusValues: List<ReminderStatus>
+    ): List<ReminderEvent>
 
     @Insert
-    long insertMedicine(Medicine medicine);
+    fun insertMedicine(medicine: Medicine): Long
 
     @Insert
-    long insertReminder(Reminder reminder);
+    fun insertReminder(reminder: Reminder): Long
 
     @Update
-    void updateMedicine(Medicine medicine);
+    fun updateMedicine(medicine: Medicine)
 
     @Update
-    void updateReminder(Reminder reminder);
+    fun updateReminder(reminder: Reminder)
 
     @Delete
-    void deleteMedicine(Medicine medicine);
+    fun deleteMedicine(medicine: Medicine)
 
     @Delete
-    void deleteReminder(Reminder reminder);
+    fun deleteReminder(reminder: Reminder)
 
     @Insert
-    long insertReminderEvent(ReminderEvent reminderEvent);
+    fun insertReminderEvent(reminderEvent: ReminderEvent): Long
 
     @Update
-    void updateReminderEvent(ReminderEvent reminderEvent);
+    fun updateReminderEvent(reminderEvent: ReminderEvent)
 
     @Update
-    void updateReminderEvents(List<ReminderEvent> reminderEvents);
+    fun updateReminderEvents(reminderEvents: List<ReminderEvent>)
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
-    ReminderEvent getReminderEvent(int reminderEventId);
+    fun getReminderEvent(reminderEventId: Int): ReminderEvent?
 
     @Query("DELETE FROM ReminderEvent")
-    void deleteReminderEvents();
+    fun deleteReminderEvents()
 
     @Delete
-    void deleteReminderEvent(ReminderEvent reminderEvent);
+    fun deleteReminderEvent(reminderEvent: ReminderEvent)
 
     @Query("DELETE FROM Reminder")
-    void deleteReminders();
+    fun deleteReminders()
 
     @Query("DELETE FROM Medicine")
-    void deleteMedicines();
+    fun deleteMedicines()
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
-    List<Reminder> getLinkedReminders(int reminderId);
+    fun getLinkedReminders(reminderId: Int): List<Reminder>
 
     @Transaction
     @Query("SELECT * FROM Tag")
-    LiveData<List<Tag>> getLiveTags();
+    fun getLiveTags(): LiveData<List<Tag>>
 
     @Query("SELECT * FROM Tag WHERE name= :name")
-    Tag getTagByName(String name);
+    fun getTagByName(name: String): Tag?
 
     @Insert
-    long insertTag(Tag tag);
+    fun insertTag(tag: Tag): Long
 
     @Delete
-    void deleteTag(Tag tag);
+    fun deleteTag(tag: Tag)
 
-    @Insert(onConflict = IGNORE)
-    void insertMedicineToTag(MedicineToTag medicineToTag);
+    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    fun insertMedicineToTag(medicineToTag: MedicineToTag)
 
     @Delete
-    void deleteMedicineToTag(MedicineToTag medicineToTag);
+    fun deleteMedicineToTag(medicineToTag: MedicineToTag)
 
     @Query("DELETE FROM MedicineToTag WHERE tagId= :tagId")
-    void deleteMedicineToTagForTag(int tagId);
+    fun deleteMedicineToTagForTag(tagId: Int)
 
     @Query("DELETE FROM MedicineToTag WHERE medicineId= :medicineId")
-    void deleteMedicineToTagForMedicine(int medicineId);
+    fun deleteMedicineToTagForMedicine(medicineId: Int)
 
     @Query("DELETE FROM Tag")
-    void deleteTags();
+    fun deleteTags()
 
     @Query("DELETE FROM MedicineToTag")
-    void deleteMedicineToTags();
+    fun deleteMedicineToTags()
 
-    @Query("SELECT * FROM MedicineToTag")
-    LiveData<List<MedicineToTag>> getLiveMedicineToTags();
+    @get:Query("SELECT * FROM MedicineToTag")
+    val liveMedicineToTags: LiveData<List<MedicineToTag>>
 
     @Query("SELECT COUNT(*) FROM Tag")
-    int countTags();
+    fun countTags(): Int
 
-    @Query("SELECT MAX(sortOrder) FROM Medicine")
-    double getHighestMedicineSortOrder();
+    @get:Query("SELECT MAX(sortOrder) FROM Medicine")
+    val highestMedicineSortOrder: Double?
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC")
-    List<ReminderEvent> getReminderEvents(int reminderId);
+    fun getReminderEvents(reminderId: Int): List<ReminderEvent>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC LIMIT 1")
-    ReminderEvent getLastReminderEvent(int reminderId);
+    fun getLastReminderEvent(reminderId: Int): ReminderEvent?
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC LIMIT :limit")
-    List<ReminderEvent> getLastReminderEvents(int reminderId, int limit);
+    fun getLastReminderEvents(reminderId: Int, limit: Int): List<ReminderEvent>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId AND remindedTimestamp= :remindedTimestamp")
-    @Nullable ReminderEvent getReminderEvent(int reminderId, long remindedTimestamp);
+    fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent?
 
     @Insert
-    void insertReminderEvents(List<@NotNull ReminderEvent> reminderEvents);
+    fun insertReminderEvents(reminderEvents: List<ReminderEvent>)
 
     @Insert
-    void insertReminders(List<@NotNull Reminder> reminders);
+    fun insertReminders(reminders: List<Reminder>)
 
     @Update
-    void updateMedicines(List<@NotNull Medicine> medicines);
+    fun updateMedicines(medicines: List<Medicine>)
 }

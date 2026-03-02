@@ -6,6 +6,8 @@ plugins {
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.robolectric.junit5)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -52,7 +54,7 @@ android {
             )
         }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.futsch1.medtimer.HiltTestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
@@ -113,9 +115,6 @@ android {
         )
     }
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
@@ -137,6 +136,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:database"))
     implementation(project(":core:domain"))
+    implementation(project(":core:preferences"))
     implementation(project(":feature:statistics"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -170,6 +170,8 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.mockito.core)
@@ -190,6 +192,8 @@ dependencies {
     androidTestImplementation(libs.uiautomator)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
     androidTestUtil(libs.androidx.test.orchestrator)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -231,6 +235,9 @@ tasks.withType(Test::class) {
         exclude("**/*FuzzTest.class")
     else
         include("**/*FuzzTest.class")
+    filter {
+        isFailOnNoMatchingTests = false
+    }
 }
 
 // Define task names for unit tests and Android tests

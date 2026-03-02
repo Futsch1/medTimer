@@ -16,6 +16,8 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.hilt.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 gradlePlugin {
@@ -35,6 +37,10 @@ gradlePlugin {
         register("androidFeature") {
             id = "medtimer.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("androidHilt") {
+            id = "medtimer.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
         }
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     id("medtimer.android.library")
     id("medtimer.android.room")
+    id("medtimer.android.hilt")
 }
 
 android {
