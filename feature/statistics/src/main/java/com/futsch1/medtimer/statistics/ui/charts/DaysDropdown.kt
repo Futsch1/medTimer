@@ -59,6 +59,7 @@ fun DaysDropdown(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(StatisticsTestTags.DAYS_DROPDOWN_MENU),
         ) {
             AnalysisDays.entries.forEach { entry ->
                 DropdownMenuItem(

@@ -31,6 +31,7 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertNotNull
@@ -83,6 +84,7 @@ fun getNotificationText(stringId: Int, vararg args: Any): String {
 
 private const val COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND = "com.android.systemui:id/remote_input_send"
 
+@HiltAndroidTest
 class NotificationTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)

@@ -18,12 +18,14 @@ import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeCh
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 private const val NEW_TAG = "New tag"
 
 private const val ANOTHER_TAG = "Another tag"
 
+@HiltAndroidTest
 class TagTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)

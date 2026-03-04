@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
@@ -122,7 +123,9 @@ fun <T : Any> SortableTable(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(sorted, key = rowKey) { row ->
                     Row(
-                        modifier = Modifier.padding(vertical = 4.dp),
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .testTag(CoreUiTestTags.TABLE_DATA_ROW),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         columns.forEachIndexed { colIndex, col ->
@@ -152,7 +155,9 @@ private fun <T> HeaderRow(
     onHeaderClick: (Int) -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(vertical = 4.dp),
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .testTag(CoreUiTestTags.TABLE_HEADER_ROW),
         verticalAlignment = Alignment.CenterVertically
     ) {
         columns.forEachIndexed { index, col ->

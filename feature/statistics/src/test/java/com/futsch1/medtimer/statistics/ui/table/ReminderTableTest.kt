@@ -1,11 +1,15 @@
 package com.futsch1.medtimer.statistics.ui.table
 
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
+import com.futsch1.medtimer.core.ui.CoreUiTestTags
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.statistics.model.ReminderTableRowData
 import kotlinx.collections.immutable.ImmutableList
@@ -48,26 +52,36 @@ class ReminderTableTest {
         }
     }
 
+    private fun onTableDataText(text: String) =
+        composeTestRule.onNode(
+            hasText(text) and hasAnyAncestor(hasTestTag(CoreUiTestTags.TABLE_DATA_ROW))
+        )
+
+    private fun onTableHeaderText(text: String) =
+        composeTestRule.onNode(
+            hasText(text) and hasAnyAncestor(hasTestTag(CoreUiTestTags.TABLE_HEADER_ROW))
+        )
+
     @Test
     fun `table renders with data`() {
         setContent()
-        composeTestRule.onNodeWithText("Aspirin").assertExists()
-        composeTestRule.onNodeWithText("Ibuprofen").assertExists()
-        composeTestRule.onNodeWithText("Vitamin D").assertExists()
+        onTableDataText("Aspirin").assertExists()
+        onTableDataText("Ibuprofen").assertExists()
+        onTableDataText("Vitamin D").assertExists()
     }
 
     @Test
     fun `table renders empty`() {
         setContent(rows = persistentListOf())
         composeTestRule.onRoot().assertExists()
-        composeTestRule.onNodeWithText("Taken").assertExists()
+        composeTestRule.onNodeWithTag(CoreUiTestTags.TABLE_HEADER_ROW).assertExists()
     }
 
     @Test
     fun `medicine name click calls onEditEvent`() {
         var clickedId = -1
         setContent(onEditEvent = { clickedId = it })
-        composeTestRule.onNodeWithText("Aspirin").performClick()
+        onTableDataText("Aspirin").performClick()
         assertEquals(1, clickedId)
     }
 
@@ -78,20 +92,20 @@ class ReminderTableTest {
             it.medicineName.lowercase().contains("asp")
         }.toImmutableList()
         setContent(rows = filteredRows, filterText = "Asp")
-        composeTestRule.onNodeWithText("Aspirin").assertExists()
-        composeTestRule.onNodeWithText("Ibuprofen").assertDoesNotExist()
+        onTableDataText("Aspirin").assertExists()
+        onTableDataText("Ibuprofen").assertDoesNotExist()
     }
 
     @Test
     fun `sort by name reorders visible rows`() {
         setContent()
         // Click on "Name" header to sort by name descending
-        composeTestRule.onNodeWithText("Name").performClick()
+        onTableHeaderText("Name").performClick()
 
         // Descending by normalizedMedicineName: vitamin d > ibuprofen > aspirin
-        val vitaminBounds = composeTestRule.onNodeWithText("Vitamin D").getUnclippedBoundsInRoot()
-        val ibuprofenBounds = composeTestRule.onNodeWithText("Ibuprofen").getUnclippedBoundsInRoot()
-        val aspirinBounds = composeTestRule.onNodeWithText("Aspirin").getUnclippedBoundsInRoot()
+        val vitaminBounds = onTableDataText("Vitamin D").getUnclippedBoundsInRoot()
+        val ibuprofenBounds = onTableDataText("Ibuprofen").getUnclippedBoundsInRoot()
+        val aspirinBounds = onTableDataText("Aspirin").getUnclippedBoundsInRoot()
         assert(vitaminBounds.top < ibuprofenBounds.top) {
             "Vitamin D should appear before Ibuprofen when sorted by name descending"
         }
@@ -100,10 +114,10 @@ class ReminderTableTest {
         }
 
         // Click again to toggle to ascending
-        composeTestRule.onNodeWithText("Name").performClick()
+        onTableHeaderText("Name").performClick()
 
-        val aspirinBoundsAsc = composeTestRule.onNodeWithText("Aspirin").getUnclippedBoundsInRoot()
-        val vitaminBoundsAsc = composeTestRule.onNodeWithText("Vitamin D").getUnclippedBoundsInRoot()
+        val aspirinBoundsAsc = onTableDataText("Aspirin").getUnclippedBoundsInRoot()
+        val vitaminBoundsAsc = onTableDataText("Vitamin D").getUnclippedBoundsInRoot()
         assert(aspirinBoundsAsc.top < vitaminBoundsAsc.top) {
             "Aspirin should appear before Vitamin D when sorted by name ascending"
         }

@@ -7,12 +7,14 @@ import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDispla
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.futsch1.medtimer.RecyclerViewDragAction.drag
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 const val TEST_MED_1 = "Test"
 const val TEST_MED_2 = "Test2"
 const val TEST_MED_3 = "A test"
 
+@HiltAndroidTest
 class MedicineHandlingTest : BaseTestHelper() {
 
 

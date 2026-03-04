@@ -1,7 +1,6 @@
 package com.futsch1.medtimer
 
 
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -27,21 +26,23 @@ import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.statistics.ui.StatisticsTestTags
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 
 
+@HiltAndroidTest
 class ReminderTest : BaseTestHelper() {
-    @get:org.junit.Rule
-    val composeTestRule = createEmptyComposeRule()
-
     @Test
     //@AllowFlaky(attempts = 1)
     fun activeReminderTest() {
@@ -330,8 +331,11 @@ class ReminderTest : BaseTestHelper() {
 
         composeTestRule.onNodeWithTag(StatisticsTestTags.TABLE_CHIP).performClick()
 
-        composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded)).assertExists()
-        composeTestRule.onNodeWithText(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken)).assertExists()
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+        val remindedText = Instant.ofEpochSecond(newReminded).atZone(ZoneId.systemDefault()).format(formatter)
+        val takenText = Instant.ofEpochSecond(newTaken).atZone(ZoneId.systemDefault()).format(formatter)
+        composeTestRule.onNodeWithText(remindedText).assertExists()
+        composeTestRule.onNodeWithText(takenText).assertExists()
     }
 
     @Test

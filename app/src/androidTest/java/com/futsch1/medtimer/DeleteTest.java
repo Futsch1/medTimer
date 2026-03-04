@@ -9,6 +9,9 @@ import static com.adevinta.android.barista.interaction.BaristaMenuClickInteracti
 
 import org.junit.Test;
 
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class DeleteTest extends BaseTestHelper {
 
     @Test

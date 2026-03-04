@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.os.Build
 import android.os.RemoteException
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,6 +12,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -19,8 +21,14 @@ import java.io.IOException
 import java.time.LocalDate
 
 abstract class BaseTestHelper {
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val composeTestRule = createEmptyComposeRule()
+
+    @Rule(order = 2)
     @JvmField
-    @Rule
     var baristaRule: BaristaRule<MainActivity> = BaristaRule.create(MainActivity::class.java)
 
     @Rule

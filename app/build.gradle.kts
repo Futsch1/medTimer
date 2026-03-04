@@ -183,7 +183,9 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing")) {
+        exclude(group = "org.robolectric")
+    }
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)

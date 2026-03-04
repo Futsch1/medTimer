@@ -2,9 +2,12 @@ package com.futsch1.medtimer.statistics.ui.table
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import com.futsch1.medtimer.core.designsystem.MedTimerTheme
+import com.futsch1.medtimer.core.ui.CoreUiTestTags
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.statistics.model.ReminderTableRowData
 import kotlinx.collections.immutable.ImmutableList
@@ -17,6 +20,11 @@ class ReminderTableInstrumentedTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    private fun onTableDataText(text: String) =
+        composeTestRule.onNode(
+            hasText(text) and hasAnyAncestor(hasTestTag(CoreUiTestTags.TABLE_DATA_ROW))
+        )
 
     @Test
     fun tableRendersWithData() {
@@ -33,8 +41,8 @@ class ReminderTableInstrumentedTest {
                 )
             }
         }
-        composeTestRule.onNodeWithText("Aspirin").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Ibuprofen").assertIsDisplayed()
+        onTableDataText("Aspirin").assertIsDisplayed()
+        onTableDataText("Ibuprofen").assertIsDisplayed()
     }
 
     @Test
@@ -55,11 +63,11 @@ class ReminderTableInstrumentedTest {
                 )
             }
         }
-        composeTestRule.onNodeWithText("Aspirin").assertIsDisplayed()
+        onTableDataText("Aspirin").assertIsDisplayed()
 
         mutableRows.value = persistentListOf(
             ReminderTableRowData(2, null, ReminderEvent.ReminderStatus.SKIPPED, "Vitamin D", "1000IU", LocalDateTime.of(2024, 1, 15, 12, 0)),
         )
-        composeTestRule.onNodeWithText("Vitamin D").assertIsDisplayed()
+        onTableDataText("Vitamin D").assertIsDisplayed()
     }
 }

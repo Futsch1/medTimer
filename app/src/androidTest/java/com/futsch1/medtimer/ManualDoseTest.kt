@@ -10,10 +10,12 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
 
+@HiltAndroidTest
 class ManualDoseTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
