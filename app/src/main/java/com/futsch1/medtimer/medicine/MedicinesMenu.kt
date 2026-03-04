@@ -21,7 +21,7 @@ class MedicinesMenu(
     lateinit var medicines: List<FullMedicine>
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.medicines, menu)
+        menuInflater.inflate(R.menu.medicines_settings, menu)
         menu.setGroupDividerEnabled(true)
 
         setupMenu(menu, R.id.activate_all) {

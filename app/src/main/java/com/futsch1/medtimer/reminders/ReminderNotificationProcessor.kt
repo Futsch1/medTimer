@@ -38,7 +38,8 @@ class ReminderNotificationProcessor(
             }
             r = true
 
-            ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
+            val processedEvents = reminderNotification.reminderNotificationParts.map { it.reminderEvent }
+            ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder(processedEvents)
         }
 
         return r

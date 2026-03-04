@@ -12,9 +12,13 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AdvancedReminderSettingsMenuProvider(
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
 
     lateinit var reminder: Reminder
@@ -24,6 +28,17 @@ class AdvancedReminderSettingsMenuProvider(
         menuInflater.inflate(R.menu.advanced_reminder_settings, menu)
         menu.setGroupDividerEnabled(true)
         enableOptionalIcons(menu)
+        
+        menu.findItem(R.id.duplicate).setOnMenuItemClickListener { _: MenuItem? ->
+            if (this::reminder.isInitialized) {
+                fragment.lifecycleScope.launch(ioDispatcher) {
+                    reminder.reminderId = 0
+                    medicineRepository.insertReminder(reminder)
+                }
+                NavHostFragment.findNavController(fragment).navigateUp()
+            }
+            true
+        }
 
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
             if (this::reminder.isInitialized) {

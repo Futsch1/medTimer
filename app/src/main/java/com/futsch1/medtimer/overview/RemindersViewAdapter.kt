@@ -75,10 +75,8 @@ class RemindersViewAdapter(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, v
     }
 
     fun getSelectedItems(): List<OverviewEvent> {
-        if (selectedItems.size > itemCount) {
-            selectAll()
-        }
-        return selectedItems.map { position -> getItem(position) }
+        return selectedItems.filter { position -> position < itemCount }
+            .map { position -> getItem(position) }
     }
 
     override fun onItemClick(position: Int): Boolean {

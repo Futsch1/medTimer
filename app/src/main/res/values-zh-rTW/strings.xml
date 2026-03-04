@@ -254,7 +254,7 @@
     <string name="clear_dates">清除日期</string>
     <string name="acknowledged">已確認</string>
     <string name="refill_amount">補充 (%s)</string>
-    <string name="expiration_date_notification">藥品 %1$s 的有效期為 %2$s。\n請考慮更換藥品。</string>
+    <string name="expiration_date_notification">藥品 %1$s 將於 %2$s 到期。\n請考慮更換藥品。</string>
     <string name="select_all">全選</string>
     <string name="by_name">按名稱</string>
     <string name="by_creation_date_ascending">按創建日期升序</string>
@@ -262,4 +262,6 @@
     <string name="create_out_of_stock_reminder">建立庫存不足提醒</string>
     <string name="successfully_created_reminder">已成功建立新提醒</string>
     <string name="create_expiration_date_reminder">建立到期日期提醒</string>
+    <string name="duplicate">複製</string>
+    <string name="duplicate_including_reminders">複製（包括提醒）</string>
 </resources>

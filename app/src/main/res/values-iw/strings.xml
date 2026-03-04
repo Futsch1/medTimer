@@ -57,7 +57,7 @@
     <string name="export_failed">הייצוא נכשל</string>
     <string name="restore_successful">השחזור הושלם בהצלחה</string>
     <string name="restore_start">זה יחליף את כל הגדרות התרופות ו/או תזכורות\n\nלהמשיך?</string>
-    <string name="log_additional_dose">רשום מינון נוספת</string>
+    <string name="log_additional_dose">רשום מינון נוסף</string>
     <string name="dismiss_notification_action">פעולה בזמן סגירת התראה</string>
     <string name="skip_reminder">דלגו על מינון</string>
     <string name="snooze">דחו</string>
@@ -194,7 +194,7 @@
     <string name="intro_notification_description">כאשר תזכורת מגיעה, תופיע התראה שמאפשרת לסמן מנה כנלקחה (בלחיצה על כפתור \"נלקח\"), שדולגה (על ידי סגירת ההתראה) או לקבל תזכורת שוב לאחר זמן מסוים (\"דחה\").</string>
     <string name="intro_overview_description">במסך התצוגה הכללית, תוכלו לראות תזכורות קרובות ואת אירועי התזכורות האחרונים. ניתן לערוך אירועי תזכורת על ידי החלקה ימינה ולמחוק אותם על ידי החלקה שמאלה.\n\nבנוסף, תוכלו לרשום ידנית מנות נוספות של אחת התרופות שהוגדרו או של תרופה מותאמת אישית.</string>
     <string name="intro_analysis_description">האפליקציה שומרת את כל אירועי התזכורות. תוכלו לנתח את המנות הקודמות שלכם במסך הניתוח ולייצא את ההיסטוריה דרך תפריט הקבאב (שלוש הנקודות). ההיסטוריה תישאר גם אם תרופות או תזכורות נמחקו או החליפו שם.</string>
-    <string name="sticky_on_lockscreen_summary">לא ניתן להסיר תזכורות ממסך הנעילה ניתן לעשות זאת רק ממגירת ההתראות\nהערה: ייתכן שחלק מהשעונים החכמים כבר לא יציגו התראות</string>
+    <string name="sticky_on_lockscreen_summary">לא ניתן להסיר תזכורות ממסך הנעילה ניתן לעשות זאת רק ממגירת ההתראות\nהערה: ייתכן שחלק מהשעונים החכמים כבר לא יציגו התראות במידה ופעילה</string>
     <string name="big_notifications">כפתורי התראה גדולים</string>
     <string name="please_wait">אנא המתינו…</string>
     <string name="interval_time">מחזור %s</string>
@@ -262,7 +262,7 @@
     <string name="clear_dates">נקה תאריכים</string>
     <string name="acknowledged">אשר</string>
     <string name="refill_amount">מילוי (%s)</string>
-    <string name="expiration_date_notification">לתרופה %1$s יש תאריך תפוגה של %2$s.\nשקול להחליף את התרופה.</string>
+    <string name="expiration_date_notification">התרופה %1$s תפוג ב%2$s.\nשיקלו להחליף את התרופה.</string>
     <string name="select_all">בחר הכל</string>
     <string name="by_name">לפי שם</string>
     <string name="by_creation_date_ascending">עולה לפי תאריך יצירה</string>
@@ -270,4 +270,6 @@
     <string name="create_out_of_stock_reminder">יצירת תזכורת על חוסר מלאי</string>
     <string name="successfully_created_reminder">תזכורת חדשה נוצרה בהצלחה</string>
     <string name="create_expiration_date_reminder">יצירת תזכורת תאריך תפוגה</string>
+    <string name="duplicate">שכפול</string>
+    <string name="duplicate_including_reminders">שכפול כולל תזכורות</string>
 </resources>

@@ -43,7 +43,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     private fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
-        for (tag in fullMedicine.tags) {
+        for (tag in fullMedicine.tags ?: emptyList<Tag>()) {
             val tagId = medicineRepository.insertTag(tag).toInt()
             medicineRepository.insertMedicineToTag(medicineId, tagId)
         }
