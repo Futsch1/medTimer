@@ -35,12 +35,12 @@ class ReminderSchedulerWeekendModeTest {
 
         FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        medicineWithReminders1.reminders.add(reminder1);
+        medicineWithReminders1.getReminders().add(reminder1);
 
         List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders1);
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1);
+        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.getMedicine(), reminder1);
     }
 
     @Test
@@ -57,17 +57,17 @@ class ReminderSchedulerWeekendModeTest {
 
         FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
         Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        medicineWithReminders1.reminders.add(reminder1);
+        medicineWithReminders1.getReminders().add(reminder1);
         List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders1);
 
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1);
+        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.getMedicine(), reminder1);
 
         Mockito.when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
 
         scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(3, 10 * 60), medicineWithReminders1.medicine, reminder1);
+        assertReminded(scheduledReminders, on(3, 10 * 60), medicineWithReminders1.getMedicine(), reminder1);
     }
 }
 

@@ -30,36 +30,36 @@ class JSONMedicineBackupUnitTest {
         List<FullMedicine> medicinesWithReminders = new ArrayList<>();
         FullMedicine medicineWithReminders = new FullMedicine();
         Reminder reminder = new Reminder(0);
-        reminder.reminderId = 14;
-        reminder.timeInMinutes = 60;
-        reminder.amount = "1";
-        reminder.consecutiveDays = 1;
-        reminder.pauseDays = 0;
-        reminder.cycleStartDay = 12;
-        reminder.instructions = "Take with water";
-        reminder.periodStart = 13;
-        reminder.days.set(0, false);
-        reminder.activeDaysOfMonth = 7;
-        reminder.linkedReminderId = 15;
-        reminder.automaticallyTaken = true;
-        reminder.intervalStartTimeOfDay = 1;
-        reminder.intervalEndTimeOfDay = 2;
-        reminder.outOfStockThreshold = 1.0;
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE;
-        reminder.expirationReminderType = Reminder.ExpirationReminderType.DAILY;
-        medicineWithReminders.reminders = Collections.singletonList(reminder);
-        medicineWithReminders.medicine = new Medicine("Medicine A");
-        medicineWithReminders.medicine.useColor = true;
-        medicineWithReminders.medicine.color = Color.RED;
-        medicineWithReminders.medicine.iconId = 5;
-        medicineWithReminders.medicine.unit = "pills";
-        medicineWithReminders.medicine.sortOrder = 4.5;
-        medicineWithReminders.medicine.notes = "Generic ingredient: Dihydrogen monoxide";
-        medicineWithReminders.medicine.showNotificationAsAlarm = true;
-        medicineWithReminders.medicine.productionDate = 1;
-        medicineWithReminders.medicine.expirationDate = 2;
-        medicineWithReminders.tags = new ArrayList<>();
-        medicineWithReminders.tags.add(new Tag("Tag A"));
+        reminder.setReminderId(14);
+        reminder.setTimeInMinutes(60);
+        reminder.setAmount("1");
+        reminder.setConsecutiveDays(1);
+        reminder.setPauseDays(0);
+        reminder.setCycleStartDay(12);
+        reminder.setInstructions("Take with water");
+        reminder.setPeriodStart(13);
+        reminder.getDays().set(0, false);
+        reminder.setActiveDaysOfMonth(7);
+        reminder.setLinkedReminderId(15);
+        reminder.setAutomaticallyTaken(true);
+        reminder.setIntervalStartTimeOfDay(1);
+        reminder.setIntervalEndTimeOfDay(2);
+        reminder.setOutOfStockThreshold(1.0);
+        reminder.setOutOfStockReminderType(Reminder.OutOfStockReminderType.ONCE);
+        reminder.setExpirationReminderType(Reminder.ExpirationReminderType.DAILY);
+        medicineWithReminders.setReminders(Collections.singletonList(reminder));
+        medicineWithReminders.setMedicine(new Medicine("Medicine A"));
+        medicineWithReminders.getMedicine().setUseColor(true);
+        medicineWithReminders.getMedicine().setColor(Color.RED);
+        medicineWithReminders.getMedicine().setIconId(5);
+        medicineWithReminders.getMedicine().setUnit("pills");
+        medicineWithReminders.getMedicine().setSortOrder(4.5);
+        medicineWithReminders.getMedicine().setNotes("Generic ingredient: Dihydrogen monoxide");
+        medicineWithReminders.getMedicine().setShowNotificationAsAlarm(true);
+        medicineWithReminders.getMedicine().setProductionDate(1);
+        medicineWithReminders.getMedicine().setExpirationDate(2);
+        medicineWithReminders.setTags(new ArrayList<>());
+        medicineWithReminders.getTags().add(new Tag("Tag A"));
         medicinesWithReminders.add(medicineWithReminders);
 
         String result = jsonMedicineBackup.createBackupAsString(5, medicinesWithReminders);
@@ -145,20 +145,20 @@ class JSONMedicineBackupUnitTest {
     }
 
     private void compareFullMedicine(FullMedicine medicineWithReminders, FullMedicine medicineWithReminders1) {
-        assertEquals(medicineWithReminders.reminders.size(), medicineWithReminders1.reminders.size());
-        for (int i = 0; i < medicineWithReminders.reminders.size(); i++) {
-            compareReminder(medicineWithReminders.reminders.get(i), medicineWithReminders1.reminders.get(i));
+        assertEquals(medicineWithReminders.getReminders().size(), medicineWithReminders1.getReminders().size());
+        for (int i = 0; i < medicineWithReminders.getReminders().size(); i++) {
+            compareReminder(medicineWithReminders.getReminders().get(i), medicineWithReminders1.getReminders().get(i));
         }
-        assertEquals(medicineWithReminders.medicine.name, medicineWithReminders1.medicine.name);
-        assertEquals(medicineWithReminders.medicine.useColor, medicineWithReminders1.medicine.useColor);
-        assertEquals(medicineWithReminders.medicine.color, medicineWithReminders1.medicine.color);
+        assertEquals(medicineWithReminders.getMedicine().getName(), medicineWithReminders1.getMedicine().getName());
+        assertEquals(medicineWithReminders.getMedicine().getUseColor(), medicineWithReminders1.getMedicine().getUseColor());
+        assertEquals(medicineWithReminders.getMedicine().getColor(), medicineWithReminders1.getMedicine().getColor());
     }
 
     private void compareReminder(Reminder reminder, Reminder reminder1) {
-        assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes);
-        assertEquals(reminder.consecutiveDays, reminder1.consecutiveDays);
-        assertEquals(reminder.instructions, reminder1.instructions);
-        assertEquals(reminder.amount, reminder1.amount);
+        assertEquals(reminder.getTimeInMinutes(), reminder1.getTimeInMinutes());
+        assertEquals(reminder.getConsecutiveDays(), reminder1.getConsecutiveDays());
+        assertEquals(reminder.getInstructions(), reminder1.getInstructions());
+        assertEquals(reminder.getAmount(), reminder1.getAmount());
     }
 
     // iterates over the list of FullMedicine and adds each one to the medicines array as a JSONObject
@@ -168,47 +168,47 @@ class JSONMedicineBackupUnitTest {
         List<FullMedicine> medicinesWithReminders = new ArrayList<>();
         FullMedicine medicineWithReminders1 = new FullMedicine();
         Reminder reminder1 = new Reminder(0);
-        reminder1.reminderId = 1;
-        reminder1.timeInMinutes = 60;
-        reminder1.amount = "1";
-        reminder1.consecutiveDays = 1;
-        reminder1.pauseDays = 0;
-        reminder1.cycleStartDay = 1234;
-        reminder1.instructions = "Take with water";
-        reminder1.activeDaysOfMonth = 0xFFFF_FFFF;
-        medicineWithReminders1.reminders = Collections.singletonList(reminder1);
-        medicineWithReminders1.medicine = new Medicine("Medicine A");
-        medicineWithReminders1.medicine.useColor = true;
-        medicineWithReminders1.medicine.color = Color.RED;
-        medicineWithReminders1.medicine.notificationImportance = 4;
-        medicineWithReminders1.medicine.sortOrder = 3.44;
+        reminder1.setReminderId(1);
+        reminder1.setTimeInMinutes(60);
+        reminder1.setAmount("1");
+        reminder1.setConsecutiveDays(1);
+        reminder1.setPauseDays(0);
+        reminder1.setCycleStartDay(1234);
+        reminder1.setInstructions("Take with water");
+        reminder1.setActiveDaysOfMonth(0xFFFF_FFFF);
+        medicineWithReminders1.setReminders(Collections.singletonList(reminder1));
+        medicineWithReminders1.setMedicine(new Medicine("Medicine A"));
+        medicineWithReminders1.getMedicine().setUseColor(true);
+        medicineWithReminders1.getMedicine().setColor(Color.RED);
+        medicineWithReminders1.getMedicine().setNotificationImportance(4);
+        medicineWithReminders1.getMedicine().setSortOrder(3.44);
         medicinesWithReminders.add(medicineWithReminders1);
 
         FullMedicine medicineWithReminders2 = new FullMedicine();
         Reminder reminder2 = new Reminder(0);
-        reminder2.reminderId = 2;
-        reminder2.timeInMinutes = 120;
-        reminder2.amount = "2";
-        reminder2.consecutiveDays = 2;
-        reminder2.pauseDays = 1;
-        reminder2.cycleStartDay = 4567;
-        reminder2.instructions = "Take after meal";
-        reminder2.days.set(6, false);
-        reminder2.activeDaysOfMonth = 255;
-        reminder2.linkedReminderId = 234;
-        reminder2.intervalStart = 256;
-        reminder2.intervalStartsFromProcessed = true;
-        reminder2.variableAmount = true;
-        medicineWithReminders2.reminders = new ArrayList<>() {{
+        reminder2.setReminderId(2);
+        reminder2.setTimeInMinutes(120);
+        reminder2.setAmount("2");
+        reminder2.setConsecutiveDays(2);
+        reminder2.setPauseDays(1);
+        reminder2.setCycleStartDay(4567);
+        reminder2.setInstructions("Take after meal");
+        reminder2.getDays().set(6, false);
+        reminder2.setActiveDaysOfMonth(255);
+        reminder2.setLinkedReminderId(234);
+        reminder2.setIntervalStart(256);
+        reminder2.setIntervalStartsFromProcessed(true);
+        reminder2.setVariableAmount(true);
+        medicineWithReminders2.setReminders(new ArrayList<>() {{
             add(reminder1);
             add(reminder2);
-        }};
-        medicineWithReminders2.medicine = new Medicine("Medicine B");
-        medicineWithReminders2.medicine.useColor = false;
-        medicineWithReminders2.medicine.color = Color.BLUE;
-        medicineWithReminders2.medicine.notificationImportance = 5;
-        medicineWithReminders2.medicine.iconId = 7;
-        medicineWithReminders2.medicine.amount = 17.0;
+        }});
+        medicineWithReminders2.setMedicine(new Medicine("Medicine B"));
+        medicineWithReminders2.getMedicine().setUseColor(false);
+        medicineWithReminders2.getMedicine().setColor(Color.BLUE);
+        medicineWithReminders2.getMedicine().setNotificationImportance(5);
+        medicineWithReminders2.getMedicine().setIconId(7);
+        medicineWithReminders2.getMedicine().setAmount(17.0);
         medicinesWithReminders.add(medicineWithReminders2);
 
         String result = jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders);
