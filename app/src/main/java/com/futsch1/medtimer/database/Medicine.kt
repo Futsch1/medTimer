@@ -49,7 +49,7 @@ class Medicine @JvmOverloads constructor(name: String, id: Int = 0) {
     @JvmField
     @ColumnInfo(defaultValue = "[]")
     @Expose
-    var refillSizes: ArrayList<Double> = arrayListOf()
+    var refillSizes: MutableList<Double> = mutableListOf()
 
     @JvmField
     @ColumnInfo(defaultValue = "")

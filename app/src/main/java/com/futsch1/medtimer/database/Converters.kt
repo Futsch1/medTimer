@@ -14,28 +14,28 @@ object Converters {
     }
 
     @TypeConverter
-    fun fromList(list: MutableList<Boolean?>?): String? {
+    fun fromList(list: List<Boolean>): String? {
         val gson = Gson()
         return gson.toJson(list)
     }
 
     @JvmStatic
     @TypeConverter
-    fun doubleListFromString(value: String): ArrayList<Double> {
-        val listType = object : TypeToken<ArrayList<Double>>() {
+    fun doubleListFromString(value: String): List<Double> {
+        val listType = object : TypeToken<List<Double>>() {
         }.type
         return Gson().fromJson(value, listType)
     }
 
     @TypeConverter
-    fun fromDoubleList(list: ArrayList<Double?>?): String? {
+    fun fromDoubleList(list: List<Double>): String {
         val gson = Gson()
         return gson.toJson(list)
     }
 
     @JvmStatic
     @TypeConverter
-    fun fromStringString(value: String?): List<String> {
+    fun fromStringString(value: String): List<String> {
         val listType = object : TypeToken<List<String>>() {
         }.type
         return Gson().fromJson(value, listType)
