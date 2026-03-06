@@ -4,8 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-object Converters {
-    @JvmStatic
+class Converters {
     @TypeConverter
     fun fromString(value: String): MutableList<Boolean> {
         val listType = object : TypeToken<MutableList<Boolean>>() {
@@ -19,7 +18,6 @@ object Converters {
         return gson.toJson(list)
     }
 
-    @JvmStatic
     @TypeConverter
     fun doubleListFromString(value: String): MutableList<Double> {
         val listType = object : TypeToken<MutableList<Double>>() {
@@ -33,7 +31,6 @@ object Converters {
         return gson.toJson(list)
     }
 
-    @JvmStatic
     @TypeConverter
     fun fromStringString(value: String): List<String> {
         val listType = object : TypeToken<List<String>>() {

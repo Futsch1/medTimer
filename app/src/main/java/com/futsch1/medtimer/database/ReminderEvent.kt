@@ -16,81 +16,63 @@ val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
 
 @Entity(indices = [Index("reminderId"), Index("remindedTimestamp")])
 class ReminderEvent {
-    @JvmField
     @PrimaryKey(autoGenerate = true)
     var reminderEventId: Int = 0
 
-    @JvmField
     @Expose
     var medicineName: String = ""
 
-    @JvmField
     @Expose
     var amount: String = ""
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var color: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var useColor: Boolean = false
 
-    @JvmField
     @Expose
     var status: ReminderStatus = ReminderStatus.RAISED
 
-    @JvmField
     @Expose
     var remindedTimestamp: Long = 0
 
-    @JvmField
     @Expose
     var processedTimestamp: Long = 0
 
-    @JvmField
     @Expose
     var reminderId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     var notificationId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var iconId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     var remainingRepeats: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     var stockHandled: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     var askForAmount: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "[]")
     @Expose
     var tags: List<String> = listOf()
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var lastIntervalReminderTimeInMinutes: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
     var notes: String = ""
 
-    @JvmField
     @ColumnInfo(defaultValue = "TIME_BASED")
     @Expose
     var reminderType: ReminderType = ReminderType.TIME_BASED

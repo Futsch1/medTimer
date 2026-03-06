@@ -11,82 +11,71 @@ import java.time.LocalDate
 import java.util.Objects
 
 @Entity
-class Medicine @JvmOverloads constructor(name: String, id: Int = 0) {
-    @JvmField
+class Medicine() {
     @ColumnInfo(name = "medicineName")
     @Expose
     var name: String = ""
 
-    @JvmField
     @PrimaryKey(autoGenerate = true)
     var medicineId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0xFFFF0000")
     @Expose
     var color: Int = Color.DKGRAY
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var useColor: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "3")
     @Expose
     var notificationImportance: Int = ReminderNotificationChannelManager.Importance.DEFAULT.value
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var iconId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var amount: Double = 0.0
 
-    @JvmField
     @ColumnInfo(defaultValue = "[]")
     @Expose
     var refillSizes: MutableList<Double> = mutableListOf()
 
-    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
     var unit: String = ""
 
-    @JvmField
     @ColumnInfo(defaultValue = "1.0")
     @Expose
     var sortOrder: Double = 1.0
 
-    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
     var notes: String? = ""
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var showNotificationAsAlarm: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var productionDate: Long = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var expirationDate: Long = 0
 
     @Ignore
-    constructor() : this("")
-
-    init {
+    constructor(name: String, id: Int = 0) : this() {
         this.name = name
         this.medicineId = id
+    }
+
+    @Ignore
+    constructor(name: String) : this() {
+        this.name = name
     }
 
     fun hasExpired(): Boolean {

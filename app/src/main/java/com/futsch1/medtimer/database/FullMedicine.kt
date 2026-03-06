@@ -6,17 +6,14 @@ import androidx.room.Relation
 import com.google.gson.annotations.Expose
 
 class FullMedicine {
-    @JvmField
     @Embedded
     @Expose
     var medicine: Medicine = Medicine()
 
-    @JvmField
     @Relation(parentColumn = "medicineId", entityColumn = "tagId", associateBy = Junction(MedicineToTag::class))
     @Expose
     var tags: List<Tag> = listOf()
 
-    @JvmField
     @Relation(parentColumn = "medicineId", entityColumn = "medicineRelId")
     @Expose
     var reminders: MutableList<Reminder> = mutableListOf()
@@ -35,13 +32,12 @@ class FullMedicine {
     }
 
     val isOutOfStock: Boolean
-        get() = this.isStockManagementActive && reminders.stream()
-            .anyMatch { reminder: Reminder -> reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
+        get() = this.isStockManagementActive && reminders.any { reminder: Reminder -> reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
 
     val isStockManagementActive: Boolean
         get() = (medicine.amount != 0.0 || hasStockReminder())
 
     private fun hasStockReminder(): Boolean {
-        return reminders.stream().anyMatch { reminder: Reminder? -> reminder!!.reminderType == Reminder.ReminderType.OUT_OF_STOCK }
+        return reminders.any { reminder: Reminder? -> reminder!!.reminderType == Reminder.ReminderType.OUT_OF_STOCK }
     }
 }
