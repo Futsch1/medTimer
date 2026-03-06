@@ -1,31 +1,25 @@
-package com.futsch1.medtimer.helpers;
+package com.futsch1.medtimer.helpers
 
-import android.app.AlertDialog;
-import android.content.Context;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import com.futsch1.medtimer.R
 
-import com.futsch1.medtimer.R;
-
-public class DeleteHelper {
-    private final Context context;
-
-    public DeleteHelper(Context context) {
-        this.context = context;
-    }
-
-    public void deleteItem(int messageStringId, ButtonCallback yesClicked, ButtonCallback noClicked) {
+class DeleteHelper(private val context: Context?) {
+    fun deleteItem(messageStringId: Int, yesClicked: ButtonCallback, noClicked: ButtonCallback) {
         if (context == null) {
-            return;
+            return
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.confirm);
-        builder.setMessage(messageStringId);
-        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> yesClicked.onButtonClick());
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> noClicked.onButtonClick());
-        builder.setOnCancelListener(v -> noClicked.onButtonClick());
-        builder.show();
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(R.string.confirm)
+        builder.setMessage(messageStringId)
+        builder.setPositiveButton(R.string.yes) { _: DialogInterface?, _: Int -> yesClicked.onButtonClick() }
+        builder.setNegativeButton(R.string.cancel) { _: DialogInterface?, _: Int -> noClicked.onButtonClick() }
+        builder.setOnCancelListener { _: DialogInterface? -> noClicked.onButtonClick() }
+        builder.show()
     }
 
-    public interface ButtonCallback {
-        void onButtonClick();
+    interface ButtonCallback {
+        fun onButtonClick()
     }
 }
