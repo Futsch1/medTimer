@@ -24,8 +24,8 @@ class ReminderSchedulerActiveDayOfMonthUnitTest {
 
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
-        reminder.activeDaysOfMonth = 0x7;
-        medicineWithReminders.reminders.add(reminder);
+        reminder.setActiveDaysOfMonth(0x7);
+        medicineWithReminders.getReminders().add(reminder);
 
         List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);

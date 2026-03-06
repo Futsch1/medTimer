@@ -23,9 +23,9 @@ class ReminderSchedulerDaysUnitTest {
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
         // 1.1.1970 was a Thursday, so skip the Friday and Saturday
-        reminder.days.set(4, false);
-        reminder.days.set(5, false);
-        medicineWithReminders.reminders.add(reminder);
+        reminder.getDays().set(4, false);
+        reminder.getDays().set(5, false);
+        medicineWithReminders.getReminders().add(reminder);
 
         List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);
@@ -35,7 +35,7 @@ class ReminderSchedulerDaysUnitTest {
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         // Expect it to be on the 4.1.1970
         assertEquals(on(4, 480), scheduledReminders.get(0).timestamp());
-        assertEquals(medicineWithReminders.medicine, scheduledReminders.get(0).medicine().medicine);
+        assertEquals(medicineWithReminders.getMedicine(), scheduledReminders.get(0).medicine().getMedicine());
         assertEquals(reminder, scheduledReminders.get(0).reminder());
     }
 
@@ -46,13 +46,13 @@ class ReminderSchedulerDaysUnitTest {
         FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
         Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 6);
         // Allow only on Mondays and only every 6 days. The start of the cycle will be on the 1.1.1970.
-        reminder.days.set(1, false);
-        reminder.days.set(2, false);
-        reminder.days.set(3, false);
-        reminder.days.set(4, false);
-        reminder.days.set(5, false);
-        reminder.days.set(6, false);
-        medicineWithReminders.reminders.add(reminder);
+        reminder.getDays().set(1, false);
+        reminder.getDays().set(2, false);
+        reminder.getDays().set(3, false);
+        reminder.getDays().set(4, false);
+        reminder.getDays().set(5, false);
+        reminder.getDays().set(6, false);
+        medicineWithReminders.getReminders().add(reminder);
 
         List<FullMedicine> medicineList = new ArrayList<>();
         medicineList.add(medicineWithReminders);
@@ -62,7 +62,7 @@ class ReminderSchedulerDaysUnitTest {
         List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
         // Expect it to be on the 26.1.1970
         assertEquals(on(19, 480), scheduledReminders.get(0).timestamp());
-        assertEquals(medicineWithReminders.medicine, scheduledReminders.get(0).medicine().medicine);
+        assertEquals(medicineWithReminders.getMedicine(), scheduledReminders.get(0).medicine().getMedicine());
         assertEquals(reminder, scheduledReminders.get(0).reminder());
     }
 }
