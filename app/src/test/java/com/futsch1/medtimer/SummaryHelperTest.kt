@@ -178,6 +178,8 @@ class SummaryHelperTest {
     @Test
     fun testRemindersSummaryLinked() {
         val context = mock(Context::class.java)
+        val application = mock(Application::class.java)
+        Mockito.`when`(context.applicationContext).thenReturn(application)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(
