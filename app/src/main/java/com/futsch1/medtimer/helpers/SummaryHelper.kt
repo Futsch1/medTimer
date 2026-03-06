@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.helpers
 
-import android.app.Application
 import android.content.Context
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
@@ -82,7 +81,7 @@ fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
 }
 
 fun linkedReminderString(reminder: Reminder, context: Context): String {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application)
+    val medicineRepository = MedicineRepository(context)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
@@ -185,7 +184,7 @@ fun getRemindersSummary(
 }
 
 fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application)
+    val medicineRepository = MedicineRepository(context)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {

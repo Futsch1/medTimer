@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.database
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import kotlinx.coroutines.flow.Flow
@@ -9,9 +9,9 @@ import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 
-open class MedicineRepository(val application: Application) {
+open class MedicineRepository(val context: Context) {
     private val medicineDao: MedicineDao
-    private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(application)
+    private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(context)
 
     init {
         medicineDao = database.medicineDao()

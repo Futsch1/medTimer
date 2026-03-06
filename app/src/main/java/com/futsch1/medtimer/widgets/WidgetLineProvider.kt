@@ -78,7 +78,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
     lateinit var reminderEvents: List<ReminderEvent>
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application)
+        val medicineRepository = MedicineRepository(context)
         reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
     val sharedPreferences: SharedPreferences? =
