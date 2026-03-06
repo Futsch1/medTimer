@@ -91,7 +91,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     private fun setupEditEvent() {
         this.contentContainer.setOnClickListener {
             if (!clickDelegate.onItemClick(layoutPosition)) {
-                if (event is OverviewReminderEvent && event.state != OverviewState.RAISED) {
+                if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
                     EditEventSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
                 } else {
                     ShowMedicineSheetDialog(fragmentActivity, event.reminderId)
