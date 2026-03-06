@@ -15,6 +15,7 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration16To17
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
+import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration22To23
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.LinkedBlockingQueue
@@ -44,9 +45,9 @@ import kotlin.concurrent.Volatile
         from = 20,
         to = 21,
         spec = AutoMigration20To21::class
-    ), AutoMigration(from = 21, to = 22, spec = AutoMigration21To22::class), AutoMigration(from = 22, to = 23)]
+    ), AutoMigration(from = 21, to = 22, spec = AutoMigration21To22::class), AutoMigration(from = 22, to = 23, spec = AutoMigration22To23::class)]
 )
-@TypeConverters
+@TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
     val version: Int
         get() = openHelper.readableDatabase.version
@@ -106,6 +107,15 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminderThreshold")
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
     internal class AutoMigration21To22 : AutoMigrationSpec
+
+    internal class AutoMigration22To23 : AutoMigrationSpec {
+        override fun onPostMigrate(db: SupportSQLiteDatabase) {
+            db.execSQL("UPDATE Medicine SET medicineName = '' WHERE medicineName IS NULL")
+            db.execSQL("UPDATE Medicine SET refillSizes = '[]' WHERE refillSizes IS NULL")
+            db.execSQL("UPDATE Medicine SET unit = '' WHERE unit IS NULL")
+        }
+    }
+
     companion object {
         private const val NUMBER_OF_THREADS = 1
         val databaseWriteExecutor: ExecutorService = IdlingThreadPoolExecutor(
