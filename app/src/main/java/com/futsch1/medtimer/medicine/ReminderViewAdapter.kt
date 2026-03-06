@@ -9,7 +9,7 @@ import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.medicine.ReminderViewHolder.Companion.create
 
 
-class ReminderViewAdapter(private val fragmentActivity: FragmentActivity) : IdlingListAdapter<Reminder, ReminderViewHolder?>(ReminderDiff()) {
+class ReminderViewAdapter(private val fragmentActivity: FragmentActivity) : IdlingListAdapter<Reminder, ReminderViewHolder>(ReminderDiff()) {
     private var fullMedicine: FullMedicine? = null
 
     init {
@@ -36,7 +36,7 @@ class ReminderViewAdapter(private val fragmentActivity: FragmentActivity) : Idli
         return getItem(position).reminderId.toLong()
     }
 
-    class ReminderDiff : DiffUtil.ItemCallback<Reminder?>() {
+    class ReminderDiff : DiffUtil.ItemCallback<Reminder>() {
         override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
             return oldItem.reminderId == newItem.reminderId
         }
