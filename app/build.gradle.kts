@@ -6,6 +6,7 @@ plugins {
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.robolectric.junit5)
+    alias(libs.plugins.ksp)
 }
 
 room {
@@ -100,6 +101,11 @@ android {
         disable.add("IconLocation")
         disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
     }
+    sourceSets {
+        getByName("main") {
+            assets.directories.add("$projectDir/schemas")
+        }
+    }
 }
 
 dependencies {
@@ -135,6 +141,7 @@ dependencies {
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
     testImplementation(libs.jazzer.junit)
+    testImplementation(libs.androidx.room.testing)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
     androidTestImplementation(libs.androidx.test.junit)
@@ -147,7 +154,8 @@ dependencies {
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
 
-    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    kspTest(libs.androidx.room.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
