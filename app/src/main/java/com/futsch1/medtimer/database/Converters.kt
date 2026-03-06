@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class Converters {
+    // TODO: Use Kotlin native JSON conversion
+
     @TypeConverter
     fun fromString(value: String): MutableList<Boolean> {
         val listType = object : TypeToken<MutableList<Boolean>>() {
