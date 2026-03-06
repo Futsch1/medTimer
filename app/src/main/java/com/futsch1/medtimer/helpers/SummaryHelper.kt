@@ -82,7 +82,7 @@ fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
 }
 
 fun linkedReminderString(reminder: Reminder, context: Context): String {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+    val medicineRepository = MedicineRepository(context.applicationContext as Application)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
@@ -185,7 +185,7 @@ fun getRemindersSummary(
 }
 
 fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+    val medicineRepository = MedicineRepository(context.applicationContext as Application)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
     if (sourceReminder != null) {
