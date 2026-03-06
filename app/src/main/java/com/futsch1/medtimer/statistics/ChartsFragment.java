@@ -45,7 +45,7 @@ public class ChartsFragment extends Fragment {
         medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart);
         takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
-        medicineRepository = new MedicineRepository(requireActivity().getApplication());
+        medicineRepository = new MedicineRepository(requireActivity());
 
         setupTakenSkippedCharts();
         Handler handler = new Handler(backgroundThread.getLooper());

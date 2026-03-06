@@ -10,7 +10,7 @@ import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import kotlinx.coroutines.CoroutineScope
 
 fun createActions(event: OverviewEvent, fragmentActivity: FragmentActivity): Actions? {
-    val medicineRepository = MedicineRepository(fragmentActivity.application)
+    val medicineRepository = MedicineRepository(fragmentActivity)
     return if (event is OverviewReminderEvent) {
         if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) {
             StockEventActions(event, medicineRepository, fragmentActivity)

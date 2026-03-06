@@ -80,7 +80,7 @@ class ReminderViewHolder private constructor(
     private fun setupLongPress() {
         itemView.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(R.string.delete).setOnMenuItemClickListener {
-                LinkedReminderHandling(reminder, MedicineRepository(fragmentActivity.application), fragmentActivity.lifecycleScope).deleteReminder(
+                LinkedReminderHandling(reminder, MedicineRepository(fragmentActivity), fragmentActivity.lifecycleScope).deleteReminder(
                     fragmentActivity,
                     { }, { }
                 )

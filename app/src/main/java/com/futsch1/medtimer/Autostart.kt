@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -37,7 +36,7 @@ class Autostart : BroadcastReceiver() {
             hasRestored = true
 
             Log.i(AUTOSTART, "Restore notifications")
-            val repo = MedicineRepository(context.applicationContext as Application)
+            val repo = MedicineRepository(context)
             val thread = HandlerThread("RestoreNotifications")
             thread.start()
             Handler(thread.getLooper()).post {

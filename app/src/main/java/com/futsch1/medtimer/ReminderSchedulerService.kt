@@ -13,7 +13,7 @@ class ReminderSchedulerService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
-        val medicineRepository = MedicineRepository(this.application)
+        val medicineRepository = MedicineRepository(this)
 
         medicineRepository.liveMedicines.observe(
             this,
