@@ -1,171 +1,148 @@
-package com.futsch1.medtimer.helpers;
+package com.futsch1.medtimer.helpers
 
-import static android.graphics.PorterDuff.Mode.CLEAR;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.view.View;
+abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int, icon: Int) : ItemTouchHelper.SimpleCallback(dragDirs, SWIPE_DIRS) {
+    private val intrinsicWidth: Int
+    private val intrinsicHeight: Int
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
-import androidx.recyclerview.widget.RecyclerView;
+    private val clearPaint: Paint = Paint()
+    private val swipeIcon: Drawable = ContextCompat.getDrawable(context, icon)!!
+    private val background = ColorDrawable()
+    var fromPosition: Int = -1
+    var toPosition: Int = 0
 
+    init {
+        clearPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
-public abstract class SwipeHelper extends SimpleCallback {
+        intrinsicHeight = swipeIcon.intrinsicHeight
+        intrinsicWidth = swipeIcon.intrinsicWidth
 
-    private static final int DRAG_DIRS = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END;
-    private static final int SWIPE_DIRS = ItemTouchHelper.LEFT;
-
-    private final int intrinsicWidth;
-    private final int intrinsicHeight;
-
-    private final Paint clearPaint;
-    private final Drawable swipeIcon;
-    private final ColorDrawable background = new ColorDrawable();
-    int fromPosition = -1;
-    int toPosition;
-
-    protected SwipeHelper(Context context, int dragDirs, int icon) {
-        super(dragDirs, SWIPE_DIRS);
-
-        clearPaint = new Paint();
-        clearPaint.setXfermode(new PorterDuffXfermode(CLEAR));
-
-        this.swipeIcon = ContextCompat.getDrawable(context, icon);
-
-        if (swipeIcon == null) {
-            throw new Resources.NotFoundException("There was an error trying to load the drawables");
-        }
-
-        intrinsicHeight = swipeIcon.getIntrinsicHeight();
-        intrinsicWidth = swipeIcon.getIntrinsicWidth();
-
-        setDefaultSwipeDirs(SWIPE_DIRS);
+        setDefaultSwipeDirs(SWIPE_DIRS)
     }
 
-    public static ItemTouchHelper createSwipeHelper(Context context, SwipedCallback swipedCallback, MovedCallback movedCallback) {
-        SwipeHelper swipeHelper = new SwipeHelper(context, movedCallback != null ? DRAG_DIRS : 0, android.R.drawable.ic_menu_delete) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                if (movedCallback != null) {
-                    this.toPosition = target.getBindingAdapterPosition();
-                    movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            @Override
-            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == SWIPE_DIRS) {
-                    swipedCallback.onSwiped(viewHolder);
-                }
-            }
-
-            @Override
-            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
-                    fromPosition = viewHolder.getBindingAdapterPosition();
-                } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && fromPosition != -1) {
-                    if (movedCallback != null) {
-                        movedCallback.onMoveCompleted(fromPosition, toPosition);
-                    }
-                    fromPosition = -1;
-                }
-                super.onSelectedChanged(viewHolder, actionState);
-            }
-        };
-        return new ItemTouchHelper(swipeHelper);
-    }
-
-    @Override
-    public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                                RecyclerView.ViewHolder viewHolder, float dX, float dY,
-                                int actionState, boolean isCurrentlyActive) {
-
-        View itemView = viewHolder.itemView;
-        int itemHeight = itemView.getBottom() - itemView.getTop();
-        boolean isCanceled = (dX == 0f) && !isCurrentlyActive;
+    override fun onChildDrawOver(
+        c: Canvas, recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float,
+        actionState: Int, isCurrentlyActive: Boolean
+    ) {
+        val itemView = viewHolder.itemView
+        val itemHeight = itemView.bottom - itemView.top
+        val isCanceled = (dX == 0f) && !isCurrentlyActive
 
         if (isCanceled) {
-            clearCanvas(c, itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, false);
-            return;
+            clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, false)
+            return
         }
 
         if (dX < 0) {
-            drawSwipeBar(c, dX, itemView, itemHeight);
+            drawSwipeBar(c, dX, itemView, itemHeight)
         }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
-    private void clearCanvas(Canvas c, float left, float top, float right, float bottom) {
-        if (c != null) {
-            c.drawRect(left, top, right, bottom, clearPaint);
+    private fun clearCanvas(c: Canvas?, left: Float, top: Float, right: Float, bottom: Float) {
+        c?.drawRect(left, top, right, bottom, clearPaint)
+    }
+
+    private fun drawSwipeBar(c: Canvas, dX: Float, itemView: View, itemHeight: Int) {
+        val swipeColor = -0x750000
+        background.color = swipeColor
+        val backgroundBounds = getBackgroundBounds(itemView, dX)
+        background.bounds = backgroundBounds
+
+        val itemBounds = getIconBounds(itemView, itemHeight)
+
+        val alpha = getAlpha(itemView)
+
+        swipeIcon.alpha = alpha
+        background.setAlpha(alpha)
+        swipeIcon.bounds = itemBounds
+        background.draw(c)
+        swipeIcon.draw(c)
+    }
+
+    private fun getBackgroundBounds(itemView: View, dX: Float): Rect {
+        val bounds = Rect()
+        bounds.top = itemView.top
+        bounds.bottom = itemView.bottom
+        bounds.left = (itemView.right + dX).toInt()
+        bounds.right = itemView.right
+
+        return bounds
+    }
+
+    private fun getIconBounds(itemView: View, itemHeight: Int): Rect {
+        val bounds = Rect()
+        bounds.top = itemView.top + (itemHeight - intrinsicHeight) / 2
+        val itemMargin = (itemHeight - intrinsicHeight) / 2
+        bounds.left = itemView.right - itemMargin - intrinsicWidth
+        bounds.right = bounds.left + intrinsicWidth
+        bounds.bottom = bounds.top + intrinsicHeight
+        return bounds
+    }
+
+    private fun getAlpha(itemView: View): Int {
+        var alpha = (((-itemView.translationX / itemView.width) * 200).toInt())
+        if (alpha > 255) alpha = 255
+        return alpha
+    }
+
+    interface SwipedCallback {
+        fun onSwiped(viewHolder: RecyclerView.ViewHolder)
+    }
+
+    interface MovedCallback {
+        fun onMoved(fromPosition: Int, toPosition: Int)
+
+        fun onMoveCompleted(fromPosition: Int, toPosition: Int)
+    }
+
+    companion object {
+        private const val DRAG_DIRS = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END
+        private const val SWIPE_DIRS = ItemTouchHelper.LEFT
+
+        fun createSwipeHelper(context: Context, swipedCallback: SwipedCallback, movedCallback: MovedCallback?): ItemTouchHelper {
+            val swipeHelper: SwipeHelper = object : SwipeHelper(context, if (movedCallback != null) DRAG_DIRS else 0, android.R.drawable.ic_menu_delete) {
+                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                    if (movedCallback != null) {
+                        this.toPosition = target.getBindingAdapterPosition()
+                        movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition)
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    if (direction == SWIPE_DIRS) {
+                        swipedCallback.onSwiped(viewHolder)
+                    }
+                }
+
+                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
+                        fromPosition = viewHolder.getBindingAdapterPosition()
+                    } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && fromPosition != -1) {
+                        movedCallback?.onMoveCompleted(fromPosition, toPosition)
+                        fromPosition = -1
+                    }
+                    super.onSelectedChanged(viewHolder, actionState)
+                }
+            }
+            return ItemTouchHelper(swipeHelper)
         }
-    }
-
-    private void drawSwipeBar(@NonNull Canvas c, float dX, View itemView, int itemHeight) {
-        int swipeColor = 0xFF8B0000;
-        background.setColor(swipeColor);
-        Rect backgroundBounds = getBackgroundBounds(itemView, dX);
-        background.setBounds(backgroundBounds);
-
-        Rect itemBounds = getIconBounds(itemView, itemHeight);
-
-        int alpha = getAlpha(itemView);
-
-        swipeIcon.setAlpha(alpha);
-        background.setAlpha(alpha);
-        swipeIcon.setBounds(itemBounds);
-        background.draw(c);
-        swipeIcon.draw(c);
-    }
-
-    private Rect getBackgroundBounds(View itemView, float dX) {
-        Rect bounds = new Rect();
-        bounds.top = itemView.getTop();
-        bounds.bottom = itemView.getBottom();
-        bounds.left = (int) (itemView.getRight() + dX);
-        bounds.right = itemView.getRight();
-
-        return bounds;
-    }
-
-    private Rect getIconBounds(View itemView, int itemHeight) {
-        Rect bounds = new Rect();
-        bounds.top = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int itemMargin = (itemHeight - intrinsicHeight) / 2;
-        bounds.left = itemView.getRight() - itemMargin - intrinsicWidth;
-        bounds.right = bounds.left + intrinsicWidth;
-        bounds.bottom = bounds.top + intrinsicHeight;
-        return bounds;
-    }
-
-    private int getAlpha(View itemView) {
-        int alpha = ((int) (
-                (-itemView.getTranslationX() / itemView.getWidth()) * 200));
-        if (alpha > 255) alpha = 255;
-        return alpha;
-    }
-
-    public interface SwipedCallback {
-        void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder);
-    }
-
-    public interface MovedCallback {
-        void onMoved(int fromPosition, int toPosition);
-
-        void onMoveCompleted(int fromPosition, int toPosition);
     }
 }
