@@ -8,7 +8,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicine>): JsonElement {
         // Fix the medicines where the instructions are null
         for (fullMedicine in list) {
-            fullMedicine.reminders.stream().filter { reminder: Reminder? -> reminder!!.instructions == null }
+            fullMedicine.reminders.filter { reminder: Reminder? -> reminder!!.instructions == null }
                 .forEach { reminder: Reminder? -> reminder!!.instructions = "" }
         }
         return super.createBackup(databaseVersion, list)

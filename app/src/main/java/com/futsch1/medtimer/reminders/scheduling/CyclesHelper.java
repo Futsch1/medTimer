@@ -14,12 +14,12 @@ public class CyclesHelper {
 
     @SuppressLint("DefaultLocale")
     public static String getCycleCountString(Reminder reminder) {
-        if (reminder.pauseDays != 0 && reminder.consecutiveDays != 1) {
-            long cycleStartDay = reminder.cycleStartDay;
+        if (reminder.getPauseDays() != 0 && reminder.getConsecutiveDays() != 1) {
+            long cycleStartDay = reminder.getCycleStartDay();
             long dayInCycle = LocalDate.now().toEpochDay() - cycleStartDay;
-            int cycleLength = reminder.consecutiveDays + reminder.pauseDays;
+            int cycleLength = reminder.getConsecutiveDays() + reminder.getPauseDays();
 
-            return String.format(" (%d/%d)", dayInCycle % cycleLength + 1, reminder.consecutiveDays);
+            return String.format(" (%d/%d)", dayInCycle % cycleLength + 1, reminder.getConsecutiveDays());
         } else {
             return "";
         }

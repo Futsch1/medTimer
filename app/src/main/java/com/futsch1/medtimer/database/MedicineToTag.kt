@@ -4,5 +4,5 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 
 @Entity(primaryKeys = ["medicineId", "tagId"])
-class MedicineToTag(@JvmField var medicineId: Int, @JvmField @field:ColumnInfo(index = true) var tagId: Int)
+class MedicineToTag(var medicineId: Int, @field:ColumnInfo(index = true) var tagId: Int)
 

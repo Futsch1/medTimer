@@ -57,7 +57,6 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
 
     abstract fun applyBackup(list: List<T>, medicineRepository: MedicineRepository)
 
-    @JvmRecord
     protected data class DatabaseContentWithVersion<T>(
         @field:Expose val version: Int,
         @field:Expose val list: List<T>?

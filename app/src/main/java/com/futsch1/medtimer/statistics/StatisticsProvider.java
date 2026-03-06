@@ -29,7 +29,7 @@ public class StatisticsProvider {
     }
 
     private boolean eventStatusDaysFilter(ReminderEvent event, int days, ReminderEvent.ReminderStatus status) {
-        return event.status == status && (days == 0 || wasAfter(event.remindedTimestamp, LocalDate.now().minusDays(days)));
+        return event.getStatus() == status && (days == 0 || wasAfter(event.getRemindedTimestamp(), LocalDate.now().minusDays(days)));
     }
 
     private boolean wasAfter(long secondsSinceEpoch, LocalDate date) {
@@ -80,10 +80,10 @@ public class StatisticsProvider {
      * @noinspection DataFlowIssue
      */
     private void incrementMedicineToDayCountForEvent(int days, ReminderEvent event, LocalDate earliestDate, Map<String, int[]> medicineToDayCount) {
-        if (event.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.remindedTimestamp, earliestDate)) {
-            String medicineName = MedicineHelper.normalizeMedicineName(event.medicineName);
+        if (event.getStatus() == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.getRemindedTimestamp(), earliestDate)) {
+            String medicineName = MedicineHelper.normalizeMedicineName(event.getMedicineName());
             medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
-            final int daysInThePast = getDaysInThePast(event.remindedTimestamp);
+            final int daysInThePast = getDaysInThePast(event.getRemindedTimestamp());
             if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
                 medicineToDayCount.get(medicineName)[daysInThePast]++;
             }    // Stream.toList() not available in SDK version selected

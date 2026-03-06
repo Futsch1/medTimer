@@ -54,7 +54,7 @@ open class MedicineRepository(val application: Application) {
     fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
         return medicineDao.getMedicineFlow(medicineId)
     }
-    
+
     fun getLiveReminderEvents(timeStamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>> {
         return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, statusValues)
     }
@@ -83,8 +83,8 @@ open class MedicineRepository(val application: Application) {
 
     private fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEvent> {
         var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2)
-        if (lastReminderEvents.isNotEmpty() && lastReminderEvents.stream()
-                .allMatch { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
+        if (lastReminderEvents.isNotEmpty() && lastReminderEvents
+                .all { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
         ) {
             lastReminderEvents = medicineDao.getReminderEvents(reminderId)
         }

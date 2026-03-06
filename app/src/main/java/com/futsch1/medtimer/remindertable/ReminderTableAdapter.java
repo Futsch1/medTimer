@@ -108,14 +108,14 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
 
         for (ReminderEvent reminderEvent : reminderEvents) {
             List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.status,
+            cell.add(new ReminderTableCellModel(reminderEvent.getStatus(),
                     getStatusString(reminderEvent, formatter),
-                    reminderEvent.reminderEventId, "taken"));
-            cell.add(new ReminderTableCellModel(reminderEvent.medicineName, reminderEvent.medicineName, reminderEvent.reminderEventId, "medicineName"));
-            cell.add(new ReminderTableCellModel(reminderEvent.amount, reminderEvent.amount, reminderEvent.reminderEventId, null));
-            cell.add(new ReminderTableCellModel(reminderEvent.remindedTimestamp, formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp), reminderEvent.reminderEventId, "time"));
+                    reminderEvent.getReminderEventId(), "taken"));
+            cell.add(new ReminderTableCellModel(reminderEvent.getMedicineName(), reminderEvent.getMedicineName(), reminderEvent.getReminderEventId(), "medicineName"));
+            cell.add(new ReminderTableCellModel(reminderEvent.getAmount(), reminderEvent.getAmount(), reminderEvent.getReminderEventId(), null));
+            cell.add(new ReminderTableCellModel(reminderEvent.getRemindedTimestamp(), formatter.secondsSinceEpochToDateTimeString(reminderEvent.getRemindedTimestamp()), reminderEvent.getReminderEventId(), "time"));
             cells.add(cell);
-            rows.add(new ReminderTableCellModel(reminderEvent.reminderEventId, Integer.toString(reminderEvent.reminderEventId), reminderEvent.reminderEventId, null));
+            rows.add(new ReminderTableCellModel(reminderEvent.getReminderEventId(), Integer.toString(reminderEvent.getReminderEventId()), reminderEvent.getReminderEventId(), null));
         }
 
         setCellItems(cells);
@@ -125,8 +125,8 @@ public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderT
 
     @NonNull
     private String getStatusString(ReminderEvent reminderEvent, TimeHelper.QuickSecondsSinceEpochFormatter formatter) {
-        return switch (reminderEvent.status) {
-            case TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp);
+        return switch (reminderEvent.getStatus()) {
+            case TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.getProcessedTimestamp());
             case RAISED -> " ";
             default -> "-";
         };

@@ -7,8 +7,7 @@ import com.google.gson.annotations.Expose
 import java.util.Objects
 
 @Entity
-class Tag(@JvmField @field:Expose var name: String) {
-    @JvmField
+class Tag(@field:Expose var name: String) {
     @PrimaryKey(autoGenerate = true)
     var tagId: Int = 0
 
