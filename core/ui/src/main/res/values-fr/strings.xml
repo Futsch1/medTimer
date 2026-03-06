@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Pris</string>
+    <string name="skipped">Sauté</string>
+    <string name="filter">Filtre</string>
+</resources>

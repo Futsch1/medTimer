@@ -31,9 +31,6 @@
     <string name="app_version">גרסת אפליקציה</string>
     <string name="are_you_sure_delete_events">האם אתם בטוחים שאתם רוצים למחוק את כל האירועים?</string>
     <string name="show_notifications">הראה התראות</string>
-    <string name="twenty_four_hours">24 שעות</string>
-    <string name="two_days">יומיים</string>
-    <string name="three_days">3 ימים</string>
     <string name="app_url">מדטיימר בGithub</string>
     <string name="color">צבע</string>
     <string name="select_color">בחרו צבע</string>
@@ -89,18 +86,8 @@
     <string name="weekday_limited">מוגבל לימים מסויימים בשבוע</string>
     <string name="reminders">תזכורות</string>
     <string name="sort">מיינו</string>
-    <string name="filter">סננו</string>
-    <string name="seven_days">7 ימים</string>
     <string name="analysis">ניתוח נתונים</string>
     <string name="tabular_view">תצוגה טבלאית</string>
-    <string name="fourteen_days">14 ימים</string>
-    <string name="thirty_days">30 ימים</string>
-    <string name="total">סך הכל</string>
-    <plurals name="last_n_days">
-        <item quantity="one">24 שעות אחרונות</item>
-        <item quantity="two">יומיים אחרונים</item>
-        <item quantity="other">%1$d ימים אחרונים</item>
-    </plurals>
     <string name="name">שם</string>
     <string name="event_data">נתוני אירוע</string>
     <string name="backup">גיבוי</string>

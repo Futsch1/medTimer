@@ -1,11 +1,19 @@
 [versions]
 # Plugins
 android-gradle-plugin = "9.0.1"
+kotlin = "2.3.10"
 navigation-safe-args = "2.9.7"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.2.2.6593"
 robolectric-junit5 = "0.9.0"
+hilt = "2.59.2"
+ksp = "2.3.6"
+
+# Compose
+compose-bom = "2026.02.01"
+kotlinx-collections-immutable = "0.4.0"
+vico = "3.0.1"
 
 # AndroidX
 appcompat = "1.7.1"
@@ -25,7 +33,6 @@ material = "1.13.0"
 color-picker = "3.1.0"
 simply-pdf = "2.1.1"
 gson = "2.13.2"
-androidplot = "1.5.11"
 appintro = "6.3.1"
 calendar = "2.10.0"
 icondialog = "3.3.0"
@@ -33,6 +40,7 @@ flexbox = "3.0.0"
 preference-extended = "1.1.0"
 
 # Testing
+junit4 = "4.13.2"
 junit = "6.0.3"
 mockito-core = "5.22.0"
 mockito-inline = "5.2.0"
@@ -50,6 +58,31 @@ barista = "4.3.0"
 desugar-jdk = "2.1.5"
 
 [libraries]
+# Gradle plugin deps (for build-logic compileOnly)
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
+# Compose (BOM-managed)
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
+vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
+
 # AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
@@ -60,6 +93,7 @@ androidx-preference-ktx = { module = "androidx.preference:preference-ktx", versi
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-ktx" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "work-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -70,10 +104,9 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 color-picker = { module = "com.github.martin-stone:hsv-alpha-color-picker-android", version.ref = "color-picker" }
 simply-pdf = { module = "com.github.wwdablu:SimplyPDF", version.ref = "simply-pdf" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-tableview = { module = "com.github.evrencoskun:TableView", version = "v0.8.9.4" }
-androidplot = { module = "com.androidplot:androidplot-core", version.ref = "androidplot" }
 appintro = { module = "com.github.AppIntro:AppIntro", version.ref = "appintro" }
 calendar = { module = "com.kizitonwose.calendar:view", version.ref = "calendar" }
+calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "calendar" }
 icondialog = { module = "com.maltaisn:icondialog", version.ref = "icondialog" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preference-extended" }
@@ -86,6 +119,7 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
 
 # Unit testing
+junit4 = { module = "junit:junit", version.ref = "junit4" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
@@ -107,8 +141,12 @@ desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room-plugin" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation-safe-args" }
 triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 robolectric-junit5 = { id = "tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin", version.ref = "robolectric-junit5" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

@@ -30,9 +30,6 @@
     <string name="app_version">Sovelluksen versio</string>
     <string name="are_you_sure_delete_events">Haluatko varmasti poistaa kaikki tapahtumat?</string>
     <string name="show_notifications">Näytä ilmoitukset</string>
-    <string name="twenty_four_hours">24 tuntia</string>
-    <string name="two_days">2 päivää</string>
-    <string name="three_days">3 päivää</string>
     <string name="app_url">MedTimer GitHubissa</string>
     <string name="color">Väri</string>
     <string name="select_color">Valitse väri</string>
@@ -88,17 +85,8 @@
     <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="reminders">Muistutukset</string>
     <string name="sort">Lajittelu</string>
-    <string name="filter">Suodatus</string>
-    <string name="seven_days">7 päivää</string>
     <string name="analysis">Analyysi</string>
     <string name="tabular_view">Taulukkonäkymä</string>
-    <string name="fourteen_days">14 päivää</string>
-    <string name="thirty_days">30 päivää</string>
-    <string name="total">Yhteensä</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Viimeiset 24 tuntia</item>
-        <item quantity="other">Viimeiset %1$d päivää</item>
-    </plurals>
     <string name="name">Nimi</string>
     <string name="event_data">Tapahtumatiedot</string>
     <string name="backup">Varmuuskopiointi</string>

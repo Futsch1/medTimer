@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Dose</string>
+    <string name="taken">Preso</string>
+    <string name="skipped">Saltato</string>
+    <string name="twenty_four_hours">24 ore</string>
+    <string name="two_days">2 giorni</string>
+    <string name="three_days">3 giorni</string>
+    <string name="seven_days">7 giorni</string>
+    <string name="fourteen_days">14 giorni</string>
+    <string name="thirty_days">30 giorni</string>
+    <string name="total">Totale</string>
+    <string name="name">Nome</string>
+    <string name="reminded">Ricordato</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Ultime 24 ore</item>
+        <item quantity="many">Ultimi %1$d giorni</item>
+        <item quantity="other">Ultimi %1$d giorni</item>
+    </plurals>
+</resources>

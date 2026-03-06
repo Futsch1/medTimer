@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Taget</string>
+    <string name="skipped">Sprunget over</string>
+    <string name="filter">Filtrér</string>
+</resources>

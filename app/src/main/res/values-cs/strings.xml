@@ -32,9 +32,6 @@
     <string name="app_version">Verze aplikace</string>
     <string name="are_you_sure_delete_events">Opravdu smazat všechny události?</string>
     <string name="show_notifications">Zobrazit notifikace</string>
-    <string name="twenty_four_hours">24 hodin</string>
-    <string name="two_days">2 dny</string>
-    <string name="three_days">3 dny</string>
     <string name="app_url">MedTimer na GitHubu</string>
     <string name="color">Barva</string>
     <string name="select_color">Vybrat barvu</string>
@@ -90,19 +87,8 @@
     <string name="weekday_limited">Omezeno na určité dny v týdnu</string>
     <string name="reminders">Připomenutí</string>
     <string name="sort">Seřadit</string>
-    <string name="filter">Filtr</string>
-    <string name="seven_days">7 dní</string>
     <string name="analysis">Analýza</string>
     <string name="tabular_view">Tabulkový přehled</string>
-    <string name="fourteen_days">14 dní</string>
-    <string name="thirty_days">30 dní</string>
-    <string name="total">Celkem</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Posledních 24 hodin</item>
-        <item quantity="few">Poslední %1$d dny</item>
-        <item quantity="many">Posledních %1$d dní</item>
-        <item quantity="other">Posledních %1$d dní</item>
-    </plurals>
     <string name="name">Název</string>
     <string name="event_data">Data událostí</string>
     <string name="backup">Záloha</string>

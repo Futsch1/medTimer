@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Доза</string>
+    <string name="taken">Взето</string>
+    <string name="skipped">Пропуснато</string>
+    <string name="twenty_four_hours">24 часа</string>
+    <string name="two_days">2 дена</string>
+    <string name="three_days">3 дена</string>
+    <string name="seven_days">7 дни</string>
+    <string name="fourteen_days">14 дни</string>
+    <string name="thirty_days">30 дни</string>
+    <string name="total">Общо</string>
+    <string name="name">Название</string>
+    <string name="reminded">Напомнено</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Последните 24 часа</item>
+        <item quantity="other">Последните %1$d дни</item>
+    </plurals>
+</resources>

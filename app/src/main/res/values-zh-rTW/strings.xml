@@ -28,10 +28,7 @@
     <string name="are_you_sure_delete_reminder">您確定要刪除此提醒嗎？</string>
     <string name="app_version">應用程式版本</string>
     <string name="are_you_sure_delete_events">您確定要刪除所有事件嗎？</string>
-    <string name="twenty_four_hours">24 小時</string>
-    <string name="two_days">2 天</string>
     <string name="show_notifications">顯示通知</string>
-    <string name="three_days">3 天</string>
     <string name="color">顔色</string>
     <string name="select_color">選擇顔色</string>
     <string name="app_url">GitHub 上的 MedTimer</string>
@@ -85,16 +82,8 @@
     <string name="weekday_limited">僅限特定平日</string>
     <string name="reminders">提醒</string>
     <string name="sort">排序</string>
-    <string name="filter">篩選</string>
-    <string name="seven_days">7 天</string>
     <string name="analysis">分析</string>
-    <string name="fourteen_days">14 天</string>
-    <string name="thirty_days">30 天</string>
-    <string name="total">總共</string>
     <string name="tabular_view">表格檢視</string>
-    <plurals name="last_n_days">
-        <item quantity="other">%1$d 天前</item>
-    </plurals>
     <string name="name">名稱</string>
     <string name="event_data">事件資料</string>
     <string name="backup">備份</string>

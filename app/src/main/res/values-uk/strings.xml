@@ -21,7 +21,6 @@
         <item quantity="other">%1$d нагадування\n%2$s</item>
     </plurals>
     <string name="show_notifications">Показувати сповіщення</string>
-    <string name="twenty_four_hours">24 години</string>
     <string name="exact_reminders">Точні нагадування</string>
     <string name="exact_reminders_summary">Нагадування заплановано на точний час (збільшує використання батареї)</string>
     <string name="generate_test_data">Згенерувати тестові дані</string>
@@ -47,12 +46,10 @@
     <string name="select_color">Обрати колір</string>
     <string name="time_after">через Х годин після прийому їжі</string>
     <string name="app_version">Версія застосунку</string>
-    <string name="two_days">2 дні</string>
     <string name="change_color_toast">Зауважте, колір змінюють тільки майбутні події</string>
     <string name="tab_settings">Налаштування</string>
     <string name="confirm">Підтвердити</string>
     <string name="app_url">MedTimer на GitHub</string>
-    <string name="three_days">3 дні</string>
     <string name="clear_events">Видалити події</string>
     <string name="are_you_sure_delete_events">Ви впевнені що хочете видалити всі події?</string>
     <string name="cycle_consecutive_days">Активні дні</string>
@@ -89,13 +86,8 @@
     <string name="cycle_reminder">Циклічні нагадування</string>
     <string name="reminders">Нагадування</string>
     <string name="weekday_limited">Обмежується деякими будніми днями</string>
-    <string name="filter">Фільтр</string>
-    <string name="seven_days">7 днів</string>
     <string name="analysis">Аналітика</string>
     <string name="tabular_view">Табличний вигляд</string>
-    <string name="fourteen_days">14 днів</string>
-    <string name="thirty_days">30 днів</string>
-    <string name="total">Загалом</string>
     <string name="name">Ім\'я</string>
     <string name="event_data">Дані про подію</string>
     <string name="backup">Підкріплення</string>
@@ -171,12 +163,6 @@
         <item quantity="other">хвилини</item>
         <item quantity="few">хвилини</item>
         <item quantity="many">хвилин</item>
-    </plurals>
-    <plurals name="last_n_days">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">Останні 24 години</item>
-        <item quantity="other">Останні %1$d дні</item>
-        <item quantity="few">Останні %1$d дні</item>
-        <item quantity="many">Останні %1$d днів</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one" ns0:ignore="ImpliedQuantity">година</item>

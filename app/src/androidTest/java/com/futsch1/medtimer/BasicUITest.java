@@ -34,6 +34,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class BasicUITest extends BaseTestHelper {
 
     public static final String TEST_2 = "Test (2)";

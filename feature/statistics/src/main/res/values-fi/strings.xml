@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Annos</string>
+    <string name="taken">Otettu</string>
+    <string name="skipped">Ohitettu</string>
+    <string name="twenty_four_hours">24 tuntia</string>
+    <string name="two_days">2 päivää</string>
+    <string name="three_days">3 päivää</string>
+    <string name="seven_days">7 päivää</string>
+    <string name="fourteen_days">14 päivää</string>
+    <string name="thirty_days">30 päivää</string>
+    <string name="total">Yhteensä</string>
+    <string name="name">Nimi</string>
+    <string name="reminded">Muistutettu</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Viimeiset 24 tuntia</item>
+        <item quantity="other">Viimeiset %1$d päivää</item>
+    </plurals>
+</resources>

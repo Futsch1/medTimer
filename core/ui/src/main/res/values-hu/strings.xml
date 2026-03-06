@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Bevéve</string>
+    <string name="skipped">Kihagyva</string>
+    <string name="filter">Szűrés</string>
+</resources>

@@ -63,13 +63,6 @@ class MedicineHelperTest {
     }
 
     @Test
-    fun testNormalizeMedicineName() {
-        assertEquals("Aspirin", MedicineHelper.normalizeMedicineName("Aspirin (1/2)"))
-        assertEquals("Aspirin", MedicineHelper.normalizeMedicineName("Aspirin"))
-        assertEquals("Aspirin", MedicineHelper.normalizeMedicineName("Aspirin (11/12)"))
-    }
-
-    @Test
     fun testMedicineNameWithStockText() {
         val contextMock = mock(Context::class.java)
         val preferencesMock = mock(SharedPreferences::class.java)

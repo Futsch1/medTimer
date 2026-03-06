@@ -1,15 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.triplet.play)
     alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.robolectric.junit5)
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -24,11 +22,39 @@ android {
         versionCode = 161
         versionName = "1.22.9"
         base.archivesName = "MedTimer"
-        // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
-        @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        androidResources {
+            @Suppress("UnstableApiUsage")
+            localeFilters.addAll(
+                listOf(
+                    "en",
+                    "ar",
+                    "bg",
+                    "cs",
+                    "da",
+                    "de",
+                    "el",
+                    "es",
+                    "fi",
+                    "fr",
+                    "hu",
+                    "it",
+                    "iw",
+                    "nl",
+                    "pl",
+                    "pt",
+                    "ru",
+                    "sv",
+                    "ta",
+                    "tr",
+                    "uk",
+                    "zh-rCN",
+                    "zh-rTW"
+                )
+            )
+        }
+
+        testInstrumentationRunner = "com.futsch1.medtimer.HiltTestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
@@ -57,6 +83,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     @Suppress("UnstableApiUsage")
     androidResources {
@@ -88,9 +115,6 @@ android {
         )
     }
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
@@ -98,11 +122,31 @@ android {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
-        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
+        disable.addAll(
+            elements = if (project.hasProperty("noGradleDeps")) listOf(
+                "GradleDependency",
+                "AndroidGradlePluginVersion"
+            ) else listOf()
+        )
     }
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:preferences"))
+    implementation(project(":feature:statistics"))
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.material.icons.extended)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
@@ -114,12 +158,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.room.runtime)
     implementation(libs.color.picker)
     implementation(libs.simply.pdf)
     implementation(libs.gson)
-    implementation(libs.tableview)
-    implementation(libs.androidplot)
     implementation(libs.appintro)
     implementation(libs.calendar)
     implementation(libs.icondialog)
@@ -129,6 +170,8 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.mockito.core)
@@ -136,7 +179,13 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.jazzer.junit)
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit4)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    androidTestImplementation(project(":core:testing")) {
+        exclude(group = "org.robolectric")
+    }
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)
@@ -145,9 +194,9 @@ dependencies {
     androidTestImplementation(libs.uiautomator)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
     androidTestUtil(libs.androidx.test.orchestrator)
-
-    annotationProcessor(libs.androidx.room.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
@@ -188,6 +237,9 @@ tasks.withType(Test::class) {
         exclude("**/*FuzzTest.class")
     else
         include("**/*FuzzTest.class")
+    filter {
+        isFailOnNoMatchingTests = false
+    }
 }
 
 // Define task names for unit tests and Android tests

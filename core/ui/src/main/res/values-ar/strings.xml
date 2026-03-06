@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">تم التناول</string>
+    <string name="skipped">تم التخطي</string>
+    <string name="filter">تصفية</string>
+</resources>

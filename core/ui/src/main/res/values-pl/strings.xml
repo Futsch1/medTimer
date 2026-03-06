@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="taken">Przyjęto</string>
+    <string name="skipped">Pominięto</string>
+    <string name="filter">Filtruj</string>
+</resources>

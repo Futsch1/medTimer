@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Dávka</string>
+    <string name="taken">Užito</string>
+    <string name="skipped">Přeskočeno</string>
+    <string name="twenty_four_hours">24 hodin</string>
+    <string name="two_days">2 dny</string>
+    <string name="three_days">3 dny</string>
+    <string name="seven_days">7 dní</string>
+    <string name="fourteen_days">14 dní</string>
+    <string name="thirty_days">30 dní</string>
+    <string name="total">Celkem</string>
+    <string name="name">Název</string>
+    <string name="reminded">Připomenuto</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Posledních 24 hodin</item>
+        <item quantity="few">Poslední %1$d dny</item>
+        <item quantity="many">Posledních %1$d dní</item>
+        <item quantity="other">Posledních %1$d dní</item>
+    </plurals>
+</resources>

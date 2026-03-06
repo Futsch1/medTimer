@@ -27,14 +27,4 @@ object TableHelper {
         )
         return headerTexts
     }
-
-    fun getTableHeadersForAnalysis(context: Context): List<String> {
-        val headerTexts = listOf(
-            context.getString(R.string.taken),
-            context.getString(R.string.name),
-            context.getString(R.string.dosage),
-            context.getString(R.string.reminded)
-        )
-        return headerTexts
-    }
 }

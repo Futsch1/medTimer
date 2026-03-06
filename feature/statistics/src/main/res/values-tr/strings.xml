@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Dozaj</string>
+    <string name="taken">Alındı</string>
+    <string name="skipped">Atlandı</string>
+    <string name="twenty_four_hours">24 saat</string>
+    <string name="two_days">2 gün</string>
+    <string name="three_days">3 gün</string>
+    <string name="seven_days">7 gün</string>
+    <string name="fourteen_days">14 gün</string>
+    <string name="thirty_days">30 gün</string>
+    <string name="total">Toplam</string>
+    <string name="name">Ad</string>
+    <string name="reminded">Hatırlatıldı</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Son 24 saat</item>
+        <item quantity="other">Son %1$d gün</item>
+    </plurals>
+</resources>

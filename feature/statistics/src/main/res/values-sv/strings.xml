@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fourteen_days">14 dagar</string>
+    <string name="thirty_days">30 dagar</string>
+    <string name="total">Total</string>
+    <string name="dosage">Dos</string>
+    <string name="taken">Tagen</string>
+    <string name="skipped">Överhoppad</string>
+    <string name="twenty_four_hours">24 timmar</string>
+    <string name="two_days">2 dagar</string>
+    <string name="three_days">3 dagar</string>
+    <string name="seven_days">7 dagar</string>
+    <string name="name">Namn</string>
+    <string name="reminded">Påmind</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Senaste 24h</item>
+        <item quantity="other">Senaste %1$d dagarna</item>
+    </plurals>
+</resources>

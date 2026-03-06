@@ -25,9 +25,6 @@
     <string name="app_version">Appversion</string>
     <string name="are_you_sure_delete_events">Er du sikker på, at du vil slette alle hændelser?</string>
     <string name="show_notifications">Vis notifikationer</string>
-    <string name="twenty_four_hours">24 timer</string>
-    <string name="two_days">2 dage</string>
-    <string name="three_days">3 dage</string>
     <string name="app_url">MedTimer på GitHub</string>
     <string name="color">Farve</string>
     <string name="select_color">Vælg farve</string>
@@ -82,17 +79,8 @@
     <string name="weekday_limited">Begrænset til nogle ugedage</string>
     <string name="reminders">Påmindelser</string>
     <string name="sort">Sortér</string>
-    <string name="filter">Filtrér</string>
-    <string name="seven_days">7 dage</string>
     <string name="analysis">Analyse</string>
     <string name="tabular_view">Tabeloversigt</string>
-    <string name="fourteen_days">14 dage</string>
-    <string name="thirty_days">30 dage</string>
-    <string name="total">Total</string>
-    <plurals name="last_n_days">
-        <item quantity="one">Sidste 24 timer</item>
-        <item quantity="other">Sidste %1$d dage</item>
-    </plurals>
     <string name="name">Navn</string>
     <string name="event_data">Hændelsesdata</string>
     <string name="backup">Backup</string>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dosage">Δοσολογία</string>
+    <string name="taken">Ελήφθη</string>
+    <string name="skipped">Παραλείφθηκε</string>
+    <string name="twenty_four_hours">24 ώρες</string>
+    <string name="two_days">2 ημέρες</string>
+    <string name="three_days">3 ημέρες</string>
+    <string name="seven_days">7 ημέρες</string>
+    <string name="fourteen_days">14 ημέρες</string>
+    <string name="thirty_days">30 ημέρες</string>
+    <string name="total">Σύνολο</string>
+    <string name="name">Όνομα</string>
+    <string name="reminded">Έγινε υπενθύμιση</string>
+    <plurals name="last_n_days">
+        <item quantity="one">Τελευταίες 24 ώρες</item>
+        <item quantity="other">Τελευταίες %1$d ημέρες</item>
+    </plurals>
+</resources>

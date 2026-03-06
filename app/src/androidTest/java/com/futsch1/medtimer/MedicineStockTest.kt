@@ -26,12 +26,14 @@ import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Calendar
 
+@HiltAndroidTest
 class MedicineStockTest : BaseTestHelper() {
 
     @Test

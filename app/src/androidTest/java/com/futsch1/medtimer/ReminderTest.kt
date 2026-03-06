@@ -1,6 +1,9 @@
 package com.futsch1.medtimer
 
-import android.widget.TextView
+
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -19,23 +22,26 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
-import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-import junit.framework.TestCase
+import com.futsch1.medtimer.statistics.ui.StatisticsTestTags
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
 
 
+@HiltAndroidTest
 class ReminderTest : BaseTestHelper() {
     @Test
     //@AllowFlaky(attempts = 1)
@@ -331,15 +337,13 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.ANALYSIS)
 
-        clickOn(R.id.tableChip)
+        composeTestRule.onNodeWithTag(StatisticsTestTags.TABLE_CHIP).performClick()
 
-        val tableView = AtomicReference<TableView?>()
-        tableView.set(baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table))
-
-        var view = tableView.get()!!.cellRecyclerView.findViewWithTag<TextView>("time")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded), view.getText())
-        view = tableView.get()!!.cellRecyclerView.findViewWithTag("taken")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken), view.getText())
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+        val remindedText = Instant.ofEpochSecond(newReminded).atZone(ZoneId.systemDefault()).format(formatter)
+        val takenText = Instant.ofEpochSecond(newTaken).atZone(ZoneId.systemDefault()).format(formatter)
+        composeTestRule.onNodeWithText(remindedText).assertExists()
+        composeTestRule.onNodeWithText(takenText).assertExists()
     }
 
     @Test

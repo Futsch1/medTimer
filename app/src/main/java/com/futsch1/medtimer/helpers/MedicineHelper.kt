@@ -18,14 +18,8 @@ import java.text.NumberFormat
 import java.text.ParseException
 import java.util.regex.Pattern
 
+
 object MedicineHelper {
-    private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
-
-    @JvmStatic
-    fun normalizeMedicineName(medicineName: String): String {
-        return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
-    }
-
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,

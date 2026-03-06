@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 
 class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : Fragment() {
     private var idlingResource: SimpleIdlingResource? = null
+    // TODO: view model should not be nullable, it should be late-init var at best
     private var medicineViewModel: MedicineViewModel? = null
     private var adapter: MedicineViewAdapter? = null
     private var optionsMenu: OptionsMenu? = null
