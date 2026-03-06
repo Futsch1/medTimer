@@ -42,11 +42,11 @@ interface MedicineDao {
     fun getReminder(reminderId: Int): Reminder?
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
-    fun getReminderFlow(reminderId: Int): Flow<Reminder>
+    fun getReminderFlow(reminderId: Int): Flow<Reminder?>
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine>
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
     fun getLiveReminderEventsStartingFrom(fromTimestamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>>
