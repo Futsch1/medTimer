@@ -17,7 +17,6 @@ import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVER
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.util.Locale
-import java.util.stream.Collectors
 
 
 fun isReminderActive(reminder: Reminder): Boolean {
@@ -32,7 +31,7 @@ fun isReminderActive(reminder: Reminder): Boolean {
 }
 
 fun getActiveReminders(medicine: FullMedicine): List<Reminder> {
-    return medicine.reminders.stream().filter { isReminderActive(it) }.collect(Collectors.toList())
+    return medicine.reminders.filter { isReminderActive(it) }
 }
 
 fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {

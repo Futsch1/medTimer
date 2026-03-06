@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets
 
 object FileHelper {
     // Unencrypted file is intended here and not a mistake
-    fun saveToFile(file: File, content: String): Boolean {
+    fun saveToFile(file: File, content: String?): Boolean {
         try {
             FileWriter(file).use { writer ->
                 writer.write(content)

@@ -19,7 +19,7 @@ class DeleteHelper(private val context: Context?) {
         builder.show()
     }
 
-    interface ButtonCallback {
+    fun interface ButtonCallback {
         fun onButtonClick()
     }
 }

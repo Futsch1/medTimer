@@ -100,7 +100,7 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         return alpha
     }
 
-    interface SwipedCallback {
+    fun interface SwipedCallback {
         fun onSwiped(viewHolder: RecyclerView.ViewHolder)
     }
 
@@ -117,12 +117,12 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         fun createSwipeHelper(context: Context, swipedCallback: SwipedCallback, movedCallback: MovedCallback?): ItemTouchHelper {
             val swipeHelper: SwipeHelper = object : SwipeHelper(context, if (movedCallback != null) DRAG_DIRS else 0, android.R.drawable.ic_menu_delete) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                    if (movedCallback != null) {
+                    return if (movedCallback != null) {
                         this.toPosition = target.getBindingAdapterPosition()
                         movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition)
-                        return true
+                        true
                     } else {
-                        return false
+                        false
                     }
                 }
 
