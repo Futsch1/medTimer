@@ -27,7 +27,7 @@ open class MedicineRepository(val application: Application) {
         return medicineDao.getOnlyMedicine(medicineId)
     }
 
-    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine> {
+    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine?> {
         return medicineDao.getLiveMedicine(medicineId)
     }
 
@@ -115,7 +115,7 @@ open class MedicineRepository(val application: Application) {
     fun deleteMedicine(medicineId: Int) {
         MedicineRoomDatabase.databaseWriteExecutor.execute {
             medicineDao.deleteMedicineToTagForMedicine(medicineId)
-            medicineDao.deleteMedicine(medicineDao.getOnlyMedicine(medicineId))
+            medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
         }
     }
 
@@ -128,7 +128,7 @@ open class MedicineRepository(val application: Application) {
     }
 
     fun deleteReminder(reminderId: Int) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminder(medicineDao.getReminder(reminderId)) }
+        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) } }
     }
 
     fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
@@ -195,7 +195,7 @@ open class MedicineRepository(val application: Application) {
         return existingTag?.tagId?.toLong() ?: internalInsert(tag) { tag -> medicineDao.insertTag(tag) }
     }
 
-    fun getTagByName(name: String?): Tag? {
+    fun getTagByName(name: String): Tag? {
         return medicineDao.getTagByName(name)
     }
 
@@ -215,14 +215,14 @@ open class MedicineRepository(val application: Application) {
     }
 
     val liveMedicineToTags: LiveData<List<MedicineToTag>>
-        get() = medicineDao.getLiveMedicineToTags()
+        get() = medicineDao.liveMedicineToTags
 
     fun hasTags(): Boolean {
         return medicineDao.countTags() > 0
     }
 
     val highestMedicineSortOrder: Double
-        get() = medicineDao.getHighestMedicineSortOrder()
+        get() = medicineDao.highestMedicineSortOrder
 
     fun moveMedicine(fromPosition: Int, toPosition: Int) {
         val medicines = this.medicines.toMutableList()

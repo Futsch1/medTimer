@@ -7,28 +7,28 @@ import com.google.gson.reflect.TypeToken
 object Converters {
     @JvmStatic
     @TypeConverter
-    fun fromString(value: String): List<Boolean> {
-        val listType = object : TypeToken<List<Boolean>>() {
+    fun fromString(value: String): MutableList<Boolean> {
+        val listType = object : TypeToken<MutableList<Boolean>>() {
         }.type
         return Gson().fromJson(value, listType)
     }
 
     @TypeConverter
-    fun fromList(list: List<Boolean>): String? {
+    fun fromList(list: MutableList<Boolean>): String {
         val gson = Gson()
         return gson.toJson(list)
     }
 
     @JvmStatic
     @TypeConverter
-    fun doubleListFromString(value: String): List<Double> {
-        val listType = object : TypeToken<List<Double>>() {
+    fun doubleListFromString(value: String): MutableList<Double> {
+        val listType = object : TypeToken<MutableList<Double>>() {
         }.type
         return Gson().fromJson(value, listType)
     }
 
     @TypeConverter
-    fun fromDoubleList(list: List<Double>): String {
+    fun fromDoubleList(list: MutableList<Double>): String {
         val gson = Gson()
         return gson.toJson(list)
     }
