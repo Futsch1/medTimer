@@ -10,7 +10,7 @@ import com.futsch1.medtimer.database.Tag
 class MedicineWithTagsViewModel(application: Application) :
     AndroidViewModel(application) {
     val medicineRepository = MedicineRepository(application)
-    fun getMedicineWithTags(medicineId: Int): LiveData<FullMedicine> =
+    fun getMedicineWithTags(medicineId: Int): LiveData<FullMedicine?> =
         medicineRepository.getLiveMedicine(medicineId)
 
     val tags: LiveData<List<Tag>> = medicineRepository.liveTags

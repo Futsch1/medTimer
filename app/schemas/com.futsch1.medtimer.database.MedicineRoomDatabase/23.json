@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 23,
-    "identityHash": "83e5c79e4a6a68b48c3ed7f42bb2fc11",
+    "identityHash": "9fbda79af6117badec1e6ee1bc537145",
     "entities": [
       {
         "tableName": "Medicine",
@@ -446,18 +446,19 @@
       },
       {
         "tableName": "Tag",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "tagId",
             "columnName": "tagId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -506,7 +507,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83e5c79e4a6a68b48c3ed7f42bb2fc11')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fbda79af6117badec1e6ee1bc537145')"
     ]
   }
 }

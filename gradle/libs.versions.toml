@@ -6,6 +6,7 @@ room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.2.3.7755"
 robolectric-junit5 = "0.9.0"
+ksp = "2.3.4"
 
 # AndroidX
 appcompat = "1.7.1"
@@ -64,6 +65,7 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "work-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 
 # UI / Third-party
@@ -114,3 +116,4 @@ androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.re
 triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 robolectric-junit5 = { id = "tech.apter.junit5.jupiter.robolectric-extension-gradle-plugin", version.ref = "robolectric-junit5" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
