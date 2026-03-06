@@ -27,7 +27,7 @@ open class ReminderEventActions(val event: OverviewReminderEvent, medicineReposi
             visibleButtons.add(Button.SKIPPED)
         }
 
-        if (event.state != OverviewState.RAISED) {
+        if (event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
             visibleButtons.add(Button.RERAISE)
             visibleButtons.add(Button.DELETE)
         } else {
