@@ -1,55 +1,47 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import androidx.room.Embedded;
-import androidx.room.Junction;
-import androidx.room.Relation;
+import androidx.room.Embedded
+import androidx.room.Junction
+import androidx.room.Relation
+import com.google.gson.annotations.Expose
 
-import com.google.gson.annotations.Expose;
-
-import java.util.List;
-
-public class FullMedicine {
+class FullMedicine {
+    @JvmField
     @Embedded
     @Expose
-    public Medicine medicine;
-    @Relation(
-            parentColumn = "medicineId",
-            entityColumn = "tagId",
-            associateBy = @Junction(MedicineToTag.class)
-    )
+    var medicine: Medicine = Medicine()
+
+    @JvmField
+    @Relation(parentColumn = "medicineId", entityColumn = "tagId", associateBy = Junction(MedicineToTag::class))
     @Expose
-    public List<Tag> tags;
-    @Relation(
-            parentColumn = "medicineId",
-            entityColumn = "medicineRelId"
-    )
+    var tags: List<Tag> = listOf()
+
+    @JvmField
+    @Relation(parentColumn = "medicineId", entityColumn = "medicineRelId")
     @Expose
-    public List<Reminder> reminders;
+    var reminders: List<Reminder> = listOf()
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        FullMedicine that = (FullMedicine) o;
-        return medicine.equals(that.medicine) && reminders.equals(that.reminders) && tags.equals(that.tags);
+    override fun equals(other: Any?): Boolean {
+        if (other == null || javaClass != other.javaClass) return false
+        val that = other as FullMedicine
+        return medicine == that.medicine && reminders == that.reminders && tags == that.tags
     }
 
-    @Override
-    public int hashCode() {
-        int result = medicine.hashCode();
-        result += reminders.hashCode();
-        result += tags.hashCode();
-        return result;
+    override fun hashCode(): Int {
+        var result = medicine.hashCode()
+        result += reminders.hashCode()
+        result += tags.hashCode()
+        return result
     }
 
-    public boolean isOutOfStock() {
-        return isStockManagementActive() && reminders.stream().anyMatch(reminder -> reminder.getReminderType() == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount);
-    }
+    val isOutOfStock: Boolean
+        get() = this.isStockManagementActive && reminders.stream()
+            .anyMatch { reminder: Reminder -> reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
 
-    public boolean isStockManagementActive() {
-        return (medicine.amount != 0 || hasStockReminder());
-    }
+    val isStockManagementActive: Boolean
+        get() = (medicine.amount != 0.0 || hasStockReminder())
 
-    private boolean hasStockReminder() {
-        return reminders.stream().anyMatch(reminder -> reminder.getReminderType() == Reminder.ReminderType.OUT_OF_STOCK);
+    private fun hasStockReminder(): Boolean {
+        return reminders.stream().anyMatch { reminder: Reminder? -> reminder!!.reminderType == Reminder.ReminderType.OUT_OF_STOCK }
     }
 }
