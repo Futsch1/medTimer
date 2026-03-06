@@ -19,7 +19,7 @@ class FullMedicine {
     @JvmField
     @Relation(parentColumn = "medicineId", entityColumn = "medicineRelId")
     @Expose
-    var reminders: ArrayList<Reminder> = arrayListOf()
+    var reminders: MutableList<Reminder> = mutableListOf()
 
     override fun equals(other: Any?): Boolean {
         if (other == null || javaClass != other.javaClass) return false
