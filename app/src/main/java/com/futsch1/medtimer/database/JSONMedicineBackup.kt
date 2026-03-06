@@ -22,7 +22,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     override fun isInvalid(item: FullMedicine?): Boolean {
-        return item == null || item.medicine == null || item.reminders == null
+        return item == null
     }
 
     override fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
@@ -43,7 +43,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     private fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
-        for (tag in fullMedicine.tags ?: emptyList<Tag>()) {
+        for (tag in fullMedicine.tags) {
             val tagId = medicineRepository.insertTag(tag).toInt()
             medicineRepository.insertMedicineToTag(medicineId, tagId)
         }
@@ -53,11 +53,9 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
         private fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
             val reminders: MutableList<Reminder> = mutableListOf()
             for (reminder in fullMedicine.reminders) {
-                if (reminder != null) {
-                    reminder.medicineRelId = medicineId
-                    reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-                    reminders.add(reminder)
-                }
+                reminder.medicineRelId = medicineId
+                reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+                reminders.add(reminder)
             }
             medicineRepository.insertReminders(reminders)
         }
