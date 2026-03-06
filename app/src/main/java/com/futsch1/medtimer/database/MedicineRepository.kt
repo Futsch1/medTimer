@@ -47,15 +47,14 @@ open class MedicineRepository(val application: Application) {
         return medicineDao.getReminder(reminderId)
     }
 
-    fun getReminderFlow(reminderId: Int): Flow<Reminder> {
+    fun getReminderFlow(reminderId: Int): Flow<Reminder?> {
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine> {
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
         return medicineDao.getMedicineFlow(medicineId)
     }
-
-
+    
     fun getLiveReminderEvents(timeStamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>> {
         return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, statusValues)
     }
