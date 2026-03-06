@@ -236,6 +236,7 @@ class JSONMedicineBackupUnitTest {
         "productionDate": 0,
         "expirationDate": 0
       },
+      "tags": [],
       "reminders": [
         {
           "reminderId": 1,
@@ -288,6 +289,7 @@ class JSONMedicineBackupUnitTest {
         "productionDate": 0,
         "expirationDate": 0
       },
+      "tags": [],
       "reminders": [
         {
           "reminderId": 1,
