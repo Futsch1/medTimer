@@ -1,123 +1,115 @@
-package com.futsch1.medtimer.database;
+package com.futsch1.medtimer.database
 
-import android.graphics.Color;
+import android.graphics.Color
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.futsch1.medtimer.ReminderNotificationChannelManager
+import com.google.gson.annotations.Expose
+import java.time.LocalDate
+import java.util.Objects
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-import com.futsch1.medtimer.ReminderNotificationChannelManager;
-import com.google.gson.annotations.Expose;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
-
-@SuppressWarnings("java:S1319")
 @Entity
-public class Medicine {
-
+class Medicine @JvmOverloads constructor(name: String, id: Int = 0) {
+    @JvmField
     @ColumnInfo(name = "medicineName")
     @Expose
-    public String name;
-    @PrimaryKey(autoGenerate = true)
-    public int medicineId;
+    var name: String = ""
 
+    @JvmField
+    @PrimaryKey(autoGenerate = true)
+    var medicineId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0xFFFF0000")
     @Expose
-    public int color;
+    var color: Int = Color.DKGRAY
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean useColor;
+    var useColor: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "3")
     @Expose
-    public int notificationImportance;
+    var notificationImportance: Int = ReminderNotificationChannelManager.Importance.DEFAULT.value
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public int iconId;
+    var iconId: Int = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public double amount;
+    var amount: Double = 0.0
+
+    @JvmField
     @ColumnInfo(defaultValue = "[]")
     @Expose
-    public ArrayList<Double> refillSizes;
+    var refillSizes: ArrayList<Double> = arrayListOf()
+
+    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String unit;
+    var unit: String = ""
+
+    @JvmField
     @ColumnInfo(defaultValue = "1.0")
     @Expose
-    public double sortOrder;
+    var sortOrder: Double = 1.0
+
+    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
-    public String notes;
+    var notes: String? = ""
+
+    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
-    public boolean showNotificationAsAlarm;
+    var showNotificationAsAlarm: Boolean = false
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public long productionDate;
+    var productionDate: Long = 0
+
+    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
-    public long expirationDate;
+    var expirationDate: Long = 0
 
     @Ignore
-    public Medicine() {
-        this("");
+    constructor() : this("")
+
+    init {
+        this.name = name
+        this.medicineId = id
     }
 
-    public Medicine(String name) {
-        this(name, 0);
+    fun hasExpired(): Boolean {
+        return expirationDate != 0L && expirationDate < LocalDate.now().toEpochDay()
     }
 
-    public Medicine(String name, int id) {
-        this.name = name;
-        this.medicineId = id;
-        this.useColor = false;
-        this.color = Color.DKGRAY;
-        this.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.getValue();
-        this.iconId = 0;
-        this.refillSizes = new ArrayList<>();
-        this.unit = "";
-        this.sortOrder = 1.0;
-        this.notes = "";
-        this.showNotificationAsAlarm = false;
-        this.productionDate = 0;
-        this.expirationDate = 0;
+    override fun equals(other: Any?): Boolean {
+        if (other == null || javaClass != other.javaClass) return false
+        return membersEqual(other as Medicine)
     }
 
-    public boolean hasExpired() {
-        return expirationDate != 0 && expirationDate < LocalDate.now().toEpochDay();
+    override fun hashCode(): Int {
+        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, amount, refillSizes, unit, notes, showNotificationAsAlarm)
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        return membersEqual((Medicine) o);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, amount, refillSizes, unit, notes, showNotificationAsAlarm);
-    }
-
-    private boolean membersEqual(Medicine that) {
+    private fun membersEqual(that: Medicine): Boolean {
         return medicineId == that.medicineId &&
-                Objects.equals(name, that.name) &&
-                useColor == that.useColor &&
-                color == that.color &&
-                notificationImportance == that.notificationImportance &&
-                iconId == that.iconId &&
-                amount == that.amount &&
-                Objects.equals(refillSizes, that.refillSizes) &&
-                Objects.equals(unit, that.unit) &&
-                Objects.equals(notes, that.notes) &&
-                showNotificationAsAlarm == that.showNotificationAsAlarm &&
-                expirationDate == that.expirationDate &&
-                productionDate == that.productionDate;
+                name == that.name && useColor == that.useColor && color == that.color && notificationImportance == that.notificationImportance && iconId == that.iconId && amount == that.amount &&
+                refillSizes == that.refillSizes &&
+                unit == that.unit &&
+                notes == that.notes && showNotificationAsAlarm == that.showNotificationAsAlarm && expirationDate == that.expirationDate && productionDate == that.productionDate
     }
 
-    public double getRefillSize() {
-        return refillSizes.isEmpty() ? 0.0 : refillSizes.get(0);
-    }
+    val refillSize: Double
+        get() = (if (refillSizes.isEmpty()) 0.0 else refillSizes[0])
 }
