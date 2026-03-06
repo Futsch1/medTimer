@@ -133,4 +133,70 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         )
     }
 
+    @Test
+    fun scheduleWindowedIntervalReminderNextDay() {
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
+
+        val medicine = TestHelper.buildFullMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 600, 1)
+        reminder.intervalStart = 1
+        reminder.windowedInterval = true
+        reminder.intervalStartsFromProcessed = false
+        reminder.intervalStartTimeOfDay = 1000
+        reminder.intervalEndTimeOfDay = 200
+        medicine.reminders.add(reminder)
+
+        val medicineList: MutableList<FullMedicine> = ArrayList()
+        medicineList.add(medicine)
+
+        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+
+        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(1, 1000),
+            medicine.medicine,
+            reminder
+        )
+
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 1000).epochSecond))
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(2, 160),
+            medicine.medicine,
+            reminder
+        )
+
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 160).epochSecond))
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(2, 1000),
+            medicine.medicine,
+            reminder
+        )
+
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 1000).epochSecond))
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(3, 160),
+            medicine.medicine,
+            reminder
+        )
+
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(3, 160).epochSecond))
+        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+
+        assertReminded(
+            scheduledReminders,
+            TestHelper.on(3, 1000),
+            medicine.medicine,
+            reminder
+        )
+    }
 }
