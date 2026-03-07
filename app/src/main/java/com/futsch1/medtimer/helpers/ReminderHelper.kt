@@ -175,10 +175,10 @@ private fun formatDuration(durationMillis: Long): String? {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
 
-    val measures: MutableList<Measure?> = ArrayList()
+    val measures: MutableList<Measure> = mutableListOf()
     if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
     if (minutes >= 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
 
     val formatter = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
-    return formatter.formatMeasures(*measures.toTypedArray<Measure?>())
+    return formatter.formatMeasures(*measures.toTypedArray<Measure>())
 }
