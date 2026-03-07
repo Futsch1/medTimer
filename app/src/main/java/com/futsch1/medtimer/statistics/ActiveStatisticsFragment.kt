@@ -1,27 +1,30 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 
-import androidx.preference.PreferenceManager;
+class ActiveStatisticsFragment(context: Context) {
 
-public class ActiveStatisticsFragment {
-    private static final int DEFAULT_FRAGMENT = StatisticFragmentType.CHARTS.ordinal();
-    private final SharedPreferences sharedPref;
-
-    public ActiveStatisticsFragment(Context context) {
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+    companion object {
+        private const val PREFERENCE_KEY = "active_statistics_fragment"
+        private val DEFAULT_FRAGMENT = StatisticFragmentType.CHARTS.ordinal
     }
 
-    public StatisticFragmentType getActiveFragment() {
-        return StatisticFragmentType.values()[sharedPref.getInt("active_statistics_fragment", DEFAULT_FRAGMENT)];
-    }
+    private val sharedPref: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
-    public void setActiveFragment(StatisticFragmentType fragment) {
-        sharedPref.edit().putInt("active_statistics_fragment", fragment.ordinal()).apply();
-    }
+    var activeFragment: StatisticFragmentType
+        get() = StatisticFragmentType.entries[sharedPref.getInt(
+            PREFERENCE_KEY,
+            DEFAULT_FRAGMENT
+        )]
+        set(fragment) {
+            sharedPref.edit { putInt(PREFERENCE_KEY, fragment.ordinal) }
+        }
 
-    public enum StatisticFragmentType {
+    enum class StatisticFragmentType {
         CHARTS,
         TABLE,
         CALENDAR
