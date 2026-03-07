@@ -10,12 +10,16 @@ import com.androidplot.pie.PieChart
 import com.androidplot.xy.XYPlot
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ChartsFragment : Fragment() {
+class ChartsFragment(
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : Fragment() {
     private lateinit var medicineRepository: MedicineRepository
 
     private lateinit var takenSkippedChartView: PieChart
@@ -55,7 +59,7 @@ class ChartsFragment : Fragment() {
         medicineRepository = MedicineRepository(requireActivity().application)
 
         setupTakenSkippedCharts()
-        lifecycleScope.launch(Dispatchers.Default) {
+        lifecycleScope.launch(backgroundDispatcher) {
             setupMedicinesPerDayChart()
             daysFlow.collect { days ->
                 populateStatistics(days)
@@ -96,12 +100,12 @@ class ChartsFragment : Fragment() {
 
         try {
             val series = statisticsProvider.getLastDaysReminders(days)
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 medicinesPerDayChart.updateData(series)
             }
 
             val data = statisticsProvider.getTakenSkippedData(days)
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 takenSkippedChart.updateData(
                     data.taken,
                     data.skipped,
@@ -110,7 +114,7 @@ class ChartsFragment : Fragment() {
             }
 
             val dataTotal = statisticsProvider.getTakenSkippedData(0)
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 takenSkippedTotalChart.updateData(
                     dataTotal.taken,
                     dataTotal.skipped,
