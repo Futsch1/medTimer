@@ -99,7 +99,7 @@ class MedicinePerDayChart(
         legend.setPadding(context.resources.dpToPx(4.0f), 0f, context.resources.dpToPx(4.0f), 0f)
     }
 
-    fun updateData(series: MutableList<SimpleXYSeries>) {
+    fun updateData(series: List<SimpleXYSeries>) {
         medicinesPerDayChart.clear()
         colorIndex = 0
         val numLegendColumns = max(3, ceil((series.size / 3.0)).toInt())
@@ -153,14 +153,14 @@ class MedicinePerDayChart(
         series.setTitle(title)
     }
 
-    private fun calculateMaxRange(series: MutableList<SimpleXYSeries>): Number {
+    private fun calculateMaxRange(series: List<SimpleXYSeries>): Number {
         if (series.isEmpty()) return 0
         return (0 until series[0].size()).maxOfOrNull { x ->
             series.sumOf { it.getY(x).toLong() }
         } ?: 0
     }
 
-    private fun calculateMinDomain(series: MutableList<SimpleXYSeries>): Long {
+    private fun calculateMinDomain(series: List<SimpleXYSeries>): Long {
         return if (series.isEmpty()) {
             LocalDate.now().toEpochDay() - 1
         } else {
@@ -168,7 +168,7 @@ class MedicinePerDayChart(
         }
     }
 
-    private fun calculateMaxDomain(series: MutableList<SimpleXYSeries>): Long {
+    private fun calculateMaxDomain(series: List<SimpleXYSeries>): Long {
         return if (series.isEmpty()) {
             LocalDate.now().toEpochDay()
         } else {
