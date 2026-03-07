@@ -1,111 +1,111 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.androidplot.pie.PieChart
+import com.androidplot.xy.XYPlot
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-import androidx.fragment.app.Fragment;
+class ChartsFragment : Fragment() {
+    private lateinit var medicineRepository: MedicineRepository
 
-import com.androidplot.pie.PieChart;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYPlot;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.MedicineRepository;
+    private lateinit var takenSkippedChartView: PieChart
+    private lateinit var takenSkippedTotalChartView: PieChart
+    private lateinit var medicinesPerDayChartView: XYPlot
+    private var takenSkippedChart: TakenSkippedChart? = null
+    private var takenSkippedTotalChart: TakenSkippedChart? = null
+    private var medicinesPerDayChart: MedicinePerDayChart? = null
 
-import java.util.List;
+    private var days = 0
 
-public class ChartsFragment extends Fragment {
-    private HandlerThread backgroundThread;
-    private MedicineRepository medicineRepository;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val statisticsView = inflater.inflate(R.layout.fragment_charts, container, false)
 
-    private PieChart takenSkippedChartView;
-    private PieChart takenSkippedTotalChartView;
-    private XYPlot medicinesPerDayChartView;
-    private TakenSkippedChart takenSkippedChart;
-    private TakenSkippedChart takenSkippedTotalChart;
-    private MedicinePerDayChart medicinesPerDayChart;
+        medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart)
+        takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart)
+        takenSkippedTotalChartView =
+            statisticsView.findViewById(R.id.takenSkippedChartTotal)
+        medicineRepository = MedicineRepository(requireActivity().application)
 
-    private int days = 0;
+        setupTakenSkippedCharts()
+        lifecycleScope.launch(Dispatchers.Default) {
+            this@ChartsFragment.setupMedicinesPerDayChart()
+        }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        backgroundThread = new HandlerThread("LoadStatistics");
-        backgroundThread.start();
+        return statisticsView
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View statisticsView = inflater.inflate(R.layout.fragment_charts, container, false);
-
-        medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart);
-        takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart);
-        takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal);
-        medicineRepository = new MedicineRepository(requireActivity());
-
-        setupTakenSkippedCharts();
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(this::setupMedicinesPerDayChart);
-
-        return statisticsView;
+    private fun setupTakenSkippedCharts() {
+        this.takenSkippedChart = TakenSkippedChart(takenSkippedChartView, requireContext())
+        this.takenSkippedTotalChart =
+            TakenSkippedChart(takenSkippedTotalChartView, requireContext())
     }
 
-    private void setupTakenSkippedCharts() {
-        this.takenSkippedChart = new TakenSkippedChart(takenSkippedChartView, requireContext());
-        this.takenSkippedTotalChart = new TakenSkippedChart(takenSkippedTotalChartView, requireContext());
-    }
-
-    private void setupMedicinesPerDayChart() {
+    private fun setupMedicinesPerDayChart() {
         try {
-            this.medicinesPerDayChart = new MedicinePerDayChart(medicinesPerDayChartView, requireContext(), medicineRepository.getMedicines());
-        } catch (IllegalStateException e) {
-            // Intentionally empty
+            this.medicinesPerDayChart = MedicinePerDayChart(
+                medicinesPerDayChartView,
+                requireContext(),
+                medicineRepository.medicines
+            )
+        } catch (_: IllegalStateException) {
+            // Intentionally ignored
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    override fun onResume() {
+        super.onResume()
 
-        Handler handler = new Handler(backgroundThread.getLooper());
-        handler.post(this::populateStatistics);
+        lifecycleScope.launch(Dispatchers.Default) {
+            this@ChartsFragment.populateStatistics()
+        }
     }
 
-    private void populateStatistics() {
-        StatisticsProvider statisticsProvider;
-        statisticsProvider = new StatisticsProvider(medicineRepository);
+    private fun populateStatistics() {
+        val statisticsProvider = StatisticsProvider(medicineRepository)
 
         try {
-            List<SimpleXYSeries> series = statisticsProvider.getLastDaysReminders(days);
-            requireActivity().runOnUiThread(() -> medicinesPerDayChart.updateData(series));
+            val series = statisticsProvider.getLastDaysReminders(days)
+            requireActivity().runOnUiThread { medicinesPerDayChart!!.updateData(series) }
 
-            StatisticsProvider.TakenSkipped data = statisticsProvider.getTakenSkippedData(days);
-            requireActivity().runOnUiThread(() -> takenSkippedChart.updateData(data.taken(), data.skipped(), days));
+            val data = statisticsProvider.getTakenSkippedData(days)
+            requireActivity().runOnUiThread {
+                takenSkippedChart!!.updateData(
+                    data.taken,
+                    data.skipped,
+                    days
+                )
+            }
 
-            StatisticsProvider.TakenSkipped dataTotal = statisticsProvider.getTakenSkippedData(0);
-            requireActivity().runOnUiThread(() -> takenSkippedTotalChart.updateData(dataTotal.taken(), dataTotal.skipped(), 0));
-        } catch (IllegalStateException e) {
-            // Intentionally empty - just don't do anything
+            val dataTotal = statisticsProvider.getTakenSkippedData(0)
+            requireActivity().runOnUiThread {
+                takenSkippedTotalChart!!.updateData(
+                    dataTotal.taken,
+                    dataTotal.skipped,
+                    0
+                )
+            }
+        } catch (_: IllegalStateException) {
+            // Intentionally ignored
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        backgroundThread.quit();
-    }
+    fun setDays(days: Int) {
+        this.days = days
 
-    public void setDays(int days) {
-        this.days = days;
-
-        if (medicineRepository != null) {
-            Handler handler = new Handler(backgroundThread.getLooper());
-            handler.post(this::populateStatistics);
+        lifecycleScope.launch(Dispatchers.Default) {
+            this@ChartsFragment.populateStatistics()
         }
     }
-
 }

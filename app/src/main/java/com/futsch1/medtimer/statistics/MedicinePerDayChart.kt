@@ -30,7 +30,7 @@ import kotlin.math.max
 class MedicinePerDayChart(
     private val medicinesPerDayChart: XYPlot,
     private val context: Context,
-    private val medicines: MutableList<FullMedicine>
+    private val medicines: List<FullMedicine>
 ) {
     private var colorIndex = 0
 
