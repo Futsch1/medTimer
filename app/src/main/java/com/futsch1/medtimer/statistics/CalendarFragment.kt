@@ -100,12 +100,15 @@ class CalendarFragment : Fragment() {
         setupDayBinder()
         setupMonthBinder()
 
-        startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastMonths.toLong())
-        endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureMonths.toLong())
+        val startMonth = YearMonth.now().minusMonths(medicineCalenderArgs.pastMonths.toLong())
+        this.startMonth = startMonth
+
+        val endMonth = YearMonth.now().plusMonths(medicineCalenderArgs.futureMonths.toLong())
+        this.endMonth = endMonth
 
         calendarView.setup(
-            startMonth!!,
-            endMonth!!,
+            startMonth,
+            endMonth,
             if (LocalePreferences.getFirstDayOfWeek() == LocalePreferences.FirstDayOfWeek.SUNDAY)
                 DayOfWeek.SUNDAY else DayOfWeek.MONDAY
         )
@@ -121,10 +124,16 @@ class CalendarFragment : Fragment() {
 
             init {
                 prevButton.setOnClickListener {
-                    calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()?.yearMonth!!.previousMonth)
+                    val firstVisibleMonth =
+                        calendarView.findFirstVisibleMonth() ?: return@setOnClickListener
+
+                    calendarView.scrollToMonth(firstVisibleMonth.yearMonth.previousMonth)
                 }
                 nextButton.setOnClickListener {
-                    calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()?.yearMonth!!.nextMonth)
+                    val firstVisibleMonth =
+                        calendarView.findFirstVisibleMonth() ?: return@setOnClickListener
+
+                    calendarView.scrollToMonth(firstVisibleMonth.yearMonth.nextMonth)
                 }
             }
         }
@@ -149,7 +158,8 @@ class CalendarFragment : Fragment() {
                     container.weekdayTitles.children.map { it as TextView }
                         .forEachIndexed { index, textView ->
                             val dayOfWeek = daysOfWeek()[index]
-                            val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                            val title =
+                                dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                             textView.text = title
                         }
                 }
