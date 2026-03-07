@@ -109,9 +109,9 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
         }
     }
 
-    private fun deleteItem(context: Context?, itemId: Long, adapterPosition: Int) {
-        val deleteHelper = DeleteHelper(context)
-        deleteHelper.deleteItem(
+    private fun deleteItem(context: Context, itemId: Long, adapterPosition: Int) {
+        DeleteHelper.deleteItem(
+            context,
             R.string.are_you_sure_delete_medicine,
             { medicineViewModel!!.medicineRepository.deleteMedicine(itemId.toInt()) },
             { adapter!!.notifyItemChanged(adapterPosition) })
