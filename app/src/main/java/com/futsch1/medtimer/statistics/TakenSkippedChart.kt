@@ -32,9 +32,19 @@ class TakenSkippedChart(private val pieChart: PieChart, private val context: Con
         )
         pieChart.plotPaddingTop = context.resources.dpToPx(5.0f)
         pieChart.backgroundPaint
-            .setColor(context.getMaterialColor(com.google.android.material.R.attr.colorSurface))
+            .setColor(
+                context.getMaterialColor(
+                    com.google.android.material.R.attr.colorSurface,
+                    TakenSkippedChart::class.simpleName
+                )
+            )
         pieChart.title.labelPaint
-            .setColor(context.getMaterialColor(com.google.android.material.R.attr.colorOnSurface))
+            .setColor(
+                context.getMaterialColor(
+                    com.google.android.material.R.attr.colorOnSurface,
+                    TakenSkippedChart::class.simpleName
+                )
+            )
 
         val renderer = pieChart.getRenderer(PieRenderer::class.java)
         renderer.setDonutSize(0.0f, PieRenderer.DonutMode.PERCENT)
@@ -42,8 +52,18 @@ class TakenSkippedChart(private val pieChart: PieChart, private val context: Con
     }
 
     fun getFormatter(colorSegment: Int, colorText: Int): SegmentFormatter {
-        val formatter = SegmentFormatter(context.getMaterialColor(colorSegment))
-        formatter.labelPaint.setColor(context.getMaterialColor(colorText))
+        val formatter = SegmentFormatter(
+            context.getMaterialColor(
+                colorSegment,
+                TakenSkippedChart::class.simpleName
+            )
+        )
+        formatter.labelPaint.setColor(
+            context.getMaterialColor(
+                colorText,
+                TakenSkippedChart::class.simpleName
+            )
+        )
         return formatter
     }
 

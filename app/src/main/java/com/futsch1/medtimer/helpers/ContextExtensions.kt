@@ -1,8 +1,12 @@
 package com.futsch1.medtimer.helpers
 
 import android.content.Context
-import com.futsch1.medtimer.statistics.TakenSkippedChart
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import com.google.android.material.color.MaterialColors
 
-fun Context.getMaterialColor(attrId: Int): Int =
-    MaterialColors.getColor(this, attrId, TakenSkippedChart::class.simpleName)
+fun Context.getMaterialColor(@AttrRes attrId: Int, errorMessageComponent: String?): Int =
+    MaterialColors.getColor(this, attrId, errorMessageComponent)
+
+fun Context.getMaterialColor(@AttrRes attrId: Int, @ColorInt defaultValue: Int): Int =
+    MaterialColors.getColor(this, attrId, defaultValue)

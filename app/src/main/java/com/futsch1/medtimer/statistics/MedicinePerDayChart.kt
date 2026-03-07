@@ -70,14 +70,24 @@ class MedicinePerDayChart(
         bottomLine.format = DaysSinceEpochFormat()
         bottomLine.paint.textSize = context.resources.dpToPx(10.0f)
         bottomLine.paint.textAlign = Paint.Align.CENTER
-        bottomLine.paint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
+        bottomLine.paint.setColor(
+            context.getMaterialColor(
+                R.attr.colorOnSurface,
+                TakenSkippedChart::class.simpleName
+            )
+        )
     }
 
     private fun setupLeftLine() {
         val leftLine = medicinesPerDayChart.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT)
         leftLine.format = DecimalFormat("#")
         leftLine.paint.textSize = context.resources.dpToPx(10.0f)
-        leftLine.paint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
+        leftLine.paint.setColor(
+            context.getMaterialColor(
+                R.attr.colorOnSurface,
+                TakenSkippedChart::class.simpleName
+            )
+        )
     }
 
     private fun setupNoBackgrounds() {
@@ -94,7 +104,12 @@ class MedicinePerDayChart(
 
     private fun setupLegend() {
         val legend = medicinesPerDayChart.legend
-        legend.textPaint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
+        legend.textPaint.setColor(
+            context.getMaterialColor(
+                R.attr.colorOnSurface,
+                TakenSkippedChart::class.simpleName
+            )
+        )
         legend.textPaint.textSize = context.resources.dpToPx(10.0f)
         legend.setPadding(context.resources.dpToPx(4.0f), 0f, context.resources.dpToPx(4.0f), 0f)
     }
@@ -139,7 +154,12 @@ class MedicinePerDayChart(
     private fun getFormatter(title: String): MedicinePerDayChartFormatter {
         val formatter = MedicinePerDayChartFormatter()
         formatter.fillPaint.setColor(getColor(title))
-        formatter.borderPaint.setColor(context.getMaterialColor(androidx.appcompat.R.attr.colorPrimary))
+        formatter.borderPaint.setColor(
+            context.getMaterialColor(
+                androidx.appcompat.R.attr.colorPrimary,
+                TakenSkippedChart::class.simpleName
+            )
+        )
         return formatter
     }
 
@@ -147,7 +167,7 @@ class MedicinePerDayChart(
         var titleWidth = textPaint.measureText(series.title).toInt()
         var title = series.title
         while (titleWidth > columnPixels && title.length > 5) {
-            title = title.substring(0, title.length - 4) + "..."
+            title = title.dropLast(4) + "..."
             titleWidth = textPaint.measureText(title).toInt()
         }
         series.setTitle(title)

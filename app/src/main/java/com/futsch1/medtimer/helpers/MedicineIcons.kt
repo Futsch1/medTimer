@@ -11,7 +11,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
-import com.google.android.material.color.MaterialColors
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
@@ -21,8 +20,7 @@ import kotlin.math.ceil
 class MedicineIcons(context: Context) {
     private val defaultDrawable = AppCompatResources.getDrawable(context, R.drawable.capsule)!!
     private var iconColor =
-        MaterialColors.getColor(
-            context,
+        context.getMaterialColor(
             com.google.android.material.R.attr.colorOnSurface,
             0
         )
