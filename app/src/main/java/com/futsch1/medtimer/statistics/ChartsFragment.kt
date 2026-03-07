@@ -12,6 +12,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChartsFragment : Fragment() {
     private lateinit var medicineRepository: MedicineRepository
@@ -24,6 +25,19 @@ class ChartsFragment : Fragment() {
     private var medicinesPerDayChart: MedicinePerDayChart? = null
 
     private var days = 0
+
+    companion object {
+        private const val DAYS_BUNDLE_KEY = "days"
+
+        fun newInstance(days: Int) = ChartsFragment().apply {
+            arguments = Bundle().apply { putInt(DAYS_BUNDLE_KEY, days) }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        days = arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,16 +86,23 @@ class ChartsFragment : Fragment() {
         }
     }
 
-    private fun populateStatistics() {
+    private suspend fun populateStatistics() {
         val statisticsProvider = StatisticsProvider(medicineRepository)
+
+        // We assume these are already initialized by this point and want the app to fail if not initialized
+        val medicinesPerDayChart = medicinesPerDayChart!!
+        val takenSkippedChart = takenSkippedChart!!
+        val takenSkippedTotalChart = takenSkippedTotalChart!!
 
         try {
             val series = statisticsProvider.getLastDaysReminders(days)
-            requireActivity().runOnUiThread { medicinesPerDayChart!!.updateData(series) }
+            withContext(Dispatchers.Main) {
+                medicinesPerDayChart.updateData(series)
+            }
 
             val data = statisticsProvider.getTakenSkippedData(days)
-            requireActivity().runOnUiThread {
-                takenSkippedChart!!.updateData(
+            withContext(Dispatchers.Main) {
+                takenSkippedChart.updateData(
                     data.taken,
                     data.skipped,
                     days
@@ -89,8 +110,8 @@ class ChartsFragment : Fragment() {
             }
 
             val dataTotal = statisticsProvider.getTakenSkippedData(0)
-            requireActivity().runOnUiThread {
-                takenSkippedTotalChart!!.updateData(
+            withContext(Dispatchers.Main) {
+                takenSkippedTotalChart.updateData(
                     dataTotal.taken,
                     dataTotal.skipped,
                     0
