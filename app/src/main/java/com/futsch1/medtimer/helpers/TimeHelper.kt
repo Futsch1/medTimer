@@ -42,7 +42,6 @@ object TimeHelper {
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
-    @JvmStatic
     fun minutesToTimeString(context: Context, minutes: Long): String {
         try {
             val time = minutesToDate(minutes.toInt())
@@ -67,7 +66,6 @@ object TimeHelper {
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
-    @JvmStatic
     @SuppressLint("DefaultLocale")
     fun minutesToDurationString(minutes: Long): String {
         return String.format("%d:%02d", minutes / 60, minutes % 60)
@@ -250,7 +248,6 @@ object TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format
      */
-    @JvmStatic
     fun secondsSinceEpochToDateTimeString(context: Context, timeStamp: Long): String {
         return secondSinceEpochToDateString(context, timeStamp) + " " + secondsSinceEpochToTimeString(context, timeStamp)
     }
@@ -338,7 +335,6 @@ object TimeHelper {
         return secondsSinceEpochToDateTimeString(context, epochSecond)
     }
 
-    @JvmStatic
     fun secondsSinceEpochToISO8601DatetimeString(remindedTimestamp: Long): Any {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }
@@ -424,7 +420,6 @@ object TimeHelper {
         }
     }
 
-    @JvmRecord
     data class DatePickerWrapper(val activity: FragmentActivity) {
         fun show(startDate: LocalDate?, datePickerResult: (daysSinceEpoch: Long) -> Unit) {
             var startDate = startDate
