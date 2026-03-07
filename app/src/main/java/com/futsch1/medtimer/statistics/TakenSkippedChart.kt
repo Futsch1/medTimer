@@ -1,66 +1,76 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import static java.lang.Math.round;
+import android.content.Context
+import com.androidplot.pie.PieChart
+import com.androidplot.pie.PieRenderer
+import com.androidplot.pie.Segment
+import com.androidplot.pie.SegmentFormatter
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.dpToPx
+import com.futsch1.medtimer.helpers.getMaterialColor
+import java.util.Locale
+import kotlin.math.roundToInt
 
-import android.content.Context;
+class TakenSkippedChart(private val pieChart: PieChart, private val context: Context) {
+    private val segmentTaken: Segment = Segment(context.getString(R.string.taken), 0)
+    private val segmentSkipped: Segment = Segment(context.getString(R.string.skipped), 0)
 
-import com.androidplot.pie.PieChart;
-import com.androidplot.pie.PieRenderer;
-import com.androidplot.pie.Segment;
-import com.androidplot.pie.SegmentFormatter;
-import com.futsch1.medtimer.R;
+    init {
+        pieChart.addSegment(
+            segmentTaken,
+            getFormatter(
+                androidx.appcompat.R.attr.colorPrimary,
+                com.google.android.material.R.attr.colorOnPrimary
+            )
+        )
+        pieChart.addSegment(
+            segmentSkipped,
+            getFormatter(
+                com.google.android.material.R.attr.colorSecondary,
+                com.google.android.material.R.attr.colorOnSecondary
+            )
+        )
+        pieChart.plotPaddingTop = context.resources.dpToPx(5.0f)
+        pieChart.backgroundPaint
+            .setColor(context.getMaterialColor(com.google.android.material.R.attr.colorSurface))
+        pieChart.title.labelPaint
+            .setColor(context.getMaterialColor(com.google.android.material.R.attr.colorOnSurface))
 
-import java.util.Locale;
+        val renderer = pieChart.getRenderer(PieRenderer::class.java)
+        renderer.setDonutSize(0.0f, PieRenderer.DonutMode.PERCENT)
 
-public class TakenSkippedChart {
-    private final PieChart pieChart;
-    private final Context context;
-    private final Segment segmentTaken;
-    private final Segment segmentSkipped;
-    private final ChartHelper chartHelper;
-
-    public TakenSkippedChart(PieChart pieChart, Context context) {
-        this.chartHelper = new ChartHelper(context);
-        this.pieChart = pieChart;
-        this.context = context;
-        this.segmentTaken = new Segment(context.getString(R.string.taken), 0);
-        this.segmentSkipped = new Segment(context.getString(R.string.skipped), 0);
-        pieChart.addSegment(segmentTaken, getFormatter(androidx.appcompat.R.attr.colorPrimary, com.google.android.material.R.attr.colorOnPrimary));
-        pieChart.addSegment(segmentSkipped, getFormatter(com.google.android.material.R.attr.colorSecondary, com.google.android.material.R.attr.colorOnSecondary));
-        pieChart.setPlotPaddingTop(chartHelper.dpToPx(5.0f));
-        PieRenderer renderer = pieChart.getRenderer(PieRenderer.class);
-        renderer.setDonutSize(0.0f, PieRenderer.DonutMode.PERCENT);
-        pieChart.getBackgroundPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorSurface));
-        pieChart.getTitle().getLabelPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
     }
 
-    SegmentFormatter getFormatter(int colorSegment, int colorText) {
-        SegmentFormatter formatter = new SegmentFormatter(chartHelper.getColor(colorSegment));
-        formatter.getLabelPaint().setColor(chartHelper.getColor(colorText));
-        return formatter;
+    fun getFormatter(colorSegment: Int, colorText: Int): SegmentFormatter {
+        val formatter = SegmentFormatter(context.getMaterialColor(colorSegment))
+        formatter.labelPaint.setColor(context.getMaterialColor(colorText))
+        return formatter
     }
 
-    public void updateData(long taken, long skipped, int days) {
-        String title;
-        if (days != 0) {
-            title = context.getResources().getQuantityString(R.plurals.last_n_days, days, days);
+    fun updateData(taken: Long, skipped: Long, days: Int) {
+        val title = if (days != 0) {
+            context.resources.getQuantityString(R.plurals.last_n_days, days, days)
         } else {
-            title = context.getString(R.string.total);
+            context.getString(R.string.total)
         }
-        pieChart.setTitle(title);
+        pieChart.setTitle(title)
 
-        setupSegment(segmentTaken, taken, skipped, R.string.taken);
-        setupSegment(segmentSkipped, skipped, taken, R.string.skipped);
-        pieChart.redraw();
+        val totalValue = taken + skipped
+        setupSegment(segmentTaken, taken, totalValue, R.string.taken)
+        setupSegment(segmentSkipped, skipped, totalValue, R.string.skipped)
+        pieChart.redraw()
     }
 
-    private void setupSegment(Segment segment, long selfValue, long otherValue, int stringId) {
-        segment.setValue(selfValue);
-        if (selfValue > 0) {
-            segment.setTitle(context.getString(stringId) + ": " +
-                    String.format(Locale.US, "%d%%", round(100 * (float) selfValue / (selfValue + otherValue))));
-        } else {
-            segment.setTitle("");
+    private fun setupSegment(segment: Segment, value: Long, totalValue: Long, stringId: Int) {
+        segment.value = value
+        if (value <= 0) {
+            segment.title = ""
+            return
         }
+
+        val stringValue = context.getString(stringId)
+        val percentageValue = (100 * value.toFloat() / totalValue).roundToInt()
+
+        segment.title = "$stringValue: ${"%d%%".format(Locale.US, percentageValue)}"
     }
 }

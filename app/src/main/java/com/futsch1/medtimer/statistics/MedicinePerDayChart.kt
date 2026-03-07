@@ -1,241 +1,244 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.Context
+import android.graphics.Paint
+import androidx.core.graphics.toColorInt
+import com.androidplot.ui.DynamicTableModel
+import com.androidplot.ui.Insets
+import com.androidplot.ui.TableOrder
+import com.androidplot.xy.BarFormatter
+import com.androidplot.xy.BarRenderer
+import com.androidplot.xy.BoundaryMode
+import com.androidplot.xy.SimpleXYSeries
+import com.androidplot.xy.StepMode
+import com.androidplot.xy.XYGraphWidget
+import com.androidplot.xy.XYPlot
+import com.androidplot.xy.XYSeries
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.helpers.TimeHelper.daysSinceEpochToDateString
+import com.futsch1.medtimer.helpers.dpToPx
+import com.futsch1.medtimer.helpers.getMaterialColor
+import com.google.android.material.R
+import java.text.DecimalFormat
+import java.text.FieldPosition
+import java.text.NumberFormat
+import java.text.ParsePosition
+import java.time.LocalDate
+import kotlin.math.ceil
+import kotlin.math.max
 
-import androidx.annotation.NonNull;
+class MedicinePerDayChart(
+    private val medicinesPerDayChart: XYPlot,
+    private val context: Context,
+    private val medicines: MutableList<FullMedicine>
+) {
+    private var colorIndex = 0
 
-import com.androidplot.ui.DynamicTableModel;
-import com.androidplot.ui.Insets;
-import com.androidplot.ui.TableOrder;
-import com.androidplot.xy.BarFormatter;
-import com.androidplot.xy.BarRenderer;
-import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.StepMode;
-import com.androidplot.xy.XYGraphWidget;
-import com.androidplot.xy.XYLegendWidget;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.helpers.TimeHelper;
-
-import java.text.DecimalFormat;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.time.LocalDate;
-import java.util.List;
-
-public class MedicinePerDayChart {
-    private final XYPlot medicinesPerDayChart;
-    private final List<FullMedicine> medicines;
-    private final ChartHelper chartHelper;
-    private final Context context;
-    private int colorIndex;
-
-    public MedicinePerDayChart(XYPlot medicinesPerDayChart, Context context, List<FullMedicine> medicines) {
-        this.medicinesPerDayChart = medicinesPerDayChart;
-        this.context = context;
-        this.chartHelper = new ChartHelper(context);
-        this.medicines = medicines;
-
-        medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED);
-
-        setupBottomLine();
-        setupLeftLine();
-        setupNoBackgrounds();
-        setupLegend();
+    companion object {
+        private val COLORS = intArrayOf(
+            "#003f5c".toColorInt(),
+            "#2f4b7c".toColorInt(),
+            "#665191".toColorInt(),
+            "#a05195".toColorInt(),
+            "#d45087".toColorInt(),
+            "#f95d6a".toColorInt(),
+            "#ff7c43".toColorInt(),
+            "#ffa600".toColorInt(),
+            "#004c6d".toColorInt(),
+            "#295d7d".toColorInt(),
+            "#436f8e".toColorInt(),
+            "#5b829f".toColorInt(),
+            "#7295b0".toColorInt(),
+            "#89a8c2".toColorInt(),
+            "#a1bcd4".toColorInt(),
+            "#b8d0e6".toColorInt(),
+            "#d0e5f8".toColorInt()
+        )
     }
 
-    private void setupBottomLine() {
-        XYGraphWidget.LineLabelStyle bottomLine = medicinesPerDayChart.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM);
-        bottomLine.setFormat(new DaysSinceEpochFormat());
-        bottomLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
-        bottomLine.getPaint().setTextAlign(Paint.Align.CENTER);
-        bottomLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+    init {
+        medicinesPerDayChart.setRangeLowerBoundary(0, BoundaryMode.FIXED)
+
+        setupBottomLine()
+        setupLeftLine()
+        setupNoBackgrounds()
+        setupLegend()
     }
 
-    private void setupLeftLine() {
-        XYGraphWidget.LineLabelStyle leftLine =
-                medicinesPerDayChart.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT);
-        leftLine.setFormat(new DecimalFormat("#"));
-        leftLine.getPaint().setTextSize(chartHelper.dpToPx(10.0f));
-        leftLine.getPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
+    private fun setupBottomLine() {
+        val bottomLine = medicinesPerDayChart.graph.getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
+        bottomLine.format = DaysSinceEpochFormat()
+        bottomLine.paint.textSize = context.resources.dpToPx(10.0f)
+        bottomLine.paint.textAlign = Paint.Align.CENTER
+        bottomLine.paint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
     }
 
-    private void setupNoBackgrounds() {
-        medicinesPerDayChart.setBackgroundPaint(null);
-        medicinesPerDayChart.getGraph().setRangeGridLinePaint(null);
-        medicinesPerDayChart.getGraph().setDomainGridLinePaint(null);
-        medicinesPerDayChart.getGraph().setBackgroundPaint(null);
-        medicinesPerDayChart.getGraph().setGridBackgroundPaint(null);
-        medicinesPerDayChart.getGraph().setDomainSubGridLinePaint(null);
-        medicinesPerDayChart.getGraph().setRangeSubGridLinePaint(null);
-        medicinesPerDayChart.getGraph().setDomainOriginLinePaint(null);
-        medicinesPerDayChart.getGraph().setRangeOriginLinePaint(null);
+    private fun setupLeftLine() {
+        val leftLine = medicinesPerDayChart.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT)
+        leftLine.format = DecimalFormat("#")
+        leftLine.paint.textSize = context.resources.dpToPx(10.0f)
+        leftLine.paint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
     }
 
-    private void setupLegend() {
-        XYLegendWidget legend = medicinesPerDayChart.getLegend();
-        legend.getTextPaint().setColor(chartHelper.getColor(com.google.android.material.R.attr.colorOnSurface));
-        legend.getTextPaint().setTextSize(chartHelper.dpToPx(10.0f));
-        legend.setPadding(chartHelper.dpToPx(4.0f), 0, chartHelper.dpToPx(4.0f), 0);
+    private fun setupNoBackgrounds() {
+        medicinesPerDayChart.backgroundPaint = null
+        medicinesPerDayChart.graph.rangeGridLinePaint = null
+        medicinesPerDayChart.graph.domainGridLinePaint = null
+        medicinesPerDayChart.graph.backgroundPaint = null
+        medicinesPerDayChart.graph.gridBackgroundPaint = null
+        medicinesPerDayChart.graph.domainSubGridLinePaint = null
+        medicinesPerDayChart.graph.rangeSubGridLinePaint = null
+        medicinesPerDayChart.graph.domainOriginLinePaint = null
+        medicinesPerDayChart.graph.rangeOriginLinePaint = null
     }
 
-    public void updateData(List<SimpleXYSeries> series) {
-        medicinesPerDayChart.clear();
-        colorIndex = 0;
-        int numLegendColumns = Math.max(3, (int) Math.ceil(series.size() / 3.0f));
-        int columnSize = (int) medicinesPerDayChart.getLegend().getWidgetDimensions().paddedRect.width() / numLegendColumns;
-        columnSize -= (int) medicinesPerDayChart.getLegend().getIconSize().getWidth().getPixelValue(0.0f) + 2;
+    private fun setupLegend() {
+        val legend = medicinesPerDayChart.legend
+        legend.textPaint.setColor(context.getMaterialColor(R.attr.colorOnSurface))
+        legend.textPaint.textSize = context.resources.dpToPx(10.0f)
+        legend.setPadding(context.resources.dpToPx(4.0f), 0f, context.resources.dpToPx(4.0f), 0f)
+    }
 
-        for (SimpleXYSeries xySeries : series) {
-            medicinesPerDayChart.addSeries(xySeries, getFormatter(xySeries.getTitle()));
-            adjustTitleLength(xySeries, columnSize, medicinesPerDayChart.getLegend().getTextPaint());
+    fun updateData(series: MutableList<SimpleXYSeries>) {
+        medicinesPerDayChart.clear()
+        colorIndex = 0
+        val numLegendColumns = max(3, ceil((series.size / 3.0)).toInt())
+        var columnSize = medicinesPerDayChart.legend.widgetDimensions.paddedRect.width()
+            .toInt() / numLegendColumns
+        columnSize -= medicinesPerDayChart.legend.iconSize.width.getPixelValue(0.0f).toInt() + 2
+
+        for (xySeries in series) {
+            medicinesPerDayChart.addSeries(xySeries, getFormatter(xySeries.title))
+            adjustTitleLength(xySeries, columnSize, medicinesPerDayChart.legend.textPaint)
         }
-        Number maxRange = calculateMaxRange(series);
-        medicinesPerDayChart.setRangeUpperBoundary(maxRange, BoundaryMode.FIXED);
-        medicinesPerDayChart.setRangeStep(StepMode.INCREMENT_BY_VAL, 1.0f);
+        val maxRange = calculateMaxRange(series)
+        medicinesPerDayChart.setRangeUpperBoundary(maxRange, BoundaryMode.FIXED)
+        medicinesPerDayChart.setRangeStep(StepMode.INCREMENT_BY_VAL, 1.0)
 
-        long minDomain = calculateMinDomain(series);
-        long maxDomain = calculateMaxDomain(series);
+        var minDomain = calculateMinDomain(series)
+        val maxDomain = calculateMaxDomain(series)
         if (maxDomain == minDomain) {
-            minDomain -= 1;
+            minDomain -= 1
         }
-        long numDomains = (maxDomain - minDomain + 1);
-        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, getDomainStepVal(numDomains));
-        medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED);
+        val numDomains = (maxDomain - minDomain + 1)
+        medicinesPerDayChart.setDomainStep(StepMode.INCREMENT_BY_VAL, getDomainStepVal(numDomains))
+        medicinesPerDayChart.setDomainBoundaries(minDomain, maxDomain, BoundaryMode.FIXED)
 
-        medicinesPerDayChart.getLegend().setTableModel(new DynamicTableModel(numLegendColumns, 3, TableOrder.ROW_MAJOR));
+        medicinesPerDayChart.legend.setTableModel(
+            DynamicTableModel(
+                numLegendColumns,
+                3,
+                TableOrder.ROW_MAJOR
+            )
+        )
 
-        setupRenderer(numDomains);
-        medicinesPerDayChart.redraw();
+        setupRenderer(numDomains)
+        medicinesPerDayChart.redraw()
     }
 
-    private MedicinePerDayChartFormatter getFormatter(String title) {
-        MedicinePerDayChartFormatter formatter = new MedicinePerDayChartFormatter();
-        formatter.getFillPaint().setColor(getColor(title));
-        formatter.getBorderPaint().setColor(chartHelper.getColor(androidx.appcompat.R.attr.colorPrimary));
-        return formatter;
+    private fun getFormatter(title: String): MedicinePerDayChartFormatter {
+        val formatter = MedicinePerDayChartFormatter()
+        formatter.fillPaint.setColor(getColor(title))
+        formatter.borderPaint.setColor(context.getMaterialColor(androidx.appcompat.R.attr.colorPrimary))
+        return formatter
     }
 
-    private void adjustTitleLength(SimpleXYSeries series, int columnPixels, Paint textPaint) {
-        int titleWidth = (int) textPaint.measureText(series.getTitle());
-        String title = series.getTitle();
-        while (titleWidth > columnPixels && title.length() > 5) {
-            title = title.substring(0, title.length() - 4) + "...";
-            titleWidth = (int) textPaint.measureText(title);
+    private fun adjustTitleLength(series: SimpleXYSeries, columnPixels: Int, textPaint: Paint) {
+        var titleWidth = textPaint.measureText(series.title).toInt()
+        var title = series.title
+        while (titleWidth > columnPixels && title.length > 5) {
+            title = title.substring(0, title.length - 4) + "..."
+            titleWidth = textPaint.measureText(title).toInt()
         }
-        series.setTitle(title);
+        series.setTitle(title)
     }
 
-    private Number calculateMaxRange(List<SimpleXYSeries> series) {
-        long max = 0;
-        if (series.isEmpty()) {
-            return max;
-        }
-        for (int x = 0; x < series.get(0).size(); x++) {
-            int finalX = x;
-            long sum = series.stream().mapToLong(xySeries -> xySeries.getY(finalX).longValue()).sum();
-            if (sum > max) {
-                max = sum;
-            }
-        }
-        return max;
+    private fun calculateMaxRange(series: MutableList<SimpleXYSeries>): Number {
+        if (series.isEmpty()) return 0
+        return (0 until series[0].size()).maxOfOrNull { x ->
+            series.sumOf { it.getY(x).toLong() }
+        } ?: 0
     }
 
-    private long calculateMinDomain(List<SimpleXYSeries> series) {
-        if (series.isEmpty()) {
-            return LocalDate.now().toEpochDay() - 1;
+    private fun calculateMinDomain(series: MutableList<SimpleXYSeries>): Long {
+        return if (series.isEmpty()) {
+            LocalDate.now().toEpochDay() - 1
         } else {
-            return series.get(0).getX(0).longValue();
+            series[0].getX(0).toLong()
         }
     }
 
-    private long calculateMaxDomain(List<SimpleXYSeries> series) {
-        if (series.isEmpty()) {
-            return LocalDate.now().toEpochDay();
+    private fun calculateMaxDomain(series: MutableList<SimpleXYSeries>): Long {
+        return if (series.isEmpty()) {
+            LocalDate.now().toEpochDay()
         } else {
-            XYSeries first = series.get(0);
-            return first.getX(first.size() - 1).longValue();
+            val first: XYSeries = series[0]
+            first.getX(first.size() - 1).toLong()
         }
     }
 
-    private double getDomainStepVal(long numDomains) {
-        if (TimeHelper.daysSinceEpochToDateString(context, LocalDate.of(2024, 12, 31).toEpochDay()).length() > 8) {
-            return Math.ceil(numDomains / 5.0f);
+    private fun getDomainStepVal(numDomains: Long): Double {
+        return if (daysSinceEpochToDateString(
+                context, LocalDate.of(2024, 12, 31).toEpochDay()
+            ).length > 8
+        ) {
+            ceil((numDomains / 5.0f).toDouble())
         } else {
-            return Math.ceil(numDomains / 7.0f);
+            ceil((numDomains / 7.0f).toDouble())
         }
     }
 
-    private void setupRenderer(long numDomains) {
+    private fun setupRenderer(numDomains: Long) {
         // The space between each bar and next to the outer bars is half bar width.
         // So we have numDomainsBar bars, numDomains - 1 spaces + 2 outer bars
-        float numBars = numDomains + (numDomains - 1 + 2) / 2.0f;
-        float barWidth = medicinesPerDayChart.getGraph().getWidgetDimensions().paddedRect.width() / numBars;
+        val numBars = numDomains + (numDomains - 1 + 2) / 2.0f
+        val barWidth = medicinesPerDayChart.graph.widgetDimensions.paddedRect.width() / numBars
 
-        medicinesPerDayChart.getGraph().setGridInsets(new Insets(0, 0, barWidth, barWidth));
+        medicinesPerDayChart.graph.setGridInsets(Insets(0f, 0f, barWidth, barWidth))
 
-        MedicinePerDayChartRenderer renderer = medicinesPerDayChart.getRenderer(MedicinePerDayChartRenderer.class);
+        val renderer = medicinesPerDayChart.getRenderer(
+            MedicinePerDayChartRenderer::class.java
+        )
         if (renderer != null) {
-            renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth);
-            renderer.setBarOrientation(BarRenderer.BarOrientation.STACKED);
+            renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth)
+            renderer.barOrientation = BarRenderer.BarOrientation.STACKED
         }
     }
 
-    private int getColor(String title) {
-        for (FullMedicine medicine : medicines) {
-            if (medicine.getMedicine().getName().equals(title) && medicine.getMedicine().getUseColor()) {
-                return medicine.getMedicine().getColor();
-            }
-        }
-        String[] colors = {"#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a",
-                "#ff7c43", "#ffa600", "#004c6d", "#295d7d", "#436f8e", "#5b829f", "#7295b0",
-                "#89a8c2", "#a1bcd4", "#b8d0e6", "#d0e5f8"};
-
-        return Color.parseColor(colors[colorIndex++ % colors.length]);
+    private fun getColor(title: String): Int {
+        val color =
+            medicines.firstOrNull { it.medicine.name == title && it.medicine.useColor }?.medicine?.color
+        return color ?: COLORS[colorIndex++ % COLORS.size]
     }
 
-    private class DaysSinceEpochFormat extends NumberFormat {
-        @NonNull
-        @Override
-        public StringBuffer format(double value, @NonNull StringBuffer buffer,
-                                   @NonNull FieldPosition field) {
-            return buffer.append(TimeHelper.daysSinceEpochToDateString(context, (long) value));
+    private inner class DaysSinceEpochFormat : NumberFormat() {
+        override fun format(
+            value: Double, buffer: StringBuffer, field: FieldPosition
+        ): StringBuffer {
+            return buffer.append(daysSinceEpochToDateString(context, value.toLong()))
         }
 
-        @NonNull
-        @Override
-        public StringBuffer format(long value, @NonNull StringBuffer buffer,
-                                   @NonNull FieldPosition field) {
-            throw new UnsupportedOperationException("Not yet implemented.");
+        override fun format(
+            value: Long, buffer: StringBuffer, field: FieldPosition
+        ): StringBuffer {
+            throw UnsupportedOperationException("Not yet implemented.")
         }
 
-        @Override
-        public Number parse(@NonNull String string, @NonNull ParsePosition position) {
-            throw new UnsupportedOperationException("Not yet implemented.");
-
+        override fun parse(string: String, position: ParsePosition): Number? {
+            throw UnsupportedOperationException("Not yet implemented.")
         }
     }
 
-    class MedicinePerDayChartFormatter extends BarFormatter {
-        @Override
-        public Class<? extends BarRenderer<?>> getRendererClass() {
-            return MedicinePerDayChartRenderer.class;
+    internal inner class MedicinePerDayChartFormatter : BarFormatter() {
+        override fun getRendererClass(): Class<out BarRenderer<*>?> {
+            return MedicinePerDayChartRenderer::class.java
         }
 
-        @Override
-        public BarRenderer<?> doGetRendererInstance(XYPlot plot) {
-            return new MedicinePerDayChartRenderer(plot);
+        override fun doGetRendererInstance(plot: XYPlot?): BarRenderer<*> {
+            return MedicinePerDayChartRenderer(plot)
         }
     }
 
-    class MedicinePerDayChartRenderer extends BarRenderer<MedicinePerDayChartFormatter> {
-        public MedicinePerDayChartRenderer(XYPlot plot) {
-            super(plot);
-        }
-    }
+    internal inner class MedicinePerDayChartRenderer(plot: XYPlot?) :
+        BarRenderer<MedicinePerDayChartFormatter?>(plot)
 }
