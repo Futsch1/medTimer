@@ -1,35 +1,31 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.R
 
-import androidx.preference.PreferenceManager;
-
-import com.futsch1.medtimer.R;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class AnalysisDays {
-    private static final int DEFAULT_DAYS = 7;
-    private final SharedPreferences sharedPref;
-    private final List<Integer> analysisDaysValues;
-
-    public AnalysisDays(Context context) {
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        analysisDaysValues = Arrays.stream(context.getResources().getStringArray(R.array.analysis_days_values)).map(Integer::valueOf).collect(Collectors.toList());
+class AnalysisDays(context: Context) {
+    companion object {
+        private const val DEFAULT_DAYS = 7
     }
 
-    public int getPosition() {
-        return analysisDaysValues.indexOf(getDays());
-    }
+    private val sharedPref: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
+    private val analysisDaysValues: IntArray =
+        context.resources.getIntArray(R.array.analysis_days_values)
 
-    public void setPosition(int position) {
-        sharedPref.edit().putInt("analysis_days", position).apply();
-    }
+    var position: Int
+        get() = analysisDaysValues.indexOf(this.days)
+        set(position) {
+            sharedPref.edit { putInt("analysis_days", position) }
+        }
 
-    public int getDays() {
-        return this.analysisDaysValues.get(sharedPref.getInt("analysis_days", analysisDaysValues.indexOf(DEFAULT_DAYS)));
-    }
+    val days: Int
+        get() {
+            val days = sharedPref.getInt("analysis_days", analysisDaysValues.indexOf(DEFAULT_DAYS))
+                .coerceIn(0, analysisDaysValues.size - 1)
+            return this.analysisDaysValues[days]
+        }
 }
