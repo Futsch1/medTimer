@@ -188,8 +188,8 @@ public class MedicinePerDayChart {
 
     private int getColor(String title) {
         for (FullMedicine medicine : medicines) {
-            if (medicine.medicine.name.equals(title) && medicine.medicine.useColor) {
-                return medicine.medicine.color;
+            if (medicine.getMedicine().getName().equals(title) && medicine.getMedicine().getUseColor()) {
+                return medicine.getMedicine().getColor();
             }
         }
         String[] colors = {"#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a",

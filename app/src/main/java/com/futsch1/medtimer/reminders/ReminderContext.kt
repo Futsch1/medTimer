@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -22,7 +21,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 class ReminderContext(private val context: Context) {
-    val medicineRepository = MedicineRepository(context.applicationContext as Application)
+    val medicineRepository = MedicineRepository(context)
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager

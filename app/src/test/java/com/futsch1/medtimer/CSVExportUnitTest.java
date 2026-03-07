@@ -41,26 +41,25 @@ class CSVExportUnitTest {
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     void testCreateCsvFileWithCorrectHeadersAndData() {
-        // Create a list of ReminderEvents
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent1 = new ReminderEvent();
-        reminderEvent1.remindedTimestamp = 1620000000; // Set remindedTimestamp to a specific value
-        reminderEvent1.processedTimestamp = 1620000120;
-        reminderEvent1.medicineName = "Medicine 1";
-        reminderEvent1.amount = "10mg";
-        reminderEvent1.status = ReminderEvent.ReminderStatus.TAKEN;
-        reminderEvent1.lastIntervalReminderTimeInMinutes = 134;
-        reminderEvent1.tags = Arrays.asList("Tag1", "Tag2");
-        reminderEvent1.notes = "Notes";
+        reminderEvent1.setRemindedTimestamp(1620000000); // Set remindedTimestamp to a specific value
+        reminderEvent1.setProcessedTimestamp(1620000120);
+        reminderEvent1.setMedicineName("Medicine 1");
+        reminderEvent1.setAmount("10mg");
+        reminderEvent1.setStatus(ReminderEvent.ReminderStatus.TAKEN);
+        reminderEvent1.setLastIntervalReminderTimeInMinutes(134);
+        reminderEvent1.setTags(Arrays.asList("Tag1", "Tag2"));
+        reminderEvent1.setNotes("Notes");
         reminderEvents.add(reminderEvent1);
 
         ReminderEvent reminderEvent2 = new ReminderEvent();
-        reminderEvent2.remindedTimestamp = 1620001800; // Set remindedTimestamp to a specific value
-        reminderEvent2.processedTimestamp = 1620001980;
-        reminderEvent2.medicineName = "Medicine 2";
-        reminderEvent2.amount = "20mg";
-        reminderEvent2.status = ReminderEvent.ReminderStatus.SKIPPED;
-        reminderEvent2.tags = new ArrayList<>();
+        reminderEvent2.setRemindedTimestamp(1620001800); // Set remindedTimestamp to a specific value
+        reminderEvent2.setProcessedTimestamp(1620001980);
+        reminderEvent2.setMedicineName("Medicine 2");
+        reminderEvent2.setAmount("20mg");
+        reminderEvent2.setStatus(ReminderEvent.ReminderStatus.SKIPPED);
+        reminderEvent2.setTags(new ArrayList<>());
         reminderEvents.add(reminderEvent2);
 
         // Create a mock Context
@@ -112,25 +111,25 @@ class CSVExportUnitTest {
         // Create a list of Medicines
         List<FullMedicine> medicines = new ArrayList<>();
         FullMedicine medicine1 = new FullMedicine();
-        medicine1.medicine = new Medicine("Medicine 1");
-        medicine1.reminders = new ArrayList<>();
+        medicine1.setMedicine(new Medicine("Medicine 1"));
+        medicine1.setReminders(new ArrayList<>());
         Reminder reminder1 = new Reminder(1);
-        reminder1.timeInMinutes = 60;
-        reminder1.amount = "1";
-        medicine1.reminders.add(reminder1);
+        reminder1.setTimeInMinutes(60);
+        reminder1.setAmount("1");
+        medicine1.getReminders().add(reminder1);
         medicines.add(medicine1);
 
         FullMedicine medicine2 = new FullMedicine();
-        medicine2.medicine = new Medicine("Medicine 2");
-        medicine2.reminders = new ArrayList<>();
+        medicine2.setMedicine(new Medicine("Medicine 2"));
+        medicine2.setReminders(new ArrayList<>());
         Reminder reminder2 = new Reminder(2);
-        reminder2.timeInMinutes = 61;
-        reminder2.amount = "2";
-        medicine2.reminders.add(reminder2);
+        reminder2.setTimeInMinutes(61);
+        reminder2.setAmount("2");
+        medicine2.getReminders().add(reminder2);
         Reminder reminder3 = new Reminder(2);
-        reminder3.timeInMinutes = 62;
-        reminder3.amount = "three";
-        medicine2.reminders.add(reminder3);
+        reminder3.setTimeInMinutes(62);
+        reminder3.setAmount("three");
+        medicine2.getReminders().add(reminder3);
         medicines.add(medicine2);
 
         // Create a mock Context

@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
 class StockMedicineViewModel(application: Application) : EntityViewModel<FullMedicine>(application) {
     override val medicineRepository = MedicineRepository(application)
 
-    override fun getFlow(id: Int): Flow<FullMedicine> = medicineRepository.getMedicineFlow(id)
+    override fun getFlow(id: Int): Flow<FullMedicine?> = medicineRepository.getMedicineFlow(id)
 }

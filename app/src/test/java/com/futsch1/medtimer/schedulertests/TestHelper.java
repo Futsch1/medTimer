@@ -23,22 +23,22 @@ public class TestHelper {
 
     public static Reminder buildReminder(int medicineId, int reminderId, String amount, int timeInMinutes, int daysBetweenReminders) {
         Reminder reminder = new Reminder(medicineId);
-        reminder.reminderId = reminderId;
-        reminder.amount = amount;
-        reminder.timeInMinutes = timeInMinutes;
-        reminder.pauseDays = daysBetweenReminders - 1;
-        reminder.consecutiveDays = 1;
-        reminder.createdTimestamp = 0;
-        reminder.cycleStartDay = 0;
-        reminder.days = new ArrayList<>(List.of(true, true, true, true, true, true, true));
+        reminder.setReminderId(reminderId);
+        reminder.setAmount(amount);
+        reminder.setTimeInMinutes(timeInMinutes);
+        reminder.setPauseDays(daysBetweenReminders - 1);
+        reminder.setConsecutiveDays(1);
+        reminder.setCreatedTimestamp(0);
+        reminder.setCycleStartDay(0);
+        reminder.setDays(new ArrayList<>(List.of(true, true, true, true, true, true, true)));
         return reminder;
     }
 
     public static FullMedicine buildFullMedicine(int medicineId, String medicineName) {
         FullMedicine medicineWithReminders = new FullMedicine();
-        medicineWithReminders.medicine = new Medicine(medicineName);
-        medicineWithReminders.medicine.medicineId = medicineId;
-        medicineWithReminders.reminders = new ArrayList<>();
+        medicineWithReminders.setMedicine(new Medicine(medicineName));
+        medicineWithReminders.getMedicine().setMedicineId(medicineId);
+        medicineWithReminders.setReminders(new ArrayList<>());
         return medicineWithReminders;
     }
 
@@ -58,16 +58,16 @@ public class TestHelper {
 
     public static ReminderEvent buildReminderEvent(int reminderId, long remindedTimestamp) {
         ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.remindedTimestamp = remindedTimestamp;
+        reminderEvent.setReminderId(reminderId);
+        reminderEvent.setRemindedTimestamp(remindedTimestamp);
         return reminderEvent;
     }
 
     public static ReminderEvent buildReminderEvent(int reminderId, long remindedTimestamp, int reminderEventId) {
         ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.reminderId = reminderId;
-        reminderEvent.remindedTimestamp = remindedTimestamp;
-        reminderEvent.reminderEventId = reminderEventId;
+        reminderEvent.setReminderId(reminderId);
+        reminderEvent.setRemindedTimestamp(remindedTimestamp);
+        reminderEvent.setReminderEventId(reminderEventId);
         return reminderEvent;
     }
 
@@ -78,7 +78,7 @@ public class TestHelper {
     public static void assertRemindedAtIndex(List<ScheduledReminder> scheduledReminders, Instant timestamp, Medicine medicine, Reminder reminder, int index) {
         assertTrue(scheduledReminders.size() > index);
         assertEquals(timestamp, scheduledReminders.get(index).timestamp());
-        assertEquals(medicine, scheduledReminders.get(index).medicine().medicine);
+        assertEquals(medicine, scheduledReminders.get(index).medicine().getMedicine());
         assertEquals(reminder, scheduledReminders.get(index).reminder());
     }
 

@@ -22,20 +22,21 @@ class JSONReminderEventBackupUnitTest {
         JSONReminderEventBackup jsonReminderEventBackup = new JSONReminderEventBackup();
         List<ReminderEvent> reminderEvents = new ArrayList<>();
         ReminderEvent reminderEvent = new ReminderEvent();
-        reminderEvent.medicineName = "Medicine A";
-        reminderEvent.color = Color.RED;
-        reminderEvent.useColor = true;
-        reminderEvent.amount = "1";
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN;
-        reminderEvent.remindedTimestamp = 1;
-        reminderEvent.processedTimestamp = 2;
-        reminderEvent.reminderId = 3;
-        reminderEvent.iconId = 4;
-        reminderEvent.tags = new ArrayList<>();
-        reminderEvent.tags.add("Tag A");
-        reminderEvent.lastIntervalReminderTimeInMinutes = 12;
-        reminderEvent.notes = "Notes";
-        reminderEvent.reminderType = Reminder.ReminderType.LINKED;
+        reminderEvent.setMedicineName("Medicine A");
+        reminderEvent.setColor(Color.RED);
+        reminderEvent.setUseColor(true);
+        reminderEvent.setAmount("1");
+        reminderEvent.setStatus(ReminderEvent.ReminderStatus.TAKEN);
+        reminderEvent.setRemindedTimestamp(1);
+        reminderEvent.setProcessedTimestamp(2);
+        reminderEvent.setReminderId(3);
+        reminderEvent.setIconId(4);
+        List<String> tags = new ArrayList<>();
+        tags.add("Tag A");
+        reminderEvent.setTags(tags);
+        reminderEvent.setLastIntervalReminderTimeInMinutes(12);
+        reminderEvent.setNotes("Notes");
+        reminderEvent.setReminderType(Reminder.ReminderType.LINKED);
         reminderEvents.add(reminderEvent);
 
         String result = jsonReminderEventBackup.createBackupAsString(1, reminderEvents);
@@ -81,19 +82,19 @@ class JSONReminderEventBackupUnitTest {
     }
 
     private void compareReminderEvent(ReminderEvent reminderEvent1, ReminderEvent reminderEvent2) {
-        assertEquals(reminderEvent1.medicineName, reminderEvent2.medicineName);
-        assertEquals(reminderEvent1.color, reminderEvent2.color);
-        assertEquals(reminderEvent1.useColor, reminderEvent2.useColor);
-        assertEquals(reminderEvent1.amount, reminderEvent2.amount);
-        assertEquals(reminderEvent1.status, reminderEvent2.status);
-        assertEquals(reminderEvent1.remindedTimestamp, reminderEvent2.remindedTimestamp);
-        assertEquals(reminderEvent1.processedTimestamp, reminderEvent2.processedTimestamp);
-        assertEquals(reminderEvent1.reminderId, reminderEvent2.reminderId);
-        assertEquals(reminderEvent1.iconId, reminderEvent2.iconId);
-        assertEquals(reminderEvent1.tags, reminderEvent2.tags);
-        assertEquals(reminderEvent1.lastIntervalReminderTimeInMinutes, reminderEvent2.lastIntervalReminderTimeInMinutes);
-        assertEquals(reminderEvent1.notes, reminderEvent2.notes);
-        assertEquals(reminderEvent1.reminderType, reminderEvent2.reminderType);
+        assertEquals(reminderEvent1.getMedicineName(), reminderEvent2.getMedicineName());
+        assertEquals(reminderEvent1.getColor(), reminderEvent2.getColor());
+        assertEquals(reminderEvent1.getUseColor(), reminderEvent2.getUseColor());
+        assertEquals(reminderEvent1.getAmount(), reminderEvent2.getAmount());
+        assertEquals(reminderEvent1.getStatus(), reminderEvent2.getStatus());
+        assertEquals(reminderEvent1.getRemindedTimestamp(), reminderEvent2.getRemindedTimestamp());
+        assertEquals(reminderEvent1.getProcessedTimestamp(), reminderEvent2.getProcessedTimestamp());
+        assertEquals(reminderEvent1.getReminderId(), reminderEvent2.getReminderId());
+        assertEquals(reminderEvent1.getIconId(), reminderEvent2.getIconId());
+        assertEquals(reminderEvent1.getTags(), reminderEvent2.getTags());
+        assertEquals(reminderEvent1.getLastIntervalReminderTimeInMinutes(), reminderEvent2.getLastIntervalReminderTimeInMinutes());
+        assertEquals(reminderEvent1.getNotes(), reminderEvent2.getNotes());
+        assertEquals(reminderEvent1.getReminderType(), reminderEvent2.getReminderType());
     }
 }
 
