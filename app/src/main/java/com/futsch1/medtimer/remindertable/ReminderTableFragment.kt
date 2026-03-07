@@ -16,7 +16,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
 import com.futsch1.medtimer.helpers.TableHelper
-import com.google.android.material.color.MaterialColors
+import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -52,7 +52,10 @@ class ReminderTableFragment : Fragment() {
         tableView.columnHeaderRecyclerView.setItemAnimator(null)
         tableView.rowHeaderRecyclerView.setItemAnimator(null)
 
-        tableView.unSelectedColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, "TableView")
+        tableView.unSelectedColor = requireContext().getMaterialColor(
+            com.google.android.material.R.attr.colorSecondaryContainer,
+            "TableView"
+        )
 
         return fragmentView
     }

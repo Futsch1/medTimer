@@ -12,9 +12,9 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import com.futsch1.medtimer.helpers.getMaterialColor
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
-import com.google.android.material.color.MaterialColors
 
 class MedTimerAppIntro : AppIntro() {
     private val requestPostNotificationPermission = RequestPostNotificationPermission(this)
@@ -74,23 +74,22 @@ class MedTimerAppIntro : AppIntro() {
         this.isImmersive = false
 
         this.setColorDoneText(
-            MaterialColors.getColor(
-                this, com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.applicationContext.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
             )
         )
         this.setNextArrowColor(
-            MaterialColors.getColor(
-                this, com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.applicationContext.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
             )
         )
         this.setColorSkipButton(
-            MaterialColors.getColor(
-                this, com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.applicationContext.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
             )
         )
         this.setBarColor(
-            MaterialColors.getColor(
-                this,
+            this.applicationContext.getMaterialColor(
                 androidx.appcompat.R.attr.colorPrimary,
                 Color.WHITE
             )
