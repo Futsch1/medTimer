@@ -11,6 +11,7 @@ import com.androidplot.xy.XYPlot
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,7 +25,8 @@ class ChartsFragment : Fragment() {
     private var takenSkippedTotalChart: TakenSkippedChart? = null
     private var medicinesPerDayChart: MedicinePerDayChart? = null
 
-    private var days = 0
+    private var currentDays = 0
+    private val daysFlow = MutableSharedFlow<Int>(replay = 1)
 
     companion object {
         private const val DAYS_BUNDLE_KEY = "days"
@@ -36,7 +38,7 @@ class ChartsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        days = arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0
+        currentDays = arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0
     }
 
     override fun onCreateView(
@@ -54,7 +56,10 @@ class ChartsFragment : Fragment() {
 
         setupTakenSkippedCharts()
         lifecycleScope.launch(Dispatchers.Default) {
-            this@ChartsFragment.setupMedicinesPerDayChart()
+            setupMedicinesPerDayChart()
+            daysFlow.collect { days ->
+                populateStatistics(days)
+            }
         }
 
         return statisticsView
@@ -80,19 +85,14 @@ class ChartsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        lifecycleScope.launch(Dispatchers.Default) {
-            this@ChartsFragment.populateStatistics()
-        }
+        lifecycleScope.launch { daysFlow.emit(currentDays) }
     }
 
-    private suspend fun populateStatistics() {
+    private suspend fun populateStatistics(days: Int) {
         val statisticsProvider = StatisticsProvider(medicineRepository)
-
-        // We assume these are already initialized by this point and want the app to fail if not initialized
-        val medicinesPerDayChart = medicinesPerDayChart!!
-        val takenSkippedChart = takenSkippedChart!!
-        val takenSkippedTotalChart = takenSkippedTotalChart!!
+        val medicinesPerDayChart = medicinesPerDayChart ?: return
+        val takenSkippedChart = takenSkippedChart ?: return
+        val takenSkippedTotalChart = takenSkippedTotalChart ?: return
 
         try {
             val series = statisticsProvider.getLastDaysReminders(days)
@@ -123,10 +123,7 @@ class ChartsFragment : Fragment() {
     }
 
     fun setDays(days: Int) {
-        this.days = days
-
-        lifecycleScope.launch(Dispatchers.Default) {
-            this@ChartsFragment.populateStatistics()
-        }
+        this.currentDays = days
+        lifecycleScope.launch { daysFlow.emit(days) }
     }
 }
