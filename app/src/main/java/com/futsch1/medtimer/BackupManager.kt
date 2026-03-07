@@ -43,8 +43,9 @@ class BackupManager(
     private val lifecycleOwner: LifecycleOwner,
     private val menu: Menu?,
     private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent?>?,
-    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>?,
+<<<<<<< HEAD
+    private val openFileLauncher: ActivityResultLauncher<Intent?>,
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>,
     private val fragmentManager: FragmentManager? = null,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main

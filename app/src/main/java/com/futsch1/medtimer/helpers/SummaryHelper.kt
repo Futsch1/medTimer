@@ -102,18 +102,19 @@ private fun timeBasedReminderString(
     strings: MutableList<String>,
     context: Context
 ) {
-    val weekdayLimited =
-        !reminder.days.all { day: Boolean -> day }
-    val dayOfMonthLimited = (reminder.activeDaysOfMonth and 0x7FFFFFFF) != 0x7FFFFFFF
-    val never = reminder.days.none { day: Boolean -> day } || (reminder.activeDaysOfMonth and 0x7FFFFFFF) == 0
+    val never = reminder.days.none { it } || (reminder.activeDaysOfMonth and 0x7FFFFFFF) == 0
     if (never) {
         strings.add(context.getString(R.string.never))
     } else {
+        val dayOfMonthLimited = (reminder.activeDaysOfMonth and 0x7FFFFFFF) != 0x7FFFFFFF
+        val hasWeekdayRestriction =
+            reminder.days.any { !it }
+
         buildReminderStrings(
             context,
             strings,
             reminder,
-            ReminderProperties(weekdayLimited, dayOfMonthLimited)
+            ReminderProperties(hasWeekdayRestriction, dayOfMonthLimited)
         )
     }
 }
@@ -143,21 +144,13 @@ private fun buildReminderStrings(
 
 fun remindersSummary(reminders: List<Reminder>, context: Context): String {
     val reminderTimes = timeBasedRemindersSummary(
-        reminders.filter { r: Reminder -> r.reminderType == Reminder.ReminderType.TIME_BASED },
+        reminders.filter { r -> r.reminderType == Reminder.ReminderType.TIME_BASED },
         context
-    ) + getRemindersSummary(
-        reminders.filter { r: Reminder -> r.reminderType == Reminder.ReminderType.LINKED },
-        ({ r: Reminder -> linkedReminderSummaryString(r, context) })
-    ) + getRemindersSummary(
-        reminders.filter { r: Reminder -> r.isInterval },
-        ({ r: Reminder -> intervalBasedReminderString(r, context) })
-    ) + getRemindersSummary(
-        reminders.filter { r: Reminder -> r.reminderType == Reminder.ReminderType.OUT_OF_STOCK },
-        ({ r: Reminder -> outOfStockReminderString(r, context) })
-    ) + getRemindersSummary(
-        reminders.filter { r: Reminder -> r.reminderType == Reminder.ReminderType.EXPIRATION_DATE },
-        ({ _: Reminder -> context.getString(R.string.expiration_date) })
-    )
+    ) +
+            reminders.filter { r -> r.reminderType == Reminder.ReminderType.LINKED }.map { linkedReminderSummaryString(it, context) } +
+            reminders.filter { r -> r.isInterval }.map { intervalBasedReminderString(it, context) } +
+            reminders.filter { r -> r.reminderType == Reminder.ReminderType.OUT_OF_STOCK }.map { outOfStockReminderString(it, context) } +
+            reminders.filter { r -> r.reminderType == Reminder.ReminderType.EXPIRATION_DATE }.map { context.getString(R.string.expiration_date) }
 
     val len = reminderTimes.size
     return context.resources.getQuantityString(
@@ -166,13 +159,6 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
         len,
         java.lang.String.join("; ", reminderTimes)
     )
-}
-
-fun getRemindersSummary(
-    reminders: List<Reminder>,
-    toStringFunction: (Reminder) -> String
-): List<String> {
-    return reminders.map { r: Reminder -> toStringFunction(r) }
 }
 
 fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
@@ -199,13 +185,7 @@ private fun timeBasedRemindersSummary(
     reminders: List<Reminder>,
     context: Context
 ): List<String> {
-    val reminderTimes: MutableList<String> = mutableListOf()
-    val timesInMinutes =
-        reminders.map { r: Reminder -> r.timeInMinutes }.sorted()
-    for (minute in timesInMinutes) {
-        reminderTimes.add(TimeHelper.minutesToTimeString(context, minute.toLong()))
-    }
-    return reminderTimes
+    return reminders.map { r -> r.timeInMinutes }.sorted().map { TimeHelper.minutesToTimeString(context, it.toLong()) }
 }
 
 fun getCyclicReminderString(reminder: Reminder, context: Context): String {
