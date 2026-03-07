@@ -1,102 +1,98 @@
-package com.futsch1.medtimer.statistics;
+package com.futsch1.medtimer.statistics
 
-import androidx.annotation.NonNull;
+import com.androidplot.xy.SimpleXYSeries
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
-import com.androidplot.xy.SimpleXYSeries;
-import com.futsch1.medtimer.database.MedicineRepository;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.MedicineHelper;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class StatisticsProvider {
-    private final List<ReminderEvent> reminderEvents;
-
-    public StatisticsProvider(MedicineRepository medicineRepository) {
-        reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted();
-    }
-
-    public TakenSkipped getTakenSkippedData(int days) {
-        long taken = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.TAKEN)).count();
-        long skipped = reminderEvents.stream().filter(event -> eventStatusDaysFilter(event, days, ReminderEvent.ReminderStatus.SKIPPED)).count();
-        return new TakenSkipped(taken, skipped);
-    }
-
-    private boolean eventStatusDaysFilter(ReminderEvent event, int days, ReminderEvent.ReminderStatus status) {
-        return event.getStatus() == status && (days == 0 || wasAfter(event.getRemindedTimestamp(), LocalDate.now().minusDays(days)));
-    }
-
-    private boolean wasAfter(long secondsSinceEpoch, LocalDate date) {
-        Instant instant = Instant.ofEpochSecond(secondsSinceEpoch);
-        return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date);
-    }
-
-    public List<SimpleXYSeries> getLastDaysReminders(int days) {
-        Map<String, int[]> medicineToDayCount = calculateMedicineToDayMap(days);
-        return calculateDataEntries(days, medicineToDayCount);
-    }
-
-    private Map<String, int[]> calculateMedicineToDayMap(int days) {
-        Map<String, int[]> medicineToDayCount = new HashMap<>();
-        LocalDate earliestDate = LocalDate.now().minusDays(days);
-        for (ReminderEvent event : reminderEvents) {
-            incrementMedicineToDayCountForEvent(days, event, earliestDate, medicineToDayCount);
-        }
-
-        return medicineToDayCount;
-    }
-
-    /**
-     * @noinspection DataFlowIssue
-     */
-    @NonNull
-    private static List<SimpleXYSeries> calculateDataEntries(int days, Map<String, int[]> medicineToDayCount) {
-        List<SimpleXYSeries> data = new ArrayList<>();
-        int seriesCount = medicineToDayCount.size();
-        if (seriesCount == 0) {
-            return data;
-        }
-
-        List<String> medicineNames = new ArrayList<>(medicineToDayCount.keySet());
-        for (int j = 0; j < seriesCount; j++) {
-            List<Number> xValues = new ArrayList<>();
-            List<Number> yValues = new ArrayList<>();
-            for (int i = days - 1; i >= 0; i--) {
-                xValues.add(LocalDate.now().toEpochDay() - i);
-                yValues.add(medicineToDayCount.get(medicineNames.get(j))[i]);
+class StatisticsProvider(medicineRepository: MedicineRepository) {
+    companion object {
+        private fun calculateDataEntries(
+            days: Int,
+            medicineToDayCount: Map<String, IntArray>
+        ): List<SimpleXYSeries> {
+            if (medicineToDayCount.isEmpty()) {
+                return listOf()
             }
-            data.add(new SimpleXYSeries(xValues, yValues, medicineNames.get(j)));
-        }
-        return data;
-    }
 
-    /**
-     * @noinspection DataFlowIssue
-     */
-    private void incrementMedicineToDayCountForEvent(int days, ReminderEvent event, LocalDate earliestDate, Map<String, int[]> medicineToDayCount) {
-        if (event.getStatus() == ReminderEvent.ReminderStatus.TAKEN && wasAfter(event.getRemindedTimestamp(), earliestDate)) {
-            String medicineName = MedicineHelper.normalizeMedicineName(event.getMedicineName());
-            medicineToDayCount.computeIfAbsent(medicineName, k -> new int[days]);
-            final int daysInThePast = getDaysInThePast(event.getRemindedTimestamp());
-            if (daysInThePast >= 0 && daysInThePast < medicineToDayCount.get(medicineName).length) {
-                medicineToDayCount.get(medicineName)[daysInThePast]++;
-            }    // Stream.toList() not available in SDK version selected
-
+            val data = mutableListOf<SimpleXYSeries>()
+            for ((name, counts) in medicineToDayCount) {
+                val xValues = (days - 1 downTo 0).map { LocalDate.now().toEpochDay() - it }
+                val yValues = (days - 1 downTo 0).map { counts.getOrElse(it) { 0 } }
+                data.add(SimpleXYSeries(xValues, yValues, name))
+            }
+            return data
         }
     }
 
-    private int getDaysInThePast(long secondsSinceEpoch) {
-        Instant instant = Instant.ofEpochSecond(secondsSinceEpoch);
-        return (int) (LocalDate.now().toEpochDay() - instant.atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay());
+    private val reminderEvents: List<ReminderEvent> =
+        medicineRepository.allReminderEventsWithoutDeleted
+
+    fun getTakenSkippedData(days: Int): TakenSkipped {
+        val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.TAKEN) }
+        val skipped =
+            reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.SKIPPED) }
+        return TakenSkipped(taken.toLong(), skipped.toLong())
     }
 
-    public record TakenSkipped(long taken, long skipped) {
-        // Standard record, no content required
+    private fun eventStatusDaysFilter(
+        event: ReminderEvent,
+        days: Int,
+        status: ReminderStatus
+    ): Boolean {
+        if (event.status != status) {
+            return false
+        }
+
+        return days == 0 || wasAfter(
+            event.remindedTimestamp,
+            LocalDate.now().minusDays(days.toLong())
+        )
     }
+
+    private fun wasAfter(secondsSinceEpoch: Long, date: LocalDate): Boolean {
+        val instant = Instant.ofEpochSecond(secondsSinceEpoch)
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date)
+    }
+
+    fun getLastDaysReminders(days: Int): List<SimpleXYSeries> {
+        val medicineToDayCount = calculateMedicineToDayMap(days)
+        return calculateDataEntries(days, medicineToDayCount)
+    }
+
+    private fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {
+        val earliestDate = LocalDate.now().minusDays(days.toLong())
+        return reminderEvents
+            .filter {
+                it.status == ReminderStatus.TAKEN && wasAfter(
+                    it.remindedTimestamp,
+                    earliestDate
+                )
+            }
+            .groupBy { normalizeMedicineName(it.medicineName) }
+            .mapValues { (_, events) ->
+                IntArray(days).also { array ->
+                    events.forEach { event ->
+                        val daysInThePast = getDaysInThePast(event.remindedTimestamp)
+                        if (daysInThePast in 0 until array.size) {
+                            array[daysInThePast]++
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun getDaysInThePast(secondsSinceEpoch: Long): Int {
+        val eventDate = Instant.ofEpochSecond(secondsSinceEpoch)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val today = LocalDate.now()
+        return (today.toEpochDay() - eventDate.toEpochDay()).toInt()
+    }
+
+    data class TakenSkipped(val taken: Long, val skipped: Long)
 }
