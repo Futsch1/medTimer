@@ -81,8 +81,8 @@ class ReminderEvent {
         get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE || reminderType == ReminderType.REFILL
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || javaClass != other.javaClass) return false
-        return membersEqual(other as ReminderEvent)
+        if (other !is ReminderEvent) return false
+        return membersEqual(other)
     }
 
     override fun hashCode(): Int {
@@ -108,12 +108,12 @@ class ReminderEvent {
         )
     }
 
-    private fun membersEqual(o: ReminderEvent): Boolean {
-        return reminderEventId == o.reminderEventId &&
-                medicineName == o.medicineName &&
-                amount == o.amount && color == o.color && useColor == o.useColor && status == o.status && remindedTimestamp == o.remindedTimestamp && processedTimestamp == o.processedTimestamp && reminderId == o.reminderId && notificationId == o.notificationId && iconId == o.iconId && remainingRepeats == o.remainingRepeats && stockHandled == o.stockHandled && askForAmount == o.askForAmount &&
-                tags == o.tags && lastIntervalReminderTimeInMinutes == o.lastIntervalReminderTimeInMinutes &&
-                notes == o.notes && reminderType == o.reminderType
+    private fun membersEqual(other: ReminderEvent): Boolean {
+        return reminderEventId == other.reminderEventId &&
+                medicineName == other.medicineName &&
+                amount == other.amount && color == other.color && useColor == other.useColor && status == other.status && remindedTimestamp == other.remindedTimestamp && processedTimestamp == other.processedTimestamp && reminderId == other.reminderId && notificationId == other.notificationId && iconId == other.iconId && remainingRepeats == other.remainingRepeats && stockHandled == other.stockHandled && askForAmount == other.askForAmount &&
+                tags == other.tags && lastIntervalReminderTimeInMinutes == other.lastIntervalReminderTimeInMinutes &&
+                notes == other.notes && reminderType == other.reminderType
     }
 
     enum class ReminderStatus {
