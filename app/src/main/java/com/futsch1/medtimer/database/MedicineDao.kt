@@ -136,7 +136,7 @@ interface MedicineDao {
     @Query("SELECT COUNT(*) FROM Tag")
     fun countTags(): Int
 
-    @get:Query("SELECT MAX(sortOrder) FROM Medicine")
+    @get:Query("SELECT COALESCE(MAX(sortOrder), 0) FROM Medicine")
     val highestMedicineSortOrder: Double
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId= :reminderId ORDER BY remindedTimestamp DESC")

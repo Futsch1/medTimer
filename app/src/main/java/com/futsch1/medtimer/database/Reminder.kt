@@ -149,8 +149,8 @@ class Reminder(var medicineRelId: Int) {
         }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || javaClass != other.javaClass) return false
-        return membersEqual(other as Reminder)
+        if (other !is Reminder) return false
+        return membersEqual(other)
     }
 
     override fun hashCode(): Int {
@@ -183,12 +183,12 @@ class Reminder(var medicineRelId: Int) {
         )
     }
 
-    private fun membersEqual(that: Reminder): Boolean {
-        return reminderId == that.reminderId && medicineRelId == that.medicineRelId && timeInMinutes == that.timeInMinutes && createdTimestamp == that.createdTimestamp && consecutiveDays == that.consecutiveDays && pauseDays == that.pauseDays &&
-                instructions == that.instructions && cycleStartDay == that.cycleStartDay &&
-                amount == that.amount &&
-                days == that.days && active == that.active && periodStart == that.periodStart && periodEnd == that.periodEnd && activeDaysOfMonth == that.activeDaysOfMonth && linkedReminderId == that.linkedReminderId && intervalStart == that.intervalStart && intervalStartsFromProcessed == that.intervalStartsFromProcessed && variableAmount == that.variableAmount && intervalStartTimeOfDay == that.intervalStartTimeOfDay && intervalEndTimeOfDay == that.intervalEndTimeOfDay && windowedInterval == that.windowedInterval &&
-                outOfStockThreshold == that.outOfStockThreshold && outOfStockReminderType == that.outOfStockReminderType && expirationReminderType == that.expirationReminderType
+    private fun membersEqual(other: Reminder): Boolean {
+        return reminderId == other.reminderId && medicineRelId == other.medicineRelId && timeInMinutes == other.timeInMinutes && createdTimestamp == other.createdTimestamp && consecutiveDays == other.consecutiveDays && pauseDays == other.pauseDays &&
+                instructions == other.instructions && cycleStartDay == other.cycleStartDay &&
+                amount == other.amount &&
+                days == other.days && active == other.active && periodStart == other.periodStart && periodEnd == other.periodEnd && activeDaysOfMonth == other.activeDaysOfMonth && linkedReminderId == other.linkedReminderId && intervalStart == other.intervalStart && intervalStartsFromProcessed == other.intervalStartsFromProcessed && variableAmount == other.variableAmount && intervalStartTimeOfDay == other.intervalStartTimeOfDay && intervalEndTimeOfDay == other.intervalEndTimeOfDay && windowedInterval == other.windowedInterval &&
+                outOfStockThreshold == other.outOfStockThreshold && outOfStockReminderType == other.outOfStockReminderType && expirationReminderType == other.expirationReminderType
     }
 
     enum class ReminderType(@param:DrawableRes val icon: Int) {

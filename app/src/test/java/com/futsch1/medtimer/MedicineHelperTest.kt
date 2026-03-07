@@ -86,7 +86,7 @@ class MedicineHelperTest {
         val medicine = Medicine("test")
         val fullMedicine = FullMedicine()
         fullMedicine.medicine = medicine
-        fullMedicine.reminders = arrayListOf()
+        fullMedicine.reminders = mutableListOf()
         medicine.unit = "pills"
         assertEquals(
             "test",
@@ -112,7 +112,7 @@ class MedicineHelperTest {
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        fullMedicine.reminders = arrayListOf(reminder)
+        fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
             MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
@@ -142,7 +142,7 @@ class MedicineHelperTest {
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        fullMedicine.reminders = arrayListOf(reminder)
+        fullMedicine.reminders = mutableListOf(reminder)
         medicine.amount = 0.0
         assertEquals(
             "t***",

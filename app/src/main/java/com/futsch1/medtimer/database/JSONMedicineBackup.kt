@@ -6,10 +6,10 @@ import java.time.Instant
 
 class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicine>): JsonElement {
-        // Fix the medicines where the instructions are null
+        // Correct the medicines where the reminder's instructions are null in this loop
         for (fullMedicine in list) {
-            fullMedicine.reminders.filter { reminder: Reminder? -> reminder!!.instructions == null }
-                .forEach { reminder: Reminder? -> reminder!!.instructions = "" }
+            fullMedicine.reminders.filter { reminder -> reminder.instructions == null }
+                .forEach { reminder -> reminder.instructions = "" }
         }
         return super.createBackup(databaseVersion, list)
     }

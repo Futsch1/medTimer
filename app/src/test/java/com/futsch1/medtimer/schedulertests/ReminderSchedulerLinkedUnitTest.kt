@@ -19,10 +19,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: List<ReminderEvent> = ArrayList()
+        val reminderEventList: List<ReminderEvent> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(1, scheduledReminders.size)
@@ -40,10 +40,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
         // Reminder 1 only raised, but not processed
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -109,10 +109,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked2.linkedReminderId = 2
         medicineWithReminders.reminders.add(reminderLinked2)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
             scheduledReminders,

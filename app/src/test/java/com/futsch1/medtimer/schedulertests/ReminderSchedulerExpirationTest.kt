@@ -22,10 +22,10 @@ class ReminderSchedulerExpirationTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         Assertions.assertTrue(scheduledReminders.isEmpty())
@@ -98,10 +98,10 @@ class ReminderSchedulerExpirationTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(

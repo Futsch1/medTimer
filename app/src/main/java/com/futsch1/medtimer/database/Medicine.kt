@@ -83,20 +83,20 @@ class Medicine() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || javaClass != other.javaClass) return false
-        return membersEqual(other as Medicine)
+        if (other !is Medicine) return false
+        return membersEqual(other)
     }
 
     override fun hashCode(): Int {
         return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, amount, refillSizes, unit, notes, showNotificationAsAlarm)
     }
 
-    private fun membersEqual(that: Medicine): Boolean {
-        return medicineId == that.medicineId &&
-                name == that.name && useColor == that.useColor && color == that.color && notificationImportance == that.notificationImportance && iconId == that.iconId && amount == that.amount &&
-                refillSizes == that.refillSizes &&
-                unit == that.unit &&
-                notes == that.notes && showNotificationAsAlarm == that.showNotificationAsAlarm && expirationDate == that.expirationDate && productionDate == that.productionDate
+    private fun membersEqual(other: Medicine): Boolean {
+        return medicineId == other.medicineId &&
+                name == other.name && useColor == other.useColor && color == other.color && notificationImportance == other.notificationImportance && iconId == other.iconId && amount == other.amount &&
+                refillSizes == other.refillSizes &&
+                unit == other.unit &&
+                notes == other.notes && showNotificationAsAlarm == other.showNotificationAsAlarm && expirationDate == other.expirationDate && productionDate == other.productionDate
     }
 
     val refillSize: Double

@@ -9,6 +9,7 @@ import java.util.LinkedList
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 
+// TODO: Context should not be a property, but ReminderNotificationProcessor.buildReminderEvent must be changed before this is possible
 open class MedicineRepository(val context: Context) {
     private val medicineDao: MedicineDao
     private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(context)
