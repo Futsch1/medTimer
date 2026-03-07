@@ -34,7 +34,7 @@ class BackupManager(
     private val fragment: Fragment,
     private val menu: Menu,
     private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent?>,
+    private val openFileLauncher: ActivityResultLauncher<Intent>,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
@@ -135,7 +135,7 @@ class BackupManager(
         }
     }
 
-    fun fileSelected(data: Uri?) {
+    fun fileSelected(data: Uri) {
         fragment.lifecycleScope.launch(ioDispatcher) {
             val json = FileHelper.readFromUri(data, context.contentResolver)
 

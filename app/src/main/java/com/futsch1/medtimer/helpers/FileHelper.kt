@@ -29,20 +29,21 @@ object FileHelper {
         return true
     }
 
-    fun readFromUri(uri: Uri?, resolver: ContentResolver): String? {
-        if (uri != null && uri.path != null) {
-            try {
-                resolver.openInputStream(uri).use { inputStream ->
-                    InputStreamReader(inputStream, StandardCharsets.UTF_8).use { inputStreamReader ->
-                        val stringBuilder = getStringBuilder(inputStreamReader)
-                        return stringBuilder.toString()
-                    }
-                }
-            } catch (e: IOException) {
-                Log.e(LogTags.BACKUP, e.toString())
-            }
+    fun readFromUri(uri: Uri, resolver: ContentResolver): String? {
+        if (uri.path == null) {
+            return null
         }
-        return null
+        try {
+            resolver.openInputStream(uri).use { inputStream ->
+                InputStreamReader(inputStream, StandardCharsets.UTF_8).use { inputStreamReader ->
+                    val stringBuilder = getStringBuilder(inputStreamReader)
+                    return stringBuilder.toString()
+                }
+            }
+        } catch (e: IOException) {
+            Log.e(LogTags.BACKUP, e.toString())
+            return null
+        }
     }
 
     @Throws(IOException::class)

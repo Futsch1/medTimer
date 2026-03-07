@@ -42,8 +42,9 @@ class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: Medici
     }
 
     override fun onMoved(fromPosition: Int, toPosition: Int) {
-        val list: List<FullMedicine> = ArrayList(currentList)
         if (toPosition != -1) {
+            val list = currentList.toList()
+
             Collections.swap(list, fromPosition, toPosition)
             submitList(list)
         }

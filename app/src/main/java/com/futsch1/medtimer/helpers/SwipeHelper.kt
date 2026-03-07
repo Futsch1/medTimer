@@ -38,7 +38,6 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         actionState: Int, isCurrentlyActive: Boolean
     ) {
         val itemView = viewHolder.itemView
-        val itemHeight = itemView.bottom - itemView.top
         val isCanceled = (dX == 0f) && !isCurrentlyActive
 
         if (isCanceled) {
@@ -48,6 +47,8 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         }
 
         if (dX < 0) {
+            val itemHeight = itemView.bottom - itemView.top
+            
             drawSwipeBar(c, dX, itemView, itemHeight)
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
