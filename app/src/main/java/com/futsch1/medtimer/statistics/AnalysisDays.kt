@@ -8,6 +8,7 @@ import com.futsch1.medtimer.R
 
 class AnalysisDays(context: Context) {
     companion object {
+        private const val PREFERENCE_KEY = "analysis_days"
         private const val DEFAULT_DAYS = 7
     }
 
@@ -19,12 +20,12 @@ class AnalysisDays(context: Context) {
     var position: Int
         get() = analysisDaysValues.indexOf(this.days)
         set(position) {
-            sharedPref.edit { putInt("analysis_days", position) }
+            sharedPref.edit { putInt(PREFERENCE_KEY, position) }
         }
 
     val days: Int
         get() {
-            val days = sharedPref.getInt("analysis_days", analysisDaysValues.indexOf(DEFAULT_DAYS))
+            val days = sharedPref.getInt(PREFERENCE_KEY, analysisDaysValues.indexOf(DEFAULT_DAYS))
                 .coerceIn(0, analysisDaysValues.size - 1)
             return this.analysisDaysValues[days]
         }
