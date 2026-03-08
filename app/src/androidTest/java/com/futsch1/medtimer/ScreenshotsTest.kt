@@ -1,112 +1,113 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
+
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.evrencoskun.tableview.TableView
+import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import junit.framework.TestCase
+import org.junit.ClassRule
+import org.junit.Test
+import tools.fastlane.screengrab.Screengrab
+import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
+import tools.fastlane.screengrab.locale.LocaleTestRule
+import java.util.concurrent.atomic.AtomicReference
 
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
-import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu;
-import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
-import static com.futsch1.medtimer.NotificationTestKt.getNotificationText;
-import static com.futsch1.medtimer.NotificationTestKt.makeNotificationExpanded;
-import static junit.framework.TestCase.assertEquals;
+class ScreenshotsTest : BaseTestHelper() {
+    companion object {
+        // JvmField is needed for the @ClassRule to work
+        @JvmField
+        @ClassRule
+        val localeTestRule: LocaleTestRule = LocaleTestRule()
+    }
 
-import android.widget.TextView;
+    @Test //@AllowFlaky(attempts = 1)
+    fun screenshotsTest() {
+        Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
+        openMenu()
+        clickOn(R.string.generate_test_data)
 
-import com.evrencoskun.tableview.TableView;
+        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
+        internalAssert(device.findObject(By.textContains("Some note")) != null)
+        Espresso.pressBack()
 
-import org.junit.ClassRule;
-import org.junit.Test;
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+        clickListItemChild(R.id.reminders, 2, R.id.stateButton)
+        clickOn(R.id.takenButton)
+        clickListItemChild(R.id.reminders, 3, R.id.stateButton)
+        clickOn(R.id.skippedButton)
 
-import java.util.concurrent.atomic.AtomicReference;
+        device.openNotification()
+        makeNotificationExpanded(device, getNotificationText(R.string.taken))
+        Screengrab.screenshot("5")
+        device.pressBack()
 
-import tools.fastlane.screengrab.Screengrab;
-import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
-import tools.fastlane.screengrab.locale.LocaleTestRule;
+        clickListItemChild(R.id.reminders, 4, R.id.stateButton)
+        clickOn(R.id.takenButton)
 
-public class ScreenshotsTest extends BaseTestHelper {
-    @ClassRule
-    public static final LocaleTestRule localeTestRule = new LocaleTestRule();
+        Screengrab.screenshot("1")
 
-    @Test
-    //@AllowFlaky(attempts = 1)
-    public void screenshotsTest() {
-        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        Screengrab.screenshot("2")
 
-        openMenu();
-        clickOn(R.string.generate_test_data);
+        Espresso.onView(ViewMatchers.withId(R.id.medicineList)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0, ViewActions.click()
+            )
+        )
+        Screengrab.screenshot("3")
 
-        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer);
-        internalAssert(device.findObject(By.textContains("Some note")) != null);
-        pressBack();
+        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings)
+        BaristaSleepInteractions.sleep(500)
+        Screengrab.screenshot("4")
 
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton);
-        clickOn(R.id.takenButton);
-        clickListItemChild(R.id.reminders, 2, R.id.stateButton);
-        clickOn(R.id.takenButton);
-        clickListItemChild(R.id.reminders, 3, R.id.stateButton);
-        clickOn(R.id.skippedButton);
+        navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
+        clickOn(R.id.chartChip)
+        Screengrab.screenshot("6")
 
-        device.openNotification();
-        makeNotificationExpanded(device, getNotificationText(R.string.taken));
-        Screengrab.screenshot("5");
-        device.pressBack();
+        clickOn(R.id.timeSpinner)
 
-        clickListItemChild(R.id.reminders, 4, R.id.stateButton);
-        clickOn(R.id.takenButton);
+        clickListItem(position = 1)
 
-        Screengrab.screenshot("1");
+        clickOn(R.id.tableChip)
+        Screengrab.screenshot("7")
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES);
-        Screengrab.screenshot("2");
+        clickListItem(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView, 1)
 
-        onView(withId(R.id.medicineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        Screengrab.screenshot("3");
+        val tableView = AtomicReference<TableView>()
+        tableView.set(
+            baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table)
+        )
 
-        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings);
-        sleep(500);
-        Screengrab.screenshot("4");
+        var view = tableView.get().cellRecyclerView.findViewWithTag<TextView>("medicineName")
+        TestCase.assertEquals("Selen (200 µg)", view.getText())
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.ANALYSIS);
-        clickOn(R.id.chartChip);
-        Screengrab.screenshot("6");
+        Espresso.onView(ViewMatchers.withId(R.id.filter))
+            .perform(ViewActions.replaceText("B"), ViewActions.closeSoftKeyboard())
 
-        clickOn(R.id.timeSpinner);
+        view = tableView.get().cellRecyclerView.findViewWithTag("medicineName")
+        TestCase.assertEquals("B12 (500µg)", view.getText())
 
-        clickListItem(1);
+        clickOn(com.google.android.material.R.id.text_input_end_icon)
 
-        clickOn(R.id.tableChip);
-        Screengrab.screenshot("7");
+        clickOn(R.id.calendarChip)
+        Screengrab.screenshot("8")
 
-        clickListItem(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView, 1);
-
-        AtomicReference<TableView> tableView = new AtomicReference<>();
-        tableView.set(baristaRule.getActivityTestRule().getActivity().findViewById(R.id.reminder_table));
-
-        TextView view = tableView.get().getCellRecyclerView().findViewWithTag("medicineName");
-        assertEquals("Selen (200 µg)", view.getText());
-
-        onView(withId(R.id.filter)).perform(replaceText("B"), closeSoftKeyboard());
-
-        view = tableView.get().getCellRecyclerView().findViewWithTag("medicineName");
-        assertEquals("B12 (500µg)", view.getText());
-
-        clickOn(com.google.android.material.R.id.text_input_end_icon);
-
-        clickOn(R.id.calendarChip);
-        Screengrab.screenshot("8");
-
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW);
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
     }
 }

@@ -195,9 +195,7 @@ class BasicUITest : BaseTestHelper() {
         assertContains(TEST_2)
 
         clickListItemChild(
-            R.id.reminders,
-            0,
-            R.id.stateButton
+            R.id.reminders, 0, R.id.stateButton
         )
         clickOn(R.id.takenButton)
 
@@ -244,23 +242,21 @@ class BasicUITest : BaseTestHelper() {
 
         clickOn(R.id.overviewFragment)
 
-        val view = AtomicReference<View?>()
+        val view = AtomicReference<View>()
         view.set(
-            baristaRule.activityTestRule.getActivity()
-                .findViewById<View?>(R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity().findViewById(R.id.overviewWeek)
         )
 
-        var currentDay = view.get()!!.findViewWithTag<TextView>("selected")
+        var currentDay = view.get().findViewWithTag<TextView>("selected")
         internalAssert(currentDay.getText() == secondDay)
 
         clickOn(R.id.overviewFragment)
 
         navigateTo(MainMenu.OVERVIEW)
         view.set(
-            baristaRule.activityTestRule.getActivity()
-                .findViewById<View?>(R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity().findViewById(R.id.overviewWeek)
         )
-        currentDay = view.get()!!.findViewWithTag<TextView>("selected")
+        currentDay = view.get().findViewWithTag("selected")
         internalAssert(currentDay.getText() == today)
     }
 
