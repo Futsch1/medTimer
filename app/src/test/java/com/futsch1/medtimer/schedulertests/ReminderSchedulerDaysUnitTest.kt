@@ -1,68 +1,71 @@
-package com.futsch1.medtimer.schedulertests;
+package com.futsch1.medtimer.schedulertests
 
-import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.schedulertests.TestHelper.on;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
+import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler
+import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
+import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
+import com.futsch1.medtimer.schedulertests.TestHelper.on
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder;
-
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-class ReminderSchedulerDaysUnitTest {
+internal class ReminderSchedulerDaysUnitTest {
     @Test
-    void scheduleSkipWeekdays() {
-        ReminderScheduler scheduler = getScheduler(1);
+    fun scheduleSkipWeekdays() {
+        val scheduler = getScheduler(1)
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 1);
+        val medicineWithReminders = buildFullMedicine(1, "Test")
+        val reminder = buildReminder(1, 1, "1", 480, 1)
         // 1.1.1970 was a Thursday, so skip the Friday and Saturday
-        reminder.getDays().set(4, false);
-        reminder.getDays().set(5, false);
-        medicineWithReminders.getReminders().add(reminder);
+        reminder.days[4] = false
+        reminder.days[5] = false
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = mutableListOf<FullMedicine>()
+        medicineList.add(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = emptyList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        val scheduledReminders =
+            scheduler.schedule(medicineList, reminderEventList)
         // Expect it to be on the 4.1.1970
-        assertEquals(on(4, 480), scheduledReminders.get(0).timestamp());
-        assertEquals(medicineWithReminders.getMedicine(), scheduledReminders.get(0).medicine().getMedicine());
-        assertEquals(reminder, scheduledReminders.get(0).reminder());
+        assertEquals(on(4, 480), scheduledReminders[0].timestamp)
+        assertEquals(
+            medicineWithReminders.medicine,
+            scheduledReminders[0].medicine.medicine
+        )
+        assertEquals(reminder, scheduledReminders[0].reminder)
     }
 
     @Test
-    void scheduleWeekdaysWithDaysBetweenReminders() {
-        ReminderScheduler scheduler = getScheduler();
+    fun scheduleWeekdaysWithDaysBetweenReminders() {
+        val scheduler = scheduler
 
-        FullMedicine medicineWithReminders = TestHelper.buildFullMedicine(1, "Test");
-        Reminder reminder = TestHelper.buildReminder(1, 1, "1", 480, 6);
+        val medicineWithReminders = buildFullMedicine(1, "Test")
+        val reminder = buildReminder(1, 1, "1", 480, 6)
         // Allow only on Mondays and only every 6 days. The start of the cycle will be on the 1.1.1970.
-        reminder.getDays().set(1, false);
-        reminder.getDays().set(2, false);
-        reminder.getDays().set(3, false);
-        reminder.getDays().set(4, false);
-        reminder.getDays().set(5, false);
-        reminder.getDays().set(6, false);
-        medicineWithReminders.getReminders().add(reminder);
+        reminder.days[1] = false
+        reminder.days[2] = false
+        reminder.days[3] = false
+        reminder.days[4] = false
+        reminder.days[5] = false
+        reminder.days[6] = false
+        medicineWithReminders.reminders.add(reminder)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders);
+        val medicineList = mutableListOf<FullMedicine>()
+        medicineList.add(medicineWithReminders)
 
-        List<ReminderEvent> reminderEventList = new ArrayList<>();
+        val reminderEventList = emptyList<ReminderEvent>()
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, reminderEventList);
+        val scheduledReminders =
+            scheduler.schedule(medicineList, reminderEventList)
         // Expect it to be on the 26.1.1970
-        assertEquals(on(19, 480), scheduledReminders.get(0).timestamp());
-        assertEquals(medicineWithReminders.getMedicine(), scheduledReminders.get(0).medicine().getMedicine());
-        assertEquals(reminder, scheduledReminders.get(0).reminder());
+        assertEquals(on(19, 480), scheduledReminders[0].timestamp)
+        assertEquals(
+            medicineWithReminders.medicine,
+            scheduledReminders[0].medicine.medicine
+        )
+        assertEquals(reminder, scheduledReminders[0].reminder)
     }
 }

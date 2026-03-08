@@ -1,73 +1,91 @@
-package com.futsch1.medtimer.schedulertests;
+package com.futsch1.medtimer.schedulertests
 
-import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.TEST_1;
-import static com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.getScheduler;
-import static com.futsch1.medtimer.schedulertests.TestHelper.assertReminded;
-import static com.futsch1.medtimer.schedulertests.TestHelper.on;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler
+import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
+import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
+import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
+import com.futsch1.medtimer.schedulertests.TestHelper.on
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
+import java.time.DayOfWeek
+import java.time.LocalDate
 
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
-import com.futsch1.medtimer.preferences.PreferencesNames;
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler;
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-class ReminderSchedulerWeekendModeTest {
+internal class ReminderSchedulerWeekendModeTest {
     @Test
-    void weekendDaysEmpty() {
-        ReminderScheduler scheduler = getScheduler();
+    fun weekendDaysEmpty() {
+        val scheduler = scheduler
 
-        Mockito.when(scheduler.getSharedPreferences().getBoolean(PreferencesNames.WEEKEND_MODE, false)).thenReturn(true);
-        Mockito.when(scheduler.getSharedPreferences().getStringSet(eq(PreferencesNames.WEEKEND_DAYS), any())).thenReturn(new HashSet<>());
+        Mockito.`when`(
+            scheduler.sharedPreferences.getBoolean(
+                PreferencesNames.WEEKEND_MODE, false
+            )
+        ).thenReturn(true)
+        Mockito.`when`(
+            scheduler.sharedPreferences.getStringSet(
+                ArgumentMatchers.eq(PreferencesNames.WEEKEND_DAYS),
+                ArgumentMatchers.any<Set<String>>()
+            )
+        ).thenReturn(setOf<String>())
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        medicineWithReminders1.getReminders().add(reminder1);
+        val medicineWithReminders1 =
+            buildFullMedicine(1, ReminderSchedulerUnitTest.Companion.TEST_1)
+        val reminder1 = buildReminder(1, 1, "1", 16, 1)
+        medicineWithReminders1.reminders.add(reminder1)
 
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders1);
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.getMedicine(), reminder1);
+        val medicineList = mutableListOf<FullMedicine>()
+        medicineList.add(medicineWithReminders1)
+        val scheduledReminders = scheduler.schedule(medicineList, ArrayList())
+        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1)
     }
 
     @Test
-    void weekendMode() {
+    fun weekendMode() {
         // 1.1.1970 is a Thursday
-        ReminderScheduler scheduler = getScheduler();
+        val scheduler = scheduler
 
-        Mockito.when(scheduler.getSharedPreferences().getBoolean(eq(PreferencesNames.WEEKEND_MODE), anyBoolean())).thenReturn(true);
-        Mockito.when(scheduler.getSharedPreferences().getInt(eq(PreferencesNames.WEEKEND_TIME), anyInt())).thenReturn(10 * 60);
-        Set<String> weekendDays = new HashSet<>();
-        weekendDays.add(String.valueOf(DayOfWeek.SATURDAY.getValue()));
-        weekendDays.add(String.valueOf(DayOfWeek.SUNDAY.getValue()));
-        Mockito.when(scheduler.getSharedPreferences().getStringSet(eq(PreferencesNames.WEEKEND_DAYS), any())).thenReturn(weekendDays);
+        Mockito.`when`(
+            scheduler.sharedPreferences.getBoolean(
+                ArgumentMatchers.eq(
+                    PreferencesNames.WEEKEND_MODE
+                ), ArgumentMatchers.anyBoolean()
+            )
+        ).thenReturn(true)
+        Mockito.`when`(
+            scheduler.sharedPreferences.getInt(
+                ArgumentMatchers.eq(
+                    PreferencesNames.WEEKEND_TIME
+                ), ArgumentMatchers.anyInt()
+            )
+        ).thenReturn(10 * 60)
+        val weekendDays = mutableSetOf<String>()
+        weekendDays.add(DayOfWeek.SATURDAY.value.toString())
+        weekendDays.add(DayOfWeek.SUNDAY.value.toString())
+        Mockito.`when`(
+            scheduler.sharedPreferences.getStringSet(
+                ArgumentMatchers.eq(PreferencesNames.WEEKEND_DAYS),
+                ArgumentMatchers.any<Set<String>>()
+            )
+        ).thenReturn(weekendDays)
 
-        FullMedicine medicineWithReminders1 = TestHelper.buildFullMedicine(1, TEST_1);
-        Reminder reminder1 = TestHelper.buildReminder(1, 1, "1", 16, 1);
-        medicineWithReminders1.getReminders().add(reminder1);
-        List<FullMedicine> medicineList = new ArrayList<>();
-        medicineList.add(medicineWithReminders1);
+        val medicineWithReminders1 =
+            buildFullMedicine(1, ReminderSchedulerUnitTest.Companion.TEST_1)
+        val reminder1 = buildReminder(1, 1, "1", 16, 1)
+        medicineWithReminders1.reminders.add(reminder1)
+        val medicineList = mutableListOf<FullMedicine>()
+        medicineList.add(medicineWithReminders1)
 
-        List<ScheduledReminder> scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.getMedicine(), reminder1);
+        var scheduledReminders = scheduler.schedule(medicineList, ArrayList())
+        assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1)
 
-        Mockito.when(scheduler.getTimeAccess().localDate()).thenReturn(LocalDate.EPOCH.plusDays(2));
+        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
 
-        scheduledReminders = scheduler.schedule(medicineList, new ArrayList<>());
-        assertReminded(scheduledReminders, on(3, 10 * 60), medicineWithReminders1.getMedicine(), reminder1);
+        scheduledReminders = scheduler.schedule(medicineList, ArrayList())
+        assertReminded(
+            scheduledReminders, on(3, 10 * 60), medicineWithReminders1.medicine, reminder1
+        )
     }
 }
 

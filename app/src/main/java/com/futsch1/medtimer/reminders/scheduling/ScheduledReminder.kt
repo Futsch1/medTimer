@@ -1,10 +1,11 @@
-package com.futsch1.medtimer.reminders.scheduling;
+package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.FullMedicine;
-import com.futsch1.medtimer.database.Reminder;
+import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.Reminder
+import java.time.Instant
 
-import java.time.Instant;
-
-public record ScheduledReminder(FullMedicine medicine, Reminder reminder, Instant timestamp) {
-
-}
+data class ScheduledReminder(
+    val medicine: FullMedicine,
+    val reminder: Reminder,
+    val timestamp: Instant
+)
