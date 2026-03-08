@@ -58,7 +58,7 @@ class ExportBackupTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.backup)
 
-        clickListItem(-1, 1)
+        clickListItem(-1, 2)
         clickDialogPositiveButton()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
