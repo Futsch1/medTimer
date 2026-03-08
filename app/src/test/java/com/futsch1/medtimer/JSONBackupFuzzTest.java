@@ -2,8 +2,6 @@ package com.futsch1.medtimer;
 
 import static org.mockito.Mockito.mock;
 
-import android.util.Log;
-
 import com.code_intelligence.jazzer.junit.FuzzTest;
 import com.futsch1.medtimer.database.JSONBackup;
 import com.futsch1.medtimer.database.JSONMedicineBackup;
@@ -18,8 +16,6 @@ public class JSONBackupFuzzTest {
     void fuzzTestMedicineBackup(String json) {
         JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
         JSONReminderEventBackup jsonReminderEventBackup = new JSONReminderEventBackup();
-
-        Log.enable = false;
 
         checkBackup(jsonMedicineBackup, json);
         checkBackup(jsonReminderEventBackup, json);

@@ -1,17 +1,12 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-public class LogTags {
-    public static final String SCHEDULER = "SchedulerDebug";
-    public static final String REMINDER = "ReminderDebug";
-    public static final String BACKUP = "BackupDebug";
-    public static final String STOCK_HANDLING = "StockHandlingDebug";
-    public static final String ALARM = "AlarmDebug";
-    public static final String AUTOSTART = "AutostartDebug";
-    public static final String MAIN = "MedTimerMain";
-    public static final String BIOMETRICS = "Biometrics";
-
-
-    private LogTags() {
-        // Intended empty
-    }
+object LogTags {
+    const val SCHEDULER = "SchedulerDebug"
+    const val REMINDER = "ReminderDebug"
+    const val BACKUP = "BackupDebug"
+    const val STOCK_HANDLING = "StockHandlingDebug"
+    const val ALARM = "AlarmDebug"
+    const val AUTOSTART = "AutostartDebug"
+    const val MAIN = "MedTimerMain"
+    const val BIOMETRICS = "Biometrics"
 }

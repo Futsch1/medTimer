@@ -1,5 +1,5 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-public interface OnFragmentReselectedListener {
-    void onFragmentReselected();
+interface OnFragmentReselectedListener {
+    fun onFragmentReselected()
 }
