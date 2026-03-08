@@ -76,8 +76,7 @@ class EditMedicineMenuProvider(
 
     private fun setupDeleteMenu(menu: Menu) {
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
-            val deleteHelper = DeleteHelper(navController.context)
-            deleteHelper.deleteItem(R.string.are_you_sure_delete_medicine, {
+            DeleteHelper.deleteItem(navController.context, R.string.are_you_sure_delete_medicine, {
                 medicineViewModel.medicineRepository.deleteMedicine(medicine.medicineId)
                 navController.navigateUp()
             }, {

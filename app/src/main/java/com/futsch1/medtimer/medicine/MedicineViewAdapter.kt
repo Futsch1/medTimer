@@ -16,7 +16,7 @@ import java.util.Collections
 
 
 class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: MedicineRepository, val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    IdlingListAdapter<FullMedicine, MedicineViewHolder?>(MedicineDiff()), MovedCallback {
+    IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
     private val activity: FragmentActivity
     private val medicineRepository: MedicineRepository
 
@@ -42,8 +42,9 @@ class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: Medici
     }
 
     override fun onMoved(fromPosition: Int, toPosition: Int) {
-        val list: MutableList<FullMedicine?> = ArrayList(currentList)
         if (toPosition != -1) {
+            val list = currentList.toList()
+
             Collections.swap(list, fromPosition, toPosition)
             submitList(list)
         }
@@ -57,7 +58,7 @@ class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: Medici
         }
     }
 
-    class MedicineDiff : DiffUtil.ItemCallback<FullMedicine?>() {
+    class MedicineDiff : DiffUtil.ItemCallback<FullMedicine>() {
         override fun areItemsTheSame(oldItem: FullMedicine, newItem: FullMedicine): Boolean {
             return oldItem.medicine.medicineId == newItem.medicine.medicineId
         }
