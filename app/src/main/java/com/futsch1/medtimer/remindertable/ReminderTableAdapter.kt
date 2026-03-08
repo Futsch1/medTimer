@@ -46,11 +46,13 @@ class ReminderTableAdapter(
         val viewHolder = holder as ReminderTableCellViewHolder
         viewHolder.textView.text = modelContent
         viewHolder.textView.tag = cellItemModel.viewTag
-        viewHolder.setupEditButton(if (columnPosition == 1) OnEditClickListener {
-            activity.lifecycleScope.launch {
-                navigateToEditEvent(
-                    cellItemModel.idAsInt.toLong()
-                )
+        viewHolder.setupEditButton(if (columnPosition == 1) object : OnEditClickListener {
+            override fun onEditClick() {
+                activity.lifecycleScope.launch {
+                    navigateToEditEvent(
+                        cellItemModel.idAsInt.toLong()
+                    )
+                }
             }
         } else null)
     }
@@ -100,9 +102,9 @@ class ReminderTableAdapter(
         return View(viewGroup.context)
     }
 
-    fun submitList(reminderEvents: MutableList<ReminderEvent>) {
-        val cells: MutableList<List<ReminderTableCellModel?>> = mutableListOf()
-        val rows: MutableList<ReminderTableCellModel?> = mutableListOf()
+    fun submitList(reminderEvents: List<ReminderEvent>) {
+        val cells = mutableListOf<List<ReminderTableCellModel?>>()
+        val rows = mutableListOf<ReminderTableCellModel?>()
         val formatter = QuickSecondsSinceEpochFormatter(tableView.context)
 
         for (reminderEvent in reminderEvents) {
