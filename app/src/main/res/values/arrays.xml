@@ -20,14 +20,14 @@
         <item>@string/fourteen_days</item>
         <item>@string/thirty_days</item>
     </string-array>
-    <string-array name="analysis_days_values">
+    <integer-array name="analysis_days_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>7</item>
         <item>14</item>
         <item>30</item>
-    </string-array>
+    </integer-array>
     <string-array name="instructions_suggestions">
         <item>@string/before_meal</item>
         <item>@string/after_meal</item>

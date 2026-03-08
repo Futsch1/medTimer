@@ -15,6 +15,7 @@ public class ReminderTableCellViewHolder extends AbstractViewHolder {
     public ReminderTableCellViewHolder(View view) {
         super(view);
         textView = view.findViewById(R.id.tableCellTextView);
+        // TODO: use Kotlin extensions (context.getMaterialColor) here once migrated to Kotlin
         textView.setTextColor(MaterialColors.getColor(view.getContext(), com.google.android.material.R.attr.colorOnSecondaryContainer, "TableView"));
         textView.setClickable(false);
         textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
