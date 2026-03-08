@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Son kullanma tarihi hatırlatıcısı oluştur</string>
     <string name="duplicate">Çoğalt</string>
     <string name="duplicate_including_reminders">Hatırlatıcılarla birlikte çoğalt</string>
+    <string name="weekly">Haftalık</string>
+    <string name="monthly">Aylık</string>
+    <string name="automatic_backup">Otomatik yedekleme</string>
+    <string name="backup_successful_to">Otomatik yedekleme başarılı: %s</string>
 </resources>

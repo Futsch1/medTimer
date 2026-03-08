@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Luo vanhentumispäivämäärämuistutus</string>
     <string name="duplicate">Monista</string>
     <string name="duplicate_including_reminders">Monista muistutukset mukaan lukien</string>
+    <string name="weekly">Viikoittain</string>
+    <string name="monthly">Kuukausittain</string>
+    <string name="automatic_backup">Automaattinen varmuuskopiointi</string>
+    <string name="backup_successful_to">Automaattinen varmuuskopiointi onnistui: %s</string>
 </resources>

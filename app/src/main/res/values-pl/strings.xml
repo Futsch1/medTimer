@@ -290,4 +290,8 @@
     <string name="create_expiration_date_reminder">Utwórz przypomnienie o dacie wygaśnięcia</string>
     <string name="duplicate">Duplikuj</string>
     <string name="duplicate_including_reminders">Duplikuj wraz z przypomnieniami</string>
+    <string name="weekly">Tygodniowo</string>
+    <string name="monthly">Miesięcznie</string>
+    <string name="automatic_backup">Automatyczna kopia zapasowa</string>
+    <string name="backup_successful_to">Automatyczna kopia zapasowa zakończona sukcesem: %s</string>
 </resources>

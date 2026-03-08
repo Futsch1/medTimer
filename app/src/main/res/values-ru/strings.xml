@@ -287,4 +287,8 @@
     <string name="create_expiration_date_reminder">Создать напоминание о сроке годности</string>
     <string name="duplicate">Дублировать</string>
     <string name="duplicate_including_reminders">Дублировать вместе с напоминаниями</string>
+    <string name="weekly">Еженедельно</string>
+    <string name="monthly">Ежемесячно</string>
+    <string name="automatic_backup">Автоматическое резервное копирование</string>
+    <string name="backup_successful_to">Автоматическое резервное копирование завершено успешно: %s</string>
 </resources>

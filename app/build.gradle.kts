@@ -129,6 +129,7 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
+    implementation(libs.androidx.documentfile)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.mockito.core)

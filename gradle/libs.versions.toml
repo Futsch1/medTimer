@@ -48,6 +48,7 @@ barista = "4.3.0"
 
 # Build
 desugar-jdk = "2.1.5"
+documentfile = "1.1.0"
 
 [libraries]
 # AndroidX
@@ -104,6 +105,7 @@ barista = { module = "com.adevinta.android:barista", version.ref = "barista" }
 
 # Build
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
+androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,7 +10,10 @@ import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
+import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.JSONBackup
@@ -20,6 +24,7 @@ import com.futsch1.medtimer.helpers.PathHelper.backupFilename
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
 import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_DIRECTORY
 import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_INTERVAL
+import com.futsch1.medtimer.preferences.PreferencesNames.LAST_AUTOMATIC_BACKUP
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -31,14 +36,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.LocalDate
 
 class BackupManager(
     private val context: Context,
-    private val fragment: Fragment,
-    private val menu: Menu,
+    private val lifecycleOwner: LifecycleOwner,
+    private val menu: Menu?,
     private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent?>,
-    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>,
+    private val openFileLauncher: ActivityResultLauncher<Intent?>?,
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>?,
+    private val fragmentManager: FragmentManager? = null,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
@@ -48,27 +55,29 @@ class BackupManager(
     }
 
     private fun setupBackup() {
-        var item = menu.findItem(R.id.create_backup)
-        item.setOnMenuItemClickListener { _ ->
-            selectBackupType()
-            true
-        }
+        if (menu != null) {
+            var item = menu.findItem(R.id.create_backup)
+            item.setOnMenuItemClickListener { _ ->
+                selectBackupType()
+                true
+            }
 
-        item = menu.findItem(R.id.restore_backup)
-        item.setOnMenuItemClickListener { _ ->
-            MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.restore)
-                .setMessage(R.string.restore_start)
-                .setCancelable(true)
-                .setPositiveButton(R.string.ok) { _, _ -> openBackup() }
-                .setNegativeButton(R.string.cancel) { _, _ -> }.show()
-            true
-        }
+            item = menu.findItem(R.id.restore_backup)
+            item.setOnMenuItemClickListener { _ ->
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.restore)
+                    .setMessage(R.string.restore_start)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.ok) { _, _ -> openBackup() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }.show()
+                true
+            }
 
-        item = menu.findItem(R.id.automatic_backup)
-        item.setOnMenuItemClickListener { _ ->
-            selectAutomaticBackupInterval()
-            true
+            item = menu.findItem(R.id.automatic_backup)
+            item.setOnMenuItemClickListener { _ ->
+                selectAutomaticBackupInterval()
+                true
+            }
         }
     }
 
@@ -81,7 +90,7 @@ class BackupManager(
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
         alertDialogBuilder.setPositiveButton(R.string.ok) { _, _ ->
-            fragment.lifecycleScope.launch(ioDispatcher) {
+            lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
                 performBackup(checkedItems)
             }
         }
@@ -102,7 +111,7 @@ class BackupManager(
                 sharedPref.edit { putString(AUTOMATIC_BACKUP_INTERVAL, selectedValue) }
                 if (selectedValue != "never") {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    openDirectoryLauncher.launch(intent)
+                    openDirectoryLauncher?.launch(intent)
                 }
                 dialog.dismiss()
             }
@@ -125,13 +134,13 @@ class BackupManager(
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setType("application/json")
-        openFileLauncher.launch(intent)
+        openFileLauncher?.launch(intent)
     }
 
     private fun performBackup(checkedItems: BooleanArray) {
         val progressDialogFragment = ProgressDialogFragment()
-        fragment.lifecycleScope.launch(mainDispatcher) {
-            progressDialogFragment.show(fragment.getParentFragmentManager(), "backup")
+        lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
+            fragmentManager?.let { progressDialogFragment.show(it, "backup") }
         }
 
         val gson = GsonBuilder().setPrettyPrinting().create()
@@ -155,8 +164,10 @@ class BackupManager(
         if (checkedItems[0] || checkedItems[1]) {
             createAndSave(gson.toJson(jsonObject))
         }
-        fragment.lifecycleScope.launch(mainDispatcher) {
-            progressDialogFragment.dismiss()
+        lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
+            if (fragmentManager != null) {
+                progressDialogFragment.dismiss()
+            }
         }
     }
 
@@ -172,19 +183,19 @@ class BackupManager(
         if (FileHelper.saveToFile(file, fileContent)) {
             FileHelper.shareFile(context, file)
         } else {
-            fragment.lifecycleScope.launch(mainDispatcher) {
+            lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
                 Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()
             }
         }
     }
 
     fun fileSelected(data: Uri?) {
-        fragment.lifecycleScope.launch(ioDispatcher) {
+        lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
             val json = FileHelper.readFromUri(data, context.contentResolver)
 
             val progressDialogFragment = ProgressDialogFragment()
             withContext(mainDispatcher) {
-                progressDialogFragment.show(fragment.getParentFragmentManager(), "restore")
+                fragmentManager?.let { progressDialogFragment.show(it, "restore") }
             }
             var restoreSuccessful = false
             if (json != null) {
@@ -198,9 +209,11 @@ class BackupManager(
             }
             Log.d(LogTags.BACKUP, "Backup restore finished")
             withContext(mainDispatcher) {
-                progressDialogFragment.dismiss()
+                if (fragmentManager != null) {
+                    progressDialogFragment.dismiss()
+                }
 
-                MaterialAlertDialogBuilder(context)
+                AlertDialog.Builder(context)
                     .setMessage(if (restoreSuccessful) R.string.restore_successful else R.string.restore_failed)
                     .setPositiveButton(R.string.ok) { _, _ -> }
                     .show()
@@ -237,6 +250,83 @@ class BackupManager(
             return true
         }
         return false
+    }
+
+    fun autoBackup() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val interval = sharedPref.getString(AUTOMATIC_BACKUP_INTERVAL, "never") ?: "never"
+        if (interval == "never") return
+
+        val lastBackupStr = sharedPref.getString(LAST_AUTOMATIC_BACKUP, "")
+        val lastBackup = if (lastBackupStr.isNullOrEmpty()) LocalDate.EPOCH else LocalDate.parse(lastBackupStr)
+        val now = LocalDate.now()
+
+        val shouldBackup = when (interval) {
+            "daily" -> lastBackup.plusDays(1) <= now
+            "weekly" -> lastBackup.plusDays(7) <= now
+            "monthly" -> lastBackup.plusDays(30) <= now
+            else -> false
+        }
+
+        if (shouldBackup) {
+            Log.d(LogTags.BACKUP, "Starting auto backup, last was at $lastBackup")
+            val directoryUriStr = sharedPref.getString(AUTOMATIC_BACKUP_DIRECTORY, "")
+            if (directoryUriStr.isNullOrEmpty()) return
+
+            val directoryUri = directoryUriStr.toUri()
+            lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
+                performAutoBackup(directoryUri)
+            }
+        }
+    }
+
+    private fun performAutoBackup(directoryUri: Uri) {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonObject = JsonObject()
+        jsonObject.add(
+            MEDICINE_KEY, createBackup(
+                JSONMedicineBackup(),
+                medicineViewModel.medicineRepository.medicines
+            )
+        )
+        jsonObject.add(
+            EVENT_KEY, createBackup(
+                JSONReminderEventBackup(),
+                medicineViewModel.medicineRepository.allReminderEventsWithoutDeleted
+            )
+        )
+
+        val json = gson.toJson(jsonObject)
+        val filename = backupFilename
+        val success = saveToDirectory(directoryUri, filename, json)
+
+        lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
+            if (success) {
+                val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+                sharedPref.edit { putString(LAST_AUTOMATIC_BACKUP, LocalDate.now().toString()) }
+                Toast.makeText(context, context.getString(R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun saveToDirectory(directoryUri: Uri, filename: String, content: String): Boolean {
+        return try {
+            val root = DocumentFile.fromTreeUri(context, directoryUri)
+            val file = root?.createFile("application/json", filename)
+            if (file != null) {
+                context.contentResolver.openOutputStream(file.uri)?.use { outputStream ->
+                    outputStream.write(content.toByteArray())
+                }
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(LogTags.BACKUP, "Auto backup failed", e)
+            false
+        }
     }
 
     companion object {

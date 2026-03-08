@@ -35,4 +35,8 @@
     <string name="create_expiration_date_reminder">Opprett påminnelse om utløpsdato</string>
     <string name="duplicate">Dupliser</string>
     <string name="duplicate_including_reminders">Dupliser inkludert påminnelser</string>
+    <string name="weekly">Ukentlig</string>
+    <string name="monthly">Månedlig</string>
+    <string name="automatic_backup">Automatisk sikkerhetskopiering</string>
+    <string name="backup_successful_to">Automatisk sikkerhetskopiering vellykket: %s</string>
 </resources>

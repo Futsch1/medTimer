@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">காலாவதி தேதி நினைவூட்டலை உருவாக்கவும்</string>
     <string name="duplicate">நகலெடு</string>
     <string name="duplicate_including_reminders">நினைவூட்டல்களுடன் நகலெடு</string>
+    <string name="weekly">வாராந்திர</string>
+    <string name="monthly">மாதாந்திர</string>
+    <string name="automatic_backup">தானியங்கி காப்புப்பிரதி</string>
+    <string name="backup_successful_to">தானியங்கி காப்புப்பிரதி வெற்றிகரமாக முடிந்தது: %s</string>
 </resources>
