@@ -290,4 +290,8 @@
     <string name="create_expiration_date_reminder">Vytvořit připomenutí data expirace</string>
     <string name="duplicate">Duplikovat</string>
     <string name="duplicate_including_reminders">Duplikovat včetně připomínek</string>
+    <string name="weekly">Týdně</string>
+    <string name="monthly">Měsíčně</string>
+    <string name="automatic_backup">Automatické zálohování</string>
+    <string name="backup_successful_to">Automatické zálohování úspěšné: %s</string>
 </resources>

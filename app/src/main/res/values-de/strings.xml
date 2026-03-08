@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Ablaufdatum-Erinnerung erstellen</string>
     <string name="duplicate">Duplizieren</string>
     <string name="duplicate_including_reminders">Duplizieren inklusive Erinnerungen</string>
+    <string name="weekly">Wöchentlich</string>
+    <string name="monthly">Monatlich</string>
+    <string name="automatic_backup">Automatisches Backup</string>
+    <string name="backup_successful_to">Automatisches Backup erfolgreich: %s</string>
 </resources>

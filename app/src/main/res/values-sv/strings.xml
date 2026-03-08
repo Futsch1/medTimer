@@ -279,4 +279,8 @@
     <string name="create_expiration_date_reminder">Skapa påminnelse om utgångsdatum</string>
     <string name="duplicate">Duplicera</string>
     <string name="duplicate_including_reminders">Duplicera inklusive påminnelser</string>
+    <string name="weekly">Varje vecka</string>
+    <string name="monthly">Varje månad</string>
+    <string name="automatic_backup">Automatisk säkerhetskopiering</string>
+    <string name="backup_successful_to">Automatisk säkerhetskopiering lyckades: %s</string>
 </resources>

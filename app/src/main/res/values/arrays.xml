@@ -164,4 +164,10 @@
         <item>@string/once</item>
         <item>@string/daily</item>
     </string-array>
+    <string-array name="automatic_backup_options">
+        <item>@string/never</item>
+        <item>@string/daily</item>
+        <item>@string/weekly</item>
+        <item>@string/monthly</item>
+    </string-array>
 </resources>

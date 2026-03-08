@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -114,6 +115,9 @@ class MainActivity : AppCompatActivity() {
             sharedPref.edit { putBoolean(BATTERY_WARNING_DISMISSED, true) }
             checkBatteryOptimization()
         }
+
+        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
 
         dispatch(this, this.intent)
         this.intent = Intent()

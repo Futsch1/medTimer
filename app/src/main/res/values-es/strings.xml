@@ -285,4 +285,8 @@
     <string name="create_expiration_date_reminder">Crear recordatorio de fecha de vencimiento</string>
     <string name="duplicate">Duplicar</string>
     <string name="duplicate_including_reminders">Duplicar incluyendo recordatorios</string>
+    <string name="weekly">Semanalmente</string>
+    <string name="monthly">Mensualmente</string>
+    <string name="automatic_backup">Copia de seguridad automática</string>
+    <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
 </resources>

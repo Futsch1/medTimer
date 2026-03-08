@@ -285,4 +285,8 @@
     <string name="create_expiration_date_reminder">Créer un rappel de date d\'expiration</string>
     <string name="duplicate">Dupliquer</string>
     <string name="duplicate_including_reminders">Dupliquer y compris les rappels</string>
+    <string name="weekly">Hebdomadaire</string>
+    <string name="monthly">Mensuel</string>
+    <string name="automatic_backup">Sauvegarde automatique</string>
+    <string name="backup_successful_to">Sauvegarde automatique réussie : %s</string>
 </resources>

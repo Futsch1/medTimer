@@ -56,6 +56,10 @@
         android:title="@string/backup">
         <menu>
             <item
+                android:id="@+id/automatic_backup"
+                android:icon="@drawable/gear"
+                android:title="@string/automatic_backup"/>
+            <item
                 android:id="@+id/create_backup"
                 android:icon="@drawable/box_arrow_down"
                 android:title="@string/backup" />

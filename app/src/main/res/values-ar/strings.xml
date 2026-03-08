@@ -300,4 +300,8 @@
     <string name="create_expiration_date_reminder">إنشاء تذكير بتاريخ انتهاء الصلاحية</string>
     <string name="duplicate">تكرار</string>
     <string name="duplicate_including_reminders">تكرار بما في ذلك التذكيرات</string>
+    <string name="weekly">أسبوعي</string>
+    <string name="monthly">شهري</string>
+    <string name="automatic_backup">نسخ احتياطي تلقائي</string>
+    <string name="backup_successful_to">نجاح النسخ الاحتياطي التلقائي: %s</string>
 </resources>

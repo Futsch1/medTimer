@@ -275,4 +275,8 @@
     <string name="create_expiration_date_reminder">创建到期日期提醒</string>
     <string name="duplicate">复制</string>
     <string name="duplicate_including_reminders">复制（包括提醒）</string>
+    <string name="weekly">每周</string>
+    <string name="monthly">每月</string>
+    <string name="automatic_backup">自动备份</string>
+    <string name="backup_successful_to">自动备份成功：%s</string>
 </resources>

@@ -290,4 +290,8 @@
     <string name="create_expiration_date_reminder">Створити нагадування про термін придатності</string>
     <string name="duplicate">Дублювати</string>
     <string name="duplicate_including_reminders">Дублювати разом із нагадуваннями</string>
+    <string name="weekly">Щотижня</string>
+    <string name="monthly">Щомісяця</string>
+    <string name="automatic_backup">Автоматичне резервне копіювання</string>
+    <string name="backup_successful_to">Автоматичне резервне копіювання завершено успішно: %s</string>
 </resources>

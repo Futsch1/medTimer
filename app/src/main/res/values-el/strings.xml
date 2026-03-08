@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Δημιουργία υπενθύμισης ημερομηνίας λήξης</string>
     <string name="duplicate">Δημιουργία αντιγράφου</string>
     <string name="duplicate_including_reminders">Δημιουργία αντιγράφου συμπεριλαμβανομένων των υπενθυμίσεων</string>
+    <string name="weekly">Εβδομαδιαία</string>
+    <string name="monthly">Μηνιαία</string>
+    <string name="automatic_backup">Αυτόματη δημιουργία αντιγράφων ασφαλείας</string>
+    <string name="backup_successful_to">Η αυτόματη δημιουργία αντιγράφων ασφαλείας ήταν επιτυχής: %s</string>
 </resources>

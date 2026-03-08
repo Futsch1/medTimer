@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Vervaldatumherinnering aanmaken</string>
     <string name="duplicate">Dupliceren</string>
     <string name="duplicate_including_reminders">Dupliceren inclusief herinneringen</string>
+    <string name="weekly">Wekelijks</string>
+    <string name="monthly">Maandelijks</string>
+    <string name="automatic_backup">Automatische back-up</string>
+    <string name="backup_successful_to">Automatische back-up geslaagd: %s</string>
 </resources>

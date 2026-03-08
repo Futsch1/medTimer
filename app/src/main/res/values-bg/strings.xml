@@ -280,4 +280,8 @@
     <string name="create_expiration_date_reminder">Създаване на напомняне за срок на годност</string>
     <string name="duplicate">Дублиране</string>
     <string name="duplicate_including_reminders">Дублиране, включително напомнянията</string>
+    <string name="weekly">Ежеседмично</string>
+    <string name="monthly">Ежемесечно</string>
+    <string name="automatic_backup">Автоматично архивиране</string>
+    <string name="backup_successful_to">Автоматичното архивиране е успешно: %s</string>
 </resources>

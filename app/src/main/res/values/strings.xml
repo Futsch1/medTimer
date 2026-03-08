@@ -270,6 +270,8 @@
     <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
     <string name="once">Once</string>
     <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
     <string name="medicine_stock_settings">Medicine stock settings</string>
     <string name="edit_medicine_stock_settings">Edit medicine stock settings</string>
     <string name="clear_dates">Clear dates</string>
@@ -285,5 +287,6 @@
     <string name="create_expiration_date_reminder">Create expiration date reminder</string>
     <string name="duplicate">Duplicate</string>
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
+    <string name="automatic_backup">Automatic backup</string>
+    <string name="backup_successful_to">Automatic backup successful: %s</string>
 </resources>
-

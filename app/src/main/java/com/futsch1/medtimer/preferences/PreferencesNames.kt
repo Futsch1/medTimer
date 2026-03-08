@@ -16,4 +16,9 @@ object PreferencesNames {
     const val COMBINE_NOTIFICATIONS: String = "combine_notifications"
     const val SHOW_TAKEN_TIME_IN_OVERVIEW: String = "show_taken_time_in_overview"
     const val SNOOZE_DURATION: String = "snooze_duration"
+    const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
+    const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
+    const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
+
 }
+

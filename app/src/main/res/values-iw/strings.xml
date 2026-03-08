@@ -285,4 +285,8 @@
     <string name="create_expiration_date_reminder">יצירת תזכורת תאריך תפוגה</string>
     <string name="duplicate">שכפול</string>
     <string name="duplicate_including_reminders">שכפול כולל תזכורות</string>
+    <string name="weekly">שבועי</string>
+    <string name="monthly">חודשי</string>
+    <string name="automatic_backup">גיבוי אוטומטי</string>
+    <string name="backup_successful_to">גיבוי אוטומטי הצליح: %s</string>
 </resources>
