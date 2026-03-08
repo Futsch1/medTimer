@@ -1,77 +1,75 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import android.content.Context;
-import android.util.Log;
-import android.view.View;
-
-import androidx.test.core.app.DeviceCapture;
-import androidx.test.core.graphics.BitmapStorage;
-import androidx.test.espresso.FailureHandler;
-import androidx.test.espresso.base.DefaultFailureHandler;
-import androidx.test.espresso.internal.inject.TargetContext;
-import androidx.test.internal.platform.util.TestOutputEmitter;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.platform.io.PlatformTestStorageRegistry;
-import androidx.test.uiautomator.UiDevice;
-
-import org.hamcrest.Matcher;
-import org.junit.rules.TestName;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicInteger;
+import android.content.Context
+import android.util.Log
+import android.view.View
+import androidx.test.core.app.canTakeScreenshot
+import androidx.test.core.app.takeScreenshotNoSync
+import androidx.test.core.graphics.writeToTestStorage
+import androidx.test.espresso.FailureHandler
+import androidx.test.espresso.base.DefaultFailureHandler
+import androidx.test.espresso.internal.inject.TargetContext
+import androidx.test.internal.platform.util.TestOutputEmitter
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.io.PlatformTestStorageRegistry
+import androidx.test.uiautomator.UiDevice
+import org.hamcrest.Matcher
+import org.junit.rules.TestName
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Modified failure handler that includes name of test in screenshot name.
  */
-public final class MyFailureHandler implements FailureHandler {
+class MyFailureHandler(
+    private val testName: String,
+    private val testFunctionName: TestName,
+    @TargetContext appContext: Context
+) : FailureHandler {
+    // Use the default handler but manage screenshots ourselves
+    private val defaultFailureHandler: DefaultFailureHandler =
+        DefaultFailureHandler(appContext, false)
+    private val device: UiDevice =
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-    private static final AtomicInteger failureCount = new AtomicInteger(0);
-    private final DefaultFailureHandler defaultFailureHandler;
-    private final String testName;
-    private final TestName testFunctionName;
-    private final UiDevice device;
-
-    public MyFailureHandler(
-            String testName,
-            TestName testFunctionName, @TargetContext Context appContext) {
-        this.testName = testName;
-        this.testFunctionName = testFunctionName;
-        // Use the default handler, but manage screenshots ourselves
-        defaultFailureHandler = new DefaultFailureHandler(appContext, false);
-        this.device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-    }
-
-    @Override
-    public void handle(Throwable error, Matcher<View> viewMatcher) {
-        int count = failureCount.incrementAndGet();
-        String fileNameBase = this.testName + "." + this.testFunctionName.getMethodName() + "_" + count;
+    override fun handle(error: Throwable, viewMatcher: Matcher<View?>?) {
+        val count = failureCount.incrementAndGet()
+        val fileNameBase = "${this.testName}.${this.testFunctionName.methodName}_$count"
         try {
-            takeScreenshot("view-op-error-" + fileNameBase);
-        } catch (RuntimeException screenshotException) {
+            takeScreenshot("view-op-error-$fileNameBase")
+        } catch (screenshotException: RuntimeException) {
             // Ensure that the root cause exception is surfaced, not an auxiliary exception that may occur
             // during the capture/screenshot process.
-            error.addSuppressed(screenshotException);
+            error.addSuppressed(screenshotException)
         }
         try {
-            OutputStream os = PlatformTestStorageRegistry.getInstance().openOutputFile("view-hierarchy-" + fileNameBase + ".txt");
-            device.dumpWindowHierarchy(os);
-        } catch (IOException e) {
-            error.addSuppressed(e);
+            val os = PlatformTestStorageRegistry.getInstance()
+                .openOutputFile("view-hierarchy-$fileNameBase.txt")
+            device.dumpWindowHierarchy(os)
+        } catch (e: IOException) {
+            error.addSuppressed(e)
         }
 
-        defaultFailureHandler.handle(error, viewMatcher);
+        defaultFailureHandler.handle(error, viewMatcher)
     }
 
-    private void takeScreenshot(String outputName) {
+    private fun takeScreenshot(outputName: String) {
         try {
-            if (DeviceCapture.canTakeScreenshot()) {
-                BitmapStorage.writeToTestStorage(DeviceCapture.takeScreenshotNoSync(), outputName);
+            if (canTakeScreenshot()) {
+                takeScreenshotNoSync().writeToTestStorage(outputName)
             } else {
-                TestOutputEmitter.takeScreenshot(outputName + ".png");
+                TestOutputEmitter.takeScreenshot("$outputName.png")
             }
-        } catch (RuntimeException | Error | IOException e) {
-            Log.w("MyFailureHandler", "Failed to take screenshot", e);
+        } catch (e: RuntimeException) {
+            Log.w("MyFailureHandler", "Failed to take screenshot", e)
+        } catch (e: Error) {
+            Log.w("MyFailureHandler", "Failed to take screenshot", e)
+        } catch (e: IOException) {
+            Log.w("MyFailureHandler", "Failed to take screenshot", e)
         }
+    }
+
+    companion object {
+        private val failureCount = AtomicInteger(0)
     }
 }
