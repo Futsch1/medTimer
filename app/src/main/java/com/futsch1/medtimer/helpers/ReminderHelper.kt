@@ -7,6 +7,8 @@ import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.ImageSpan
+import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -60,6 +62,7 @@ fun formatReminderEventString(
     var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, reminderEvent.remindedTimestamp, false
     )
+    val reminderTypeSpan = getReminderTypeSpan(context, reminderEvent.reminderType)
     if (reminderEvent.processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
         sharedPreferences.getBoolean(SHOW_TAKEN_TIME_IN_OVERVIEW, true)
     ) {
@@ -77,7 +80,7 @@ fun formatReminderEventString(
 
     val intervalTime = getLastIntervalTime(context, reminderEvent)
 
-    return SpannableStringBuilder().append(takenTime).append(intervalTime).append("\n").bold { append(reminderEvent.medicineName) }
+    return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime).append(intervalTime).append("\n").bold { append(reminderEvent.medicineName) }
         .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
 }
 
@@ -92,10 +95,11 @@ fun formatReminderStringForWidget(
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
             context, sharedPreferences, reminderEvent.remindedTimestamp
         )) + ": "
+    val reminderTypeSpan = getReminderTypeSpan(context, reminderEvent.reminderType)
 
     val amountStatusString = "${reminderEvent.amount} ${statusToString(context, reminderEvent.status)}".trim()
 
-    return SpannableStringBuilder().append(takenTime).bold { append(reminderEvent.medicineName) }
+    return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime).bold { append(reminderEvent.medicineName) }
         .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
 }
 
@@ -113,10 +117,25 @@ fun formatScheduledReminderString(
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, false
     )
+    val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
+    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
         append(scheduledReminder.medicine().medicine.name)
     }.append(getAmountOrStockString(context, scheduledReminder))
+}
+
+fun getReminderTypeSpan(context: Context, reminderType: Reminder.ReminderType): Spanned {
+    val span = SpannableStringBuilder()
+    val drawable = ContextCompat.getDrawable(context, reminderType.icon)
+
+    if (drawable != null) {
+        val imageSpan = TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
+
+        span.append("  ")
+        span.setSpan(imageSpan, 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+    }
+
+    return span
 }
 
 fun formatScheduledReminderStringForWidget(
@@ -130,8 +149,9 @@ fun formatScheduledReminderStringForWidget(
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
             context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
         )) + ": "
+    val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
+    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
         getAmountOrStockString(
             context,
             scheduledReminder

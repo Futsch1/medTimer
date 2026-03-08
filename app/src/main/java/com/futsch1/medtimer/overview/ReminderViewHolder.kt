@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 import com.futsch1.medtimer.overview.actions.createActionsView
@@ -27,7 +26,6 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
-    val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
     val stateButton: ImageView = itemView.findViewById(R.id.stateButton)
     val topBar: View = itemView.findViewById(R.id.topBar)
     val bottomBar: View = itemView.findViewById(R.id.bottomBar)
@@ -51,14 +49,6 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         setBarsVisibility(event.eventPosition)
         setBackgrounds()
         ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
-        reminderTypeIcon.visibility =
-            if (event.reminderType == Reminder.ReminderType.REFILL || event.reminderType == Reminder.ReminderType.OUT_OF_STOCK || event.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-        reminderTypeIcon.setImageResource(event.reminderType.icon)
-        ViewColorHelper.setDrawableTint(contentContainer, reminderTypeIcon.drawable)
 
         setStateButton(event.state)
         setupStateMenu()

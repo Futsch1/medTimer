@@ -40,6 +40,7 @@ object ViewColorHelper {
     private fun setTextColor(textViews: List<TextView>, @ColorInt color: Int) {
         for (textView in textViews) {
             textView.setTextColor(color)
+            textView.setHintTextColor(color)
         }
     }
 

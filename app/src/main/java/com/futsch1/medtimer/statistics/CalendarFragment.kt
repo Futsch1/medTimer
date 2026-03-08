@@ -3,6 +3,7 @@ package com.futsch1.medtimer.statistics
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +43,7 @@ class CalendarFragment : Fragment() {
     private var currentDayEvents: EditText? = null
     private lateinit var calendarEventsViewModel: CalendarEventsViewModel
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
-    private var dayStrings: Map<LocalDate, String>? = null
+    private var dayStrings: Map<LocalDate, Spanned>? = null
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
 
@@ -77,7 +78,7 @@ class CalendarFragment : Fragment() {
             medicineCalenderArgs.pastMonths,
             medicineCalenderArgs.futureMonths
         )
-            .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, String> ->
+            .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, Spanned> ->
                 this.dayStrings = dayStrings
                 calendarView.notifyCalendarChanged()
                 updateCurrentDay()
