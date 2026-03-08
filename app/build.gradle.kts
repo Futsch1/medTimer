@@ -139,6 +139,7 @@ dependencies {
     implementation(libs.androidx.documentfile)
 
     testImplementation(libs.junit.jupiter.api)
+    testImplementation(kotlin("test-junit5"))
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
