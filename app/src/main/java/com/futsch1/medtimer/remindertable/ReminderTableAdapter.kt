@@ -1,134 +1,169 @@
-package com.futsch1.medtimer.remindertable;
+package com.futsch1.medtimer.remindertable
 
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import com.evrencoskun.tableview.TableView
+import com.evrencoskun.tableview.adapter.AbstractTableAdapter
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
+import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.helpers.TimeHelper.QuickSecondsSinceEpochFormatter
+import com.futsch1.medtimer.overview.EditEventSheetDialog
+import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-
-import com.evrencoskun.tableview.TableView;
-import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
-import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.futsch1.medtimer.MedicineViewModel;
-import com.futsch1.medtimer.R;
-import com.futsch1.medtimer.database.ReminderEvent;
-import com.futsch1.medtimer.helpers.TimeHelper;
-import com.futsch1.medtimer.overview.EditEventSheetDialog;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import kotlinx.coroutines.Dispatchers;
-
-public class ReminderTableAdapter extends AbstractTableAdapter<String, ReminderTableCellModel, ReminderTableCellModel> {
-    private final TableView tableView;
-    private final MedicineViewModel medicineViewModel;
-    private final FragmentActivity activity;
-    private final HandlerThread thread;
-
-    public ReminderTableAdapter(TableView tableView, MedicineViewModel medicineViewModel, FragmentActivity fragmentActivity) {
-        this.tableView = tableView;
-        this.medicineViewModel = medicineViewModel;
-        this.activity = fragmentActivity;
-        this.thread = new HandlerThread("EditReminderFromTable");
-        this.thread.start();
+class ReminderTableAdapter(
+    private val tableView: TableView,
+    private val medicineViewModel: MedicineViewModel,
+    private val activity: FragmentActivity,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : AbstractTableAdapter<String?, ReminderTableCellModel?, ReminderTableCellModel?>() {
+    override fun onCreateCellViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
+        return getTextCellViewHolder(parent)
     }
 
-    @NonNull
-    @Override
-    public AbstractViewHolder onCreateCellViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return getTextCellViewHolder(parent);
-    }
-
-    @NonNull
-    private static ReminderTableCellViewHolder getTextCellViewHolder(ViewGroup parent) {
-        View layout = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.reminder_table_cell, parent, false);
-        return new ReminderTableCellViewHolder(layout);
-    }
-
-    @Override
-    public void onBindCellViewHolder(@NonNull AbstractViewHolder holder, ReminderTableCellModel cellItemModel, int
-            columnPosition, int rowPosition) {
-        ReminderTableCellViewHolder viewHolder = (ReminderTableCellViewHolder) holder;
-        if (cellItemModel != null) {
-            String modelContent = cellItemModel.getRepresentation();
-            viewHolder.getTextView().setText(modelContent);
-            viewHolder.getTextView().setTag(cellItemModel.getViewTag());
-            viewHolder.setupEditButton(columnPosition == 1 ? () -> new Handler(thread.getLooper()).post(() -> navigateToEditEvent(cellItemModel.getIdAsInt())) : null);
+    override fun onBindCellViewHolder(
+        holder: AbstractViewHolder,
+        cellItemModel: ReminderTableCellModel?,
+        columnPosition: Int,
+        rowPosition: Int
+    ) {
+        if (cellItemModel == null) {
+            return
         }
+
+        val modelContent = cellItemModel.representation
+
+        val viewHolder = holder as ReminderTableCellViewHolder
+        viewHolder.textView.text = modelContent
+        viewHolder.textView.tag = cellItemModel.viewTag
+        viewHolder.setupEditButton(if (columnPosition == 1) OnEditClickListener {
+            activity.lifecycleScope.launch {
+                navigateToEditEvent(
+                    cellItemModel.idAsInt.toLong()
+                )
+            }
+        } else null)
     }
 
-    @NonNull
-    @Override
-    public AbstractViewHolder onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.reminder_table_column_header, parent, false);
-        return new ReminderTableColumnHeaderViewHolder(layout, tableView);
+    override fun onCreateColumnHeaderViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AbstractViewHolder {
+        val layout = LayoutInflater.from(parent.context)
+            .inflate(R.layout.reminder_table_column_header, parent, false)
+        return ReminderTableColumnHeaderViewHolder(layout, tableView)
     }
 
-    @Override
-    public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, String columnHeaderItemModel, int
-            position) {
-        ReminderTableColumnHeaderViewHolder columnHeaderViewHolder = (ReminderTableColumnHeaderViewHolder) holder;
-        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel, position == 0);
+    override fun onBindColumnHeaderViewHolder(
+        holder: AbstractViewHolder,
+        columnHeaderItemModel: String?,
+        position: Int
+    ) {
+        val columnHeaderViewHolder = holder as ReminderTableColumnHeaderViewHolder
+        columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel, position == 0)
     }
 
-    @NonNull
-    @Override
-    public AbstractViewHolder onCreateRowHeaderViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return getTextCellViewHolder(parent);
+    override fun onCreateRowHeaderViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
+        return getTextCellViewHolder(parent)
     }
 
-    @Override
-    public void onBindRowHeaderViewHolder(@NonNull AbstractViewHolder abstractViewHolder, ReminderTableCellModel s, int i) {
-        onBindCellViewHolder(abstractViewHolder, s, i, i);
+    override fun onBindRowHeaderViewHolder(
+        abstractViewHolder: AbstractViewHolder,
+        s: ReminderTableCellModel?,
+        i: Int
+    ) {
+        onBindCellViewHolder(abstractViewHolder, s, i, i)
     }
 
-    private void navigateToEditEvent(long eventId) {
-        ReminderEvent reminderEvent = medicineViewModel.medicineRepository.getReminderEvent((int) eventId);
+    private suspend fun navigateToEditEvent(eventId: Long) {
+        val reminderEvent = withContext(ioDispatcher) {
+            medicineViewModel.medicineRepository.getReminderEvent(eventId.toInt())
+        }
         if (reminderEvent != null) {
-            activity.runOnUiThread(() -> new EditEventSheetDialog(activity, reminderEvent, Dispatchers.getIO()));
+            withContext(mainDispatcher) {
+                EditEventSheetDialog(activity, reminderEvent)
+            }
         }
     }
 
-    @NonNull
-    @Override
-    public View onCreateCornerView(@NonNull ViewGroup viewGroup) {
-        return new View(viewGroup.getContext());
+    override fun onCreateCornerView(viewGroup: ViewGroup): View {
+        return View(viewGroup.context)
     }
 
-    public void submitList(List<ReminderEvent> reminderEvents) {
-        List<List<ReminderTableCellModel>> cells = new ArrayList<>();
-        List<ReminderTableCellModel> rows = new ArrayList<>();
-        TimeHelper.QuickSecondsSinceEpochFormatter formatter = new TimeHelper.QuickSecondsSinceEpochFormatter(tableView.getContext());
+    fun submitList(reminderEvents: MutableList<ReminderEvent>) {
+        val cells: MutableList<List<ReminderTableCellModel?>> = mutableListOf()
+        val rows: MutableList<ReminderTableCellModel?> = mutableListOf()
+        val formatter = QuickSecondsSinceEpochFormatter(tableView.context)
 
-        for (ReminderEvent reminderEvent : reminderEvents) {
-            List<ReminderTableCellModel> cell = new ArrayList<>();
-            cell.add(new ReminderTableCellModel(reminderEvent.getStatus(),
+        for (reminderEvent in reminderEvents) {
+            val cell = listOf(
+                ReminderTableCellModel(
+                    reminderEvent.status,
                     getStatusString(reminderEvent, formatter),
-                    reminderEvent.getReminderEventId(), "taken"));
-            cell.add(new ReminderTableCellModel(reminderEvent.getMedicineName(), reminderEvent.getMedicineName(), reminderEvent.getReminderEventId(), "medicineName"));
-            cell.add(new ReminderTableCellModel(reminderEvent.getAmount(), reminderEvent.getAmount(), reminderEvent.getReminderEventId(), null));
-            cell.add(new ReminderTableCellModel(reminderEvent.getRemindedTimestamp(), formatter.secondsSinceEpochToDateTimeString(reminderEvent.getRemindedTimestamp()), reminderEvent.getReminderEventId(), "time"));
-            cells.add(cell);
-            rows.add(new ReminderTableCellModel(reminderEvent.getReminderEventId(), Integer.toString(reminderEvent.getReminderEventId()), reminderEvent.getReminderEventId(), null));
+                    reminderEvent.reminderEventId, "taken"
+                ),
+                ReminderTableCellModel(
+                    reminderEvent.medicineName,
+                    reminderEvent.medicineName,
+                    reminderEvent.reminderEventId,
+                    "medicineName"
+                ),
+                ReminderTableCellModel(
+                    reminderEvent.amount,
+                    reminderEvent.amount,
+                    reminderEvent.reminderEventId,
+                    null
+                ),
+                ReminderTableCellModel(
+                    reminderEvent.remindedTimestamp,
+                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp),
+                    reminderEvent.reminderEventId,
+                    "time"
+                )
+            )
+
+            cells.add(cell)
+            rows.add(
+                ReminderTableCellModel(
+                    reminderEvent.reminderEventId,
+                    reminderEvent.reminderEventId.toString(),
+                    reminderEvent.reminderEventId,
+                    null
+                )
+            )
         }
 
-        setCellItems(cells);
+        setCellItems(cells)
         // This is not used in the table, but required for the filter to work
-        setRowHeaderItems(rows);
+        setRowHeaderItems(rows)
     }
 
-    @NonNull
-    private String getStatusString(ReminderEvent reminderEvent, TimeHelper.QuickSecondsSinceEpochFormatter formatter) {
-        return switch (reminderEvent.getStatus()) {
-            case TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.getProcessedTimestamp());
-            case RAISED -> " ";
-            default -> "-";
-        };
+    private fun getStatusString(
+        reminderEvent: ReminderEvent,
+        formatter: QuickSecondsSinceEpochFormatter
+    ): String {
+        return when (reminderEvent.status) {
+            ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp)
+            ReminderStatus.RAISED -> " "
+            else -> "-"
+        }
+    }
+
+    companion object {
+        private fun getTextCellViewHolder(parent: ViewGroup): ReminderTableCellViewHolder {
+            val layout = LayoutInflater.from(parent.context)
+                .inflate(R.layout.reminder_table_cell, parent, false)
+            return ReminderTableCellViewHolder(layout)
+        }
     }
 }
