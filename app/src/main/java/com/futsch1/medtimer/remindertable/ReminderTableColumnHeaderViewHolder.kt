@@ -1,92 +1,92 @@
-package com.futsch1.medtimer.remindertable;
+package com.futsch1.medtimer.remindertable
 
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.evrencoskun.tableview.ITableView;
-import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
-import com.evrencoskun.tableview.sort.SortState;
-import com.futsch1.medtimer.R;
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.evrencoskun.tableview.ITableView
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder
+import com.evrencoskun.tableview.sort.SortState
+import com.futsch1.medtimer.R
 
 /**
  * Created by evrencoskun on 23/10/2017.
  */
+class ReminderTableColumnHeaderViewHolder(itemView: View, tableView: ITableView) :
+    AbstractSorterViewHolder(itemView) {
+    private val columnHeaderContainer: LinearLayout =
+        itemView.findViewById(R.id.tableColumnHeaderContainer)
+    private val columnHeaderTextview: TextView =
+        itemView.findViewById(R.id.tableColumnHeaderTextView)
+    private val columnHeaderSortButton: ImageButton =
+        itemView.findViewById(R.id.tableColumnHeaderSortButton)
 
-public class ReminderTableColumnHeaderViewHolder extends AbstractSorterViewHolder {
-
-    @NonNull
-    private final LinearLayout columnHeaderContainer;
-    @NonNull
-    private final TextView columnHeaderTextview;
-    @NonNull
-    private final ImageButton columnHeaderSortButton;
-
-    public ReminderTableColumnHeaderViewHolder(@NonNull View itemView, @NonNull ITableView tableView) {
-        super(itemView);
-        columnHeaderTextview = itemView.findViewById(R.id.tableColumnHeaderTextView);
-        columnHeaderContainer = itemView.findViewById(R.id.tableColumnHeaderContainer);
-        columnHeaderSortButton = itemView.findViewById(R.id.tableColumnHeaderSortButton);
-
+    init {
         // Set click listener to the sort button
         // Default one
-        View.OnClickListener mSortButtonClickListener = view -> {
-            if (getSortState() == SortState.ASCENDING) {
-                tableView.sortColumn(getBindingAdapterPosition(), SortState.UNSORTED);
-            } else if (getSortState() == SortState.DESCENDING) {
-                tableView.sortColumn(getBindingAdapterPosition(), SortState.ASCENDING);
-            } else if (getSortState() == SortState.UNSORTED) {
-                // Default one
-                tableView.sortColumn(getBindingAdapterPosition(), SortState.DESCENDING);
+        val mSortButtonClickListener = View.OnClickListener {
+            when (sortState) {
+                SortState.ASCENDING -> {
+                    tableView.sortColumn(getBindingAdapterPosition(), SortState.UNSORTED)
+                }
+
+                SortState.DESCENDING -> {
+                    tableView.sortColumn(getBindingAdapterPosition(), SortState.ASCENDING)
+                }
+
+                SortState.UNSORTED -> {
+                    // Default one
+                    tableView.sortColumn(getBindingAdapterPosition(), SortState.DESCENDING)
+                }
             }
-        };
-        columnHeaderSortButton.setOnClickListener(mSortButtonClickListener);
-        itemView.setOnClickListener(mSortButtonClickListener);
+        }
+        columnHeaderSortButton.setOnClickListener(mSortButtonClickListener)
+        itemView.setOnClickListener(mSortButtonClickListener)
     }
 
     /**
      * This method is calling from onBindColumnHeaderHolder on TableViewAdapter
      */
-    public void setColumnHeader(@Nullable String columnHeader, boolean firstColumn) {
-        columnHeaderTextview.setText(columnHeader);
+    fun setColumnHeader(columnHeader: String?, firstColumn: Boolean) {
+        columnHeaderTextview.text = columnHeader
 
         if (firstColumn) {
-            onSortingStatusChanged(SortState.DESCENDING);
+            onSortingStatusChanged(SortState.DESCENDING)
         }
 
-        columnHeaderContainer.getLayoutParams().width = WRAP_CONTENT;
-        columnHeaderTextview.requestLayout();
+        columnHeaderContainer.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        columnHeaderTextview.requestLayout()
     }
 
-    @Override
-    public void onSortingStatusChanged(@NonNull SortState sortState) {
-        super.onSortingStatusChanged(sortState);
+    override fun onSortingStatusChanged(sortState: SortState) {
+        super.onSortingStatusChanged(sortState)
 
-        columnHeaderContainer.getLayoutParams().width = WRAP_CONTENT;
+        columnHeaderContainer.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
 
-        controlSortState(sortState);
+        controlSortState(sortState)
 
-        columnHeaderTextview.requestLayout();
-        columnHeaderSortButton.requestLayout();
-        columnHeaderContainer.requestLayout();
-        itemView.requestLayout();
+        columnHeaderTextview.requestLayout()
+        columnHeaderSortButton.requestLayout()
+        columnHeaderContainer.requestLayout()
+        itemView.requestLayout()
     }
 
-    private void controlSortState(@NonNull SortState sortState) {
-        if (sortState == SortState.ASCENDING) {
-            columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.sort_up);
-        } else if (sortState == SortState.DESCENDING) {
-            columnHeaderSortButton.setVisibility(View.VISIBLE);
-            columnHeaderSortButton.setImageResource(R.drawable.sort_down);
-        } else {
-            columnHeaderSortButton.setVisibility(View.GONE);
+    private fun controlSortState(sortState: SortState) {
+        when (sortState) {
+            SortState.ASCENDING -> {
+                columnHeaderSortButton.setVisibility(View.VISIBLE)
+                columnHeaderSortButton.setImageResource(R.drawable.sort_up)
+            }
+
+            SortState.DESCENDING -> {
+                columnHeaderSortButton.setVisibility(View.VISIBLE)
+                columnHeaderSortButton.setImageResource(R.drawable.sort_down)
+            }
+
+            else -> {
+                columnHeaderSortButton.setVisibility(View.GONE)
+            }
         }
     }
 }

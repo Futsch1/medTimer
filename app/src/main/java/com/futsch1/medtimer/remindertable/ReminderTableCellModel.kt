@@ -1,54 +1,25 @@
-package com.futsch1.medtimer.remindertable;
+package com.futsch1.medtimer.remindertable
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import com.evrencoskun.tableview.filter.IFilterableModel
+import com.evrencoskun.tableview.sort.ISortableModel
 
-import com.evrencoskun.tableview.filter.IFilterableModel;
-import com.evrencoskun.tableview.sort.ISortableModel;
+class ReminderTableCellModel(
+    private val content: Any?,
+    val representation: String,
+    val idAsInt: Int,
+    val viewTag: String?
+) : ISortableModel, IFilterableModel {
+    private val stringId: String = idAsInt.toString()
 
-public class ReminderTableCellModel implements ISortableModel, IFilterableModel {
-    private final Object content;
-    private final int id;
-    private final String stringId;
-    private final String representation;
-    private final String viewTag;
-
-    public ReminderTableCellModel(Object content, String representation, int id, String viewTag) {
-        this.content = content;
-        this.representation = representation;
-        this.id = id;
-        this.stringId = Integer.toString(id);
-        this.viewTag = viewTag;
+    override fun getId(): String {
+        return this.stringId
     }
 
-    @NonNull
-    @Override
-    public String getId() {
-        return this.stringId;
+    override fun getContent(): Any? {
+        return content
     }
 
-    @Nullable
-    @Override
-    public Object getContent() {
-        return content;
-    }
-
-    public int getIdAsInt() {
-        return id;
-    }
-
-    @NonNull
-    @Override
-    @SuppressWarnings("java:S4144")
-    public String getFilterableKeyword() {
-        return getRepresentation();
-    }
-
-    public String getRepresentation() {
-        return representation;
-    }
-
-    public String getViewTag() {
-        return viewTag;
+    override fun getFilterableKeyword(): String {
+        return this.representation
     }
 }

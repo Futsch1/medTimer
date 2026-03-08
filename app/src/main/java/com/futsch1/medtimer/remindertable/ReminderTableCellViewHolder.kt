@@ -1,41 +1,38 @@
-package com.futsch1.medtimer.remindertable;
+package com.futsch1.medtimer.remindertable
 
-import android.graphics.Paint;
-import android.view.View;
-import android.widget.TextView;
+import android.graphics.Paint
+import android.view.View
+import android.widget.TextView
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.getMaterialColor
 
-import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.futsch1.medtimer.R;
-import com.google.android.material.color.MaterialColors;
+class ReminderTableCellViewHolder(view: View) : AbstractViewHolder(view) {
+    val textView: TextView = view.findViewById(R.id.tableCellTextView)
 
-public class ReminderTableCellViewHolder extends AbstractViewHolder {
-
-    private final TextView textView;
-
-    public ReminderTableCellViewHolder(View view) {
-        super(view);
-        textView = view.findViewById(R.id.tableCellTextView);
-        // TODO: use Kotlin extensions (context.getMaterialColor) here once migrated to Kotlin
-        textView.setTextColor(MaterialColors.getColor(view.getContext(), com.google.android.material.R.attr.colorOnSecondaryContainer, "TableView"));
-        textView.setClickable(false);
-        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+    init {
+        textView.setTextColor(
+            view.context.getMaterialColor(
+                com.google.android.material.R.attr.colorOnSecondaryContainer,
+                "TableView"
+            )
+        )
+        textView.isClickable = false
+        textView.paintFlags = textView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
     }
 
-    public TextView getTextView() {
-        return textView;
-    }
-
-    public void setupEditButton(OnEditClickListener clickListener) {
-        if (clickListener != null) {
-            textView.setOnClickListener(v -> clickListener.onEditClick());
-            textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        } else {
-            textView.setClickable(false);
-            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+    fun setupEditButton(clickListener: OnEditClickListener?) {
+        if (clickListener == null) {
+            textView.isClickable = false
+            textView.paintFlags = textView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+            return
         }
+
+        textView.setOnClickListener { clickListener.onEditClick() }
+        textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
-    public interface OnEditClickListener {
-        void onEditClick();
+    interface OnEditClickListener {
+        fun onEditClick()
     }
 }
