@@ -1,31 +1,27 @@
-package com.futsch1.medtimer;
+package com.futsch1.medtimer
 
-import static org.mockito.Mockito.mock;
+import com.code_intelligence.jazzer.junit.FuzzTest
+import com.futsch1.medtimer.database.JSONBackup
+import com.futsch1.medtimer.database.JSONMedicineBackup
+import com.futsch1.medtimer.database.JSONReminderEventBackup
+import com.futsch1.medtimer.database.MedicineRepository
+import org.mockito.Mockito
 
-import com.code_intelligence.jazzer.junit.FuzzTest;
-import com.futsch1.medtimer.database.JSONBackup;
-import com.futsch1.medtimer.database.JSONMedicineBackup;
-import com.futsch1.medtimer.database.JSONReminderEventBackup;
-import com.futsch1.medtimer.database.MedicineRepository;
-
-import java.util.List;
-
-@SuppressWarnings("java:S2187")
-public class JSONBackupFuzzTest {
+class JSONBackupFuzzTest {
     @FuzzTest
-    void fuzzTestMedicineBackup(String json) {
-        JSONMedicineBackup jsonMedicineBackup = new JSONMedicineBackup();
-        JSONReminderEventBackup jsonReminderEventBackup = new JSONReminderEventBackup();
+    fun fuzzTestMedicineBackup(json: String) {
+        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonReminderEventBackup = JSONReminderEventBackup()
 
-        checkBackup(jsonMedicineBackup, json);
-        checkBackup(jsonReminderEventBackup, json);
+        checkBackup(jsonMedicineBackup, json)
+        checkBackup(jsonReminderEventBackup, json)
     }
 
-    private <T> void checkBackup(JSONBackup<T> backup, String json) {
-        List<T> parsedData = backup.parseBackup(json);
-        MedicineRepository medicineRepository = mock(MedicineRepository.class);
+    private fun <T> checkBackup(backup: JSONBackup<T>, json: String) {
+        val parsedData = backup.parseBackup(json)
+        val medicineRepository = Mockito.mock(MedicineRepository::class.java)
         if (parsedData != null) {
-            backup.applyBackup(parsedData, medicineRepository);
+            backup.applyBackup(parsedData, medicineRepository)
         }
     }
 }
