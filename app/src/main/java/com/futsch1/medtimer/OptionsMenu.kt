@@ -54,6 +54,7 @@ class OptionsMenu(
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent?>
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
     private var menu: Menu? = null
     private var backupManager: BackupManager? = null
@@ -65,6 +66,12 @@ class OptionsMenu(
                     this.fileSelected(result.data!!.data)
                 }
             }
+        this.openDirectoryLauncher =
+            fragment.registerForActivityResult<Intent?, ActivityResult?>(StartActivityForResult()) { result: ActivityResult? ->
+                if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
+                    this.directorySelected(result.data!!.data)
+                }
+            }
         idlingResource.setIdle()
     }
 
@@ -74,12 +81,16 @@ class OptionsMenu(
         }
     }
 
+    fun directorySelected(data: Uri?) {
+        backupManager!!.directorySelected(data)
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main, menu)
         MenuCompat.setGroupDividerEnabled(menu, true)
         enableOptionalIcons(menu)
 
-        this.backupManager = BackupManager(context, fragment, menu, medicineViewModel, openFileLauncher)
+        this.backupManager = BackupManager(context, fragment, menu, medicineViewModel, openFileLauncher, openDirectoryLauncher)
         this.menu = menu
         setupSettings()
         setupVersion()

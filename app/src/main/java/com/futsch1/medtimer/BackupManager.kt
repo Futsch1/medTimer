@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,14 +8,18 @@ import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.helpers.FileHelper
 import com.futsch1.medtimer.helpers.PathHelper.backupFilename
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
+import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_DIRECTORY
+import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_INTERVAL
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -35,6 +38,7 @@ class BackupManager(
     private val menu: Menu,
     private val medicineViewModel: MedicineViewModel,
     private val openFileLauncher: ActivityResultLauncher<Intent?>,
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
@@ -52,12 +56,18 @@ class BackupManager(
 
         item = menu.findItem(R.id.restore_backup)
         item.setOnMenuItemClickListener { _ ->
-            AlertDialog.Builder(context)
+            MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.restore)
                 .setMessage(R.string.restore_start)
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { _, _ -> openBackup() }
                 .setNegativeButton(R.string.cancel) { _, _ -> }.show()
+            true
+        }
+
+        item = menu.findItem(R.id.automatic_backup)
+        item.setOnMenuItemClickListener { _ ->
+            selectAutomaticBackupInterval()
             true
         }
     }
@@ -76,6 +86,39 @@ class BackupManager(
             }
         }
         alertDialogBuilder.show()
+    }
+
+    private fun selectAutomaticBackupInterval() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val currentInterval = sharedPref.getString(AUTOMATIC_BACKUP_INTERVAL, "never")
+        val options = context.resources.getStringArray(R.array.automatic_backup_options)
+        val values = arrayOf("never", "daily", "weekly", "monthly")
+        val checkedItem = values.indexOf(currentInterval).coerceAtLeast(0)
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.automatic_backup)
+            .setSingleChoiceItems(options, checkedItem) { dialog, which ->
+                val selectedValue = values[which]
+                sharedPref.edit { putString(AUTOMATIC_BACKUP_INTERVAL, selectedValue) }
+                if (selectedValue != "never") {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    openDirectoryLauncher.launch(intent)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    fun directorySelected(uri: Uri?) {
+        if (uri != null) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            sharedPref.edit { putString(AUTOMATIC_BACKUP_DIRECTORY, uri.toString()) }
+            context.contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+        }
     }
 
     private fun openBackup() {
@@ -157,7 +200,7 @@ class BackupManager(
             withContext(mainDispatcher) {
                 progressDialogFragment.dismiss()
 
-                AlertDialog.Builder(context)
+                MaterialAlertDialogBuilder(context)
                     .setMessage(if (restoreSuccessful) R.string.restore_successful else R.string.restore_failed)
                     .setPositiveButton(R.string.ok) { _, _ -> }
                     .show()
