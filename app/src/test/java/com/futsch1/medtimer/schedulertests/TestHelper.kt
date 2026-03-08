@@ -35,7 +35,7 @@ object TestHelper {
         val medicineWithReminders = FullMedicine()
         medicineWithReminders.medicine = Medicine(medicineName)
         medicineWithReminders.medicine.medicineId = medicineId
-        medicineWithReminders.reminders = ArrayList<Reminder>()
+        medicineWithReminders.reminders = mutableListOf()
         return medicineWithReminders
     }
 

@@ -15,6 +15,7 @@ object CyclesHelper {
         val dayInCycle = LocalDate.now().toEpochDay() - cycleStartDay
         val cycleLength = reminder.consecutiveDays + reminder.pauseDays
 
-        return " (%d/%d)".format(dayInCycle % cycleLength + 1, reminder.consecutiveDays)
+        val dayWithinCycle = dayInCycle % cycleLength + 1
+        return " ($dayWithinCycle/${reminder.consecutiveDays})"
     }
 }
