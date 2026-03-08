@@ -110,11 +110,11 @@ fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
-        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, false
+        context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, false
     )
 
     return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
-        append(scheduledReminder.medicine().medicine.name)
+        append(scheduledReminder.medicine.medicine.name)
     }.append(getAmountOrStockString(context, scheduledReminder))
 }
 
@@ -123,14 +123,14 @@ fun formatScheduledReminderStringForWidget(
 ): Spanned {
     val scheduledTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, true
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, true
         )
     else
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000
         )) + ": "
 
-    return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
+    return SpannableStringBuilder().append(scheduledTime).bold { append(scheduledReminder.medicine.medicine.name) }.append(
         getAmountOrStockString(
             context,
             scheduledReminder
