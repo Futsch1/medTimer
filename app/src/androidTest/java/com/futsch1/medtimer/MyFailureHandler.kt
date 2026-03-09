@@ -61,12 +61,16 @@ class MyFailureHandler(
                 TestOutputEmitter.takeScreenshot("$outputName.png")
             }
         } catch (e: RuntimeException) {
-            Log.w("MyFailureHandler", "Failed to take screenshot", e)
+            logWarning()
         } catch (e: Error) {
-            Log.w("MyFailureHandler", "Failed to take screenshot", e)
+            logWarning()
         } catch (e: IOException) {
-            Log.w("MyFailureHandler", "Failed to take screenshot", e)
+            logWarning()
         }
+    }
+
+    private fun logWarning() {
+        Log.w("MyFailureHandler", "Failed to take screenshot", e)
     }
 
     companion object {
