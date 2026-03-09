@@ -2,16 +2,16 @@ package com.futsch1.medtimer.database
 
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 import java.io.IOException
+import kotlin.test.assertEquals
 
-@ExtendWith(RobolectricExtension::class)
+@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class MigrationTest {
     private val testDb = "migration-test"
@@ -19,7 +19,7 @@ class MigrationTest {
     @get:Rule
     private lateinit var helper: MigrationTestHelper
 
-    @BeforeEach
+    @Before
     fun setUp() {
         helper = MigrationTestHelper(
             InstrumentationRegistry.getInstrumentation(),

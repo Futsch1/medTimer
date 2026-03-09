@@ -5,8 +5,8 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert
+import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.LocalDate
@@ -19,19 +19,19 @@ internal class ReminderSchedulerUnitTest {
 
         // Two empty lists
         var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(emptyList(), emptyList())
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        Assert.assertTrue(scheduledReminders.isEmpty())
 
         // One medicine without reminders, no reminder events
         val medicineWithReminders = TestHelper.buildFullMedicine(1, TEST)
         scheduledReminders = scheduler.schedule(listOf(medicineWithReminders), emptyList())
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        Assert.assertTrue(scheduledReminders.isEmpty())
 
         // No reminder events
         val reminder = TestHelper.buildReminder(1, 1, "1", 12, 1)
         reminder.createdTimestamp = TestHelper.on(1, 13).epochSecond
         medicineWithReminders.reminders.add(reminder)
         scheduledReminders = scheduler.schedule(listOf(medicineWithReminders), emptyList())
-        Assertions.assertEquals(1, scheduledReminders.size)
+        Assert.assertEquals(1, scheduledReminders.size)
         TestHelper.assertReminded(scheduledReminders, TestHelper.on(2, 12), medicineWithReminders.medicine, reminder)
     }
 

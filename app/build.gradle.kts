@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
     alias(libs.plugins.sonarqube)
-    alias(libs.plugins.robolectric.junit5)
     alias(libs.plugins.ksp)
 }
 
@@ -137,15 +136,14 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
 
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.junit4)
+    testImplementation(kotlin("test-junit"))
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
-    testImplementation(libs.jazzer.junit)
     testImplementation(libs.androidx.room.testing)
-    testRuntimeOnly(libs.junit.jupiter.engine)
 
+    androidTestImplementation(kotlin("test-junit"))
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)

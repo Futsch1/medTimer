@@ -7,7 +7,7 @@ import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
 import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
 import com.futsch1.medtimer.schedulertests.TestHelper.on
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.DayOfWeek
@@ -31,7 +31,7 @@ internal class ReminderSchedulerWeekendModeTest {
         ).thenReturn(setOf<String>())
 
         val medicineWithReminders1 =
-            buildFullMedicine(1, ReminderSchedulerUnitTest.Companion.TEST_1)
+            buildFullMedicine(1, ReminderSchedulerUnitTest.TEST_1)
         val reminder1 = buildReminder(1, 1, "1", 16, 1)
         medicineWithReminders1.reminders.add(reminder1)
 
@@ -71,7 +71,7 @@ internal class ReminderSchedulerWeekendModeTest {
         ).thenReturn(weekendDays)
 
         val medicineWithReminders1 =
-            buildFullMedicine(1, ReminderSchedulerUnitTest.Companion.TEST_1)
+            buildFullMedicine(1, ReminderSchedulerUnitTest.TEST_1)
         val reminder1 = buildReminder(1, 1, "1", 16, 1)
         medicineWithReminders1.reminders.add(reminder1)
         val medicineList = mutableListOf<FullMedicine>()

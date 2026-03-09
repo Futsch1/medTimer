@@ -6,10 +6,10 @@ import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.g
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
 import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
 import com.futsch1.medtimer.schedulertests.TestHelper.on
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate
+import kotlin.test.assertEquals
 
 internal class ReminderSchedulerActiveDayOfMonthUnitTest {
     @Test

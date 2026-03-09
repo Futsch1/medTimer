@@ -7,8 +7,8 @@ import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.s
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
 import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
 import com.futsch1.medtimer.schedulertests.TestHelper.on
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
+import kotlin.test.assertEquals
 
 internal class ReminderSchedulerDaysUnitTest {
     @Test

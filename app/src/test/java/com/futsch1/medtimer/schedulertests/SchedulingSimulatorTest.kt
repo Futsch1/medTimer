@@ -10,13 +10,13 @@ import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.schedulertests.TestHelper.on
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
     private fun buildSchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {

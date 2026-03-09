@@ -1,20 +1,35 @@
 package com.futsch1.medtimer
 
-import com.code_intelligence.jazzer.junit.FuzzTest
 import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.MedicineRepository
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import org.mockito.Mockito
 
-class JSONBackupFuzzTest {
-    @FuzzTest
-    fun fuzzTestMedicineBackup(json: String) {
-        val jsonMedicineBackup = JSONMedicineBackup()
-        val jsonReminderEventBackup = JSONReminderEventBackup()
+@RunWith(Parameterized::class)
+class JSONBackupFuzzTest(private val json: String) {
 
-        checkBackup(jsonMedicineBackup, json)
-        checkBackup(jsonReminderEventBackup, json)
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "{0}")
+        fun inputs() = listOf(
+            "",
+            "{}",
+            "[]",
+            "null",
+            """{"invalid":}""",
+            "normal string",
+            """{"medicines":[]}"""
+        )
+    }
+
+    @Test
+    fun fuzzTestMedicineBackup() {
+        checkBackup(JSONMedicineBackup(), json)
+        checkBackup(JSONReminderEventBackup(), json)
     }
 
     private fun <T> checkBackup(backup: JSONBackup<T>, json: String) {
