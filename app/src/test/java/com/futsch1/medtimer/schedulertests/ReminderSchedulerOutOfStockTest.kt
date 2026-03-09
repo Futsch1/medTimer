@@ -4,8 +4,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
-import org.junit.Assert
 import org.junit.Test
+import kotlin.test.assertTrue
 
 class ReminderSchedulerOutOfStockTest {
     @Test
@@ -26,15 +26,15 @@ class ReminderSchedulerOutOfStockTest {
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assert.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         medicine.medicine.amount = 5.0
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assert.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assert.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
     }
 
     @Test
@@ -55,7 +55,7 @@ class ReminderSchedulerOutOfStockTest {
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assert.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         medicine.medicine.amount = 5.0
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
