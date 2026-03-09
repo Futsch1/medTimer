@@ -17,12 +17,11 @@ import com.futsch1.medtimer.statistics.ActiveStatisticsFragment.StatisticFragmen
 import com.google.android.material.chip.ChipGroup
 
 class StatisticsFragment : Fragment() {
-    private var timeSpinner: Spinner? = null
-
-    private var chartsFragment: ChartsFragment? = null
-    private var analysisDays: AnalysisDays? = null
-    private var activeStatisticsFragment: ActiveStatisticsFragment? = null
-    private var optionsMenu: OptionsMenu? = null
+    private lateinit var timeSpinner: Spinner
+    private lateinit var chartsFragment: ChartsFragment
+    private lateinit var analysisDays: AnalysisDays
+    private lateinit var activeStatisticsFragment: ActiveStatisticsFragment
+    private lateinit var optionsMenu: OptionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +29,7 @@ class StatisticsFragment : Fragment() {
         analysisDays = AnalysisDays(requireContext())
         activeStatisticsFragment = ActiveStatisticsFragment(requireContext())
 
-        chartsFragment = ChartsFragment()
-        chartsFragment!!.setDays(analysisDays!!.days)
+        chartsFragment = ChartsFragment.newInstance(analysisDays.days)
 
         optionsMenu = OptionsMenu(
             this,
@@ -52,9 +50,9 @@ class StatisticsFragment : Fragment() {
 
         setupFragmentButtons(statisticsView)
 
-        loadActiveFragment(activeStatisticsFragment!!.activeFragment)
+        loadActiveFragment(activeStatisticsFragment.activeFragment)
 
-        requireActivity().addMenuProvider(optionsMenu!!, getViewLifecycleOwner())
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
         return statisticsView
     }
@@ -72,9 +70,8 @@ class StatisticsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (optionsMenu != null) {
-            optionsMenu!!.onDestroy()
-        }
+        optionsMenu.onDestroy()
+
         try {
             requireActivity().supportFragmentManager.executePendingTransactions()
         } catch (_: IllegalStateException) {
@@ -99,7 +96,7 @@ class StatisticsFragment : Fragment() {
             }
         }
         chipGroup.check(
-            when (activeStatisticsFragment!!.activeFragment) {
+            when (activeStatisticsFragment.activeFragment) {
                 StatisticFragmentType.TABLE -> R.id.tableChip
                 StatisticFragmentType.CALENDAR -> R.id.calendarChip
                 else -> R.id.chartChip
@@ -112,12 +109,12 @@ class StatisticsFragment : Fragment() {
             StatisticFragmentType.TABLE -> ReminderTableFragment()
             StatisticFragmentType.CALENDAR -> CalendarFragment()
             else -> chartsFragment
-        }!!
+        }
         val transaction = getChildFragmentManager().beginTransaction()
         transaction.replace(R.id.container, fragment)
         try {
             transaction.commit()
-            activeStatisticsFragment!!.activeFragment = fragmentType
+            activeStatisticsFragment.activeFragment = fragmentType
             checkTimeSpinnerVisibility()
         } catch (_: IllegalStateException) {
             // Intentionally empty
@@ -125,21 +122,26 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun checkTimeSpinnerVisibility() {
-        if (activeStatisticsFragment!!.activeFragment == StatisticFragmentType.CHARTS) {
-            timeSpinner!!.visibility = View.VISIBLE
+        if (activeStatisticsFragment.activeFragment == StatisticFragmentType.CHARTS) {
+            timeSpinner.visibility = View.VISIBLE
         } else {
-            timeSpinner!!.visibility = View.INVISIBLE
+            timeSpinner.visibility = View.INVISIBLE
         }
     }
 
     private fun setupTimeSpinner() {
-        timeSpinner!!.setSelection(analysisDays!!.position)
-        timeSpinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != analysisDays!!.position) {
-                    analysisDays!!.position = position
+        timeSpinner.setSelection(analysisDays.position)
+        timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position != analysisDays.position) {
+                    analysisDays.position = position
 
-                    chartsFragment!!.setDays(analysisDays!!.days)
+                    chartsFragment.setDays(analysisDays.days)
                 }
             }
 

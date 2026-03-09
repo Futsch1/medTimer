@@ -12,8 +12,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.helpers.remindersSummary
 import com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.MockedConstruction
 import org.mockito.MockedStatic
@@ -27,6 +26,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
+import kotlin.test.assertEquals
 
 class SummaryHelperTest {
 
@@ -178,6 +178,8 @@ class SummaryHelperTest {
     @Test
     fun testRemindersSummaryLinked() {
         val context = mock(Context::class.java)
+        val application = mock(Application::class.java)
+        Mockito.`when`(context.applicationContext).thenReturn(application)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(

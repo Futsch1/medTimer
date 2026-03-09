@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
     alias(libs.plugins.sonarqube)
-    alias(libs.plugins.robolectric.junit5)
+    alias(libs.plugins.ksp)
 }
 
 room {
@@ -21,8 +21,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 161
-        versionName = "1.22.9"
+        versionCode = 162
+        versionName = "1.23.0"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -90,6 +90,7 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
@@ -99,6 +100,11 @@ android {
         warningsAsErrors = true
         disable.add("IconLocation")
         disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
+    }
+    sourceSets {
+        getByName("main") {
+            assets.directories.add("$projectDir/schemas")
+        }
     }
 }
 
@@ -131,13 +137,14 @@ dependencies {
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
 
-    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit4)
+    testImplementation(kotlin("test-junit"))
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
-    testImplementation(libs.jazzer.junit)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.androidx.room.testing)
 
+    androidTestImplementation(kotlin("test-junit"))
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)
@@ -148,7 +155,8 @@ dependencies {
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
 
-    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    kspTest(libs.androidx.room.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

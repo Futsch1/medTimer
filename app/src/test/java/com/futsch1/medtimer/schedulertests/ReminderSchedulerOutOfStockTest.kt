@@ -4,8 +4,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Test
+import kotlin.test.assertTrue
 
 class ReminderSchedulerOutOfStockTest {
     @Test
@@ -20,21 +20,21 @@ class ReminderSchedulerOutOfStockTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         medicine.medicine.amount = 5.0
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
     }
 
     @Test
@@ -49,13 +49,13 @@ class ReminderSchedulerOutOfStockTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         medicine.medicine.amount = 5.0
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)

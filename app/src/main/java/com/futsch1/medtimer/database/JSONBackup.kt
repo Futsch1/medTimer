@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 abstract class JSONBackup<T> protected constructor(private val contentClass: Class<T>) {
-    fun createBackupAsString(databaseVersion: Int, list: List<T>): String? {
+    fun createBackupAsString(databaseVersion: Int, list: List<T>): String {
         val gson = GsonBuilder().setPrettyPrinting().create()
         return gson.toJson(createBackup(databaseVersion, list))
     }
@@ -24,7 +24,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
         return gson.toJsonTree(content)
     }
 
-    fun parseBackup(jsonFile: String?): List<T>? {
+    fun parseBackup(jsonFile: String): List<T>? {
         // In a first step, parse with the version set to 0
         var gson = registerTypeAdapters(GsonBuilder()).setVersion(0.0).create()
         try {
@@ -57,7 +57,6 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
 
     abstract fun applyBackup(list: List<T>, medicineRepository: MedicineRepository)
 
-    @JvmRecord
     protected data class DatabaseContentWithVersion<T>(
         @field:Expose val version: Int,
         @field:Expose val list: List<T>?

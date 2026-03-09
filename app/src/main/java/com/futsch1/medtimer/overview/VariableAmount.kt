@@ -25,7 +25,7 @@ fun variableAmountDialog(
 
     activity.lifecycleScope.launch(dispatcher) {
         val reminderContext = ReminderContext(activity)
-        val medicineRepository = MedicineRepository(activity.application)
+        val medicineRepository = MedicineRepository(activity)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(
             reminderContext,
             reminderNotificationData

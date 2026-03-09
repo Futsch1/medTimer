@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.reminders
 
-import android.app.Application
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -44,7 +43,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
     private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
         val reminderContext = ReminderContext(context)
         ProcessLifecycleOwner.get().lifecycleScope.launch(dispatcher) {
-            val medicineRepository = MedicineRepository(context.applicationContext as Application)
+            val medicineRepository = MedicineRepository(context)
             val reminderNotification = ReminderNotification.fromReminderNotificationData(
                 reminderContext,
                 reminderNotificationData

@@ -26,7 +26,7 @@ class ShowMedicineSheetDialog(
 ) {
     init {
         activity.lifecycleScope.launch(ioDispatcher) {
-            val medicineRepository = MedicineRepository(activity.application)
+            val medicineRepository = MedicineRepository(activity)
             val reminder = medicineRepository.getReminder(reminderId) ?: return@launch
             val fullMedicine = medicineRepository.getMedicine(reminder.medicineRelId) ?: return@launch
             val reminderSummary = reminderSummary(reminder, activity)

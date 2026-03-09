@@ -27,8 +27,7 @@ class TagDataFromMedicine(
             viewModel.disassociateTag(medicineId, it.tag.tagId)
         }
     }, { it: TagWithState ->
-        val deleteHelper = DeleteHelper(fragment.context)
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_tag, {
+        DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
             viewModel.medicineRepository.deleteTag(it.tag)
         }, {})
     })

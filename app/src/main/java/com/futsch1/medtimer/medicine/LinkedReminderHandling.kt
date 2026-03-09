@@ -54,8 +54,7 @@ class LinkedReminderHandling(
     }
 
     fun deleteReminder(context: Context, postYesAction: () -> Unit, postNoAction: () -> Unit) {
-        val deleteHelper = DeleteHelper(context)
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder, {
+        DeleteHelper.deleteItem(context, R.string.are_you_sure_delete_reminder, {
             coroutineScope.launch(dispatcher) {
                 internalDelete(reminder)
                 Handler(Looper.getMainLooper()).post(postYesAction)

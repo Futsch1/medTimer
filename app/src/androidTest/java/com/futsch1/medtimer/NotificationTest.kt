@@ -34,13 +34,13 @@ import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 
 const val TEST_MED = "Test med"

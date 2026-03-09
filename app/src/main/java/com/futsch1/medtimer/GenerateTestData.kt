@@ -111,7 +111,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
             if (stock > 0) {
                 medicine.amount = stock
                 medicine.unit = "pills"
-                medicine.refillSizes.add(20.0)
+                medicine.refillSizes = arrayListOf(20.0)
                 medicine.expirationDate = LocalDate.now().toEpochDay() + 7
                 medicine.notes = "Some note\nabout this medicine"
             }

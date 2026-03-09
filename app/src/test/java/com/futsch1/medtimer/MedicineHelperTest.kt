@@ -9,20 +9,20 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.futsch1.medtimer.schedulertests.TestHelper
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 import java.time.LocalDate
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-@ExtendWith(RobolectricExtension::class)
+@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class MedicineHelperTest {
     @Test
@@ -86,7 +86,7 @@ class MedicineHelperTest {
         val medicine = Medicine("test")
         val fullMedicine = FullMedicine()
         fullMedicine.medicine = medicine
-        fullMedicine.reminders = listOf()
+        fullMedicine.reminders = mutableListOf()
         medicine.unit = "pills"
         assertEquals(
             "test",
@@ -112,7 +112,7 @@ class MedicineHelperTest {
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        fullMedicine.reminders = listOf(reminder)
+        fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
             MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
@@ -142,7 +142,7 @@ class MedicineHelperTest {
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        fullMedicine.reminders = listOf(reminder)
+        fullMedicine.reminders = mutableListOf(reminder)
         medicine.amount = 0.0
         assertEquals(
             "t***",

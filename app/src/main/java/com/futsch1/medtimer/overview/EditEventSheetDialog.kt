@@ -80,7 +80,7 @@ class EditEventSheetDialog(val activity: FragmentActivity, val reminderEvent: Re
 
         activity.lifecycleScope.launch {
             withContext(ioDispatcher) {
-                val medicineRepository = MedicineRepository(activity.application)
+                val medicineRepository = MedicineRepository(activity)
 
                 medicineRepository.updateReminderEvent(reminderEvent)
             }

@@ -32,7 +32,7 @@ fun interface WidgetLineProvider {
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
     lateinit var scheduledReminders: List<ScheduledReminder>
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+        val medicineRepository = MedicineRepository(context.applicationContext as Application)
         val medicinesWithReminders = medicineRepository.medicines
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
         val reminderScheduler = ReminderScheduler(object : TimeAccess {
@@ -78,7 +78,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
     lateinit var reminderEvents: List<ReminderEvent>
     private val job: Job = CoroutineScope(SupervisorJob()).launch {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application?)
+        val medicineRepository = MedicineRepository(context)
         reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
     val sharedPreferences: SharedPreferences? =

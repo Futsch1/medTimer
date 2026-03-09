@@ -3,7 +3,7 @@ package com.futsch1.medtimer.processortests
 import android.app.PendingIntent
 import com.futsch1.medtimer.reminders.ScheduleNextReminderNotificationProcessor
 import com.futsch1.medtimer.schedulertests.TestHelper
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyLong

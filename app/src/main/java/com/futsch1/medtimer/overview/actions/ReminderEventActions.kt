@@ -70,15 +70,14 @@ open class ReminderEventActions(val event: OverviewReminderEvent, medicineReposi
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper(context).deleteItem(R.string.delete_re_raise_event, {
+        DeleteHelper.deleteItem(context, R.string.delete_re_raise_event, {
             medicineRepository.deleteReminderEvent(reminderEvent)
             ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
         }, {})
     }
 
     protected fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
-        val deleteHelper = DeleteHelper(context)
-        deleteHelper.deleteItem(R.string.are_you_sure_delete_reminder_event, {
+        DeleteHelper.deleteItem(context, R.string.are_you_sure_delete_reminder_event, {
             reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
             medicineRepository.updateReminderEventFromMain(reminderEvent)
         }, {})

@@ -4,10 +4,10 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate
+import kotlin.test.assertTrue
 
 class ReminderSchedulerExpirationTest {
     @Test
@@ -22,13 +22,13 @@ class ReminderSchedulerExpirationTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
     }
 
     @Test
@@ -49,7 +49,7 @@ class ReminderSchedulerExpirationTest {
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         reminder.periodStart = 2
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -71,11 +71,11 @@ class ReminderSchedulerExpirationTest {
 
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertTrue(scheduledReminders.isEmpty())
+        assertTrue(scheduledReminders.isEmpty())
 
         scheduledReminders = scheduler.schedule(medicineList, listOf())
         assertReminded(
@@ -98,10 +98,10 @@ class ReminderSchedulerExpirationTest {
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicine> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(

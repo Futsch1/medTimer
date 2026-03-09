@@ -10,120 +10,96 @@ import com.google.gson.annotations.Expose
 import java.util.Objects
 
 @Entity
-class Reminder(@JvmField var medicineRelId: Int) {
-    @JvmField
+class Reminder(var medicineRelId: Int) {
     @PrimaryKey(autoGenerate = true)
     @Expose
     var reminderId: Int = 0
 
-    @JvmField
     @Expose
     var timeInMinutes: Int = DEFAULT_TIME
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     var createdTimestamp: Long = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "1")
     @Expose
     var consecutiveDays: Int = 1
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var pauseDays: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "")
     @Expose
     var instructions: String? = ""
 
-    @JvmField
     @ColumnInfo(defaultValue = "19823") // 10.4.24
     @Expose
     var cycleStartDay: Long = 0
 
-    @JvmField
     @Expose
     var amount: String = "?"
 
-    @JvmField
     @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]")
     @Expose
     var days: MutableList<Boolean> = mutableListOf(true, true, true, true, true, true, true)
 
-    @JvmField
     @ColumnInfo(defaultValue = "true")
     @Expose
     var active: Boolean = true
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var periodStart: Long = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var periodEnd: Long = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0xFFFFFFFF")
     @Expose
     var activeDaysOfMonth: Int = -0x1
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var linkedReminderId: Int = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "0")
     @Expose
     var intervalStart: Long = 0
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var intervalStartsFromProcessed: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var variableAmount: Boolean = false
 
-    @JvmField
     @ColumnInfo(defaultValue = "false")
     @Expose
     var automaticallyTaken: Boolean = false
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "480")
     var intervalStartTimeOfDay: Int = 480
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "1320")
     var intervalEndTimeOfDay: Int = 1320
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "false")
     var windowedInterval: Boolean = false
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "0.0")
     var outOfStockThreshold: Double = 0.0
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "OFF")
     var outOfStockReminderType: OutOfStockReminderType = OutOfStockReminderType.OFF
 
-    @JvmField
     @Expose
     @ColumnInfo(defaultValue = "OFF")
     var expirationReminderType: ExpirationReminderType = ExpirationReminderType.OFF
@@ -173,8 +149,8 @@ class Reminder(@JvmField var medicineRelId: Int) {
         }
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || javaClass != other.javaClass) return false
-        return membersEqual(other as Reminder)
+        if (other !is Reminder) return false
+        return membersEqual(other)
     }
 
     override fun hashCode(): Int {
@@ -207,12 +183,12 @@ class Reminder(@JvmField var medicineRelId: Int) {
         )
     }
 
-    private fun membersEqual(that: Reminder): Boolean {
-        return reminderId == that.reminderId && medicineRelId == that.medicineRelId && timeInMinutes == that.timeInMinutes && createdTimestamp == that.createdTimestamp && consecutiveDays == that.consecutiveDays && pauseDays == that.pauseDays &&
-                instructions == that.instructions && cycleStartDay == that.cycleStartDay &&
-                amount == that.amount &&
-                days == that.days && active == that.active && periodStart == that.periodStart && periodEnd == that.periodEnd && activeDaysOfMonth == that.activeDaysOfMonth && linkedReminderId == that.linkedReminderId && intervalStart == that.intervalStart && intervalStartsFromProcessed == that.intervalStartsFromProcessed && variableAmount == that.variableAmount && intervalStartTimeOfDay == that.intervalStartTimeOfDay && intervalEndTimeOfDay == that.intervalEndTimeOfDay && windowedInterval == that.windowedInterval &&
-                outOfStockThreshold == that.outOfStockThreshold && outOfStockReminderType == that.outOfStockReminderType && expirationReminderType == that.expirationReminderType
+    private fun membersEqual(other: Reminder): Boolean {
+        return reminderId == other.reminderId && medicineRelId == other.medicineRelId && timeInMinutes == other.timeInMinutes && createdTimestamp == other.createdTimestamp && consecutiveDays == other.consecutiveDays && pauseDays == other.pauseDays &&
+                instructions == other.instructions && cycleStartDay == other.cycleStartDay &&
+                amount == other.amount &&
+                days == other.days && active == other.active && periodStart == other.periodStart && periodEnd == other.periodEnd && activeDaysOfMonth == other.activeDaysOfMonth && linkedReminderId == other.linkedReminderId && intervalStart == other.intervalStart && intervalStartsFromProcessed == other.intervalStartsFromProcessed && variableAmount == other.variableAmount && intervalStartTimeOfDay == other.intervalStartTimeOfDay && intervalEndTimeOfDay == other.intervalEndTimeOfDay && windowedInterval == other.windowedInterval &&
+                outOfStockThreshold == other.outOfStockThreshold && outOfStockReminderType == other.outOfStockReminderType && expirationReminderType == other.expirationReminderType
     }
 
     enum class ReminderType(@param:DrawableRes val icon: Int) {

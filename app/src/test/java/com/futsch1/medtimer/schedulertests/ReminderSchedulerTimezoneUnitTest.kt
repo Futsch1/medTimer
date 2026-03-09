@@ -2,7 +2,7 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.Mockito
 import java.time.ZoneId
 

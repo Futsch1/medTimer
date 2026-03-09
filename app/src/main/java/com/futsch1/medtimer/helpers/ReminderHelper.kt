@@ -19,7 +19,6 @@ import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_TAKEN_TIME_IN_OVER
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.util.Locale
-import java.util.stream.Collectors
 
 
 fun isReminderActive(reminder: Reminder): Boolean {
@@ -34,7 +33,7 @@ fun isReminderActive(reminder: Reminder): Boolean {
 }
 
 fun getActiveReminders(medicine: FullMedicine): List<Reminder> {
-    return medicine.reminders.stream().filter { isReminderActive(it) }.collect(Collectors.toList())
+    return medicine.reminders.filter { isReminderActive(it) }
 }
 
 fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {
@@ -115,12 +114,12 @@ fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
-        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, false
+        context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, false
     )
     val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
-        append(scheduledReminder.medicine().medicine.name)
+    return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
+        append(scheduledReminder.medicine.medicine.name)
     }.append(getAmountOrStockString(context, scheduledReminder))
 }
 
@@ -143,15 +142,15 @@ fun formatScheduledReminderStringForWidget(
 ): Spanned {
     val scheduledTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, true
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, true
         )
     else
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000
         )) + ": "
     val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
+    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.medicine.name) }.append(
         getAmountOrStockString(
             context,
             scheduledReminder
@@ -196,10 +195,10 @@ private fun formatDuration(durationMillis: Long): String? {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
 
-    val measures: MutableList<Measure?> = ArrayList()
+    val measures: MutableList<Measure> = mutableListOf()
     if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
     if (minutes >= 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
 
     val formatter = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
-    return formatter.formatMeasures(*measures.toTypedArray<Measure?>())
+    return formatter.formatMeasures(*measures.toTypedArray<Measure>())
 }

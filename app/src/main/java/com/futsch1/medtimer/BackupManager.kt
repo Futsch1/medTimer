@@ -43,8 +43,8 @@ class BackupManager(
     private val lifecycleOwner: LifecycleOwner,
     private val menu: Menu?,
     private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent?>?,
-    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>?,
+    private val openFileLauncher: ActivityResultLauncher<Intent>?,
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent>?,
     private val fragmentManager: FragmentManager? = null,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -189,7 +189,7 @@ class BackupManager(
         }
     }
 
-    fun fileSelected(data: Uri?) {
+    fun fileSelected(data: Uri) {
         lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
             val json = FileHelper.readFromUri(data, context.contentResolver)
 
