@@ -53,22 +53,21 @@ class OptionsMenu(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
-<<<<<<< HEAD
-    private val openFileLauncher: ActivityResultLauncher<Intent?>
-    private val openDirectoryLauncher: ActivityResultLauncher<Intent?>
+    private val openFileLauncher: ActivityResultLauncher<Intent>
+    private val openDirectoryLauncher: ActivityResultLauncher<Intent>
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
     private var menu: Menu? = null
     private var backupManager: BackupManager? = null
 
     init {
         this.openFileLauncher =
-            fragment.registerForActivityResult<Intent, ActivityResult>(StartActivityForResult()) { result: ActivityResult ->
+            fragment.registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     result.data?.data?.let { this.fileSelected(it) }
                 }
             }
         this.openDirectoryLauncher =
-            fragment.registerForActivityResult<Intent?, ActivityResult?>(StartActivityForResult()) { result: ActivityResult? ->
+            fragment.registerForActivityResult(StartActivityForResult()) { result: ActivityResult? ->
                 if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
                     this.directorySelected(result.data!!.data)
                 }
