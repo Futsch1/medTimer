@@ -116,9 +116,6 @@ class MainActivity : AppCompatActivity() {
             checkBatteryOptimization()
         }
 
-        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-        BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
-
         dispatch(this, this.intent)
         this.intent = Intent()
 
@@ -202,6 +199,9 @@ class MainActivity : AppCompatActivity() {
                 startService(Intent(applicationContext, ReminderSchedulerService::class.java))
             }
         }
+
+        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
     }
