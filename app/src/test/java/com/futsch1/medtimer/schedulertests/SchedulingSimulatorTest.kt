@@ -250,7 +250,7 @@ class SchedulingSimulatorTest {
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(6.0, amount)
-                assertEquals(scheduledReminder.reminder().reminderType, Reminder.ReminderType.OUT_OF_STOCK)
+                assertEquals(scheduledReminder.reminder.reminderType, Reminder.ReminderType.OUT_OF_STOCK)
             }
             scheduledReminders.size < 3
         }

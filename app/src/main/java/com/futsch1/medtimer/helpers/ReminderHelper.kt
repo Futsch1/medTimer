@@ -114,12 +114,12 @@ fun formatScheduledReminderString(
     context: Context, scheduledReminder: ScheduledReminder, sharedPreferences: SharedPreferences
 ): Spanned {
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
-        context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, false
+        context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, false
     )
     val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
-        append(scheduledReminder.medicine().medicine.name)
+    return SpannableStringBuilder().append(scheduledTime).append("\n").bold {
+        append(scheduledReminder.medicine.medicine.name)
     }.append(getAmountOrStockString(context, scheduledReminder))
 }
 
@@ -142,15 +142,15 @@ fun formatScheduledReminderStringForWidget(
 ): Spanned {
     val scheduledTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000, true
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000, true
         )
     else
         TimeHelper.secondsSinceEpochToConfigurableDateTimeString(
-            context, sharedPreferences, scheduledReminder.timestamp().toEpochMilli() / 1000
+            context, sharedPreferences, scheduledReminder.timestamp.toEpochMilli() / 1000
         )) + ": "
     val reminderTypeSpan = getReminderTypeSpan(context, scheduledReminder.reminder.reminderType)
 
-    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine().medicine.name) }.append(
+    return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.medicine.name) }.append(
         getAmountOrStockString(
             context,
             scheduledReminder
