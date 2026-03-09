@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.overview
 
-import FilterToggleGroup
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -50,9 +49,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-        medicineViewModel.medicines.observe(this) {
-
-        }
         overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         overviewViewModel.day = LocalDate.now()
 
@@ -117,10 +113,14 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
         adapter.clickListener = this
 
-        overviewViewModel.overviewEvents.observe(getViewLifecycleOwner()) { list ->
-            adapter.submitList(list) {
-                reminders.post {
-                    if (!onceStable && overviewViewModel.initialized) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            overviewViewModel.overviewEvents.collect { list ->
+                adapter.submitList(list) {
+                    reminders.post {
+                        if (onceStable || !overviewViewModel.initialized) {
+                            return@post
+                        }
+
                         onceStable = true
                         scrollToCurrentTimeItem()
                     }

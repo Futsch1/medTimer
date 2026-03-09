@@ -4,8 +4,6 @@ import android.app.Application
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -21,6 +19,8 @@ import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -37,20 +37,22 @@ class CalendarEventsViewModel(
     private var reminderEvents: List<ReminderEvent> = listOf()
     private var allMedicines: List<FullMedicine> = listOf()
     private var medicine: Medicine? = null
-    private val eventsByDay: MutableLiveData<Map<LocalDate, Spanned>> = MutableLiveData()
+    private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
     fun getEventForMonths(
         medicineId: Int, pastMonths: Int, futureMonths: Int
 
-    ): LiveData<Map<LocalDate, Spanned>> {
+    ): Flow<Map<LocalDate, Spanned>> {
         eventListByDay.clear()
 
         // Calculate days in the past and the future based on the current date
         val currentDate = LocalDate.now()
-        val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong()).withDayOfMonth(1).toEpochDay()
-        val futureDays = if (futureMonths > 0) (currentDate.plusMonths(futureMonths.toLong() + 1).withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
+        val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong())
+            .withDayOfMonth(1).toEpochDay()
+        val futureDays = if (futureMonths > 0) (currentDate.plusMonths(futureMonths.toLong() + 1)
+            .withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
         else 0
 
         viewModelScope.launch(dispatcher) {
@@ -58,11 +60,12 @@ class CalendarEventsViewModel(
             allMedicines = medicineRepository.medicines
             if (medicineId > 0) {
                 medicine = medicineRepository.getOnlyMedicine(medicineId)
-                allMedicines = allMedicines.filter { medicine -> medicine.medicine.medicineId == medicineId }
+                allMedicines =
+                    allMedicines.filter { medicine -> medicine.medicine.medicineId == medicineId }
             }
             addPastEvents(pastDays)
             addFutureEvents(futureDays)
-            viewModelScope.launch { eventsByDay.value = buildEventsByDay() }
+            eventsByDay.emit(buildEventsByDay())
         }
         return eventsByDay
     }
@@ -78,7 +81,8 @@ class CalendarEventsViewModel(
     private fun buildDayEvents(day: LocalDate, eventStrings: List<Spanned>): Spanned {
         val builder = SpannableStringBuilder()
         if (eventStrings.isNotEmpty()) {
-            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).append("\n")
+            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
+                .append("\n")
         }
         eventStrings.forEach { builder.append(it).append("\n") }
 
@@ -93,18 +97,28 @@ class CalendarEventsViewModel(
         }
         val endDay = LocalDate.now().plusDays(futureDays)
 
-        val schedulingSimulator = SchedulingSimulator(allMedicines, reminderEvents, timeProvider, PreferenceManager.getDefaultSharedPreferences(application))
+        val schedulingSimulator = SchedulingSimulator(
+            allMedicines,
+            reminderEvents,
+            timeProvider,
+            PreferenceManager.getDefaultSharedPreferences(application)
+        )
 
         schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
             if (scheduledDate < endDay) {
-                eventListByDay.getOrPut(scheduledDate) { mutableListOf() }.add(scheduledReminderToString(scheduledReminder))
+                eventListByDay.getOrPut(scheduledDate) { mutableListOf() }
+                    .add(scheduledReminderToString(scheduledReminder))
             }
             scheduledDate < endDay
         }
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
-        return OverviewScheduledReminderEvent(application.applicationContext, sharedPreferences, scheduledReminder).text
+        return OverviewScheduledReminderEvent(
+            application.applicationContext,
+            sharedPreferences,
+            scheduledReminder
+        ).text
     }
 
 
@@ -115,14 +129,25 @@ class CalendarEventsViewModel(
                 continue
             }
 
-            val day = secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
-            if ((day >= startDay) && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))) {
-                eventListByDay.getOrPut(day) { mutableListOf() }.add(reminderEventToString(reminderEvent))
+            val day = secondsSinceEpochToLocalDate(
+                reminderEvent.remindedTimestamp,
+                ZoneId.systemDefault()
+            )
+            if ((day >= startDay) && (medicine == null || medicine?.name == MedicineHelper.normalizeMedicineName(
+                    reminderEvent.medicineName
+                ))
+            ) {
+                eventListByDay.getOrPut(day) { mutableListOf() }
+                    .add(reminderEventToString(reminderEvent))
             }
         }
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
-        return OverviewReminderEvent(application.applicationContext, sharedPreferences, reminderEvent).text
+        return OverviewReminderEvent(
+            application.applicationContext,
+            sharedPreferences,
+            reminderEvent
+        ).text
     }
 }

@@ -9,7 +9,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -84,11 +83,12 @@ class EditMedicineFragment :
 
         adapter!!.setMedicine(entity)
 
-        this.medicineViewModel.medicineRepository.getLiveReminders(this.getEntityId()).observe(getViewLifecycleOwner(), Observer { l: List<Reminder> ->
-            this.sortAndSubmitList(l)
-            this.setFragmentReady()
+        viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.medicineRepository.getRemindersFlow(getEntityId()).collect {
+                    sortAndSubmitList(it)
+                    setFragmentReady()
+                }
         }
-        )
         return false
     }
 

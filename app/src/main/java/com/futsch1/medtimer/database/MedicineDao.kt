@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
-    fun getLiveMedicines(): LiveData<List<FullMedicine>>
+    fun getMedicinesFlow(): Flow<List<FullMedicine>>
 
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
@@ -27,13 +26,8 @@ interface MedicineDao {
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
     fun getMedicine(medicineId: Int): FullMedicine?
-
-    @Transaction
-    @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine?>
-
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId ORDER BY timeInMinutes")
-    fun getLiveReminders(medicineId: Int): LiveData<List<Reminder>>
+    fun getRemindersFlow(medicineId: Int): Flow<List<Reminder>>
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId= :medicineId")
     fun getReminders(medicineId: Int): List<Reminder>
@@ -49,7 +43,7 @@ interface MedicineDao {
     fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    fun getLiveReminderEventsStartingFrom(fromTimestamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>>
+    fun getReminderEventsFlowStartingFrom(fromTimestamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEvent>>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
     fun getLimitedReminderEvents(fromTimestamp: Long, statusValues: List<ReminderStatus>): List<ReminderEvent>
@@ -101,7 +95,7 @@ interface MedicineDao {
 
     @Transaction
     @Query("SELECT * FROM Tag")
-    fun getLiveTags(): LiveData<List<Tag>>
+    fun getTagsFlow(): Flow<List<Tag>>
 
     @Query("SELECT * FROM Tag WHERE name= :name")
     fun getTagByName(name: String): Tag?
@@ -131,7 +125,7 @@ interface MedicineDao {
     fun deleteMedicineToTags()
 
     @get:Query("SELECT * FROM MedicineToTag")
-    val liveMedicineToTags: LiveData<List<MedicineToTag>>
+    val medicineToTagsFlow: Flow<List<MedicineToTag>>
 
     @Query("SELECT COUNT(*) FROM Tag")
     fun countTags(): Int

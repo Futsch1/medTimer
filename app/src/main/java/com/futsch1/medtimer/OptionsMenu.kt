@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.view.menu.MenuBuilder
@@ -18,7 +17,6 @@ import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.FullMedicine
@@ -56,20 +54,21 @@ class OptionsMenu(
     private val openFileLauncher: ActivityResultLauncher<Intent>
     private val openDirectoryLauncher: ActivityResultLauncher<Intent>
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
-    private var menu: Menu? = null
-    private var backupManager: BackupManager? = null
+    private lateinit var menu: Menu
+    private lateinit var backupManager: BackupManager
 
     init {
-        this.openFileLauncher =
-            fragment.registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+        openFileLauncher =
+            fragment.registerForActivityResult(StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     result.data?.data?.let { this.fileSelected(it) }
                 }
             }
-        this.openDirectoryLauncher =
-            fragment.registerForActivityResult(StartActivityForResult()) { result: ActivityResult? ->
-                if (result!!.resultCode == Activity.RESULT_OK && result.data != null) {
-                    this.directorySelected(result.data!!.data)
+        openDirectoryLauncher =
+            fragment.registerForActivityResult(StartActivityForResult()) { result ->
+                val resultData = result.data ?: return@registerForActivityResult
+                if (result.resultCode == Activity.RESULT_OK) {
+                    this.directorySelected(resultData.data)
                 }
             }
         idlingResource.setIdle()
@@ -77,12 +76,12 @@ class OptionsMenu(
 
     fun fileSelected(data: Uri) {
         fragment.lifecycleScope.launch(ioDispatcher) {
-            backupManager!!.fileSelected(data)
+            backupManager.fileSelected(data)
         }
     }
 
     fun directorySelected(data: Uri?) {
-        backupManager!!.directorySelected(data)
+        backupManager.directorySelected(data)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -104,7 +103,7 @@ class OptionsMenu(
     }
 
     private fun setupSettings() {
-        val item = menu!!.findItem(R.id.settings)
+        val item = menu.findItem(R.id.settings)
         item.setOnMenuItemClickListener { _: MenuItem? ->
             try {
                 navController.navigate(R.id.action_global_preferencesFragment)
@@ -116,12 +115,12 @@ class OptionsMenu(
     }
 
     private fun setupVersion() {
-        val item = menu!!.findItem(R.id.version)
+        val item = menu.findItem(R.id.version)
         item.title = context.getString(R.string.version, BuildConfig.VERSION_NAME)
     }
 
     private fun setupAppURL() {
-        val item = menu!!.findItem(R.id.app_url)
+        val item = menu.findItem(R.id.app_url)
         item.setOnMenuItemClickListener { _: MenuItem? ->
             val myIntent = Intent(Intent.ACTION_VIEW, "https://github.com/Futsch1/medTimer".toUri())
             safeStartActivity(context, myIntent)
@@ -130,7 +129,7 @@ class OptionsMenu(
     }
 
     private fun setupClearEvents() {
-        val item = menu!!.findItem(R.id.clear_events)
+        val item = menu.findItem(R.id.clear_events)
         item.setOnMenuItemClickListener { _ ->
             val builder = AlertDialog.Builder(context)
             builder.setTitle(R.string.confirm)
@@ -147,22 +146,22 @@ class OptionsMenu(
     }
 
     private fun setupExport() {
-        var item = menu!!.findItem(R.id.export_csv)
+        var item = menu.findItem(R.id.export_csv)
         item.setOnMenuItemClickListener { _ ->
             fragment.lifecycleScope.launch(ioDispatcher) { eventExport(true) }
             true
         }
-        item = menu!!.findItem(R.id.export_pdf)
+        item = menu.findItem(R.id.export_pdf)
         item.setOnMenuItemClickListener { _ ->
             fragment.lifecycleScope.launch(ioDispatcher) { eventExport(false) }
             true
         }
-        item = menu!!.findItem(R.id.export_medicine_csv)
+        item = menu.findItem(R.id.export_medicine_csv)
         item.setOnMenuItemClickListener { _ ->
             fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(true) }
             true
         }
-        item = menu!!.findItem(R.id.export_medicine_pdf)
+        item = menu.findItem(R.id.export_medicine_pdf)
         item.setOnMenuItemClickListener { _ ->
             fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(false) }
             true
@@ -170,8 +169,8 @@ class OptionsMenu(
     }
 
     fun setupGenerateTestData() {
-        val item = menu!!.findItem(R.id.generate_test_data)
-        val itemWithEvents = menu!!.findItem(R.id.generate_test_data_and_events)
+        val item = menu.findItem(R.id.generate_test_data)
+        val itemWithEvents = menu.findItem(R.id.generate_test_data_and_events)
         if (BuildConfig.DEBUG) {
             itemWithEvents.isVisible = true
             item.isVisible = true
@@ -195,7 +194,7 @@ class OptionsMenu(
     }
 
     private fun setupShowAppIntro() {
-        val item = menu!!.findItem(R.id.show_app_intro)
+        val item = menu.findItem(R.id.show_app_intro)
         if (BuildConfig.DEBUG) {
             item.isVisible = true
             item.setOnMenuItemClickListener { _ ->
@@ -219,7 +218,7 @@ class OptionsMenu(
                         // Intentionally empty, do nothing
                     }
                 } else {
-                    medicineViewModel.validTagIds.postValue(setOf())
+                    medicineViewModel.validTagIds.value = setOf()
                 }
             }
         }
@@ -261,7 +260,7 @@ class OptionsMenu(
             return
         }
 
-        val item = menu!!.findItem(R.id.tag_filter)
+        val item = menu.findItem(R.id.tag_filter)
         item.isVisible = true
         item.setOnMenuItemClickListener { _ ->
             val tagDataFromPreferences = TagDataFromPreferences(fragment)
@@ -269,13 +268,15 @@ class OptionsMenu(
             dialog.show(fragment.getParentFragmentManager(), "tags")
             true
         }
-        medicineViewModel.validTagIds.observe(fragment.getViewLifecycleOwner(), Observer { validTagIds: Set<Int> ->
-            if (validTagIds.isEmpty()) {
-                item.setIcon(R.drawable.tag)
-            } else {
-                item.setIcon(R.drawable.tag_fill)
+        fragment.viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.validTagIds.collect { validTagIds ->
+                if (validTagIds.isNullOrEmpty()) {
+                    item.setIcon(R.drawable.tag)
+                } else {
+                    item.setIcon(R.drawable.tag_fill)
+                }
             }
-        })
+        }
     }
 
     private fun export(export: Export) {
