@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq

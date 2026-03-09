@@ -3,8 +3,7 @@ package com.futsch1.medtimer.processortests
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
@@ -12,6 +11,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import java.time.Instant
+import kotlin.test.assertEquals
 
 class NotificationProcessorTest {
     @Test

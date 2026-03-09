@@ -9,8 +9,8 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert
+import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
@@ -104,9 +104,9 @@ internal class CSVExportUnitTest {
                         Mockito.verify(fileWriter)
                             .write("5/3/21 1:30\u202FAM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n")
                     } catch (_: ExporterException) {
-                        Assertions.fail(EXCEPTION_OCCURRED)
+                        Assert.fail(EXCEPTION_OCCURRED)
                     } catch (_: IOException) {
-                        Assertions.fail(EXCEPTION_OCCURRED)
+                        Assert.fail(EXCEPTION_OCCURRED)
                     }
                 }
         }
@@ -193,9 +193,9 @@ internal class CSVExportUnitTest {
                             Mockito.verify(fileWriter)
                                 .write("Medicine 2;three;1:02\u202FAM, Every day\n")
                         } catch (_: ExporterException) {
-                            Assertions.fail(EXCEPTION_OCCURRED)
+                            Assert.fail(EXCEPTION_OCCURRED)
                         } catch (_: IOException) {
-                            Assertions.fail(EXCEPTION_OCCURRED)
+                            Assert.fail(EXCEPTION_OCCURRED)
                         }
                     }
                 }
@@ -237,9 +237,9 @@ internal class CSVExportUnitTest {
                     Mockito.verify(fileWriter)
                         .write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
                 } catch (_: ExporterException) {
-                    Assertions.fail(EXCEPTION_OCCURRED)
+                    Assert.fail(EXCEPTION_OCCURRED)
                 } catch (_: IOException) {
-                    Assertions.fail(EXCEPTION_OCCURRED)
+                    Assert.fail(EXCEPTION_OCCURRED)
                 }
             }
     }

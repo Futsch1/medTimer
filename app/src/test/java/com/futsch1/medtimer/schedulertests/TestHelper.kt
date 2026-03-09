@@ -5,7 +5,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import org.junit.jupiter.api.Assertions
+import org.junit.Assert
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -90,9 +90,9 @@ object TestHelper {
         reminder: Reminder,
         index: Int
     ) {
-        Assertions.assertTrue(scheduledReminders.size > index)
-        Assertions.assertEquals(timestamp, scheduledReminders[index].timestamp)
-        Assertions.assertEquals(medicine, scheduledReminders[index].medicine.medicine)
-        Assertions.assertEquals(reminder, scheduledReminders[index].reminder)
+        Assert.assertTrue(scheduledReminders.size > index)
+        Assert.assertEquals(timestamp, scheduledReminders[index].timestamp)
+        Assert.assertEquals(medicine, scheduledReminders[index].medicine.medicine)
+        Assert.assertEquals(reminder, scheduledReminders[index].reminder)
     }
 }

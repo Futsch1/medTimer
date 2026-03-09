@@ -4,7 +4,7 @@ import android.graphics.Color
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 

@@ -2,8 +2,8 @@ package com.futsch1.medtimer
 
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.IntervalUnit
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
+import kotlin.test.assertEquals
 
 class IntervalTest {
 

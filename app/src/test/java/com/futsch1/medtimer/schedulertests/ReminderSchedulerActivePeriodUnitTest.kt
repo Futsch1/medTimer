@@ -3,8 +3,8 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert
+import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate
 
@@ -22,7 +22,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val reminderEventList: List<ReminderEvent> = listOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(0, scheduledReminders.size)
+        Assert.assertEquals(0, scheduledReminders.size)
     }
 
     @Test
@@ -39,17 +39,17 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val reminderEventList: List<ReminderEvent> = listOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(4, 480), scheduledReminders[0].timestamp)
-        Assertions.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
-        Assertions.assertEquals(reminder, scheduledReminders[0].reminder)
+        Assert.assertEquals(TestHelper.on(4, 480), scheduledReminders[0].timestamp)
+        Assert.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
+        Assert.assertEquals(reminder, scheduledReminders[0].reminder)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(5, 480), scheduledReminders[0].timestamp)
+        Assert.assertEquals(TestHelper.on(5, 480), scheduledReminders[0].timestamp)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(0, scheduledReminders.size)
+        Assert.assertEquals(0, scheduledReminders.size)
     }
 
     @Test
@@ -67,17 +67,17 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val reminderEventList: List<ReminderEvent> = listOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(4, 1), scheduledReminders[0].timestamp)
-        Assertions.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
-        Assertions.assertEquals(reminder, scheduledReminders[0].reminder)
+        Assert.assertEquals(TestHelper.on(4, 1), scheduledReminders[0].timestamp)
+        Assert.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
+        Assert.assertEquals(reminder, scheduledReminders[0].reminder)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(5, 1), scheduledReminders[0].timestamp)
+        Assert.assertEquals(TestHelper.on(5, 1), scheduledReminders[0].timestamp)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(0, scheduledReminders.size)
+        Assert.assertEquals(0, scheduledReminders.size)
     }
 
     @Test
@@ -99,16 +99,16 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val reminderEventList: List<ReminderEvent> = listOf()
 
         var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(4, 120), scheduledReminders[0].timestamp)
-        Assertions.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
-        Assertions.assertEquals(reminder, scheduledReminders[0].reminder)
+        Assert.assertEquals(TestHelper.on(4, 120), scheduledReminders[0].timestamp)
+        Assert.assertEquals(medicineWithReminders.medicine, scheduledReminders[0].medicine.medicine)
+        Assert.assertEquals(reminder, scheduledReminders[0].reminder)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(4))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(TestHelper.on(5, 120), scheduledReminders[0].timestamp)
+        Assert.assertEquals(TestHelper.on(5, 120), scheduledReminders[0].timestamp)
 
         Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(5))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
-        Assertions.assertEquals(0, scheduledReminders.size)
+        Assert.assertEquals(0, scheduledReminders.size)
     }
 }

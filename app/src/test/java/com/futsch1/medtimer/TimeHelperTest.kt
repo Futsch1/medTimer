@@ -5,26 +5,32 @@ import android.os.LocaleList
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
-import tech.apter.junit.jupiter.robolectric.RobolectricExtension
 import java.time.Instant
 import java.time.LocalDate
 import java.util.Locale
+import kotlin.test.assertEquals
 
 private const val englishDataSecondOfJan2023 = "1/2/23"
 
 private const val germanDateSecondOfJan2023 = "02.01.23"
 
-@ExtendWith(RobolectricExtension::class)
+@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class TimeHelperTest {
+
+    @Before
+    fun setUp() {
+        TimeHelper.onChangedUseSystemLocale()
+    }
 
     @Test
     fun testLocaleHandling() {
