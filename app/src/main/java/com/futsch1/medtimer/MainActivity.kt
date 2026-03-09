@@ -22,6 +22,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -36,6 +37,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private var appBarConfiguration: AppBarConfiguration? = null
@@ -64,7 +66,9 @@ class MainActivity : AppCompatActivity() {
 
         TimeHelper.onChangedUseSystemLocale()
 
-        authenticate(sharedPref)
+        lifecycleScope.launch {
+            authenticate(sharedPref)
+        }
     }
 
     private fun showIntro(sharedPref: SharedPreferences) {
@@ -78,11 +82,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun authenticate(sharedPref: SharedPreferences) {
+    private suspend fun authenticate(sharedPref: SharedPreferences) {
         val biometrics = Biometrics(
             this,
             {
-                start()
+                lifecycleScope.launch {
+                    start()
+                }
             }, {
                 this.finish()
             })
@@ -106,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun start() {
+    private suspend fun start() {
         setContentView(R.layout.activity_main)
         setupNavigation()
         batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning)
@@ -174,7 +180,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkForceStopped() {
+    private suspend fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
             val exitInfos: List<ApplicationExitInfo> = activityManager.getHistoricalProcessExitReasons(null, 0, 1)

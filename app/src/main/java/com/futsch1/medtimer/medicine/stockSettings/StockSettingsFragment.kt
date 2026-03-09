@@ -16,6 +16,7 @@ import androidx.preference.Preference
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
@@ -30,8 +31,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
-class StockSettingsFragment(
-) : EntityPreferencesFragment<FullMedicine>(
+class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     R.xml.stock_settings,
     mapOf(
     ),
@@ -39,6 +39,8 @@ class StockSettingsFragment(
     ),
     listOf("stock_unit")
 ) {
+    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
@@ -57,8 +59,15 @@ class StockSettingsFragment(
             }
         )
 
-    override fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
-        return MedicineDataStore(requireArguments.getInt("medicineId"), requireContext(), getEntityViewModel().medicineRepository)
+    override suspend fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
+        val entityId = requireArguments.getInt("medicineId")
+        val entity = medicineRepository.getMedicine(entityId)!!
+        return MedicineDataStore(
+            entity,
+            requireContext(),
+            getEntityViewModel().medicineRepository,
+            lifecycleScope
+        )
     }
 
     override fun getEntityViewModel(): EntityViewModel<FullMedicine> {

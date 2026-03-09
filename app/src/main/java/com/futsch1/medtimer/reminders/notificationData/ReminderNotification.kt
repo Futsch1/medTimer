@@ -62,7 +62,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     companion object {
-        fun fromReminderNotificationData(
+        suspend fun fromReminderNotificationData(
             reminderContext: ReminderContext,
             reminderNotificationData: ReminderNotificationData
         ): ReminderNotification? {

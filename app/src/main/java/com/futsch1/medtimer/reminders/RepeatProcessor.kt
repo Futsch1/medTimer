@@ -13,7 +13,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 class RepeatProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
-    fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
+    suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
         reminderNotificationData.remindInstant = reminderContext.timeAccess.now().plusSeconds(repeatTimeSeconds.toLong())
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
@@ -24,7 +24,7 @@ class RepeatProcessor(val reminderContext: ReminderContext) {
         }
     }
 
-    private fun decreaseRemainingRepeats(reminderEventId: Int) {
+    private suspend fun decreaseRemainingRepeats(reminderEventId: Int) {
         val reminderEvent = reminderContext.medicineRepository.getReminderEvent(reminderEventId)
         if (reminderEvent != null) {
             reminderEvent.remainingRepeats = reminderEvent.remainingRepeats - 1

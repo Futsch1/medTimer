@@ -12,7 +12,7 @@ class JSONReminderEventBackup : JSONBackup<ReminderEvent>(ReminderEvent::class.j
             .registerTypeAdapter(ReminderEvent::class.java, FullDeserialize<ReminderEvent>())
     }
 
-    override fun applyBackup(list: List<ReminderEvent>, medicineRepository: MedicineRepository) {
+    override suspend fun applyBackup(list: List<ReminderEvent>, medicineRepository: MedicineRepository) {
         medicineRepository.deleteReminderEvents()
 
         medicineRepository.insertReminderEvents(list)

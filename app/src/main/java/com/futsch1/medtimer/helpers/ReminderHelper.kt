@@ -36,14 +36,14 @@ fun getActiveReminders(medicine: FullMedicine): List<Reminder> {
     return medicine.reminders.filter { isReminderActive(it) }
 }
 
-fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {
+suspend fun setRemindersActive(reminders: List<Reminder>, medicineRepository: MedicineRepository, active: Boolean) {
     for (reminder in reminders) {
         setReminderActive(reminder, active)
         medicineRepository.updateReminder(reminder)
     }
 }
 
-fun setAllRemindersActive(medicine: FullMedicine, medicineRepository: MedicineRepository, active: Boolean) {
+suspend fun setAllRemindersActive(medicine: FullMedicine, medicineRepository: MedicineRepository, active: Boolean) {
     setRemindersActive(medicine.reminders, medicineRepository, active)
 }
 

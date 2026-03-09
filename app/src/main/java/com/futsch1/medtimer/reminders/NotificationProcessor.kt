@@ -24,7 +24,7 @@ import java.time.Instant
 class NotificationProcessor(val reminderContext: ReminderContext) {
     private val medicineRepository = reminderContext.medicineRepository
 
-    fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
+    suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
         val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
@@ -48,14 +48,14 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         reminderContext.notificationManager.cancel(notificationId)
     }
 
-    fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
+    suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
         val notificationId = reminderEvents.firstOrNull()?.notificationId
         if (notificationId != null && notificationId != -1) {
             removeRemindersFromNotification(notificationId, reminderEvents.map { it.reminderEventId })
         }
     }
 
-    fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
+    suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
         Log.d(LogTags.REMINDER, "Remove reminders from notification nID $notificationId")
         for (notification in reminderContext.notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
@@ -67,7 +67,7 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         }
     }
 
-    private fun updateNotification(
+    private suspend fun updateNotification(
         reminderNotificationData: ReminderNotificationData,
         reminderEventIds: List<Int>
     ) {
@@ -80,7 +80,7 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         }
     }
 
-    fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
+    suspend fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
         for (reminderEvent in reminderEvents) {
             reminderEvent.status = status
             reminderEvent.processedTimestamp = reminderContext.timeAccess.now().epochSecond
@@ -101,7 +101,7 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         removeRemindersFromNotification(reminderEvents)
     }
 
-    private fun doStockHandling(reminderEvent: ReminderEvent) {
+    private suspend fun doStockHandling(reminderEvent: ReminderEvent) {
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
         ) {

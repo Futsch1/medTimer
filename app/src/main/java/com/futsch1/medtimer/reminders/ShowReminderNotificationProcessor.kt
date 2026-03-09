@@ -14,7 +14,7 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
-    fun showReminder(reminderNotificationData: ReminderNotificationData) {
+    suspend fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
@@ -25,7 +25,7 @@ class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
         ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
     }
 
-    private fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
+    private suspend fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
         val notificationData = getNotificationData(reminderNotificationData.notificationId)
         if (notificationData != null) {
             // Check if all reminder event IDs from the notification are also in the reminder notification data

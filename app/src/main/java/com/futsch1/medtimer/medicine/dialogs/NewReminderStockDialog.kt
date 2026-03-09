@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -18,6 +19,7 @@ import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
 class NewReminderStockDialog(
@@ -115,22 +117,28 @@ class NewReminderStockDialog(
         timeEditor: TimeEditor
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
-            var canCreate = true
-            reminder.timeInMinutes = timeEditor.getMinutes()
+            activity.lifecycleScope.launch {
+                var canCreate = true
+                reminder.timeInMinutes = timeEditor.getMinutes()
 
-            if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
-                canCreate = fillOutOfStockReminder()
-            }
-            if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
-                canCreate = fillExpirationReminder()
-            }
+                if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
+                    canCreate = fillOutOfStockReminder()
+                }
+                if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+                    canCreate = fillExpirationReminder()
+                }
 
-            if (!canCreate) {
-                Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
-            } else {
-                medicineRepository.insertReminder(reminder)
-                Toast.makeText(activity, R.string.successfully_created_reminder, Toast.LENGTH_LONG).show()
-                dialog.dismiss()
+                if (!canCreate) {
+                    Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                } else {
+                    medicineRepository.insertReminder(reminder)
+                    Toast.makeText(
+                        activity,
+                        R.string.successfully_created_reminder,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    dialog.dismiss()
+                }
             }
         }
     }

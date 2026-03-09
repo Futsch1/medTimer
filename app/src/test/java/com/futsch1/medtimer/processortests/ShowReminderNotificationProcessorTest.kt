@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
@@ -16,7 +17,11 @@ class ShowReminderNotificationProcessorTest {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
 
-        ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
+        runBlocking {
+            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+                reminderNotificationData
+            )
+        }
 
         // The actually requested reminder
         verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
@@ -32,7 +37,11 @@ class ShowReminderNotificationProcessorTest {
         reminderNotificationData.notificationId = 1
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1, 2), remindTimestamp = 10)
 
-        ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
+        runBlocking {
+            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+                reminderNotificationData
+            )
+        }
 
         // Never cancel a notification
         verify(reminderContext.notificationManagerFake.mock, never()).cancel(anyInt())
@@ -53,7 +62,11 @@ class ShowReminderNotificationProcessorTest {
         reminderContext.notificationId = 2
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(2))
 
-        ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
+        runBlocking {
+            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+                reminderNotificationData
+            )
+        }
 
         // Cancel the notification
         verify(reminderContext.notificationManagerFake.mock, times(1)).cancel(1)
@@ -78,7 +91,11 @@ class ShowReminderNotificationProcessorTest {
 
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
 
-        ShowReminderNotificationProcessor(reminderContext.mock).showReminder(reminderNotificationData)
+        runBlocking {
+            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+                reminderNotificationData
+            )
+        }
 
         // Cancel the notification
         verify(reminderContext.notificationManagerFake.mock, times(1)).cancel(1)

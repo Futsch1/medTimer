@@ -16,7 +16,7 @@ import java.time.Instant
 class AlarmProcessor(val reminderContext: ReminderContext) {
     private val alarmManager: AlarmManager = reminderContext.alarmManager
 
-    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
+    suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         val originalInstant = scheduledReminderNotificationData.remindInstant
         scheduledReminderNotificationData.remindInstant = adjustTimestamp(reminderContext, originalInstant)

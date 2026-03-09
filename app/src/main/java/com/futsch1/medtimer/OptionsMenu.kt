@@ -136,8 +136,10 @@ class OptionsMenu(
             builder.setMessage(R.string.are_you_sure_delete_events)
             builder.setCancelable(false)
             builder.setPositiveButton(R.string.yes) { _, _ ->
-                medicineViewModel.medicineRepository.deleteReminderEvents()
-                requestScheduleNextNotification(context)
+                fragment.lifecycleScope.launch {
+                    medicineViewModel.medicineRepository.deleteReminderEvents()
+                    requestScheduleNextNotification(context)
+                }
             }
             builder.setNegativeButton(R.string.cancel) { _, _ -> }
             builder.show()
@@ -224,7 +226,7 @@ class OptionsMenu(
         }
     }
 
-    private fun eventExport(isCSV: Boolean) {
+    private suspend fun eventExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
@@ -240,7 +242,7 @@ class OptionsMenu(
         export(exporter)
     }
 
-    private fun medicineExport(isCSV: Boolean) {
+    private suspend fun medicineExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
@@ -279,7 +281,7 @@ class OptionsMenu(
         }
     }
 
-    private fun export(export: Export) {
+    private suspend fun export(export: Export) {
         val csvFile = File(context.cacheDir, getExportFilename(export))
         try {
             export.export(csvFile)

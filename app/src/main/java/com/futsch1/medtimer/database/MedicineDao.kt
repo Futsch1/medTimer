@@ -21,7 +21,7 @@ interface MedicineDao {
     fun getMedicines(): List<FullMedicine>
 
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
-    fun getOnlyMedicine(medicineId: Int): Medicine?
+    suspend fun getOnlyMedicine(medicineId: Int): Medicine?
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId= :medicineId")
@@ -33,7 +33,7 @@ interface MedicineDao {
     fun getReminders(medicineId: Int): List<Reminder>
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
-    fun getReminder(reminderId: Int): Reminder?
+    suspend fun getReminder(reminderId: Int): Reminder?
 
     @Query("SELECT * FROM Reminder WHERE reminderId= :reminderId")
     fun getReminderFlow(reminderId: Int): Flow<Reminder?>
@@ -49,19 +49,19 @@ interface MedicineDao {
     fun getLimitedReminderEvents(fromTimestamp: Long, statusValues: List<ReminderStatus>): List<ReminderEvent>
 
     @Insert
-    fun insertMedicine(medicine: Medicine): Long
+    suspend fun insertMedicine(medicine: Medicine): Long
 
     @Insert
-    fun insertReminder(reminder: Reminder): Long
+    suspend fun insertReminder(reminder: Reminder): Long
 
     @Update
-    fun updateMedicine(medicine: Medicine)
+    suspend fun updateMedicine(medicine: Medicine)
 
     @Update
-    fun updateReminder(reminder: Reminder)
+    suspend fun updateReminder(reminder: Reminder)
 
     @Delete
-    fun deleteMedicine(medicine: Medicine)
+    suspend fun deleteMedicine(medicine: Medicine)
 
     @Delete
     fun deleteReminder(reminder: Reminder)
@@ -70,7 +70,7 @@ interface MedicineDao {
     fun insertReminderEvent(reminderEvent: ReminderEvent): Long
 
     @Update
-    fun updateReminderEvent(reminderEvent: ReminderEvent)
+    suspend fun updateReminderEvent(reminderEvent: ReminderEvent)
 
     @Update
     fun updateReminderEvents(reminderEvents: List<ReminderEvent>)
@@ -79,16 +79,16 @@ interface MedicineDao {
     fun getReminderEvent(reminderEventId: Int): ReminderEvent?
 
     @Query("DELETE FROM ReminderEvent")
-    fun deleteReminderEvents()
+    suspend fun deleteReminderEvents()
 
     @Delete
-    fun deleteReminderEvent(reminderEvent: ReminderEvent)
+    suspend fun deleteReminderEvent(reminderEvent: ReminderEvent)
 
     @Query("DELETE FROM Reminder")
-    fun deleteReminders()
+    suspend fun deleteReminders()
 
     @Query("DELETE FROM Medicine")
-    fun deleteMedicines()
+    suspend fun deleteMedicines()
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId= :reminderId")
     fun getLinkedReminders(reminderId: Int): List<Reminder>
@@ -101,28 +101,28 @@ interface MedicineDao {
     fun getTagByName(name: String): Tag?
 
     @Insert
-    fun insertTag(tag: Tag): Long
+    suspend fun insertTag(tag: Tag): Long
 
     @Delete
-    fun deleteTag(tag: Tag)
+    suspend fun deleteTag(tag: Tag)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertMedicineToTag(medicineToTag: MedicineToTag)
+    suspend fun insertMedicineToTag(medicineToTag: MedicineToTag)
 
     @Delete
-    fun deleteMedicineToTag(medicineToTag: MedicineToTag)
+    suspend fun deleteMedicineToTag(medicineToTag: MedicineToTag)
 
     @Query("DELETE FROM MedicineToTag WHERE tagId= :tagId")
-    fun deleteMedicineToTagForTag(tagId: Int)
+    suspend fun deleteMedicineToTagForTag(tagId: Int)
 
     @Query("DELETE FROM MedicineToTag WHERE medicineId= :medicineId")
-    fun deleteMedicineToTagForMedicine(medicineId: Int)
+    suspend fun deleteMedicineToTagForMedicine(medicineId: Int)
 
     @Query("DELETE FROM Tag")
-    fun deleteTags()
+    suspend fun deleteTags()
 
     @Query("DELETE FROM MedicineToTag")
-    fun deleteMedicineToTags()
+    suspend fun deleteMedicineToTags()
 
     @get:Query("SELECT * FROM MedicineToTag")
     val medicineToTagsFlow: Flow<List<MedicineToTag>>
@@ -146,10 +146,10 @@ interface MedicineDao {
     fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent?
 
     @Insert
-    fun insertReminderEvents(reminderEvents: List<ReminderEvent>)
+    suspend fun insertReminderEvents(reminderEvents: List<ReminderEvent>)
 
     @Insert
-    fun insertReminders(reminders: List<Reminder>)
+    suspend fun insertReminders(reminders: List<Reminder>)
 
     @Update
     fun updateMedicines(medicines: List<Medicine>)

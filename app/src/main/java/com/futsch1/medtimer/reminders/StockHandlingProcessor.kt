@@ -18,13 +18,13 @@ import java.time.Instant
 class StockHandlingProcessor(val reminderContext: ReminderContext) {
     val medicineRepository = reminderContext.medicineRepository
 
-    fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
+    suspend fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
         val medicine = medicineRepository.getMedicine(medicineId) ?: return
 
         processStock(medicine, amount, processedInstant)
     }
 
-    private fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+    private suspend fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
         val medicine = fullMedicine.medicine
         medicine.amount -= decreaseAmount
         if (medicine.amount < 0) {
@@ -36,7 +36,7 @@ class StockHandlingProcessor(val reminderContext: ReminderContext) {
         Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
     }
 
-    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+    private suspend fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in fullMedicine.reminders) {
             if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
                 val showEvent =

@@ -15,11 +15,11 @@ class MedicineWithTagsViewModel(application: Application) :
 
     val tags: Flow<List<Tag>> = medicineRepository.tagsFlow
 
-    fun associateTag(medicineId: Int, tagId: Int) {
+    suspend fun associateTag(medicineId: Int, tagId: Int) {
         medicineRepository.insertMedicineToTag(medicineId, tagId)
     }
 
-    fun disassociateTag(medicineId: Int, tagId: Int) {
+    suspend fun disassociateTag(medicineId: Int, tagId: Int) {
         medicineRepository.deleteMedicineToTag(medicineId, tagId)
     }
 }

@@ -20,17 +20,13 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
-class ReminderAlarmActivity : AppCompatActivity() {
-
-    // A single-threaded coroutine dispatcher for handling media player and vibrator operations
-    private val alarmExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
+class ReminderAlarmActivity(
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
 
@@ -48,35 +44,35 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
         addAlarmFragment(intent)
 
-        lifecycleScope.launch(alarmExecutor) {
+        lifecycleScope.launch(backgroundDispatcher) {
             buildMediaPlayerAndVibrator()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch(alarmExecutor) {
+        lifecycleScope.launch(backgroundDispatcher) {
             startAlarm()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        lifecycleScope.launch(alarmExecutor) {
+        lifecycleScope.launch(backgroundDispatcher) {
             pauseAlarm()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        (alarmExecutor.executor as ExecutorService).awaitTermination(1, TimeUnit.SECONDS)
         releaseMediaPlayer()
         Log.d("ReminderAlarm", "Destroyed alarm activity")
     }
 
     private fun buildMediaPlayerAndVibrator() {
         val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
-            .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!.toUri()
+            .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
+            .toUri()
         val audioContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             createAttributionContext("audioPlayback")
         } else {
@@ -101,7 +97,6 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun startAlarm() {
-        // Launch a coroutine on the single-threaded dispatcher
         Log.d("ReminderAlarm", "Executing startAlarm job")
 
         if (shallPlayAlarm()) {
@@ -149,7 +144,8 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun combinePreferenceAndRingerMode(preferenceName: String): Boolean {
-        val preferenceValue = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, false)
+        val preferenceValue =
+            PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, false)
         if (preferenceValue) {
             // If the silent mode is active, do not ring the alarm
             val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
@@ -161,12 +157,16 @@ class ReminderAlarmActivity : AppCompatActivity() {
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
             Log.d("ReminderAlarm", "Adding alarm fragment")
-            supportFragmentManager.beginTransaction().add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
     }
 
     companion object {
-        fun getIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {
+        fun getIntent(
+            reminderContext: ReminderContext,
+            reminderNotificationData: ReminderNotificationData
+        ): Intent {
             val intent = Intent()
             reminderContext.setIntentClass(intent, ReminderAlarmActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)

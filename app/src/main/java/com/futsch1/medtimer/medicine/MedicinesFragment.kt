@@ -29,8 +29,12 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : Fragment() {
+class MedicinesFragment(
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+) : Fragment() {
     private lateinit var idlingResource: SimpleIdlingResource
     private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var adapter: MedicineViewAdapter
@@ -110,7 +114,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
         DeleteHelper.deleteItem(
             context,
             R.string.are_you_sure_delete_medicine,
-            { medicineViewModel.medicineRepository.deleteMedicine(itemId.toInt()) },
+            { lifecycleScope.launch { medicineViewModel.medicineRepository.deleteMedicine(itemId.toInt()) } },
             { adapter.notifyItemChanged(adapterPosition) })
     }
 
@@ -143,7 +147,7 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
                     val medicine = Medicine(e.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
                     val medicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
-                    requireActivity().runOnUiThread { navigateToMedicineId(medicineId) }
+                    withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }
         }

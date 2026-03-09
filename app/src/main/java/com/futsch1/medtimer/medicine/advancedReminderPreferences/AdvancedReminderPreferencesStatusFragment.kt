@@ -2,11 +2,11 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 
 
-class AdvancedReminderPreferencesStatusFragment(
-) : AdvancedReminderPreferencesFragment(
+class AdvancedReminderPreferencesStatusFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_status,
     mapOf(
     ),
@@ -16,6 +16,7 @@ class AdvancedReminderPreferencesStatusFragment(
     ),
     listOf("period_start_date", "period_end_date")
 ) {
+    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
 
     override fun onEntityUpdated(entity: Reminder) {
         super.onEntityUpdated(entity)

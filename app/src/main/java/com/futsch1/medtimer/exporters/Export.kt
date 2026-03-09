@@ -6,7 +6,7 @@ import java.io.File
 
 abstract class Export internal constructor(private val fragmentManager: FragmentManager) {
     @Throws(ExporterException::class)
-    fun export(file: File) {
+    suspend fun export(file: File) {
         val progressDialog = ProgressDialogFragment()
         progressDialog.show(fragmentManager, "exporting")
         exportInternal(file)
@@ -14,7 +14,7 @@ abstract class Export internal constructor(private val fragmentManager: Fragment
     }
 
     @Throws(ExporterException::class)
-    protected abstract fun exportInternal(file: File)
+    protected abstract suspend fun exportInternal(file: File)
 
     abstract val extension: String
     abstract val type: String

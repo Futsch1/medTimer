@@ -6,19 +6,29 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: FragmentManager, val context: Context) : Export(fragmentManager) {
+class CSVMedicineExport(
+    val medicines: List<FullMedicine>,
+    fragmentManager: FragmentManager,
+    val context: Context,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : Export(fragmentManager) {
     @Throws(ExporterException::class)
-    public override fun exportInternal(file: File) {
+    public override suspend fun exportInternal(file: File) {
         try {
-            FileWriter(file).use { csvFile ->
-                val headerTexts = TableHelper.getTableHeadersForMedicationExport(context)
-                csvFile.write(java.lang.String.join(";", headerTexts) + "\n")
-                for (medicine in medicines) {
-                    exportMedicine(csvFile, medicine)
+            withContext(ioDispatcher) {
+                FileWriter(file).use { csvFile ->
+                    val headerTexts = TableHelper.getTableHeadersForMedicationExport(context)
+                    csvFile.write(java.lang.String.join(";", headerTexts) + "\n")
+                    for (medicine in medicines) {
+                        exportMedicine(csvFile, medicine)
+                    }
                 }
             }
         } catch (_: IOException) {
@@ -26,7 +36,7 @@ class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         }
     }
 
-    private fun exportMedicine(csvFile: FileWriter, medicine: FullMedicine) {
+    private suspend fun exportMedicine(csvFile: FileWriter, medicine: FullMedicine) {
         val reminders = LinkedReminderAlgorithms().sortRemindersList(medicine.reminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {
@@ -38,10 +48,21 @@ class CSVMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
                 if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount,
                 getExportReminderSummary(context, reminder)
             )
-            csvFile.write(line)
+            withContext(ioDispatcher) {
+                csvFile.write(line)
+            }
         }
         if (reminders.isEmpty()) {
-            csvFile.write(String.format("%s;%s;%s\n", medicine.medicine.name, "", context.getString(R.string.no_reminders)))
+            withContext(ioDispatcher) {
+                csvFile.write(
+                    String.format(
+                        "%s;%s;%s\n",
+                        medicine.medicine.name,
+                        "",
+                        context.getString(R.string.no_reminders)
+                    )
+                )
+            }
         }
     }
 

@@ -23,6 +23,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
+import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyInt
@@ -53,9 +54,9 @@ class MedicineRepositoryFake {
             reminderEvents.add(reminderEvent)
             reminderEvent.reminderEventId.toLong()
         }
-        `when`(mock.getReminder(anyInt())).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
+        `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
         `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
-        `when`(mock.updateMedicine(anyNotNull())).thenAnswer {
+        `when`(runBlocking { mock.updateMedicine(anyNotNull()) }).thenAnswer {
             val medicine = it.arguments[0] as Medicine
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
             medicines[index] = medicine

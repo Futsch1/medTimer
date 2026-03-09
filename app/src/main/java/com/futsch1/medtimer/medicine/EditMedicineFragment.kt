@@ -219,7 +219,7 @@ class EditMedicineFragment :
         }
     }
 
-    override fun fillEntityData(entity: FullMedicine, fragmentView: View) {
+    override suspend fun fillEntityData(entity: FullMedicine, fragmentView: View) {
         val medicine = entity.medicine
         medicine.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim()
         medicine.useColor = enableColor!!.isChecked
@@ -231,7 +231,7 @@ class EditMedicineFragment :
         updateReminders(fragmentView)
     }
 
-    private fun updateReminders(fragmentView: View?) {
+    private suspend fun updateReminders(fragmentView: View?) {
         if (fragmentView != null) {
             val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
             for (i in 0..<recyclerView.size) {

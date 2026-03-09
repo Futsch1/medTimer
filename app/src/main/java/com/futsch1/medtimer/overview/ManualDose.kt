@@ -20,6 +20,7 @@ import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -29,19 +30,19 @@ class ManualDose(
     private val medicineViewModel: MedicineViewModel,
     private val activity: FragmentActivity,
     private val date: LocalDate,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
 
-    fun logManualDose() {
+    suspend fun logManualDose() {
         val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
         val adapter = ManualDoseListEntryAdapter(context, R.layout.manual_dose_list_entry, entries)
 
-        // But run the actual dialog on the UI thread again
-        activity.runOnUiThread {
+        withContext(mainDispatcher) {
             AlertDialog.Builder(context)
                 .setAdapter(adapter) { _: DialogInterface?, which: Int ->
                     startLogProcess(entries[which])

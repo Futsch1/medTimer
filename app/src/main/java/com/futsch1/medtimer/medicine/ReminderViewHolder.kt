@@ -26,11 +26,13 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReminderViewHolder private constructor(
     itemView: View,
     private val fragmentActivity: FragmentActivity,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
     RecyclerView.ViewHolder(itemView) {
     private val editTime: TextInputEditText = itemView.findViewById(R.id.editReminderTime)
@@ -59,7 +61,7 @@ class ReminderViewHolder private constructor(
 
         fragmentActivity.lifecycleScope.launch(dispatcher) {
             val summary = reminderSummary(reminder, itemView.context)
-            fragmentActivity.runOnUiThread { advancedSettingsSummary.text = summary }
+            withContext(mainDispatcher) { advancedSettingsSummary.text = summary }
         }
 
         if (fullMedicine.isStockManagementActive) {
