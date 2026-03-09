@@ -38,3 +38,6 @@ google-services.json
 
 # Fuzzing
 app/.cifuzz-corpus/
+
+# Gradle daemon
+gradle/gradle-daemon-jvm.properties
