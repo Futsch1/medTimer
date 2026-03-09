@@ -5,11 +5,12 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import org.junit.Assert
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 object TestHelper {
     fun buildReminder(
@@ -90,9 +91,9 @@ object TestHelper {
         reminder: Reminder,
         index: Int
     ) {
-        Assert.assertTrue(scheduledReminders.size > index)
-        Assert.assertEquals(timestamp, scheduledReminders[index].timestamp)
-        Assert.assertEquals(medicine, scheduledReminders[index].medicine.medicine)
-        Assert.assertEquals(reminder, scheduledReminders[index].reminder)
+        assertTrue(scheduledReminders.size > index)
+        assertEquals(timestamp, scheduledReminders[index].timestamp)
+        assertEquals(medicine, scheduledReminders[index].medicine.medicine)
+        assertEquals(reminder, scheduledReminders[index].reminder)
     }
 }
