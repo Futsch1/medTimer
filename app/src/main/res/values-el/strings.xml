@@ -267,7 +267,7 @@
     <string name="daily">Καθημερινά</string>
     <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>
     <string name="edit_medicine_stock_settings">Επεξεργασία ρυθμίσεων αποθέματος φαρμάκων</string>
-    <string name="clear_dates">Εκκαθάριση ημερομηнιών</string>
+    <string name="clear_dates">Εκκαθάριση ημερομηνιών</string>
     <string name="acknowledged">Αναγνωρίστηκε</string>
     <string name="refill_amount">Αναπλήρωση (%s)</string>
     <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηνία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
