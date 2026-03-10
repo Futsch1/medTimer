@@ -26,7 +26,7 @@ abstract class AdvancedReminderPreferencesFragment(
         return ReminderDataStore(
             entity,
             requireContext(),
-            getEntityViewModel().medicineRepository,
+            medicineRepository,
             lifecycleScope
         )
     }

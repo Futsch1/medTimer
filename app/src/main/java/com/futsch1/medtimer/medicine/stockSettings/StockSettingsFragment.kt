@@ -65,7 +65,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
         return MedicineDataStore(
             entity,
             requireContext(),
-            getEntityViewModel().medicineRepository,
+            medicineRepository,
             lifecycleScope
         )
     }
