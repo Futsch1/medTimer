@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -122,7 +123,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onStop() {
         super.onStop()
         if (fragmentReady) {
-            lifecycleScope.launch {
+            ProcessLifecycleOwner.get().lifecycleScope.launch {
                 val entityBefore = Gson().toJson(entity)
                 fillEntityData(entity!! as T, fragmentView!!)
                 if (entityBefore != Gson().toJson(entity)) {
