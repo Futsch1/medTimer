@@ -33,6 +33,13 @@ class ReminderAlarmActivity(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+
         setShowWhenLocked(true)
         setTurnScreenOn(true)
 
@@ -45,7 +52,7 @@ class ReminderAlarmActivity(
         addAlarmFragment(intent)
 
         lifecycleScope.launch(backgroundDispatcher) {
-            buildMediaPlayerAndVibrator()
+            buildMediaPlayer()
         }
     }
 
@@ -69,7 +76,7 @@ class ReminderAlarmActivity(
         Log.d("ReminderAlarm", "Destroyed alarm activity")
     }
 
-    private fun buildMediaPlayerAndVibrator() {
+    private fun buildMediaPlayer() {
         val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
             .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
             .toUri()
@@ -87,13 +94,6 @@ class ReminderAlarmActivity(
                 0
             )
         mediaPlayer?.isLooping = true
-
-        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-        } else {
-            @Suppress("DEPRECATION")
-            getSystemService(VIBRATOR_SERVICE) as Vibrator
-        }
     }
 
     private fun startAlarm() {

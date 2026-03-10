@@ -17,7 +17,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 
@@ -123,7 +122,7 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onStop() {
         super.onStop()
         if (fragmentReady) {
-            runBlocking {
+            lifecycleScope.launch {
                 val entityBefore = Gson().toJson(entity)
                 fillEntityData(entity!! as T, fragmentView!!)
                 if (entityBefore != Gson().toJson(entity)) {

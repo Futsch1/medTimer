@@ -26,13 +26,15 @@ import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
 class OverviewFragment(
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
 
     private lateinit var adapter: RemindersViewAdapter
@@ -113,14 +115,16 @@ class OverviewFragment(
 
         viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
             overviewViewModel.overviewEvents.collect { list ->
-                adapter.submitList(list) {
-                    reminders.post {
-                        if (onceStable || !overviewViewModel.initialized) {
-                            return@post
-                        }
+                withContext(mainDispatcher) {
+                    adapter.submitList(list) {
+                        reminders.post {
+                            if (onceStable || !overviewViewModel.initialized) {
+                                return@post
+                            }
 
-                        onceStable = true
-                        scrollToCurrentTimeItem()
+                            onceStable = true
+                            scrollToCurrentTimeItem()
+                        }
                     }
                 }
             }
