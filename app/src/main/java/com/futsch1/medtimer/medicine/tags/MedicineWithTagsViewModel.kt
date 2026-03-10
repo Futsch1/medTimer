@@ -11,7 +11,7 @@ class MedicineWithTagsViewModel(application: Application) :
     AndroidViewModel(application) {
     val medicineRepository = MedicineRepository(application)
     fun getMedicineWithTags(medicineId: Int): Flow<FullMedicine?> =
-        medicineRepository.getFlowMedicine(medicineId)
+        medicineRepository.getMedicineFlow(medicineId)
 
     val tags: Flow<List<Tag>> = medicineRepository.tagsFlow
 

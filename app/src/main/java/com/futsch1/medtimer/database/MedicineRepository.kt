@@ -27,7 +27,7 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getOnlyMedicine(medicineId)
     }
 
-    fun getFlowMedicine(medicineId: Int): Flow<FullMedicine?> {
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
         return medicineDao.getMedicineFlow(medicineId)
     }
 
@@ -49,10 +49,6 @@ open class MedicineRepository(val context: Context) {
 
     fun getReminderFlow(reminderId: Int): Flow<Reminder?> {
         return medicineDao.getReminderFlow(reminderId)
-    }
-
-    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
-        return medicineDao.getMedicineFlow(medicineId)
     }
 
     fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEvent>> {

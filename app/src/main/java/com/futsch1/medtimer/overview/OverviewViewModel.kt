@@ -31,7 +31,7 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     private var _initialized = false
     val initialized get() = _initialized
 
-    private val _filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
+    private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
 
     private val reminderEvents =
         medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
@@ -40,13 +40,13 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
     var day: LocalDate
-        get() = _filterState.value.day
+        get() = filterState.value.day
         set(value) {
-            _filterState.update { it.copy(day = value) }
+            filterState.update { it.copy(day = value) }
         }
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEvents, scheduledReminders, _filterState) { events, reminders, fs ->
+        combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
     }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
@@ -62,19 +62,19 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     }
 
     fun update() {
-        _filterState.update { it.copy(tick = it.tick + 1) }
+        filterState.update { it.copy(tick = it.tick + 1) }
     }
 
     fun addFilter(f: OverviewFilterToggles) {
-        _filterState.update { it.copy(activeFilters = it.activeFilters + f) }
+        filterState.update { it.copy(activeFilters = it.activeFilters + f) }
     }
 
     fun removeFilter(f: OverviewFilterToggles) {
-        _filterState.update { it.copy(activeFilters = it.activeFilters - f) }
+        filterState.update { it.copy(activeFilters = it.activeFilters - f) }
     }
 
     fun setFilters(filters: Set<OverviewFilterToggles>) {
-        _filterState.update { it.copy(activeFilters = filters) }
+        filterState.update { it.copy(activeFilters = filters) }
     }
 
     private fun getFiltered(events: List<ReminderEvent>, reminders: List<ScheduledReminder>, filterState: FilterState): List<OverviewEvent> {
