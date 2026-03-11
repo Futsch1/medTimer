@@ -4,6 +4,7 @@ import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.MedicineRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -36,7 +37,7 @@ class JSONBackupFuzzTest(private val json: String) {
         val parsedData = backup.parseBackup(json)
         val medicineRepository = Mockito.mock(MedicineRepository::class.java)
         if (parsedData != null) {
-            backup.applyBackup(parsedData, medicineRepository)
+            runBlocking { backup.applyBackup(parsedData, medicineRepository) }
         }
     }
 }

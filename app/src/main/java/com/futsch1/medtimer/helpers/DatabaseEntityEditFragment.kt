@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -25,8 +26,8 @@ class FullMedicineEntityInterface : DatabaseEntityEditFragment.EntityInterface<F
         return medicineViewModel.medicineRepository.getMedicine(id)
     }
 
-    override fun updateEntity(medicineViewModel: MedicineViewModel, entity: FullMedicine) {
-        medicineViewModel.medicineRepository.updateMedicineFromMain(entity.medicine)
+    override suspend fun updateEntity(medicineViewModel: MedicineViewModel, entity: FullMedicine) {
+        medicineViewModel.medicineRepository.updateMedicine(entity.medicine)
     }
 }
 
@@ -40,12 +41,11 @@ abstract class DatabaseEntityEditFragment<T>(
     val name: String,
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) :
-    Fragment() {
+) : Fragment() {
 
     interface EntityInterface<T> {
         fun getEntity(medicineViewModel: MedicineViewModel, id: Int): T?
-        fun updateEntity(medicineViewModel: MedicineViewModel, entity: T)
+        suspend fun updateEntity(medicineViewModel: MedicineViewModel, entity: T)
     }
 
     private var entity: T? = null
@@ -123,15 +123,17 @@ abstract class DatabaseEntityEditFragment<T>(
     override fun onStop() {
         super.onStop()
         if (fragmentReady) {
-            val entityBefore = Gson().toJson(entity)
-            fillEntityData(entity!! as T, fragmentView!!)
-            if (entityBefore != Gson().toJson(entity)) {
-                entityInterface.updateEntity(medicineViewModel, entity!!)
+            ProcessLifecycleOwner.get().lifecycleScope.launch {
+                val entityBefore = Gson().toJson(entity)
+                fillEntityData(entity!! as T, fragmentView!!)
+                if (entityBefore != Gson().toJson(entity)) {
+                    entityInterface.updateEntity(medicineViewModel, entity!!)
+                }
             }
         }
     }
 
     abstract fun onEntityLoaded(entity: T, fragmentView: View): Boolean
-    abstract fun fillEntityData(entity: T, fragmentView: View)
+    abstract suspend fun fillEntityData(entity: T, fragmentView: View)
     abstract fun getEntityId(): Int
 }

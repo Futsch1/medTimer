@@ -18,7 +18,7 @@ import kotlin.time.ExperimentalTime
 
 class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: FragmentManager, val context: Context) : Export(fragmentManager) {
     @OptIn(ExperimentalTime::class)
-    override fun exportInternal(file: File) {
+    override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
         simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
@@ -39,7 +39,7 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
         }
     }
 
-    private fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
+    private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
         val reminders = LinkedReminderAlgorithms().sortRemindersList(activeReminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {

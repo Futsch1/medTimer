@@ -10,14 +10,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 import kotlinx.coroutines.launch
 
-class AdvancedReminderPreferencesStockFragment(
-) : AdvancedReminderPreferencesFragment(
+class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_stock,
     mapOf(
     ),
@@ -25,6 +25,8 @@ class AdvancedReminderPreferencesStockFragment(
     ),
     listOf("stock_threshold", "expiration_days_before")
 ) {
+    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+
     val menuProvider = AdvancedReminderSettingsMenuProvider(this)
     var fullMedicine: FullMedicine? = null
 

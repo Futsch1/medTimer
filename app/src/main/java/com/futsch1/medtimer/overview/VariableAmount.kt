@@ -14,12 +14,14 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 
 fun variableAmountDialog(
     activity: AppCompatActivity,
     intent: Intent,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
     val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
@@ -36,25 +38,33 @@ fun variableAmountDialog(
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
                 reminderEvents.add(reminderNotificationPart.reminderEvent)
-            } else {
-                val dialogHelper = DialogHelper(activity)
-                    .title(reminderNotificationPart.medicine.medicine.name)
-                    .hint(R.string.dosage)
-                    .initialText(reminderNotificationPart.reminder.amount)
-                    .textSink { amountLocal: String? ->
-                        amountLocal?.let {
-                            reminderNotificationPart.reminderEvent.amount = it
-                            activity.lifecycleScope.launch(dispatcher) {
-                                NotificationProcessor(reminderContext).setReminderEventStatus(
-                                    ReminderEvent.ReminderStatus.TAKEN,
-                                    listOf(reminderNotificationPart.reminderEvent)
-                                )
-                            }
+                continue
+            }
+
+            val dialogHelper = DialogHelper(activity)
+                .title(reminderNotificationPart.medicine.medicine.name)
+                .hint(R.string.dosage)
+                .initialText(reminderNotificationPart.reminder.amount)
+                .textSink { amountLocal: String? ->
+                    amountLocal?.let {
+                        reminderNotificationPart.reminderEvent.amount = it
+                        activity.lifecycleScope.launch(dispatcher) {
+                            NotificationProcessor(reminderContext).setReminderEventStatus(
+                                ReminderEvent.ReminderStatus.TAKEN,
+                                listOf(reminderNotificationPart.reminderEvent)
+                            )
                         }
                     }
-                    .cancelCallback { touchReminderEvent(medicineRepository, reminderNotificationPart.reminderEvent) }
-                activity.runOnUiThread { dialogHelper.show() }
-            }
+                }
+                .cancelCallback {
+                    activity.lifecycleScope.launch {
+                        touchReminderEvent(
+                            medicineRepository,
+                            reminderNotificationPart.reminderEvent
+                        )
+                    }
+                }
+            withContext(mainDispatcher) { dialogHelper.show() }
         }
 
         NotificationProcessor(reminderContext).setReminderEventStatus(
@@ -64,10 +74,10 @@ fun variableAmountDialog(
     }
 }
 
-private fun touchReminderEvent(
+private suspend fun touchReminderEvent(
     medicineRepository: MedicineRepository,
     reminderEvent: ReminderEvent
 ) {
     reminderEvent.processedTimestamp = Instant.now().epochSecond
-    medicineRepository.updateReminderEventFromMain(reminderEvent)
+    medicineRepository.updateReminderEvent(reminderEvent)
 }

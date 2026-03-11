@@ -221,7 +221,7 @@ class BackupManager(
         }
     }
 
-    private fun restoreCombinedBackup(json: String): Boolean {
+    private suspend fun restoreCombinedBackup(json: String): Boolean {
         var restoreSuccessful = false
         try {
             val rootElement = JsonParser.parseString(json).getAsJsonObject()
@@ -243,7 +243,7 @@ class BackupManager(
         return restoreSuccessful
     }
 
-    private fun <T> restoreBackup(json: String, backup: JSONBackup<T>): Boolean {
+    private suspend fun <T> restoreBackup(json: String, backup: JSONBackup<T>): Boolean {
         val backupData: List<T>? = backup.parseBackup(json)
         if (backupData != null) {
             backup.applyBackup(backupData, medicineViewModel.medicineRepository)

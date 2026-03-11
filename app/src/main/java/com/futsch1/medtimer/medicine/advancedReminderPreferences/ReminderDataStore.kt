@@ -7,12 +7,17 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ReminderDataStore(
-    override val entityId: Int, val context: Context, override val medicineRepository: MedicineRepository,
+    override var entity: Reminder,
+    val context: Context,
+    private val medicineRepository: MedicineRepository,
+    private val coroutineScope: CoroutineScope
 ) : EntityDataStore<Reminder>() {
-    override var entity: Reminder = medicineRepository.getReminder(entityId)!!
+    override val entityId: Int get() = entity.reminderId
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {
@@ -50,7 +55,10 @@ class ReminderDataStore(
 
             "daily_interval" -> entity.windowedInterval = value
         }
-        medicineRepository.updateReminder(entity)
+
+        coroutineScope.launch {
+            medicineRepository.updateReminder(entity)
+        }
     }
 
     override fun getString(key: String?, defValue: String?): String? {
@@ -88,10 +96,15 @@ class ReminderDataStore(
             "interval_daily_end_time" -> entity.intervalEndTimeOfDay = TimeHelper.timeStringToMinutes(context, value!!)
             "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.outOfStockThreshold = it }
             "stock_reminder" -> entity.outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()]
-            "expiration_reminder" -> entity.expirationReminderType = Reminder.ExpirationReminderType.entries[value!!.toInt()]
+            "expiration_reminder" -> entity.expirationReminderType =
+                Reminder.ExpirationReminderType.entries[value!!.toInt()]
+
             "expiration_days_before" -> value?.toLongOrNull()?.let { entity.periodStart = it }
         }
-        medicineRepository.updateReminder(entity)
+
+        coroutineScope.launch {
+            medicineRepository.updateReminder(entity)
+        }
     }
 
     override fun getInt(key: String?, defValue: Int): Int {
@@ -105,7 +118,10 @@ class ReminderDataStore(
         when (key) {
             "interval" -> entity.timeInMinutes = value
         }
-        medicineRepository.updateReminder(entity)
+
+        coroutineScope.launch {
+            medicineRepository.updateReminder(entity)
+        }
     }
 
     override fun getStringSet(key: String?, defValues: Set<String?>?): Set<String?>? {
@@ -162,6 +178,8 @@ class ReminderDataStore(
             }
         }
 
-        medicineRepository.updateReminder(entity)
+        coroutineScope.launch {
+            medicineRepository.updateReminder(entity)
+        }
     }
 }

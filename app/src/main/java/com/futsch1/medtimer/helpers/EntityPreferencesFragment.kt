@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 abstract class EntityDataStore<T> : PreferenceDataStore() {
     abstract var entity: T
     abstract val entityId: Int
-    abstract val medicineRepository: MedicineRepository
 }
 
 abstract class EntityViewModel<T>(application: Application) : AndroidViewModel(application) {
@@ -36,8 +35,7 @@ abstract class EntityPreferencesFragment<T>(
     val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : PreferenceFragmentCompat() {
     lateinit var dataStore: EntityDataStore<T>
-    val medicineRepository: MedicineRepository
-        get() = dataStore.medicineRepository
+    abstract val medicineRepository: MedicineRepository
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()
@@ -47,7 +45,7 @@ abstract class EntityPreferencesFragment<T>(
                 dataStore = getEntityDataStore(requireArguments())
 
                 preferenceManager.preferenceDataStore = dataStore
-                this.launch(mainDispatcher) {
+                lifecycleScope.launch(mainDispatcher) {
                     setPreferencesFromResource(preferencesResId, rootKey)
                     observeUserData()
                     setupLinks()
@@ -62,7 +60,7 @@ abstract class EntityPreferencesFragment<T>(
         }
     }
 
-    abstract fun getEntityDataStore(
+    abstract suspend fun getEntityDataStore(
         requireArguments: Bundle
     ): EntityDataStore<T>
 

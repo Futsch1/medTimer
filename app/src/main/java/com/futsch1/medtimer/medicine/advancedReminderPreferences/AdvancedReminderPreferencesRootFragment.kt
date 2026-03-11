@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -72,8 +73,7 @@ fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
     }
 }
 
-class AdvancedReminderPreferencesRootFragment(
-) : AdvancedReminderPreferencesFragment(
+class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_root,
     mapOf(
         "instructions" to { id ->
@@ -95,7 +95,8 @@ class AdvancedReminderPreferencesRootFragment(
     mapOf(
         "add_linked_reminder" to { activity, preference ->
             val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
-            LinkedReminderHandling(reminderDataStore.entity, reminderDataStore.medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
+            val medicineRepository = MedicineRepository(activity.applicationContext)
+            LinkedReminderHandling(reminderDataStore.entity, medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
         },
         "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
         "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
@@ -103,6 +104,8 @@ class AdvancedReminderPreferencesRootFragment(
     ),
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
+    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+
     val menuProvider = AdvancedReminderSettingsMenuProvider(this)
 
     override fun onEntityUpdated(entity: Reminder) {

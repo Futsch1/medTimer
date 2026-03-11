@@ -13,11 +13,6 @@ import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -30,8 +25,11 @@ fun interface WidgetLineProvider {
 }
 
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
-    lateinit var scheduledReminders: List<ScheduledReminder>
-    private val job: Job = CoroutineScope(SupervisorJob()).launch {
+    val scheduledReminders: List<ScheduledReminder>
+    val sharedPreferences: SharedPreferences? =
+        PreferenceManager.getDefaultSharedPreferences(context)
+
+    init {
         val medicineRepository = MedicineRepository(context.applicationContext as Application)
         val medicinesWithReminders = medicineRepository.medicines
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
@@ -43,17 +41,11 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }
-    val sharedPreferences: SharedPreferences? =
-        PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
         line: Int,
         isShort: Boolean
     ): Spanned {
-        runBlocking {
-            job.join()
-        }
-
         val scheduledReminder = scheduledReminders.getOrNull(line)
 
         return if (scheduledReminder != null) scheduledReminderToString(
@@ -76,21 +68,19 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 }
 
 class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
-    lateinit var reminderEvents: List<ReminderEvent>
-    private val job: Job = CoroutineScope(SupervisorJob()).launch {
+    val reminderEvents: List<ReminderEvent>
+    val sharedPreferences: SharedPreferences? =
+        PreferenceManager.getDefaultSharedPreferences(context)
+
+    init {
         val medicineRepository = MedicineRepository(context)
         reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
-    val sharedPreferences: SharedPreferences? =
-        PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun getWidgetLine(
         line: Int,
         isShort: Boolean
     ): Spanned {
-        runBlocking {
-            job.join()
-        }
         val reminderEvent = reminderEvents.getOrNull(line)
 
         return if (reminderEvent != null) reminderEventToString(

@@ -54,14 +54,14 @@ class EditMedicineMenuProvider(
         setupLinksMenu(menu)
     }
 
-    private fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
+    private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
         val oldFullMedicine = medicineViewModel.medicineRepository.getMedicine(oldMedicineId)!!
         for (oldTag in oldFullMedicine.tags) {
             medicineViewModel.medicineRepository.insertMedicineToTag(newMedicineId, oldTag.tagId)
         }
     }
 
-    private fun duplicateIncludingReminders() {
+    private suspend fun duplicateIncludingReminders() {
         val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicine.medicineId)!!
         val oldMedicineId = medicine.medicineId
         medicine.medicineId = 0
@@ -76,12 +76,19 @@ class EditMedicineMenuProvider(
 
     private fun setupDeleteMenu(menu: Menu) {
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
-            DeleteHelper.deleteItem(navController.context, R.string.are_you_sure_delete_medicine, {
-                medicineViewModel.medicineRepository.deleteMedicine(medicine.medicineId)
-                navController.navigateUp()
-            }, {
-                // do nothing
-            })
+            DeleteHelper.deleteItem(
+                navController.context,
+                R.string.are_you_sure_delete_medicine,
+                {
+                    fragment.lifecycleScope.launch {
+
+                        medicineViewModel.medicineRepository.deleteMedicine(medicine.medicineId)
+                        navController.navigateUp()
+                    }
+                },
+                {
+                    // do nothing
+                })
             true
         }
     }

@@ -5,8 +5,6 @@ import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.util.LinkedList
-import java.util.concurrent.Callable
-import java.util.concurrent.ExecutionException
 
 // TODO: Context should not be a property, but ReminderNotificationProcessor.buildReminderEvent must be changed before this is possible
 open class MedicineRepository(val context: Context) {
@@ -23,7 +21,7 @@ open class MedicineRepository(val context: Context) {
     val medicinesFlow: Flow<List<FullMedicine>>
         get() = medicineDao.getMedicinesFlow()
 
-    fun getOnlyMedicine(medicineId: Int): Medicine? {
+    suspend fun getOnlyMedicine(medicineId: Int): Medicine? {
         return medicineDao.getOnlyMedicine(medicineId)
     }
 
@@ -43,7 +41,7 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getReminders(medicineId)
     }
 
-    fun getReminder(reminderId: Int): Reminder? {
+    suspend fun getReminder(reminderId: Int): Reminder? {
         return medicineDao.getReminder(reminderId)
     }
 
@@ -92,38 +90,25 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getLastReminderEvent(reminderId)
     }
 
-    fun insertMedicine(medicine: Medicine): Long {
-        return internalInsert(medicine) { medicine -> medicineDao.insertMedicine(medicine) }
+    suspend fun insertMedicine(medicine: Medicine): Long {
+        return  medicineDao.insertMedicine(medicine)
     }
 
-    private fun <T> internalInsert(insertType: T, f: Insert<T>): Long {
-        try {
-            return MedicineRoomDatabase.databaseWriteExecutor.submit(Callable { f.insert(insertType) }).get()
-        } catch (_: InterruptedException) {
-            Thread.currentThread().interrupt()
-        } catch (_: ExecutionException) {
-            return -1
-        }
-        return 0
+    suspend fun deleteMedicine(medicineId: Int) {
+        medicineDao.deleteMedicineToTagForMedicine(medicineId)
+        medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
     }
 
-    fun deleteMedicine(medicineId: Int) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute {
-            medicineDao.deleteMedicineToTagForMedicine(medicineId)
-            medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
-        }
+    suspend fun insertReminder(reminder: Reminder): Long {
+        return medicineDao.insertReminder(reminder)
     }
 
-    fun insertReminder(reminder: Reminder): Long {
-        return internalInsert(reminder) { reminder -> medicineDao.insertReminder(reminder) }
+    suspend fun updateReminder(reminder: Reminder) {
+        medicineDao.updateReminder(reminder)
     }
 
-    fun updateReminder(reminder: Reminder) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminder(reminder) }
-    }
-
-    fun deleteReminder(reminderId: Int) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) } }
+    suspend fun deleteReminder(reminderId: Int) {
+        medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) }
     }
 
     fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
@@ -138,44 +123,40 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
     }
 
-    fun updateReminderEvent(reminderEvent: ReminderEvent) {
+    suspend fun updateReminderEvent(reminderEvent: ReminderEvent) {
         medicineDao.updateReminderEvent(reminderEvent)
-    }
-
-    fun updateReminderEventFromMain(reminderEvent: ReminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateReminderEvent(reminderEvent) }
     }
 
     fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
         medicineDao.updateReminderEvents(reminderEvents)
     }
 
-    fun deleteAll() {
+    suspend fun deleteAll() {
         deleteReminders()
         deleteMedicines()
         deleteReminderEvents()
         deleteTags()
     }
 
-    fun deleteReminders() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminders() }
+    suspend fun deleteReminders() {
+        medicineDao.deleteReminders()
     }
 
-    fun deleteMedicines() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicines() }
+    suspend fun deleteMedicines() {
+       medicineDao.deleteMedicines()
     }
 
-    fun deleteReminderEvents() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminderEvents() }
+    suspend fun deleteReminderEvents() {
+        medicineDao.deleteReminderEvents()
     }
 
-    fun deleteTags() {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteTags() }
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicineToTags() }
+    suspend fun deleteTags() {
+        medicineDao.deleteTags()
+        medicineDao.deleteMedicineToTags()
     }
 
-    fun deleteReminderEvent(reminderEvent: ReminderEvent) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteReminderEvent(reminderEvent) }
+    suspend fun deleteReminderEvent(reminderEvent: ReminderEvent) {
+        medicineDao.deleteReminderEvent(reminderEvent)
     }
 
     fun getLinkedReminders(reminderId: Int): List<Reminder> {
@@ -185,28 +166,27 @@ open class MedicineRepository(val context: Context) {
     val tagsFlow: Flow<List<Tag>>
         get() = medicineDao.getTagsFlow()
 
-    fun insertTag(tag: Tag): Long {
-        val existingTag = getTagByName(tag.name)
-        return existingTag?.tagId?.toLong() ?: internalInsert(tag) { tag -> medicineDao.insertTag(tag) }
+    suspend fun insertTag(tag: Tag): Long {
+        val existingTagId = getTagByName(tag.name)?.tagId?.toLong()
+
+        return existingTagId ?:  medicineDao.insertTag(tag)
     }
 
     fun getTagByName(name: String): Tag? {
         return medicineDao.getTagByName(name)
     }
 
-    fun deleteTag(tag: Tag) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute {
-            medicineDao.deleteMedicineToTagForTag(tag.tagId)
-            medicineDao.deleteTag(tag)
-        }
+    suspend fun deleteTag(tag: Tag) {
+        medicineDao.deleteMedicineToTagForTag(tag.tagId)
+        medicineDao.deleteTag(tag)
     }
 
-    fun insertMedicineToTag(medicineId: Int, tagId: Int) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertMedicineToTag(MedicineToTag(medicineId, tagId)) }
+    suspend fun insertMedicineToTag(medicineId: Int, tagId: Int) {
+        medicineDao.insertMedicineToTag(MedicineToTag(medicineId, tagId))
     }
 
-    fun deleteMedicineToTag(medicineId: Int, tagId: Int) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId)) }
+    suspend fun deleteMedicineToTag(medicineId: Int, tagId: Int) {
+        medicineDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId))
     }
 
     val medicineToTagsFlow: Flow<List<MedicineToTag>>
@@ -219,7 +199,7 @@ open class MedicineRepository(val context: Context) {
     val highestMedicineSortOrder: Double
         get() = medicineDao.highestMedicineSortOrder
 
-    fun moveMedicine(fromPosition: Int, toPosition: Int) {
+    suspend fun moveMedicine(fromPosition: Int, toPosition: Int) {
         val medicines = this.medicines.toMutableList()
         try {
             val moveMedicine = medicines.removeAt(fromPosition)
@@ -234,7 +214,7 @@ open class MedicineRepository(val context: Context) {
     val medicines: List<FullMedicine>
         get() = medicineDao.getMedicines()
 
-    fun updateMedicine(medicine: Medicine) {
+    suspend fun updateMedicine(medicine: Medicine) {
         medicineDao.updateMedicine(medicine)
     }
 
@@ -242,19 +222,11 @@ open class MedicineRepository(val context: Context) {
         medicineDao.updateMedicines(medicines)
     }
 
-    fun updateMedicineFromMain(medicine: Medicine) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.updateMedicine(medicine) }
+    suspend fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
+        medicineDao.insertReminderEvents(reminderEvents)
     }
 
-    fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminderEvents(reminderEvents) }
-    }
-
-    fun insertReminders(reminders: List<Reminder>) {
-        MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.insertReminders(reminders) }
-    }
-
-    internal fun interface Insert<T> {
-        fun insert(item: T): Long
+    suspend fun insertReminders(reminders: List<Reminder>) {
+        medicineDao.insertReminders(reminders)
     }
 }

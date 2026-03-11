@@ -25,7 +25,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
         return item == null
     }
 
-    override fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
+    override suspend fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
         medicineRepository.deleteReminders()
         medicineRepository.deleteMedicines()
         medicineRepository.deleteTags()
@@ -42,7 +42,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
         }
     }
 
-    private fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+    private suspend fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
         for (tag in fullMedicine.tags) {
             val tagId = medicineRepository.insertTag(tag).toInt()
             medicineRepository.insertMedicineToTag(medicineId, tagId)
@@ -50,7 +50,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     companion object {
-        private fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+        private suspend fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
             val reminders: MutableList<Reminder> = mutableListOf()
             for (reminder in fullMedicine.reminders) {
                 reminder.medicineRelId = medicineId

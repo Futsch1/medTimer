@@ -26,7 +26,7 @@ import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
-    fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
+    suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
         val fullMedicines = reminderContext.medicineRepository.medicines
         val reminderEvents = reminderContext.medicineRepository.getReminderEventsForScheduling(fullMedicines)
         val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }
@@ -34,7 +34,7 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
         scheduleNextReminderInternal(fullMedicines, allEvents)
     }
 
-    private fun scheduleNextReminderInternal(
+    private suspend fun scheduleNextReminderInternal(
         fullMedicines: List<FullMedicine>,
         reminderEvents: List<ReminderEvent>
     ) {

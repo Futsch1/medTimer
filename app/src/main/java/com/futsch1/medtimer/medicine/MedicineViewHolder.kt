@@ -25,11 +25,13 @@ import com.google.android.material.chip.Chip
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MedicineViewHolder private constructor(
     holderItemView: View,
     private val activity: FragmentActivity,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
     RecyclerView.ViewHolder(holderItemView) {
     private val medicineNameView: TextView = holderItemView.findViewById(R.id.medicineName)
@@ -64,7 +66,7 @@ class MedicineViewHolder private constructor(
         } else {
             activity.lifecycleScope.launch(dispatcher) {
                 val summary = remindersSummary(activeReminders, itemView.context)
-                activity.runOnUiThread { remindersSummaryView.text = summary }
+                withContext(mainDispatcher) { remindersSummaryView.text = summary }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.reminders.RepeatProcessor
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
@@ -15,7 +16,9 @@ class RepeatProcessorTest {
         val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
 
-        RepeatProcessor(reminderContext.mock).processRepeat(reminderNotificationData, 10)
+        runBlocking {
+            RepeatProcessor(reminderContext.mock).processRepeat(reminderNotificationData, 10)
+        }
 
         assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[0].remainingRepeats, -1)
         assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[1].remainingRepeats, -1)

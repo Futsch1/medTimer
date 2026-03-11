@@ -11,16 +11,11 @@ import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration16To17
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadFactory
-import java.util.concurrent.TimeUnit
 import kotlin.concurrent.Volatile
 
 @Database(
@@ -127,17 +122,6 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE `_new_Tag` RENAME TO `Tag`")
             }
         }
-
-        private const val NUMBER_OF_THREADS = 1
-        val databaseWriteExecutor: ExecutorService = IdlingThreadPoolExecutor(
-            "DatabaseWriteExecutor", NUMBER_OF_THREADS, NUMBER_OF_THREADS, 100, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>(),
-            object : ThreadFactory {
-                private var count = 1
-
-                override fun newThread(r: Runnable?): Thread {
-                    return Thread(r, "DatabaseWrite-" + count++)
-                }
-            })
 
         // marking the instance as volatile to ensure atomic access to the variable
         @Volatile

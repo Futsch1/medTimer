@@ -3,6 +3,7 @@ package com.futsch1.medtimer.processortests
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
@@ -23,7 +24,12 @@ class NotificationProcessorTest {
         reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
 
-        NotificationProcessor(reminderContext.mock).processReminderEventsInNotification(processedNotificationData, ReminderEvent.ReminderStatus.TAKEN)
+        runBlocking {
+            NotificationProcessor(reminderContext.mock).processReminderEventsInNotification(
+                processedNotificationData,
+                ReminderEvent.ReminderStatus.TAKEN
+            )
+        }
 
         // Reminder marked as taken
         assertEquals(ReminderEvent.ReminderStatus.TAKEN, reminderContext.medicineRepositoryFake.reminderEvents[0].status)
@@ -47,7 +53,12 @@ class NotificationProcessorTest {
 
         val processedNotificationData = ProcessedNotificationData(listOf(2))
 
-        NotificationProcessor(reminderContext.mock).processReminderEventsInNotification(processedNotificationData, ReminderEvent.ReminderStatus.SKIPPED)
+        runBlocking {
+            NotificationProcessor(reminderContext.mock).processReminderEventsInNotification(
+                processedNotificationData,
+                ReminderEvent.ReminderStatus.SKIPPED
+            )
+        }
         // Reminder marked as taken
         assertEquals(ReminderEvent.ReminderStatus.SKIPPED, reminderContext.medicineRepositoryFake.reminderEvents[1].status)
         // Processed time stamp set

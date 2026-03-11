@@ -10,7 +10,7 @@ import java.time.Period
 import java.util.LinkedList
 
 class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents: Boolean) {
-    fun generateTestMedicine() {
+    suspend fun generateTestMedicine() {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(

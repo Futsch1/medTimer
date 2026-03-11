@@ -12,6 +12,7 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.helpers.remindersSummary
 import com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.MockedConstruction
@@ -31,7 +32,7 @@ import kotlin.test.assertEquals
 class SummaryHelperTest {
 
     @Test
-    fun testReminderSummaryInactive() {
+    fun testReminderSummaryInactive() = runBlocking {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
@@ -57,7 +58,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun test_reminderSummary_limited() {
+    fun test_reminderSummary_limited() = runBlocking {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.weekday_limited)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.day_of_month_limited)).thenReturn("2")
@@ -75,7 +76,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testReminderSummaryCyclic() {
+    fun testReminderSummaryCyclic() = runBlocking {
         val localeList = mock(LocaleList::class.java)
         Mockito.`when`(localeList.get(0)).thenReturn(Locale.US)
         val configuration = mock(android.content.res.Configuration::class.java)
@@ -101,7 +102,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testReminderSummaryInstructions() {
+    fun testReminderSummaryInstructions() = runBlocking {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
@@ -112,7 +113,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testReminderSummaryLinked() {
+    fun testReminderSummaryLinked() = runBlocking {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(eq(R.string.linked_reminder_summary), anyString()))
             .thenReturn("1")
@@ -128,13 +129,10 @@ class SummaryHelperTest {
         val sourceSourceReminder = Reminder(1)
         val mockedMedicineRepositoryConstruction: MockedConstruction<MedicineRepository> =
             mockConstruction(MedicineRepository::class.java) { mock, _ ->
-                Mockito.`when`(
-                    mock.getReminder(2)
-                ).thenReturn(sourceReminder)
-                Mockito.`when`(
-                    mock.getReminder(3)
-                ).thenReturn(sourceSourceReminder)
-
+                runBlocking {
+                    Mockito.`when`(mock.getReminder(2)).thenReturn(sourceReminder)
+                    Mockito.`when`(mock.getReminder(3)).thenReturn(sourceSourceReminder)
+                }
             }
 
         val reminder = Reminder(1)
@@ -151,7 +149,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testRemindersSummarySimple() {
+    fun testRemindersSummarySimple() = runBlocking {
         val context = mock(Context::class.java)
         val resources = mock(android.content.res.Resources::class.java)
         Mockito.`when`(context.resources).thenReturn(resources)
@@ -176,7 +174,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testRemindersSummaryLinked() {
+    fun testRemindersSummaryLinked() = runBlocking {
         val context = mock(Context::class.java)
         val application = mock(Application::class.java)
         Mockito.`when`(context.applicationContext).thenReturn(application)
@@ -215,12 +213,10 @@ class SummaryHelperTest {
 
         val mockedMedicineRepositoryConstruction: MockedConstruction<MedicineRepository> =
             mockConstruction(MedicineRepository::class.java) { mock, _ ->
-                Mockito.`when`(
-                    mock.getReminder(2)
-                ).thenReturn(reminder2)
-                Mockito.`when`(
-                    mock.getReminder(1)
-                ).thenReturn(reminder)
+                runBlocking {
+                    Mockito.`when`(mock.getReminder(2)).thenReturn(reminder2)
+                    Mockito.`when`(mock.getReminder(1)).thenReturn(reminder)
+                }
             }
 
         assertEquals("ok", remindersSummary(listOf(reminder2, reminder, reminder3), context))
@@ -230,7 +226,7 @@ class SummaryHelperTest {
     }
 
     @Test
-    fun testRemindersSummaryInterval() {
+    fun testRemindersSummaryInterval() = runBlocking {
         val context = mock(Context::class.java)
         Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
             .thenReturn("ok")

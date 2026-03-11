@@ -55,7 +55,7 @@ fun getDocument(context: Context, file: File): SimplyPdfDocument {
         .build()
 }
 
-fun getExportReminderSummary(context: Context, reminder: Reminder): String {
+suspend fun getExportReminderSummary(context: Context, reminder: Reminder): String {
     var summary = ""
     if (reminder.usesTimeInMinutes) {
         summary = TimeHelper.minutesToTimeString(context, reminder.timeInMinutes.toLong()) + ", "

@@ -7,7 +7,7 @@ import com.futsch1.medtimer.database.Reminder
 import java.util.LinkedList
 import java.util.Locale
 
-fun reminderSummary(reminder: Reminder, context: Context): String {
+suspend fun reminderSummary(reminder: Reminder, context: Context): String {
     var strings: MutableList<String> = LinkedList()
 
     if (!isReminderActive(reminder)) {
@@ -78,7 +78,7 @@ fun getIntervalTypeSummary(reminder: Reminder, context: Context): String {
     }
 }
 
-fun linkedReminderString(reminder: Reminder, context: Context): String {
+suspend fun linkedReminderString(reminder: Reminder, context: Context): String {
     val medicineRepository = MedicineRepository(context)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 
@@ -142,7 +142,7 @@ private fun buildReminderStrings(
     }
 }
 
-fun remindersSummary(reminders: List<Reminder>, context: Context): String {
+suspend fun remindersSummary(reminders: List<Reminder>, context: Context): String {
     val reminderTimes = timeBasedRemindersSummary(
         reminders.filter { r -> r.reminderType == Reminder.ReminderType.TIME_BASED },
         context
@@ -161,7 +161,7 @@ fun remindersSummary(reminders: List<Reminder>, context: Context): String {
     )
 }
 
-fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
+suspend fun linkedReminderSummaryString(reminder: Reminder, context: Context): String {
     val medicineRepository = MedicineRepository(context)
     val sourceReminder = medicineRepository.getReminder(reminder.linkedReminderId)
 

@@ -9,6 +9,8 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
@@ -73,7 +75,7 @@ internal class CSVExportUnitTest {
 
         // Create the CSVCreator object
         val csvEventExport =
-            CSVEventExport(reminderEvents, fragmentManager, context)
+            CSVEventExport(reminderEvents, fragmentManager, context, Dispatchers.Unconfined)
 
         Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
             Mockito.mockStatic(android.text.format.DateFormat::class.java)
@@ -92,7 +94,7 @@ internal class CSVExportUnitTest {
 
                     try {
                         // Call the create method
-                        csvEventExport.exportInternal(file)
+                        runBlocking { csvEventExport.exportInternal(file) }
 
                         val fileWriter = fileWriterMockedConstruction.constructed().first()
 
@@ -175,10 +177,10 @@ internal class CSVExportUnitTest {
                             .thenReturn(utc)
 
                         // Create the CSVCreator object
-                        val csvExport = CSVMedicineExport(medicines, fragmentManager, context)
+                        val csvExport = CSVMedicineExport(medicines, fragmentManager, context, Dispatchers.Unconfined)
                         try {
                             // Call the create method
-                            csvExport.exportInternal(file)
+                            runBlocking { csvExport.exportInternal(file) }
 
                             val fileWriter =
                                 fileWriterMockedConstruction.constructed().first()
@@ -226,10 +228,10 @@ internal class CSVExportUnitTest {
                     FragmentManager::class.java
                 )
                 // Create the CSVCreator object
-                val csvEventExport = CSVEventExport(emptyList(), fragmentManager, context)
+                val csvEventExport = CSVEventExport(emptyList(), fragmentManager, context, Dispatchers.Unconfined)
                 try {
                     // Call the create method
-                    csvEventExport.exportInternal(file)
+                    runBlocking { csvEventExport.exportInternal(file) }
 
                     val fileWriter = fileWriterMockedConstruction.constructed().first()
 

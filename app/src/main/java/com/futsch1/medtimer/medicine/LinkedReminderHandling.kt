@@ -47,9 +47,11 @@ class LinkedReminderHandling(
             R.string.linked_reminder_delay,
             TimeFormat.CLOCK_24H
         ).show(0, 0) { minutes: Int ->
-            linkedReminder.timeInMinutes = minutes
-            medicineRepository.insertReminder(linkedReminder)
-            fragmentActivity.supportFragmentManager.popBackStack()
+            coroutineScope.launch {
+                linkedReminder.timeInMinutes = minutes
+                medicineRepository.insertReminder(linkedReminder)
+                fragmentActivity.supportFragmentManager.popBackStack()
+            }
         }
     }
 
@@ -62,7 +64,7 @@ class LinkedReminderHandling(
         }, { Handler(Looper.getMainLooper()).post(postNoAction) })
     }
 
-    private fun internalDelete(
+    private suspend fun internalDelete(
         reminder: Reminder
     ) {
         val reminders: List<Reminder> =

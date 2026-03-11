@@ -13,14 +13,14 @@ import java.util.stream.Collectors
 class RefillProcessor(val reminderContext: ReminderContext) {
     private val medicineRepository = reminderContext.medicineRepository
 
-    fun processRefill(processedNotificationData: ProcessedNotificationData) {
+    suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
         val reminderEvent = medicineRepository.getReminderEvent(processedNotificationData.reminderEventIds[0])!!
         val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
         val medicineId = reminder!!.medicineRelId
         processRefill(medicineId, reminderEvent)
     }
 
-    fun processRefill(medicineId: Int, reminderEvent: ReminderEvent? = null) {
+    suspend fun processRefill(medicineId: Int, reminderEvent: ReminderEvent? = null) {
         val medicine = medicineRepository.getMedicine(medicineId)!!
 
         val refillEvent = processRefillInternal(medicine)

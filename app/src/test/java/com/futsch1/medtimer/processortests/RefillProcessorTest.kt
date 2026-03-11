@@ -5,6 +5,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.time.Instant
 import kotlin.test.assertEquals
@@ -19,7 +20,9 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.medicines[0].refillSizes.add(10.0)
         reminderContext.medicineRepositoryFake.medicines[0].amount = 100.0
 
-        RefillProcessor(reminderContext.mock).processRefill(1)
+        runBlocking {
+            RefillProcessor(reminderContext.mock).processRefill(1)
+        }
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
         assertEquals(10, reminderContext.medicineRepositoryFake.reminderEvents[0].processedTimestamp)
@@ -38,7 +41,9 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1))
         reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
 
-        RefillProcessor(reminderContext.mock).processRefill(ProcessedNotificationData(listOf(1)))
+        runBlocking {
+            RefillProcessor(reminderContext.mock).processRefill(ProcessedNotificationData(listOf(1)))
+        }
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
         assertEquals(ReminderEvent.ReminderStatus.ACKNOWLEDGED, reminderContext.medicineRepositoryFake.reminderEvents[0].status)

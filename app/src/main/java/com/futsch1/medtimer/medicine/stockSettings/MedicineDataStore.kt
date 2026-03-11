@@ -6,11 +6,16 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class MedicineDataStore(
-    override val entityId: Int, val context: Context, override val medicineRepository: MedicineRepository,
+    override var entity: FullMedicine,
+    val context: Context,
+    private val medicineRepository: MedicineRepository,
+    private val coroutineScope: CoroutineScope
 ) : EntityDataStore<FullMedicine>() {
-    override var entity: FullMedicine = medicineRepository.getMedicine(entityId)!!
+    override val entityId: Int get() = entity.medicine.medicineId
 
     override fun getString(key: String?, defValue: String?): String? {
         return when (key) {
@@ -31,7 +36,9 @@ class MedicineDataStore(
             "production_date" -> entity.medicine.productionDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
             "expiration_date" -> entity.medicine.expirationDate = TimeHelper.stringToLocalDate(context, value!!)!!.toEpochDay()
         }
-        medicineRepository.updateMedicineFromMain(entity.medicine)
+        coroutineScope.launch {
+            medicineRepository.updateMedicine(entity.medicine)
+        }
     }
 
     override fun putLong(key: String?, value: Long) {
@@ -39,6 +46,8 @@ class MedicineDataStore(
             "production_date" -> entity.medicine.productionDate = value
             "expiration_date" -> entity.medicine.expirationDate = value
         }
-        medicineRepository.updateMedicineFromMain(entity.medicine)
+        coroutineScope.launch {
+            medicineRepository.updateMedicine(entity.medicine)
+        }
     }
 }

@@ -28,7 +28,7 @@ class PDFEventExport(private val reminderEvents: List<ReminderEvent>, fragmentMa
     }
 
     @OptIn(ExperimentalTime::class)
-    public override fun exportInternal(file: File) {
+    public override suspend fun exportInternal(file: File) {
         val simplyPdfDocument = getDocument(context, file)
 
         val rows = LinkedList<LinkedList<Cell>>()

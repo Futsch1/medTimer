@@ -3,8 +3,6 @@ package com.futsch1.medtimer
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.Log
 import com.futsch1.medtimer.LogTags.AUTOSTART
 import com.futsch1.medtimer.database.MedicineRepository
@@ -12,14 +10,30 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.util.function.Predicate
 import java.util.stream.Collectors
 
-class Autostart : BroadcastReceiver() {
+class Autostart(
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != null && (intent.action == "android.intent.action.BOOT_COMPLETED" || intent.action == "android.intent.action.MY_PACKAGE_REPLACED")) {
-            restoreNotifications(context)
+            if (hasRestored) {
+                return
+            }
+            hasRestored = true
+
+            // TODO: once Hilt is set upped, inject a global coroutine scope
+            CoroutineScope(SupervisorJob() + backgroundDispatcher).launch {
+                restoreNotifications(context)
+            }
             Log.i(AUTOSTART, "Requesting reschedule")
             requestScheduleNextNotification(context)
         }
@@ -29,17 +43,10 @@ class Autostart : BroadcastReceiver() {
         var hasRestored = false
 
         @SuppressWarnings("kotlin:S5320") // Sending to local receiver is safe
-        fun restoreNotifications(context: Context) {
-            if (hasRestored) {
-                return
-            }
-            hasRestored = true
-
+        suspend fun restoreNotifications(context: Context) {
             Log.i(AUTOSTART, "Restore notifications")
-            val repo = MedicineRepository(context)
-            val thread = HandlerThread("RestoreNotifications")
-            thread.start()
-            Handler(thread.getLooper()).post {
+            withContext(Dispatchers.Default) {
+                val repo = MedicineRepository(context)
                 val reminderEventList: List<ReminderEvent> = repo.getLastDaysReminderEvents(1).stream()
                     .filter((Predicate { reminderEvent: ReminderEvent -> reminderEvent.status == ReminderEvent.ReminderStatus.RAISED })).collect(
                         Collectors.toUnmodifiableList()

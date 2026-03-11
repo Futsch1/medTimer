@@ -21,14 +21,18 @@ class TagDataFromMedicine(
         fragment,
     )[MedicineWithTagsViewModel::class.java]
     private var tagsAdapter: TagsAdapter = TagsAdapter({ it: TagWithState ->
-        if (it.isSelected) {
-            viewModel.associateTag(medicineId, it.tag.tagId)
-        } else {
-            viewModel.disassociateTag(medicineId, it.tag.tagId)
+        fragment.lifecycleScope.launch {
+            if (it.isSelected) {
+                viewModel.associateTag(medicineId, it.tag.tagId)
+            } else {
+                viewModel.disassociateTag(medicineId, it.tag.tagId)
+            }
         }
     }, { it: TagWithState ->
         DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
+            fragment.lifecycleScope.launch {
             viewModel.medicineRepository.deleteTag(it.tag)
+                }
         }, {})
     })
 

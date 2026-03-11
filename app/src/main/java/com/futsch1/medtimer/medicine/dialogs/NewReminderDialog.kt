@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -21,6 +22,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import java.time.Instant
 
 
@@ -75,7 +77,8 @@ class NewReminderDialog(
             if (reminder.isInterval) ViewGroup.VISIBLE else ViewGroup.GONE
         val continuousIntervalVisibility =
             if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
-        val windowedIntervalVisibility = if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+        val windowedIntervalVisibility =
+            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
 
         dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
             intervalBasedVisibility
@@ -83,8 +86,10 @@ class NewReminderDialog(
             intervalBasedVisibility
         dialog.findViewById<TextInputLayout>(R.id.editIntervalStartDateTimeLayout).visibility =
             continuousIntervalVisibility
-        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyStartTimeLayout).visibility = windowedIntervalVisibility
-        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyEndTimeLayout).visibility = windowedIntervalVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyStartTimeLayout).visibility =
+            windowedIntervalVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editIntervalDailyEndTimeLayout).visibility =
+            windowedIntervalVisibility
         dialog.findViewById<RadioGroup>(R.id.intervalStartType).visibility =
             intervalBasedVisibility
         dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
@@ -147,30 +152,37 @@ class NewReminderDialog(
         dailyEndTimeEditor: TimeEditor
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
-            reminder.amount =
-                dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
+            activity.lifecycleScope.launch {
+                reminder.amount =
+                    dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
 
-            val minutes = if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
-                timeEditor.getMinutes()
-            } else {
-                intervalEditor.getMinutes()
-            }
-            reminder.timeInMinutes = minutes
-            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
-                reminder.intervalStart = intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
-                reminder.intervalStartsFromProcessed =
-                    dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
-            }
-            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) {
-                reminder.intervalStartTimeOfDay = dailyStartTimeEditor.getMinutes()
-                reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
-            }
-            if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
-                medicineRepository.insertReminder(reminder)
-                Toast.makeText(activity, R.string.successfully_created_reminder, Toast.LENGTH_LONG).show()
-                dialog.dismiss()
-            } else {
-                Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                val minutes = if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
+                    timeEditor.getMinutes()
+                } else {
+                    intervalEditor.getMinutes()
+                }
+                reminder.timeInMinutes = minutes
+                if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
+                    reminder.intervalStart =
+                        intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
+                    reminder.intervalStartsFromProcessed =
+                        dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
+                }
+                if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) {
+                    reminder.intervalStartTimeOfDay = dailyStartTimeEditor.getMinutes()
+                    reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
+                }
+                if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
+                    medicineRepository.insertReminder(reminder)
+                    Toast.makeText(
+                        activity,
+                        R.string.successfully_created_reminder,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    dialog.dismiss()
+                } else {
+                    Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

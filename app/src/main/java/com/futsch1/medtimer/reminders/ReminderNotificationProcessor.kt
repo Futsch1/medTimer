@@ -21,7 +21,7 @@ import java.util.stream.Collectors
 class ReminderNotificationProcessor(
     val reminderContext: ReminderContext
 ) {
-    fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
+    suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
         var r = false
 
         // Create reminder events and filter those that are already processed
@@ -45,7 +45,7 @@ class ReminderNotificationProcessor(
         return r
     }
 
-    private fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
+    private suspend fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
                 NotificationProcessor(reminderContext).setReminderEventStatus(
@@ -65,7 +65,7 @@ class ReminderNotificationProcessor(
         return reminderNotification.filterAutomaticallyTaken()
     }
 
-    private fun notificationAction(reminderNotification: ReminderNotification) {
+    private suspend fun notificationAction(reminderNotification: ReminderNotification) {
         if (reminderNotification.reminderNotificationData.notificationId != -1) {
             NotificationProcessor(reminderContext).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
         }
@@ -80,7 +80,7 @@ class ReminderNotificationProcessor(
         }
     }
 
-    private fun showNotification(reminderNotification: ReminderNotification) {
+    private suspend fun showNotification(reminderNotification: ReminderNotification) {
         if (canShowNotifications()) {
             val notifications = Notifications(reminderContext)
             val notificationId =

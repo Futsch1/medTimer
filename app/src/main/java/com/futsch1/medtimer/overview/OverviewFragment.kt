@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.overview
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
@@ -25,13 +23,19 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
 import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
+class OverviewFragment(
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+) : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -40,7 +44,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     private lateinit var daySelector: DaySelector
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: FragmentSwipeLayout
-    private lateinit var thread: HandlerThread
     private var onceStable = false
     private var actionMode: ActionMode? = null
     private var actionsMenu: ActionsMenu? = null
@@ -57,9 +60,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             medicineViewModel,
             this.findNavController(), false
         )
-
-        thread = HandlerThread("LogManualDose")
-        thread.start()
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
@@ -113,16 +113,18 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
         adapter.clickListener = this
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
             overviewViewModel.overviewEvents.collect { list ->
-                adapter.submitList(list) {
-                    reminders.post {
-                        if (onceStable || !overviewViewModel.initialized) {
-                            return@post
-                        }
+                withContext(mainDispatcher) {
+                    adapter.submitList(list) {
+                        reminders.post {
+                            if (onceStable || !overviewViewModel.initialized) {
+                                return@post
+                            }
 
-                        onceStable = true
-                        scrollToCurrentTimeItem()
+                            onceStable = true
+                            scrollToCurrentTimeItem()
+                        }
                     }
                 }
             }
@@ -141,10 +143,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     private fun setupLogManualDose() {
         val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
-            val handler = Handler(thread.getLooper())
-            // Run the setup of the drop down in a separate thread to access the database
-            handler.post {
-                ManualDose(requireContext(), medicineViewModel, this.requireActivity(), overviewViewModel.day).logManualDose()
+            lifecycleScope.launch {
+                ManualDose(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day).logManualDose()
             }
         }
     }
@@ -156,9 +156,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     override fun onDestroy() {
         super.onDestroy()
-        if (this::thread.isInitialized) {
-            thread.quit()
-        }
         if (this::optionsMenu.isInitialized) {
             optionsMenu.onDestroy()
         }

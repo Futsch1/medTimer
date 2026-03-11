@@ -2,6 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.AlarmProcessor
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
@@ -17,9 +18,17 @@ class AlarmProcessorTest {
         reminderContext.boolPreferencesMap[PreferencesNames.EXACT_REMINDERS] = true
         processedNotificationData.remindInstant = processedNotificationData.remindInstant.plusSeconds(10)
 
-        AlarmProcessor(reminderContext.mock).setAlarmForReminderNotification(processedNotificationData)
+        runBlocking {
+            AlarmProcessor(reminderContext.mock).setAlarmForReminderNotification(
+                processedNotificationData
+            )
+        }
 
-        verify(reminderContext.alarmManagerMock, times(1)).setExactAndAllowWhileIdle(anyInt(), anyLong(), any())
+        verify(reminderContext.alarmManagerMock, times(1)).setExactAndAllowWhileIdle(
+            anyInt(),
+            anyLong(),
+            any()
+        )
     }
 
 
