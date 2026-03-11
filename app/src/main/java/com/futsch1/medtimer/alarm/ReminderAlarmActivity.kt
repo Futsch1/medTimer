@@ -78,6 +78,11 @@ class ReminderAlarmActivity(
         Log.d("ReminderAlarm", "Destroyed alarm activity")
     }
 
+    private suspend fun awaitMediaPlayer(): MediaPlayer? {
+        buildMediaPlayerJob?.join()
+        return mediaPlayer
+    }
+
     private fun buildMediaPlayer() {
         val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
             .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
@@ -99,7 +104,6 @@ class ReminderAlarmActivity(
 
     private suspend fun startAlarm() {
         Log.d("ReminderAlarm", "Executing startAlarm job")
-        buildMediaPlayerJob?.join()
 
         if (shallPlayAlarm()) {
             playAlarmTone()
@@ -110,12 +114,14 @@ class ReminderAlarmActivity(
         }
     }
 
-    private fun pauseAlarm() {
+    private suspend fun pauseAlarm() {
         Log.d("ReminderAlarm", "Executing pauseAlarm job")
 
+        val mediaPlayer = awaitMediaPlayer() ?: return
+
         try {
-            if (mediaPlayer?.isPlaying == true) {
-                mediaPlayer?.pause()
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
             }
         } catch (_: IllegalStateException) {
             // Ignore
@@ -133,8 +139,9 @@ class ReminderAlarmActivity(
         vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
     }
 
-    private fun playAlarmTone() {
-        mediaPlayer?.start()
+    private suspend fun playAlarmTone() {
+        val mediaPlayer = awaitMediaPlayer() ?: return
+        mediaPlayer.start()
     }
 
     private fun shallPlayAlarm(): Boolean {
