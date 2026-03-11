@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.Observer
-import com.futsch1.medtimer.database.FullMedicine
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import kotlinx.coroutines.launch
 
 class ReminderSchedulerService : LifecycleService() {
     override fun onCreate() {
@@ -15,9 +15,9 @@ class ReminderSchedulerService : LifecycleService() {
 
         val medicineRepository = MedicineRepository(this)
 
-        medicineRepository.liveMedicines.observe(
-            this,
-            Observer { _: List<FullMedicine> -> this.updateMedicine() })
+        lifecycleScope.launch {
+            medicineRepository.medicinesFlow.collect { updateMedicine() }
+        }
 
         Log.i(LogTags.SCHEDULER, "Scheduler service created")
     }

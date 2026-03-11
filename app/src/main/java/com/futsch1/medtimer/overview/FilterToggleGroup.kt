@@ -1,8 +1,8 @@
+package com.futsch1.medtimer.overview
+
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.overview.OverviewFilterToggles
-import com.futsch1.medtimer.overview.OverviewViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
 
 class FilterToggleGroup(
@@ -26,12 +26,11 @@ class FilterToggleGroup(
         toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             filterMap[checkedId]?.let { (filterEnum, _) ->
                 if (isChecked) {
-                    overviewViewModel.activeFilters.add(filterEnum)
+                    overviewViewModel.addFilter(filterEnum)
                 } else {
-                    overviewViewModel.activeFilters.remove(filterEnum)
+                    overviewViewModel.removeFilter(filterEnum)
                 }
                 saveCheckedFilters(checkedId, isChecked)
-                overviewViewModel.update()
             }
         }
     }
@@ -52,18 +51,18 @@ class FilterToggleGroup(
     fun restoreCheckedFilters(filtersMask: Int) {
         if (filtersMask == 0) {
             toggleGroup.clearChecked()
-            overviewViewModel.activeFilters.clear() // Also clear active filters in ViewModel
+            overviewViewModel.setFilters(emptySet())
         } else {
-            overviewViewModel.activeFilters.clear() // Start with a clean slate
+            val restoredFilters = mutableSetOf<OverviewFilterToggles>()
             filterMap.forEach { (buttonId, entry) ->
                 val filterEnum = entry.first
                 val mask = entry.second
                 if (filtersMask and mask == mask) {
                     toggleGroup.check(buttonId)
-                    overviewViewModel.activeFilters.add(filterEnum) // Add enum to ViewModel
+                    restoredFilters.add(filterEnum)
                 }
             }
+            overviewViewModel.setFilters(restoredFilters)
         }
-        overviewViewModel.update()
     }
 }

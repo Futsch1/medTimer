@@ -2,9 +2,10 @@ package com.futsch1.medtimer.medicine.tags
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.MedicineViewModel
-import java.util.stream.Collectors
+import kotlinx.coroutines.launch
 
 class TagDataFromPreferences(fragment: Fragment) : TagDataProvider() {
     private var viewModel: MedicineWithTagsViewModel = ViewModelProvider(
@@ -25,12 +26,12 @@ class TagDataFromPreferences(fragment: Fragment) : TagDataProvider() {
     }, null)
 
     init {
-        viewModel.tags.observe(fragment) { tagList ->
-            tagsAdapter.submitList(
-                tagList.stream()
-                    .map { TagWithState(it, tagFilterStore.selectedTags.contains(it.tagId)) }
-                    .collect(Collectors.toList())
-            )
+        fragment.viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.tags.collect { tagList ->
+                tagsAdapter.submitList(
+                    tagList.map { TagWithState(it, tagFilterStore.selectedTags.contains(it.tagId)) }
+                )
+            }
         }
     }
 

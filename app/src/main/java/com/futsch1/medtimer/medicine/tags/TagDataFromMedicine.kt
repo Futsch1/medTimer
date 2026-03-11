@@ -36,13 +36,16 @@ class TagDataFromMedicine(
         val tagsWithStateCollector =
             TagWithStateCollector { tagsAdapter.submitList(it) }
 
-        viewModel.tags.observe(fragment) {
-            tagsWithStateCollector.tags = it
+        fragment.viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.tags.collect {
+                tagsWithStateCollector.tags = it
+            }
         }
-        viewModel.getMedicineWithTags(medicineId).observe(fragment) {
-            tagsWithStateCollector.fullMedicine = it
+        fragment.viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getMedicineWithTags(medicineId).collect {
+                tagsWithStateCollector.fullMedicine = it
+            }
         }
-
     }
 
     override fun getAdapter(): ListAdapter<TagWithState, TagViewHolder> {

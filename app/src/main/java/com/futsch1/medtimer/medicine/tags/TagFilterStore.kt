@@ -2,13 +2,13 @@ package com.futsch1.medtimer.medicine.tags
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.lifecycle.MutableLiveData
 import com.futsch1.medtimer.database.Tag
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.stream.Collectors
 
 class TagFilterStore(
     context: Context,
-    private var validTagIds: MutableLiveData<Set<Int>>
+    private var validTagIds: MutableStateFlow<Set<Int>?>
 ) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
     private val sharedPreferences =
@@ -24,8 +24,9 @@ class TagFilterStore(
         }
 
     fun filterForDeletedTags(allTags: List<Tag>) {
-        if (validTagIds.value != null) {
-            selectedTags = validTagIds.value!!
+        val validTagsIdsValue = validTagIds.value
+        if (validTagsIdsValue != null) {
+            selectedTags = validTagsIdsValue
         }
         selectedTags = selectedTags.stream().filter { tagId ->
             allTags.stream().filter { tag -> tag.tagId == tagId }.count() > 0

@@ -7,22 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.filter.Filter
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
 import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 
 class ReminderTableFragment : Fragment() {
-    private var filterLayout: TextInputLayout? = null
-    private var filter: TextInputEditText? = null
+    private lateinit var filterLayout: TextInputLayout
+    private lateinit var filter: TextInputEditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +41,13 @@ class ReminderTableFragment : Fragment() {
 
         tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
-        medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
-            .observe(getViewLifecycleOwner(), Observer { reminderEvents: List<ReminderEvent> ->
-                adapter.submitList(reminderEvents)
-                tableFilter.set(filter?.text.toString())
-            })
+        viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
+                .collect { reminderEvents ->
+                    adapter.submitList(reminderEvents)
+                    tableFilter.set(filter.text.toString())
+                }
+        }
 
         // This is a workaround for a recycler view bug that causes random crashes
         tableView.cellRecyclerView.setItemAnimator(null)
@@ -61,11 +63,11 @@ class ReminderTableFragment : Fragment() {
     }
 
     private fun setupFilter(tableFilter: Filter) {
-        filterLayout!!.setEndIconOnClickListener { _: View? ->
-            filter?.setText("")
+        filterLayout.setEndIconOnClickListener { _: View? ->
+            filter.setText("")
             tableFilter.set("")
         }
-        filter!!.addTextChangedListener(object : TextWatcher {
+        filter.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // Intentionally empty
             }

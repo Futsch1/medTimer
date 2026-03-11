@@ -2,9 +2,7 @@ package com.futsch1.medtimer
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTag
@@ -14,72 +12,48 @@ import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.stream.Collectors
 
 class MedicineViewModel(application: Application) : AndroidViewModel(application) {
-    @JvmField
     val medicineRepository: MedicineRepository = MedicineRepository(application)
-    private val liveMedicines: LiveData<List<FullMedicine>> =
-        medicineRepository.liveMedicines
+    private val liveMedicines = medicineRepository.medicinesFlow
 
-    val validTagIds: MutableLiveData<Set<Int>> = MutableLiveData()
+    val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(application, validTagIds)
-    private lateinit var medicineToTags: List<MedicineToTag>
-    private val liveTags = medicineRepository.liveTags
+    private var medicineToTags: List<MedicineToTag> = emptyList()
+    private val liveTags: StateFlow<List<Tag>> = medicineRepository.tagsFlow.stateIn(
+        viewModelScope, SharingStarted.Eagerly, emptyList()
+    )
 
-    private val filteredMedicine = MediatorLiveData<List<FullMedicine>>()
-    val medicines: LiveData<List<FullMedicine>> = filteredMedicine
+    private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
 
-    private val liveScheduledReminders: MutableLiveData<List<ScheduledReminder>> = MutableLiveData()
-    private val filteredScheduledReminders = MediatorLiveData<List<ScheduledReminder>>()
-    val scheduledReminders = filteredScheduledReminders
+    val medicines: StateFlow<List<FullMedicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
+        getFiltered(medicines, tagIds ?: emptySet())
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    private val filteredReminderEvents = MediatorLiveData<List<ReminderEvent>>()
-    private lateinit var liveReminderEvents: LiveData<List<ReminderEvent>>
+    val scheduledReminders: SharedFlow<List<ScheduledReminder>> = combine(_scheduledReminders, validTagIds) { reminders, tagIds ->
+        getFiltered(reminders, tagIds ?: emptySet())
+    }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        medicineRepository.liveMedicineToTags.observeForever {
-            medicineToTags = it
-        }
-
-        medicineRepository.liveTags.observeForever {
-            tagFilterStore.filterForDeletedTags(it)
-        }
-
-        filteredMedicine.addSource(liveMedicines) {
-            if (validTagIds.value != null) {
-                filteredMedicine.value = getFiltered(it, validTagIds.value!!)
-            }
-        }
-        filteredMedicine.addSource(validTagIds) {
-            if (liveMedicines.value != null) {
-                filteredMedicine.value = getFiltered(liveMedicines.value!!, it)
+        viewModelScope.launch {
+            medicineRepository.medicineToTagsFlow.collect {
+                medicineToTags = it
             }
         }
 
-        filteredScheduledReminders.addSource(liveScheduledReminders) {
-            if (validTagIds.value != null) {
-                filteredScheduledReminders.value =
-                    getFiltered(it, validTagIds.value!!)
-            }
-        }
-        filteredScheduledReminders.addSource(validTagIds) {
-            if (liveScheduledReminders.value != null) {
-                filteredScheduledReminders.value =
-                    getFiltered(liveScheduledReminders.value!!, it)
-            }
-        }
-
-        filteredReminderEvents.addSource(validTagIds) {
-            if (liveReminderEvents.isInitialized && liveReminderEvents.value != null && liveTags.value != null) {
-                filteredReminderEvents.value =
-                    getFilteredEvents(liveReminderEvents.value!!, it, liveTags.value!!)
-            }
-        }
-        filteredReminderEvents.addSource(liveTags) {
-            if (liveReminderEvents.isInitialized && liveReminderEvents.value != null && validTagIds.value != null) {
-                filteredReminderEvents.value =
-                    getFilteredEvents(liveReminderEvents.value!!, validTagIds.value!!, it)
+        viewModelScope.launch {
+            medicineRepository.tagsFlow.collect {
+                tagFilterStore.filterForDeletedTags(it)
             }
         }
     }
@@ -102,15 +76,15 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun filterEvents(events: List<ReminderEvent>): List<ReminderEvent> {
-        return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value ?: listOf())
+        return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value)
     }
 
     fun filterMedicines(medicines: List<FullMedicine>): List<FullMedicine> {
-        return getFiltered(medicines, validTagIds.value!!)
+        return getFiltered(medicines, validTagIds.value ?: emptySet())
     }
 
     fun tagFilterActive(): Boolean {
-        return validTagIds.value != null && validTagIds.value!!.isNotEmpty()
+        return validTagIds.value?.isNotEmpty() ?: return false
     }
 
     private fun getFilteredEvents(
@@ -141,7 +115,7 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun filterMedicineId(medicineId: Int, validTagIds: Set<Int>? = null): Boolean {
-        if (validTagIds.isNullOrEmpty() || !this::medicineToTags.isInitialized) {
+        if (validTagIds.isNullOrEmpty() || medicineToTags.isEmpty()) {
             return true
         }
         val medicineTags: List<Int> = medicineToTags.stream()
@@ -159,18 +133,17 @@ class MedicineViewModel(application: Application) : AndroidViewModel(application
     fun getLiveReminderEvents(
         timeStamp: Long,
         statusValues: List<ReminderStatus> = allStatusValues
-    ): LiveData<List<ReminderEvent>> {
-        liveReminderEvents = medicineRepository.getLiveReminderEvents(timeStamp, statusValues)
-        filteredReminderEvents.addSource(liveReminderEvents) {
-            if (validTagIds.value != null && liveTags.value != null) {
-                filteredReminderEvents.value =
-                    getFilteredEvents(it, validTagIds.value!!, liveTags.value!!)
-            }
-        }
-        return filteredReminderEvents
+    ): Flow<List<ReminderEvent>> {
+        return combine(
+            medicineRepository.getReminderEventsFlow(timeStamp, statusValues),
+            validTagIds,
+            liveTags
+        ) { events, tagIds, tags ->
+            if (tagIds.isNullOrEmpty()) events else getFilteredEvents(events, tagIds, tags)
+        }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
     }
 
     fun setScheduledReminders(scheduledReminders: List<ScheduledReminder>) {
-        this.liveScheduledReminders.postValue(scheduledReminders)
+        _scheduledReminders.value = scheduledReminders
     }
 }

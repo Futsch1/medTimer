@@ -14,6 +14,7 @@ import androidx.core.text.util.LocalePreferences
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.google.android.material.button.MaterialButton
@@ -30,6 +31,7 @@ import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -73,17 +75,18 @@ class CalendarFragment : Fragment() {
         setupCalendarView(medicineCalenderArgs)
 
         calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
-        calendarEventsViewModel.getEventForMonths(
-            medicineCalenderArgs.medicineId,
-            medicineCalenderArgs.pastMonths,
-            medicineCalenderArgs.futureMonths
-        )
-            .observe(viewLifecycleOwner) { dayStrings: Map<LocalDate, Spanned> ->
-                this.dayStrings = dayStrings
+        lifecycleScope.launch {
+            calendarEventsViewModel.getEventForMonths(
+                medicineCalenderArgs.medicineId,
+                medicineCalenderArgs.pastMonths,
+                medicineCalenderArgs.futureMonths
+            ).collect {
+                this@CalendarFragment.dayStrings = it
                 calendarView.notifyCalendarChanged()
                 updateCurrentDay()
                 idlingResource.setIdle()
             }
+        }
 
         return fragmentView
     }
