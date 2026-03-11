@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicine
@@ -10,6 +11,7 @@ import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -19,27 +21,26 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private val medicineViewModel: MedicineViewModel
 ) {
 
-    private lateinit var reminderEvents: List<ReminderEvent>
-    private lateinit var fullMedicines: List<FullMedicine>
+    private  var reminderEvents: List<ReminderEvent>? = null
+    private  var fullMedicines: List<FullMedicine>? = null
 
     init {
         setupScheduleObservers(parentFragment)
     }
 
     private fun setupScheduleObservers(parentFragment: Fragment) {
-        medicineViewModel.medicineRepository.getLiveReminderEvents(
-            Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
-            allStatusValues
-        )
-            .observe(parentFragment.viewLifecycleOwner) { reminderEvents: List<ReminderEvent> ->
-                this.changedReminderEvents(
-                    reminderEvents
-                )
+        parentFragment.viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.medicineRepository.getReminderEventsFlow(
+                Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
+                allStatusValues
+            ).collect { reminderEvents ->
+                changedReminderEvents(reminderEvents)
             }
-        medicineViewModel.medicineRepository.liveMedicines.observe(parentFragment.viewLifecycleOwner) { fullMedicines: List<FullMedicine> ->
-            this.changedMedicines(
-                fullMedicines
-            )
+        }
+        parentFragment.viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.medicineRepository.medicinesFlow.collect { fullMedicines ->
+                changedMedicines(fullMedicines)
+            }
         }
     }
 
@@ -54,9 +55,9 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     }
 
     private fun calculateSchedule() {
-        if (!::fullMedicines.isInitialized || !::reminderEvents.isInitialized) {
-            return
-        }
+        val fullMedicines = fullMedicines ?: return
+        val reminderEvents = reminderEvents ?: return
+
         val scheduler = ReminderScheduler(object : TimeAccess {
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()

@@ -2,7 +2,6 @@ package com.futsch1.medtimer.overview
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
@@ -11,6 +10,13 @@ import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -19,9 +25,13 @@ enum class OverviewFilterToggles {
     TAKEN, SKIPPED, SCHEDULED, RAISED
 }
 
+data class FilterState(val activeFilters: Set<OverviewFilterToggles>, val day: LocalDate, val tick: Long)
+
 class OverviewViewModel(application: Application, medicineViewModel: MedicineViewModel) : AndroidViewModel(application) {
-    var initialized = false
-    val overviewEvents = MediatorLiveData<List<OverviewEvent>>()
+    private var _initialized = false
+    val initialized get() = _initialized
+
+    private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
 
     private val reminderEvents =
         medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
@@ -29,22 +39,18 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
-    val activeFilters = mutableSetOf<OverviewFilterToggles>()
-
-    var day: LocalDate = LocalDate.now()
+    var day: LocalDate
+        get() = filterState.value.day
         set(value) {
-            field = value
-            update()
+            filterState.update { it.copy(day = value) }
         }
+
+    val overviewEvents: SharedFlow<List<OverviewEvent>> =
+        combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
+            getFiltered(events, reminders, fs)
+    }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        overviewEvents.addSource(reminderEvents) {
-            overviewEvents.value = getFiltered()
-        }
-        overviewEvents.addSource(scheduledReminders) {
-            overviewEvents.value = getFiltered()
-        }
-
         if (PreferenceManager.getDefaultSharedPreferences(application).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
             viewModelScope.launch {
                 while (true) {
@@ -56,29 +62,35 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     }
 
     fun update() {
-        overviewEvents.value = getFiltered()
+        filterState.update { it.copy(tick = it.tick + 1) }
     }
 
-    private fun getFiltered(): List<OverviewEvent> {
+    fun addFilter(f: OverviewFilterToggles) {
+        filterState.update { it.copy(activeFilters = it.activeFilters + f) }
+    }
+
+    fun removeFilter(f: OverviewFilterToggles) {
+        filterState.update { it.copy(activeFilters = it.activeFilters - f) }
+    }
+
+    fun setFilters(filters: Set<OverviewFilterToggles>) {
+        filterState.update { it.copy(activeFilters = filters) }
+    }
+
+    private fun getFiltered(events: List<ReminderEvent>, reminders: List<ScheduledReminder>, filterState: FilterState): List<OverviewEvent> {
         val filteredOverviewEvents = mutableListOf<OverviewEvent>()
 
-        if (reminderEvents.value != null) {
-            for (reminderEvent in reminderEvents.value!!) {
-                if (isReminderEventVisible(reminderEvent)) {
-                    filteredOverviewEvents.add(create(getApplication(), sharedPreferences, reminderEvent))
-                }
+        for (reminderEvent in events) {
+            if (isReminderEventVisible(reminderEvent, filterState)) {
+                filteredOverviewEvents.add(create(getApplication(), sharedPreferences, reminderEvent))
             }
         }
 
-        if (scheduledReminders.value != null) {
-            for (scheduledReminder in scheduledReminders.value!!) {
-                if (isScheduledReminderVisible(scheduledReminder)) {
-                    filteredOverviewEvents.add(create(getApplication(), sharedPreferences, scheduledReminder))
-                }
+        for (scheduledReminder in reminders) {
+            if (isScheduledReminderVisible(scheduledReminder, filterState)) {
+                filteredOverviewEvents.add(create(getApplication(), sharedPreferences, scheduledReminder))
             }
         }
-
-        initialized = reminderEvents.value != null && scheduledReminders.value != null
 
         return assignPositions(filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id }))
     }
@@ -94,20 +106,20 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
         return overviewEvents
     }
 
-    private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder): Boolean {
-        val scheduledRemindersVisible = activeFilters.isEmpty() || activeFilters.contains(OverviewFilterToggles.SCHEDULED)
-        return isSameDayOrNull(scheduledReminder.timestamp.epochSecond, day) && scheduledRemindersVisible
+    private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder, filterState: FilterState): Boolean {
+        val scheduledRemindersVisible = filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilterToggles.SCHEDULED)
+        return isSameDay(scheduledReminder.timestamp.epochSecond, filterState.day) && scheduledRemindersVisible
     }
 
-    private fun isReminderEventVisible(reminderEvent: ReminderEvent): Boolean {
-        val reminderEventVisible = activeFilters.isEmpty() ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && activeFilters.contains(OverviewFilterToggles.TAKEN)) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && activeFilters.contains(OverviewFilterToggles.SKIPPED)) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && activeFilters.contains(OverviewFilterToggles.RAISED))
-        return isSameDayOrNull(reminderEvent.remindedTimestamp, day) && reminderEventVisible
+    private fun isReminderEventVisible(reminderEvent: ReminderEvent, filterState: FilterState): Boolean {
+        val reminderEventVisible = filterState.activeFilters.isEmpty() ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilterToggles.TAKEN)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilterToggles.SKIPPED)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilterToggles.RAISED))
+        return isSameDay(reminderEvent.remindedTimestamp, filterState.day) && reminderEventVisible
     }
 
-    private fun isSameDayOrNull(timestamp: Long, day: LocalDate): Boolean {
+    private fun isSameDay(timestamp: Long, day: LocalDate): Boolean {
         val reminderDate = Instant.ofEpochSecond(timestamp).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
         return reminderDate.isEqual(day)
     }

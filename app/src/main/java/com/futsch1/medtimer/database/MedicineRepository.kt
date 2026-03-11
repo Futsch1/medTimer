@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -21,23 +20,23 @@ open class MedicineRepository(val context: Context) {
     val version: Int
         get() = database.version
 
-    val liveMedicines: LiveData<List<FullMedicine>>
-        get() = medicineDao.getLiveMedicines()
+    val medicinesFlow: Flow<List<FullMedicine>>
+        get() = medicineDao.getMedicinesFlow()
 
     fun getOnlyMedicine(medicineId: Int): Medicine? {
         return medicineDao.getOnlyMedicine(medicineId)
     }
 
-    fun getLiveMedicine(medicineId: Int): LiveData<FullMedicine?> {
-        return medicineDao.getLiveMedicine(medicineId)
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
+        return medicineDao.getMedicineFlow(medicineId)
     }
 
     fun getMedicine(medicineId: Int): FullMedicine? {
         return medicineDao.getMedicine(medicineId)
     }
 
-    fun getLiveReminders(medicineId: Int): LiveData<List<Reminder>> {
-        return medicineDao.getLiveReminders(medicineId)
+    fun getRemindersFlow(medicineId: Int): Flow<List<Reminder>> {
+        return medicineDao.getRemindersFlow(medicineId)
     }
 
     fun getReminders(medicineId: Int): List<Reminder> {
@@ -52,12 +51,8 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
-        return medicineDao.getMedicineFlow(medicineId)
-    }
-
-    fun getLiveReminderEvents(timeStamp: Long, statusValues: List<ReminderStatus>): LiveData<List<ReminderEvent>> {
-        return medicineDao.getLiveReminderEventsStartingFrom(timeStamp, statusValues)
+    fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEvent>> {
+        return medicineDao.getReminderEventsFlowStartingFrom(timeStamp, statusValues)
     }
 
     val allReminderEventsWithoutDeleted: List<ReminderEvent>
@@ -187,8 +182,8 @@ open class MedicineRepository(val context: Context) {
         return medicineDao.getLinkedReminders(reminderId)
     }
 
-    val liveTags: LiveData<List<Tag>>
-        get() = medicineDao.getLiveTags()
+    val tagsFlow: Flow<List<Tag>>
+        get() = medicineDao.getTagsFlow()
 
     fun insertTag(tag: Tag): Long {
         val existingTag = getTagByName(tag.name)
@@ -214,8 +209,8 @@ open class MedicineRepository(val context: Context) {
         MedicineRoomDatabase.databaseWriteExecutor.execute { medicineDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId)) }
     }
 
-    val liveMedicineToTags: LiveData<List<MedicineToTag>>
-        get() = medicineDao.liveMedicineToTags
+    val medicineToTagsFlow: Flow<List<MedicineToTag>>
+        get() = medicineDao.medicineToTagsFlow
 
     fun hasTags(): Boolean {
         return medicineDao.countTags() > 0

@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
@@ -32,26 +31,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : Fragment() {
-    private var idlingResource: SimpleIdlingResource? = null
-    private var medicineViewModel: MedicineViewModel? = null
-    private var adapter: MedicineViewAdapter? = null
-    private var optionsMenu: OptionsMenu? = null
+    private lateinit var idlingResource: SimpleIdlingResource
+    private lateinit var medicineViewModel: MedicineViewModel
+    private lateinit var adapter: MedicineViewAdapter
+    private lateinit var optionsMenu: OptionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
-        idlingResource!!.setBusy()
+        idlingResource.setBusy()
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
         optionsMenu = OptionsMenu(
             this,
-            medicineViewModel!!,
+            medicineViewModel,
             NavHostFragment.findNavController(this), false
         )
 
-        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel!!.medicineRepository)
+        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel.medicineRepository)
     }
 
     override fun onCreateView(
@@ -68,10 +67,10 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
         // Swipe to delete
         val itemTouchHelper = SwipeHelper.createSwipeHelper(
             requireContext(),
-            { viewHolder: RecyclerView.ViewHolder? ->
+            { viewHolder ->
                 deleteItem(
                     requireContext(),
-                    viewHolder!!.itemId,
+                    viewHolder.itemId,
                     viewHolder.getBindingAdapterPosition()
                 )
             },
@@ -83,38 +82,36 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
 
         setupAddMedicineButton(fragmentView)
 
-        val medicinesMenu = MedicinesMenu(medicineViewModel!!)
+        val medicinesMenu = MedicinesMenu(medicineViewModel)
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
 
         // Connect view model to recycler view adapter
-        medicineViewModel!!.medicines.observe(getViewLifecycleOwner(), Observer { l: List<FullMedicine> ->
-            adapter!!.submitList(l)
-            medicinesMenu.medicines = l
-            startPostponedEnterTransition()
-            idlingResource!!.setIdle()
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            medicineViewModel.medicines.collect { l: List<FullMedicine> ->
+                adapter.submitList(l)
+                medicinesMenu.medicines = l
+                startPostponedEnterTransition()
+                idlingResource.setIdle()
+            }
+        }
 
-        requireActivity().addMenuProvider(optionsMenu!!, getViewLifecycleOwner())
+        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
         return fragmentView
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (idlingResource != null) {
-            idlingResource!!.destroy()
-        }
-        if (optionsMenu != null) {
-            optionsMenu!!.onDestroy()
-        }
+        idlingResource.destroy()
+        optionsMenu.onDestroy()
     }
 
     private fun deleteItem(context: Context, itemId: Long, adapterPosition: Int) {
         DeleteHelper.deleteItem(
             context,
             R.string.are_you_sure_delete_medicine,
-            { medicineViewModel!!.medicineRepository.deleteMedicine(itemId.toInt()) },
-            { adapter!!.notifyItemChanged(adapterPosition) })
+            { medicineViewModel.medicineRepository.deleteMedicine(itemId.toInt()) },
+            { adapter.notifyItemChanged(adapterPosition) })
     }
 
     private fun setupAddMedicineButton(fragmentView: View) {
@@ -142,15 +139,15 @@ class MedicinesFragment(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : 
             val e = editText.getText()
             if (e != null) {
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineViewModel!!.medicineRepository.highestMedicineSortOrder
+                    val highestSortOrder = medicineViewModel.medicineRepository.highestMedicineSortOrder
                     val medicine = Medicine(e.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
-                    val medicineId = medicineViewModel!!.medicineRepository.insertMedicine(medicine).toInt()
+                    val medicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
                     requireActivity().runOnUiThread { navigateToMedicineId(medicineId) }
                 }
             }
         }
-        builder.setNegativeButton(R.string.cancel) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
         return builder
     }
 
