@@ -20,7 +20,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-class ReminderContext(private val context: Context) {
+// TODO: potential memory leak - analyze what the context is used for and try to use DI to remove the need of storing the context
+class ReminderContext(val context: Context) {
     val medicineRepository = MedicineRepository(context)
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

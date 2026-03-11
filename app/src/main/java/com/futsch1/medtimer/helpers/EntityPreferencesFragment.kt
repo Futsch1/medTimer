@@ -11,10 +11,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 abstract class EntityDataStore<T> : PreferenceDataStore() {
     abstract var entity: T
@@ -30,10 +32,16 @@ abstract class EntityPreferencesFragment<T>(
     val preferencesResId: Int,
     val links: Map<String, (Int) -> NavDirections>,
     open val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
-    val simpleSummaryKeys: List<String>,
-    val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+    val simpleSummaryKeys: List<String>
 ) : PreferenceFragmentCompat() {
+    @Inject
+    @Dispatcher(MedTimerDispatchers.IO)
+    lateinit var ioDispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
+
     lateinit var dataStore: EntityDataStore<T>
     abstract val medicineRepository: MedicineRepository
 

@@ -5,7 +5,10 @@ import androidx.preference.EditTextPreference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AdvancedReminderPreferencesCyclicFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_cyclic,
     mapOf(
@@ -15,7 +18,8 @@ class AdvancedReminderPreferencesCyclicFragment : AdvancedReminderPreferencesFra
     ),
     listOf("cycle_start_date", "cycle_consecutive_days", "cycle_pause_days")
 ) {
-    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+    @Inject
+    override lateinit var medicineRepository: MedicineRepository
 
     override fun customSetup(entity: Reminder) {
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->

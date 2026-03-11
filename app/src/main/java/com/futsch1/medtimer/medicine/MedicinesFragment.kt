@@ -20,21 +20,30 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MedicinesFragment(
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) : Fragment() {
+@AndroidEntryPoint
+class MedicinesFragment : Fragment() {
+    @Inject
+    @Dispatcher(MedTimerDispatchers.IO)
+    lateinit var dispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
+
     private lateinit var idlingResource: SimpleIdlingResource
     private lateinit var medicineViewModel: MedicineViewModel
     private lateinit var adapter: MedicineViewAdapter

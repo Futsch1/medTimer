@@ -6,6 +6,7 @@ plugins {
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 room {
@@ -155,7 +156,10 @@ dependencies {
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
 
+    implementation(libs.hilt.android)
+
     ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.compiler)
     kspTest(libs.androidx.room.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)

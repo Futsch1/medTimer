@@ -1,6 +1,7 @@
 [versions]
 # Plugins
 android-gradle-plugin = "9.1.0"
+hilt = "2.59.2"
 navigation-safe-args = "2.9.7"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
@@ -105,6 +106,10 @@ barista = { module = "com.adevinta.android:barista", version.ref = "barista" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 androidx-room = { id = "androidx.room", version.ref = "room-plugin" }
@@ -112,3 +117,4 @@ androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.re
 triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

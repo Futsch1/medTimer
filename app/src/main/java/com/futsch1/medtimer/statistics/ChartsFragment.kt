@@ -10,17 +10,27 @@ import com.androidplot.pie.PieChart
 import com.androidplot.xy.XYPlot
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ChartsFragment(
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
-) : Fragment() {
-    private lateinit var medicineRepository: MedicineRepository
+@AndroidEntryPoint
+class ChartsFragment : Fragment() {
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Default)
+    lateinit var backgroundDispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var medicineRepository: MedicineRepository
 
     private lateinit var takenSkippedChartView: PieChart
     private lateinit var takenSkippedTotalChartView: PieChart
@@ -56,7 +66,6 @@ class ChartsFragment(
         takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart)
         takenSkippedTotalChartView =
             statisticsView.findViewById(R.id.takenSkippedChartTotal)
-        medicineRepository = MedicineRepository(requireActivity().application)
 
         setupTakenSkippedCharts()
         lifecycleScope.launch(backgroundDispatcher) {

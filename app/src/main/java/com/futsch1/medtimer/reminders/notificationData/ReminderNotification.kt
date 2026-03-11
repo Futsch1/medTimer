@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders.notificationData
 
+import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
@@ -92,6 +93,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
                     reminderEvent =
                         buildAndInsertReminderEvent(
                             reminderContext.medicineRepository,
+                            reminderContext.context,
                             medicine,
                             reminder,
                             reminderNotificationData.remindInstant,
@@ -117,10 +119,15 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         }
 
         private fun buildAndInsertReminderEvent(
-            medicineRepository: MedicineRepository, medicine: FullMedicine, reminder: Reminder, remindInstant: Instant, numberOfRepeats: Int
+            medicineRepository: MedicineRepository,
+            context: Context,
+            medicine: FullMedicine,
+            reminder: Reminder,
+            remindInstant: Instant,
+            numberOfRepeats: Int
         ): ReminderEvent {
             val reminderEvent: ReminderEvent =
-                ReminderNotificationProcessor.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository)
+                ReminderNotificationProcessor.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository, context)
             reminderEvent.remainingRepeats = numberOfRepeats
             reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
             return reminderEvent

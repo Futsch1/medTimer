@@ -5,11 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Tag
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MedicineWithTagsViewModel(application: Application) :
-    AndroidViewModel(application) {
-    val medicineRepository = MedicineRepository(application)
+@HiltViewModel
+class MedicineWithTagsViewModel @Inject constructor(
+    application: Application,
+    val medicineRepository: MedicineRepository
+) : AndroidViewModel(application) {
     fun getMedicineWithTags(medicineId: Int): Flow<FullMedicine?> =
         medicineRepository.getMedicineFlow(medicineId)
 

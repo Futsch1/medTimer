@@ -2,21 +2,16 @@ package com.futsch1.medtimer.database
 
 import android.content.Context
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.di.DatabaseModule
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.util.LinkedList
 
-// TODO: Context should not be a property, but ReminderNotificationProcessor.buildReminderEvent must be changed before this is possible
-open class MedicineRepository(val context: Context) {
+open class MedicineRepository(
     private val medicineDao: MedicineDao
-    private val database: MedicineRoomDatabase = MedicineRoomDatabase.getDatabase(context)
-
-    init {
-        medicineDao = database.medicineDao()
-    }
-
-    val version: Int
-        get() = database.version
+) {
+    // TODO: a temporary constructor for backwards compatibility with existing code; remove it once all usages are replaced with DI
+    constructor(context: Context) : this(DatabaseModule.provideMedicineRoomDatabase(context.applicationContext).medicineDao())
 
     val medicinesFlow: Flow<List<FullMedicine>>
         get() = medicineDao.getMedicinesFlow()
@@ -91,7 +86,7 @@ open class MedicineRepository(val context: Context) {
     }
 
     suspend fun insertMedicine(medicine: Medicine): Long {
-        return  medicineDao.insertMedicine(medicine)
+        return medicineDao.insertMedicine(medicine)
     }
 
     suspend fun deleteMedicine(medicineId: Int) {
@@ -143,7 +138,7 @@ open class MedicineRepository(val context: Context) {
     }
 
     suspend fun deleteMedicines() {
-       medicineDao.deleteMedicines()
+        medicineDao.deleteMedicines()
     }
 
     suspend fun deleteReminderEvents() {
@@ -169,7 +164,7 @@ open class MedicineRepository(val context: Context) {
     suspend fun insertTag(tag: Tag): Long {
         val existingTagId = getTagByName(tag.name)?.tagId?.toLong()
 
-        return existingTagId ?:  medicineDao.insertTag(tag)
+        return existingTagId ?: medicineDao.insertTag(tag)
     }
 
     fun getTagByName(name: String): Tag? {

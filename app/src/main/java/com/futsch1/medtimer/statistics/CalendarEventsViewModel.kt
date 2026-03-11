@@ -18,6 +18,7 @@ import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,12 +28,13 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import javax.inject.Inject
 
-class CalendarEventsViewModel(
-    application: Application
+@HiltViewModel
+class CalendarEventsViewModel @Inject constructor(
+    application: Application,
+    val medicineRepository: MedicineRepository
 ) : AndroidViewModel(application) {
-
-    val medicineRepository = MedicineRepository(application)
     private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()
     private var allMedicines: List<FullMedicine> = listOf()

@@ -15,7 +15,9 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.remindertable.ReminderTableFragment
 import com.futsch1.medtimer.statistics.ActiveStatisticsFragment.StatisticFragmentType
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment

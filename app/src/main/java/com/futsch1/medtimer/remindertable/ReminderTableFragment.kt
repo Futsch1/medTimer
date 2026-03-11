@@ -18,8 +18,10 @@ import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ReminderTableFragment : Fragment() {
     private lateinit var filterLayout: TextInputLayout
     private lateinit var filter: TextInputEditText

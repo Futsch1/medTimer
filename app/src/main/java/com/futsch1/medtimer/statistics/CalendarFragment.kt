@@ -31,6 +31,7 @@ import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -39,6 +40,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
+@AndroidEntryPoint
 class CalendarFragment : Fragment() {
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private lateinit var calendarView: CalendarView

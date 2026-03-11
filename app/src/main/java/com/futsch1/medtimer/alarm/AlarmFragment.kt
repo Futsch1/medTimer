@@ -43,11 +43,12 @@ class AlarmFragment(
         val view = inflater.inflate(R.layout.fragment_alarm, container, false)
 
         lifecycleScope.launch {
-            val reminderContext = ReminderContext(requireContext())
+            val context = requireContext()
+            val reminderContext = ReminderContext(context)
 
             withContext(ioCoroutineDispatcher) {
                 val reminderNotification = ReminderNotification.fromReminderNotificationData(
-                    ReminderContext(requireContext()),
+                    reminderContext,
                     reminderNotificationData
                 )!!
                 Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
