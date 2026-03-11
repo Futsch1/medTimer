@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -45,7 +45,7 @@ class MedicinesFragment : Fragment() {
     lateinit var mainDispatcher: CoroutineDispatcher
 
     private lateinit var idlingResource: SimpleIdlingResource
-    private lateinit var medicineViewModel: MedicineViewModel
+    private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
     private lateinit var optionsMenu: OptionsMenu
 
@@ -53,9 +53,6 @@ class MedicinesFragment : Fragment() {
         super.onCreate(savedInstanceState)
         idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
         idlingResource.setBusy()
-
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
         optionsMenu = OptionsMenu(
             this,

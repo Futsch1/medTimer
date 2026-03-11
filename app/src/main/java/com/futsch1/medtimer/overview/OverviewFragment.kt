@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -48,10 +48,10 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
-    private lateinit var medicineViewModel: MedicineViewModel
+    private val medicineViewModel: MedicineViewModel by viewModels()
+    private val overviewViewModel: OverviewViewModel by viewModels { OverviewViewModelFactory(requireActivity().application, medicineViewModel) }
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
-    private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: FragmentSwipeLayout
     private var onceStable = false
     private var actionMode: ActionMode? = null
@@ -60,8 +60,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-        overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         overviewViewModel.day = LocalDate.now()
 
         optionsMenu = OptionsMenu(

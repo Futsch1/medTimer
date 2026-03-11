@@ -2,7 +2,7 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
@@ -31,9 +31,9 @@ abstract class AdvancedReminderPreferencesFragment(
         )
     }
 
-    override fun getEntityViewModel(): EntityViewModel<Reminder> {
-        return ViewModelProvider(this)[ReminderViewModel::class.java]
-    }
+    private val reminderViewModel: ReminderViewModel by viewModels()
+
+    override fun getEntityViewModel(): EntityViewModel<Reminder> = reminderViewModel
 
     override fun customSetup(entity: Reminder) {
         // Intentionally empty

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
+    private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment
     private lateinit var analysisDays: AnalysisDays
@@ -35,7 +36,7 @@ class StatisticsFragment : Fragment() {
 
         optionsMenu = OptionsMenu(
             this,
-            ViewModelProvider(this)[MedicineViewModel::class.java],
+            medicineViewModel,
             NavHostFragment.findNavController(this), true
         )
     }

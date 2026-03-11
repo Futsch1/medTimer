@@ -2,7 +2,6 @@ package com.futsch1.medtimer.di
 
 import android.content.Context
 import androidx.room.Room
-import com.futsch1.medtimer.database.MIGRATION_22_23
 import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
@@ -22,7 +21,7 @@ object DatabaseModule {
     @Singleton
     fun provideMedicineRoomDatabase(@ApplicationContext ctx: Context): MedicineRoomDatabase =
         Room.databaseBuilder(ctx, MedicineRoomDatabase::class.java, "medTimer")
-            .addMigrations(MIGRATION_22_23)
+            .addMigrations(MedicineRoomDatabase.Migration22To23)
             .build()
 
     @Provides

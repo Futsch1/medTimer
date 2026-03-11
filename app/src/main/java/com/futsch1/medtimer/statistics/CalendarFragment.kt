@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.core.text.util.LocalePreferences
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
@@ -45,7 +45,7 @@ class CalendarFragment : Fragment() {
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private lateinit var calendarView: CalendarView
     private var currentDayEvents: EditText? = null
-    private lateinit var calendarEventsViewModel: CalendarEventsViewModel
+    private val calendarEventsViewModel: CalendarEventsViewModel by viewModels()
     private var currentDay: CalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     private var dayStrings: Map<LocalDate, Spanned>? = null
     private var startMonth: YearMonth? = null
@@ -76,7 +76,6 @@ class CalendarFragment : Fragment() {
 
         setupCalendarView(medicineCalenderArgs)
 
-        calendarEventsViewModel = ViewModelProvider(this)[CalendarEventsViewModel::class.java]
         lifecycleScope.launch {
             calendarEventsViewModel.getEventForMonths(
                 medicineCalenderArgs.medicineId,

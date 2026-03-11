@@ -17,11 +17,11 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val medicineViewModel: MedicineViewModel by viewModels()
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
 
@@ -208,7 +209,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
