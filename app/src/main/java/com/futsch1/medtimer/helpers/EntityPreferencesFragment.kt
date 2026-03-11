@@ -1,9 +1,8 @@
 package com.futsch1.medtimer.helpers
 
-import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -23,8 +22,10 @@ abstract class EntityDataStore<T> : PreferenceDataStore() {
     abstract val entityId: Int
 }
 
-abstract class EntityViewModel<T>(application: Application) : AndroidViewModel(application) {
+abstract class EntityViewModel<T> : ViewModel() {
     abstract fun getFlow(id: Int): Flow<T?>
+
+    // TODO: view model should not expose the repository to the view logic; the repository be private
     abstract val medicineRepository: MedicineRepository
 }
 

@@ -117,7 +117,8 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
 
     private fun calculateRunOutDate(entity: FullMedicine) {
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(medicineViewModel, entity.medicine.medicineId, entity.medicine.amount)
+            val applicationContext = requireContext().applicationContext
+            val runOutDate = estimateStockRunOutDate(medicineViewModel, entity.medicine.medicineId, entity.medicine.amount, applicationContext)
 
             val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
 

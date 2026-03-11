@@ -1,7 +1,7 @@
 package com.futsch1.medtimer
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,16 +29,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
-    application: Application,
+    @ApplicationContext
+    applicationContext: Context,
     database: MedicineRoomDatabase,
+    // TODO: view model should not expose the repository to the view; the repository should be private
     val medicineRepository: MedicineRepository,
-) : AndroidViewModel(application) {
+) : ViewModel() {
     private val liveMedicines = medicineRepository.medicinesFlow
 
     val databaseVersion: Int = database.version
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
-    val tagFilterStore = TagFilterStore(application, validTagIds)
+    val tagFilterStore = TagFilterStore(applicationContext, validTagIds)
     private var medicineToTags: List<MedicineToTag> = emptyList()
     private val liveTags: StateFlow<List<Tag>> = medicineRepository.tagsFlow.stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()

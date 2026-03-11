@@ -1,10 +1,9 @@
 package com.futsch1.medtimer.statistics
 
-import android.app.Application
+import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.FullMedicine
@@ -19,6 +18,7 @@ import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,16 +32,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
-    application: Application,
-    val medicineRepository: MedicineRepository
-) : AndroidViewModel(application) {
+    @param:ApplicationContext
+    private val applicationContext: Context,
+    private val medicineRepository: MedicineRepository
+) : ViewModel() {
     private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()
     private var allMedicines: List<FullMedicine> = listOf()
     private var medicine: Medicine? = null
     private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
     fun getEventForMonths(
         medicineId: Int, pastMonths: Int, futureMonths: Int
@@ -103,7 +104,7 @@ class CalendarEventsViewModel @Inject constructor(
             allMedicines,
             reminderEvents,
             timeProvider,
-            PreferenceManager.getDefaultSharedPreferences(application)
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
         )
 
         schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
@@ -117,7 +118,7 @@ class CalendarEventsViewModel @Inject constructor(
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
         return OverviewScheduledReminderEvent(
-            application.applicationContext,
+            applicationContext,
             sharedPreferences,
             scheduledReminder
         ).text
@@ -147,7 +148,7 @@ class CalendarEventsViewModel @Inject constructor(
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
         return OverviewReminderEvent(
-            application.applicationContext,
+            applicationContext,
             sharedPreferences,
             reminderEvent
         ).text
