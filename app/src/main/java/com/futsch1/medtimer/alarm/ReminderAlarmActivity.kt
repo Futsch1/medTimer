@@ -22,6 +22,7 @@ import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ReminderAlarmActivity(
@@ -29,6 +30,7 @@ class ReminderAlarmActivity(
 ) : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
+    private var buildMediaPlayerJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +53,7 @@ class ReminderAlarmActivity(
 
         addAlarmFragment(intent)
 
-        lifecycleScope.launch(backgroundDispatcher) {
+        buildMediaPlayerJob = lifecycleScope.launch(backgroundDispatcher) {
             buildMediaPlayer()
         }
     }
@@ -92,12 +94,12 @@ class ReminderAlarmActivity(
                 null,
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
                 0
-            )
-        mediaPlayer?.isLooping = true
+            ).apply { isLooping = true }
     }
 
-    private fun startAlarm() {
+    private suspend fun startAlarm() {
         Log.d("ReminderAlarm", "Executing startAlarm job")
+        buildMediaPlayerJob?.join()
 
         if (shallPlayAlarm()) {
             playAlarmTone()
