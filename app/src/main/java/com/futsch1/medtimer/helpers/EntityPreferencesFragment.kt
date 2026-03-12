@@ -15,6 +15,7 @@ import com.futsch1.medtimer.di.MedTimerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 abstract class EntityDataStore<T> : PreferenceDataStore() {
@@ -52,19 +53,19 @@ abstract class EntityPreferencesFragment<T>(
         this.lifecycleScope.launch(ioDispatcher) {
             try {
                 dataStore = getEntityDataStore(requireArguments())
-
                 preferenceManager.preferenceDataStore = dataStore
-                lifecycleScope.launch(mainDispatcher) {
-                    setPreferencesFromResource(preferencesResId, rootKey)
-                    observeUserData()
-                    setupLinks()
-                    setupOnClick()
-                    customSetup(dataStore.entity)
-
-                    startPostponedEnterTransition()
-                }
             } catch (_: NullPointerException) {
                 // It may happen that the reminder is deleted already, so ignore this
+            }
+
+            withContext(mainDispatcher) {
+                setPreferencesFromResource(preferencesResId, rootKey)
+                observeUserData()
+                setupLinks()
+                setupOnClick()
+                customSetup(dataStore.entity)
+
+                startPostponedEnterTransition()
             }
         }
     }
