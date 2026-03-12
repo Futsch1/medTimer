@@ -20,7 +20,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel
 ) {
-
+    private val applicationContext = parentFragment.requireContext().applicationContext
     private  var reminderEvents: List<ReminderEvent>? = null
     private  var fullMedicines: List<FullMedicine>? = null
 
@@ -62,7 +62,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()
             override fun now(): Instant = Instant.now()
-        }, PreferenceManager.getDefaultSharedPreferences(medicineViewModel.getApplication()))
+        }, PreferenceManager.getDefaultSharedPreferences(applicationContext))
 
         val reminders: List<ScheduledReminder> = scheduler.schedule(
             fullMedicines, reminderEvents

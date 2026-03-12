@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
@@ -110,7 +111,13 @@ class ReminderNotificationProcessor(
         }
 
     companion object {
-        fun buildReminderEvent(remindedTimeStamp: Long, medicine: FullMedicine, reminder: Reminder, medicineRepository: MedicineRepository): ReminderEvent {
+        fun buildReminderEvent(
+            remindedTimeStamp: Long,
+            medicine: FullMedicine,
+            reminder: Reminder,
+            medicineRepository: MedicineRepository,
+            context: Context
+        ): ReminderEvent {
             val reminderEvent = ReminderEvent()
             reminderEvent.reminderId = reminder.reminderId
             reminderEvent.remindedTimestamp = remindedTimeStamp
@@ -130,7 +137,7 @@ class ReminderNotificationProcessor(
 
                 Reminder.ReminderType.EXPIRATION_DATE -> {
                     reminderEvent.amount =
-                        TimeHelper.daysSinceEpochToDateString(medicineRepository.context, medicine.medicine.expirationDate)
+                        TimeHelper.daysSinceEpochToDateString(context, medicine.medicine.expirationDate)
                 }
 
                 else -> {

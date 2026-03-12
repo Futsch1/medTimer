@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.filter.Filter
@@ -18,18 +18,20 @@ import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ReminderTableFragment : Fragment() {
     private lateinit var filterLayout: TextInputLayout
     private lateinit var filter: TextInputEditText
+
+    private val medicineViewModel: MedicineViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-
         val fragmentView = inflater.inflate(R.layout.fragment_reminder_table, container, false)
         val tableView = fragmentView.findViewById<TableView>(R.id.reminder_table)
         filter = fragmentView.findViewById(R.id.filter)

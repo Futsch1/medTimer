@@ -5,7 +5,7 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
 import androidx.room.RenameColumn
-import androidx.room.Room.databaseBuilder
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
@@ -16,7 +16,6 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
-import kotlin.concurrent.Volatile
 
 @Database(
     entities = [Medicine::class, Reminder::class, ReminderEvent::class, Tag::class, MedicineToTag::class],
@@ -44,6 +43,23 @@ import kotlin.concurrent.Volatile
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
+    companion object {
+        private lateinit var instance: MedicineRoomDatabase
+
+        // TODO: temporary solution; remove after all repositories are injected using DI
+        fun getDatabase(context: Context): MedicineRoomDatabase {
+            synchronized(MedicineRoomDatabase::class.java) {
+                if (!::instance.isInitialized) {
+                    instance = Room.databaseBuilder(context, MedicineRoomDatabase::class.java, "medTimer")
+                        .addMigrations(Migration22To23)
+                        .build()
+                }
+
+                return instance
+            }
+        }
+    }
+
     val version: Int
         get() = openHelper.readableDatabase.version
 
@@ -103,43 +119,22 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
     internal class AutoMigration21To22 : AutoMigrationSpec
 
-    companion object {
-        val MIGRATION_22_23 = object : Migration(22, 23) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("UPDATE Medicine SET medicineName = '' WHERE medicineName IS NULL")
-                db.execSQL("UPDATE Medicine SET refillSizes = '[]' WHERE refillSizes IS NULL")
-                db.execSQL("UPDATE Medicine SET unit = '' WHERE unit IS NULL")
+    object Migration22To23 : Migration(22, 23) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("UPDATE Medicine SET medicineName = '' WHERE medicineName IS NULL")
+            db.execSQL("UPDATE Medicine SET refillSizes = '[]' WHERE refillSizes IS NULL")
+            db.execSQL("UPDATE Medicine SET unit = '' WHERE unit IS NULL")
 
-                db.execSQL("UPDATE TAG SET name = '' WHERE name IS NULL")
+            db.execSQL("UPDATE TAG SET name = '' WHERE name IS NULL")
 
-                db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Medicine` (`medicineName` TEXT NOT NULL, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `amount` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT NOT NULL DEFAULT '[]', `unit` TEXT NOT NULL DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)")
-                db.execSQL("INSERT INTO `_new_Medicine` (`medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate`) SELECT `medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate` FROM `Medicine`")
-                db.execSQL("DROP TABLE `Medicine`")
-                db.execSQL("ALTER TABLE `_new_Medicine` RENAME TO `Medicine`")
-                db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Tag` (`name` TEXT NOT NULL, `tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
-                db.execSQL("INSERT INTO `_new_Tag` (`name`,`tagId`) SELECT `name`,`tagId` FROM `Tag`")
-                db.execSQL("DROP TABLE `Tag`")
-                db.execSQL("ALTER TABLE `_new_Tag` RENAME TO `Tag`")
-            }
-        }
-
-        // marking the instance as volatile to ensure atomic access to the variable
-        @Volatile
-        private var instance: MedicineRoomDatabase? = null
-
-        fun getDatabase(context: Context): MedicineRoomDatabase {
-            if (instance == null) {
-                synchronized(MedicineRoomDatabase::class.java) {
-                    if (instance == null) {
-                        instance = databaseBuilder(
-                            context.applicationContext,
-                            MedicineRoomDatabase::class.java, "medTimer"
-                        ).addMigrations(MIGRATION_22_23)
-                            .build()
-                    }
-                }
-            }
-            return instance!!
+            db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Medicine` (`medicineName` TEXT NOT NULL, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `amount` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT NOT NULL DEFAULT '[]', `unit` TEXT NOT NULL DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)")
+            db.execSQL("INSERT INTO `_new_Medicine` (`medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate`) SELECT `medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate` FROM `Medicine`")
+            db.execSQL("DROP TABLE `Medicine`")
+            db.execSQL("ALTER TABLE `_new_Medicine` RENAME TO `Medicine`")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Tag` (`name` TEXT NOT NULL, `tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
+            db.execSQL("INSERT INTO `_new_Tag` (`name`,`tagId`) SELECT `name`,`tagId` FROM `Tag`")
+            db.execSQL("DROP TABLE `Tag`")
+            db.execSQL("ALTER TABLE `_new_Tag` RENAME TO `Tag`")
         }
     }
 }

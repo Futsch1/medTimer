@@ -7,13 +7,17 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReminderSchedulerService : LifecycleService() {
+    @Inject
+    lateinit var medicineRepository: MedicineRepository
+
     override fun onCreate() {
         super.onCreate()
-
-        val medicineRepository = MedicineRepository(this)
 
         lifecycleScope.launch {
             medicineRepository.medicinesFlow.collect { updateMedicine() }

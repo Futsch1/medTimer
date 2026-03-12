@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.overview
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
@@ -9,6 +9,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
+import javax.inject.Inject
 
 enum class OverviewFilterToggles {
     TAKEN, SKIPPED, SCHEDULED, RAISED
@@ -27,7 +29,10 @@ enum class OverviewFilterToggles {
 
 data class FilterState(val activeFilters: Set<OverviewFilterToggles>, val day: LocalDate, val tick: Long)
 
-class OverviewViewModel(application: Application, medicineViewModel: MedicineViewModel) : AndroidViewModel(application) {
+class OverviewViewModel @Inject constructor(
+    @param:ApplicationContext private val applicationContext: Context,
+    medicineViewModel: MedicineViewModel
+) : ViewModel() {
     private var _initialized = false
     val initialized get() = _initialized
 
@@ -37,7 +42,7 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
         medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
     private val scheduledReminders = medicineViewModel.scheduledReminders
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
     var day: LocalDate
         get() = filterState.value.day
@@ -51,7 +56,7 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
     }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        if (PreferenceManager.getDefaultSharedPreferences(application).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
             viewModelScope.launch {
                 while (true) {
                     delay(60_000)
@@ -82,13 +87,13 @@ class OverviewViewModel(application: Application, medicineViewModel: MedicineVie
 
         for (reminderEvent in events) {
             if (isReminderEventVisible(reminderEvent, filterState)) {
-                filteredOverviewEvents.add(create(getApplication(), sharedPreferences, reminderEvent))
+                filteredOverviewEvents.add(create(applicationContext, sharedPreferences, reminderEvent))
             }
         }
 
         for (scheduledReminder in reminders) {
             if (isScheduledReminderVisible(scheduledReminder, filterState)) {
-                filteredOverviewEvents.add(create(getApplication(), sharedPreferences, scheduledReminder))
+                filteredOverviewEvents.add(create(applicationContext, sharedPreferences, scheduledReminder))
             }
         }
 

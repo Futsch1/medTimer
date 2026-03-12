@@ -17,62 +17,32 @@ import com.futsch1.medtimer.helpers.getCyclicReminderString
 import com.futsch1.medtimer.helpers.getIntervalTypeSummary
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import javax.inject.Inject
 
 
 fun showDateEdit(activity: FragmentActivity, preference: Preference) {
+    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
+
     val datePickerWrapper = DatePickerWrapper(activity)
-    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
-    if (currentDateString != null) {
-        val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
-            TimeHelper.stringToLocalDate(activity, currentDateString)
-        } else {
-            LocalDate.now()
-        }
-        datePickerWrapper.show(currentDate) { daysSinceEpoch: Long ->
-            val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
-            preference.preferenceDataStore?.putString(preference.key, newDateString)
-        }
+    val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
+        TimeHelper.stringToLocalDate(activity, currentDateString)
+    } else {
+        LocalDate.now()
+    }
+
+    datePickerWrapper.show(currentDate) { daysSinceEpoch: Long ->
+        val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
+        preference.preferenceDataStore?.putString(preference.key, newDateString)
     }
 }
 
-fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
-    val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
-    val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)
-    if (currentTimeString != null) {
-        val currentTime = TimeHelper.timeStringToMinutes(activity, currentTimeString)
-        timePickerWrapper.show(currentTime / 60, currentTime % 60) { minutes: Int ->
-            val newTimeString = TimeHelper.minutesToTimeString(activity, minutes.toLong())
-            preference.preferenceDataStore?.putString(preference.key, newTimeString)
-        }
-    }
-}
-
-fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
-    val datePickerWrapper = DatePickerWrapper(activity)
-    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
-    if (currentDateString != null) {
-        val currentDateTime = TimeHelper.stringToSecondsSinceEpoch(activity, currentDateString)
-        val startInstant = Instant.ofEpochSecond(currentDateTime)
-        val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
-        datePickerWrapper.show(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
-            val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
-            timePickerWrapper.show(dateTime.hour, dateTime.minute) { minutes: Int ->
-                val selectedLocalDateTime = LocalDateTime.of(
-                    LocalDate.ofEpochDay(daysSinceEpoch),
-                    LocalTime.of(minutes / 60, minutes % 60)
-                )
-                val timeString = TimeHelper.localeDateTimeToDateTimeString(activity, selectedLocalDateTime)
-                preference.preferenceDataStore?.putString(preference.key, timeString)
-            }
-        }
-    }
-}
-
+@AndroidEntryPoint
 class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_root,
     mapOf(
@@ -92,19 +62,24 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
             )
         }
     ),
-    mapOf(
-        "add_linked_reminder" to { activity, preference ->
-            val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
-            val medicineRepository = MedicineRepository(activity.applicationContext)
-            LinkedReminderHandling(reminderDataStore.entity, medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
-        },
-        "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
-        "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
-        "interval_daily_end_time" to { activity, preference -> showTimeEdit(activity, preference) }
-    ),
+    mapOf(),
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
-    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+    @Inject
+    override lateinit var medicineRepository: MedicineRepository
+
+    override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
+        get() = mapOf(
+            "add_linked_reminder" to { activity, preference ->
+                val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
+                // TODO: replace with injected MedicineRepository when lambda-based DI is supported
+                val medicineRepository = MedicineRepository(activity.applicationContext)
+                LinkedReminderHandling(reminderDataStore.entity, medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
+            },
+            "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
+            "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
+            "interval_daily_end_time" to { activity, preference -> showTimeEdit(activity, preference) }
+        )
 
     val menuProvider = AdvancedReminderSettingsMenuProvider(this)
 
@@ -184,6 +159,39 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         )
 
         return view
+    }
+
+    private fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
+        val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
+        val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)
+        if (currentTimeString != null) {
+            val currentTime = TimeHelper.timeStringToMinutes(activity, currentTimeString)
+            timePickerWrapper.show(currentTime / 60, currentTime % 60) { minutes: Int ->
+                val newTimeString = TimeHelper.minutesToTimeString(activity, minutes.toLong())
+                preference.preferenceDataStore?.putString(preference.key, newTimeString)
+            }
+        }
+    }
+
+    private fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
+        val datePickerWrapper = DatePickerWrapper(activity)
+        val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
+        if (currentDateString != null) {
+            val currentDateTime = TimeHelper.stringToSecondsSinceEpoch(activity, currentDateString)
+            val startInstant = Instant.ofEpochSecond(currentDateTime)
+            val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+            datePickerWrapper.show(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
+                val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
+                timePickerWrapper.show(dateTime.hour, dateTime.minute) { minutes: Int ->
+                    val selectedLocalDateTime = LocalDateTime.of(
+                        LocalDate.ofEpochDay(daysSinceEpoch),
+                        LocalTime.of(minutes / 60, minutes % 60)
+                    )
+                    val timeString = TimeHelper.localeDateTimeToDateTimeString(activity, selectedLocalDateTime)
+                    preference.preferenceDataStore?.putString(preference.key, timeString)
+                }
+            }
+        }
     }
 
 }

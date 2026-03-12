@@ -18,16 +18,23 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReminderAlarmActivity(
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
-) : AppCompatActivity() {
+
+@AndroidEntryPoint
+class ReminderAlarmActivity : AppCompatActivity() {
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Default)
+    lateinit var backgroundDispatcher: CoroutineDispatcher
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
     private var buildMediaPlayerJob: Job? = null

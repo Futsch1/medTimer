@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.medicine
 
+import android.content.Context
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
@@ -9,7 +10,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: Int, currentAmount: Double? = null): LocalDate? {
+fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: Int, currentAmount: Double? = null, context: Context): LocalDate? {
     val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicineId) ?: return null
 
     if (currentAmount != null) {
@@ -21,7 +22,7 @@ fun estimateStockRunOutDate(medicineViewModel: MedicineViewModel, medicineId: In
         override fun systemZone(): ZoneId = ZoneId.systemDefault()
         override fun localDate(): LocalDate = LocalDate.now()
         override fun now(): Instant = Instant.now()
-    }, PreferenceManager.getDefaultSharedPreferences(medicineViewModel.getApplication()))
+    }, PreferenceManager.getDefaultSharedPreferences(context))
     val endDate = LocalDate.now().plusDays(365 * 2)
     var runOutDate: LocalDate? = null
 

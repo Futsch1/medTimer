@@ -1,15 +1,18 @@
 package com.futsch1.medtimer.medicine.tags
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Tag
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MedicineWithTagsViewModel(application: Application) :
-    AndroidViewModel(application) {
-    val medicineRepository = MedicineRepository(application)
+@HiltViewModel
+class MedicineWithTagsViewModel @Inject constructor(
+    // TODO: view model should not expose the repository to the view; the repository should be private
+    val medicineRepository: MedicineRepository
+) : ViewModel() {
     fun getMedicineWithTags(medicineId: Int): Flow<FullMedicine?> =
         medicineRepository.getMedicineFlow(medicineId)
 

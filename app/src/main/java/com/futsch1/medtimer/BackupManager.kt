@@ -173,7 +173,7 @@ class BackupManager(
 
     private fun <T> createBackup(jsonBackup: JSONBackup<T>, backupData: List<T>): JsonElement {
         return jsonBackup.createBackup(
-            medicineViewModel.medicineRepository.version,
+            medicineViewModel.databaseVersion,
             backupData
         )
     }

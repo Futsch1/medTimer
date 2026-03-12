@@ -41,7 +41,7 @@ class MigrationTest {
         db.close()
 
         // Re-open the database with version 23 and validate
-        db = helper.runMigrationsAndValidate(testDb, 23, true, MedicineRoomDatabase.MIGRATION_22_23)
+        db = helper.runMigrationsAndValidate(testDb, 23, true, MedicineRoomDatabase.Migration22To23)
 
         // Verify data was migrated properly
         var cursor = db.query("SELECT medicineName, refillSizes, unit FROM Medicine")

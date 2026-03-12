@@ -49,7 +49,10 @@ abstract class ActionsBase(
             if (reminderEvent == null) {
                 reminderEvent = ReminderNotificationProcessor.buildReminderEvent(
                     reminderTimeStamp,
-                    scheduledReminder.medicine, scheduledReminder.reminder, medicineRepository
+                    scheduledReminder.medicine,
+                    scheduledReminder.reminder,
+                    medicineRepository,
+                    context
                 )
 
                 reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()

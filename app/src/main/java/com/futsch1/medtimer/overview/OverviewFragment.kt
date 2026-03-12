@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -20,29 +20,38 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
 import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import javax.inject.Inject
 
-class OverviewFragment(
-    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
+@AndroidEntryPoint
+class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Default)
+    lateinit var backgroundDispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
+
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
-    private lateinit var medicineViewModel: MedicineViewModel
+    private val medicineViewModel: MedicineViewModel by viewModels()
+    private val overviewViewModel: OverviewViewModel by viewModels { OverviewViewModelFactory(requireActivity().application, medicineViewModel) }
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
-    private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var fragmentOverview: FragmentSwipeLayout
     private var onceStable = false
     private var actionMode: ActionMode? = null
@@ -51,8 +60,6 @@ class OverviewFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
-        overviewViewModel = ViewModelProvider(this, OverviewViewModelFactory(requireActivity().application, medicineViewModel))[OverviewViewModel::class.java]
         overviewViewModel.day = LocalDate.now()
 
         optionsMenu = OptionsMenu(

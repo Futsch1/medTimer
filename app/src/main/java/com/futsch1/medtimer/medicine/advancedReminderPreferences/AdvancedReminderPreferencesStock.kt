@@ -15,8 +15,11 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFragment(
     R.xml.advanced_reminder_settings_stock,
     mapOf(
@@ -25,7 +28,8 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     ),
     listOf("stock_threshold", "expiration_days_before")
 ) {
-    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+    @Inject
+    override lateinit var medicineRepository: MedicineRepository
 
     val menuProvider = AdvancedReminderSettingsMenuProvider(this)
     var fullMedicine: FullMedicine? = null

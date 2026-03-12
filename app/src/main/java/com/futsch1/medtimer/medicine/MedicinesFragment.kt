@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,23 +20,32 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MedicinesFragment(
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) : Fragment() {
+@AndroidEntryPoint
+class MedicinesFragment : Fragment() {
+    @Inject
+    @Dispatcher(MedTimerDispatchers.IO)
+    lateinit var dispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
+
     private lateinit var idlingResource: SimpleIdlingResource
-    private lateinit var medicineViewModel: MedicineViewModel
+    private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
     private lateinit var optionsMenu: OptionsMenu
 
@@ -44,9 +53,6 @@ class MedicinesFragment(
         super.onCreate(savedInstanceState)
         idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
         idlingResource.setBusy()
-
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        medicineViewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
         optionsMenu = OptionsMenu(
             this,
@@ -142,11 +148,12 @@ class MedicinesFragment(
         builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
             val e = editText.getText()
             if (e != null) {
+                val viewModel = medicineViewModel
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineViewModel.medicineRepository.highestMedicineSortOrder
+                    val highestSortOrder = viewModel.medicineRepository.highestMedicineSortOrder
                     val medicine = Medicine(e.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
-                    val medicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+                    val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }

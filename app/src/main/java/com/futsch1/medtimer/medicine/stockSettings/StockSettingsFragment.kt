@@ -9,7 +9,7 @@ import android.text.method.DigitsKeyListener
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -28,9 +28,13 @@ import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormatSymbols
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     R.xml.stock_settings,
     mapOf(
@@ -39,7 +43,10 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     ),
     listOf("stock_unit")
 ) {
-    override val medicineRepository: MedicineRepository by lazy { MedicineRepository(requireContext()) }
+    // TODO: repository in a UI code; all repository operations should be delegated to the viewmodel
+    @Inject override lateinit var medicineRepository: MedicineRepository
+    private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
+    private val medicineViewModel: MedicineViewModel by viewModels()
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
@@ -48,6 +55,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
             "production_date" to { activity, preference -> showDateEdit(activity, preference) },
             "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
             "clear_dates" to { _, _ ->
+                // TODO: direct store usage in UI code; all non-UI logic should be delegated to the viewmodel
                 dataStore.putLong("production_date", 0)
                 dataStore.putLong("expiration_date", 0)
             },
@@ -70,9 +78,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
         )
     }
 
-    override fun getEntityViewModel(): EntityViewModel<FullMedicine> {
-        return ViewModelProvider(this)[StockMedicineViewModel::class.java]
-    }
+    override fun getEntityViewModel(): EntityViewModel<FullMedicine> = stockMedicineViewModel
 
     override fun customSetup(entity: FullMedicine) {
         setupAmountEdit(findPreference("amount")!!)
@@ -111,13 +117,14 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     }
 
     private fun calculateRunOutDate(entity: FullMedicine) {
-        val viewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
+        val viewModel = medicineViewModel
+        val applicationContext = requireContext().applicationContext
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount)
+            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount, applicationContext)
 
             val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
 
-            this.launch(mainDispatcher) {
+            withContext(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
             }
         }
