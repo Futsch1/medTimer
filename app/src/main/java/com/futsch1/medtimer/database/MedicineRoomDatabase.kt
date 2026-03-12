@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.database
 
+import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
 import androidx.room.RenameColumn
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
@@ -41,6 +43,23 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
+    companion object {
+        private lateinit var instance: MedicineRoomDatabase
+
+        // TODO: temporary solution; remove after all repositories are injected using DI
+        fun getDatabase(context: Context): MedicineRoomDatabase {
+            synchronized(MedicineRoomDatabase::class.java) {
+                if (!::instance.isInitialized) {
+                    instance = Room.databaseBuilder(context, MedicineRoomDatabase::class.java, "medTimer")
+                        .addMigrations(Migration22To23)
+                        .build()
+                }
+
+                return instance
+            }
+        }
+    }
+
     val version: Int
         get() = openHelper.readableDatabase.version
 

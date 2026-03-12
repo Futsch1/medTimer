@@ -2,7 +2,6 @@ package com.futsch1.medtimer.database
 
 import android.content.Context
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
-import com.futsch1.medtimer.di.DatabaseModule
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.util.LinkedList
@@ -11,7 +10,7 @@ open class MedicineRepository(
     private val medicineDao: MedicineDao
 ) {
     // TODO: a temporary constructor for backwards compatibility with existing code; remove it once all usages are replaced with DI
-    constructor(context: Context) : this(DatabaseModule.provideMedicineRoomDatabase(context.applicationContext).medicineDao())
+    constructor(context: Context) : this(MedicineRoomDatabase.getDatabase(context).medicineDao())
 
     val medicinesFlow: Flow<List<FullMedicine>>
         get() = medicineDao.getMedicinesFlow()
