@@ -148,11 +148,12 @@ class MedicinesFragment : Fragment() {
         builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
             val e = editText.getText()
             if (e != null) {
+                val viewModel = medicineViewModel
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineViewModel.medicineRepository.highestMedicineSortOrder
+                    val highestSortOrder = viewModel.medicineRepository.highestMedicineSortOrder
                     val medicine = Medicine(e.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
-                    val medicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+                    val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }

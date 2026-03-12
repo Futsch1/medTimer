@@ -30,6 +30,7 @@ import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormatSymbols
 import javax.inject.Inject
 
@@ -116,13 +117,14 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     }
 
     private fun calculateRunOutDate(entity: FullMedicine) {
+        val viewModel = medicineViewModel
+        val applicationContext = requireContext().applicationContext
         this.lifecycleScope.launch(ioDispatcher) {
-            val applicationContext = requireContext().applicationContext
-            val runOutDate = estimateStockRunOutDate(medicineViewModel, entity.medicine.medicineId, entity.medicine.amount, applicationContext)
+            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount, applicationContext)
 
             val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
 
-            this.launch(mainDispatcher) {
+            withContext(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
             }
         }

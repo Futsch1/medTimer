@@ -103,8 +103,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         val recyclerView = setupMedicineList(fragmentView)
         setupSwiping(recyclerView)
 
+        val viewModel = medicineViewModel
         lifecycleScope.launch(ioDispatcher) {
-            val entity = medicineViewModel.medicineRepository.getMedicine(getEntityId())
+            val entity = viewModel.medicineRepository.getMedicine(getEntityId())
             this@EditMedicineFragment.entity = entity
 
             if (entity == null) {
@@ -305,11 +306,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun deleteItem(itemId: Long, adapterPosition: Int) {
+        val viewModel = medicineViewModel
         lifecycleScope.launch(ioDispatcher) {
-            val reminder = medicineViewModel.medicineRepository.getReminder(itemId.toInt())
+            val reminder = viewModel.medicineRepository.getReminder(itemId.toInt())
             if (reminder != null) {
                 withContext(mainDispatcher) {
-                    LinkedReminderHandling(reminder, medicineViewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
+                    LinkedReminderHandling(reminder, viewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
                         adapter.notifyItemChanged(adapterPosition)
                     })
                 }
