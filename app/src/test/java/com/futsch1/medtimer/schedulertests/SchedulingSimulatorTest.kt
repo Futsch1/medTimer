@@ -4,12 +4,14 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.MedTimerSettings
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.schedulertests.TestHelper.on
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.Instant
@@ -22,8 +24,11 @@ class SchedulingSimulatorTest {
         val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val mockPreferencesDataSource = Mockito.mock(MedTimerPreferencesDataSource::class.java)
+        val stateFlow = MutableStateFlow(MedTimerSettings(9 * 60, false, emptySet()))
+        Mockito.`when`(mockPreferencesDataSource.data).thenReturn(stateFlow)
 
-        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, Mockito.mock(MedTimerPreferencesDataSource::class.java))
+        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, mockPreferencesDataSource)
     }
 
     @Test

@@ -20,9 +20,12 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.MedTimerSettings
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyBoolean
@@ -132,6 +135,7 @@ class TestReminderContext {
     val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
     val audioManagerMock: AudioManager = mock(AudioManager::class.java)
+    val preferencesDataSourceMock: MedTimerPreferencesDataSource = mock(MedTimerPreferencesDataSource::class.java)
 
     val stringPreferencesMap = mutableMapOf(
         PreferencesNames.NUMBER_OF_REPETITIONS to "3",
@@ -165,6 +169,7 @@ class TestReminderContext {
         `when`(mock.audioManager).thenReturn(audioManagerMock)
         `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
         `when`(mock.icons).thenReturn(mock(MedicineIcons::class.java))
+        `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 
@@ -184,5 +189,8 @@ class TestReminderContext {
         val spannableStringBuilderMock = mock(SpannableStringBuilder::class.java)
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
+
+        val stateFlow = MutableStateFlow(MedTimerSettings(9 * 60, true, emptySet()))
+        `when`(preferencesDataSourceMock.data).thenReturn(stateFlow)
     }
 }
