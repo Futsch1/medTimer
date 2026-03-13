@@ -3,15 +3,18 @@ package com.futsch1.medtimer.preferences
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceDataStore
+import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPrefs
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class MedTimerPreferencesDataSource @Inject constructor(
-    @param:DefaultPrefs private val sharedPreferences: SharedPreferences
+    @param:DefaultPrefs private val sharedPreferences: SharedPreferences,
+    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) : PreferenceDataStore() {
     val data: Flow<MedTimerSettings> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -20,10 +23,12 @@ class MedTimerPreferencesDataSource @Inject constructor(
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
 
+        trySend(getSettings())
+
         awaitClose {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
         }
-    }.onStart { emit(getSettings()) }
+    }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getSettings())
 
     fun setWeekendTime(value: Int) {
         sharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, value) }

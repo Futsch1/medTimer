@@ -29,7 +29,7 @@ android {
         @Suppress("DEPRECATION")
         resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.futsch1.medtimer.TestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
@@ -137,6 +137,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
+    implementation(libs.androidx.test.runner)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -144,6 +145,7 @@ dependencies {
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.hilt.android.testing)
 
     androidTestImplementation(kotlin("test-junit"))
     androidTestImplementation(libs.androidx.test.junit)
@@ -161,6 +163,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     kspTest(libs.androidx.room.compiler)
+    kspTest(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

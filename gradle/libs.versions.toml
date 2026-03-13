@@ -49,6 +49,7 @@ barista = "4.3.0"
 # Build
 desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
+hilt-android-testing = "2.56.2"
 
 [libraries]
 # AndroidX
@@ -109,6 +110,7 @@ androidx-documentfile = { group = "androidx.documentfile", name = "documentfile"
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt-android-testing" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

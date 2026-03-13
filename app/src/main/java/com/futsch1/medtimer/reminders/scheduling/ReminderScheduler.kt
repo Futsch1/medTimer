@@ -1,13 +1,13 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
-class ReminderScheduler(val timeAccess: TimeAccess, val sharedPreferences: SharedPreferences) {
+class ReminderScheduler(val timeAccess: TimeAccess, val dataSource: MedTimerPreferencesDataSource) {
     fun schedule(fullMedicineWithTagsAndReminders: List<FullMedicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {
-        val scheduledReminders = ArrayList<ScheduledReminder>()
+        val scheduledReminders: MutableList<ScheduledReminder> = mutableListOf()
 
         for (fullMedicine in fullMedicineWithTagsAndReminders) {
 
@@ -16,7 +16,7 @@ class ReminderScheduler(val timeAccess: TimeAccess, val sharedPreferences: Share
                     continue
                 }
 
-                val scheduling = SchedulingFactory().create(reminder, fullMedicine.medicine, reminderEvents, this.timeAccess, sharedPreferences)
+                val scheduling = SchedulingFactory().create(reminder, fullMedicine.medicine, reminderEvents, timeAccess, dataSource)
                 val reminderScheduledTime = scheduling.getNextScheduledTime()
 
                 if (reminderScheduledTime != null) {
