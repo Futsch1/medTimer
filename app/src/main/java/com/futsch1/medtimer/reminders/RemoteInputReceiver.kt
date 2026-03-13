@@ -5,30 +5,35 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
-import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : BroadcastReceiver() {
+@AndroidEntryPoint
+class RemoteInputReceiver : BroadcastReceiver() {
+    @Inject
+    lateinit var remoteInputReceiverService: RemoteInputReceiverService
+
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
     override fun onReceive(context: Context, intent: Intent) {
         val results = RemoteInput.getResultsFromIntent(intent)
         if (results != null) {
             val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
             when (intent.action) {
                 REMOTE_INPUT_SNOOZE_ACTION -> snooze(context, results, reminderNotificationData)
-                REMOTE_INPUT_VARIABLE_AMOUNT_ACTION -> variableAmount(context, results, reminderNotificationData)
+                REMOTE_INPUT_VARIABLE_AMOUNT_ACTION -> applicationScope.launch { variableAmount(context, results, reminderNotificationData) }
             }
         }
     }
@@ -40,51 +45,38 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
         ReminderProcessorBroadcastReceiver.requestSnooze(context, reminderNotificationData, snoozeTimeInt)
     }
 
-    private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
-        val reminderContext = ReminderContext(context)
-        ProcessLifecycleOwner.get().lifecycleScope.launch(dispatcher) {
-            val medicineRepository = MedicineRepository(context)
-            val reminderNotification = ReminderNotification.fromReminderNotificationData(
-                reminderContext,
-                reminderNotificationData
-            ) ?: return@launch
+    private suspend fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
+        val amountsByReminderEventId = extractAmountsFromBundle(results)
+        remoteInputReceiverService.handleVariableAmount(amountsByReminderEventId, reminderNotificationData)
+        confirmNotification(context, reminderNotificationData.notificationId)
+    }
 
-            val reminderEvents = mutableListOf<ReminderEvent>()
-
-            for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
-                if (!reminderNotificationPart.reminder.variableAmount) {
-                    reminderEvents.add(reminderNotificationPart.reminderEvent)
-                } else {
-                    val amount = results.getCharSequence("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
-                    if (amount != null) {
-                        Log.d(LogTags.REMINDER, "Setting variable amount to $amount of reID ${reminderNotificationPart.reminderEvent.reminderEventId}")
-
-                        reminderEvents.add(reminderNotificationPart.reminderEvent)
-                        reminderNotificationPart.reminderEvent.amount = amount.toString()
-                        medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
-                        confirmNotification(context, reminderNotificationData.notificationId)
-                    }
-                }
+    private fun extractAmountsFromBundle(results: Bundle): Map<Int, String> {
+        return results.keySet()
+            .filter { it.startsWith("amount_") }
+            .associate { key ->
+                val reminderEventId = key.removePrefix("amount_").toInt()
+                val amount = results.getCharSequence(key)?.toString() ?: return@associate reminderEventId to null
+                reminderEventId to amount
             }
-
-            NotificationProcessor(reminderContext).setReminderEventStatus(
-                ReminderEvent.ReminderStatus.TAKEN,
-                reminderEvents,
-            )
-        }
+            .filterValues { it != null }
+            .mapValues { it.value!! }
     }
 
     private fun confirmNotification(context: Context, notificationId: Int) {
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.cancel(notificationId)
         for (notification in notificationManager.activeNotifications) {
-            if (notification.id == notificationId) {
-                val builder = NotificationCompat.Builder(context, notification.notification.channelId)
-                builder.setSmallIcon(notification.notification.smallIcon.resId).setContentInfo("")
-                builder.setTimeoutAfter(4000)
-                builder.setExtras(notification.notification.extras)
-                notificationManager.notify(notificationId, builder.build())
+            if (notification.id != notificationId) {
+                continue
             }
+
+            val notification = NotificationCompat.Builder(context, notification.notification.channelId).apply {
+                setSmallIcon(notification.notification.smallIcon.resId)
+                setContentInfo("")
+                setTimeoutAfter(4000)
+                setExtras(notification.notification.extras)
+            }.build()
+            notificationManager.notify(notificationId, notification)
         }
     }
 }
