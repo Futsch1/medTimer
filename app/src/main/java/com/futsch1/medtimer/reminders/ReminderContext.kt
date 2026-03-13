@@ -80,7 +80,7 @@ class ReminderContext(val context: Context) {
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-interface PreferencesEntryPoint {
+fun interface PreferencesEntryPoint {
     fun getDataSource(): MedTimerPreferencesDataSource
 }
 
