@@ -31,7 +31,6 @@ import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
@@ -39,10 +38,14 @@ import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val medicineViewModel: MedicineViewModel by viewModels()
+
+    @Inject
+    lateinit var autostartService: AutostartService
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
 
@@ -191,7 +194,7 @@ class MainActivity : AppCompatActivity() {
             if (exitInfos.isNotEmpty() && exitInfos[0].reason == ApplicationExitInfo.REASON_USER_REQUESTED) {
                 Log.w(LogTags.MAIN, "MedTimer was force stopped")
 
-                restoreNotifications(applicationContext)
+                autostartService.restoreNotifications()
             }
         }
     }
