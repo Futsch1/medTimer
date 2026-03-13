@@ -2,6 +2,8 @@ package com.futsch1.medtimer.di
 
 import android.app.NotificationManager
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,4 +19,9 @@ object SystemServicesModule {
     @Singleton
     fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager =
         context.getSystemService(NotificationManager::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 }

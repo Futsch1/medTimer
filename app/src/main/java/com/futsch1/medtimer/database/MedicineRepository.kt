@@ -113,6 +113,10 @@ open class MedicineRepository(
         return medicineDao.getReminderEvent(reminderEventId)
     }
 
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?> {
+        return medicineDao.getReminderEventFlow(reminderEventId)
+    }
+
     fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
         return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
     }

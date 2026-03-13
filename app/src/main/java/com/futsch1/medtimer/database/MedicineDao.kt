@@ -78,6 +78,9 @@ interface MedicineDao {
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
     fun getReminderEvent(reminderEventId: Int): ReminderEvent?
 
+    @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?>
+
     @Query("DELETE FROM ReminderEvent")
     suspend fun deleteReminderEvents()
 

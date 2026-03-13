@@ -39,7 +39,7 @@ class ReminderTableFragment : Fragment() {
         val tableFilter = Filter(tableView)
         setupFilter(tableFilter)
 
-        val adapter = ReminderTableAdapter(tableView, medicineViewModel, requireActivity())
+        val adapter = ReminderTableAdapter(tableView, requireActivity().supportFragmentManager)
 
         tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
