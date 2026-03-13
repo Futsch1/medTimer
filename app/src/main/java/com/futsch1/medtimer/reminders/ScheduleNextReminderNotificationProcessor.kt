@@ -38,7 +38,7 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
         fullMedicines: List<FullMedicine>,
         reminderEvents: List<ReminderEvent>
     ) {
-        val reminderScheduler = ReminderScheduler(reminderContext.timeAccess, reminderContext.preferences)
+        val reminderScheduler = ReminderScheduler(reminderContext.timeAccess, reminderContext.preferencesDataSource)
         val scheduledReminders: List<ScheduledReminder> =
             reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {

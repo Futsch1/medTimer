@@ -10,6 +10,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -37,7 +38,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()
             override fun now(): Instant = Instant.now()
-        }, PreferenceManager.getDefaultSharedPreferences(context))
+        }, ReminderContext(context).preferencesDataSource)
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }

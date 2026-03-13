@@ -27,6 +27,7 @@ import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,7 +45,11 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     listOf("stock_unit")
 ) {
     // TODO: repository in a UI code; all repository operations should be delegated to the viewmodel
-    @Inject override lateinit var medicineRepository: MedicineRepository
+    @Inject
+    override lateinit var medicineRepository: MedicineRepository
+
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
     private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
     private val medicineViewModel: MedicineViewModel by viewModels()
 
@@ -118,9 +123,8 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
 
     private fun calculateRunOutDate(entity: FullMedicine) {
         val viewModel = medicineViewModel
-        val applicationContext = requireContext().applicationContext
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount, applicationContext)
+            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource)
 
             val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
 

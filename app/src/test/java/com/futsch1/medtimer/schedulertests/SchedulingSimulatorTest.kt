@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.schedulertests
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
@@ -11,7 +11,6 @@ import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.schedulertests.TestHelper.on
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.Instant
 import java.time.LocalDate
@@ -23,10 +22,8 @@ class SchedulingSimulatorTest {
         val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
-        val sharedPreferencesMock = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPreferencesMock.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(false)
 
-        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, sharedPreferencesMock)
+        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, Mockito.mock(MedTimerPreferencesDataSource::class.java))
     }
 
     @Test

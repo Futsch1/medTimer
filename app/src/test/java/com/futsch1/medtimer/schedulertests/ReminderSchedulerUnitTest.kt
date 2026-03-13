@@ -1,12 +1,11 @@
 package com.futsch1.medtimer.schedulertests
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.LocalDate
 import java.time.ZoneId
@@ -354,19 +353,17 @@ internal class ReminderSchedulerUnitTest {
         const val TEST: String = "Test"
         const val TEST_2: String = "Test2"
 
-        @JvmStatic
         val scheduler: ReminderScheduler
             get() = getScheduler(0)
 
-        @JvmStatic
+        var preferencesDataSource: MedTimerPreferencesDataSource = Mockito.mock(MedTimerPreferencesDataSource::class.java)
+
         fun getScheduler(plusDays: Int): ReminderScheduler {
-            val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+            val mockTimeAccess: TimeAccess = Mockito.mock(TimeAccess::class.java)
             Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
             Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(plusDays.toLong()))
-            val sharedPreferencesMock = Mockito.mock(SharedPreferences::class.java)
-            Mockito.`when`(sharedPreferencesMock.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(false)
 
-            return ReminderScheduler(mockTimeAccess, sharedPreferencesMock)
+            return ReminderScheduler(mockTimeAccess, preferencesDataSource)
         }
     }
 }
