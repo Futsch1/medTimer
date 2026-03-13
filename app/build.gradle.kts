@@ -29,7 +29,7 @@ android {
         @Suppress("DEPRECATION")
         resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        testInstrumentationRunner = "com.futsch1.medtimer.TestRunner"
+        // testInstrumentationRunner = "com.futsch1.medtimer.TestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
