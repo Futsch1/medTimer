@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.widgets
 
-import android.app.Application
 import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -9,7 +8,6 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -26,20 +24,21 @@ fun interface WidgetLineProvider {
     ): Spanned
 }
 
-class NextRemindersLineProvider @Inject constructor(@param:ApplicationContext val context: Context, val reminderContext: ReminderContext) : WidgetLineProvider {
-    val scheduledReminders: List<ScheduledReminder>
-
-    init {
-        val medicineRepository = MedicineRepository(context.applicationContext as Application)
+class NextRemindersLineProvider @Inject constructor(
+    @param:ApplicationContext private val context: Context,
+    private val medicineRepository: MedicineRepository,
+    private val preferencesDataSource: PreferencesDataSource
+) : WidgetLineProvider {
+    private val scheduledReminders: List<ScheduledReminder> by lazy {
         val medicinesWithReminders = medicineRepository.medicines
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
         val reminderScheduler = ReminderScheduler(object : TimeAccess {
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()
             override fun now(): Instant = Instant.now()
-        }, reminderContext.preferencesDataSource)
+        }, preferencesDataSource)
 
-        scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
+        reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }
 
     override fun getWidgetLine(
@@ -61,19 +60,19 @@ class NextRemindersLineProvider @Inject constructor(@param:ApplicationContext va
         return formatScheduledReminderStringForWidget(
             context,
             scheduledReminder,
-            reminderContext.preferencesDataSource,
+            preferencesDataSource,
             isSmall
         )
     }
 }
 
-class LatestRemindersLineProvider @Inject constructor(@param:ApplicationContext val context: Context) : WidgetLineProvider {
-    val reminderEvents: List<ReminderEvent>
-    val reminderContext = ReminderContext(context)
-
-    init {
-        val medicineRepository = MedicineRepository(context)
-        reminderEvents = medicineRepository.getLastDaysReminderEvents(7).reversed()
+class LatestRemindersLineProvider @Inject constructor(
+    @param:ApplicationContext private val context: Context,
+    private val preferencesDataSource: PreferencesDataSource,
+    private val medicineRepository: MedicineRepository
+) : WidgetLineProvider {
+    private val reminderEvents: List<ReminderEvent> by lazy {
+        medicineRepository.getLastDaysReminderEvents(7).reversed()
     }
 
     override fun getWidgetLine(
@@ -84,7 +83,7 @@ class LatestRemindersLineProvider @Inject constructor(@param:ApplicationContext 
 
         return if (reminderEvent != null) reminderEventToString(
             reminderEvent,
-            reminderContext.preferencesDataSource,
+            preferencesDataSource,
             isShort
         ) else SpannableStringBuilder()
     }
