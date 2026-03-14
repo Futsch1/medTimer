@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [28, 36]
-        profile: [medium_phone, medium_tablet]
+        api-level: [ 28, 36 ]
+        profile: [ medium_phone, medium_tablet ]
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Set up JDK 21
@@ -54,6 +54,8 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
+          # ubuntu-latest is limited to 2 cores
+          cores: 2
 
       - name: Run device tests
         uses: reactivecircus/android-emulator-runner@5d6e86df22ab11632167a1a6b0c9ab0dc3469586 # v2.36.0
@@ -66,14 +68,13 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           script: |
-            ./gradlew packageDebug packageDebugUnitTest 
+            ./gradlew packageDebug packageDebugUnitTest
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
             EXIT_CODE=0 && ./gradlew connectedCheck || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
-          cores: 4
 
       - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always()

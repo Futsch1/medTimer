@@ -21,7 +21,12 @@ import com.futsch1.medtimer.overview.actions.createActionsView
 import com.google.android.material.color.MaterialColors
 
 
-class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity, val clickDelegate: ClickDelegate) :
+class ReminderViewHolder(
+    itemView: View,
+    val parent: ViewGroup,
+    val fragmentActivity: FragmentActivity,
+    val clickDelegate: ClickDelegate
+) :
     RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -82,7 +87,9 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
         this.contentContainer.setOnClickListener {
             if (!clickDelegate.onItemClick(layoutPosition)) {
                 if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
-                    EditEventSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
+                    EditEventSheetDialogFragment.newInstance(
+                        (event as OverviewReminderEvent).reminderEvent.reminderEventId
+                    ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")
                 } else {
                     ShowMedicineSheetDialog(fragmentActivity, event.reminderId)
                 }

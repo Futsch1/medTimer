@@ -9,7 +9,6 @@ import android.content.res.Resources
 import android.os.LocaleList
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
@@ -42,6 +41,7 @@ object TimeHelper {
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
+    // TODO: the Long type for minutes forces unnecessary casting at many places; it should be changed to int
     fun minutesToTimeString(context: Context, minutes: Long): String {
         try {
             val time = minutesToDate(minutes.toInt())
@@ -386,6 +386,7 @@ object TimeHelper {
     }
 
     class TimePickerWrapper {
+        // TODO: should accept supportFragmentManager instead
         val activity: FragmentActivity
         private val titleText: Int?
         private val timeFormat: Int
@@ -414,7 +415,7 @@ object TimeHelper {
             }
 
             val timePickerDialog = builder.build()
-            timePickerDialog.addOnPositiveButtonClickListener { _: View? -> timePickerResult(timePickerDialog.hour * 60 + timePickerDialog.minute) }
+            timePickerDialog.addOnPositiveButtonClickListener { timePickerResult(timePickerDialog.hour * 60 + timePickerDialog.minute) }
 
             timePickerDialog.show(activity.supportFragmentManager, "time_picker")
         }

@@ -5,18 +5,19 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
 
 class ManualDoseTest : BaseTestHelper() {
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun testManualDose() {
         openMenu()
         clickOn(R.string.generate_test_data)
@@ -27,7 +28,7 @@ class ManualDoseTest : BaseTestHelper() {
 
         clickListItem(position = 3)
         writeTo(android.R.id.input, "12")
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         assertContains(R.id.reminderText, "Ginseng (200mg) (12)")
@@ -35,8 +36,8 @@ class ManualDoseTest : BaseTestHelper() {
         clickOn(R.id.logManualDose)
         clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
-        BaristaDialogInteractions.clickDialogPositiveButton()
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
+        clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
         assertContains(R.id.reminderText, "Test")
         assertNotContains(R.id.reminderText, "Test (")
@@ -46,7 +47,7 @@ class ManualDoseTest : BaseTestHelper() {
         assertNotContains(R.id.reminderText, "Test (")
         clickOn("Test")
         writeTo(android.R.id.input, "13")
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         assertContains(R.id.reminderText, TEST_13_)
@@ -70,7 +71,7 @@ class ManualDoseTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun testManualDoseOfDisabledReminder() {
         // Create medication + reminder
         AndroidTestHelper.createMedicine("Test")

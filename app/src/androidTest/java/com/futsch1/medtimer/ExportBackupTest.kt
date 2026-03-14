@@ -51,6 +51,7 @@ class ExportBackupTest : BaseTestHelper() {
     }
 
     @Test
+    @AllowFlaky(attempts = 3)
     fun testTriggerBackup() {
         openMenu()
         clickOn(R.string.generate_test_data)

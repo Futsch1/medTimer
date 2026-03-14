@@ -12,9 +12,9 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -26,6 +26,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
@@ -48,6 +49,7 @@ import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -65,6 +67,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @Inject
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
@@ -120,9 +126,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 }
 
                 // Signal that entity was loaded
-                if (activity != null && onEntityLoaded(entity, fragmentView)) {
-                    setFragmentReady()
-                }
+                onEntityLoaded(entity, fragmentView)
             }
         }
 
@@ -153,17 +157,19 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         super.onStop()
         val entity = entity ?: return
         if (fragmentReady) {
-            ProcessLifecycleOwner.get().lifecycleScope.launch {
+            applicationScope.launch {
                 val entityBefore = Gson().toJson(entity)
                 fillEntityData(entity, fragmentView)
-                if (entityBefore != Gson().toJson(entity)) {
+
+                val entityAfter = Gson().toJson(entity)
+                if (entityBefore != entityAfter) {
                     medicineViewModel.medicineRepository.updateMedicine(entity.medicine)
                 }
             }
         }
     }
 
-    private fun onEntityLoaded(entity: FullMedicine, fragmentView: View): Boolean {
+    private fun onEntityLoaded(entity: FullMedicine, fragmentView: View) {
         val medicine = entity.medicine
 
         color = medicine.color
@@ -171,7 +177,19 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         notes = medicine.notes
 
         (requireActivity() as AppCompatActivity).supportActionBar?.title = medicine.name
-        fragmentView.findViewById<EditText>(R.id.editMedicineName).setText(medicine.name)
+        fragmentView.findViewById<EditText>(R.id.editMedicineName).apply {
+            setText(medicine.name)
+            doAfterTextChanged { editable ->
+                val name = editable?.toString()?.trim() ?: return@doAfterTextChanged
+                val currentEntity = this@EditMedicineFragment.entity ?: return@doAfterTextChanged
+                if (name != currentEntity.medicine.name) {
+                    currentEntity.medicine.name = name
+                    viewLifecycleOwner.lifecycleScope.launch(ioDispatcher) {
+                        medicineViewModel.medicineRepository.updateMedicine(currentEntity.medicine)
+                    }
+                }
+            }
+        }
 
         val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository)
 
@@ -195,7 +213,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 setFragmentReady()
             }
         }
-        return false
     }
 
     private fun setupSelectIcon(fragmentView: View) {

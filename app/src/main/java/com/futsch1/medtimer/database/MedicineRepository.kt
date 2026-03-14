@@ -113,6 +113,10 @@ open class MedicineRepository(
         return medicineDao.getReminderEvent(reminderEventId)
     }
 
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?> {
+        return medicineDao.getReminderEventFlow(reminderEventId)
+    }
+
     fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
         return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
     }
@@ -210,6 +214,10 @@ open class MedicineRepository(
 
     suspend fun updateMedicine(medicine: Medicine) {
         medicineDao.updateMedicine(medicine)
+    }
+
+    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicine? {
+        return medicineDao.decreaseStock(medicineId, decreaseAmount)
     }
 
     fun updateMedicines(medicines: List<Medicine>) {
