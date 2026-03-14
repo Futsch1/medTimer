@@ -16,7 +16,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import com.futsch1.medtimer.utilities.closeNotification
+import com.futsch1.medtimer.utilities.openNotification
 import junit.framework.TestCase
 import org.junit.ClassRule
 import org.junit.Test
@@ -54,10 +54,10 @@ class ScreenshotsTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 3, R.id.stateButton)
         clickOn(R.id.skippedButton)
 
-        device.openNotification()
-        makeNotificationExpanded(device, getNotificationText(R.string.taken))
-        Screengrab.screenshot("5")
-        device.closeNotification()
+        openNotification().use {
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            Screengrab.screenshot("5")
+        }
 
         clickListItemChild(R.id.reminders, 4, R.id.stateButton)
         clickOn(R.id.takenButton)

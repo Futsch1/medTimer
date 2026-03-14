@@ -26,7 +26,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import com.futsch1.medtimer.utilities.closeNotification
+import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
@@ -130,24 +130,24 @@ class MedicineStockTest : BaseTestHelper() {
         dismiss: Boolean = false,
         additionalExpectedString: String? = null
     ) {
-        device.openNotification()
-        val o = device.wait(
-            Until.findObject(By.textContains(notificationTitle)),
-            1_000
-        )
-        if (expected) {
-            internalAssert(o != null)
-        } else {
-            internalAssert(o == null)
-        }
-        if (additionalExpectedString != null) {
-            internalAssert(device.findObject(By.textContains(additionalExpectedString)) != null)
-        }
+        openNotification().use {
+            val notificationTitleObject = device.wait(
+                Until.findObject(By.textContains(notificationTitle)),
+                1_000
+            )
+            if (expected) {
+                internalAssert(notificationTitleObject != null)
+            } else {
+                internalAssert(notificationTitleObject == null)
+            }
+            if (additionalExpectedString != null) {
+                internalAssert(device.findObject(By.textContains(additionalExpectedString)) != null)
+            }
 
-        if (dismiss) {
-            o.fling(Direction.RIGHT)
+            if (dismiss) {
+                notificationTitleObject.fling(Direction.RIGHT)
+            }
         }
-        device.closeNotification()
     }
 
     @Test
@@ -185,15 +185,15 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.takenButton)
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
-        device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
-            1_000
-        )
-        internalAssert(device.findObject(By.textContains("T******")) != null)
-        internalAssert(device.findObject(By.textContains("TestMed")) == null)
-        clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
-        device.closeNotification()
+        openNotification().use {
+            device.wait(
+                Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
+                1_000
+            )
+            internalAssert(device.findObject(By.textContains("T******")) != null)
+            internalAssert(device.findObject(By.textContains("TestMed")) == null)
+            clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
+        }
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
@@ -281,10 +281,10 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        device.openNotification()
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 5_000)
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
-        device.closeNotification()
+        openNotification().use {
+            device.wait(Until.findObject(By.textContains(TEST_MED)), 5_000)
+            internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
+        }
         device.waitForIdle(2_000)
 
         clickOn(R.id.openStockTracking)
