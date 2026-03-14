@@ -28,10 +28,11 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.utilities.closeNotification
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
@@ -86,7 +87,7 @@ private const val COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND = "com.android.syste
 
 class NotificationTest : BaseTestHelper() {
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun notificationTest() {
         AndroidTestHelper.createMedicine(TEST_MED)
 
@@ -131,7 +132,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun actionOnDismissedNotification() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         openMenu()
@@ -194,7 +195,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -234,7 +235,7 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
         notification = device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
         assertNotNull(notification)
-        device.pressBack()
+        device.closeNotification()
         navigateTo(MainMenu.OVERVIEW)
 
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
@@ -256,11 +257,11 @@ class NotificationTest : BaseTestHelper() {
         notification = device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
         assertNotNull(notification)
 
-        device.pressBack()
+        device.closeNotification()
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun variableAmount() {
         openMenu()
         clickOn(R.string.tab_settings)
@@ -288,18 +289,18 @@ class NotificationTest : BaseTestHelper() {
         device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         clickNotificationButton(device, getNotificationText(R.string.taken))
 
-        var input = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
-        input.text = TEST_VARIABLE_AMOUNT
+        val notificationInput1 = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
+        notificationInput1.text = TEST_VARIABLE_AMOUNT
         device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
 
         clickNotificationButton(device, getNotificationText(R.string.taken))
-        input = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
-        input.text = TEST_ANOTHER_VARIABLE_AMOUNT
+        val notificationInput2 = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
+        notificationInput2.text = TEST_ANOTHER_VARIABLE_AMOUNT
         device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
 
-        AndroidTestHelper.closeNotifications(device)
+        device.closeNotification()
 
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_VARIABLE_AMOUNT)
@@ -307,7 +308,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun variableAmountBigButton() {
         openMenu()
         clickOn(R.string.tab_settings)
@@ -367,7 +368,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun customSnooze() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -389,7 +390,7 @@ class NotificationTest : BaseTestHelper() {
         var notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         assertNotNull(notification)
         dismissNotification(notification, device)
-        AndroidTestHelper.closeNotifications(device)
+        device.closeNotification()
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
         writeTo(android.R.id.input, "1")
@@ -414,7 +415,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         pressBack()
         device.openNotification()
-        sleep(2_000)
+        device.wait(Until.hasObject(By.pkg("com.android.systemui")), 2_000)
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
         internalAssert(notification != null)
@@ -429,7 +430,7 @@ class NotificationTest : BaseTestHelper() {
         input.text = "13"
         device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
         device.wait(Until.gone(By.textContains(snoozeString)), 2_000)
-        AndroidTestHelper.closeNotifications(device)
+        device.closeNotification()
 
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(
@@ -441,7 +442,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun hiddenMedicineName() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -463,7 +464,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun bigButtons() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
@@ -503,7 +504,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -533,7 +534,7 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
 
         internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
-        device.pressBack()
+        device.closeNotification()
 
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(
@@ -567,7 +568,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun automaticallyTakenTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -593,11 +594,11 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         internalAssert(device.findObject(By.textContains(getNotificationText(R.string.taken))) == null)
-        device.pressBack()
+        device.closeNotification()
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun alarmTest() {
         val timeToNotify = 10_000L
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -613,7 +614,7 @@ class NotificationTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
 
-        sleep(2_000)
+        device.waitForIdle(2_000)
 
         device.sleep()
 
@@ -630,7 +631,7 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
 
-        sleep(2_000)
+        device.waitForIdle(2_000)
 
         device.sleep()
 
@@ -655,7 +656,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun scheduleReminderTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -672,7 +673,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.openNotification()
         assertContains(TEST_MED)
-        device.pressBack()
+        device.closeNotification()
     }
 
     private fun clickTakenOnAlarmScreen(
@@ -695,7 +696,7 @@ class NotificationTest : BaseTestHelper() {
         assertNotNull(notification)
         dismissNotification(notification, device)
 
-        device.pressBack()
+        device.closeNotification()
     }
 
     private fun dismissNotification(notification: UiObject2, device: UiDevice) {

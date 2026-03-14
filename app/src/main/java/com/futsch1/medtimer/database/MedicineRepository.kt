@@ -216,6 +216,10 @@ open class MedicineRepository(
         medicineDao.updateMedicine(medicine)
     }
 
+    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicine? {
+        return medicineDao.decreaseStock(medicineId, decreaseAmount)
+    }
+
     fun updateMedicines(medicines: List<Medicine>) {
         medicineDao.updateMedicines(medicines)
     }

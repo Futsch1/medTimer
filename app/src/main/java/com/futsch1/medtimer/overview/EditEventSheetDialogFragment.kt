@@ -16,6 +16,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.google.android.material.appbar.MaterialToolbar
@@ -90,20 +91,20 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editEventNotes.doAfterTextChanged { viewModel.notes.value = it?.toString() ?: "" }
 
         // Time/date display strings: reactive to picker changes
-        viewModel.remindedTimeString.onEach { editEventRemindedTimestamp.setText(it) }.launchIn(lifecycleScope)
+        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }.launchIn(lifecycleScope)
         setupTimePicker(editEventRemindedTimestamp, { viewModel.remindedMinutes }, { viewModel.remindedMinutes = it })
 
-        viewModel.remindedDateString.onEach { editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
+        viewModel.remindedDateString.onEach { if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
         setupDatePicker(editEventRemindedDate, { viewModel.remindedDate }, { viewModel.remindedDate = it })
 
         // Status-dependent UI: runs once when actual status arrives
         viewModel.reminderStatus.filterNotNull().take(1).onEach { status ->
             configureTakenText(editEventSheetDialog, status)
             if (status != ReminderEvent.ReminderStatus.RAISED) {
-                viewModel.processedTimeString.onEach { editEventTakenTimestamp.setText(it) }.launchIn(lifecycleScope)
+                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }.launchIn(lifecycleScope)
                 setupTimePicker(editEventTakenTimestamp, { viewModel.processedMinutes }, { viewModel.processedMinutes = it })
 
-                viewModel.processedDateString.onEach { editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
+                viewModel.processedDateString.onEach { if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
                 setupDatePicker(editEventTakenDate, { viewModel.processedDate }, { viewModel.processedDate = it })
             } else {
                 editEventTakenTimestamp.visibility = View.GONE
@@ -155,6 +156,11 @@ class EditEventSheetDialogFragment : DialogFragment() {
                 }
             }
         }
+        editText.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            val minutes = TimeHelper.timeStringToMinutes(requireContext(), text)
+            if (minutes >= 0 && minutes != getMinutes()) onTimePicked(minutes)
+        }
     }
 
     private fun setupDatePicker(editText: EditText, getDate: () -> LocalDate, onDatePicked: (LocalDate) -> Unit) {
@@ -165,6 +171,11 @@ class EditEventSheetDialogFragment : DialogFragment() {
             }
         }
         editText.visibility = View.VISIBLE
+        editText.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            val date = TimeHelper.stringToLocalDate(requireContext(), text)
+            if (date != null && date != getDate()) onDatePicked(date)
+        }
     }
 
     private fun configureTakenText(dialog: AppCompatDialog, status: ReminderEvent.ReminderStatus) {

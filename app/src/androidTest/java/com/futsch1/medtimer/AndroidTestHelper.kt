@@ -14,10 +14,11 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiScrollable
 import androidx.test.uiautomator.UiSelector
+import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
+import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.google.android.material.textfield.TextInputEditText
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
@@ -108,7 +109,7 @@ object AndroidTestHelper {
     @JvmStatic
     fun setValue(value: String) {
         writeTo(android.R.id.edit, value)
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
     }
 
     @JvmStatic
@@ -131,7 +132,7 @@ object AndroidTestHelper {
         clickOn(R.id.addMedicine)
         writeTo(R.id.medicineName, name)
 
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
     }
 
     @JvmStatic
@@ -167,17 +168,17 @@ object AndroidTestHelper {
         }
     }
 
-    fun closeNotifications(device: UiDevice) {
-        device.swipe(device.displayWidth / 2, device.displayHeight, device.displayWidth / 2, device.displayHeight / 2, 20)
-        device.waitForIdle(200)
-        if (!device.findObjects(By.res("android:id/expand_button")).isEmpty() || !device.findObjects(By.descContains("Expand")).isEmpty()) {
-            device.pressBack()
-        }
-    }
-
     fun longClickListItem(@IdRes id: Int, position: Int) {
         Espresso.onView(ViewMatchers.withId(id))
             .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder?>(position, ViewActions.longClick()))
+    }
+
+    fun waitForIdle(timeoutMs: Long = 2_000) {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle(timeoutMs)
+    }
+
+    fun waitForText(text: String, timeoutMs: Long = 3_000) {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).wait(Until.findObject(By.text(text)), timeoutMs)
     }
 
     enum class MainMenu {

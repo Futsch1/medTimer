@@ -11,6 +11,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import com.futsch1.medtimer.utilities.closeNotification
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -78,7 +79,7 @@ abstract class BaseTestHelper {
                 clearAllButton.click()
             }
         } catch (_: Exception) {
-            device.pressBack()
+            device.closeNotification()
         }
     }
 

@@ -49,8 +49,8 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
     }
 
     suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
-        val notificationId = reminderEvents.firstOrNull()?.notificationId
-        if (notificationId != null && notificationId != -1) {
+        val notificationId = reminderEvents.firstOrNull()?.notificationId ?: return
+        if (notificationId != -1) {
             removeRemindersFromNotification(notificationId, reminderEvents.map { it.reminderEventId })
         }
     }
@@ -105,21 +105,17 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
         ) {
-            val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
-            if (reminder != null) {
-                var amount: Double? = MedicineHelper.parseAmount(reminderEvent.amount)
-                if (amount != null) {
-                    if (reminderEvent.status == ReminderStatus.SKIPPED) {
-                        amount = -amount
-                    }
-                    reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-                    StockHandlingProcessor(reminderContext).processStock(
-                        amount,
-                        reminder.medicineRelId,
-                        Instant.ofEpochSecond(reminderEvent.processedTimestamp)
-                    )
-                }
+            val reminder = medicineRepository.getReminder(reminderEvent.reminderId) ?: return
+            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
+            if (reminderEvent.status == ReminderStatus.SKIPPED) {
+                amount = -amount
             }
+            reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
+            StockHandlingProcessor(reminderContext).processStock(
+                amount,
+                reminder.medicineRelId,
+                Instant.ofEpochSecond(reminderEvent.processedTimestamp)
+            )
         }
     }
 }

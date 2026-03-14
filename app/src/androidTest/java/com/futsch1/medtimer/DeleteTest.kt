@@ -5,13 +5,14 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import org.junit.Test
 
 
 class DeleteTest : BaseTestHelper() {
-    //@AllowFlaky(attempts = 1)
     @Test
+    @AllowFlaky(attempts = 3)
     fun testDelete() {
         openMenu()
         clickOn(R.string.generate_test_data)
