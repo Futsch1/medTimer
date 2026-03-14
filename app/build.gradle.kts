@@ -144,6 +144,7 @@ dependencies {
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.hilt.android.testing)
 
     androidTestImplementation(kotlin("test-junit"))
     androidTestImplementation(libs.androidx.test.junit)
@@ -161,6 +162,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     kspTest(libs.androidx.room.compiler)
+    kspTest(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
