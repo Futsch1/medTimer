@@ -1,24 +1,52 @@
 package com.futsch1.medtimer.processortests
 
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import javax.inject.Inject
 
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
 class ShowReminderNotificationProcessorTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Before
+    fun init() {
+        hiltRule.inject()
+    }
+
+    val reminderContext = TestReminderContext()
+
+    @BindValue
+    val boundReminderContext: ReminderContext = reminderContext.mock
+
+    @Inject
+    lateinit var showReminderNotificationProcessor: ShowReminderNotificationProcessor
+
     @Test
     fun reminderNotificationNotActive() {
-        val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
 
         runBlocking {
-            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+            showReminderNotificationProcessor.showReminder(
                 reminderNotificationData
             )
         }
@@ -31,14 +59,13 @@ class ShowReminderNotificationProcessorTest {
 
     @Test
     fun reminderNotificationActive() {
-        val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
         reminderNotificationData.notificationId = 1
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1, 2), remindTimestamp = 10)
 
         runBlocking {
-            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+            showReminderNotificationProcessor.showReminder(
                 reminderNotificationData
             )
         }
@@ -55,7 +82,6 @@ class ShowReminderNotificationProcessorTest {
 
     @Test
     fun reminderNotificationPartlyActive() {
-        val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
         reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
@@ -63,24 +89,21 @@ class ShowReminderNotificationProcessorTest {
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(2))
 
         runBlocking {
-            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+            showReminderNotificationProcessor.showReminder(
                 reminderNotificationData
             )
         }
 
-        // Cancel the notification
-        verify(reminderContext.notificationManagerFake.mock, times(1)).cancel(1)
-        // Raise a new one
-        verify(reminderContext.notificationManagerFake.mock, times(1)).notify(eq(2), any())
+        // Send broadcast (one for the reminder and one for updating the widget)
+        verify(reminderContext.mock, times(2)).sendBroadcast(anyNotNull(), anyNotNull())
         // The actually requested reminder
         verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
         // And two times for tomorrow (twice is actually unnecessary, but to reduce complexity, scheduling is called more often)
-        verify(reminderContext.alarmManagerMock, times(2)).setAndAllowWhileIdle(anyInt(), eq(24 * 60 * 60 * 1000L + 10 * 60 * 60 * 1000L), any())
+        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(24 * 60 * 60 * 1000L + 10 * 60 * 60 * 1000L), any())
     }
 
     @Test
     fun rescheduleReminderEvent() {
-        val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
         reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
@@ -92,7 +115,7 @@ class ShowReminderNotificationProcessorTest {
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
 
         runBlocking {
-            ShowReminderNotificationProcessor(reminderContext.mock).showReminder(
+            showReminderNotificationProcessor.showReminder(
                 reminderNotificationData
             )
         }
@@ -102,4 +125,6 @@ class ShowReminderNotificationProcessorTest {
         // The rescheduled reminder
         verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
     }
+
+    private fun <T> anyNotNull(): T = any()
 }

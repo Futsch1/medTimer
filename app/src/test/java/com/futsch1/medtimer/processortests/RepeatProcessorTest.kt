@@ -1,23 +1,51 @@
 package com.futsch1.medtimer.processortests
 
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RepeatProcessor
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import javax.inject.Inject
 import kotlin.test.assertEquals
 
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
 class RepeatProcessorTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Before
+    fun init() {
+        hiltRule.inject()
+    }
+
+    val reminderContext = TestReminderContext()
+
+    @BindValue
+    val boundReminderContext: ReminderContext = reminderContext.mock
+
+    @Inject
+    lateinit var repeatProcessor: RepeatProcessor
+
     @Test
     fun repeat() {
-        val reminderContext = TestReminderContext()
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
 
         runBlocking {
-            RepeatProcessor(reminderContext.mock).processRepeat(reminderNotificationData, 10)
+            repeatProcessor.processRepeat(reminderNotificationData, 10)
         }
 
         assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[0].remainingRepeats, -1)
