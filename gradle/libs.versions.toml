@@ -10,7 +10,7 @@ ksp = "2.3.4"
 
 # AndroidX
 appcompat = "1.7.1"
-core-ktx = "1.17.0"
+core-ktx = "1.18.0"
 constraintlayout = "2.2.1"
 navigation = "2.9.7"
 preference-ktx = "1.2.1"
@@ -35,7 +35,7 @@ preference-extended = "1.1.0"
 
 # Testing
 junit4 = "4.13.2"
-mockito-core = "5.22.0"
+mockito-core = "5.23.0"
 mockito-inline = "5.2.0"
 robolectric = "4.16.1"
 android-test-junit = "1.3.0"
@@ -49,7 +49,6 @@ barista = "4.3.0"
 # Build
 desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
-hilt-android-testing = "2.56.2"
 
 [libraries]
 # AndroidX
@@ -110,7 +109,7 @@ androidx-documentfile = { group = "androidx.documentfile", name = "documentfile"
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt-android-testing" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

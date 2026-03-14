@@ -7,7 +7,7 @@ import com.futsch1.medtimer.reminders.TimeAccess
 
 class ReminderScheduler(val timeAccess: TimeAccess, val dataSource: MedTimerPreferencesDataSource) {
     fun schedule(fullMedicineWithTagsAndReminders: List<FullMedicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {
-        val scheduledReminders: MutableList<ScheduledReminder> = mutableListOf()
+        val scheduledReminders = mutableListOf<ScheduledReminder>()
 
         for (fullMedicine in fullMedicineWithTagsAndReminders) {
 

@@ -29,7 +29,6 @@ android {
         @Suppress("DEPRECATION")
         resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        //testInstrumentationRunner = "com.futsch1.medtimer.TestRunner"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
@@ -138,7 +137,6 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
-    implementation(libs.androidx.test.runner)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
