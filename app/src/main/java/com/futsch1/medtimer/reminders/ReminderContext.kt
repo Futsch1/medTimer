@@ -19,13 +19,15 @@ import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import javax.inject.Inject
 
 // TODO: potential memory leak - analyze what the context is used for and try to use DI to remove the need of storing the context
-class ReminderContext(val context: Context) {
+class ReminderContext @Inject constructor(@param:ApplicationContext val context: Context) {
     val medicineRepository = MedicineRepository(context)
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -68,6 +70,9 @@ class ReminderContext(val context: Context) {
 
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
+    fun startActivity(intent: Intent) {
+        context.startActivity(intent)
+    }
 
     val preferencesDataSource: PreferencesDataSource by lazy {
         // Bridge from non-Hilt to Hilt code

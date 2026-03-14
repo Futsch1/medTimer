@@ -1,16 +1,16 @@
 package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 
 class ScheduledStockReminderActions(
     event: OverviewScheduledReminderEvent,
-    medicineRepository: MedicineRepository,
+    reminderContext: ReminderContext,
     fragmentActivity: FragmentActivity
-) : ScheduledReminderActions(event, medicineRepository, fragmentActivity) {
+) : ScheduledReminderActions(event, reminderContext, fragmentActivity) {
     init {
         visibleButtons.clear()
         visibleButtons.add(Button.ACKNOWLEDGED)
@@ -31,6 +31,6 @@ class ScheduledStockReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(context, reminderEvent)
+        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(reminderContext, reminderEvent)
     }
 }

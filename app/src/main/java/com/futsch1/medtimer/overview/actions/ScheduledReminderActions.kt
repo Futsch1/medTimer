@@ -2,9 +2,9 @@ package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -13,9 +13,9 @@ import java.time.ZoneId
 
 open class ScheduledReminderActions(
     val event: OverviewScheduledReminderEvent,
-    medicineRepository: MedicineRepository,
+    val reminderContext: ReminderContext,
     private val fragmentActivity: FragmentActivity
-) : ActionsBase(medicineRepository, fragmentActivity) {
+) : ActionsBase(reminderContext.medicineRepository, fragmentActivity) {
     init {
         visibleButtons.add(Button.TAKEN)
         visibleButtons.add(Button.SKIPPED)
@@ -42,7 +42,7 @@ open class ScheduledReminderActions(
                     val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
 
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, reminderNotificationData)
                 }
             }
     }
@@ -50,6 +50,6 @@ open class ScheduledReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestReminderAction(context, scheduledReminder.reminder, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext, scheduledReminder.reminder, reminderEvent, taken)
     }
 }

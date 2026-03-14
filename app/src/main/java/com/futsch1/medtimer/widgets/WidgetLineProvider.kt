@@ -13,9 +13,11 @@ import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import javax.inject.Inject
 
 fun interface WidgetLineProvider {
     fun getWidgetLine(
@@ -24,9 +26,8 @@ fun interface WidgetLineProvider {
     ): Spanned
 }
 
-class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
+class NextRemindersLineProvider @Inject constructor(@param:ApplicationContext val context: Context, val reminderContext: ReminderContext) : WidgetLineProvider {
     val scheduledReminders: List<ScheduledReminder>
-    val reminderContext = ReminderContext(context)
 
     init {
         val medicineRepository = MedicineRepository(context.applicationContext as Application)
@@ -66,7 +67,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
     }
 }
 
-class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
+class LatestRemindersLineProvider @Inject constructor(@param:ApplicationContext val context: Context) : WidgetLineProvider {
     val reminderEvents: List<ReminderEvent>
     val reminderContext = ReminderContext(context)
 

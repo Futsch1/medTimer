@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
+import javax.inject.Inject
 
 /**
  * Responsible for updating medicine stock levels.
@@ -15,7 +16,9 @@ import java.time.Instant
  * It updates the stock in the database, ensures the amount does not drop below zero,
  * and triggers a notification if the stock level crosses the configured threshold.
  */
-class StockHandlingProcessor(val reminderContext: ReminderContext) {
+class StockHandlingProcessor @Inject constructor(
+    val reminderContext: ReminderContext,
+) {
     val medicineRepository = reminderContext.medicineRepository
 
     suspend fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
@@ -36,7 +39,7 @@ class StockHandlingProcessor(val reminderContext: ReminderContext) {
         Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
     }
 
-    private suspend fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in fullMedicine.reminders) {
             if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
                 val showEvent =
@@ -55,7 +58,7 @@ class StockHandlingProcessor(val reminderContext: ReminderContext) {
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
                     val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ShowReminderNotificationProcessor(reminderContext).showReminder(reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, reminderNotificationData)
                 }
             }
         }

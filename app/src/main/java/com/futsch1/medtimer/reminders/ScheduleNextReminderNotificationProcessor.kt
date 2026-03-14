@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import javax.inject.Inject
 
 /**
  * Responsible for calculating and scheduling the next medicine reminder notification.
@@ -22,8 +23,7 @@ import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
  *
  * If no future reminders are found, any existing next reminder alarm is cancelled.
  */
-class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderContext) {
-    val alarmSetter = AlarmProcessor(reminderContext)
+class ScheduleNextReminderNotificationProcessor @Inject constructor(val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor) {
 
     suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
         val fullMedicines = reminderContext.medicineRepository.medicines
@@ -47,10 +47,10 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
                         scheduledReminders[0]
                     )
                 )
-            alarmSetter.setAlarmForReminderNotification(scheduledReminderNotificationData)
+            alarmProcessor.setAlarmForReminderNotification(scheduledReminderNotificationData)
         } else {
             Log.d(LogTags.REMINDER, "No reminders scheduled")
-            alarmSetter.cancelNextReminder()
+            alarmProcessor.cancelNextReminder()
         }
     }
 }

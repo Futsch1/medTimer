@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-open class WidgetProvider(val getWidgetImpl: (Context) -> WidgetImpl) : AppWidgetProvider() {
+abstract class WidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(
         context: Context,
@@ -27,6 +27,8 @@ open class WidgetProvider(val getWidgetImpl: (Context) -> WidgetImpl) : AppWidge
             }
         }
     }
+
+    abstract fun getWidgetImpl(context: Context): WidgetImpl
 
     override fun onEnabled(context: Context) {
         // Enter relevant functionality for when the first widget is created

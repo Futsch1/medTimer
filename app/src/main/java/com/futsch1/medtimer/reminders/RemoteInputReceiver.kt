@@ -14,17 +14,25 @@ import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : BroadcastReceiver() {
+    @Inject
+    lateinit var reminderContext: ReminderContext
+
+    @Inject
+    lateinit var notificationProcessor: NotificationProcessor
+
     override fun onReceive(context: Context, intent: Intent) {
         val results = RemoteInput.getResultsFromIntent(intent)
         if (results != null) {
@@ -44,9 +52,7 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
     }
 
     private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
-        val reminderContext = ReminderContext(context)
         ProcessLifecycleOwner.get().lifecycleScope.launch(dispatcher) {
-            val medicineRepository = MedicineRepository(context)
             val reminderNotification = ReminderNotification.fromReminderNotificationData(
                 reminderContext,
                 reminderNotificationData
@@ -64,13 +70,13 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
 
                         reminderEvents.add(reminderNotificationPart.reminderEvent)
                         reminderNotificationPart.reminderEvent.amount = amount.toString()
-                        medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
+                        reminderContext.medicineRepository.updateReminderEvent(reminderNotificationPart.reminderEvent)
                         confirmNotification(context, reminderNotificationData.notificationId)
                     }
                 }
             }
 
-            NotificationProcessor(reminderContext).setReminderEventStatus(
+            notificationProcessor.setReminderEventStatus(
                 ReminderEvent.ReminderStatus.TAKEN,
                 reminderEvents,
             )

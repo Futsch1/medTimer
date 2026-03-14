@@ -19,6 +19,7 @@ import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 import com.futsch1.medtimer.overview.actions.createActionsView
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.color.MaterialColors
 
 
@@ -115,7 +116,7 @@ class ReminderViewHolder(
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val actions = createActions(event, fragmentActivity)
+        val actions = createActions(event, ReminderContext(view.context), fragmentActivity)
         val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {

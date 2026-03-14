@@ -16,6 +16,7 @@ import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_MODE
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_TIME
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -98,7 +99,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     private fun requestReschedule() {
         val context = getContext()
         if (context != null) {
-            requestScheduleNextNotification(context)
+            requestScheduleNextNotification(ReminderContext(context))
         }
     }
 }

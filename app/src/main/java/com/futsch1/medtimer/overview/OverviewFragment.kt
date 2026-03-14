@@ -25,6 +25,7 @@ import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.reminders.ReminderContext
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -217,7 +218,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             actionsMenu = null
         } else {
             actionMode?.title = selectedCount.toString()
-            val multipleActions = MultipleActions(adapter.getSelectedItems(), this.requireActivity())
+            val multipleActions = MultipleActions(adapter.getSelectedItems(), ReminderContext(requireContext()), this.requireActivity())
             actionsMenu = ActionsMenu(actionMode!!.menu, multipleActions)
         }
 

@@ -28,6 +28,7 @@ import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -147,7 +148,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     }
 
     private fun refillNow() {
-        ReminderProcessorBroadcastReceiver.requestRefill(requireContext(), dataStore.entity.medicine.medicineId)
+        ReminderProcessorBroadcastReceiver.requestRefill(ReminderContext(requireContext()), dataStore.entity.medicine.medicineId)
     }
 
     private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {

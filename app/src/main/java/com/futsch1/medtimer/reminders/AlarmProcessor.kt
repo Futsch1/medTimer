@@ -8,11 +8,14 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
+import javax.inject.Inject
 
 /**
  * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
  */
-class AlarmProcessor(val reminderContext: ReminderContext) {
+class AlarmProcessor @Inject constructor(
+    val reminderContext: ReminderContext
+) {
     private val alarmManager: AlarmManager = reminderContext.alarmManager
     private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
@@ -63,7 +66,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
                     scheduledReminderNotificationData
                 )
             )
-            ReminderNotificationProcessor(reminderContext).processReminders(scheduledReminderNotificationData)
+            ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, scheduledReminderNotificationData)
         }
     }
 

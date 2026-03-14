@@ -5,6 +5,7 @@ import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
+import javax.inject.Inject
 
 /**
  * Handles the creation and display of system notifications for reminders and stock alerts.
@@ -16,7 +17,7 @@ import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificatio
  * @property context The application context used to access system services and shared preferences.
  */
 @SuppressLint("DefaultLocale")
-class Notifications(private val reminderContext: ReminderContext) {
+class Notifications @Inject constructor(val reminderContext: ReminderContext) {
     fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
         var notificationId = notificationId
         if (notificationId == -1) {
