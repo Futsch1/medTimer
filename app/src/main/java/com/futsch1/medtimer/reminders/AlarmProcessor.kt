@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
@@ -19,7 +20,7 @@ class AlarmProcessor @Inject constructor(
     private val alarmManager: AlarmManager = reminderContext.alarmManager
     private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
-    suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         val originalInstant = scheduledReminderNotificationData.remindInstant
         scheduledReminderNotificationData.remindInstant = adjustTimestamp(reminderContext, originalInstant)
@@ -41,7 +42,6 @@ class AlarmProcessor @Inject constructor(
         // If the alarm is in the future, schedule with alarm manager
         if (scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
             val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
-
             if (canScheduleExactAlarms()) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
             } else {
@@ -66,7 +66,9 @@ class AlarmProcessor @Inject constructor(
                     scheduledReminderNotificationData
                 )
             )
-            ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, scheduledReminderNotificationData)
+            val reminderIntent = getReminderAction(reminderContext)
+            scheduledReminderNotificationData.toIntent(reminderIntent)
+            reminderContext.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
         }
     }
 
