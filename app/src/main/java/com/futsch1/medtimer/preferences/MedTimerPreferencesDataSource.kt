@@ -88,15 +88,33 @@ class MedTimerPreferencesDataSource @Inject constructor(
                 ?.toInt()
                 ?: 15).toDuration(DurationUnit.MINUTES),
             overrideDnd = sharedPreferences.getBoolean(PreferencesNames.OVERRIDE_DND, DEFAULT_MEDTIMER_SETTINGS.overrideDnd),
-            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, DEFAULT_MEDTIMER_SETTINGS.overrideDnd),
-            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, DEFAULT_MEDTIMER_SETTINGS.bigNotifications),
+            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, DEFAULT_MEDTIMER_SETTINGS.stickyOnLockscreen),
             dismissNotificationAction = when (sharedPreferences.getString(PreferencesNames.DISMISS_NOTIFICATION_ACTION, "0")) {
                 "0" -> DismissNotificationAction.SKIP
                 "1" -> DismissNotificationAction.SNOOZE
                 else -> DismissNotificationAction.TAKE
             },
+            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, DEFAULT_MEDTIMER_SETTINGS.bigNotifications),
             combineNotifications = sharedPreferences.getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, DEFAULT_MEDTIMER_SETTINGS.combineNotifications),
-            hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, DEFAULT_MEDTIMER_SETTINGS.hideMedicineName)
+            useRelativeDateTime = sharedPreferences.getBoolean(PreferencesNames.USE_RELATIVE_DATE_TIME, DEFAULT_MEDTIMER_SETTINGS.useRelativeDateTime),
+            showTakenTimeInOverview = sharedPreferences.getBoolean(
+                PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW,
+                DEFAULT_MEDTIMER_SETTINGS.showTakenTimeInOverview
+            ),
+            systemLocale = sharedPreferences.getBoolean(PreferencesNames.SYSTEM_LOCALE, DEFAULT_MEDTIMER_SETTINGS.systemLocale),
+            theme = when (sharedPreferences.getString(PreferencesNames.THEME, "0")) {
+                "0" -> ThemeSetting.DEFAULT
+                else -> ThemeSetting.ALTERNATIVE
+            },
+            hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, DEFAULT_MEDTIMER_SETTINGS.hideMedicineName),
+            appAuthentication = sharedPreferences.getBoolean(PreferencesNames.APP_AUTHENTICATION, DEFAULT_MEDTIMER_SETTINGS.appAuthentication),
+            useSecureWindow = sharedPreferences.getBoolean(PreferencesNames.SECURE_WINDOW, DEFAULT_MEDTIMER_SETTINGS.useSecureWindow),
+            automaticBackupInterval = when (sharedPreferences.getString(PreferencesNames.AUTOMATIC_BACKUP_INTERVAL, "0")) {
+                "0" -> BackupInterval.NEVER
+                "1" -> BackupInterval.DAILY
+                "2" -> BackupInterval.WEEKLY
+                else -> BackupInterval.MONTHLY
+            }
         )
     }
 }

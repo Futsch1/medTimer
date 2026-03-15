@@ -1,21 +1,20 @@
 package com.futsch1.medtimer
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.MedTimerSettings
 import com.futsch1.medtimer.schedulertests.TestHelper
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.mockStatic
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.LocalDate
@@ -72,10 +71,8 @@ class MedicineHelperTest {
     @Test
     fun testMedicineNameWithStockText() {
         val contextMock = mock(Context::class.java)
-        val preferencesMock = mock(SharedPreferences::class.java)
-        Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(false)
-        val preferencesManager = mockStatic(PreferenceManager::class.java)
-        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
+        val preferencesDataSource = mock(MedTimerPreferencesDataSource::class.java)
+        Mockito.`when`(preferencesDataSource.data).thenReturn(MutableStateFlow(MedTimerSettings.default()))
 
         Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->
@@ -90,14 +87,14 @@ class MedicineHelperTest {
         medicine.unit = "pills"
         assertEquals(
             "test",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
         )
 
         // Expired case
         medicine.expirationDate = LocalDate.now().toEpochDay() - 1
         assertEquals(
             "test (\uD83D\uDEAB)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
         )
         medicine.expirationDate = 0
 
@@ -105,7 +102,7 @@ class MedicineHelperTest {
         medicine.amount = 12.0
         assertEquals(
             "test (12 pills left)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
         )
 
         // Out of stock case
@@ -115,26 +112,21 @@ class MedicineHelperTest {
         fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
         )
 
         // Out of stock and expired case
         medicine.expirationDate = LocalDate.now().toEpochDay() - 1
         assertEquals(
             "test (12 pills left ⚠ \uD83D\uDEAB)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, fullMedicine).toString()
+            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
         )
-
-        preferencesManager.close()
     }
 
     @Test
     fun testGetMedicineName() {
-        val contextMock = mock(Context::class.java)
-        val preferencesMock = mock(SharedPreferences::class.java)
-        Mockito.`when`(preferencesMock.getBoolean(HIDE_MED_NAME, false)).thenReturn(true)
-        val preferencesManager = mockStatic(PreferenceManager::class.java)
-        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(contextMock) }.thenReturn(preferencesMock)
+        val medTimerSettings = mock(MedTimerSettings::class.java)
+        Mockito.`when`(medTimerSettings.hideMedicineName).thenReturn(true)
 
         val medicine = Medicine("test")
         val fullMedicine = FullMedicine()
@@ -146,9 +138,7 @@ class MedicineHelperTest {
         medicine.amount = 0.0
         assertEquals(
             "t***",
-            MedicineHelper.getMedicineName(contextMock, medicine, true)
+            MedicineHelper.getMedicineName(medicine, true, medTimerSettings)
         )
-
-        preferencesManager.close()
     }
 }

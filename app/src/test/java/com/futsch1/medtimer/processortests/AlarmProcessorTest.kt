@@ -14,7 +14,7 @@ class AlarmProcessorTest {
     @Test
     fun exactAlarms() {
         val reminderContext = TestReminderContext()
-        reminderContext.medTimerSettings = MedTimerSettings(exactReminders = true)
+        reminderContext.medTimerSettings = MedTimerSettings.default().copy(exactReminders = true)
         val processedNotificationData = fillWithTwoReminders(reminderContext)
         processedNotificationData.remindInstant = processedNotificationData.remindInstant.plusSeconds(10)
 

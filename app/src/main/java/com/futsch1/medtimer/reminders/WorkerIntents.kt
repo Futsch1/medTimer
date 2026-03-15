@@ -27,7 +27,7 @@ fun getReminderAction(reminderContext: ReminderContext): Intent {
  * Creates an [Intent] to trigger a snooze action with a specified duration.
  *
  * @param reminderNotificationData The data of the reminder to be snoozed.
- * @param snoozeTime The snooze duration in minutes.
+ * @param snoozeDuration The duration for which the reminder should be snoozed.
  */
 fun getSnoozeIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration): Intent {
     val snoozeIntent = reminderContext.getIntent(ProcessorCode.Snooze.action)

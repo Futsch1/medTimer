@@ -20,6 +20,9 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.preferences.PreferencesNames.ALARM_RINGTONE
+import com.futsch1.medtimer.preferences.PreferencesNames.NO_ALARM_SOUND_WHEN_SILENT
+import com.futsch1.medtimer.preferences.PreferencesNames.NO_VIBRATION_WHEN_SILENT
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
@@ -92,7 +95,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     private fun buildMediaPlayer() {
         val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
-            .getString("alarm_ringtone", Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
+            .getString(ALARM_RINGTONE, Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
             .toUri()
         val audioContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             createAttributionContext("audioPlayback")
@@ -152,11 +155,11 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun shallPlayAlarm(): Boolean {
-        return combinePreferenceAndRingerMode("no_alarm_sound_when_silent")
+        return combinePreferenceAndRingerMode(NO_ALARM_SOUND_WHEN_SILENT)
     }
 
     private fun shallVibrate(): Boolean {
-        return combinePreferenceAndRingerMode("no_vibration_when_silent")
+        return combinePreferenceAndRingerMode(NO_VIBRATION_WHEN_SILENT)
     }
 
     private fun combinePreferenceAndRingerMode(preferenceName: String): Boolean {

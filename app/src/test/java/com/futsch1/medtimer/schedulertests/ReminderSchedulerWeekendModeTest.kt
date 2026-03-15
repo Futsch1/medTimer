@@ -19,7 +19,7 @@ internal class ReminderSchedulerWeekendModeTest {
     fun weekendDaysEmpty() {
         val scheduler = scheduler
 
-        val medTimerSettings = MedTimerSettings(weekendTime = LocalTime.of(10, 0), weekendMode = true)
+        val medTimerSettings = MedTimerSettings.default().copy(weekendTime = LocalTime.of(10, 0), weekendMode = true)
         val stateFlow = MutableStateFlow(medTimerSettings)
 
         Mockito.`when`(
@@ -42,7 +42,7 @@ internal class ReminderSchedulerWeekendModeTest {
         // 1.1.1970 is a Thursday
         val scheduler = scheduler
 
-        val medTimerSettings = MedTimerSettings(
+        val medTimerSettings = MedTimerSettings.default().copy(
             weekendTime = LocalTime.of(10, 0),
             weekendMode = true,
             weekendDays = setOf(DayOfWeek.SATURDAY.value.toString(), DayOfWeek.SUNDAY.value.toString())

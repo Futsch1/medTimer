@@ -11,6 +11,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.reminderSummary
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 
 class ShowMedicineSheetDialog(
     val activity: FragmentActivity,
+    val preferencesDataSource: MedTimerPreferencesDataSource,
     val reminderId: Int,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -41,7 +43,8 @@ class ShowMedicineSheetDialog(
         val showMedicineSheetDialog =
             if (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) BottomSheetDialog(activity) else SideSheetDialog(activity)
         showMedicineSheetDialog.setContentView(R.layout.sheet_show_medicine)
-        showMedicineSheetDialog.findViewById<TextView>(R.id.medicineName)?.text = MedicineHelper.getMedicineNameWithStockText(activity, fullMedicine)
+        showMedicineSheetDialog.findViewById<TextView>(R.id.medicineName)?.text =
+            MedicineHelper.getMedicineNameWithStockText(activity, preferencesDataSource, fullMedicine)
 
         val datesTextView = showMedicineSheetDialog.findViewById<TextView>(R.id.medicineDates)
         datesTextView?.text = MedicineHelper.getDatesText(activity, fullMedicine)

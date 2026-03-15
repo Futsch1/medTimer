@@ -7,12 +7,11 @@ import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import androidx.core.text.bold
 import androidx.core.text.color
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.preferences.MedTimerSettings
-import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
@@ -30,14 +29,15 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
+        medTimerSettings: MedTimerSettings,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 getMedicineName(
-                    context,
                     fullMedicine.medicine,
-                    false
+                    false,
+                    medTimerSettings
                 )
             )
         }
@@ -133,22 +133,12 @@ object MedicineHelper {
     }
 
 
-    fun getMedicineNameWithStockText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, fullMedicine)
-    }
-
-    fun getMedicineName(
+    fun getMedicineNameWithStockText(
         context: Context,
-        medicine: Medicine,
-        notification: Boolean
-    ): String {
-        return if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(HIDE_MED_NAME, false) && notification
-        ) {
-            medicine.name[0] + "*".repeat(medicine.name.length - 1)
-        } else {
-            medicine.name
-        }
+        preferencesDataSource: MedTimerPreferencesDataSource,
+        fullMedicine: FullMedicine
+    ): SpannableStringBuilder {
+        return getMedicineNameWithStockTextInternal(context, preferencesDataSource.data.value, fullMedicine)
     }
 
     fun getMedicineName(

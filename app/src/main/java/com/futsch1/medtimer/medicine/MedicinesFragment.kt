@@ -25,6 +25,7 @@ import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -44,6 +45,9 @@ class MedicinesFragment : Fragment() {
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
 
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+
     private lateinit var idlingResource: SimpleIdlingResource
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
@@ -60,7 +64,7 @@ class MedicinesFragment : Fragment() {
             NavHostFragment.findNavController(this), false
         )
 
-        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel.medicineRepository)
+        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel.medicineRepository, preferencesDataSource)
     }
 
     override fun onCreateView(

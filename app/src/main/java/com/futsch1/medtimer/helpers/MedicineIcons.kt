@@ -11,6 +11,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PreferencesNames.ICON_COLOR
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
@@ -33,9 +34,9 @@ class MedicineIcons(context: Context) {
         }
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         if (iconColor != 0) {
-            sharedPref.edit { putInt("icon_color", iconColor) }
+            sharedPref.edit { putInt(ICON_COLOR, iconColor) }
         } else {
-            iconColor = sharedPref.getInt("icon_color", Color.BLACK)
+            iconColor = sharedPref.getInt(ICON_COLOR, Color.BLACK)
         }
     }
 

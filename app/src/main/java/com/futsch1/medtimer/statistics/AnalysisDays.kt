@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PreferencesNames.ANALYSIS_DAYS
 
 class AnalysisDays(context: Context) {
     companion object {
-        private const val PREFERENCE_KEY = "analysis_days"
         private const val DEFAULT_DAYS = 7
     }
 
@@ -20,12 +20,12 @@ class AnalysisDays(context: Context) {
     var position: Int
         get() = analysisDaysValues.indexOf(this.days)
         set(position) {
-            sharedPref.edit { putInt(PREFERENCE_KEY, position) }
+            sharedPref.edit { putInt(ANALYSIS_DAYS, position) }
         }
 
     val days: Int
         get() {
-            val days = sharedPref.getInt(PREFERENCE_KEY, analysisDaysValues.indexOf(DEFAULT_DAYS))
+            val days = sharedPref.getInt(ANALYSIS_DAYS, analysisDaysValues.indexOf(DEFAULT_DAYS))
                 .coerceIn(0, analysisDaysValues.size - 1)
             return this.analysisDaysValues[days]
         }

@@ -18,10 +18,17 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 import com.futsch1.medtimer.overview.actions.createActionsView
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.google.android.material.color.MaterialColors
 
 
-class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActivity: FragmentActivity, val clickDelegate: ClickDelegate) :
+class ReminderViewHolder(
+    itemView: View,
+    val parent: ViewGroup,
+    val fragmentActivity: FragmentActivity,
+    val preferencesDataSource: MedTimerPreferencesDataSource,
+    val clickDelegate: ClickDelegate
+) :
     RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -34,10 +41,15 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
     var selected: Boolean = false
 
     companion object {
-        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity, clickDelegate: ClickDelegate): ReminderViewHolder {
+        fun create(
+            parent: ViewGroup,
+            fragmentActivity: FragmentActivity,
+            preferencesDataSource: MedTimerPreferencesDataSource,
+            clickDelegate: ClickDelegate
+        ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate)
+            return ReminderViewHolder(view, parent, fragmentActivity, preferencesDataSource, clickDelegate)
         }
     }
 
@@ -84,7 +96,7 @@ class ReminderViewHolder(itemView: View, val parent: ViewGroup, val fragmentActi
                 if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
                     EditEventSheetDialog(fragmentActivity, (event as OverviewReminderEvent).reminderEvent)
                 } else {
-                    ShowMedicineSheetDialog(fragmentActivity, event.reminderId)
+                    ShowMedicineSheetDialog(fragmentActivity, preferencesDataSource, event.reminderId)
                 }
             }
         }

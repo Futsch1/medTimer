@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_NOTIFICATION
 
 class RequestPostNotificationPermission(val activity: AppCompatActivity) {
     private val requestPermissionLauncher = activity.registerForActivityResult(
@@ -15,7 +16,7 @@ class RequestPostNotificationPermission(val activity: AppCompatActivity) {
     ) { result: Boolean ->
         if (java.lang.Boolean.FALSE == result) {
             PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
-                .edit { putBoolean("show_notification", false) }
+                .edit { putBoolean(SHOW_NOTIFICATION, false) }
         }
     }
 

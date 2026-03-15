@@ -35,6 +35,9 @@ import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.preferences.PreferencesNames.APP_AUTHENTICATION
+import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_DISMISSED
+import com.futsch1.medtimer.preferences.PreferencesNames.THEME
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         // Select theme
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val theme: String = sharedPref.getString("theme", "0")!!
+        val theme: String = sharedPref.getString(THEME, "0")!!
         if (theme == "1") {
             setTheme(R.style.Theme_MedTimer2)
         }
@@ -95,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+        if (sharedPref.getBoolean(APP_AUTHENTICATION, false) && biometrics.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {
@@ -227,9 +230,5 @@ class MainActivity : AppCompatActivity() {
         } catch (_: IllegalStateException) {
             return false
         }
-    }
-
-    companion object {
-        private const val BATTERY_WARNING_DISMISSED = "battery_warning_dismissed"
     }
 }

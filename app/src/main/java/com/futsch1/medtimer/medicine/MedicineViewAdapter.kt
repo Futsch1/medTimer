@@ -9,26 +9,28 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
 import com.futsch1.medtimer.medicine.MedicineViewHolder.Companion.create
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Collections
 
 
-class MedicineViewAdapter(activity: FragmentActivity, medicineRepository: MedicineRepository, val dispatcher: CoroutineDispatcher = Dispatchers.IO) :
+class MedicineViewAdapter(
+    private val activity: FragmentActivity,
+    private val medicineRepository: MedicineRepository,
+    private val preferencesDataSource: MedTimerPreferencesDataSource,
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) :
     IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
-    private val activity: FragmentActivity
-    private val medicineRepository: MedicineRepository
 
     init {
         setHasStableIds(true)
-        this.activity = activity
-        this.medicineRepository = medicineRepository
     }
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
-        return create(parent, activity)
+        return create(parent, activity, preferencesDataSource)
     }
 
     // Replace the contents of a view (invoked by the layout manager)

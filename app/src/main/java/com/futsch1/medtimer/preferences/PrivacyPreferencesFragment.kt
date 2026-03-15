@@ -8,8 +8,14 @@ import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.Biometrics
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.preferences.PreferencesNames.SECURE_WINDOW
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.privacy_preferences, rootKey)
         setupBlockScreenCapture()
