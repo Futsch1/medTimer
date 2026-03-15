@@ -9,20 +9,15 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.preferences.PreferencesNames.ALARM_RINGTONE
-import com.futsch1.medtimer.preferences.PreferencesNames.NO_ALARM_SOUND_WHEN_SILENT
-import com.futsch1.medtimer.preferences.PreferencesNames.NO_VIBRATION_WHEN_SILENT
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +33,10 @@ class ReminderAlarmActivity : AppCompatActivity() {
     @Inject
     @Dispatcher(MedTimerDispatchers.Default)
     lateinit var backgroundDispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
     private var buildMediaPlayerJob: Job? = null
@@ -94,9 +93,6 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun buildMediaPlayer() {
-        val alarmURI = PreferenceManager.getDefaultSharedPreferences(this)
-            .getString(ALARM_RINGTONE, Settings.System.DEFAULT_ALARM_ALERT_URI.toString())!!
-            .toUri()
         val audioContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             createAttributionContext("audioPlayback")
         } else {
@@ -105,7 +101,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
         mediaPlayer =
             MediaPlayer.create(
                 audioContext,
-                alarmURI,
+                preferencesDataSource.data.value.alarmRingtone,
                 null,
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
                 0
@@ -155,16 +151,14 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun shallPlayAlarm(): Boolean {
-        return combinePreferenceAndRingerMode(NO_ALARM_SOUND_WHEN_SILENT)
+        return combinePreferenceAndRingerMode(preferencesDataSource.data.value.noAlarmSoundWhenSilent)
     }
 
     private fun shallVibrate(): Boolean {
-        return combinePreferenceAndRingerMode(NO_VIBRATION_WHEN_SILENT)
+        return combinePreferenceAndRingerMode(preferencesDataSource.data.value.noVibrationWhenSilent)
     }
 
-    private fun combinePreferenceAndRingerMode(preferenceName: String): Boolean {
-        val preferenceValue =
-            PreferenceManager.getDefaultSharedPreferences(this).getBoolean(preferenceName, false)
+    private fun combinePreferenceAndRingerMode(preferenceValue: Boolean): Boolean {
         if (preferenceValue) {
             // If the silent mode is active, do not ring the alarm
             val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager

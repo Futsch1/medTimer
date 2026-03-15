@@ -3,12 +3,10 @@ package com.futsch1.medtimer.overview
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
-import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -56,7 +54,7 @@ class OverviewViewModel @Inject constructor(
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        if (PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
+        if (preferencesDataSource.data.value.useRelativeDateTime) {
             viewModelScope.launch {
                 while (true) {
                     delay(60_000)

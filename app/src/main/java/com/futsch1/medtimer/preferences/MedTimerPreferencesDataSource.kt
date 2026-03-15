@@ -2,6 +2,7 @@ package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.preference.PreferenceDataStore
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPrefs
@@ -109,6 +110,12 @@ class MedTimerPreferencesDataSource @Inject constructor(
             hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, DEFAULT_MEDTIMER_SETTINGS.hideMedicineName),
             appAuthentication = sharedPreferences.getBoolean(PreferencesNames.APP_AUTHENTICATION, DEFAULT_MEDTIMER_SETTINGS.appAuthentication),
             useSecureWindow = sharedPreferences.getBoolean(PreferencesNames.SECURE_WINDOW, DEFAULT_MEDTIMER_SETTINGS.useSecureWindow),
+            alarmRingtone = sharedPreferences.getString(PreferencesNames.ALARM_RINGTONE, "")?.toUri() ?: DEFAULT_MEDTIMER_SETTINGS.alarmRingtone,
+            noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
+                PreferencesNames.NO_ALARM_SOUND_WHEN_SILENT,
+                DEFAULT_MEDTIMER_SETTINGS.noAlarmSoundWhenSilent
+            ),
+            noVibrationWhenSilent = sharedPreferences.getBoolean(PreferencesNames.NO_VIBRATION_WHEN_SILENT, DEFAULT_MEDTIMER_SETTINGS.noVibrationWhenSilent),
             automaticBackupInterval = when (sharedPreferences.getString(PreferencesNames.AUTOMATIC_BACKUP_INTERVAL, "0")) {
                 "0" -> BackupInterval.NEVER
                 "1" -> BackupInterval.DAILY

@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.preferences
 
+import android.net.Uri
+import android.provider.Settings
 import java.time.LocalTime
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -41,6 +43,10 @@ data class MedTimerSettings(
     val hideMedicineName: Boolean,
     val appAuthentication: Boolean,
     val useSecureWindow: Boolean,
+    // Alarm settings
+    val alarmRingtone: Uri,
+    val noAlarmSoundWhenSilent: Boolean,
+    val noVibrationWhenSilent: Boolean,
     // Automatic backup settings
     val automaticBackupInterval: BackupInterval
 ) {
@@ -67,11 +73,16 @@ data class MedTimerSettings(
                 hideMedicineName = false,
                 appAuthentication = false,
                 useSecureWindow = false,
+                alarmRingtone = Settings.System.DEFAULT_ALARM_ALERT_URI,
+                noAlarmSoundWhenSilent = false,
+                noVibrationWhenSilent = false,
                 automaticBackupInterval = BackupInterval.NEVER
             )
         }
     }
 
+    // Used from unit tests
+    @Suppress("unused")
     fun copyWith(overrides: MedTimerSettings.() -> Unit): MedTimerSettings {
         val copy = this.copy()
         overrides(copy)
