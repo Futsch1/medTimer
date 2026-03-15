@@ -43,7 +43,7 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
         if (scheduledReminders.isNotEmpty()) {
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(
-                    if (reminderContext.preferencesDataSource.data.value.combineNotifications) scheduledReminders else listOf(
+                    if (reminderContext.preferencesDataSource.preferences.value.combineNotifications) scheduledReminders else listOf(
                         scheduledReminders[0]
                     )
                 )

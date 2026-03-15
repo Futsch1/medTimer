@@ -12,7 +12,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
@@ -229,8 +229,8 @@ object TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format as relative date time string
      */
-    fun secondsSinceEpochToConfigurableDateTimeString(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, timeStamp: Long): String {
-        return if (preferencesDataSource.data.value.useRelativeDateTime) {
+    fun secondsSinceEpochToConfigurableDateTimeString(context: Context, preferencesDataSource: PreferencesDataSource, timeStamp: Long): String {
+        return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             DateUtils.getRelativeDateTimeString(
                 LocaleContextWrapper(context),
                 timeStamp * 1000,
@@ -307,11 +307,11 @@ object TimeHelper {
      */
     fun secondsSinceEpochToConfigurableTimeString(
         context: Context,
-        preferencesDataSource: MedTimerPreferencesDataSource,
+        preferencesDataSource: PreferencesDataSource,
         timeStamp: Long,
         isShort: Boolean
     ): String {
-        return if (preferencesDataSource.data.value.useRelativeDateTime) {
+        return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             if (isShort) {
                 DateUtils.getRelativeTimeSpanString(timeStamp * 1000, Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString()
             } else {

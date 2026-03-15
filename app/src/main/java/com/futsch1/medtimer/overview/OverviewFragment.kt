@@ -24,7 +24,7 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
@@ -47,7 +47,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     lateinit var mainDispatcher: CoroutineDispatcher
 
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView

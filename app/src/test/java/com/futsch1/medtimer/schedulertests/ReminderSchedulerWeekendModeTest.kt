@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.preferences.MedTimerPreferences
+import com.futsch1.medtimer.model.MedTimerPreferences
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
@@ -23,7 +23,7 @@ internal class ReminderSchedulerWeekendModeTest {
         val stateFlow = MutableStateFlow(medTimerPreferences)
 
         Mockito.`when`(
-            ReminderSchedulerUnitTest.preferencesDataSource.data
+            ReminderSchedulerUnitTest.preferencesDataSource.preferences
         ).thenReturn(stateFlow)
 
         val medicineWithReminders1 =
@@ -50,7 +50,7 @@ internal class ReminderSchedulerWeekendModeTest {
         val stateFlow = MutableStateFlow(medTimerPreferences)
 
         Mockito.`when`(
-            ReminderSchedulerUnitTest.preferencesDataSource.data
+            ReminderSchedulerUnitTest.preferencesDataSource.preferences
         ).thenReturn(stateFlow)
 
         val medicineWithReminders1 =

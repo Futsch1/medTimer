@@ -18,7 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +36,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
     lateinit var backgroundDispatcher: CoroutineDispatcher
 
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var vibrator: Vibrator
@@ -102,7 +102,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
         mediaPlayer =
             MediaPlayer.create(
                 audioContext,
-                preferencesDataSource.data.value.alarmRingtone ?: Settings.System.DEFAULT_ALARM_ALERT_URI,
+                preferencesDataSource.preferences.value.alarmRingtone ?: Settings.System.DEFAULT_ALARM_ALERT_URI,
                 null,
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
                 0
@@ -152,11 +152,11 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     private fun shallPlayAlarm(): Boolean {
-        return combinePreferenceAndRingerMode(preferencesDataSource.data.value.noAlarmSoundWhenSilent)
+        return combinePreferenceAndRingerMode(preferencesDataSource.preferences.value.noAlarmSoundWhenSilent)
     }
 
     private fun shallVibrate(): Boolean {
-        return combinePreferenceAndRingerMode(preferencesDataSource.data.value.noVibrationWhenSilent)
+        return combinePreferenceAndRingerMode(preferencesDataSource.preferences.value.noVibrationWhenSilent)
     }
 
     private fun combinePreferenceAndRingerMode(preferenceValue: Boolean): Boolean {

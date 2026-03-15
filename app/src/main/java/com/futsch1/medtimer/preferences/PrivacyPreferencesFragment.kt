@@ -14,7 +14,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.privacy_preferences, rootKey)

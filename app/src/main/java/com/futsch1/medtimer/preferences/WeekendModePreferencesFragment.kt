@@ -12,6 +12,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
+import com.futsch1.medtimer.model.MedTimerPreferences
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     private var currentSettings: MedTimerPreferences? = null
 
@@ -40,7 +41,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                preferencesDataSource.data.collect { settings ->
+                preferencesDataSource.preferences.collect { settings ->
                     currentSettings = settings
                     updateTimePicker(settings)
                 }

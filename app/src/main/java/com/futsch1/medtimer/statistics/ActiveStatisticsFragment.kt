@@ -23,10 +23,4 @@ class ActiveStatisticsFragment(context: Context) {
         set(fragment) {
             sharedPref.edit { putInt(ACTIVE_STATISTICS_FRAGMENT, fragment.ordinal) }
         }
-
-    enum class StatisticFragmentType {
-        CHARTS,
-        TABLE,
-        CALENDAR
-    }
 }

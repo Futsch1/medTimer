@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -30,7 +30,7 @@ data class FilterState(val activeFilters: Set<OverviewFilterToggles>, val day: L
 
 class OverviewViewModel @Inject constructor(
     @param:ApplicationContext private val applicationContext: Context,
-    private val preferencesDataSource: MedTimerPreferencesDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     medicineViewModel: MedicineViewModel
 ) : ViewModel() {
     private var _initialized = false
@@ -54,7 +54,7 @@ class OverviewViewModel @Inject constructor(
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        if (preferencesDataSource.data.value.useRelativeDateTime) {
+        if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             viewModelScope.launch {
                 while (true) {
                     delay(60_000)

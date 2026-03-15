@@ -33,9 +33,9 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.ThemeSetting
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_DISMISSED
-import com.futsch1.medtimer.preferences.ThemeSetting
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,18 +49,18 @@ class MainActivity : AppCompatActivity() {
     private var batteryOptimizationWarning: CardView? = null
 
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Select theme
-        if (preferencesDataSource.data.value.theme == ThemeSetting.ALTERNATIVE) {
+        if (preferencesDataSource.preferences.value.theme == ThemeSetting.ALTERNATIVE) {
             setTheme(R.style.Theme_MedTimer2)
         }
 
         // Screen capture
-        if (preferencesDataSource.data.value.useSecureWindow) {
+        if (preferencesDataSource.preferences.value.useSecureWindow) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
 
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun authenticate(preferencesDataSource: MedTimerPreferencesDataSource) {
+    private suspend fun authenticate(preferencesDataSource: PreferencesDataSource) {
         val biometrics = Biometrics(
             this,
             {
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (preferencesDataSource.data.value.appAuthentication && biometrics.hasBiometrics()) {
+        if (preferencesDataSource.preferences.value.appAuthentication && biometrics.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {

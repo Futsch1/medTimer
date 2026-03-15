@@ -6,7 +6,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 
@@ -29,7 +29,7 @@ enum class EventPosition {
 }
 
 
-abstract class OverviewEvent(val preferencesDataSource: MedTimerPreferencesDataSource) {
+abstract class OverviewEvent(val preferencesDataSource: PreferencesDataSource) {
     abstract val id: Int
     abstract val timestamp: Long
     abstract val text: Spanned
@@ -39,7 +39,7 @@ abstract class OverviewEvent(val preferencesDataSource: MedTimerPreferencesDataS
     abstract val reminderType: Reminder.ReminderType
     abstract val reminderId: Int
     val updateValue: Long
-        get() = if (preferencesDataSource.data.value.useRelativeDateTime) System.currentTimeMillis() / 60_000 else 0
+        get() = if (preferencesDataSource.preferences.value.useRelativeDateTime) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
 
     override fun equals(other: Any?): Boolean {
@@ -60,7 +60,7 @@ abstract class OverviewEvent(val preferencesDataSource: MedTimerPreferencesDataS
     }
 }
 
-class OverviewReminderEvent(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, val reminderEvent: ReminderEvent) :
+class OverviewReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val reminderEvent: ReminderEvent) :
     OverviewEvent(preferencesDataSource) {
     override val text: Spanned = formatReminderEventString(context, reminderEvent, preferencesDataSource)
 
@@ -93,7 +93,7 @@ class OverviewReminderEvent(context: Context, preferencesDataSource: MedTimerPre
     }
 }
 
-class OverviewScheduledReminderEvent(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, val scheduledReminder: ScheduledReminder) :
+class OverviewScheduledReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val scheduledReminder: ScheduledReminder) :
     OverviewEvent(preferencesDataSource) {
     override val text: Spanned = formatScheduledReminderString(context, scheduledReminder, preferencesDataSource)
     override val id: Int
@@ -113,10 +113,10 @@ class OverviewScheduledReminderEvent(context: Context, preferencesDataSource: Me
         get() = scheduledReminder.reminder.reminderId
 }
 
-fun create(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, reminderEvent: ReminderEvent): OverviewEvent {
+fun create(context: Context, preferencesDataSource: PreferencesDataSource, reminderEvent: ReminderEvent): OverviewEvent {
     return OverviewReminderEvent(context, preferencesDataSource, reminderEvent)
 }
 
-fun create(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, scheduledReminder: ScheduledReminder): OverviewEvent {
+fun create(context: Context, preferencesDataSource: PreferencesDataSource, scheduledReminder: ScheduledReminder): OverviewEvent {
     return OverviewScheduledReminderEvent(context, preferencesDataSource, scheduledReminder)
 }

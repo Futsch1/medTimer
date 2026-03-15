@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
@@ -90,7 +90,7 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
     private fun reminderEventToString(
         reminderEvent: ReminderEvent,
-        preferencesDataSource: MedTimerPreferencesDataSource,
+        preferencesDataSource: PreferencesDataSource,
         isSmall: Boolean
     ): Spanned {
         return formatReminderStringForWidget(context, reminderEvent, preferencesDataSource, isSmall)

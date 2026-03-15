@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders.scheduling
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
 class SchedulingFactory {
@@ -12,7 +12,7 @@ class SchedulingFactory {
         medicine: Medicine,
         reminderEvents: List<ReminderEvent>,
         timeAccess: TimeAccess,
-        dataSource: MedTimerPreferencesDataSource
+        dataSource: PreferencesDataSource
     ): Scheduling {
         val scheduler = when (reminder.reminderType) {
             Reminder.ReminderType.LINKED -> {

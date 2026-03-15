@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -70,7 +70,7 @@ class ReminderContext(val context: Context) {
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
 
-    val preferencesDataSource: MedTimerPreferencesDataSource by lazy {
+    val preferencesDataSource: PreferencesDataSource by lazy {
         // Bridge from non-Hilt to Hilt code
         EntryPointAccessors.fromApplication(context, PreferencesEntryPoint::class.java).getDataSource()
     }
@@ -79,7 +79,7 @@ class ReminderContext(val context: Context) {
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 fun interface PreferencesEntryPoint {
-    fun getDataSource(): MedTimerPreferencesDataSource
+    fun getDataSource(): PreferencesDataSource
 }
 
 interface TimeAccess {

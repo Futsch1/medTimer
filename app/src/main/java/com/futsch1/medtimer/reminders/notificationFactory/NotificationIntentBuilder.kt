@@ -6,7 +6,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.preferences.DismissNotificationAction
+import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
@@ -67,7 +67,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeDuration = reminderContext.preferencesDataSource.data.value.snoozeDuration
+        val snoozeDuration = reminderContext.preferencesDataSource.preferences.value.snoozeDuration
 
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = getCustomSnoozeActionIntent(
@@ -95,7 +95,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
-        if (reminderContext.preferencesDataSource.data.value.snoozeDuration.inWholeSeconds > 0) {
+        if (reminderContext.preferencesDataSource.preferences.value.snoozeDuration.inWholeSeconds > 0) {
             return null
         }
         val resultIntent = Intent()
@@ -150,7 +150,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
-        return when (reminderContext.preferencesDataSource.data.value.dismissNotificationAction) {
+        return when (reminderContext.preferencesDataSource.preferences.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
                 pendingSkipped
             }

@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.preferences.MedTimerPreferences
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -358,14 +358,14 @@ internal class ReminderSchedulerUnitTest {
         val scheduler: ReminderScheduler
             get() = getScheduler(0)
 
-        var preferencesDataSource: MedTimerPreferencesDataSource = Mockito.mock(MedTimerPreferencesDataSource::class.java)
+        var preferencesDataSource: PreferencesDataSource = Mockito.mock(PreferencesDataSource::class.java)
 
         fun getScheduler(plusDays: Int): ReminderScheduler {
             val mockTimeAccess: TimeAccess = Mockito.mock(TimeAccess::class.java)
             Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
             Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(plusDays.toLong()))
             val stateFlow = MutableStateFlow(MedTimerPreferences.default())
-            Mockito.`when`(preferencesDataSource.data).thenReturn(stateFlow)
+            Mockito.`when`(preferencesDataSource.preferences).thenReturn(stateFlow)
 
             return ReminderScheduler(mockTimeAccess, preferencesDataSource)
         }

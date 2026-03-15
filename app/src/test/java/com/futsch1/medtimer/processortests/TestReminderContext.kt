@@ -20,8 +20,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.preferences.DEFAULT_MEDTIMER_SETTINGS
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -132,7 +132,7 @@ class TestReminderContext {
     val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
     val audioManagerMock: AudioManager = mock(AudioManager::class.java)
-    val preferencesDataSourceMock: MedTimerPreferencesDataSource = mock(MedTimerPreferencesDataSource::class.java)
+    val preferencesDataSourceMock: PreferencesDataSource = mock(PreferencesDataSource::class.java)
 
     val stringList = mapOf(
         R.string.high to "High",
@@ -141,7 +141,7 @@ class TestReminderContext {
     var notificationId: Int = 1
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
     var instant: Instant = Instant.ofEpochSecond(0)
-    var medTimerSettings = DEFAULT_MEDTIMER_SETTINGS
+    var medTimerPreferences = MedTimerPreferences.default()
 
     init {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
@@ -177,6 +177,6 @@ class TestReminderContext {
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 
-        `when`(preferencesDataSourceMock.data).thenAnswer { MutableStateFlow(medTimerSettings) }
+        `when`(preferencesDataSourceMock.preferences).thenAnswer { MutableStateFlow(medTimerPreferences) }
     }
 }

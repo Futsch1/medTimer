@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 
 class OverviewViewModelFactory(
     context: Context,
-    private val preferencesDataSource: MedTimerPreferencesDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     private val medicineViewModel: MedicineViewModel
 ) : ViewModelProvider.Factory {
     private val applicationContext = context.applicationContext

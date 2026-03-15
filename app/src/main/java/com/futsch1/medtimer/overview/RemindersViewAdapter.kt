@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 
 class RemindersViewAdapter(
     diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
     val fragmentActivity: FragmentActivity,
-    val preferencesDataSource: MedTimerPreferencesDataSource
+    val preferencesDataSource: PreferencesDataSource
 ) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder>(diffCallback),
     ReminderViewHolder.ClickDelegate {

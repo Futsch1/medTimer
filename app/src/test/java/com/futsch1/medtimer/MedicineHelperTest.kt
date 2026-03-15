@@ -5,8 +5,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.preferences.MedTimerPreferences
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.schedulertests.TestHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
@@ -71,8 +71,8 @@ class MedicineHelperTest {
     @Test
     fun testMedicineNameWithStockText() {
         val contextMock = mock(Context::class.java)
-        val preferencesDataSource = mock(MedTimerPreferencesDataSource::class.java)
-        Mockito.`when`(preferencesDataSource.data).thenReturn(MutableStateFlow(MedTimerPreferences.default()))
+        val preferencesDataSource = mock(PreferencesDataSource::class.java)
+        Mockito.`when`(preferencesDataSource.preferences).thenReturn(MutableStateFlow(MedTimerPreferences.default()))
 
         Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->

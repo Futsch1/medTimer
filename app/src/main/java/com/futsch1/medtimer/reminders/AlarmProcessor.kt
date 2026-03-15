@@ -14,7 +14,7 @@ import java.time.Instant
  */
 class AlarmProcessor(val reminderContext: ReminderContext) {
     private val alarmManager: AlarmManager = reminderContext.alarmManager
-    private val exactReminders: Boolean = reminderContext.preferencesDataSource.data.value.exactReminders
+    private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
     suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling

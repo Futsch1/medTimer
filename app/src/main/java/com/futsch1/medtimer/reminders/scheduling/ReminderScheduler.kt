@@ -2,10 +2,10 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
-class ReminderScheduler(val timeAccess: TimeAccess, val dataSource: MedTimerPreferencesDataSource) {
+class ReminderScheduler(val timeAccess: TimeAccess, val dataSource: PreferencesDataSource) {
     fun schedule(fullMedicineWithTagsAndReminders: List<FullMedicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 

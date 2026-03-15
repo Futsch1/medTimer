@@ -9,7 +9,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AlarmSettingsFragment : PreferenceFragmentCompat() {
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferencesDataSource

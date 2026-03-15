@@ -9,7 +9,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
 import com.futsch1.medtimer.medicine.MedicineViewHolder.Companion.create
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import java.util.Collections
 class MedicineViewAdapter(
     private val activity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
-    private val preferencesDataSource: MedTimerPreferencesDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :
     IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {

@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.preferences
+package com.futsch1.medtimer.model
 
 import android.net.Uri
 import android.provider.Settings
@@ -89,5 +89,3 @@ data class MedTimerPreferences(
         return copy
     }
 }
-
-val DEFAULT_MEDTIMER_SETTINGS = MedTimerPreferences.default()

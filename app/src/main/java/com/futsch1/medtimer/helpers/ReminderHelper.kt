@@ -14,7 +14,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.LocalDate
 import java.util.Locale
@@ -55,14 +55,14 @@ fun setReminderActive(reminder: Reminder, active: Boolean) {
 }
 
 fun formatReminderEventString(
-    context: Context, reminderEvent: ReminderEvent, preferencesDataSource: MedTimerPreferencesDataSource
+    context: Context, reminderEvent: ReminderEvent, preferencesDataSource: PreferencesDataSource
 ): Spanned {
     var takenTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, preferencesDataSource, reminderEvent.remindedTimestamp, false
     )
     val reminderTypeSpan = getReminderTypeSpan(context, reminderEvent.reminderType)
     if (reminderEvent.processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
-        preferencesDataSource.data.value.showTakenTimeInOverview
+        preferencesDataSource.preferences.value.showTakenTimeInOverview
     ) {
         val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
             TimeHelper.secondsSinceEpochToConfigurableTimeString(
@@ -83,7 +83,7 @@ fun formatReminderEventString(
 }
 
 fun formatReminderStringForWidget(
-    context: Context, reminderEvent: ReminderEvent, preferencesDataSource: MedTimerPreferencesDataSource, isShort: Boolean
+    context: Context, reminderEvent: ReminderEvent, preferencesDataSource: PreferencesDataSource, isShort: Boolean
 ): Spanned {
     val takenTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(
@@ -110,7 +110,7 @@ private fun statusToString(context: Context, status: ReminderEvent.ReminderStatu
 }
 
 fun formatScheduledReminderString(
-    context: Context, scheduledReminder: ScheduledReminder, preferencesDataSource: MedTimerPreferencesDataSource
+    context: Context, scheduledReminder: ScheduledReminder, preferencesDataSource: PreferencesDataSource
 ): Spanned {
     val scheduledTime = TimeHelper.secondsSinceEpochToConfigurableTimeString(
         context, preferencesDataSource, scheduledReminder.timestamp.toEpochMilli() / 1000, false
@@ -137,7 +137,7 @@ fun getReminderTypeSpan(context: Context, reminderType: Reminder.ReminderType): 
 }
 
 fun formatScheduledReminderStringForWidget(
-    context: Context, scheduledReminder: ScheduledReminder, preferencesDataSource: MedTimerPreferencesDataSource, isShort: Boolean
+    context: Context, scheduledReminder: ScheduledReminder, preferencesDataSource: PreferencesDataSource, isShort: Boolean
 ): Spanned {
     val scheduledTime = (if (isShort)
         TimeHelper.secondsSinceEpochToConfigurableTimeString(

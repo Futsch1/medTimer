@@ -27,7 +27,7 @@ import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     override lateinit var medicineRepository: MedicineRepository
 
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
     private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
     private val medicineViewModel: MedicineViewModel by viewModels()
 

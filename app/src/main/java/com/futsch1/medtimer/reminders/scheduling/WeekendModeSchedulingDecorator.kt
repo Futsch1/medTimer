@@ -1,14 +1,14 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.preferences.MedTimerPreferences
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
 class WeekendModeSchedulingDecorator(
     val scheduler: Scheduling,
     val timeAccess: TimeAccess,
-    private val dataSource: MedTimerPreferencesDataSource
+    private val dataSource: PreferencesDataSource
 ) :
     Scheduling {
 
@@ -29,7 +29,7 @@ class WeekendModeSchedulingDecorator(
         var nextScheduledTime = scheduler.getNextScheduledTime()
 
         if (nextScheduledTime != null) {
-            nextScheduledTime = adjustInstant(nextScheduledTime, dataSource.data.value)
+            nextScheduledTime = adjustInstant(nextScheduledTime, dataSource.preferences.value)
         }
         return nextScheduledTime
     }

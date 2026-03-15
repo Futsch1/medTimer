@@ -6,7 +6,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.preferences.DismissNotificationAction
+import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -26,7 +26,7 @@ fun getReminderNotificationFactory(
             reminderNotification
         )
     } else {
-        if (reminderContext.preferencesDataSource.data.value.bigNotifications) {
+        if (reminderContext.preferencesDataSource.preferences.value.bigNotifications) {
             BigReminderNotificationFactory(
                 reminderContext, reminderNotification
             )
@@ -72,7 +72,7 @@ abstract class ReminderNotificationFactory(
         )
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferencesDataSource.data.value.stickyOnLockscreen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferencesDataSource.preferences.value.stickyOnLockscreen
         ) {
             builder.setOngoing(true)
         }
@@ -108,7 +108,7 @@ abstract class ReminderNotificationFactory(
 
     fun buildActions(
     ) {
-        when (reminderContext.preferencesDataSource.data.value.dismissNotificationAction) {
+        when (reminderContext.preferencesDataSource.preferences.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
                 addTakenAction()
                 addSnoozeAction()

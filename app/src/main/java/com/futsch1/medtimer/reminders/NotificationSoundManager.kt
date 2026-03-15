@@ -21,7 +21,7 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
         reminderContext.notificationManager
     private val audioManager: AudioManager =
         reminderContext.audioManager
-    private val overrideDnd = reminderContext.preferencesDataSource.data.value.overrideDnd
+    private val overrideDnd = reminderContext.preferencesDataSource.preferences.value.overrideDnd
 
     init {
         if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd

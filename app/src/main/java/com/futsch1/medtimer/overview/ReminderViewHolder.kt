@@ -18,7 +18,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 import com.futsch1.medtimer.overview.actions.createActionsView
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.color.MaterialColors
 
 
@@ -26,7 +26,7 @@ class ReminderViewHolder(
     itemView: View,
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
-    val preferencesDataSource: MedTimerPreferencesDataSource,
+    val preferencesDataSource: PreferencesDataSource,
     val clickDelegate: ClickDelegate
 ) :
     RecyclerView.ViewHolder(itemView) {
@@ -44,7 +44,7 @@ class ReminderViewHolder(
         fun create(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
-            preferencesDataSource: MedTimerPreferencesDataSource,
+            preferencesDataSource: PreferencesDataSource,
             clickDelegate: ClickDelegate
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)

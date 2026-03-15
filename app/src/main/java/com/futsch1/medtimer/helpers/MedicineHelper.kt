@@ -10,8 +10,8 @@ import androidx.core.text.color
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.preferences.MedTimerPreferences
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
@@ -135,10 +135,10 @@ object MedicineHelper {
 
     fun getMedicineNameWithStockText(
         context: Context,
-        preferencesDataSource: MedTimerPreferencesDataSource,
+        preferencesDataSource: PreferencesDataSource,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, preferencesDataSource.data.value, fullMedicine)
+        return getMedicineNameWithStockTextInternal(context, preferencesDataSource.preferences.value, fullMedicine)
     }
 
     fun getMedicineName(

@@ -20,7 +20,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockText
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.helpers.remindersSummary
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 class MedicineViewHolder private constructor(
     holderItemView: View,
     private val activity: FragmentActivity,
-    private val preferencesDataSource: MedTimerPreferencesDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
@@ -110,10 +110,10 @@ class MedicineViewHolder private constructor(
 
     companion object {
         @JvmStatic
-        fun create(parent: ViewGroup, activity: FragmentActivity, medTimerPreferencesDataSource: MedTimerPreferencesDataSource): MedicineViewHolder {
+        fun create(parent: ViewGroup, activity: FragmentActivity, preferencesDataSource: PreferencesDataSource): MedicineViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.card_medicine, parent, false)
-            return MedicineViewHolder(view, activity, medTimerPreferencesDataSource)
+            return MedicineViewHolder(view, activity, preferencesDataSource)
         }
     }
 }

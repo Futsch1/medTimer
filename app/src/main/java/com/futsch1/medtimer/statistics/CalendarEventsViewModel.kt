@@ -13,7 +13,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
@@ -35,7 +35,7 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext
     private val applicationContext: Context,
     private val medicineRepository: MedicineRepository,
-    private val preferencesDataSource: MedTimerPreferencesDataSource
+    private val preferencesDataSource: PreferencesDataSource
 ) : ViewModel() {
     private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()

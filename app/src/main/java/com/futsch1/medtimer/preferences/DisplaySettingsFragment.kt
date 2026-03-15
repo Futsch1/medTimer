@@ -11,7 +11,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DisplaySettingsFragment : PreferencesFragment() {
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferencesDataSource

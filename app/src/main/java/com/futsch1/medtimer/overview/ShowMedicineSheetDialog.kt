@@ -11,7 +11,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.reminderSummary
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 
 class ShowMedicineSheetDialog(
     val activity: FragmentActivity,
-    val preferencesDataSource: MedTimerPreferencesDataSource,
+    val preferencesDataSource: PreferencesDataSource,
     val reminderId: Int,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main

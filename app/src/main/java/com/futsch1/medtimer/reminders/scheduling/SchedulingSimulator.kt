@@ -4,7 +4,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -18,7 +18,7 @@ class SchedulingSimulator(
     medicines: List<FullMedicine>,
     recentReminders: List<ReminderEvent>,
     timeAccess: TimeAccess,
-    private val dataSource: MedTimerPreferencesDataSource
+    private val dataSource: PreferencesDataSource
 ) {
     val maxSimulationDays = 400
 

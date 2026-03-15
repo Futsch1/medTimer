@@ -24,7 +24,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NotificationSettingsFragment : PreferencesFragment() {
     @Inject
-    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     private var rootKey: String? = null
 

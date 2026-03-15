@@ -133,7 +133,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         }
 
         private fun getNumberOfRepeats(reminderContext: ReminderContext): Int {
-            return reminderContext.preferencesDataSource.data.value.numberOfRepetitions
+            return reminderContext.preferencesDataSource.preferences.value.numberOfRepetitions
         }
 
     }

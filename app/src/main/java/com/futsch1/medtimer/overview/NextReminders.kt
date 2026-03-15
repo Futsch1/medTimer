@@ -7,7 +7,7 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.allStatusValues
-import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -19,7 +19,7 @@ import java.time.ZoneId
 class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel,
-    private val dataSource: MedTimerPreferencesDataSource
+    private val dataSource: PreferencesDataSource
 ) {
     private var reminderEvents: List<ReminderEvent>? = null
     private var fullMedicines: List<FullMedicine>? = null
