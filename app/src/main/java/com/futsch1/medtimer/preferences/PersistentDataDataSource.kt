@@ -12,8 +12,9 @@ import com.futsch1.medtimer.model.StatisticFragment
 import com.futsch1.medtimer.preferences.PreferencesNames.ACTIVE_STATISTICS_FRAGMENT
 import com.futsch1.medtimer.preferences.PreferencesNames.ANALYSIS_DAYS
 import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_DIRECTORY
-import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_DISMISSED
+import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_SHOWN
 import com.futsch1.medtimer.preferences.PreferencesNames.ICON_COLOR
+import com.futsch1.medtimer.preferences.PreferencesNames.INTRO_SHOWN
 import com.futsch1.medtimer.preferences.PreferencesNames.LAST_AUTOMATIC_BACKUP
 import com.futsch1.medtimer.preferences.PreferencesNames.LAST_CUSTOM_DOSE
 import com.futsch1.medtimer.preferences.PreferencesNames.LAST_CUSTOM_DOSE_AMOUNT
@@ -47,16 +48,28 @@ class PersistentDataDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getPersistentData())
 
-    fun setLastCustomDose(value: String) {
-        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE, value) }
+    fun setLastCustomDose(lastCustomDose: String) {
+        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE, lastCustomDose) }
     }
 
-    fun setLastCustomDoseAmount(value: String) {
-        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE_AMOUNT, value) }
+    fun setLastCustomDoseAmount(lastCustomDoseAmount: String) {
+        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE_AMOUNT, lastCustomDoseAmount) }
     }
 
     fun setActiveStatisticsFragment(fragment: StatisticFragment) {
         defaultSharedPreferences.edit { putInt(ACTIVE_STATISTICS_FRAGMENT, fragment.ordinal) }
+    }
+
+    fun setAnalysisDays(days: Int) {
+        defaultSharedPreferences.edit { putInt(ANALYSIS_DAYS, days) }
+    }
+
+    fun setIntroShown(introShown: Boolean) {
+        defaultSharedPreferences.edit { putBoolean(INTRO_SHOWN, introShown) }
+    }
+
+    fun setBatteryWarningShown(batteryWarningShown: Boolean) {
+        defaultSharedPreferences.edit { putBoolean(BATTERY_WARNING_SHOWN, batteryWarningShown) }
     }
 
     private fun getPersistentData(): PersistentData {
@@ -70,7 +83,8 @@ class PersistentDataDataSource @Inject constructor(
                 else -> StatisticFragment.CALENDAR
             },
             analysisDays = defaultSharedPreferences.getInt(ANALYSIS_DAYS, default.analysisDays),
-            batteryWarningDismissed = defaultSharedPreferences.getBoolean(BATTERY_WARNING_DISMISSED, default.batteryWarningDismissed),
+            batteryWarningShown = defaultSharedPreferences.getBoolean(BATTERY_WARNING_SHOWN, default.batteryWarningShown),
+            introShown = defaultSharedPreferences.getBoolean(INTRO_SHOWN, default.introShown),
             lastAutomaticBackup = LocalDate.parse(defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null) ?: default.lastAutomaticBackup.toString()),
             automaticBackupDirectory = defaultSharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),

@@ -24,7 +24,6 @@ class StatisticsFragment : Fragment() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment
-    private lateinit var analysisDays: AnalysisDays
     private lateinit var optionsMenu: OptionsMenu
 
     @Inject
@@ -33,9 +32,7 @@ class StatisticsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        analysisDays = AnalysisDays(requireContext())
-
-        chartsFragment = ChartsFragment.newInstance(analysisDays.days)
+        chartsFragment = ChartsFragment.newInstance(persistentDataDataSource.data.value.analysisDays)
 
         optionsMenu = OptionsMenu(
             this,
@@ -136,7 +133,7 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun setupTimeSpinner() {
-        timeSpinner.setSelection(analysisDays.position)
+        timeSpinner.setSelection(AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays))
         timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -144,10 +141,12 @@ class StatisticsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                if (position != analysisDays.position) {
-                    analysisDays.position = position
+                val oldPosition = AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays)
+                if (position != oldPosition) {
+                    val days = AnalysisDays.getDays(requireContext(), position)
+                    persistentDataDataSource.setAnalysisDays(days)
 
-                    chartsFragment.setDays(analysisDays.days)
+                    chartsFragment.setDays(days)
                 }
             }
 
