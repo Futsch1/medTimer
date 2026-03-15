@@ -2,14 +2,13 @@ package com.futsch1.medtimer.widgets
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
@@ -27,8 +26,7 @@ fun interface WidgetLineProvider {
 
 class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
     val scheduledReminders: List<ScheduledReminder>
-    val sharedPreferences: SharedPreferences? =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    val reminderContext = ReminderContext(context)
 
     init {
         val medicineRepository = MedicineRepository(context.applicationContext as Application)
@@ -38,7 +36,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()
             override fun now(): Instant = Instant.now()
-        }, ReminderContext(context).preferencesDataSource)
+        }, reminderContext.preferencesDataSource)
 
         scheduledReminders = reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
     }
@@ -62,7 +60,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
         return formatScheduledReminderStringForWidget(
             context,
             scheduledReminder,
-            sharedPreferences!!,
+            reminderContext.preferencesDataSource,
             isSmall
         )
     }
@@ -70,8 +68,7 @@ class NextRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
 class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
     val reminderEvents: List<ReminderEvent>
-    val sharedPreferences: SharedPreferences? =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    val reminderContext = ReminderContext(context)
 
     init {
         val medicineRepository = MedicineRepository(context)
@@ -86,14 +83,16 @@ class LatestRemindersLineProvider(val context: Context) : WidgetLineProvider {
 
         return if (reminderEvent != null) reminderEventToString(
             reminderEvent,
+            reminderContext.preferencesDataSource,
             isShort
         ) else SpannableStringBuilder()
     }
 
     private fun reminderEventToString(
         reminderEvent: ReminderEvent,
+        preferencesDataSource: MedTimerPreferencesDataSource,
         isSmall: Boolean
     ): Spanned {
-        return formatReminderStringForWidget(context, reminderEvent, sharedPreferences!!, isSmall)
+        return formatReminderStringForWidget(context, reminderEvent, preferencesDataSource, isSmall)
     }
 }

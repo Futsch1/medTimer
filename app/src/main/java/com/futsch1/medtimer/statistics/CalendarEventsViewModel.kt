@@ -5,7 +5,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -36,7 +35,7 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext
     private val applicationContext: Context,
     private val medicineRepository: MedicineRepository,
-    private val dataSource: MedTimerPreferencesDataSource
+    private val preferencesDataSource: MedTimerPreferencesDataSource
 ) : ViewModel() {
     private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()
@@ -44,7 +43,6 @@ class CalendarEventsViewModel @Inject constructor(
     private var medicine: Medicine? = null
     private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
     fun getEventForMonths(
         medicineId: Int, pastMonths: Int, futureMonths: Int
@@ -106,7 +104,7 @@ class CalendarEventsViewModel @Inject constructor(
             allMedicines,
             reminderEvents,
             timeProvider,
-            dataSource
+            preferencesDataSource
         )
 
         schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
@@ -121,7 +119,7 @@ class CalendarEventsViewModel @Inject constructor(
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
         return OverviewScheduledReminderEvent(
             applicationContext,
-            sharedPreferences,
+            preferencesDataSource,
             scheduledReminder
         ).text
     }
@@ -151,7 +149,7 @@ class CalendarEventsViewModel @Inject constructor(
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
         return OverviewReminderEvent(
             applicationContext,
-            sharedPreferences,
+            preferencesDataSource,
             reminderEvent
         ).text
     }

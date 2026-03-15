@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,6 +32,7 @@ data class FilterState(val activeFilters: Set<OverviewFilterToggles>, val day: L
 
 class OverviewViewModel @Inject constructor(
     @param:ApplicationContext private val applicationContext: Context,
+    private val preferencesDataSource: MedTimerPreferencesDataSource,
     medicineViewModel: MedicineViewModel
 ) : ViewModel() {
     private var _initialized = false
@@ -42,8 +44,6 @@ class OverviewViewModel @Inject constructor(
         medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
     private val scheduledReminders = medicineViewModel.scheduledReminders
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
     var day: LocalDate
         get() = filterState.value.day
         set(value) {
@@ -53,7 +53,7 @@ class OverviewViewModel @Inject constructor(
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
         combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
-    }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
+        }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         if (PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean(USE_RELATIVE_DATE_TIME, false)) {
@@ -87,13 +87,13 @@ class OverviewViewModel @Inject constructor(
 
         for (reminderEvent in events) {
             if (isReminderEventVisible(reminderEvent, filterState)) {
-                filteredOverviewEvents.add(create(applicationContext, sharedPreferences, reminderEvent))
+                filteredOverviewEvents.add(create(applicationContext, preferencesDataSource, reminderEvent))
             }
         }
 
         for (scheduledReminder in reminders) {
             if (isScheduledReminderVisible(scheduledReminder, filterState)) {
-                filteredOverviewEvents.add(create(applicationContext, sharedPreferences, scheduledReminder))
+                filteredOverviewEvents.add(create(applicationContext, preferencesDataSource, scheduledReminder))
             }
         }
 

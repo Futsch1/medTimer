@@ -5,7 +5,6 @@ import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.ApplicationExitInfo
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -34,14 +33,14 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.PreferencesNames
-import com.futsch1.medtimer.preferences.PreferencesNames.APP_AUTHENTICATION
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_DISMISSED
-import com.futsch1.medtimer.preferences.PreferencesNames.THEME
+import com.futsch1.medtimer.preferences.ThemeSetting
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -49,22 +48,23 @@ class MainActivity : AppCompatActivity() {
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
 
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Select theme
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val theme: String = sharedPref.getString(THEME, "0")!!
-        if (theme == "1") {
+        if (preferencesDataSource.data.value.theme == ThemeSetting.ALTERNATIVE) {
             setTheme(R.style.Theme_MedTimer2)
         }
 
         // Screen capture
-        if (sharedPref.getBoolean(PreferencesNames.SECURE_WINDOW, false)) {
+        if (preferencesDataSource.data.value.useSecureWindow) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        showIntro(sharedPref)
+        showIntro()
 
         this.enableEdgeToEdge()
 
@@ -73,11 +73,12 @@ class MainActivity : AppCompatActivity() {
         TimeHelper.onChangedUseSystemLocale()
 
         lifecycleScope.launch {
-            authenticate(sharedPref)
+            authenticate(preferencesDataSource)
         }
     }
 
-    private fun showIntro(sharedPref: SharedPreferences) {
+    private fun showIntro() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val introShown = sharedPref.getBoolean("intro_shown", false)
         if (!introShown && !BuildConfig.DEBUG) {
             Log.d(LogTags.MAIN, "Show MedTimer intro")
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun authenticate(sharedPref: SharedPreferences) {
+    private suspend fun authenticate(preferencesDataSource: MedTimerPreferencesDataSource) {
         val biometrics = Biometrics(
             this,
             {
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (sharedPref.getBoolean(APP_AUTHENTICATION, false) && biometrics.hasBiometrics()) {
+        if (preferencesDataSource.data.value.appAuthentication && biometrics.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {

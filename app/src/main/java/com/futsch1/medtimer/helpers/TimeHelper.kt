@@ -3,7 +3,6 @@ package com.futsch1.medtimer.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.LocaleList
@@ -13,6 +12,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
+import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
@@ -229,8 +229,8 @@ object TimeHelper {
      * @param timeStamp Time stamp in seconds since epoch
      * @return Date and time string in local format as relative date time string
      */
-    fun secondsSinceEpochToConfigurableDateTimeString(context: Context, preferences: SharedPreferences, timeStamp: Long): String {
-        return if (preferences.getBoolean(PreferencesNames.USE_RELATIVE_DATE_TIME, false)) {
+    fun secondsSinceEpochToConfigurableDateTimeString(context: Context, preferencesDataSource: MedTimerPreferencesDataSource, timeStamp: Long): String {
+        return if (preferencesDataSource.data.value.useRelativeDateTime) {
             DateUtils.getRelativeDateTimeString(
                 LocaleContextWrapper(context),
                 timeStamp * 1000,
@@ -300,13 +300,18 @@ object TimeHelper {
 
     /**
      * @param context     Context to extract date and time formats
-     * @param preferences SharedPreferences to use for checking if relative date time is active
+     * @param preferencesDataSource Preferences data source
      * @param timeStamp   Time stamp in seconds since epoch
      * @param isShort     Whether to show the actual time stamp or not
      * @return Date and time string in local format as relative date time string
      */
-    fun secondsSinceEpochToConfigurableTimeString(context: Context, preferences: SharedPreferences, timeStamp: Long, isShort: Boolean): String {
-        return if (preferences.getBoolean(PreferencesNames.USE_RELATIVE_DATE_TIME, false)) {
+    fun secondsSinceEpochToConfigurableTimeString(
+        context: Context,
+        preferencesDataSource: MedTimerPreferencesDataSource,
+        timeStamp: Long,
+        isShort: Boolean
+    ): String {
+        return if (preferencesDataSource.data.value.useRelativeDateTime) {
             if (isShort) {
                 DateUtils.getRelativeTimeSpanString(timeStamp * 1000, Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString()
             } else {

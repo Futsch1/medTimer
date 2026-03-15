@@ -52,7 +52,13 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
     private val medicineViewModel: MedicineViewModel by viewModels()
-    private val overviewViewModel: OverviewViewModel by viewModels { OverviewViewModelFactory(requireActivity().application, medicineViewModel) }
+    private val overviewViewModel: OverviewViewModel by viewModels {
+        OverviewViewModelFactory(
+            requireActivity().application,
+            preferencesDataSource,
+            medicineViewModel
+        )
+    }
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
     private lateinit var fragmentOverview: FragmentSwipeLayout
