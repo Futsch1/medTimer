@@ -15,7 +15,6 @@ import javax.inject.Inject
 class Autostart : BroadcastReceiver() {
 
     companion object {
-        const val TAG = "Autostart"
         var hasRestored = false
     }
 
@@ -37,7 +36,7 @@ class Autostart : BroadcastReceiver() {
         hasRestored = true
         applicationScope.launch {
             autostartService.restoreNotifications()
-            Log.i(TAG, "Requesting reschedule")
+            Log.i(LogTags.AUTOSTART, "Requesting reschedule")
             ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
         }
     }

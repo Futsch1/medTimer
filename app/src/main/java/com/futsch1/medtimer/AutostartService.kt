@@ -21,12 +21,8 @@ class AutostartService @Inject constructor(
     private val medicineRepository: MedicineRepository,
     @param:Dispatcher(MedTimerDispatchers.Default) private val backgroundDispatcher: CoroutineDispatcher
 ) {
-    companion object {
-        const val TAG = "AutostartService"
-    }
-
     suspend fun restoreNotifications() = withContext(backgroundDispatcher) {
-        Log.i(TAG, "Restore notifications")
+        Log.i(LogTags.AUTOSTART, "Restore notifications")
 
         val reminderEventList: List<ReminderEvent> = medicineRepository.getLastDaysReminderEvents(1)
             .filter { it.status == ReminderEvent.ReminderStatus.RAISED }
@@ -41,7 +37,7 @@ class AutostartService @Inject constructor(
                     Instant.ofEpochSecond(notificationEntry.key),
                     -1
                 )
-            Log.i(TAG, "Restoring reminder event: $scheduledReminderNotificationData")
+            Log.i(LogTags.AUTOSTART, "Restoring reminder event: $scheduledReminderNotificationData")
             val intent = getShowReminderNotificationIntent(context, scheduledReminderNotificationData)
             context.sendBroadcast(intent)
         }
