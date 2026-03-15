@@ -2,16 +2,13 @@ package com.futsch1.medtimer
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.LocaleList
 import android.text.format.DateFormat
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.helpers.remindersSummary
-import com.futsch1.medtimer.preferences.PreferencesNames.SYSTEM_LOCALE
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
@@ -87,18 +84,12 @@ class SummaryHelperTest {
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.getString(R.string.cycle_reminder)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.cycle_start_date)).thenReturn("2")
-        val preferencesMock = mock<SharedPreferences>()
-        Mockito.`when`(preferencesMock.getBoolean(SYSTEM_LOCALE, false)).thenReturn(false)
-        val preferencesManager = mockStatic(PreferenceManager::class.java)
-        preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(context) }.thenReturn(preferencesMock)
 
         val reminder = Reminder(1)
         reminder.consecutiveDays = 4
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
         assertEquals("1 4/5, 2 4/10/24", reminderSummary(reminder, context))
-
-        preferencesManager.close()
     }
 
     @Test

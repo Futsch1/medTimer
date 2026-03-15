@@ -1,25 +1,13 @@
 package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
-import android.graphics.Color
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPreferences
 import com.futsch1.medtimer.di.MedTimerPreferencess
+import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.StatisticFragment
-import com.futsch1.medtimer.preferences.PreferencesNames.ACTIVE_STATISTICS_FRAGMENT
-import com.futsch1.medtimer.preferences.PreferencesNames.ANALYSIS_DAYS
-import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_DIRECTORY
-import com.futsch1.medtimer.preferences.PreferencesNames.BATTERY_WARNING_SHOWN
-import com.futsch1.medtimer.preferences.PreferencesNames.ICON_COLOR
-import com.futsch1.medtimer.preferences.PreferencesNames.INTRO_SHOWN
-import com.futsch1.medtimer.preferences.PreferencesNames.LAST_AUTOMATIC_BACKUP
-import com.futsch1.medtimer.preferences.PreferencesNames.LAST_CUSTOM_DOSE
-import com.futsch1.medtimer.preferences.PreferencesNames.LAST_CUSTOM_DOSE_AMOUNT
-import com.futsch1.medtimer.preferences.PreferencesNames.NOTIFICATION_ID
-import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_NOTIFICATION
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -72,11 +60,35 @@ class PersistentDataDataSource @Inject constructor(
         defaultSharedPreferences.edit { putBoolean(BATTERY_WARNING_SHOWN, batteryWarningShown) }
     }
 
+    fun setLastAutomaticBackup(localDate: LocalDate) {
+        defaultSharedPreferences.edit { putString(LAST_AUTOMATIC_BACKUP, localDate.toString()) }
+    }
+
+    fun increaseNotificationId() {
+        medTimerSharedPreferences.edit { putInt(NOTIFICATION_ID, data.value.notificationId + 1) }
+    }
+
+    fun setFilterTags(filterTags: Set<String>) {
+        medTimerSharedPreferences.edit { putStringSet(FILTER_TAGS, filterTags) }
+    }
+
+    fun setIconColor(iconColor: Int) {
+        defaultSharedPreferences.edit { putInt(ICON_COLOR, iconColor) }
+    }
+
+    fun setCheckedFilters(checkedFilters: Set<OverviewFilter>) {
+        medTimerSharedPreferences.edit { putStringSet(CHECKED_FILTERS, checkedFilters.map { it.toString() }.toSet()) }
+    }
+
+    fun setShowNotifications(showNotifications: Boolean) {
+        medTimerSharedPreferences.edit { putBoolean(SHOW_NOTIFICATION, showNotifications) }
+    }
+
     private fun getPersistentData(): PersistentData {
         val default = PersistentData.default()
         return PersistentData(
             showNotifications = defaultSharedPreferences.getBoolean(SHOW_NOTIFICATION, default.showNotifications),
-            iconColor = Color.valueOf(defaultSharedPreferences.getInt(ICON_COLOR, default.iconColor.toArgb())),
+            iconColor = defaultSharedPreferences.getInt(ICON_COLOR, default.iconColor),
             activeStatisticsFragment = when (defaultSharedPreferences.getInt(ACTIVE_STATISTICS_FRAGMENT, default.activeStatisticsFragment.ordinal)) {
                 StatisticFragment.CHARTS.ordinal -> StatisticFragment.CHARTS
                 StatisticFragment.TABLE.ordinal -> StatisticFragment.TABLE
@@ -86,10 +98,27 @@ class PersistentDataDataSource @Inject constructor(
             batteryWarningShown = defaultSharedPreferences.getBoolean(BATTERY_WARNING_SHOWN, default.batteryWarningShown),
             introShown = defaultSharedPreferences.getBoolean(INTRO_SHOWN, default.introShown),
             lastAutomaticBackup = LocalDate.parse(defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null) ?: default.lastAutomaticBackup.toString()),
-            automaticBackupDirectory = defaultSharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),
             lastCustomDose = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE, null) ?: default.lastCustomDose,
-            lastCustomDoseAmount = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE_AMOUNT, null) ?: default.lastCustomDoseAmount
+            lastCustomDoseAmount = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE_AMOUNT, null) ?: default.lastCustomDoseAmount,
+            filterTags = medTimerSharedPreferences.getStringSet(FILTER_TAGS, emptySet()) ?: emptySet(),
+            checkedFilters = medTimerSharedPreferences.getStringSet(CHECKED_FILTERS, emptySet())?.map { OverviewFilter.valueOf(it) }?.toSet() ?: emptySet()
         )
+    }
+
+    companion object {
+        const val SHOW_NOTIFICATION = "show_notification"
+        const val ICON_COLOR = "icon_color"
+        const val ACTIVE_STATISTICS_FRAGMENT = "active_statistics_fragment"
+        const val ANALYSIS_DAYS = "analysis_days"
+        const val BATTERY_WARNING_SHOWN = "battery_warning_dismissed"
+        const val INTRO_SHOWN = "intro_shown"
+        const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
+        const val NOTIFICATION_ID = "notificationId"
+        const val LAST_CUSTOM_DOSE = "lastCustomDose"
+        const val LAST_CUSTOM_DOSE_AMOUNT = "lastCustomDoseAmount"
+        const val FILTER_TAGS = "filterTags"
+        const val CHECKED_FILTERS = "checkedFilters"
+
     }
 }

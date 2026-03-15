@@ -48,7 +48,8 @@ data class UserPreferences(
     val noAlarmSoundWhenSilent: Boolean,
     val noVibrationWhenSilent: Boolean,
     // Automatic backup settings
-    val automaticBackupInterval: BackupInterval
+    val automaticBackupInterval: BackupInterval,
+    val automaticBackupDirectory: Uri?
 ) {
     companion object {
         fun default(): UserPreferences {
@@ -76,7 +77,8 @@ data class UserPreferences(
                 alarmRingtone = Settings.System.DEFAULT_ALARM_ALERT_URI,
                 noAlarmSoundWhenSilent = false,
                 noVibrationWhenSilent = false,
-                automaticBackupInterval = BackupInterval.NEVER
+                automaticBackupInterval = BackupInterval.NEVER,
+                automaticBackupDirectory = null
             )
         }
     }

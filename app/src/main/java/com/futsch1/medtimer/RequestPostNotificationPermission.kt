@@ -6,17 +6,14 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
-import com.futsch1.medtimer.preferences.PreferencesNames.SHOW_NOTIFICATION
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 
-class RequestPostNotificationPermission(val activity: AppCompatActivity) {
+class RequestPostNotificationPermission(val activity: AppCompatActivity, val persistentDataDataSource: PersistentDataDataSource) {
     private val requestPermissionLauncher = activity.registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { result: Boolean ->
         if (java.lang.Boolean.FALSE == result) {
-            PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
-                .edit { putBoolean(SHOW_NOTIFICATION, false) }
+            persistentDataDataSource.setShowNotifications(false)
         }
     }
 

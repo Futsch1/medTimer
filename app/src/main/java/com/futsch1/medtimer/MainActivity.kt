@@ -52,6 +52,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var persistentDataDataSource: PersistentDataDataSource
 
+    @Inject
+    lateinit var backupManagerFactory: BackupManager.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -114,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            RequestPostNotificationPermission(this).requestPermission()
+            RequestPostNotificationPermission(this, persistentDataDataSource).requestPermission()
         }
     }
 
@@ -209,7 +212,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
+        backupManagerFactory.create(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
     }

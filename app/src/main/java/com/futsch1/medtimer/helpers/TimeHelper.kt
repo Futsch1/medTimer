@@ -11,13 +11,13 @@ import android.text.format.DateUtils
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.reminders.PreferencesEntryPoint
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.EntryPointAccessors
 import java.text.ParseException
 import java.time.DateTimeException
 import java.time.Instant
@@ -135,11 +135,11 @@ object TimeHelper {
     }
 
     private fun useSystemLocale(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesNames.SYSTEM_LOCALE, false)
+        return EntryPointAccessors.fromApplication(context, PreferencesEntryPoint::class.java).getPreferencesDataSource().preferences.value.systemLocale
     }
 
     /**
-     * @param context        Context to extract date format
+     * @param context        Context to extract date and time formats
      * @param dateTimeString String containing date and time
      * @return Seconds since epoch of date/time
      */

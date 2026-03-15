@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
@@ -26,7 +25,6 @@ import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -64,6 +62,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             medicineViewModel
         )
     }
+
+    @Inject
+    lateinit var optionsMenuFactory: OptionsMenu.Factory
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
     private lateinit var fragmentOverview: FragmentSwipeLayout
@@ -76,10 +77,11 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         super.onCreate(savedInstanceState)
         overviewViewModel.day = LocalDate.now()
 
-        optionsMenu = OptionsMenu(
+        optionsMenu = optionsMenuFactory.create(
             this,
-            medicineViewModel,
-            this.findNavController(), false
+            this.findNavController(),
+            false,
+            medicineViewModel
         )
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -102,7 +104,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         setupReminders()
 
         setupLogManualDose()
-        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel, requireContext().getSharedPreferences("medtimer.data", 0))
+        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel, persistentDataDataSource)
 
         fragmentOverview.onSwipeListener = OverviewOnSwipeListener()
 
@@ -200,7 +202,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             onBackPressedCallback.isEnabled = true
         }
 
-        if (PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean(COMBINE_NOTIFICATIONS, false)) {
+        if (preferencesDataSource.preferences.value.combineNotifications) {
             adapter.selectSameTimeEvents(position)
         } else {
             adapter.toggleSelection(position)

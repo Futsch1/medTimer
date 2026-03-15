@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.model
 
-import android.graphics.Color
-import android.net.Uri
 import java.time.LocalDate
 
 enum class StatisticFragment {
@@ -10,33 +8,39 @@ enum class StatisticFragment {
     CALENDAR
 }
 
+enum class OverviewFilter {
+    TAKEN, SKIPPED, SCHEDULED, RAISED
+}
+
 data class PersistentData(
     val showNotifications: Boolean,
-    val iconColor: Color,
+    val iconColor: Int,
     val activeStatisticsFragment: StatisticFragment,
     val analysisDays: Int,
     val batteryWarningShown: Boolean,
     val introShown: Boolean,
     val lastAutomaticBackup: LocalDate,
-    val automaticBackupDirectory: Uri?,
     val notificationId: Int,
     val lastCustomDose: String,
-    val lastCustomDoseAmount: String
+    val lastCustomDoseAmount: String,
+    val filterTags: Set<String>,
+    val checkedFilters: Set<OverviewFilter>
 ) {
     companion object {
         fun default(): PersistentData {
             return PersistentData(
                 showNotifications = true,
-                iconColor = Color.valueOf(Color.BLACK),
+                iconColor = 0,
                 activeStatisticsFragment = StatisticFragment.CHARTS,
                 analysisDays = 7,
                 batteryWarningShown = false,
                 introShown = false,
                 lastAutomaticBackup = LocalDate.EPOCH,
-                automaticBackupDirectory = null,
                 notificationId = 0,
                 lastCustomDose = "",
-                lastCustomDoseAmount = ""
+                lastCustomDoseAmount = "",
+                filterTags = emptySet(),
+                checkedFilters = emptySet()
             )
         }
     }

@@ -13,6 +13,9 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
 import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_MODE
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_TIME
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -50,7 +53,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupWeekendMode() {
-        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_MODE)
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_MODE)
         preference?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             requestReschedule()
             true
@@ -58,12 +61,12 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateTimePicker(settings: UserPreferences) {
-        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
         preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.hour * 60 + settings.weekendTime.minute.toLong()))
     }
 
     private fun setupTimePicker() {
-        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
         if (preference != null) {
             preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
                 val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
@@ -78,7 +81,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupDays() {
-        val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_DAYS)
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_DAYS)
         if (preference != null) {
             preference.setSummaryProvider(SummaryProvider { preference1: MultiSelectListPreference? ->
                 preference1!!.values.stream().map { s: String? -> preference1.entries[s!!.toInt() - 1] }

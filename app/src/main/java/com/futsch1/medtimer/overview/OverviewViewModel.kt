@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
+import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,11 +23,7 @@ import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 
-enum class OverviewFilterToggles {
-    TAKEN, SKIPPED, SCHEDULED, RAISED
-}
-
-data class FilterState(val activeFilters: Set<OverviewFilterToggles>, val day: LocalDate, val tick: Long)
+data class FilterState(val activeFilters: Set<OverviewFilter>, val day: LocalDate, val tick: Long)
 
 class OverviewViewModel @Inject constructor(
     @param:ApplicationContext private val applicationContext: Context,
@@ -68,15 +65,15 @@ class OverviewViewModel @Inject constructor(
         filterState.update { it.copy(tick = it.tick + 1) }
     }
 
-    fun addFilter(f: OverviewFilterToggles) {
+    fun addFilter(f: OverviewFilter) {
         filterState.update { it.copy(activeFilters = it.activeFilters + f) }
     }
 
-    fun removeFilter(f: OverviewFilterToggles) {
+    fun removeFilter(f: OverviewFilter) {
         filterState.update { it.copy(activeFilters = it.activeFilters - f) }
     }
 
-    fun setFilters(filters: Set<OverviewFilterToggles>) {
+    fun setFilters(filters: Set<OverviewFilter>) {
         filterState.update { it.copy(activeFilters = filters) }
     }
 
@@ -110,15 +107,15 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun isScheduledReminderVisible(scheduledReminder: ScheduledReminder, filterState: FilterState): Boolean {
-        val scheduledRemindersVisible = filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilterToggles.SCHEDULED)
+        val scheduledRemindersVisible = filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilter.SCHEDULED)
         return isSameDay(scheduledReminder.timestamp.epochSecond, filterState.day) && scheduledRemindersVisible
     }
 
     private fun isReminderEventVisible(reminderEvent: ReminderEvent, filterState: FilterState): Boolean {
         val reminderEventVisible = filterState.activeFilters.isEmpty() ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilterToggles.TAKEN)) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilterToggles.SKIPPED)) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilterToggles.RAISED))
+                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilter.TAKEN)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilter.SKIPPED)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilter.RAISED))
         return isSameDay(reminderEvent.remindedTimestamp, filterState.day) && reminderEventVisible
     }
 

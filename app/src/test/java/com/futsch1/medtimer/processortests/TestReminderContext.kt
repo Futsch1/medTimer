@@ -147,7 +147,6 @@ class TestReminderContext {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
         `when`(mock.notificationManager).thenReturn(notificationManagerFake.mock)
         `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
-        `when`(mock.localPreferences).thenReturn(localPreferencesMock)
         `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
         `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] }
         `when`(mock.getNotificationBuilder(anyString())).thenReturn(notificationBuilderFake.mock)

@@ -13,11 +13,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.helpers.getMaterialColor
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MedTimerAppIntro : AppIntro() {
-    private val requestPostNotificationPermission = RequestPostNotificationPermission(this)
+    @Inject
+    lateinit var persistentDataDataSource: PersistentDataDataSource
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +140,7 @@ class MedTimerAppIntro : AppIntro() {
 
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
-        requestPostNotificationPermission.requestPermission()
+        RequestPostNotificationPermission(this, persistentDataDataSource).requestPermission()
         finish()
     }
 }

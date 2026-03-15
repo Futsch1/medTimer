@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceDataStore
@@ -37,9 +38,18 @@ class PreferencesDataSource @Inject constructor(
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getSettings())
 
     fun setWeekendTime(value: LocalTime) {
-        sharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, value.toSecondOfDay() / 60) }
+        sharedPreferences.edit { putInt(WEEKEND_TIME, value.toSecondOfDay() / 60) }
     }
 
+    fun setAutomaticBackupInterval(backupInterval: BackupInterval) {
+        sharedPreferences.edit { putString(AUTOMATIC_BACKUP_INTERVAL, backupInterval.ordinal.toString()) }
+    }
+
+    fun setAutomaticBackupDirectory(uri: Uri) {
+        sharedPreferences.edit { putString(AUTOMATIC_BACKUP_DIRECTORY, uri.toString()) }
+    }
+
+    // Functions for compatibility with PreferencesFragment
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(key, defValue)
     }
@@ -76,62 +86,86 @@ class PreferencesDataSource @Inject constructor(
         val default = UserPreferences.default()
         return UserPreferences(
             weekendTime = LocalTime.of(
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60,
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60
+                sharedPreferences.getInt(WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60,
+                sharedPreferences.getInt(WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60
             ),
-            weekendMode = sharedPreferences.getBoolean(PreferencesNames.WEEKEND_MODE, default.weekendMode),
-            weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, default.weekendDays) ?: emptySet(),
-            exactReminders = sharedPreferences.getBoolean(PreferencesNames.EXACT_REMINDERS, default.exactReminders),
-            repeatReminders = sharedPreferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, default.repeatReminders),
+            weekendMode = sharedPreferences.getBoolean(WEEKEND_MODE, default.weekendMode),
+            weekendDays = sharedPreferences.getStringSet(WEEKEND_DAYS, default.weekendDays) ?: emptySet(),
+            exactReminders = sharedPreferences.getBoolean(EXACT_REMINDERS, default.exactReminders),
+            repeatReminders = sharedPreferences.getBoolean(REPEAT_REMINDERS, default.repeatReminders),
             numberOfRepetitions = sharedPreferences.getString(
-                PreferencesNames.NUMBER_OF_REPETITIONS,
+                NUMBER_OF_REPETITIONS,
                 default.numberOfRepetitions.toString()
             )
                 ?.toInt()
                 ?: 3,
-            repeatDelay = (sharedPreferences.getString(PreferencesNames.REPEAT_DELAY, default.repeatDelay.inWholeMinutes.toString())
+            repeatDelay = (sharedPreferences.getString(REPEAT_DELAY, default.repeatDelay.inWholeMinutes.toString())
                 ?.toInt()
                 ?: 10).toDuration(DurationUnit.MINUTES),
             snoozeDuration = (sharedPreferences.getString(
-                PreferencesNames.SNOOZE_DURATION,
+                SNOOZE_DURATION,
                 default.snoozeDuration.inWholeMinutes.toString()
             )
                 ?.toInt()
                 ?: 15).toDuration(DurationUnit.MINUTES),
-            overrideDnd = sharedPreferences.getBoolean(PreferencesNames.OVERRIDE_DND, default.overrideDnd),
-            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, default.stickyOnLockscreen),
-            dismissNotificationAction = when (sharedPreferences.getString(PreferencesNames.DISMISS_NOTIFICATION_ACTION, "0")) {
+            overrideDnd = sharedPreferences.getBoolean(OVERRIDE_DND, default.overrideDnd),
+            stickyOnLockscreen = sharedPreferences.getBoolean(STICKY_ON_LOCKSCREEN, default.stickyOnLockscreen),
+            dismissNotificationAction = when (sharedPreferences.getString(DISMISS_NOTIFICATION_ACTION, "0")) {
                 "0" -> DismissNotificationAction.SKIP
                 "1" -> DismissNotificationAction.SNOOZE
                 else -> DismissNotificationAction.TAKE
             },
-            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, default.bigNotifications),
-            combineNotifications = sharedPreferences.getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, default.combineNotifications),
-            useRelativeDateTime = sharedPreferences.getBoolean(PreferencesNames.USE_RELATIVE_DATE_TIME, default.useRelativeDateTime),
+            bigNotifications = sharedPreferences.getBoolean(BIG_NOTIFICATIONS, default.bigNotifications),
+            combineNotifications = sharedPreferences.getBoolean(COMBINE_NOTIFICATIONS, default.combineNotifications),
+            useRelativeDateTime = sharedPreferences.getBoolean(USE_RELATIVE_DATE_TIME, default.useRelativeDateTime),
             showTakenTimeInOverview = sharedPreferences.getBoolean(
-                PreferencesNames.SHOW_TAKEN_TIME_IN_OVERVIEW,
+                SHOW_TAKEN_TIME_IN_OVERVIEW,
                 default.showTakenTimeInOverview
             ),
-            systemLocale = sharedPreferences.getBoolean(PreferencesNames.SYSTEM_LOCALE, default.systemLocale),
-            theme = when (sharedPreferences.getString(PreferencesNames.THEME, "0")) {
+            systemLocale = sharedPreferences.getBoolean(SYSTEM_LOCALE, default.systemLocale),
+            theme = when (sharedPreferences.getString(THEME, "0")) {
                 "0" -> ThemeSetting.DEFAULT
                 else -> ThemeSetting.ALTERNATIVE
             },
-            hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, default.hideMedicineName),
-            appAuthentication = sharedPreferences.getBoolean(PreferencesNames.APP_AUTHENTICATION, default.appAuthentication),
-            useSecureWindow = sharedPreferences.getBoolean(PreferencesNames.SECURE_WINDOW, default.useSecureWindow),
-            alarmRingtone = sharedPreferences.getString(PreferencesNames.ALARM_RINGTONE, null)?.toUri() ?: default.alarmRingtone,
+            hideMedicineName = sharedPreferences.getBoolean(HIDE_MED_NAME, default.hideMedicineName),
+            appAuthentication = sharedPreferences.getBoolean(APP_AUTHENTICATION, default.appAuthentication),
+            useSecureWindow = sharedPreferences.getBoolean(SECURE_WINDOW, default.useSecureWindow),
+            alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.toUri() ?: default.alarmRingtone,
             noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
-                PreferencesNames.NO_ALARM_SOUND_WHEN_SILENT,
+                NO_ALARM_SOUND_WHEN_SILENT,
                 default.noAlarmSoundWhenSilent
             ),
-            noVibrationWhenSilent = sharedPreferences.getBoolean(PreferencesNames.NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
-            automaticBackupInterval = when (sharedPreferences.getString(PreferencesNames.AUTOMATIC_BACKUP_INTERVAL, "0")) {
-                "0" -> BackupInterval.NEVER
-                "1" -> BackupInterval.DAILY
-                "2" -> BackupInterval.WEEKLY
-                else -> BackupInterval.MONTHLY
-            }
+            noVibrationWhenSilent = sharedPreferences.getBoolean(NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
+            automaticBackupInterval = BackupInterval.entries[sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")?.toInt() ?: 0],
+            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri()
         )
+    }
+
+    companion object {
+        const val WEEKEND_TIME = "weekend_time"
+        const val WEEKEND_MODE = "weekend_mode"
+        const val WEEKEND_DAYS = "weekend_days"
+        const val EXACT_REMINDERS = "exact_reminders"
+        const val REPEAT_REMINDERS = "repeat_reminders"
+        const val NUMBER_OF_REPETITIONS = "repeat_reminders_repetitions"
+        const val REPEAT_DELAY = "repeat_reminders_delay"
+        const val SNOOZE_DURATION = "snooze_duration"
+        const val OVERRIDE_DND = "override_dnd"
+        const val HIDE_MED_NAME = "hide_med_name"
+        const val SECURE_WINDOW = "window_flag_secure"
+        const val USE_RELATIVE_DATE_TIME = "use_relative_date_time"
+        const val SYSTEM_LOCALE = "system_locale"
+        const val COMBINE_NOTIFICATIONS = "combine_notifications"
+        const val SHOW_TAKEN_TIME_IN_OVERVIEW = "show_taken_time_in_overview"
+        const val STICKY_ON_LOCKSCREEN = "sticky_on_lockscreen"
+        const val BIG_NOTIFICATIONS = "big_notifications"
+        const val DISMISS_NOTIFICATION_ACTION = "dismiss_notification_action"
+        const val ALARM_RINGTONE = "alarm_ringtone"
+        const val NO_ALARM_SOUND_WHEN_SILENT = "no_alarm_sound_when_silent"
+        const val NO_VIBRATION_WHEN_SILENT = "no_vibration_when_silent"
+        const val THEME = "theme"
+        const val APP_AUTHENTICATION = "app_authentication"
+        const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
+        const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
     }
 }

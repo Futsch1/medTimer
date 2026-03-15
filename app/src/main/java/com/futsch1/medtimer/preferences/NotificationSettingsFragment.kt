@@ -17,7 +17,9 @@ import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.safeStartActivity
-import com.futsch1.medtimer.preferences.PreferencesNames.STICKY_ON_LOCKSCREEN
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -63,7 +65,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             setupNotificationSettingsPreference(preference, Importance.DEFAULT)
         }
         preference =
-            preferenceScreen.findPreference(PreferencesNames.OVERRIDE_DND)
+            preferenceScreen.findPreference(OVERRIDE_DND)
         preference?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, value: Any? ->
                 if (true == value) {
@@ -90,7 +92,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun setupExactReminders() {
         val preference =
-            preferenceScreen.findPreference<Preference?>(PreferencesNames.EXACT_REMINDERS) ?: return
+            preferenceScreen.findPreference<Preference?>(EXACT_REMINDERS) ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             preference.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue: Any? ->
@@ -134,7 +136,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             }
             builder.setNegativeButton(R.string.cancel) { _, _ ->
                 try {
-                    resetBooleanPreferenceAndReload(PreferencesNames.EXACT_REMINDERS)
+                    resetBooleanPreferenceAndReload(EXACT_REMINDERS)
                 } catch (_: IllegalStateException) {
                     // Intentionally empty (monkey test can cause this to fail)
                 }
@@ -151,7 +153,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun cancelOverrideDnd() {
         try {
-            resetBooleanPreferenceAndReload(PreferencesNames.OVERRIDE_DND)
+            resetBooleanPreferenceAndReload(OVERRIDE_DND)
         } catch (_: IllegalStateException) {
             // Intentionally empty (monkey test can cause this to fail)
         }
@@ -185,7 +187,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             val alarmManager =
                 requireContext().getSystemService(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
-                resetBooleanPreferenceAndReload(PreferencesNames.EXACT_REMINDERS)
+                resetBooleanPreferenceAndReload(EXACT_REMINDERS)
             }
         }
     }
@@ -195,7 +197,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
                 NotificationManager::class.java
             ).isNotificationPolicyAccessGranted
         ) {
-            resetBooleanPreferenceAndReload(PreferencesNames.OVERRIDE_DND)
+            resetBooleanPreferenceAndReload(OVERRIDE_DND)
         }
     }
 }

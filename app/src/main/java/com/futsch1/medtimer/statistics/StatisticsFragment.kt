@@ -24,6 +24,9 @@ class StatisticsFragment : Fragment() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment
+
+    @Inject
+    lateinit var optionsMenuFactory: OptionsMenu.Factory
     private lateinit var optionsMenu: OptionsMenu
 
     @Inject
@@ -34,10 +37,11 @@ class StatisticsFragment : Fragment() {
 
         chartsFragment = ChartsFragment.newInstance(persistentDataDataSource.data.value.analysisDays)
 
-        optionsMenu = OptionsMenu(
+        optionsMenu = optionsMenuFactory.create(
             this,
-            medicineViewModel,
-            NavHostFragment.findNavController(this), true
+            NavHostFragment.findNavController(this),
+            true,
+            medicineViewModel
         )
     }
 
