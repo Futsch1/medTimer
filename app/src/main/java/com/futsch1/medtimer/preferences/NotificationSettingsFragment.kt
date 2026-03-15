@@ -17,6 +17,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.safeStartActivity
+import com.futsch1.medtimer.preferences.PreferencesNames.STICKY_ON_LOCKSCREEN
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -45,7 +46,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         )
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            preferenceScreen.findPreference<Preference?>("sticky_on_lockscreen")?.isVisible = false
+            preferenceScreen.findPreference<Preference?>(STICKY_ON_LOCKSCREEN)?.isVisible = false
         }
     }
 
@@ -147,9 +148,8 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun resetBooleanPreferenceAndReload(preferenceName: String) {
         preferenceManager.preferenceDataStore?.putBoolean(preferenceName, false)
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        findPreference<SwitchPreferenceCompat>(preferenceName)?.isChecked = false
     }
-
 
     private fun cancelOverrideDnd() {
         try {
