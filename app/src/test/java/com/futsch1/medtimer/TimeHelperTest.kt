@@ -37,7 +37,7 @@ class TimeHelperTest {
         val context = RuntimeEnvironment.getApplication()
         context.resources.configuration.setLocales(LocaleList(Locale.US, Locale.GERMAN))
 
-        val preferencesMock = mock(SharedPreferences::class.java)
+        val preferencesMock = mock<SharedPreferences>()
         Mockito.`when`(preferencesMock.getBoolean(SYSTEM_LOCALE, false)).thenReturn(false)
         val preferencesManager = mockStatic(PreferenceManager::class.java)
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(context) }.thenReturn(preferencesMock)

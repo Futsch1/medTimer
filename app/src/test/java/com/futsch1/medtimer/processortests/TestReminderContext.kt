@@ -43,7 +43,7 @@ class MedicineRepositoryFake {
     val reminderEvents = mutableListOf<ReminderEvent>()
     val reminders = mutableListOf<Reminder>()
 
-    val mock: MedicineRepository = mock(MedicineRepository::class.java)
+    val mock: MedicineRepository = mock<MedicineRepository>()
 
     init {
         `when`(mock.medicines).thenAnswer { buildFullMedicines() }
@@ -83,7 +83,7 @@ class MedicineRepositoryFake {
 class NotificationManagerFake {
     val activeNotifications = mutableMapOf<Int, Notification>()
 
-    val mock: NotificationManager = mock(NotificationManager::class.java)
+    val mock: NotificationManager = mock<NotificationManager>()
 
     init {
         `when`(mock.activeNotifications).thenAnswer { getNotifications() }
@@ -92,7 +92,7 @@ class NotificationManagerFake {
     fun getNotifications(): Array<StatusBarNotification> {
         val statusBarNotifications = mutableListOf<StatusBarNotification>()
         for (activeNotification in activeNotifications) {
-            val statusBarNotificationMock = mock(StatusBarNotification::class.java)
+            val statusBarNotificationMock = mock<StatusBarNotification>()
             `when`(statusBarNotificationMock.id).thenReturn(activeNotification.key)
             `when`(statusBarNotificationMock.notification).thenReturn(activeNotification.value)
             statusBarNotifications.add(statusBarNotificationMock)
@@ -101,8 +101,8 @@ class NotificationManagerFake {
     }
 
     fun add(id: Int, reminderIds: IntArray = intArrayOf(), reminderEventIds: IntArray = intArrayOf(), remindTimestamp: Long = 0) {
-        val notificationMock = mock(Notification::class.java)
-        val bundleMock = mock(Bundle::class.java)
+        val notificationMock = mock<Notification>()
+        val bundleMock = mock<Bundle>()
         notificationMock.extras = bundleMock
         `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)).thenReturn(reminderIds)
         `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)).thenReturn(reminderEventIds)
@@ -113,9 +113,9 @@ class NotificationManagerFake {
 }
 
 class NotificationBuilderFake {
-    val mock: NotificationCompat.Builder = mock(NotificationCompat.Builder::class.java)
-    val extrasMock: Bundle = mock(Bundle::class.java)
-    val notificationMock: Notification = mock(Notification::class.java)
+    val mock: NotificationCompat.Builder = mock<NotificationCompat.Builder>()
+    val extrasMock: Bundle = mock<Bundle>()
+    val notificationMock: Notification = mock<Notification>()
 
     init {
         `when`(mock.extras).thenReturn(extrasMock)
@@ -124,15 +124,15 @@ class NotificationBuilderFake {
 }
 
 class TestReminderContext {
-    val alarmManagerMock: AlarmManager = mock(AlarmManager::class.java)
+    val alarmManagerMock: AlarmManager = mock<AlarmManager>()
     val notificationManagerFake = NotificationManagerFake()
-    val notificationChannelMock: NotificationChannel = mock(NotificationChannel::class.java)
-    val mock: ReminderContext = mock(ReminderContext::class.java)
+    val notificationChannelMock: NotificationChannel = mock<NotificationChannel>()
+    val mock: ReminderContext = mock<ReminderContext>()
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
-    val localPreferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
-    val audioManagerMock: AudioManager = mock(AudioManager::class.java)
-    val preferencesDataSourceMock: PreferencesDataSource = mock(PreferencesDataSource::class.java)
+    val localPreferencesMock: SharedPreferences = mock<SharedPreferences>()
+    val audioManagerMock: AudioManager = mock<AudioManager>()
+    val preferencesDataSourceMock: PreferencesDataSource = mock<PreferencesDataSource>()
 
     val stringList = mapOf(
         R.string.high to "High",
@@ -158,22 +158,22 @@ class TestReminderContext {
         })
         `when`(mock.audioManager).thenReturn(audioManagerMock)
         `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
-        `when`(mock.icons).thenReturn(mock(MedicineIcons::class.java))
+        `when`(mock.icons).thenReturn(mock<MedicineIcons>())
         `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 
         `when`(localPreferencesMock.getInt(eq("notificationId"), anyInt())).thenAnswer { notificationId }
-        val editMock = mock(SharedPreferences.Editor::class.java)
+        val editMock = mock<SharedPreferences.Editor>()
         `when`(localPreferencesMock.edit()).thenReturn(editMock)
         `when`(editMock.putInt(eq("notificationId"), anyInt())).then { notificationId = it.arguments[1] as Int; editMock }
 
         `when`(notificationChannelMock.id).thenReturn("channel")
 
-        `when`(mock.getIntent(anyString())).thenReturn(mock(Intent::class.java))
-        `when`(mock.getIntent(isNull())).thenReturn(mock(Intent::class.java))
+        `when`(mock.getIntent(anyString())).thenReturn(mock<Intent>())
+        `when`(mock.getIntent(isNull())).thenReturn(mock<Intent>())
 
-        val spannableStringBuilderMock = mock(SpannableStringBuilder::class.java)
+        val spannableStringBuilderMock = mock<SpannableStringBuilder>()
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 

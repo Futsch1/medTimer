@@ -70,8 +70,8 @@ class MedicineHelperTest {
 
     @Test
     fun testMedicineNameWithStockText() {
-        val contextMock = mock(Context::class.java)
-        val preferencesDataSource = mock(PreferencesDataSource::class.java)
+        val contextMock = mock<Context>()
+        val preferencesDataSource = mock<PreferencesDataSource>()
         Mockito.`when`(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
         Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
@@ -125,7 +125,7 @@ class MedicineHelperTest {
 
     @Test
     fun testGetMedicineName() {
-        val userPreferences = mock(UserPreferences::class.java)
+        val userPreferences = mock<UserPreferences>()
         Mockito.`when`(userPreferences.hideMedicineName).thenReturn(true)
 
         val medicine = Medicine("test")

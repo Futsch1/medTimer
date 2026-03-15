@@ -33,8 +33,8 @@ class ReminderHelperTest {
 
     @Test
     fun testFormatScheduledReminderString() {
-        val contextMock = mock(Context::class.java)
-        val preferencesDataSourceMock = mock(PreferencesDataSource::class.java)
+        val contextMock = mock<Context>()
+        val preferencesDataSourceMock = mock<PreferencesDataSource>()
         Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
         val utc = TimeZone.getTimeZone("WET")

@@ -33,7 +33,7 @@ class SummaryHelperTest {
 
     @Test
     fun testReminderSummaryInactive() = runBlocking {
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
         val reminder = Reminder(1)
@@ -59,7 +59,7 @@ class SummaryHelperTest {
 
     @Test
     fun test_reminderSummary_limited() = runBlocking {
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.getString(R.string.weekday_limited)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.day_of_month_limited)).thenReturn("2")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("3")
@@ -77,17 +77,17 @@ class SummaryHelperTest {
 
     @Test
     fun testReminderSummaryCyclic() = runBlocking {
-        val localeList = mock(LocaleList::class.java)
+        val localeList = mock<LocaleList>()
         Mockito.`when`(localeList.get(0)).thenReturn(Locale.US)
-        val configuration = mock(android.content.res.Configuration::class.java)
+        val configuration = mock<android.content.res.Configuration>()
         Mockito.`when`(configuration.locales).thenReturn(localeList)
-        val resources = mock(android.content.res.Resources::class.java)
+        val resources = mock<android.content.res.Resources>()
         Mockito.`when`(resources.configuration).thenReturn(configuration)
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.getString(R.string.cycle_reminder)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.cycle_start_date)).thenReturn("2")
-        val preferencesMock = mock(SharedPreferences::class.java)
+        val preferencesMock = mock<SharedPreferences>()
         Mockito.`when`(preferencesMock.getBoolean(SYSTEM_LOCALE, false)).thenReturn(false)
         val preferencesManager = mockStatic(PreferenceManager::class.java)
         preferencesManager.`when`<Any> { PreferenceManager.getDefaultSharedPreferences(context) }.thenReturn(preferencesMock)
@@ -103,7 +103,7 @@ class SummaryHelperTest {
 
     @Test
     fun testReminderSummaryInstructions() = runBlocking {
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.getString(R.string.inactive)).thenReturn("1")
         Mockito.`when`(context.getString(R.string.every_day)).thenReturn("2")
         val reminder = Reminder(1)
@@ -114,13 +114,13 @@ class SummaryHelperTest {
 
     @Test
     fun testReminderSummaryLinked() = runBlocking {
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.getString(eq(R.string.linked_reminder_summary), anyString()))
             .thenReturn("1")
-        val application = mock(Application::class.java)
+        val application = mock<Application>()
         Mockito.`when`(context.applicationContext).thenReturn(application)
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
-        val dateFormat = mock(java.text.DateFormat::class.java)
+        val dateFormat = mock<java.text.DateFormat>()
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(any(Date::class.java))).thenReturn("0:02")
@@ -150,13 +150,13 @@ class SummaryHelperTest {
 
     @Test
     fun testRemindersSummarySimple() = runBlocking {
-        val context = mock(Context::class.java)
-        val resources = mock(android.content.res.Resources::class.java)
+        val context = mock<Context>()
+        val resources = mock<android.content.res.Resources>()
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(resources.getQuantityString(R.plurals.sum_reminders, 2, 2, "0:02; 1:03"))
             .thenReturn("ok")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
-        val dateFormat = mock(java.text.DateFormat::class.java)
+        val dateFormat = mock<java.text.DateFormat>()
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(2)))
@@ -175,10 +175,10 @@ class SummaryHelperTest {
 
     @Test
     fun testRemindersSummaryLinked() = runBlocking {
-        val context = mock(Context::class.java)
-        val application = mock(Application::class.java)
+        val context = mock<Context>()
+        val application = mock<Application>()
         Mockito.`when`(context.applicationContext).thenReturn(application)
-        val resources = mock(android.content.res.Resources::class.java)
+        val resources = mock<android.content.res.Resources>()
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(
             resources.getQuantityString(
@@ -190,7 +190,7 @@ class SummaryHelperTest {
         )
             .thenReturn("ok")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
-        val dateFormat = mock(java.text.DateFormat::class.java)
+        val dateFormat = mock<java.text.DateFormat>()
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
             .thenReturn(dateFormat)
         Mockito.`when`(dateFormat.format(TimeHelper.minutesToDate(2)))
@@ -227,14 +227,14 @@ class SummaryHelperTest {
 
     @Test
     fun testRemindersSummaryInterval() = runBlocking {
-        val context = mock(Context::class.java)
+        val context = mock<Context>()
         Mockito.`when`(context.getString(R.string.every_interval, "2 ok"))
             .thenReturn("ok")
         Mockito.`when`(context.getString(R.string.continuous_from, "0 1"))
             .thenReturn("start time")
         val mockedDateFormat: MockedStatic<DateFormat> = mockStatic(DateFormat::class.java)
-        val dateFormat = mock(java.text.DateFormat::class.java)
-        val timeFormat = mock(java.text.DateFormat::class.java)
+        val dateFormat = mock<java.text.DateFormat>()
+        val timeFormat = mock<java.text.DateFormat>()
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getDateFormat(any()) }
             .thenReturn(dateFormat)
         mockedDateFormat.`when`<java.text.DateFormat> { DateFormat.getTimeFormat(any()) }
@@ -243,7 +243,7 @@ class SummaryHelperTest {
             .thenReturn("0")
         Mockito.`when`(timeFormat.format(Date.from(Instant.ofEpochSecond(1))))
             .thenReturn("1")
-        val resources = mock(android.content.res.Resources::class.java)
+        val resources = mock<android.content.res.Resources>()
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(resources.getQuantityString(R.plurals.hours, 2))
             .thenReturn("ok")

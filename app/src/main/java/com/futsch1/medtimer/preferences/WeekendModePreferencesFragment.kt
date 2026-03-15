@@ -68,7 +68,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
             preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
                 val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
                 TimePickerWrapper(requireActivity()).show(weekendTime.hour, weekendTime.minute) { minutes: Int ->
-                    preferencesDataSource.setWeekendTime(minutes)
+                    preferencesDataSource.setWeekendTime(LocalTime.of(minutes / 60, minutes % 60))
                     preference1!!.setSummary(minutesToTimeString(requireContext(), minutes.toLong()))
                     requestReschedule()
                 }

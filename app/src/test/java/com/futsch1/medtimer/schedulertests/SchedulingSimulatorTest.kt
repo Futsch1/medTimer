@@ -21,10 +21,10 @@ import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
     private fun buildSchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
-        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+        val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
-        val mockPreferencesDataSource = Mockito.mock(PreferencesDataSource::class.java)
+        val mockPreferencesDataSource = Mockito.mock<PreferencesDataSource>()
         val stateFlow = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferencesDataSource.preferences).thenReturn(stateFlow)
 
