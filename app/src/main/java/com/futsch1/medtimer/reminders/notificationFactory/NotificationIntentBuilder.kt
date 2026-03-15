@@ -16,7 +16,6 @@ import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
-import kotlin.time.Duration
 
 class NotificationIntentBuilder(val reminderContext: ReminderContext, val reminderNotification: ReminderNotification) {
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
@@ -28,9 +27,6 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     val actionTaken = getTakenActionRemoteInput()
 
     val pendingDismiss = getDismissPendingIntent()
-
-    private val snoozeDuration: Duration = reminderContext.preferencesDataSource.data.value.snoozeDuration
-    private val dismissNotificationAction: DismissNotificationAction = reminderContext.preferencesDataSource.data.value.dismissNotificationAction
 
     /**
      * Creates a [PendingIntent] for the "taken" action of a reminder notification.
@@ -71,6 +67,8 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
+        val snoozeDuration = reminderContext.preferencesDataSource.data.value.snoozeDuration
+
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = getCustomSnoozeActionIntent(
                 reminderContext, reminderNotification.reminderNotificationData
@@ -97,7 +95,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
-        if (snoozeDuration.inWholeSeconds > 0) {
+        if (reminderContext.preferencesDataSource.data.value.snoozeDuration.inWholeSeconds > 0) {
             return null
         }
         val resultIntent = Intent()
@@ -152,7 +150,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
-        return when (dismissNotificationAction) {
+        return when (reminderContext.preferencesDataSource.data.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
                 pendingSkipped
             }

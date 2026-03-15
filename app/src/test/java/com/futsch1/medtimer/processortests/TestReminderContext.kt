@@ -20,15 +20,13 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.preferences.DEFAULT_MEDTIMER_SETTINGS
 import com.futsch1.medtimer.preferences.MedTimerPreferencesDataSource
-import com.futsch1.medtimer.preferences.MedTimerSettings
-import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
@@ -38,7 +36,6 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 
 class MedicineRepositoryFake {
@@ -130,7 +127,6 @@ class TestReminderContext {
     val alarmManagerMock: AlarmManager = mock(AlarmManager::class.java)
     val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock(NotificationChannel::class.java)
-    val preferencesMock: SharedPreferences = mock(SharedPreferences::class.java)
     val mock: ReminderContext = mock(ReminderContext::class.java)
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
@@ -138,13 +134,6 @@ class TestReminderContext {
     val audioManagerMock: AudioManager = mock(AudioManager::class.java)
     val preferencesDataSourceMock: MedTimerPreferencesDataSource = mock(MedTimerPreferencesDataSource::class.java)
 
-    val stringPreferencesMap = mutableMapOf(
-        PreferencesNames.NUMBER_OF_REPETITIONS to "3",
-        PreferencesNames.SNOOZE_DURATION to "15"
-    )
-    val boolPreferencesMap = mutableMapOf(
-        PreferencesNames.EXACT_REMINDERS to false
-    )
     val stringList = mapOf(
         R.string.high to "High",
         R.string.default_ to "Default"
@@ -152,11 +141,11 @@ class TestReminderContext {
     var notificationId: Int = 1
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
     var instant: Instant = Instant.ofEpochSecond(0)
+    var medTimerSettings = DEFAULT_MEDTIMER_SETTINGS
 
     init {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
         `when`(mock.notificationManager).thenReturn(notificationManagerFake.mock)
-        `when`(mock.preferences).thenReturn(preferencesMock)
         `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
         `when`(mock.localPreferences).thenReturn(localPreferencesMock)
         `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
@@ -174,9 +163,6 @@ class TestReminderContext {
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 
-        `when`(preferencesMock.getString(anyString(), anyString())).thenAnswer { stringPreferencesMap[it.arguments[0]] }
-        `when`(preferencesMock.getBoolean(anyString(), anyBoolean())).thenAnswer { boolPreferencesMap[it.arguments[0]] }
-
         `when`(localPreferencesMock.getInt(eq("notificationId"), anyInt())).thenAnswer { notificationId }
         val editMock = mock(SharedPreferences.Editor::class.java)
         `when`(localPreferencesMock.edit()).thenReturn(editMock)
@@ -191,7 +177,6 @@ class TestReminderContext {
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 
-        val stateFlow = MutableStateFlow(MedTimerSettings(LocalTime.of(9, 0), true, emptySet()))
-        `when`(preferencesDataSourceMock.data).thenReturn(stateFlow)
+        `when`(preferencesDataSourceMock.data).thenAnswer { MutableStateFlow(medTimerSettings) }
     }
 }

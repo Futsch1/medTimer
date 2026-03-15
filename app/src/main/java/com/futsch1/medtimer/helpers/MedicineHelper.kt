@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.preferences.MedTimerSettings
 import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
@@ -21,7 +22,7 @@ import java.util.regex.Pattern
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
 
-    @JvmStatic
+
     fun normalizeMedicineName(medicineName: String): String {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
     }
@@ -87,7 +88,7 @@ object MedicineHelper {
         return s
     }
 
-    @JvmStatic
+
     fun getStockText(reminderContext: ReminderContext, medicine: Medicine): String {
         return reminderContext.getString(
             R.string.medicine_stock_string,
@@ -95,7 +96,7 @@ object MedicineHelper {
         )
     }
 
-    @JvmStatic
+
     fun getStockText(context: Context, medicine: Medicine): String {
         return context.getString(
             R.string.medicine_stock_string,
@@ -104,7 +105,6 @@ object MedicineHelper {
     }
 
 
-    @JvmStatic
     fun getStockIcons(
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
@@ -132,12 +132,11 @@ object MedicineHelper {
         return builder
     }
 
-    @JvmStatic
+
     fun getMedicineNameWithStockText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
         return getMedicineNameWithStockTextInternal(context, fullMedicine)
     }
 
-    @JvmStatic
     fun getMedicineName(
         context: Context,
         medicine: Medicine,
@@ -152,13 +151,12 @@ object MedicineHelper {
         }
     }
 
-    @JvmStatic
     fun getMedicineName(
-        reminderContext: ReminderContext,
         medicine: Medicine,
-        notification: Boolean
+        notification: Boolean,
+        medTimerSettings: MedTimerSettings
     ): String {
-        return if (reminderContext.preferences.getBoolean(HIDE_MED_NAME, false) && notification
+        return if (medTimerSettings.hideMedicineName && notification
         ) {
             medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {
@@ -166,7 +164,7 @@ object MedicineHelper {
         }
     }
 
-    @JvmStatic
+
     fun formatAmount(amount: Double, unit: String): String {
         val numberFormat = NumberFormat.getNumberInstance()
         numberFormat.minimumFractionDigits = 0

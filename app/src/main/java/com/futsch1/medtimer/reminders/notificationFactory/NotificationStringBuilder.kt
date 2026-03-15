@@ -61,7 +61,8 @@ class NotificationStringBuilder(
     }
 
     private fun buildSingleBaseString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
-        val medicineNameString = MedicineHelper.getMedicineName(reminderContext, reminderNotificationPart.medicine.medicine, true)
+        val medicineNameString =
+            MedicineHelper.getMedicineName(reminderNotificationPart.medicine.medicine, true, reminderContext.preferencesDataSource.data.value)
         return reminderContext.getStringBuilder().bold { append(medicineNameString) }
             .append(if (reminderNotificationPart.reminder.amount.isNotEmpty()) " (${reminderNotificationPart.reminder.amount})" else "")
     }

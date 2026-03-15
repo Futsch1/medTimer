@@ -17,7 +17,7 @@ class ExpirationDateNotificationFactory(reminderContext: ReminderContext, val re
         val contentIntent = getStartAppIntent()
         val medicine = reminderNotification.reminderNotificationParts[0].medicine.medicine
 
-        val medicineNameString = MedicineHelper.getMedicineName(reminderContext, medicine, true)
+        val medicineNameString = MedicineHelper.getMedicineName(medicine, true, reminderContext.preferencesDataSource.data.value)
         val notificationMessage = reminderContext.getString(
             R.string.expiration_date_notification,
             medicineNameString,

@@ -12,13 +12,15 @@ import org.junit.Test
 import org.mockito.Mockito
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 
 internal class ReminderSchedulerWeekendModeTest {
     @Test
     fun weekendDaysEmpty() {
         val scheduler = scheduler
 
-        val stateFlow = MutableStateFlow(MedTimerSettings(10 * 60, true, emptySet()))
+        val medTimerSettings = MedTimerSettings(weekendTime = LocalTime.of(10, 0), weekendMode = true)
+        val stateFlow = MutableStateFlow(medTimerSettings)
 
         Mockito.`when`(
             ReminderSchedulerUnitTest.preferencesDataSource.data
@@ -40,7 +42,12 @@ internal class ReminderSchedulerWeekendModeTest {
         // 1.1.1970 is a Thursday
         val scheduler = scheduler
 
-        val stateFlow = MutableStateFlow(MedTimerSettings(10 * 60, true, setOf(DayOfWeek.SATURDAY.value.toString(), DayOfWeek.SUNDAY.value.toString())))
+        val medTimerSettings = MedTimerSettings(
+            weekendTime = LocalTime.of(10, 0),
+            weekendMode = true,
+            weekendDays = setOf(DayOfWeek.SATURDAY.value.toString(), DayOfWeek.SUNDAY.value.toString())
+        )
+        val stateFlow = MutableStateFlow(medTimerSettings)
 
         Mockito.`when`(
             ReminderSchedulerUnitTest.preferencesDataSource.data

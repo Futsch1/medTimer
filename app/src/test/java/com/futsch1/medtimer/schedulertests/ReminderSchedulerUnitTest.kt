@@ -364,7 +364,7 @@ internal class ReminderSchedulerUnitTest {
             val mockTimeAccess: TimeAccess = Mockito.mock(TimeAccess::class.java)
             Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
             Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(plusDays.toLong()))
-            val stateFlow = MutableStateFlow(MedTimerSettings(9 * 60, false, emptySet()))
+            val stateFlow = MutableStateFlow(MedTimerSettings())
             Mockito.`when`(preferencesDataSource.data).thenReturn(stateFlow)
 
             return ReminderScheduler(mockTimeAccess, preferencesDataSource)

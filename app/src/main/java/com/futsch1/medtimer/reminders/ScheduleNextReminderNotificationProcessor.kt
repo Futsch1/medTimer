@@ -5,7 +5,6 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -42,9 +41,12 @@ class ScheduleNextReminderNotificationProcessor(val reminderContext: ReminderCon
         val scheduledReminders: List<ScheduledReminder> =
             reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
-            val combinedReminders = reminderContext.preferences.getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, false)
             val scheduledReminderNotificationData =
-                ReminderNotificationData.fromScheduledReminders(if (combinedReminders) scheduledReminders else listOf(scheduledReminders[0]))
+                ReminderNotificationData.fromScheduledReminders(
+                    if (reminderContext.preferencesDataSource.data.value.combineNotifications) scheduledReminders else listOf(
+                        scheduledReminders[0]
+                    )
+                )
             alarmSetter.setAlarmForReminderNotification(scheduledReminderNotificationData)
         } else {
             Log.d(LogTags.REMINDER, "No reminders scheduled")

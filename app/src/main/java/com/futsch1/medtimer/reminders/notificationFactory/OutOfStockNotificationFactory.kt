@@ -18,7 +18,7 @@ class OutOfStockNotificationFactory(reminderContext: ReminderContext, val remind
         val contentIntent = getStartAppIntent()
         val medicine = reminderNotification.reminderNotificationParts[0].medicine.medicine
 
-        val medicineNameString = MedicineHelper.getMedicineName(reminderContext, medicine, true)
+        val medicineNameString = MedicineHelper.getMedicineName(medicine, true, reminderContext.preferencesDataSource.data.value)
         val notificationMessage = reminderContext.getString(
             R.string.out_of_stock_notification,
             medicineNameString,

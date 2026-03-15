@@ -72,24 +72,31 @@ class MedTimerPreferencesDataSource @Inject constructor(
     private fun getSettings(): MedTimerSettings {
         return MedTimerSettings(
             weekendTime = LocalTime.of(
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540) % 60,
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540) / 60
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, DEFAULT_MEDTIMER_SETTINGS.weekendTime.toSecondOfDay() / 60) % 60,
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, DEFAULT_MEDTIMER_SETTINGS.weekendTime.toSecondOfDay() / 60) / 60
             ),
-            weekendMode = sharedPreferences.getBoolean(PreferencesNames.WEEKEND_MODE, false),
-            weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, emptySet()) ?: emptySet(),
-            exactReminders = sharedPreferences.getBoolean(PreferencesNames.EXACT_REMINDERS, true),
-            repeatReminders = sharedPreferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, false),
-            numberOfRepetitions = sharedPreferences.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")?.toInt() ?: 3,
-            repeatDelay = (sharedPreferences.getString(PreferencesNames.REPEAT_DELAY, "10")?.toInt() ?: 10).toDuration(DurationUnit.MINUTES),
-            snoozeDuration = (sharedPreferences.getString(PreferencesNames.SNOOZE_DURATION, "15")?.toInt() ?: 15).toDuration(DurationUnit.MINUTES),
-            overrideDnd = sharedPreferences.getBoolean(PreferencesNames.OVERRIDE_DND, false),
-            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, false),
-            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, false),
+            weekendMode = sharedPreferences.getBoolean(PreferencesNames.WEEKEND_MODE, DEFAULT_MEDTIMER_SETTINGS.weekendMode),
+            weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, DEFAULT_MEDTIMER_SETTINGS.weekendDays) ?: emptySet(),
+            exactReminders = sharedPreferences.getBoolean(PreferencesNames.EXACT_REMINDERS, DEFAULT_MEDTIMER_SETTINGS.exactReminders),
+            repeatReminders = sharedPreferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, DEFAULT_MEDTIMER_SETTINGS.repeatReminders),
+            numberOfRepetitions = sharedPreferences.getString(PreferencesNames.NUMBER_OF_REPETITIONS, DEFAULT_MEDTIMER_SETTINGS.numberOfRepetitions.toString())
+                ?.toInt()
+                ?: 3,
+            repeatDelay = (sharedPreferences.getString(PreferencesNames.REPEAT_DELAY, DEFAULT_MEDTIMER_SETTINGS.repeatDelay.inWholeMinutes.toString())?.toInt()
+                ?: 10).toDuration(DurationUnit.MINUTES),
+            snoozeDuration = (sharedPreferences.getString(PreferencesNames.SNOOZE_DURATION, DEFAULT_MEDTIMER_SETTINGS.snoozeDuration.inWholeMinutes.toString())
+                ?.toInt()
+                ?: 15).toDuration(DurationUnit.MINUTES),
+            overrideDnd = sharedPreferences.getBoolean(PreferencesNames.OVERRIDE_DND, DEFAULT_MEDTIMER_SETTINGS.overrideDnd),
+            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, DEFAULT_MEDTIMER_SETTINGS.overrideDnd),
+            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, DEFAULT_MEDTIMER_SETTINGS.bigNotifications),
             dismissNotificationAction = when (sharedPreferences.getString(PreferencesNames.DISMISS_NOTIFICATION_ACTION, "0")) {
                 "0" -> DismissNotificationAction.SKIP
                 "1" -> DismissNotificationAction.SNOOZE
                 else -> DismissNotificationAction.TAKE
-            }
+            },
+            combineNotifications = sharedPreferences.getBoolean(PreferencesNames.COMBINE_NOTIFICATIONS, DEFAULT_MEDTIMER_SETTINGS.combineNotifications),
+            hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, DEFAULT_MEDTIMER_SETTINGS.hideMedicineName)
         )
     }
 }

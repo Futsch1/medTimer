@@ -12,7 +12,6 @@ import android.media.AudioManager
 import android.os.Build
 import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -31,7 +30,6 @@ class ReminderContext(val context: Context) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val localPreferences: SharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
     val icons = MedicineIcons(context)
     val packageName: String = context.packageName

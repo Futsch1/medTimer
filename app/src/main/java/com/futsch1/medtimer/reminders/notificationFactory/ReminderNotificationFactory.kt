@@ -6,8 +6,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.preferences.PreferencesNames.BIG_NOTIFICATIONS
-import com.futsch1.medtimer.preferences.PreferencesNames.STICKY_ON_LOCKSCREEN
+import com.futsch1.medtimer.preferences.DismissNotificationAction
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -27,7 +26,7 @@ fun getReminderNotificationFactory(
             reminderNotification
         )
     } else {
-        if (reminderContext.preferences.getBoolean(BIG_NOTIFICATIONS, false)) {
+        if (reminderContext.preferencesDataSource.data.value.bigNotifications) {
             BigReminderNotificationFactory(
                 reminderContext, reminderNotification
             )
@@ -73,9 +72,7 @@ abstract class ReminderNotificationFactory(
         )
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferences.getBoolean(
-                STICKY_ON_LOCKSCREEN, false
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferencesDataSource.data.value.stickyOnLockscreen
         ) {
             builder.setOngoing(true)
         }
@@ -111,15 +108,13 @@ abstract class ReminderNotificationFactory(
 
     fun buildActions(
     ) {
-        val dismissNotificationAction: String? = reminderContext.preferences.getString("dismiss_notification_action", "0")
-
-        when (dismissNotificationAction) {
-            "0" -> {
+        when (reminderContext.preferencesDataSource.data.value.dismissNotificationAction) {
+            DismissNotificationAction.SKIP -> {
                 addTakenAction()
                 addSnoozeAction()
             }
 
-            "1" -> {
+            DismissNotificationAction.SNOOZE -> {
                 addTakenAction()
                 addSkippedAction()
             }
