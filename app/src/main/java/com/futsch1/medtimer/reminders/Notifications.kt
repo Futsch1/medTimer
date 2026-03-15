@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.content.edit
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.preferences.PreferencesNames.NOTIFICATION_ID
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
 
@@ -41,8 +42,8 @@ class Notifications(private val reminderContext: ReminderContext) {
 
     private val nextNotificationId: Int
         get() {
-            val notificationId = sharedPreferences.getInt("notificationId", 1)
-            sharedPreferences.edit { putInt("notificationId", notificationId + 1) }
+            val notificationId = sharedPreferences.getInt(NOTIFICATION_ID, 1)
+            sharedPreferences.edit { putInt(NOTIFICATION_ID, notificationId + 1) }
 
             return notificationId
         }

@@ -17,7 +17,10 @@ data class MedTimerPersistentData(
     val analysisDays: Int,
     val batteryWarningDismissed: Boolean,
     val lastAutomaticBackup: Instant,
-    val automaticBackupDirectory: Uri?
+    val automaticBackupDirectory: Uri?,
+    val notificationId: Int,
+    val lastCustomDose: String,
+    val lastCustomDoseAmount: String
 ) {
     companion object {
         fun default(): MedTimerPersistentData {
@@ -28,7 +31,10 @@ data class MedTimerPersistentData(
                 analysisDays = 7,
                 batteryWarningDismissed = false,
                 lastAutomaticBackup = Instant.EPOCH,
-                automaticBackupDirectory = null
+                automaticBackupDirectory = null,
+                notificationId = 0,
+                lastCustomDose = "",
+                lastCustomDoseAmount = ""
             )
         }
     }

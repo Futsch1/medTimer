@@ -24,6 +24,7 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.preferences.PreferencesNames.COMBINE_NOTIFICATIONS
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,8 +47,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
 
+    // TODO: Remove these data sources again (as they should be part of view models) when the dependent classes are DId
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var persistentDataDataSource: PersistentDataDataSource
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -160,7 +165,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
             lifecycleScope.launch {
-                ManualDose(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day).logManualDose()
+                ManualDose(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day, persistentDataDataSource).logManualDose()
             }
         }
     }

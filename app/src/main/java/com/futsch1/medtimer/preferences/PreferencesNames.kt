@@ -34,5 +34,8 @@ object PreferencesNames {
     const val BATTERY_WARNING_DISMISSED = "battery_warning_dismissed"
     const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
     const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
+    const val NOTIFICATION_ID = "notificationId"
+    const val LAST_CUSTOM_DOSE = "lastCustomDose"
+    const val LAST_CUSTOM_DOSE_AMOUNT = "lastCustomDoseAmount"
 }
 
