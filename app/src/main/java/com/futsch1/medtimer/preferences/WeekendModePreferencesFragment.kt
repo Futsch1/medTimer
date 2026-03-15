@@ -24,7 +24,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     @Inject
     lateinit var preferencesDataSource: MedTimerPreferencesDataSource
 
-    private var currentSettings: MedTimerSettings? = null
+    private var currentSettings: MedTimerPreferences? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferencesDataSource
@@ -56,7 +56,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun updateTimePicker(settings: MedTimerSettings) {
+    private fun updateTimePicker(settings: MedTimerPreferences) {
         val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
         preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.hour * 60 + settings.weekendTime.minute.toLong()))
     }

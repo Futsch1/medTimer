@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -101,7 +102,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
         mediaPlayer =
             MediaPlayer.create(
                 audioContext,
-                preferencesDataSource.data.value.alarmRingtone,
+                preferencesDataSource.data.value.alarmRingtone ?: Settings.System.DEFAULT_ALARM_ALERT_URI,
                 null,
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
                 0

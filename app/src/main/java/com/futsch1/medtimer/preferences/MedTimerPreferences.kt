@@ -19,7 +19,7 @@ enum class BackupInterval {
     NEVER, DAILY, WEEKLY, MONTHLY
 }
 
-data class MedTimerSettings(
+data class MedTimerPreferences(
     // Reminder settings
     val weekendTime: LocalTime,
     val weekendMode: Boolean,
@@ -44,15 +44,15 @@ data class MedTimerSettings(
     val appAuthentication: Boolean,
     val useSecureWindow: Boolean,
     // Alarm settings
-    val alarmRingtone: Uri,
+    val alarmRingtone: Uri?,
     val noAlarmSoundWhenSilent: Boolean,
     val noVibrationWhenSilent: Boolean,
     // Automatic backup settings
     val automaticBackupInterval: BackupInterval
 ) {
     companion object {
-        fun default(): MedTimerSettings {
-            return MedTimerSettings(
+        fun default(): MedTimerPreferences {
+            return MedTimerPreferences(
                 weekendTime = LocalTime.of(9, 0),
                 weekendMode = false,
                 weekendDays = emptySet(),
@@ -83,11 +83,11 @@ data class MedTimerSettings(
 
     // Used from unit tests
     @Suppress("unused")
-    fun copyWith(overrides: MedTimerSettings.() -> Unit): MedTimerSettings {
+    fun copyWith(overrides: MedTimerPreferences.() -> Unit): MedTimerPreferences {
         val copy = this.copy()
         overrides(copy)
         return copy
     }
 }
 
-val DEFAULT_MEDTIMER_SETTINGS = MedTimerSettings.default()
+val DEFAULT_MEDTIMER_SETTINGS = MedTimerPreferences.default()

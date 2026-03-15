@@ -20,7 +20,7 @@ class MedTimerPreferencesDataSource @Inject constructor(
     @param:DefaultPrefs private val sharedPreferences: SharedPreferences,
     @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) : PreferenceDataStore() {
-    val data: StateFlow<MedTimerSettings> = callbackFlow {
+    val data: StateFlow<MedTimerPreferences> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getSettings())
         }
@@ -70,8 +70,8 @@ class MedTimerPreferencesDataSource @Inject constructor(
         sharedPreferences.edit { putString(key, value) }
     }
 
-    private fun getSettings(): MedTimerSettings {
-        return MedTimerSettings(
+    private fun getSettings(): MedTimerPreferences {
+        return MedTimerPreferences(
             weekendTime = LocalTime.of(
                 sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, DEFAULT_MEDTIMER_SETTINGS.weekendTime.toSecondOfDay() / 60) % 60,
                 sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, DEFAULT_MEDTIMER_SETTINGS.weekendTime.toSecondOfDay() / 60) / 60
