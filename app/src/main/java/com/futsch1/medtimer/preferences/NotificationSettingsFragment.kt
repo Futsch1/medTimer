@@ -11,19 +11,27 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.Preference
-import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.safeStartActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NotificationSettingsFragment : PreferencesFragment() {
+    @Inject
+    lateinit var preferencesDataSource: MedTimerPreferencesDataSource
+
     private var rootKey: String? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         this.rootKey = rootKey
+
+        preferenceManager.preferenceDataStore = preferencesDataSource
+
         setPreferencesFromResource(R.xml.notification_settings, rootKey)
 
         setupNotificationSettings()
@@ -138,9 +146,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resetBooleanPreferenceAndReload(preferenceName: String) {
-        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit {
-            putBoolean(preferenceName, false)
-        }
+        preferenceManager.preferenceDataStore?.putBoolean(preferenceName, false)
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 
@@ -170,4 +176,32 @@ class NotificationSettingsFragment : PreferencesFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        resumeExactReminders()
+        resumeOverrideDnd()
+    }
+
+    private fun resumeExactReminders() {
+        val preference =
+            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.EXACT_REMINDERS)
+        if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager =
+                requireContext().getSystemService(AlarmManager::class.java)
+            if (!alarmManager.canScheduleExactAlarms()) {
+                resetBooleanPreferenceAndReload(PreferencesNames.EXACT_REMINDERS)
+            }
+        }
+    }
+
+    private fun resumeOverrideDnd() {
+        val preference =
+            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.OVERRIDE_DND)
+        if (preference != null && !requireContext().getSystemService(
+                NotificationManager::class.java
+            ).isNotificationPolicyAccessGranted
+        ) {
+            resetBooleanPreferenceAndReload(PreferencesNames.OVERRIDE_DND)
+        }
+    }
 }

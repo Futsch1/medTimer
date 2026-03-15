@@ -8,7 +8,6 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import java.time.Instant
@@ -134,7 +133,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         }
 
         private fun getNumberOfRepeats(reminderContext: ReminderContext): Int {
-            return reminderContext.preferences.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")!!.toInt()
+            return reminderContext.preferencesDataSource.data.value.numberOfRepetitions
         }
 
     }

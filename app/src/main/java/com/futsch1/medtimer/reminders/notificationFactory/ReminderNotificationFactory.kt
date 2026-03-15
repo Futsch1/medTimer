@@ -2,11 +2,12 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
+import com.futsch1.medtimer.preferences.PreferencesNames.BIG_NOTIFICATIONS
+import com.futsch1.medtimer.preferences.PreferencesNames.STICKY_ON_LOCKSCREEN
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
@@ -26,7 +27,7 @@ fun getReminderNotificationFactory(
             reminderNotification
         )
     } else {
-        if (reminderContext.preferences.getBoolean("big_notifications", false)) {
+        if (reminderContext.preferences.getBoolean(BIG_NOTIFICATIONS, false)) {
             BigReminderNotificationFactory(
                 reminderContext, reminderNotification
             )
@@ -45,7 +46,6 @@ abstract class ReminderNotificationFactory(
     reminderContext,
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
-    val defaultSharedPreferences: SharedPreferences = reminderContext.preferences
 
     val intents = NotificationIntentBuilder(
         reminderContext, reminderNotification
@@ -73,8 +73,8 @@ abstract class ReminderNotificationFactory(
         )
 
         // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && defaultSharedPreferences.getBoolean(
-                "sticky_on_lockscreen", false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferences.getBoolean(
+                STICKY_ON_LOCKSCREEN, false
             )
         ) {
             builder.setOngoing(true)
@@ -111,7 +111,7 @@ abstract class ReminderNotificationFactory(
 
     fun buildActions(
     ) {
-        val dismissNotificationAction: String? = defaultSharedPreferences.getString("dismiss_notification_action", "0")
+        val dismissNotificationAction: String? = reminderContext.preferences.getString("dismiss_notification_action", "0")
 
         when (dismissNotificationAction) {
             "0" -> {

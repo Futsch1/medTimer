@@ -38,6 +38,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 
 class MedicineRepositoryFake {
@@ -190,7 +191,7 @@ class TestReminderContext {
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 
-        val stateFlow = MutableStateFlow(MedTimerSettings(9 * 60, true, emptySet()))
+        val stateFlow = MutableStateFlow(MedTimerSettings(LocalTime.of(9, 0), true, emptySet()))
         `when`(preferencesDataSourceMock.data).thenReturn(stateFlow)
     }
 }

@@ -15,6 +15,7 @@ import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import java.util.stream.Collectors
 import javax.inject.Inject
 
@@ -57,15 +58,15 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateTimePicker(settings: MedTimerSettings) {
         val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
-        preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.toLong()))
+        preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.hour * 60 + settings.weekendTime.minute.toLong()))
     }
 
     private fun setupTimePicker() {
         val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
         if (preference != null) {
             preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
-                val weekendTime = currentSettings?.weekendTime ?: 540
-                TimePickerWrapper(requireActivity()).show(weekendTime / 60, weekendTime % 60) { minutes: Int ->
+                val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
+                TimePickerWrapper(requireActivity()).show(weekendTime.hour, weekendTime.minute) { minutes: Int ->
                     preferencesDataSource.setWeekendTime(minutes)
                     preference1!!.setSummary(minutesToTimeString(requireContext(), minutes.toLong()))
                     requestReschedule()

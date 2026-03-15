@@ -12,7 +12,6 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
@@ -76,8 +75,11 @@ class ReminderNotificationProcessor(
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
-        if (remainingRepeats != 0 && this.isRepeatReminders) {
-            RepeatProcessor(reminderContext).processRepeat(reminderNotification.reminderNotificationData, repeatTimeSeconds)
+        if (remainingRepeats != 0 && reminderContext.preferencesDataSource.data.value.repeatReminders) {
+            RepeatProcessor(reminderContext).processRepeat(
+                reminderNotification.reminderNotificationData,
+                reminderContext.preferencesDataSource.data.value.numberOfRepetitions
+            )
         }
     }
 
@@ -96,19 +98,9 @@ class ReminderNotificationProcessor(
         }
     }
 
-    private val isRepeatReminders: Boolean
-        get() {
-            return reminderContext.preferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, false)
-        }
-
     private fun canShowNotifications(): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || reminderContext.hasPermission(Manifest.permission.POST_NOTIFICATIONS)
     }
-
-    private val repeatTimeSeconds: Int
-        get() {
-            return reminderContext.preferences.getString(PreferencesNames.REPEAT_DELAY, "10")!!.toInt() * 60
-        }
 
     companion object {
         fun buildReminderEvent(

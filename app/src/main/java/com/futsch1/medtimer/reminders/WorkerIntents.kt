@@ -7,6 +7,7 @@ import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.ProcessorCode
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlin.time.Duration
 
 /**
  * Provides factory methods for creating [Intent]s used to trigger reminder-related actions
@@ -28,16 +29,16 @@ fun getReminderAction(reminderContext: ReminderContext): Intent {
  * @param reminderNotificationData The data of the reminder to be snoozed.
  * @param snoozeTime The snooze duration in minutes.
  */
-fun getSnoozeIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent {
+fun getSnoozeIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration): Intent {
     val snoozeIntent = reminderContext.getIntent(ProcessorCode.Snooze.action)
     reminderNotificationData.toIntent(snoozeIntent)
-    snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeTime)
+    snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeDuration.inWholeSeconds)
     reminderContext.setIntentClass(snoozeIntent, ReminderProcessorBroadcastReceiver::class.java)
     return snoozeIntent
 }
 
-fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int): Intent =
-    getSnoozeIntent(ReminderContext(context), reminderNotificationData, snoozeTime)
+fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration): Intent =
+    getSnoozeIntent(ReminderContext(context), reminderNotificationData, snoozeDuration)
 
 
 fun getShowReminderNotificationIntent(reminderContext: ReminderContext, reminderNotificationData: ReminderNotificationData): Intent {

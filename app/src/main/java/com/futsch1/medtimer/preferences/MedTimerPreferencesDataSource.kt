@@ -6,17 +6,20 @@ import androidx.preference.PreferenceDataStore
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPrefs
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
+import java.time.LocalTime
 import javax.inject.Inject
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class MedTimerPreferencesDataSource @Inject constructor(
     @param:DefaultPrefs private val sharedPreferences: SharedPreferences,
     @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) : PreferenceDataStore() {
-    val data: Flow<MedTimerSettings> = callbackFlow {
+    val data: StateFlow<MedTimerSettings> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getSettings())
         }
@@ -32,14 +35,6 @@ class MedTimerPreferencesDataSource @Inject constructor(
 
     fun setWeekendTime(value: Int) {
         sharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, value) }
-    }
-
-    fun setWeekendMode(value: Boolean) {
-        sharedPreferences.edit { putBoolean(PreferencesNames.WEEKEND_MODE, value) }
-    }
-
-    fun setWeekendDays(value: Set<String>) {
-        sharedPreferences.edit { putStringSet(PreferencesNames.WEEKEND_DAYS, value) }
     }
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
@@ -66,11 +61,35 @@ class MedTimerPreferencesDataSource @Inject constructor(
         sharedPreferences.edit { putInt(key, value) }
     }
 
+    override fun getString(key: String?, defValue: String?): String? {
+        return sharedPreferences.getString(key, defValue)
+    }
+
+    override fun putString(key: String?, value: String?) {
+        sharedPreferences.edit { putString(key, value) }
+    }
+
     private fun getSettings(): MedTimerSettings {
         return MedTimerSettings(
-            weekendTime = sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540),
+            weekendTime = LocalTime.of(
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540) % 60,
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, 540) / 60
+            ),
             weekendMode = sharedPreferences.getBoolean(PreferencesNames.WEEKEND_MODE, false),
-            weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, emptySet()) ?: emptySet()
+            weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, emptySet()) ?: emptySet(),
+            exactReminders = sharedPreferences.getBoolean(PreferencesNames.EXACT_REMINDERS, true),
+            repeatReminders = sharedPreferences.getBoolean(PreferencesNames.REPEAT_REMINDERS, false),
+            numberOfRepetitions = sharedPreferences.getString(PreferencesNames.NUMBER_OF_REPETITIONS, "3")?.toInt() ?: 3,
+            repeatDelay = (sharedPreferences.getString(PreferencesNames.REPEAT_DELAY, "10")?.toInt() ?: 10).toDuration(DurationUnit.MINUTES),
+            snoozeDuration = (sharedPreferences.getString(PreferencesNames.SNOOZE_DURATION, "15")?.toInt() ?: 15).toDuration(DurationUnit.MINUTES),
+            overrideDnd = sharedPreferences.getBoolean(PreferencesNames.OVERRIDE_DND, false),
+            stickyOnLockscreen = sharedPreferences.getBoolean(PreferencesNames.STICKY_ON_LOCKSCREEN, false),
+            bigNotifications = sharedPreferences.getBoolean(PreferencesNames.BIG_NOTIFICATIONS, false),
+            dismissNotificationAction = when (sharedPreferences.getString(PreferencesNames.DISMISS_NOTIFICATION_ACTION, "0")) {
+                "0" -> DismissNotificationAction.SKIP
+                "1" -> DismissNotificationAction.SNOOZE
+                else -> DismissNotificationAction.TAKE
+            }
         )
     }
 }

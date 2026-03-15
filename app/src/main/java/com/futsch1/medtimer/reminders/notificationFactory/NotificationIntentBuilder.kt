@@ -2,12 +2,11 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.preferences.PreferencesNames.SNOOZE_DURATION
+import com.futsch1.medtimer.preferences.DismissNotificationAction
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
@@ -17,10 +16,9 @@ import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import kotlin.time.Duration
 
 class NotificationIntentBuilder(val reminderContext: ReminderContext, val reminderNotification: ReminderNotification) {
-    val defaultSharedPreferences: SharedPreferences = reminderContext.preferences
-
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
@@ -30,6 +28,9 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     val actionTaken = getTakenActionRemoteInput()
 
     val pendingDismiss = getDismissPendingIntent()
+
+    private val snoozeDuration: Duration = reminderContext.preferencesDataSource.data.value.snoozeDuration
+    private val dismissNotificationAction: DismissNotificationAction = reminderContext.preferencesDataSource.data.value.dismissNotificationAction
 
     /**
      * Creates a [PendingIntent] for the "taken" action of a reminder notification.
@@ -70,8 +71,6 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeTime = defaultSharedPreferences.getString(SNOOZE_DURATION, "15")!!.toInt()
-
         fun getSnoozeCustomTimeIntent(): PendingIntent {
             val snooze = getCustomSnoozeActionIntent(
                 reminderContext, reminderNotification.reminderNotificationData
@@ -83,14 +82,14 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
 
         fun getStandardSnoozeIntent(): PendingIntent {
             val snooze = getSnoozeIntent(
-                reminderContext, reminderNotification.reminderNotificationData, snoozeTime
+                reminderContext, reminderNotification.reminderNotificationData, snoozeDuration
             )
             return reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
 
-        return if (snoozeTime == -1) {
+        return if (snoozeDuration.inWholeMinutes < 0) {
             getSnoozeCustomTimeIntent()
         } else {
             getStandardSnoozeIntent()
@@ -98,8 +97,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
-        if (snoozeTime != -1) {
+        if (snoozeDuration.inWholeSeconds > 0) {
             return null
         }
         val resultIntent = Intent()
@@ -154,12 +152,12 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
-        return when (defaultSharedPreferences.getString("dismiss_notification_action", "0")) {
-            "0" -> {
+        return when (dismissNotificationAction) {
+            DismissNotificationAction.SKIP -> {
                 pendingSkipped
             }
 
-            "1" -> {
+            DismissNotificationAction.SNOOZE -> {
                 pendingSnooze
             }
 

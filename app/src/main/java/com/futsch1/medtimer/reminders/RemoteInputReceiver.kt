@@ -20,6 +20,8 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -34,10 +36,10 @@ class RemoteInputReceiver(val dispatcher: CoroutineDispatcher = Dispatchers.IO) 
     }
 
     private fun snooze(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
-        val snoozeTime = results.getCharSequence("snooze_time")
-        val snoozeTimeInt = snoozeTime.toString().toIntOrNull() ?: 10
         confirmNotification(context, reminderNotificationData.notificationId)
-        ReminderProcessorBroadcastReceiver.requestSnooze(context, reminderNotificationData, snoozeTimeInt)
+        val snoozeTime = results.getCharSequence("snooze_time")?.toString()
+        snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
+            ?.let { ReminderProcessorBroadcastReceiver.requestSnooze(context, reminderNotificationData, it) }
     }
 
     private fun variableAmount(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {

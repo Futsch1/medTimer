@@ -19,6 +19,8 @@ object PreferencesNames {
     const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
     const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
     const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
-
+    const val STICKY_ON_LOCKSCREEN = "sticky_on_lockscreen"
+    const val BIG_NOTIFICATIONS = "big_notifications"
+    const val DISMISS_NOTIFICATION_ACTION = "dismiss_notification_action"
 }
 

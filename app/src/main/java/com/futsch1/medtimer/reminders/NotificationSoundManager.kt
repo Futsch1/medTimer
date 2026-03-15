@@ -3,7 +3,6 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.media.AudioManager
 import android.os.Build
-import com.futsch1.medtimer.preferences.PreferencesNames
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,12 +21,10 @@ class NotificationSoundManager(reminderContext: ReminderContext) {
         reminderContext.notificationManager
     private val audioManager: AudioManager =
         reminderContext.audioManager
+    private val overrideDnd = reminderContext.preferencesDataSource.data.value.overrideDnd
 
     init {
-        if (notificationManager.isNotificationPolicyAccessGranted() && reminderContext.preferences.getBoolean(
-                PreferencesNames.OVERRIDE_DND,
-                false
-            )
+        if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd
         ) {
             loadPendingRingerMode(audioManager, notificationManager)
         }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
+import kotlin.time.Duration
 
 private val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
 
@@ -195,8 +196,8 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
-        fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
-            val intent = getSnoozeIntent(context, reminderNotificationData, snoozeTime)
+        fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration) {
+            val intent = getSnoozeIntent(context, reminderNotificationData, snoozeDuration)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
