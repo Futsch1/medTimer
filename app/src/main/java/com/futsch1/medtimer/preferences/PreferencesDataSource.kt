@@ -36,8 +36,8 @@ class PreferencesDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getSettings())
 
-    fun setWeekendTime(value: Int) {
-        sharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, value) }
+    fun setWeekendTime(value: LocalTime) {
+        sharedPreferences.edit { putInt(PreferencesNames.WEEKEND_TIME, value.toSecondOfDay() / 60) }
     }
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
@@ -76,8 +76,8 @@ class PreferencesDataSource @Inject constructor(
         val default = UserPreferences.default()
         return UserPreferences(
             weekendTime = LocalTime.of(
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60,
-                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60,
+                sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60
             ),
             weekendMode = sharedPreferences.getBoolean(PreferencesNames.WEEKEND_MODE, default.weekendMode),
             weekendDays = sharedPreferences.getStringSet(PreferencesNames.WEEKEND_DAYS, default.weekendDays) ?: emptySet(),

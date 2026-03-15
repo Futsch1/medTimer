@@ -2,7 +2,7 @@ package com.futsch1.medtimer.model
 
 import android.graphics.Color
 import android.net.Uri
-import java.time.Instant
+import java.time.LocalDate
 
 enum class StatisticFragment {
     CHARTS,
@@ -16,7 +16,7 @@ data class PersistentData(
     val activeStatisticsFragment: StatisticFragment,
     val analysisDays: Int,
     val batteryWarningDismissed: Boolean,
-    val lastAutomaticBackup: Instant,
+    val lastAutomaticBackup: LocalDate,
     val automaticBackupDirectory: Uri?,
     val notificationId: Int,
     val lastCustomDose: String,
@@ -30,7 +30,7 @@ data class PersistentData(
                 activeStatisticsFragment = StatisticFragment.CHARTS,
                 analysisDays = 7,
                 batteryWarningDismissed = false,
-                lastAutomaticBackup = Instant.EPOCH,
+                lastAutomaticBackup = LocalDate.EPOCH,
                 automaticBackupDirectory = null,
                 notificationId = 0,
                 lastCustomDose = "",

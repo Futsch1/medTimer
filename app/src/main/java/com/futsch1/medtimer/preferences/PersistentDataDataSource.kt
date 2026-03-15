@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
-import java.time.Instant
+import java.time.LocalDate
 import javax.inject.Inject
 
 class PersistentDataDataSource @Inject constructor(
@@ -71,7 +71,7 @@ class PersistentDataDataSource @Inject constructor(
             },
             analysisDays = defaultSharedPreferences.getInt(ANALYSIS_DAYS, default.analysisDays),
             batteryWarningDismissed = defaultSharedPreferences.getBoolean(BATTERY_WARNING_DISMISSED, default.batteryWarningDismissed),
-            lastAutomaticBackup = Instant.ofEpochMilli(defaultSharedPreferences.getLong(LAST_AUTOMATIC_BACKUP, default.lastAutomaticBackup.toEpochMilli())),
+            lastAutomaticBackup = LocalDate.parse(defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null) ?: default.lastAutomaticBackup.toString()),
             automaticBackupDirectory = defaultSharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),
             lastCustomDose = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE, null) ?: default.lastCustomDose,
