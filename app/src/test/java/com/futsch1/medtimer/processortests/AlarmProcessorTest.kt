@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.processortests
 
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.reminders.AlarmProcessor
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -14,7 +14,7 @@ class AlarmProcessorTest {
     @Test
     fun exactAlarms() {
         val reminderContext = TestReminderContext()
-        reminderContext.medTimerPreferences = MedTimerPreferences.default().copy(exactReminders = true)
+        reminderContext.userPreferences = UserPreferences.default().copy(exactReminders = true)
         val processedNotificationData = fillWithTwoReminders(reminderContext)
         processedNotificationData.remindInstant = processedNotificationData.remindInstant.plusSeconds(10)
 

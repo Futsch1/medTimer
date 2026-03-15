@@ -10,7 +10,7 @@ import androidx.core.text.color
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
@@ -29,7 +29,7 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
-        medTimerPreferences: MedTimerPreferences,
+        userPreferences: UserPreferences,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
@@ -37,7 +37,7 @@ object MedicineHelper {
                 getMedicineName(
                     fullMedicine.medicine,
                     false,
-                    medTimerPreferences
+                    userPreferences
                 )
             )
         }
@@ -144,9 +144,9 @@ object MedicineHelper {
     fun getMedicineName(
         medicine: Medicine,
         notification: Boolean,
-        medTimerPreferences: MedTimerPreferences
+        userPreferences: UserPreferences
     ): String {
-        return if (medTimerPreferences.hideMedicineName && notification
+        return if (userPreferences.hideMedicineName && notification
         ) {
             medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {

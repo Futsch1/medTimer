@@ -10,7 +10,7 @@ import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatReminderStringForWidget
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ class ReminderHelperTest {
     fun testFormatScheduledReminderString() {
         val contextMock = mock(Context::class.java)
         val preferencesDataSourceMock = mock(PreferencesDataSource::class.java)
-        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(MedTimerPreferences.default()))
+        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
         val utc = TimeZone.getTimeZone("WET")
         val usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US)
@@ -93,7 +93,7 @@ class ReminderHelperTest {
         assertEquals(result.toString(), resultReminder.toString())
 
         // Relative date/time
-        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(MedTimerPreferences.default().copy(useRelativeDateTime = true)))
+        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(useRelativeDateTime = true)))
         scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
         reminderEvent.remindedTimestamp = instantLater.toEpochMilli() / 1000
         result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesDataSourceMock)
@@ -121,7 +121,7 @@ class ReminderHelperTest {
         assertEquals("In 1 hour, 2:00\u202FAM: Test (6 Skipped)", resultReminder.toString())
 
         // Test show taken time in overview
-        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(MedTimerPreferences.default().copy(showTakenTimeInOverview = true)))
+        Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(showTakenTimeInOverview = true)))
 
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
         reminderEvent.remindedTimestamp = instantZero.toEpochMilli() / 1000

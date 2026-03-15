@@ -12,7 +12,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
 
-    private var currentSettings: MedTimerPreferences? = null
+    private var currentSettings: UserPreferences? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferencesDataSource
@@ -57,7 +57,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun updateTimePicker(settings: MedTimerPreferences) {
+    private fun updateTimePicker(settings: UserPreferences) {
         val preference = preferenceScreen.findPreference<Preference?>(PreferencesNames.WEEKEND_TIME)
         preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.hour * 60 + settings.weekendTime.minute.toLong()))
     }

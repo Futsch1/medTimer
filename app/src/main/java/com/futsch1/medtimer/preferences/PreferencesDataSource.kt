@@ -5,11 +5,11 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceDataStore
 import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.DefaultPrefs
+import com.futsch1.medtimer.di.DefaultPreferences
 import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.model.DismissNotificationAction
-import com.futsch1.medtimer.model.MedTimerPreferences
 import com.futsch1.medtimer.model.ThemeSetting
+import com.futsch1.medtimer.model.UserPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,10 +21,10 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class PreferencesDataSource @Inject constructor(
-    @param:DefaultPrefs private val sharedPreferences: SharedPreferences,
+    @param:DefaultPreferences private val sharedPreferences: SharedPreferences,
     @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) : PreferenceDataStore() {
-    val preferences: StateFlow<MedTimerPreferences> = callbackFlow {
+    val preferences: StateFlow<UserPreferences> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getSettings())
         }
@@ -72,9 +72,9 @@ class PreferencesDataSource @Inject constructor(
         sharedPreferences.edit { putString(key, value) }
     }
 
-    private fun getSettings(): MedTimerPreferences {
-        val default = MedTimerPreferences.default()
-        return MedTimerPreferences(
+    private fun getSettings(): UserPreferences {
+        val default = UserPreferences.default()
+        return UserPreferences(
             weekendTime = LocalTime.of(
                 sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60,
                 sharedPreferences.getInt(PreferencesNames.WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60

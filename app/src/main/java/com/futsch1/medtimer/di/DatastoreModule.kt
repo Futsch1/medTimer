@@ -13,11 +13,11 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class DefaultPrefs
+annotation class DefaultPreferences
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class MedTimerPrefs
+annotation class MedTimerPreferencess
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -25,14 +25,14 @@ object DatastoreModule {
 
     @Provides
     @Singleton
-    @DefaultPrefs
+    @DefaultPreferences
     fun providesDefaultSharedPreferences(@ApplicationContext ctx: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
     @Provides
     @Singleton
-    @MedTimerPrefs
+    @MedTimerPreferencess
     fun providesMedTimerSharedPreferences(@ApplicationContext ctx: Context): SharedPreferences {
         return ctx.getSharedPreferences("medTimer", Context.MODE_PRIVATE)
     }

@@ -3,7 +3,7 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -25,7 +25,7 @@ class SchedulingSimulatorTest {
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
         val mockPreferencesDataSource = Mockito.mock(PreferencesDataSource::class.java)
-        val stateFlow = MutableStateFlow(MedTimerPreferences.default())
+        val stateFlow = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferencesDataSource.preferences).thenReturn(stateFlow)
 
         return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, mockPreferencesDataSource)

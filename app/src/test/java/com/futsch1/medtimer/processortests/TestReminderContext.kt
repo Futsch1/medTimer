@@ -20,7 +20,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
@@ -141,7 +141,7 @@ class TestReminderContext {
     var notificationId: Int = 1
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
     var instant: Instant = Instant.ofEpochSecond(0)
-    var medTimerPreferences = MedTimerPreferences.default()
+    var userPreferences = UserPreferences.default()
 
     init {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
@@ -177,6 +177,6 @@ class TestReminderContext {
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 
-        `when`(preferencesDataSourceMock.preferences).thenAnswer { MutableStateFlow(medTimerPreferences) }
+        `when`(preferencesDataSourceMock.preferences).thenAnswer { MutableStateFlow(userPreferences) }
     }
 }

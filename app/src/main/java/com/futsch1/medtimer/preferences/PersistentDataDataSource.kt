@@ -5,9 +5,9 @@ import android.graphics.Color
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.DefaultPrefs
-import com.futsch1.medtimer.di.MedTimerPrefs
-import com.futsch1.medtimer.model.MedTimerPersistentData
+import com.futsch1.medtimer.di.DefaultPreferences
+import com.futsch1.medtimer.di.MedTimerPreferencess
+import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.StatisticFragment
 import com.futsch1.medtimer.preferences.PreferencesNames.ACTIVE_STATISTICS_FRAGMENT
 import com.futsch1.medtimer.preferences.PreferencesNames.ANALYSIS_DAYS
@@ -28,12 +28,12 @@ import java.time.Instant
 import javax.inject.Inject
 
 class PersistentDataDataSource @Inject constructor(
-    @param:DefaultPrefs private val defaultSharedPreferences: SharedPreferences,
-    @param:MedTimerPrefs private val medTimerSharedPreferences: SharedPreferences,
+    @param:DefaultPreferences private val defaultSharedPreferences: SharedPreferences,
+    @param:MedTimerPreferencess private val medTimerSharedPreferences: SharedPreferences,
     @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) {
 
-    val data: StateFlow<MedTimerPersistentData> = callbackFlow {
+    val data: StateFlow<PersistentData> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getPersistentData())
         }
@@ -48,20 +48,20 @@ class PersistentDataDataSource @Inject constructor(
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getPersistentData())
 
     fun setLastCustomDose(value: String) {
-        medTimerSharedPreferences.edit { putString(PreferencesNames.LAST_CUSTOM_DOSE, value) }
+        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE, value) }
     }
 
     fun setLastCustomDoseAmount(value: String) {
-        medTimerSharedPreferences.edit { putString(PreferencesNames.LAST_CUSTOM_DOSE_AMOUNT, value) }
+        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE_AMOUNT, value) }
     }
 
     fun setActiveStatisticsFragment(fragment: StatisticFragment) {
         defaultSharedPreferences.edit { putInt(ACTIVE_STATISTICS_FRAGMENT, fragment.ordinal) }
     }
 
-    private fun getPersistentData(): MedTimerPersistentData {
-        val default = MedTimerPersistentData.default()
-        return MedTimerPersistentData(
+    private fun getPersistentData(): PersistentData {
+        val default = PersistentData.default()
+        return PersistentData(
             showNotifications = defaultSharedPreferences.getBoolean(SHOW_NOTIFICATION, default.showNotifications),
             iconColor = Color.valueOf(defaultSharedPreferences.getInt(ICON_COLOR, default.iconColor.toArgb())),
             activeStatisticsFragment = when (defaultSharedPreferences.getInt(ACTIVE_STATISTICS_FRAGMENT, default.activeStatisticsFragment.ordinal)) {

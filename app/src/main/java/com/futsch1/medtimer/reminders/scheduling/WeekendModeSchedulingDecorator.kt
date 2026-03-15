@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
@@ -12,7 +12,7 @@ class WeekendModeSchedulingDecorator(
 ) :
     Scheduling {
 
-    fun adjustInstant(instant: Instant, settings: MedTimerPreferences): Instant {
+    fun adjustInstant(instant: Instant, settings: UserPreferences): Instant {
         var instant = instant
         if (settings.weekendMode) {
             val localDateTime = instant.atZone(timeAccess.systemZone())

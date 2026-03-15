@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.model.MedTimerPreferences
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
@@ -19,8 +19,8 @@ internal class ReminderSchedulerWeekendModeTest {
     fun weekendDaysEmpty() {
         val scheduler = scheduler
 
-        val medTimerPreferences = MedTimerPreferences.default().copy(weekendTime = LocalTime.of(10, 0), weekendMode = true)
-        val stateFlow = MutableStateFlow(medTimerPreferences)
+        val userPreferences = UserPreferences.default().copy(weekendTime = LocalTime.of(10, 0), weekendMode = true)
+        val stateFlow = MutableStateFlow(userPreferences)
 
         Mockito.`when`(
             ReminderSchedulerUnitTest.preferencesDataSource.preferences
@@ -42,12 +42,12 @@ internal class ReminderSchedulerWeekendModeTest {
         // 1.1.1970 is a Thursday
         val scheduler = scheduler
 
-        val medTimerPreferences = MedTimerPreferences.default().copy(
+        val userPreferences = UserPreferences.default().copy(
             weekendTime = LocalTime.of(10, 0),
             weekendMode = true,
             weekendDays = setOf(DayOfWeek.SATURDAY.value.toString(), DayOfWeek.SUNDAY.value.toString())
         )
-        val stateFlow = MutableStateFlow(medTimerPreferences)
+        val stateFlow = MutableStateFlow(userPreferences)
 
         Mockito.`when`(
             ReminderSchedulerUnitTest.preferencesDataSource.preferences

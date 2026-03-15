@@ -90,19 +90,17 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun setupExactReminders() {
         val preference =
-            preferenceScreen.findPreference<Preference?>(PreferencesNames.EXACT_REMINDERS)
-        if (preference != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                preference.onPreferenceChangeListener =
-                    Preference.OnPreferenceChangeListener { _, newValue: Any? ->
-                        if (true == newValue) {
-                            showExactReminderDialog()
-                        }
-                        true
+            preferenceScreen.findPreference<Preference?>(PreferencesNames.EXACT_REMINDERS) ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            preference.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, newValue: Any? ->
+                    if (true == newValue) {
+                        showExactReminderDialog()
                     }
-            } else {
-                preference.isVisible = false
-            }
+                    true
+                }
+        } else {
+            preference.isVisible = false
         }
     }
 
@@ -183,9 +181,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resumeExactReminders() {
-        val preference =
-            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.EXACT_REMINDERS)
-        if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager =
                 requireContext().getSystemService(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
@@ -195,9 +191,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resumeOverrideDnd() {
-        val preference =
-            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.OVERRIDE_DND)
-        if (preference != null && !requireContext().getSystemService(
+        if (!requireContext().getSystemService(
                 NotificationManager::class.java
             ).isNotificationPolicyAccessGranted
         ) {

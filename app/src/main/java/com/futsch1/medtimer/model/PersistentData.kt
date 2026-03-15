@@ -10,7 +10,7 @@ enum class StatisticFragment {
     CALENDAR
 }
 
-data class MedTimerPersistentData(
+data class PersistentData(
     val showNotifications: Boolean,
     val iconColor: Color,
     val activeStatisticsFragment: StatisticFragment,
@@ -23,8 +23,8 @@ data class MedTimerPersistentData(
     val lastCustomDoseAmount: String
 ) {
     companion object {
-        fun default(): MedTimerPersistentData {
-            return MedTimerPersistentData(
+        fun default(): PersistentData {
+            return PersistentData(
                 showNotifications = true,
                 iconColor = Color.valueOf(Color.BLACK),
                 activeStatisticsFragment = StatisticFragment.CHARTS,
