@@ -120,7 +120,7 @@ class PreferencesDataSource @Inject constructor(
             hideMedicineName = sharedPreferences.getBoolean(PreferencesNames.HIDE_MED_NAME, default.hideMedicineName),
             appAuthentication = sharedPreferences.getBoolean(PreferencesNames.APP_AUTHENTICATION, default.appAuthentication),
             useSecureWindow = sharedPreferences.getBoolean(PreferencesNames.SECURE_WINDOW, default.useSecureWindow),
-            alarmRingtone = sharedPreferences.getString(PreferencesNames.ALARM_RINGTONE, "")?.toUri() ?: default.alarmRingtone,
+            alarmRingtone = sharedPreferences.getString(PreferencesNames.ALARM_RINGTONE, null)?.toUri() ?: default.alarmRingtone,
             noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
                 PreferencesNames.NO_ALARM_SOUND_WHEN_SILENT,
                 default.noAlarmSoundWhenSilent
