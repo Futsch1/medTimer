@@ -10,7 +10,7 @@ ksp = "2.3.6"
 
 # AndroidX
 appcompat = "1.7.1"
-core-ktx = "1.17.0"
+core-ktx = "1.18.0"
 constraintlayout = "2.2.1"
 navigation = "2.9.7"
 preference-ktx = "1.2.1"
