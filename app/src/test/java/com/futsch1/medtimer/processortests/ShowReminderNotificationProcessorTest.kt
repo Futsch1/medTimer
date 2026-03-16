@@ -59,7 +59,7 @@ class ShowReminderNotificationProcessorTest {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
         reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
         reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
-        reminderContext.notificationId = 2
+        reminderContext.persistentData = reminderContext.persistentData.copy(notificationId = 2)
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(2))
 
         runBlocking {

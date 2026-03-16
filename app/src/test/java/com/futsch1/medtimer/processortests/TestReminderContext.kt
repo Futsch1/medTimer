@@ -20,7 +20,9 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
@@ -43,7 +45,7 @@ class MedicineRepositoryFake {
     val reminderEvents = mutableListOf<ReminderEvent>()
     val reminders = mutableListOf<Reminder>()
 
-    val mock: MedicineRepository = mock<MedicineRepository>()
+    val mock: MedicineRepository = mock()
 
     init {
         `when`(mock.medicines).thenAnswer { buildFullMedicines() }
@@ -83,7 +85,7 @@ class MedicineRepositoryFake {
 class NotificationManagerFake {
     val activeNotifications = mutableMapOf<Int, Notification>()
 
-    val mock: NotificationManager = mock<NotificationManager>()
+    val mock: NotificationManager = mock()
 
     init {
         `when`(mock.activeNotifications).thenAnswer { getNotifications() }
@@ -113,9 +115,9 @@ class NotificationManagerFake {
 }
 
 class NotificationBuilderFake {
-    val mock: NotificationCompat.Builder = mock<NotificationCompat.Builder>()
-    val extrasMock: Bundle = mock<Bundle>()
-    val notificationMock: Notification = mock<Notification>()
+    val mock: NotificationCompat.Builder = mock()
+    val extrasMock: Bundle = mock()
+    val notificationMock: Notification = mock()
 
     init {
         `when`(mock.extras).thenReturn(extrasMock)
@@ -124,15 +126,16 @@ class NotificationBuilderFake {
 }
 
 class TestReminderContext {
-    val alarmManagerMock: AlarmManager = mock<AlarmManager>()
+    val alarmManagerMock: AlarmManager = mock()
     val notificationManagerFake = NotificationManagerFake()
-    val notificationChannelMock: NotificationChannel = mock<NotificationChannel>()
-    val mock: ReminderContext = mock<ReminderContext>()
+    val notificationChannelMock: NotificationChannel = mock()
+    val mock: ReminderContext = mock()
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
-    val localPreferencesMock: SharedPreferences = mock<SharedPreferences>()
-    val audioManagerMock: AudioManager = mock<AudioManager>()
-    val preferencesDataSourceMock: PreferencesDataSource = mock<PreferencesDataSource>()
+    val localPreferencesMock: SharedPreferences = mock()
+    val audioManagerMock: AudioManager = mock()
+    val preferencesDataSourceMock: PreferencesDataSource = mock()
+    val persistentDataDataSourceMock: PersistentDataDataSource = mock()
 
     val stringList = mapOf(
         R.string.high to "High",
@@ -142,6 +145,7 @@ class TestReminderContext {
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
     var instant: Instant = Instant.ofEpochSecond(0)
     var userPreferences = UserPreferences.default()
+    var persistentData = PersistentData.default()
 
     init {
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
@@ -159,6 +163,7 @@ class TestReminderContext {
         `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
         `when`(mock.icons).thenReturn(mock<MedicineIcons>())
         `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
+        `when`(mock.persistentDataDataSource).thenReturn(persistentDataDataSourceMock)
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 
@@ -177,5 +182,6 @@ class TestReminderContext {
         `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
 
         `when`(preferencesDataSourceMock.preferences).thenAnswer { MutableStateFlow(userPreferences) }
+        `when`(persistentDataDataSourceMock.data).thenAnswer { MutableStateFlow(persistentData) }
     }
 }
