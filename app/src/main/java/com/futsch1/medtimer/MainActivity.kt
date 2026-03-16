@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
+    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -117,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                 permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            RequestPostNotificationPermission(this, persistentDataDataSource).requestPermission()
+            requestNotificationPermission.requestPermission()
         }
     }
 

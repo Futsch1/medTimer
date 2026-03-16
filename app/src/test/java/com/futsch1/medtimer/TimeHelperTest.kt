@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.os.LocaleList
 import com.futsch1.medtimer.helpers.TimeHelper
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +20,7 @@ private const val germanDateSecondOfJan2023 = "02.01.23"
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
+@HiltAndroidTest
 class TimeHelperTest {
 
     @Before

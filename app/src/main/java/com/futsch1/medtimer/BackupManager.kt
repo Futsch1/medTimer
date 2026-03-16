@@ -54,7 +54,7 @@ class BackupManager @AssistedInject constructor(
 ) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             context: Context,
             lifecycleOwner: LifecycleOwner,
@@ -62,7 +62,7 @@ class BackupManager @AssistedInject constructor(
             medicineViewModel: MedicineViewModel,
             @Assisted("openFile") openFileLauncher: ActivityResultLauncher<Intent>?,
             @Assisted("openDirectory") openDirectoryLauncher: ActivityResultLauncher<Intent>?,
-            fragmentManager: FragmentManager? = null,
+            fragmentManager: FragmentManager?
         ): BackupManager
     }
 

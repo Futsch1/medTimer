@@ -6,14 +6,13 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
 
-class RequestPostNotificationPermission(val activity: AppCompatActivity, val persistentDataDataSource: PersistentDataDataSource) {
+class RequestPostNotificationPermission(val activity: AppCompatActivity, val abortCallback: () -> Unit) {
     private val requestPermissionLauncher = activity.registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { result: Boolean ->
         if (java.lang.Boolean.FALSE == result) {
-            persistentDataDataSource.setShowNotifications(false)
+            abortCallback()
         }
     }
 

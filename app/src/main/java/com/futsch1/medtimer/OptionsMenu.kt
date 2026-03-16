@@ -66,7 +66,7 @@ class OptionsMenu @AssistedInject constructor(
     private lateinit var backupManager: BackupManager
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             fragment: Fragment,
             navController: NavController,
@@ -107,7 +107,15 @@ class OptionsMenu @AssistedInject constructor(
         MenuCompat.setGroupDividerEnabled(menu, true)
         enableOptionalIcons(menu)
 
-        this.backupManager = backupManagerFactory.create(fragment.requireContext(), fragment, menu, medicineViewModel, openFileLauncher, openDirectoryLauncher)
+        this.backupManager = backupManagerFactory.create(
+            fragment.requireContext(),
+            fragment,
+            menu,
+            medicineViewModel,
+            openFileLauncher,
+            openDirectoryLauncher,
+            fragment.parentFragmentManager
+        )
         this.menu = menu
         setupSettings()
         setupVersion()

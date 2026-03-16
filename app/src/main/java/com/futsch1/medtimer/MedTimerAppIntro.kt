@@ -23,6 +23,7 @@ import javax.inject.Inject
 class MedTimerAppIntro : AppIntro() {
     @Inject
     lateinit var persistentDataDataSource: PersistentDataDataSource
+    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,7 +141,7 @@ class MedTimerAppIntro : AppIntro() {
 
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
-        RequestPostNotificationPermission(this, persistentDataDataSource).requestPermission()
+        requestNotificationPermission.requestPermission()
         finish()
     }
 }
