@@ -45,13 +45,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.reflect.InvocationTargetException
-import javax.inject.Inject
 
 class OptionsMenu @AssistedInject constructor(
     @Assisted private val fragment: Fragment,
     @Assisted private val navController: NavController,
     @Assisted private val hideFilter: Boolean,
     @Assisted private val medicineViewModel: MedicineViewModel,
+    val backupManagerFactory: BackupManager.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher
 ) : EntityEditOptionsMenu {
@@ -61,8 +61,6 @@ class OptionsMenu @AssistedInject constructor(
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
     private lateinit var menu: Menu
 
-    @Inject
-    lateinit var backupManagerFactory: BackupManager.Factory
     private lateinit var backupManager: BackupManager
 
     @AssistedFactory
