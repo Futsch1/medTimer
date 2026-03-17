@@ -12,32 +12,36 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.model.StatisticFragment
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.remindertable.ReminderTableFragment
-import com.futsch1.medtimer.statistics.ActiveStatisticsFragment.StatisticFragmentType
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment
-    private lateinit var analysisDays: AnalysisDays
-    private lateinit var activeStatisticsFragment: ActiveStatisticsFragment
+
+    @Inject
+    lateinit var optionsMenuFactory: OptionsMenu.Factory
     private lateinit var optionsMenu: OptionsMenu
+
+    @Inject
+    lateinit var persistentDataDataSource: PersistentDataDataSource
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        analysisDays = AnalysisDays(requireContext())
-        activeStatisticsFragment = ActiveStatisticsFragment(requireContext())
+        chartsFragment = ChartsFragment.newInstance(persistentDataDataSource.data.value.analysisDays)
 
-        chartsFragment = ChartsFragment.newInstance(analysisDays.days)
-
-        optionsMenu = OptionsMenu(
+        optionsMenu = optionsMenuFactory.create(
             this,
-            medicineViewModel,
-            NavHostFragment.findNavController(this), true
+            NavHostFragment.findNavController(this),
+            true,
+            medicineViewModel
         )
     }
 
@@ -53,7 +57,7 @@ class StatisticsFragment : Fragment() {
 
         setupFragmentButtons(statisticsView)
 
-        loadActiveFragment(activeStatisticsFragment.activeFragment)
+        loadActiveFragment(persistentDataDataSource.data.value.activeStatisticsFragment)
 
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
@@ -90,34 +94,34 @@ class StatisticsFragment : Fragment() {
             if (checkedIds.isNotEmpty()) {
                 val checkedId: Int = checkedIds[0]
                 if (R.id.chartChip == checkedId) {
-                    loadActiveFragment(StatisticFragmentType.CHARTS)
+                    loadActiveFragment(StatisticFragment.CHARTS)
                 } else if (R.id.tableChip == checkedId) {
-                    loadActiveFragment(StatisticFragmentType.TABLE)
+                    loadActiveFragment(StatisticFragment.TABLE)
                 } else {
-                    loadActiveFragment(StatisticFragmentType.CALENDAR)
+                    loadActiveFragment(StatisticFragment.CALENDAR)
                 }
             }
         }
         chipGroup.check(
-            when (activeStatisticsFragment.activeFragment) {
-                StatisticFragmentType.TABLE -> R.id.tableChip
-                StatisticFragmentType.CALENDAR -> R.id.calendarChip
+            when (persistentDataDataSource.data.value.activeStatisticsFragment) {
+                StatisticFragment.TABLE -> R.id.tableChip
+                StatisticFragment.CALENDAR -> R.id.calendarChip
                 else -> R.id.chartChip
             }
         )
     }
 
-    private fun loadActiveFragment(fragmentType: StatisticFragmentType) {
+    private fun loadActiveFragment(fragmentType: StatisticFragment) {
         val fragment = when (fragmentType) {
-            StatisticFragmentType.TABLE -> ReminderTableFragment()
-            StatisticFragmentType.CALENDAR -> CalendarFragment()
+            StatisticFragment.TABLE -> ReminderTableFragment()
+            StatisticFragment.CALENDAR -> CalendarFragment()
             else -> chartsFragment
         }
         val transaction = getChildFragmentManager().beginTransaction()
         transaction.replace(R.id.container, fragment)
         try {
             transaction.commit()
-            activeStatisticsFragment.activeFragment = fragmentType
+            persistentDataDataSource.setActiveStatisticsFragment(fragmentType)
             checkTimeSpinnerVisibility()
         } catch (_: IllegalStateException) {
             // Intentionally empty
@@ -125,7 +129,7 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun checkTimeSpinnerVisibility() {
-        if (activeStatisticsFragment.activeFragment == StatisticFragmentType.CHARTS) {
+        if (persistentDataDataSource.data.value.activeStatisticsFragment == StatisticFragment.CHARTS) {
             timeSpinner.visibility = View.VISIBLE
         } else {
             timeSpinner.visibility = View.INVISIBLE
@@ -133,7 +137,7 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun setupTimeSpinner() {
-        timeSpinner.setSelection(analysisDays.position)
+        timeSpinner.setSelection(AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays))
         timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -141,10 +145,12 @@ class StatisticsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                if (position != analysisDays.position) {
-                    analysisDays.position = position
+                val oldPosition = AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays)
+                if (position != oldPosition) {
+                    val days = AnalysisDays.getDays(requireContext(), position)
+                    persistentDataDataSource.setAnalysisDays(days)
 
-                    chartsFragment.setDays(analysisDays.days)
+                    chartsFragment.setDays(days)
                 }
             }
 

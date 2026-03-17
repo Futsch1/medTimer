@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
 class SchedulingFactory {
@@ -12,7 +12,7 @@ class SchedulingFactory {
         medicine: Medicine,
         reminderEvents: List<ReminderEvent>,
         timeAccess: TimeAccess,
-        sharedPreferences: SharedPreferences
+        dataSource: PreferencesDataSource
     ): Scheduling {
         val scheduler = when (reminder.reminderType) {
             Reminder.ReminderType.LINKED -> {
@@ -40,9 +40,9 @@ class SchedulingFactory {
             }
 
             Reminder.ReminderType.REFILL -> {
-                null
+                error("Refill reminder cannot be scheduled.")
             }
         }
-        return WeekendModeSchedulingDecorator(scheduler!!, timeAccess, sharedPreferences)
+        return WeekendModeSchedulingDecorator(scheduler, timeAccess, dataSource)
     }
 }

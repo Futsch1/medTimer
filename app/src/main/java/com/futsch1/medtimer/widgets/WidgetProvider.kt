@@ -3,10 +3,12 @@ package com.futsch1.medtimer.widgets
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 open class WidgetProvider(val getWidgetImpl: (Context) -> WidgetImpl) : AppWidgetProvider() {
 
     override fun onUpdate(

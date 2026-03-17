@@ -11,19 +11,30 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.Preference
-import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.safeStartActivity
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NotificationSettingsFragment : PreferencesFragment() {
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
     private var rootKey: String? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         this.rootKey = rootKey
+
+        preferenceManager.preferenceDataStore = preferencesDataSource
+
         setPreferencesFromResource(R.xml.notification_settings, rootKey)
 
         setupNotificationSettings()
@@ -37,7 +48,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         )
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            preferenceScreen.findPreference<Preference?>("sticky_on_lockscreen")?.isVisible = false
+            preferenceScreen.findPreference<Preference?>(STICKY_ON_LOCKSCREEN)?.isVisible = false
         }
     }
 
@@ -54,7 +65,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             setupNotificationSettingsPreference(preference, Importance.DEFAULT)
         }
         preference =
-            preferenceScreen.findPreference(PreferencesNames.OVERRIDE_DND)
+            preferenceScreen.findPreference(OVERRIDE_DND)
         preference?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, value: Any? ->
                 if (true == value) {
@@ -81,19 +92,17 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun setupExactReminders() {
         val preference =
-            preferenceScreen.findPreference<Preference?>(PreferencesNames.EXACT_REMINDERS)
-        if (preference != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                preference.onPreferenceChangeListener =
-                    Preference.OnPreferenceChangeListener { _, newValue: Any? ->
-                        if (true == newValue) {
-                            showExactReminderDialog()
-                        }
-                        true
+            preferenceScreen.findPreference<Preference?>(EXACT_REMINDERS) ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            preference.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, newValue: Any? ->
+                    if (true == newValue) {
+                        showExactReminderDialog()
                     }
-            } else {
-                preference.isVisible = false
-            }
+                    true
+                }
+        } else {
+            preference.isVisible = false
         }
     }
 
@@ -127,7 +136,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             }
             builder.setNegativeButton(R.string.cancel) { _, _ ->
                 try {
-                    resetBooleanPreferenceAndReload(PreferencesNames.EXACT_REMINDERS)
+                    resetBooleanPreferenceAndReload(EXACT_REMINDERS)
                 } catch (_: IllegalStateException) {
                     // Intentionally empty (monkey test can cause this to fail)
                 }
@@ -138,16 +147,13 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resetBooleanPreferenceAndReload(preferenceName: String) {
-        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit {
-            putBoolean(preferenceName, false)
-        }
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        preferenceManager.preferenceDataStore?.putBoolean(preferenceName, false)
+        findPreference<SwitchPreferenceCompat>(preferenceName)?.isChecked = false
     }
-
 
     private fun cancelOverrideDnd() {
         try {
-            resetBooleanPreferenceAndReload(PreferencesNames.OVERRIDE_DND)
+            resetBooleanPreferenceAndReload(OVERRIDE_DND)
         } catch (_: IllegalStateException) {
             // Intentionally empty (monkey test can cause this to fail)
         }
@@ -170,4 +176,28 @@ class NotificationSettingsFragment : PreferencesFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        resumeExactReminders()
+        resumeOverrideDnd()
+    }
+
+    private fun resumeExactReminders() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager =
+                requireContext().getSystemService(AlarmManager::class.java)
+            if (!alarmManager.canScheduleExactAlarms()) {
+                resetBooleanPreferenceAndReload(EXACT_REMINDERS)
+            }
+        }
+    }
+
+    private fun resumeOverrideDnd() {
+        if (!requireContext().getSystemService(
+                NotificationManager::class.java
+            ).isNotificationPolicyAccessGranted
+        ) {
+            resetBooleanPreferenceAndReload(OVERRIDE_DND)
+        }
+    }
 }

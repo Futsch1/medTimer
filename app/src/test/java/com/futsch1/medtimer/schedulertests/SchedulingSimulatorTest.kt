@@ -1,17 +1,18 @@
 package com.futsch1.medtimer.schedulertests
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.schedulertests.TestHelper.on
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.time.Instant
 import java.time.LocalDate
@@ -20,13 +21,14 @@ import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
     private fun buildSchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
-        val mockTimeAccess = Mockito.mock(TimeAccess::class.java)
+        val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
-        val sharedPreferencesMock = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPreferencesMock.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(false)
+        val mockPreferencesDataSource = Mockito.mock<PreferencesDataSource>()
+        val stateFlow = MutableStateFlow(UserPreferences.default())
+        Mockito.`when`(mockPreferencesDataSource.preferences).thenReturn(stateFlow)
 
-        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, sharedPreferencesMock)
+        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, mockPreferencesDataSource)
     }
 
     @Test

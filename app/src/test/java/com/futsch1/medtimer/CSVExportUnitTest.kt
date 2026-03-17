@@ -50,7 +50,7 @@ internal class CSVExportUnitTest {
         )
 
         // Create a mock Context
-        val context = Mockito.mock(Context::class.java).apply {
+        val context = Mockito.mock<Context>().apply {
             Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
             Mockito.`when`(getString(R.string.name)).thenReturn("Name")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
@@ -61,7 +61,7 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock(File::class.java)
+        val file = Mockito.mock<File>()
         val utc = TimeZone.getTimeZone("WET")
 
         val usDateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US)
@@ -71,7 +71,7 @@ internal class CSVExportUnitTest {
         usTimeFormat.timeZone = utc
 
         val fragmentManager =
-            Mockito.mock(FragmentManager::class.java)
+            Mockito.mock<FragmentManager>()
 
         // Create the CSVCreator object
         val csvEventExport =
@@ -147,7 +147,7 @@ internal class CSVExportUnitTest {
         )
 
         // Create a mock Context
-        val context = Mockito.mock(Context::class.java).apply {
+        val context = Mockito.mock<Context>().apply {
             Mockito.`when`(getString(R.string.tab_medicine)).thenReturn("Medicine")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
             Mockito.`when`(getString(R.string.time)).thenReturn("Time")
@@ -155,7 +155,7 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock(File::class.java)
+        val file = Mockito.mock<File>()
         val utc = TimeZone.getTimeZone("UTC")
         val usTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US)
         usTimeFormat.timeZone = utc
@@ -167,7 +167,7 @@ internal class CSVExportUnitTest {
                         TimeZone::class.java
                     ).use { timeZoneMockedStatic ->
                         val fragmentManager =
-                            Mockito.mock(FragmentManager::class.java)
+                            Mockito.mock<FragmentManager>()
                         dateAccessMockedStatic.`when`<Any> {
                             android.text.format.DateFormat.getTimeFormat(
                                 ArgumentMatchers.any()
@@ -209,7 +209,7 @@ internal class CSVExportUnitTest {
     @Test
     fun testHandleEmptyListOfReminderEvents() {
         // Create a mock Context
-        val context = Mockito.mock(Context::class.java).apply {
+        val context = Mockito.mock<Context>().apply {
             Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
             Mockito.`when`(getString(R.string.name)).thenReturn("Name")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
@@ -220,13 +220,11 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock(File::class.java)
+        val file = Mockito.mock<File>()
 
         Mockito.mockConstruction(FileWriter::class.java)
             .use { fileWriterMockedConstruction ->
-                val fragmentManager = Mockito.mock(
-                    FragmentManager::class.java
-                )
+                val fragmentManager = Mockito.mock<FragmentManager>()
                 // Create the CSVCreator object
                 val csvEventExport = CSVEventExport(emptyList(), fragmentManager, context, Dispatchers.Unconfined)
                 try {

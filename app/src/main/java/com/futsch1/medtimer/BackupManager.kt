@@ -9,46 +9,62 @@ import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.FileHelper
 import com.futsch1.medtimer.helpers.PathHelper.backupFilename
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
-import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_DIRECTORY
-import com.futsch1.medtimer.preferences.PreferencesNames.AUTOMATIC_BACKUP_INTERVAL
-import com.futsch1.medtimer.preferences.PreferencesNames.LAST_AUTOMATIC_BACKUP
+import com.futsch1.medtimer.model.BackupInterval
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.LocalDate
 
-class BackupManager(
-    private val context: Context,
-    private val lifecycleOwner: LifecycleOwner,
-    private val menu: Menu?,
-    private val medicineViewModel: MedicineViewModel,
-    private val openFileLauncher: ActivityResultLauncher<Intent>?,
-    private val openDirectoryLauncher: ActivityResultLauncher<Intent>?,
-    private val fragmentManager: FragmentManager? = null,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+class BackupManager @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted private val lifecycleOwner: LifecycleOwner,
+    @Assisted private val menu: Menu?,
+    @Assisted private val medicineViewModel: MedicineViewModel,
+    @Assisted("openFile") private val openFileLauncher: ActivityResultLauncher<Intent>?,
+    @Assisted("openDirectory") private val openDirectoryLauncher: ActivityResultLauncher<Intent>?,
+    @Assisted private val fragmentManager: FragmentManager? = null,
+    private val preferencesDataSource: PreferencesDataSource,
+    private val persistentDataDataSource: PersistentDataDataSource,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(
+            context: Context,
+            lifecycleOwner: LifecycleOwner,
+            menu: Menu?,
+            medicineViewModel: MedicineViewModel,
+            @Assisted("openFile") openFileLauncher: ActivityResultLauncher<Intent>?,
+            @Assisted("openDirectory") openDirectoryLauncher: ActivityResultLauncher<Intent>?,
+            fragmentManager: FragmentManager?
+        ): BackupManager
+    }
 
     init {
         setupBackup()
@@ -98,18 +114,16 @@ class BackupManager(
     }
 
     private fun selectAutomaticBackupInterval() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val currentInterval = sharedPref.getString(AUTOMATIC_BACKUP_INTERVAL, "never")
+        val currentInterval = preferencesDataSource.preferences.value.automaticBackupInterval
         val options = context.resources.getStringArray(R.array.automatic_backup_options)
-        val values = arrayOf("never", "daily", "weekly", "monthly")
-        val checkedItem = values.indexOf(currentInterval).coerceAtLeast(0)
+        val checkedItem = currentInterval.ordinal
 
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.automatic_backup)
             .setSingleChoiceItems(options, checkedItem) { dialog, which ->
-                val selectedValue = values[which]
-                sharedPref.edit { putString(AUTOMATIC_BACKUP_INTERVAL, selectedValue) }
-                if (selectedValue != "never") {
+                val selectedValue = BackupInterval.entries[which]
+                preferencesDataSource.setAutomaticBackupInterval(selectedValue)
+                if (selectedValue != BackupInterval.NEVER) {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                     openDirectoryLauncher?.launch(intent)
                 }
@@ -121,8 +135,7 @@ class BackupManager(
 
     fun directorySelected(uri: Uri?) {
         if (uri != null) {
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-            sharedPref.edit { putString(AUTOMATIC_BACKUP_DIRECTORY, uri.toString()) }
+            preferencesDataSource.setAutomaticBackupDirectory(uri)
             context.contentResolver.takePersistableUriPermission(
                 uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
@@ -253,27 +266,23 @@ class BackupManager(
     }
 
     fun autoBackup() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val interval = sharedPref.getString(AUTOMATIC_BACKUP_INTERVAL, "never") ?: "never"
-        if (interval == "never") return
+        val interval = preferencesDataSource.preferences.value.automaticBackupInterval
+        if (interval == BackupInterval.NEVER) return
 
-        val lastBackupStr = sharedPref.getString(LAST_AUTOMATIC_BACKUP, "")
-        val lastBackup = if (lastBackupStr.isNullOrEmpty()) LocalDate.EPOCH else LocalDate.parse(lastBackupStr)
+        val lastBackup = persistentDataDataSource.data.value.lastAutomaticBackup
         val now = LocalDate.now()
 
         val shouldBackup = when (interval) {
-            "daily" -> lastBackup.plusDays(1) <= now
-            "weekly" -> lastBackup.plusDays(7) <= now
-            "monthly" -> lastBackup.plusDays(30) <= now
+            BackupInterval.DAILY -> lastBackup.plusDays(1) <= now
+            BackupInterval.WEEKLY -> lastBackup.plusDays(7) <= now
+            BackupInterval.MONTHLY -> lastBackup.plusDays(30) <= now
             else -> false
         }
 
         if (shouldBackup) {
             Log.d(LogTags.BACKUP, "Starting auto backup, last was at $lastBackup")
-            val directoryUriStr = sharedPref.getString(AUTOMATIC_BACKUP_DIRECTORY, "")
-            if (directoryUriStr.isNullOrEmpty()) return
+            val directoryUri = preferencesDataSource.preferences.value.automaticBackupDirectory ?: return
 
-            val directoryUri = directoryUriStr.toUri()
             lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
                 performAutoBackup(directoryUri)
             }
@@ -302,8 +311,7 @@ class BackupManager(
 
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
             if (success) {
-                val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-                sharedPref.edit { putString(LAST_AUTOMATIC_BACKUP, LocalDate.now().toString()) }
+                persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
                 Toast.makeText(context, context.getString(R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(context, R.string.backup_failed, Toast.LENGTH_LONG).show()

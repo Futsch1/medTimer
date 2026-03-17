@@ -6,6 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.RemoteInput
+import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
 import com.futsch1.medtimer.di.ApplicationScope
@@ -14,6 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class RemoteInputReceiver : BroadcastReceiver() {
@@ -39,9 +45,9 @@ class RemoteInputReceiver : BroadcastReceiver() {
     }
 
     private fun snooze(context: Context, results: Bundle, reminderNotificationData: ReminderNotificationData) {
-        val snoozeTime = results.getCharSequence("snooze_time")
-        val snoozeTimeInt = snoozeTime.toString().toIntOrNull() ?: 10
-        ReminderProcessorBroadcastReceiver.requestSnooze(context, reminderNotificationData, snoozeTimeInt)
+        val snoozeTime = results.getCharSequence(EXTRA_SNOOZE_TIME)?.toString()
+        snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
+            ?.let { ReminderProcessorBroadcastReceiver.requestSnooze(context, reminderNotificationData, it) }
     }
 
     private suspend fun variableAmount(results: Bundle, reminderNotificationData: ReminderNotificationData) {

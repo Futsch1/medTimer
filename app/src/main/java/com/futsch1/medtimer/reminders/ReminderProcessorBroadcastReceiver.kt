@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
+import kotlin.time.Duration
 
 /**
  * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
@@ -156,8 +157,8 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
-        fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
-            val intent = getSnoozeIntent(context, reminderNotificationData, snoozeTime)
+        fun requestSnooze(context: Context, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration) {
+            val intent = getSnoozeIntent(context, reminderNotificationData, snoozeDuration)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 

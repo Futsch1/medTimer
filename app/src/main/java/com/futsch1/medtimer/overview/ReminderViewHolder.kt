@@ -18,6 +18,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.createActions
 import com.futsch1.medtimer.overview.actions.createActionsView
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.color.MaterialColors
 
 
@@ -25,6 +26,7 @@ class ReminderViewHolder(
     itemView: View,
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
+    val preferencesDataSource: PreferencesDataSource,
     val clickDelegate: ClickDelegate
 ) :
     RecyclerView.ViewHolder(itemView) {
@@ -39,10 +41,15 @@ class ReminderViewHolder(
     var selected: Boolean = false
 
     companion object {
-        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity, clickDelegate: ClickDelegate): ReminderViewHolder {
+        fun create(
+            parent: ViewGroup,
+            fragmentActivity: FragmentActivity,
+            preferencesDataSource: PreferencesDataSource,
+            clickDelegate: ClickDelegate
+        ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate)
+            return ReminderViewHolder(view, parent, fragmentActivity, preferencesDataSource, clickDelegate)
         }
     }
 
@@ -91,7 +98,7 @@ class ReminderViewHolder(
                         (event as OverviewReminderEvent).reminderEvent.reminderEventId
                     ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")
                 } else {
-                    ShowMedicineSheetDialog(fragmentActivity, event.reminderId)
+                    ShowMedicineSheetDialog(fragmentActivity, preferencesDataSource, event.reminderId)
                 }
             }
         }

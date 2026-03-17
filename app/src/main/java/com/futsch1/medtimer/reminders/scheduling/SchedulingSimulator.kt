@@ -1,10 +1,10 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import android.content.SharedPreferences
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -18,7 +18,7 @@ class SchedulingSimulator(
     medicines: List<FullMedicine>,
     recentReminders: List<ReminderEvent>,
     timeAccess: TimeAccess,
-    private val sharedPreferences: SharedPreferences
+    private val dataSource: PreferencesDataSource
 ) {
     val maxSimulationDays = 400
 
@@ -56,7 +56,7 @@ class SchedulingSimulator(
     }
 
     private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(schedulingItem.reminder, schedulingItem.medicine.medicine, totalEvents, timeAccess, sharedPreferences)
+        val scheduler = schedulingFactory.create(schedulingItem.reminder, schedulingItem.medicine.medicine, totalEvents, timeAccess, dataSource)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if (nextScheduledTime?.atZone(timeAccess.systemZone())?.toLocalDate() != currentDay) {

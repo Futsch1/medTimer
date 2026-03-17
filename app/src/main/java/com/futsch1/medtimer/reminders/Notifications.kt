@@ -1,9 +1,7 @@
 package com.futsch1.medtimer.reminders
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.content.edit
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
@@ -11,7 +9,7 @@ import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificatio
 /**
  * Handles the creation and display of system notifications for reminders and stock alerts.
  *
- * This class manages notification IDs using [SharedPreferences] to ensure uniqueness across
+ * This class manages notification IDs to ensure uniqueness across
  * app restarts and coordinates with notification factories to build and dispatch
  * [android.app.Notification] objects.
  *
@@ -19,8 +17,6 @@ import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificatio
  */
 @SuppressLint("DefaultLocale")
 class Notifications(private val reminderContext: ReminderContext) {
-    private val sharedPreferences: SharedPreferences = reminderContext.localPreferences
-
     fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
         var notificationId = notificationId
         if (notificationId == -1) {
@@ -41,8 +37,8 @@ class Notifications(private val reminderContext: ReminderContext) {
 
     private val nextNotificationId: Int
         get() {
-            val notificationId = sharedPreferences.getInt("notificationId", 1)
-            sharedPreferences.edit { putInt("notificationId", notificationId + 1) }
+            val notificationId = reminderContext.persistentDataDataSource.data.value.notificationId
+            reminderContext.persistentDataDataSource.increaseNotificationId()
 
             return notificationId
         }

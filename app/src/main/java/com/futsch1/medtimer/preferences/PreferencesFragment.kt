@@ -1,15 +1,11 @@
 package com.futsch1.medtimer.preferences
 
-import android.app.AlarmManager
-import android.app.NotificationManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.navigation.Navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.R
 
@@ -78,32 +74,4 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
             }
     }
 
-    override fun onResume() {
-        super.onResume()
-        resumeExactReminders()
-        resumeOverrideDnd()
-    }
-
-    private fun resumeExactReminders() {
-        val preference =
-            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.EXACT_REMINDERS)
-        if (preference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager =
-                requireContext().getSystemService<AlarmManager>(AlarmManager::class.java)
-            if (!alarmManager.canScheduleExactAlarms()) {
-                preference.setChecked(false)
-            }
-        }
-    }
-
-    private fun resumeOverrideDnd() {
-        val preference =
-            preferenceScreen.findPreference<SwitchPreferenceCompat?>(PreferencesNames.OVERRIDE_DND)
-        if (preference != null && !requireContext().getSystemService(
-                NotificationManager::class.java
-            ).isNotificationPolicyAccessGranted
-        ) {
-            preference.setChecked(false)
-        }
-    }
 }

@@ -35,7 +35,7 @@ class JSONBackupFuzzTest(private val json: String) {
 
     private fun <T> checkBackup(backup: JSONBackup<T>, json: String) {
         val parsedData = backup.parseBackup(json)
-        val medicineRepository = Mockito.mock(MedicineRepository::class.java)
+        val medicineRepository = Mockito.mock<MedicineRepository>()
         if (parsedData != null) {
             runBlocking { backup.applyBackup(parsedData, medicineRepository) }
         }
