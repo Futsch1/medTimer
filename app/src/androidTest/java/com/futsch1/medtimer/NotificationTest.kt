@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.content.Context
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -73,7 +74,7 @@ fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
     return button
 }
 
-fun getNotificationText(stringId: Int, vararg args: Any): String {
+fun getNotificationText(@StringRes stringId: Int, vararg args: Any): String {
     val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, args)
     return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         s.uppercase()
@@ -392,7 +393,7 @@ class NotificationTest : BaseTestHelper() {
         }
 
         device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
-        writeTo(android.R.id.input, "1")
+        writeTo(android.R.id.input, "5")
         clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
@@ -413,9 +414,9 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.taken)
         pressBack()
         pressBack()
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         openNotification().use {
             device.wait(Until.hasObject(By.pkg("com.android.systemui")), 2_000)
-            ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
             val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
             internalAssert(notification != null)
             makeNotificationExpanded(device, getNotificationText(R.string.skipped))
