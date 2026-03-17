@@ -9,7 +9,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.reminders.PersistentDataEntryPoint
+import com.futsch1.medtimer.reminders.DataSourcesEntryPoint
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
@@ -26,7 +26,7 @@ class MedicineIcons(context: Context) {
         )
     private val persistentDataDataSource: PersistentDataDataSource by lazy {
         // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, PersistentDataEntryPoint::class.java).getPersistentDataDataSource()
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
     }
 
     init {
@@ -35,7 +35,6 @@ class MedicineIcons(context: Context) {
             pack = IconPackLoader(context).load(R.xml.icon_pack)
             pack!!.loadDrawables(IconDrawableLoader(context))
         }
-        // TODO: To remove this, the changes would be really big. Keep this one shared preferences instance for the moment.
         if (iconColor != 0) {
             persistentDataDataSource.setIconColor(iconColor)
         } else {

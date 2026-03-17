@@ -71,27 +71,21 @@ class ReminderContext(val context: Context) {
 
     val preferencesDataSource: PreferencesDataSource by lazy {
         // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, PreferencesEntryPoint::class.java).getPreferencesDataSource()
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPreferencesDataSource()
     }
 
     val persistentDataDataSource: PersistentDataDataSource by lazy {
         // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, PersistentDataEntryPoint::class.java).getPersistentDataDataSource()
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
     }
 }
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-fun interface PreferencesEntryPoint {
+interface DataSourcesEntryPoint {
     fun getPreferencesDataSource(): PreferencesDataSource
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-fun interface PersistentDataEntryPoint {
     fun getPersistentDataDataSource(): PersistentDataDataSource
 }
-
 
 interface TimeAccess {
     fun systemZone(): ZoneId

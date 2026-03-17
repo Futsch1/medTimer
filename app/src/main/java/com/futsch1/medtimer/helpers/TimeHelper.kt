@@ -12,7 +12,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.PreferencesEntryPoint
+import com.futsch1.medtimer.reminders.DataSourcesEntryPoint
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -135,7 +135,7 @@ object TimeHelper {
     }
 
     private fun useSystemLocale(context: Context): Boolean {
-        return EntryPointAccessors.fromApplication(context, PreferencesEntryPoint::class.java).getPreferencesDataSource().preferences.value.systemLocale
+        return EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPreferencesDataSource().preferences.value.systemLocale
     }
 
     /**

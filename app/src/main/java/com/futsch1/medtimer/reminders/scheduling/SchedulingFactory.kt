@@ -40,9 +40,9 @@ class SchedulingFactory {
             }
 
             Reminder.ReminderType.REFILL -> {
-                null
+                error("Refill reminder cannot be scheduled.")
             }
         }
-        return WeekendModeSchedulingDecorator(scheduler!!, timeAccess, dataSource)
+        return WeekendModeSchedulingDecorator(scheduler, timeAccess, dataSource)
     }
 }
