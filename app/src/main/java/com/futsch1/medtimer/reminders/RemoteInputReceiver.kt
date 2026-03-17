@@ -7,9 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.RemoteInput
 import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
 import com.futsch1.medtimer.ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
 import com.futsch1.medtimer.di.ApplicationScope

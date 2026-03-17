@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.helpers
 
 import android.content.Context
-import android.content.SharedPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class TimeFormatter @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val preferences: SharedPreferences
+    private val preferencesDataSource: PreferencesDataSource
 ) {
     fun minutesToTimeString(minutes: Long): String =
         TimeHelper.minutesToTimeString(context, minutes)
@@ -36,10 +36,10 @@ class TimeFormatter @Inject constructor(
         TimeHelper.secondsSinceEpochToDateTimeString(context, timestamp)
 
     fun secondsSinceEpochToConfigurableDateTimeString(timestamp: Long): String =
-        TimeHelper.secondsSinceEpochToConfigurableDateTimeString(context, preferences, timestamp)
+        TimeHelper.secondsSinceEpochToConfigurableDateTimeString(context, preferencesDataSource, timestamp)
 
     fun secondsSinceEpochToConfigurableTimeString(timestamp: Long, isShort: Boolean): String =
-        TimeHelper.secondsSinceEpochToConfigurableTimeString(context, preferences, timestamp, isShort)
+        TimeHelper.secondsSinceEpochToConfigurableTimeString(context, preferencesDataSource, timestamp, isShort)
 
     fun localeDateTimeToDateTimeString(localDateTime: LocalDateTime): String =
         TimeHelper.localeDateTimeToDateTimeString(context, localDateTime)
