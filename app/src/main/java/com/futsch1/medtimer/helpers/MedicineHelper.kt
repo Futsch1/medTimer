@@ -7,11 +7,11 @@ import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import androidx.core.text.bold
 import androidx.core.text.color
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.preferences.PreferencesNames.HIDE_MED_NAME
+import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
@@ -21,7 +21,7 @@ import java.util.regex.Pattern
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
 
-    @JvmStatic
+
     fun normalizeMedicineName(medicineName: String): String {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
     }
@@ -29,14 +29,15 @@ object MedicineHelper {
     @SuppressLint("DefaultLocale")
     fun getMedicineNameWithStockTextInternal(
         context: Context,
+        userPreferences: UserPreferences,
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 getMedicineName(
-                    context,
                     fullMedicine.medicine,
-                    false
+                    false,
+                    userPreferences
                 )
             )
         }
@@ -87,7 +88,7 @@ object MedicineHelper {
         return s
     }
 
-    @JvmStatic
+
     fun getStockText(reminderContext: ReminderContext, medicine: Medicine): String {
         return reminderContext.getString(
             R.string.medicine_stock_string,
@@ -95,7 +96,7 @@ object MedicineHelper {
         )
     }
 
-    @JvmStatic
+
     fun getStockText(context: Context, medicine: Medicine): String {
         return context.getString(
             R.string.medicine_stock_string,
@@ -104,7 +105,6 @@ object MedicineHelper {
     }
 
 
-    @JvmStatic
     fun getStockIcons(
         fullMedicine: FullMedicine
     ): SpannableStringBuilder {
@@ -132,33 +132,21 @@ object MedicineHelper {
         return builder
     }
 
-    @JvmStatic
-    fun getMedicineNameWithStockText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, fullMedicine)
-    }
 
-    @JvmStatic
-    fun getMedicineName(
+    fun getMedicineNameWithStockText(
         context: Context,
-        medicine: Medicine,
-        notification: Boolean
-    ): String {
-        return if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(HIDE_MED_NAME, false) && notification
-        ) {
-            medicine.name[0] + "*".repeat(medicine.name.length - 1)
-        } else {
-            medicine.name
-        }
+        preferencesDataSource: PreferencesDataSource,
+        fullMedicine: FullMedicine
+    ): SpannableStringBuilder {
+        return getMedicineNameWithStockTextInternal(context, preferencesDataSource.preferences.value, fullMedicine)
     }
 
-    @JvmStatic
     fun getMedicineName(
-        reminderContext: ReminderContext,
         medicine: Medicine,
-        notification: Boolean
+        notification: Boolean,
+        userPreferences: UserPreferences
     ): String {
-        return if (reminderContext.preferences.getBoolean(HIDE_MED_NAME, false) && notification
+        return if (userPreferences.hideMedicineName && notification
         ) {
             medicine.name[0] + "*".repeat(medicine.name.length - 1)
         } else {
@@ -166,7 +154,7 @@ object MedicineHelper {
         }
     }
 
-    @JvmStatic
+
     fun formatAmount(amount: Double, unit: String): String {
         val numberFormat = NumberFormat.getNumberInstance()
         numberFormat.minimumFractionDigits = 0

@@ -3,17 +3,17 @@ package com.futsch1.medtimer.helpers
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.edit
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.reminders.DataSourcesEntryPoint
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
+import dagger.hilt.android.EntryPointAccessors
 import kotlin.math.ceil
 
 
@@ -24,6 +24,10 @@ class MedicineIcons(context: Context) {
             com.google.android.material.R.attr.colorOnSurface,
             0
         )
+    private val persistentDataDataSource: PersistentDataDataSource by lazy {
+        // Bridge from non-Hilt to Hilt code
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
+    }
 
     init {
         IconPackLoader(context).load(R.xml.icon_pack)
@@ -31,11 +35,10 @@ class MedicineIcons(context: Context) {
             pack = IconPackLoader(context).load(R.xml.icon_pack)
             pack!!.loadDrawables(IconDrawableLoader(context))
         }
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         if (iconColor != 0) {
-            sharedPref.edit { putInt("icon_color", iconColor) }
+            persistentDataDataSource.setIconColor(iconColor)
         } else {
-            iconColor = sharedPref.getInt("icon_color", Color.BLACK)
+            iconColor = persistentDataDataSource.data.value.iconColor
         }
     }
 

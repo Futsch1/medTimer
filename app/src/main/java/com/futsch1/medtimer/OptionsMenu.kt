@@ -21,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export
@@ -35,27 +37,41 @@ import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 
-class OptionsMenu(
-    private val fragment: Fragment,
-    private val medicineViewModel: MedicineViewModel,
-    private val navController: NavController,
-    private val hideFilter: Boolean,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+class OptionsMenu @AssistedInject constructor(
+    @Assisted private val fragment: Fragment,
+    @Assisted private val navController: NavController,
+    @Assisted private val hideFilter: Boolean,
+    @Assisted private val medicineViewModel: MedicineViewModel,
+    val backupManagerFactory: BackupManager.Factory,
+    @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
+    @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent>
     private val openDirectoryLauncher: ActivityResultLauncher<Intent>
     private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
     private lateinit var menu: Menu
+
     private lateinit var backupManager: BackupManager
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(
+            fragment: Fragment,
+            navController: NavController,
+            hideFilter: Boolean,
+            medicineViewModel: MedicineViewModel
+        ): OptionsMenu
+    }
 
     init {
         openFileLauncher =
@@ -89,7 +105,15 @@ class OptionsMenu(
         MenuCompat.setGroupDividerEnabled(menu, true)
         enableOptionalIcons(menu)
 
-        this.backupManager = BackupManager(context, fragment, menu, medicineViewModel, openFileLauncher, openDirectoryLauncher)
+        this.backupManager = backupManagerFactory.create(
+            fragment.requireContext(),
+            fragment,
+            menu,
+            medicineViewModel,
+            openFileLauncher,
+            openDirectoryLauncher,
+            fragment.parentFragmentManager
+        )
         this.menu = menu
         setupSettings()
         setupVersion()

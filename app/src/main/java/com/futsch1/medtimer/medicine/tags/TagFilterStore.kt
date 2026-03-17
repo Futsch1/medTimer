@@ -1,24 +1,19 @@
 package com.futsch1.medtimer.medicine.tags
 
-import android.content.Context
-import androidx.core.content.edit
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.stream.Collectors
 
 class TagFilterStore(
-    context: Context,
+    private val persistentDataDataSource: PersistentDataDataSource,
     private var validTagIds: MutableStateFlow<Set<Int>?>
 ) {
     @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
-    private val sharedPreferences =
-        context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
     var selectedTags =
-        tagIdSetFromStringSet(sharedPreferences.getStringSet("filterTags", emptySet()))
+        tagIdSetFromStringSet(persistentDataDataSource.data.value.filterTags)
         set(value) {
-            sharedPreferences.edit {
-                putStringSet("filterTags", value.map { it.toString() }.toSet())
-            }
+            persistentDataDataSource.setFilterTags(value.map { it.toString() }.toSet())
             field = value
             validTagIds.value = value
         }

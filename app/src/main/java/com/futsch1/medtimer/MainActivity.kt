@@ -5,7 +5,6 @@ import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.ApplicationExitInfo
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -21,7 +20,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -30,38 +28,48 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.Autostart.Companion.restoreNotifications
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.model.ThemeSetting
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
+    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
+
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var persistentDataDataSource: PersistentDataDataSource
+
+    @Inject
+    lateinit var backupManagerFactory: BackupManager.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Select theme
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val theme: String = sharedPref.getString("theme", "0")!!
-        if (theme == "1") {
+        if (preferencesDataSource.preferences.value.theme == ThemeSetting.ALTERNATIVE) {
             setTheme(R.style.Theme_MedTimer2)
         }
 
         // Screen capture
-        if (sharedPref.getBoolean(PreferencesNames.SECURE_WINDOW, false)) {
+        if (preferencesDataSource.preferences.value.useSecureWindow) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        showIntro(sharedPref)
+        showIntro()
 
         this.enableEdgeToEdge()
 
@@ -70,22 +78,21 @@ class MainActivity : AppCompatActivity() {
         TimeHelper.onChangedUseSystemLocale()
 
         lifecycleScope.launch {
-            authenticate(sharedPref)
+            authenticate(preferencesDataSource)
         }
     }
 
-    private fun showIntro(sharedPref: SharedPreferences) {
-        val introShown = sharedPref.getBoolean("intro_shown", false)
-        if (!introShown && !BuildConfig.DEBUG) {
+    private fun showIntro() {
+        if (!persistentDataDataSource.data.value.introShown && !BuildConfig.DEBUG) {
             Log.d(LogTags.MAIN, "Show MedTimer intro")
             startActivity(Intent(applicationContext, MedTimerAppIntro::class.java))
-            sharedPref.edit { putBoolean("intro_shown", true) }
+            persistentDataDataSource.setIntroShown(true)
         } else {
             checkPermissions()
         }
     }
 
-    private suspend fun authenticate(sharedPref: SharedPreferences) {
+    private suspend fun authenticate(preferencesDataSource: PreferencesDataSource) {
         val biometrics = Biometrics(
             this,
             {
@@ -95,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (sharedPref.getBoolean("app_authentication", false) && biometrics.hasBiometrics()) {
+        if (preferencesDataSource.preferences.value.appAuthentication && biometrics.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {
@@ -111,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                 permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            RequestPostNotificationPermission(this).requestPermission()
+            requestNotificationPermission.requestPermission()
         }
     }
 
@@ -120,8 +127,7 @@ class MainActivity : AppCompatActivity() {
         setupNavigation()
         batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning)
         findViewById<View>(R.id.dismissBatteryWarning)?.setOnClickListener { _: View ->
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            sharedPref.edit { putBoolean(BATTERY_WARNING_DISMISSED, true) }
+            persistentDataDataSource.setBatteryWarningShown(true)
             checkBatteryOptimization()
         }
 
@@ -172,10 +178,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkBatteryOptimization() {
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val warningDismissed = sharedPref.getBoolean(BATTERY_WARNING_DISMISSED, false)
 
-        if (!powerManager.isIgnoringBatteryOptimizations(packageName) && !warningDismissed && !BuildConfig.DEBUG) {
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName) && !persistentDataDataSource.data.value.batteryWarningShown && !BuildConfig.DEBUG) {
             Log.d(LogTags.MAIN, "Show battery optimization")
             batteryOptimizationWarning?.visibility = View.VISIBLE
         } else {
@@ -209,7 +213,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        BackupManager(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
+        backupManagerFactory.create(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
     }
@@ -227,9 +231,5 @@ class MainActivity : AppCompatActivity() {
         } catch (_: IllegalStateException) {
             return false
         }
-    }
-
-    companion object {
-        private const val BATTERY_WARNING_DISMISSED = "battery_warning_dismissed"
     }
 }

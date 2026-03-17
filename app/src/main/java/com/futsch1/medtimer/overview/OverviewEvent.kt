@@ -1,13 +1,12 @@
 package com.futsch1.medtimer.overview
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.text.Spanned
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.formatReminderEventString
 import com.futsch1.medtimer.helpers.formatScheduledReminderString
-import com.futsch1.medtimer.preferences.PreferencesNames.USE_RELATIVE_DATE_TIME
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 
@@ -30,9 +29,7 @@ enum class EventPosition {
 }
 
 
-abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
-    val hasRelativeTimes = sharedPreferences.getBoolean(USE_RELATIVE_DATE_TIME, false)
-
+abstract class OverviewEvent(val preferencesDataSource: PreferencesDataSource) {
     abstract val id: Int
     abstract val timestamp: Long
     abstract val text: Spanned
@@ -42,9 +39,8 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     abstract val reminderType: Reminder.ReminderType
     abstract val reminderId: Int
     val updateValue: Long
-        get() = if (hasRelativeTimes) System.currentTimeMillis() / 60_000 else 0
+        get() = if (preferencesDataSource.preferences.value.useRelativeDateTime) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -64,8 +60,9 @@ abstract class OverviewEvent(sharedPreferences: SharedPreferences) {
     }
 }
 
-class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferences, val reminderEvent: ReminderEvent) : OverviewEvent(sharedPreferences) {
-    override val text: Spanned = formatReminderEventString(context, reminderEvent, sharedPreferences)
+class OverviewReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val reminderEvent: ReminderEvent) :
+    OverviewEvent(preferencesDataSource) {
+    override val text: Spanned = formatReminderEventString(context, reminderEvent, preferencesDataSource)
 
     override val id: Int
         get() = reminderEvent.reminderEventId
@@ -96,9 +93,9 @@ class OverviewReminderEvent(context: Context, sharedPreferences: SharedPreferenc
     }
 }
 
-class OverviewScheduledReminderEvent(context: Context, sharedPreferences: SharedPreferences, val scheduledReminder: ScheduledReminder) :
-    OverviewEvent(sharedPreferences) {
-    override val text: Spanned = formatScheduledReminderString(context, scheduledReminder, sharedPreferences)
+class OverviewScheduledReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val scheduledReminder: ScheduledReminder) :
+    OverviewEvent(preferencesDataSource) {
+    override val text: Spanned = formatScheduledReminderString(context, scheduledReminder, preferencesDataSource)
     override val id: Int
         get() = scheduledReminder.reminder.reminderId + 1_000_000
 
@@ -116,10 +113,10 @@ class OverviewScheduledReminderEvent(context: Context, sharedPreferences: Shared
         get() = scheduledReminder.reminder.reminderId
 }
 
-fun create(context: Context, sharedPreferences: SharedPreferences, reminderEvent: ReminderEvent): OverviewEvent {
-    return OverviewReminderEvent(context, sharedPreferences, reminderEvent)
+fun create(context: Context, preferencesDataSource: PreferencesDataSource, reminderEvent: ReminderEvent): OverviewEvent {
+    return OverviewReminderEvent(context, preferencesDataSource, reminderEvent)
 }
 
-fun create(context: Context, sharedPreferences: SharedPreferences, scheduledReminder: ScheduledReminder): OverviewEvent {
-    return OverviewScheduledReminderEvent(context, sharedPreferences, scheduledReminder)
+fun create(context: Context, preferencesDataSource: PreferencesDataSource, scheduledReminder: ScheduledReminder): OverviewEvent {
+    return OverviewScheduledReminderEvent(context, preferencesDataSource, scheduledReminder)
 }

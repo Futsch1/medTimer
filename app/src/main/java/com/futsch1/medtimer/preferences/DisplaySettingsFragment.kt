@@ -5,9 +5,17 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.TimeHelper
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DisplaySettingsFragment : PreferencesFragment() {
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceManager.preferenceDataStore = preferencesDataSource
+
         setPreferencesFromResource(R.xml.display_settings, rootKey)
 
         val systemLocalePreference = findPreference<SwitchPreferenceCompat>("system_locale")

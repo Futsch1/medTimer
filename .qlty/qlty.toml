@@ -79,10 +79,6 @@ mode = "disabled"
 name = "prettier"
 
 [[plugin]]
-name = "radarlint-java"
-mode = "comment"
-
-[[plugin]]
 name = "radarlint-kotlin"
 mode = "comment"
 
@@ -93,6 +89,8 @@ mode = "comment"
 [[plugin]]
 name = "ripgrep"
 mode = "comment"
+[plugin.rules.TODO]
+mode = "disabled"
 
 [[plugin]]
 name = "rubocop"

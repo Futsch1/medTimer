@@ -3,11 +3,11 @@ package com.futsch1.medtimer.overview
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.allStatusValues
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -18,11 +18,11 @@ import java.time.ZoneId
 
 class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
-    private val medicineViewModel: MedicineViewModel
+    private val medicineViewModel: MedicineViewModel,
+    private val dataSource: PreferencesDataSource
 ) {
-    private val applicationContext = parentFragment.requireContext().applicationContext
-    private  var reminderEvents: List<ReminderEvent>? = null
-    private  var fullMedicines: List<FullMedicine>? = null
+    private var reminderEvents: List<ReminderEvent>? = null
+    private var fullMedicines: List<FullMedicine>? = null
 
     init {
         setupScheduleObservers(parentFragment)
@@ -62,7 +62,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()
             override fun now(): Instant = Instant.now()
-        }, PreferenceManager.getDefaultSharedPreferences(applicationContext))
+        }, dataSource)
 
         val reminders: List<ScheduledReminder> = scheduler.schedule(
             fullMedicines, reminderEvents

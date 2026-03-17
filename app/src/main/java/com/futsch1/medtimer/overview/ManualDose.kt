@@ -3,8 +3,6 @@ package com.futsch1.medtimer.overview
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
@@ -16,6 +14,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +29,10 @@ class ManualDose(
     private val medicineViewModel: MedicineViewModel,
     private val activity: FragmentActivity,
     private val date: LocalDate,
+    private val persistentDataDataSource: PersistentDataDataSource,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
-    @Suppress("kotlin:S6291") // Preferences do not contain sensitive date
-    private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
-
     suspend fun logManualDose() {
         val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
@@ -71,10 +67,10 @@ class ManualDose(
         entries: MutableList<ManualDoseEntry>
     ) {
         val lastCustomDose = lastCustomDose
-        if (lastCustomDose.first != null && lastCustomDose.first!!.isNotBlank()) {
-            entries.add(ManualDoseEntry(lastCustomDose.first!!))
-            if (lastCustomDose.second != null && lastCustomDose.second!!.isNotBlank()) {
-                entries.add(ManualDoseEntry(lastCustomDose.first!!, lastCustomDose.second))
+        if (lastCustomDose.first.isNotBlank()) {
+            entries.add(ManualDoseEntry(lastCustomDose.first))
+            if (lastCustomDose.second.isNotBlank()) {
+                entries.add(ManualDoseEntry(lastCustomDose.first, lastCustomDose.second))
             }
         }
     }
@@ -106,14 +102,15 @@ class ManualDose(
         }
     }
 
-    private var lastCustomDose: Pair<String?, String?>
+    private var lastCustomDose: Pair<String, String>
         get() {
-            val name = sharedPreferences.getString("lastCustomDose", "")
-            val amount = sharedPreferences.getString("lastCustomDoseAmount", "")
+            val name = persistentDataDataSource.data.value.lastCustomDose
+            val amount = persistentDataDataSource.data.value.lastCustomDoseAmount
             return Pair(name, amount)
         }
         set(lastCustomDose) {
-            sharedPreferences.edit { putString("lastCustomDose", lastCustomDose.first); putString("lastCustomDoseAmount", lastCustomDose.second) }
+            persistentDataDataSource.setLastCustomDose(lastCustomDose.first)
+            persistentDataDataSource.setLastCustomDoseAmount(lastCustomDose.second)
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
@@ -125,7 +122,7 @@ class ManualDose(
                 }
                 getTimeAndLog(reminderEvent, entry.medicineId)
             }
-        if (entry.amount != null && !entry.amount.isBlank()) {
+        if (!entry.amount.isNullOrBlank()) {
             dialog = dialog.initialText(entry.amount)
         }
         dialog.show()

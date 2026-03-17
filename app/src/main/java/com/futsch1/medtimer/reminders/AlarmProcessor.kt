@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.preferences.PreferencesNames
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
@@ -15,6 +14,7 @@ import java.time.Instant
  */
 class AlarmProcessor(val reminderContext: ReminderContext) {
     private val alarmManager: AlarmManager = reminderContext.alarmManager
+    private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
     suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
@@ -93,8 +93,6 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
     }
 
     private fun canScheduleExactAlarms(): Boolean {
-        val exactReminders = reminderContext.preferences.getBoolean(PreferencesNames.EXACT_REMINDERS, true)
-
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             exactReminders && (reminderContext.sdkInt >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
         } else {

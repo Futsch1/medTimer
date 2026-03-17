@@ -2,12 +2,12 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.preferences.PreferencesNames.SNOOZE_DURATION
+import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
@@ -19,8 +19,6 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 class NotificationIntentBuilder(val reminderContext: ReminderContext, val reminderNotification: ReminderNotification) {
-    val defaultSharedPreferences: SharedPreferences = reminderContext.preferences
-
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
@@ -70,36 +68,27 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeTime = defaultSharedPreferences.getString(SNOOZE_DURATION, "15")!!.toInt()
+        val snoozeDuration = reminderContext.preferencesDataSource.preferences.value.snoozeDuration
 
-        fun getSnoozeCustomTimeIntent(): PendingIntent {
+        return if (snoozeDuration.inWholeMinutes < 0) {
             val snooze = getCustomSnoozeActionIntent(
                 reminderContext, reminderNotification.reminderNotificationData
             )
-            return reminderContext.getPendingIntentActivity(
+            reminderContext.getPendingIntentActivity(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
-        }
-
-        fun getStandardSnoozeIntent(): PendingIntent {
+        } else {
             val snooze = getSnoozeIntent(
-                reminderContext, reminderNotification.reminderNotificationData, snoozeTime
+                reminderContext, reminderNotification.reminderNotificationData, snoozeDuration
             )
-            return reminderContext.getPendingIntentBroadcast(
+            reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-        }
-
-        return if (snoozeTime == -1) {
-            getSnoozeCustomTimeIntent()
-        } else {
-            getStandardSnoozeIntent()
         }
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
-        val snoozeTime = defaultSharedPreferences.getString("snooze_duration", "15")!!.toInt()
-        if (snoozeTime != -1) {
+        if (reminderContext.preferencesDataSource.preferences.value.snoozeDuration.inWholeSeconds > 0) {
             return null
         }
         val resultIntent = Intent()
@@ -113,7 +102,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
                 resultIntent,
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-        val remoteInput = RemoteInput.Builder("snooze_time").setLabel(reminderContext.getString(R.string.snooze_duration)).build()
+        val remoteInput = RemoteInput.Builder(EXTRA_SNOOZE_TIME).setLabel(reminderContext.getString(R.string.snooze_duration)).build()
         val action = NotificationCompat.Action.Builder(
             R.drawable.hourglass_split, reminderContext.getString(R.string.snooze), resultPendingIntent
         ).addRemoteInput(remoteInput).build()
@@ -154,12 +143,12 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
-        return when (defaultSharedPreferences.getString("dismiss_notification_action", "0")) {
-            "0" -> {
+        return when (reminderContext.preferencesDataSource.preferences.value.dismissNotificationAction) {
+            DismissNotificationAction.SKIP -> {
                 pendingSkipped
             }
 
-            "1" -> {
+            DismissNotificationAction.SNOOZE -> {
                 pendingSnooze
             }
 

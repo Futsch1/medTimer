@@ -11,6 +11,8 @@ import com.futsch1.medtimer.reminders.AlarmProcessor
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
     val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
@@ -27,10 +29,8 @@ fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
         .initialText("")
         .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
         .textSink { snoozeTime: String? ->
-            val snoozeTimeInt = snoozeTime?.toIntOrNull()
-            if (snoozeTimeInt != null) {
-                ReminderProcessorBroadcastReceiver.requestSnooze(activity, reminderNotificationData, snoozeTimeInt)
-            }
+            snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
+                ?.let { ReminderProcessorBroadcastReceiver.requestSnooze(activity, reminderNotificationData, it) }
         }
         .cancelCallback {
             Log.d(LogTags.REMINDER, "Snooze dialog cancelled")

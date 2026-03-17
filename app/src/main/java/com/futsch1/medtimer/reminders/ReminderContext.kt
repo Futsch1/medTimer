@@ -6,16 +6,20 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.Build
 import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -26,8 +30,6 @@ class ReminderContext(val context: Context) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    val localPreferences: SharedPreferences = context.getSharedPreferences("medtimer.data", Context.MODE_PRIVATE)
     val icons = MedicineIcons(context)
     val packageName: String = context.packageName
     val timeAccess = object : TimeAccess {
@@ -66,6 +68,23 @@ class ReminderContext(val context: Context) {
 
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
+
+    val preferencesDataSource: PreferencesDataSource by lazy {
+        // Bridge from non-Hilt to Hilt code
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPreferencesDataSource()
+    }
+
+    val persistentDataDataSource: PersistentDataDataSource by lazy {
+        // Bridge from non-Hilt to Hilt code
+        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
+    }
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface DataSourcesEntryPoint {
+    fun getPreferencesDataSource(): PreferencesDataSource
+    fun getPersistentDataDataSource(): PersistentDataDataSource
 }
 
 interface TimeAccess {

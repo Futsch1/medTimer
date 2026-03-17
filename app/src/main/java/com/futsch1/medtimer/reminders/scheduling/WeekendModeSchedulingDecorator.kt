@@ -1,36 +1,35 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import android.content.SharedPreferences
-import android.util.ArraySet
-import com.futsch1.medtimer.preferences.PreferencesNames
+import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
-class WeekendModeSchedulingDecorator(val scheduler: Scheduling, val timeAccess: TimeAccess, private val preferences: SharedPreferences) :
+class WeekendModeSchedulingDecorator(
+    val scheduler: Scheduling,
+    val timeAccess: TimeAccess,
+    private val dataSource: PreferencesDataSource
+) :
     Scheduling {
-    fun adjustInstant(instant: Instant): Instant {
+
+    fun adjustInstant(instant: Instant, settings: UserPreferences): Instant {
         var instant = instant
-        if (this.isWeekendModeEnabled) {
-            val weekendTime = preferences.getInt(PreferencesNames.WEEKEND_TIME, 540)
-            val weekendDays: Set<String?> = preferences.getStringSet(PreferencesNames.WEEKEND_DAYS, ArraySet())!!
+        if (settings.weekendMode) {
             val localDateTime = instant.atZone(timeAccess.systemZone())
             val dayOfWeek = localDateTime.dayOfWeek
-            val minutes = localDateTime.minute + localDateTime.hour * 60
-            val deltaMinutes = weekendTime - minutes
-            if (weekendDays.contains(dayOfWeek.value.toString()) && deltaMinutes > 0) {
-                instant = instant.plusSeconds(deltaMinutes * 60L)
+            val deltaSeconds = settings.weekendTime.toSecondOfDay() - localDateTime.toLocalTime().toSecondOfDay()
+            if (settings.weekendDays.contains(dayOfWeek.value.toString()) && deltaSeconds > 0) {
+                instant = instant.plusSeconds(deltaSeconds.toLong())
             }
         }
         return instant
     }
 
-    private val isWeekendModeEnabled: Boolean
-        get() = preferences.getBoolean(PreferencesNames.WEEKEND_MODE, false)
-
     override fun getNextScheduledTime(): Instant? {
         var nextScheduledTime = scheduler.getNextScheduledTime()
+
         if (nextScheduledTime != null) {
-            nextScheduledTime = adjustInstant(nextScheduledTime)
+            nextScheduledTime = adjustInstant(nextScheduledTime, dataSource.preferences.value)
         }
         return nextScheduledTime
     }

@@ -25,6 +25,7 @@ import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -44,9 +45,14 @@ class MedicinesFragment : Fragment() {
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
 
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
     private lateinit var idlingResource: SimpleIdlingResource
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
+    @Inject
+    lateinit var optionsMenuFactory: OptionsMenu.Factory
     private lateinit var optionsMenu: OptionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +60,14 @@ class MedicinesFragment : Fragment() {
         idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
         idlingResource.setBusy()
 
-        optionsMenu = OptionsMenu(
+        optionsMenu = optionsMenuFactory.create(
             this,
-            medicineViewModel,
-            NavHostFragment.findNavController(this), false
+            NavHostFragment.findNavController(this),
+            false,
+            medicineViewModel
         )
 
-        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel.medicineRepository)
+        adapter = MedicineViewAdapter(requireActivity(), medicineViewModel.medicineRepository, preferencesDataSource)
     }
 
     override fun onCreateView(
