@@ -9,6 +9,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ private val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(1))
  * various reminder tasks such as rescheduling notifications, handling stock updates, and
  * repeating alerts.
  */
+@AndroidEntryPoint
 class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     @Inject
     lateinit var notificationProcessor: NotificationProcessor
