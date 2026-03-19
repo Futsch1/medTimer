@@ -226,14 +226,19 @@ open class MedicineRepository(val application: Application?) {
 
     fun moveMedicine(fromPosition: Int, toPosition: Int) {
         val medicines = this.medicines.toMutableList()
-        try {
-            val moveMedicine = medicines.removeAt(fromPosition)
-            medicines.add(toPosition, moveMedicine)
-            moveMedicine.medicine.sortOrder = (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2
-            updateMedicine(moveMedicine.medicine)
-        } catch (_: IndexOutOfBoundsException) {
-            // Intentionally left blank
+        if (fromPosition == toPosition || medicines.size < 2) return
+
+        val moveMedicine = medicines.removeAt(fromPosition)
+        medicines.add(toPosition, moveMedicine)
+
+        val newSortOrder = when (toPosition) {
+            0 -> medicines[1].medicine.sortOrder - 1.0
+            medicines.size - 1 -> medicines[toPosition - 1].medicine.sortOrder + 1.0
+            else -> (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2.0
         }
+
+        moveMedicine.medicine.sortOrder = newSortOrder
+        updateMedicine(moveMedicine.medicine)
     }
 
     val medicines: List<FullMedicine>
