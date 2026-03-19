@@ -74,16 +74,16 @@ abstract class MedicineDao {
     abstract suspend fun deleteMedicine(medicine: Medicine)
 
     @Delete
-    abstract fun deleteReminder(reminder: Reminder)
+    abstract suspend fun deleteReminder(reminder: Reminder)
 
     @Insert
-    abstract fun insertReminderEvent(reminderEvent: ReminderEvent): Long
+    abstract suspend fun insertReminderEvent(reminderEvent: ReminderEvent): Long
 
     @Update
     abstract suspend fun updateReminderEvent(reminderEvent: ReminderEvent)
 
     @Update
-    abstract fun updateReminderEvents(reminderEvents: List<ReminderEvent>)
+    abstract suspend fun updateReminderEvents(reminderEvents: List<ReminderEvent>)
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId= :reminderEventId")
     abstract fun getReminderEvent(reminderEventId: Int): ReminderEvent?
@@ -164,5 +164,5 @@ abstract class MedicineDao {
     abstract suspend fun insertReminders(reminders: List<Reminder>)
 
     @Update
-    abstract fun updateMedicines(medicines: List<Medicine>)
+    abstract suspend fun updateMedicines(medicines: List<Medicine>)
 }

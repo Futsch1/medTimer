@@ -117,7 +117,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
             }
         }
 
-        private fun buildAndInsertReminderEvent(
+        private suspend fun buildAndInsertReminderEvent(
             medicineRepository: MedicineRepository,
             context: Context,
             medicine: FullMedicine,
