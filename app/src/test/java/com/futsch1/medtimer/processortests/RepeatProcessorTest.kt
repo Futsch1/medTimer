@@ -19,6 +19,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
 import kotlin.test.assertEquals
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
@@ -45,7 +47,7 @@ class RepeatProcessorTest {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
 
         runBlocking {
-            repeatProcessor.processRepeat(reminderNotificationData, 10)
+            repeatProcessor.processRepeat(reminderNotificationData, 10.toDuration(DurationUnit.SECONDS))
         }
 
         assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[0].remainingRepeats, -1)

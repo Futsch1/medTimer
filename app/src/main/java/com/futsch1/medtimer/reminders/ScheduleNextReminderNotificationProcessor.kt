@@ -25,7 +25,7 @@ import javax.inject.Inject
  */
 class ScheduleNextReminderNotificationProcessor @Inject constructor(val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor) {
 
-    suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
+    fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
         val fullMedicines = reminderContext.medicineRepository.medicines
         val reminderEvents = reminderContext.medicineRepository.getReminderEventsForScheduling(fullMedicines)
         val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }

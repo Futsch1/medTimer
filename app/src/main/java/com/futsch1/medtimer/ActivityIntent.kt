@@ -16,6 +16,6 @@ fun dispatch(activity: AppCompatActivity, notificationProcessor: NotificationPro
         variableAmountDialog(activity, intent, notificationProcessor, reminderContext)
     }
     if (intent.action == CUSTOM_SNOOZE_ACTIVITY) {
-        customSnoozeDialog(activity, intent, reminderContext)
+        customSnoozeDialog(activity, intent)
     }
 }
