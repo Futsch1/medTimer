@@ -22,6 +22,7 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import junit.framework.TestCase
 import org.hamcrest.Matchers.equalTo
@@ -476,7 +477,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
         sleep(1000)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.rescheduleButton)
