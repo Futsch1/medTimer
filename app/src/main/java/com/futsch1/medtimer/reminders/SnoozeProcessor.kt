@@ -20,7 +20,7 @@ open class SnoozeProcessor @Inject constructor(
     val notificationProcessor: NotificationProcessor
 ) {
 
-    suspend fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
+    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 

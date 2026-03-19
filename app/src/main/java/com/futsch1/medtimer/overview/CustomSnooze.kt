@@ -7,13 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.DialogHelper
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent, reminderContext: ReminderContext) {
+fun customSnoozeDialog(activity: AppCompatActivity, intent: Intent) {
     val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
     if (!reminderNotificationData.valid) {

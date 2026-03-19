@@ -33,7 +33,7 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(val reminder
         scheduleNextReminderInternal(fullMedicines, allEvents)
     }
 
-    private suspend fun scheduleNextReminderInternal(
+    private fun scheduleNextReminderInternal(
         fullMedicines: List<FullMedicine>,
         reminderEvents: List<ReminderEvent>
     ) {
