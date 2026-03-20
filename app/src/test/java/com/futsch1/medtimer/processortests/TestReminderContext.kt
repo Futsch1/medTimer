@@ -51,11 +51,13 @@ class MedicineRepositoryFake {
         `when`(mock.medicines).thenAnswer { buildFullMedicines() }
         `when`(mock.getReminderEventsForScheduling(anyList())).thenAnswer { reminderEvents }
         `when`(mock.getReminderEvent(anyInt())).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
-        `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
-            val reminderEvent = it.arguments[0] as ReminderEvent
-            reminderEvent.reminderEventId = reminderEvents.size + 1
-            reminderEvents.add(reminderEvent)
-            reminderEvent.reminderEventId.toLong()
+        runBlocking {
+            `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
+                val reminderEvent = it.arguments[0] as ReminderEvent
+                reminderEvent.reminderEventId = reminderEvents.size + 1
+                reminderEvents.add(reminderEvent)
+                reminderEvent.reminderEventId.toLong()
+            }
         }
         `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
         `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
