@@ -1,17 +1,17 @@
 package com.futsch1.medtimer
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 import android.os.RemoteException
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
-import com.futsch1.medtimer.utilities.closeNotification
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -47,7 +47,7 @@ abstract class BaseTestHelper {
             // Ignore
         }
 
-        dismissAllNotifications(device)
+        dismissAllNotifications()
 
         device.pressHome()
         baristaRule.launchActivity()
@@ -60,27 +60,10 @@ abstract class BaseTestHelper {
         }
     }
 
-    private fun dismissAllNotifications(device: UiDevice) {
-        try {
-            device.openNotification()
-
-            val clearAllButtons = device.findObjects(
-                By.res("com.android.systemui:id/dismiss_text")
-            ) + device.findObjects(
-                By.res("com.android.systemui:id/dismiss_button")
-            ) + device.findObjects(
-                By.textContains("Clear all")
-            ) + device.findObjects(
-                By.textContains("CLEAR ALL")
-            ) + device.findObjects(
-                By.descContains("Clear all")
-            )
-            for (clearAllButton in clearAllButtons) {
-                clearAllButton.click()
-            }
-        } catch (_: Exception) {
-            device.closeNotification()
-        }
+    private fun dismissAllNotifications() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
     }
 
     protected fun internalAssert(b: Boolean) {
