@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Intent
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Build
@@ -33,7 +32,6 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.ArgumentMatchers.isNull
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.time.Instant
@@ -175,9 +173,6 @@ class TestReminderContext {
         `when`(editMock.putInt(eq("notificationId"), anyInt())).then { notificationId = it.arguments[1] as Int; editMock }
 
         `when`(notificationChannelMock.id).thenReturn("channel")
-
-        `when`(mock.getIntent(anyString())).thenReturn(mock<Intent>())
-        `when`(mock.getIntent(isNull())).thenReturn(mock<Intent>())
 
         val spannableStringBuilderMock = mock<SpannableStringBuilder>()
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
