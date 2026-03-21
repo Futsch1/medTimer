@@ -70,10 +70,10 @@ class ReminderNotificationProcessor(
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
-        if (remainingRepeats != 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
+        if (remainingRepeats > 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
             RepeatProcessor(reminderContext).processRepeat(
                 reminderNotification.reminderNotificationData,
-                reminderContext.preferencesDataSource.preferences.value.numberOfRepetitions
+                reminderContext.preferencesDataSource.preferences.value.repeatDelay
             )
         }
     }

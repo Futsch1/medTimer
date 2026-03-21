@@ -48,8 +48,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     private fun getRemindedTime(): LocalTime {
-        val remindedTimestamp = reminderNotificationParts.firstOrNull()?.reminderEvent?.remindedTimestamp ?: reminderNotificationData.remindInstant.epochSecond
-        return TimeHelper.secondsSinceEpochToLocalTime(remindedTimestamp, ZoneId.systemDefault())
+        return TimeHelper.secondsSinceEpochToLocalTime(reminderNotificationData.remindInstant.epochSecond, ZoneId.systemDefault())
     }
 
     fun getRemindTime(reminderContext: ReminderContext): String {

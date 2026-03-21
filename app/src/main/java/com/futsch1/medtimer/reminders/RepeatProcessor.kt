@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlin.time.Duration
 
 /**
  * [RepeatProcessor] is responsible for rescheduling a reminder notification
@@ -13,8 +14,8 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 class RepeatProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
-    suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Int) {
-        reminderNotificationData.remindInstant = reminderContext.timeAccess.now().plusSeconds(repeatTimeSeconds.toLong())
+    suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatDelay: Duration) {
+        reminderNotificationData.remindInstant = reminderContext.timeAccess.now().plusSeconds(repeatDelay.inWholeSeconds)
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
         alarmSetter.setAlarmForReminderNotification(reminderNotificationData)

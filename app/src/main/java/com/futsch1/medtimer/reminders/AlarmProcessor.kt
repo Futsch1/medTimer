@@ -35,27 +35,8 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
             }
         }
 
-        // If the alarm is in the future, schedule with alarm manager
-        if (scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
-            val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
-
-            if (canScheduleExactAlarms()) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-            } else {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-            }
-
-            Log.i(
-                LogTags.REMINDER,
-                String.format(
-                    "Set alarm for reminder notification: %s",
-                    scheduledReminderNotificationData
-                )
-            )
-
-            updateNextReminderWidget()
-        } else {
-            // Immediately remind
+        // Immediately remind if the alarm is not in the future
+        if (!scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
             Log.i(
                 LogTags.REMINDER,
                 String.format(
@@ -64,7 +45,26 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
                 )
             )
             ReminderNotificationProcessor(reminderContext).processReminders(scheduledReminderNotificationData)
+            return
         }
+
+        val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
+
+        if (canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
+        } else {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
+        }
+
+        Log.i(
+            LogTags.REMINDER,
+            String.format(
+                "Set alarm for reminder notification: %s",
+                scheduledReminderNotificationData
+            )
+        )
+
+        updateNextReminderWidget()
     }
 
     fun cancelNextReminder() {
@@ -94,7 +94,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
 
     private fun canScheduleExactAlarms(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            exactReminders && (reminderContext.sdkInt >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+            exactReminders && alarmManager.canScheduleExactAlarms()
         } else {
             exactReminders
         }

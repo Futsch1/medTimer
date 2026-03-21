@@ -65,7 +65,6 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
 
                     ProcessorCode.Refill -> processRefill(reminderContext, intent)
                     ProcessorCode.StockHandling -> processStockHandling(reminderContext, intent)
-                    ProcessorCode.Repeat -> processRepeat(reminderContext, intent)
                     ProcessorCode.Schedule -> processReschedule(reminderContext)
                 }
             } finally {
@@ -97,13 +96,6 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         SnoozeProcessor(reminderContext).processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
             intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 0)
-        )
-    }
-
-    private suspend fun processRepeat(reminderContext: ReminderContext, intent: Intent) {
-        RepeatProcessor(reminderContext).processRepeat(
-            ReminderNotificationData.fromBundle(intent.extras!!),
-            intent.getIntExtra(ActivityCodes.EXTRA_REPEAT_TIME_SECONDS, 0)
         )
     }
 
