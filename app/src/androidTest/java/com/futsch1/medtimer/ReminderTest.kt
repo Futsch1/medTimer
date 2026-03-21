@@ -427,7 +427,7 @@ class ReminderTest : BaseTestHelper() {
             clickOn(R.id.takenButton)
 
             // Check if cyclic information is present
-            clickOn(R.id.overviewContentContainer)
+            clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
             if (reminder.shouldHaveInfo) {
                 assertContains(R.id.editEventName, String.format("Test (1/%d)", reminder.consecutiveDays))
             } else {
@@ -437,7 +437,7 @@ class ReminderTest : BaseTestHelper() {
             Espresso.pressBack()
 
             // Remove event
-            clickOn(R.id.stateButton)
+            clickListItemChild(R.id.reminders, 0, R.id.stateButton)
             clickOn(R.id.deleteButton)
             clickDialogPositiveButton()
 
