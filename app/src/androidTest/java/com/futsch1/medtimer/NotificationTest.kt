@@ -36,7 +36,6 @@ import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
-import org.junit.Ignore
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -197,15 +196,15 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @Ignore("Repeat timing unreliable with exact reminders disabled")
     fun repeatingReminders() {
         // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         openMenu()
 
-        // Repeat reminder every minute
+        // Repeat reminder every minute and enable exact reminders
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
+        clickOn(R.string.exact_reminders)
         clickOn(R.string.repeat_reminders)
         onView(
             allOf(

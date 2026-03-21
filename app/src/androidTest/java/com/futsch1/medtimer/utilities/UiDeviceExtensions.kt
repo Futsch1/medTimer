@@ -9,6 +9,11 @@ import androidx.test.uiautomator.Until
 
 const val TAG = "UiDeviceExtensions"
 
+fun UiDevice.grantAppPermission(permission: String) {
+    val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
+    executeShellCommand("appops set $packageName $permission allow")
+}
+
 fun UiDevice.waitForView(selector: BySelector, timeoutMs: Long) {
     wait(Until.hasObject(selector), timeoutMs)
 }

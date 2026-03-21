@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
@@ -12,6 +13,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import com.futsch1.medtimer.utilities.grantAppPermission
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -26,7 +28,16 @@ abstract class BaseTestHelper {
 
     @Rule
     @JvmField
-    var mGrantPermissionRule: GrantPermissionRule? = permissionRule
+    var grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        *buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                add(Manifest.permission.USE_FULL_SCREEN_INTENT)
+            }
+        }.toTypedArray()
+    )
 
     @Rule
     @JvmField
@@ -48,6 +59,11 @@ abstract class BaseTestHelper {
         }
 
         dismissAllNotifications()
+
+        // Grant permissions which cannot be granted via the GrantPermissionRule
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            device.grantAppPermission("SCHEDULE_EXACT_ALARM")
+        }
 
         device.pressHome()
         baristaRule.launchActivity()
@@ -98,16 +114,5 @@ abstract class BaseTestHelper {
                 // Intentionally empty
             }
         }
-
-        val permissionRule: GrantPermissionRule?
-            get() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    return GrantPermissionRule.grant(
-                        "android.permission.POST_NOTIFICATIONS",
-                        "android.permission.USE_FULL_SCREEN_INTENT"
-                    )
-                }
-                return null
-            }
     }
 }

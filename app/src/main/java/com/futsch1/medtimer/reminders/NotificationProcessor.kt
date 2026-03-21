@@ -75,8 +75,27 @@ class NotificationProcessor(val reminderContext: ReminderContext) {
         val reminderNotification = ReminderNotification.fromReminderNotificationData(reminderContext, newReminderNotificationData)
         if (reminderNotification != null) {
             Notifications(reminderContext).showNotification(reminderNotification, reminderNotificationData.notificationId)
+            rescheduleRepeat(newReminderNotificationData)
         } else {
             cancelNotification(reminderNotificationData.notificationId)
+        }
+    }
+
+    private suspend fun rescheduleRepeat(reminderNotificationData: ReminderNotificationData) {
+        val preferences = reminderContext.preferencesDataSource.preferences.value
+        if (!preferences.repeatReminders) {
+            return
+        }
+
+        val remainingRepeats = reminderContext.medicineRepository
+            .getReminderEvent(reminderNotificationData.reminderEventIds[0])
+            ?.remainingRepeats ?: return
+
+        if (remainingRepeats > 0) {
+            RepeatProcessor(reminderContext).processRepeat(
+                reminderNotificationData,
+                preferences.repeatDelay
+            )
         }
     }
 
