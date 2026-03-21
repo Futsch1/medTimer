@@ -7,8 +7,6 @@ import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.ImageSpan
-import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -126,14 +124,8 @@ fun formatScheduledReminderString(
 
 fun getReminderTypeSpan(context: Context, reminderType: Reminder.ReminderType): Spanned {
     val span = SpannableStringBuilder()
-    val drawable = ContextCompat.getDrawable(context, reminderType.icon)
 
-    if (drawable != null) {
-        val imageSpan = TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
-
-        span.append("  ")
-        span.setSpan(imageSpan, 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
+    addImageToSpan(reminderType.icon, span, context)
 
     return span
 }

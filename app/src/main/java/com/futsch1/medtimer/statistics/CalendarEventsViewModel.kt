@@ -15,8 +15,11 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
+import com.futsch1.medtimer.helpers.addDividerToSpan
+import com.futsch1.medtimer.helpers.addImageToSpan
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.getImage
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
@@ -123,6 +126,11 @@ class CalendarEventsViewModel(
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
-        return OverviewReminderEvent(application.applicationContext, sharedPreferences, reminderEvent).text
+        val overviewReminderEvent = OverviewReminderEvent(application.applicationContext, sharedPreferences, reminderEvent)
+        val builder = SpannableStringBuilder()
+        addDividerToSpan(builder)
+        addImageToSpan(overviewReminderEvent.state.getImage(), builder, application.applicationContext)
+
+        return builder.append(" ").append(overviewReminderEvent.text)
     }
 }
