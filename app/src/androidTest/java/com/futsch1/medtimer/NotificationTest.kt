@@ -204,7 +204,9 @@ class NotificationTest : BaseTestHelper() {
         // Repeat reminder every minute and enable exact reminders
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.exact_reminders)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            clickOn(R.string.exact_reminders)
+        }
         clickOn(R.string.repeat_reminders)
         onView(
             allOf(
