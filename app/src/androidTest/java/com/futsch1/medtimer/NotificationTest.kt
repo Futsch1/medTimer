@@ -127,9 +127,9 @@ class NotificationTest : BaseTestHelper() {
         baristaRule.activityTestRule.finishActivity()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         waitAndDismissNotification(device, 2_000)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         waitAndDismissNotification(device, 2_000)
     }
 
@@ -230,7 +230,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createReminder(SECOND_REMINDER, LocalTime.of(22, 0))
         pressBack()
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext), 0)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
 
         openNotification().use {
             val notification1 = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
@@ -288,7 +288,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         openNotification().use {
-            ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext), 0)
+            ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
             device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
             clickNotificationButton(device, getNotificationText(R.string.taken))
 
@@ -340,7 +340,7 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.ANALYSIS)
 
         openNotification().use {
-            ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext), 0)
+            ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
             device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
             clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
         }
@@ -594,7 +594,7 @@ class NotificationTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
 
         openNotification().use {
@@ -623,7 +623,7 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(context), timeToNotify, 0)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
 
         var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
@@ -640,10 +640,10 @@ class NotificationTest : BaseTestHelper() {
 
         device.sleep()
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(context), timeToNotify, 0)
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
         o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(context))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         clickTakenOnAlarmScreen(device, context)
 
         assertCustomAssertionAtPosition(

@@ -47,7 +47,7 @@ class ReminderNotificationData(
     }
 
     fun getPendingIntent(reminderContext: ReminderContext): PendingIntent {
-        val reminderIntent = getReminderAction(reminderContext)
+        val reminderIntent = getReminderAction(reminderContext.context)
         toIntent(reminderIntent)
         // Use the reminderEventId as request code to ensure unique PendingIntent for each reminder event
         return reminderContext.getPendingIntentBroadcast(reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)

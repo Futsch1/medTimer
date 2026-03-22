@@ -15,7 +15,6 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -146,7 +145,7 @@ class ManualDose(
 
             val amount = MedicineHelper.parseAmount(reminderEvent.amount)
             if (amount != null) {
-                    ReminderProcessorBroadcastReceiver.requestStockHandling(ReminderContext(context), amount, medicineId, reminderEvent.remindedTimestamp)
+                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
             }
         }
     }

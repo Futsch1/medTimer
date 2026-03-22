@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -18,9 +17,6 @@ class Autostart : BroadcastReceiver() {
     companion object {
         var hasRestored = false
     }
-
-    @Inject
-    lateinit var reminderContext: ReminderContext
 
     @Inject
     lateinit var autostartService: AutostartService
@@ -41,7 +37,7 @@ class Autostart : BroadcastReceiver() {
         applicationScope.launch {
             autostartService.restoreNotifications()
             Log.i(LogTags.AUTOSTART, "Requesting reschedule")
-            ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(reminderContext)
+            ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
         }
     }
 }

@@ -64,20 +64,20 @@ open class ReminderEventActions(
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                     reminderEvent.remindedTimestamp = newReminderTime
                     medicineRepository.updateReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext.context, reminderNotificationData)
                 }
             }
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext, null, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext.context, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(context, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 medicineRepository.deleteReminderEvent(reminderEvent)
-                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(reminderContext)
+                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(reminderContext.context)
             }
         }, {})
     }

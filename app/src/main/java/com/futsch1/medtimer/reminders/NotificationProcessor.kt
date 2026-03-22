@@ -27,7 +27,8 @@ class NotificationProcessor @Inject constructor(
     val alarmProcessor: AlarmProcessor,
     val notifications: Notifications,
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
-    val stockHandlingProcessor: StockHandlingProcessor
+    val stockHandlingProcessor: StockHandlingProcessor,
+    val repeatProcessor: RepeatProcessor
 ) {
     suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
@@ -97,7 +98,7 @@ class NotificationProcessor @Inject constructor(
             ?.remainingRepeats ?: return
 
         if (remainingRepeats > 0) {
-            RepeatProcessor(reminderContext).processRepeat(
+            repeatProcessor.processRepeat(
                 reminderNotificationData,
                 preferences.repeatDelay
             )
@@ -135,7 +136,7 @@ class NotificationProcessor @Inject constructor(
                 amount = -amount
             }
             reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-                    stockHandlingProcessor.processStock(
+            stockHandlingProcessor.processStock(
                 amount,
                 reminder.medicineRelId,
                 Instant.ofEpochSecond(reminderEvent.processedTimestamp)

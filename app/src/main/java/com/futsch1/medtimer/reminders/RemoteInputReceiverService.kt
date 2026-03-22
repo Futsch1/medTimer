@@ -18,14 +18,15 @@ import javax.inject.Singleton
 @Singleton
 class RemoteInputReceiverService @Inject constructor(
     @param:ApplicationContext private val context: Context,
+    private val notificationProcessor: NotificationProcessor,
     private val medicineRepository: MedicineRepository,
+    private val reminderContext: ReminderContext,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun handleVariableAmount(
         amountsByReminderEventId: Map<Int, String>,
         reminderNotificationData: ReminderNotificationData
     ) = withContext(ioDispatcher) {
-        val reminderContext = ReminderContext(context)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(
             reminderContext,
             reminderNotificationData
@@ -47,7 +48,7 @@ class RemoteInputReceiverService @Inject constructor(
             reminderEvents.add(reminderNotificationPart.reminderEvent)
         }
 
-        NotificationProcessor(reminderContext).setReminderEventStatus(
+        notificationProcessor.setReminderEventStatus(
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvents,
         )

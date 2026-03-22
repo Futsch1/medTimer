@@ -39,9 +39,8 @@ class ReminderNotificationProcessor @Inject constructor(
             notificationAction(nonTakenReminderNotification)
         }
 
-            val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
-            scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
-        }
+        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
+        scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
 
         return true
     }
@@ -77,8 +76,10 @@ class ReminderNotificationProcessor @Inject constructor(
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
         if (remainingRepeats != 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
-            repeatProcessor.processRepeat(reminderNotification.reminderNotificationData,
-                reminderContext.preferencesDataSource.preferences.value.repeatDelay)
+            repeatProcessor.processRepeat(
+                reminderNotification.reminderNotificationData,
+                reminderContext.preferencesDataSource.preferences.value.repeatDelay
+            )
         }
     }
 

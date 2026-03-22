@@ -479,7 +479,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         AndroidTestHelper.waitForIdle(2_000)
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.rescheduleButton)

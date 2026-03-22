@@ -30,7 +30,7 @@ class AlarmProcessor @Inject constructor(
         alarmManager.cancel(
             reminderContext.getPendingIntentBroadcast(
                 0,
-                getReminderAction(reminderContext),
+                getReminderAction(reminderContext.context),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -49,7 +49,7 @@ class AlarmProcessor @Inject constructor(
                     scheduledReminderNotificationData
                 )
             )
-            val reminderIntent = getReminderAction(reminderContext)
+            val reminderIntent = getReminderAction(reminderContext.context)
             scheduledReminderNotificationData.toIntent(reminderIntent)
             reminderContext.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
             return
@@ -76,7 +76,7 @@ class AlarmProcessor @Inject constructor(
     fun cancelNextReminder() {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
-        val intent = getReminderAction(reminderContext)
+        val intent = getReminderAction(reminderContext.context)
         val pendingIntent = reminderContext.getPendingIntentBroadcast(0, intent, PendingIntent.FLAG_IMMUTABLE)
         alarmManager.cancel(pendingIntent)
     }
@@ -85,7 +85,7 @@ class AlarmProcessor @Inject constructor(
         alarmManager.cancel(
             reminderContext.getPendingIntentBroadcast(
                 reminderEventId,
-                getReminderAction(reminderContext),
+                getReminderAction(reminderContext.context),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )

@@ -1,21 +1,21 @@
 package com.futsch1.medtimer.reminders
 
- import android.content.BroadcastReceiver
- import android.content.Context
- import android.content.Intent
- import com.futsch1.medtimer.ActivityCodes
- import com.futsch1.medtimer.ProcessorCode
- import com.futsch1.medtimer.database.Reminder
- import com.futsch1.medtimer.database.ReminderEvent
- import com.futsch1.medtimer.di.ApplicationScope
- import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
- import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
- import dagger.hilt.android.AndroidEntryPoint
- import kotlinx.coroutines.CoroutineScope
- import kotlinx.coroutines.launch
- import java.time.Instant
- import javax.inject.Inject
- import kotlin.time.Duration
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.ProcessorCode
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.time.Instant
+import javax.inject.Inject
+import kotlin.time.Duration
 
 /**
  * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
@@ -26,46 +26,64 @@ package com.futsch1.medtimer.reminders
  */
 @AndroidEntryPoint
 class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
+    @Inject
+    lateinit var notificationProcessor: NotificationProcessor
+
+    @Inject
+    lateinit var snoozeProcessor: SnoozeProcessor
+
+    @Inject
+    lateinit var refillProcessor: RefillProcessor
+
+    @Inject
+    lateinit var repeatProcessor: RepeatProcessor
+
+    @Inject
+    lateinit var reminderNotificationProcessor: ReminderNotificationProcessor
+
+    @Inject
+    lateinit var scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor
+
+    @Inject
+    lateinit var showReminderNotificationProcessor: ShowReminderNotificationProcessor
+
+    @Inject
+    lateinit var stockHandlingProcessor: StockHandlingProcessor
 
     @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
-        val reminderContext = ReminderContext(context)
         val intentAction = ProcessorCode.fromAction(intent.action!!) ?: return
         val pendingResult = goAsync()
         applicationScope.launch {
             try {
                 when (intentAction) {
-                    ProcessorCode.Dismissed -> processNotification(
-                        reminderContext,
+                    ProcessorCode.Dismissed -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
                         ReminderEvent.ReminderStatus.SKIPPED
                     )
 
-                    ProcessorCode.Taken -> processNotification(
-                        reminderContext,
+                    ProcessorCode.Taken -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
                         ReminderEvent.ReminderStatus.TAKEN
                     )
 
-                    ProcessorCode.Acknowledged -> processNotification(
-                        reminderContext,
+                    ProcessorCode.Acknowledged -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
                         ReminderEvent.ReminderStatus.ACKNOWLEDGED
                     )
 
-                    ProcessorCode.Snooze -> processSnooze(reminderContext, intent)
-                    ProcessorCode.Reminder -> processReminderNotification(reminderContext, ReminderNotificationData.fromBundle(intent.extras!!))
-                    ProcessorCode.ShowReminderNotification -> processShowReminderNotification(
-                        reminderContext,
+                    ProcessorCode.Snooze -> processSnooze(intent)
+                    ProcessorCode.Reminder -> reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras!!))
+                    ProcessorCode.ShowReminderNotification -> showReminderNotificationProcessor.showReminder(
                         ReminderNotificationData.fromBundle(intent.extras!!)
                     )
 
-                    ProcessorCode.Refill -> processRefill(reminderContext, intent)
-                    ProcessorCode.StockHandling -> processStockHandling(reminderContext, intent)
-                    ProcessorCode.Schedule -> processReschedule(reminderContext)
+                    ProcessorCode.Refill -> processRefill(intent)
+                    ProcessorCode.StockHandling -> processStockHandling(intent)
+                    ProcessorCode.Schedule -> scheduleNextReminderNotificationProcessor.scheduleNextReminder()
                 }
             } finally {
                 pendingResult.finish()
@@ -73,52 +91,26 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private suspend fun processReschedule(reminderContext: ReminderContext) {
-        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
-    }
-
-    private suspend fun processShowReminderNotification(
-        reminderContext: ReminderContext,
-        reminderNotificationData: ReminderNotificationData
-    ) {
-        ShowReminderNotificationProcessor(reminderContext).showReminder(reminderNotificationData)
-    }
-
-    private suspend fun processRefill(reminderContext: ReminderContext, intent: Intent) {
+    private suspend fun processRefill(intent: Intent) {
         if (intent.hasExtra(ActivityCodes.EXTRA_MEDICINE_ID)) {
-            RefillProcessor(reminderContext).processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
+            refillProcessor.processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
         } else {
-            RefillProcessor(reminderContext).processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
+            refillProcessor.processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
         }
     }
 
-    private suspend fun processSnooze(reminderContext: ReminderContext, intent: Intent) {
-        SnoozeProcessor(reminderContext).processSnooze(
+    private fun processSnooze(intent: Intent) {
+        snoozeProcessor.processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
             intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 0)
         )
     }
 
-    private suspend fun processStockHandling(reminderContext: ReminderContext, intent: Intent) {
+    private suspend fun processStockHandling(intent: Intent) {
         val amount = intent.getDoubleExtra(ActivityCodes.EXTRA_AMOUNT, 0.0)
         val medicineId = intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0)
         val processedInstant = Instant.ofEpochSecond(intent.getLongExtra(ActivityCodes.EXTRA_REMIND_INSTANT, 0))
-        StockHandlingProcessor(reminderContext).processStock(amount, medicineId, processedInstant)
-    }
-
-    private suspend fun processReminderNotification(
-        reminderContext: ReminderContext,
-        reminderNotificationData: ReminderNotificationData
-    ) {
-        ReminderNotificationProcessor(reminderContext).processReminders(reminderNotificationData)
-    }
-
-    private suspend fun processNotification(
-        reminderContext: ReminderContext,
-        processedNotificationData: ProcessedNotificationData,
-        status: ReminderEvent.ReminderStatus
-    ) {
-        NotificationProcessor(reminderContext).processReminderEventsInNotification(processedNotificationData, status)
+        stockHandlingProcessor.processStock(amount, medicineId, processedInstant)
     }
 
     companion object {

@@ -31,6 +31,6 @@ class ScheduledStockReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(reminderContext, reminderEvent)
+        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(reminderContext.context, reminderEvent)
     }
 }

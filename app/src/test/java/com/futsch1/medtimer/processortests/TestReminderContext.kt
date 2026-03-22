@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Build
@@ -130,6 +131,7 @@ class TestReminderContext {
     val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock()
     val mock: ReminderContext = mock()
+    val contextMock: Context = mock()
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock()
@@ -148,6 +150,7 @@ class TestReminderContext {
     var persistentData = PersistentData.default()
 
     init {
+        `when`(mock.context).thenReturn(contextMock)
         `when`(mock.alarmManager).thenReturn(alarmManagerMock)
         `when`(mock.notificationManager).thenReturn(notificationManagerFake.mock)
         `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)

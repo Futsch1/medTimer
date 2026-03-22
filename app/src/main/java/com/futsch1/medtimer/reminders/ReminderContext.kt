@@ -27,11 +27,22 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 // TODO: potential memory leak - analyze what the context is used for and try to use DI to remove the need of storing the context
-class ReminderContext @Inject constructor(@param:ApplicationContext val context: Context) {
-    val medicineRepository = MedicineRepository(context)
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+class ReminderContext @Inject constructor(
+    @param:ApplicationContext val context: Context,
+    val medicineRepository: MedicineRepository,
+    val alarmManager: AlarmManager,
+    val notificationManager: NotificationManager,
+    val audioManager: AudioManager
+) {
+    // TODO: a temporary constructor for backwards compatibility with existing code; remove it once all usages are replaced with DI
+    constructor(context: Context) : this(
+        context,
+        MedicineRepository(context),
+        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager,
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager,
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    )
+
     val icons = MedicineIcons(context)
     val packageName: String = context.packageName
     val timeAccess = object : TimeAccess {
@@ -68,9 +79,6 @@ class ReminderContext @Inject constructor(@param:ApplicationContext val context:
 
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
-    fun startActivity(intent: Intent) {
-        context.startActivity(intent)
-    }
 
     val preferencesDataSource: PreferencesDataSource by lazy {
         // Bridge from non-Hilt to Hilt code

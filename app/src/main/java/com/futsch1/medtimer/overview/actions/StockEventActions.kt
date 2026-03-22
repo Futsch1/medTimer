@@ -23,7 +23,7 @@ class StockEventActions(
     override suspend fun buttonClicked(button: Button) {
         when (button) {
             Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
-            Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(reminderContext, event.reminderEvent)
+            Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(reminderContext.context, event.reminderEvent)
             else -> Unit
         }
 

@@ -42,14 +42,14 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getVariableAmountActivityIntent(reminderContext, reminderNotification.reminderNotificationData)
+            val notifyTaken = getVariableAmountActivityIntent(reminderContext.context, reminderNotification.reminderNotificationData)
             reminderContext.getPendingIntentActivity(
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         } else {
-            val notifyTaken = getTakenActionIntent(reminderContext, processedNotificationData)
+            val notifyTaken = getTakenActionIntent(reminderContext.context, processedNotificationData)
             reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
@@ -59,7 +59,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped = getSkippedActionIntent(reminderContext, processedNotificationData)
+        val notifySkipped = getSkippedActionIntent(reminderContext.context, processedNotificationData)
         return reminderContext.getPendingIntentBroadcast(
             reminderNotification.reminderNotificationData.notificationId,
             notifySkipped,
@@ -72,14 +72,14 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
 
         return if (snoozeDuration.inWholeMinutes < 0) {
             val snooze = getCustomSnoozeActionIntent(
-                reminderContext, reminderNotification.reminderNotificationData
+                reminderContext.context, reminderNotification.reminderNotificationData
             )
             reminderContext.getPendingIntentActivity(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
             )
         } else {
             val snooze = getSnoozeIntent(
-                reminderContext, reminderNotification.reminderNotificationData, snoozeDuration
+                reminderContext.context, reminderNotification.reminderNotificationData, snoozeDuration
             )
             reminderContext.getPendingIntentBroadcast(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT

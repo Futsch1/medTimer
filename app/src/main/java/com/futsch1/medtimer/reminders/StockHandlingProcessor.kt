@@ -46,7 +46,7 @@ class StockHandlingProcessor @Inject constructor(
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
                     val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext.context, reminderNotificationData)
                 }
             }
         }

@@ -36,7 +36,6 @@ import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -163,7 +162,7 @@ class OptionsMenu @AssistedInject constructor(
             builder.setPositiveButton(R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
                     medicineViewModel.medicineRepository.deleteReminderEvents()
-                    requestScheduleNextNotification(ReminderContext(context))
+                    requestScheduleNextNotification(context)
                 }
             }
             builder.setNegativeButton(R.string.cancel) { _, _ -> }
@@ -207,7 +206,7 @@ class OptionsMenu @AssistedInject constructor(
                     medicineViewModel.medicineRepository.deleteAll()
                     val generateTestData = GenerateTestData(medicineViewModel, menuItem === itemWithEvents)
                     generateTestData.generateTestMedicine()
-                    requestScheduleNextNotification(ReminderContext(context))
+                    requestScheduleNextNotification(context)
                     idlingResource.setIdle()
                 }
                 true

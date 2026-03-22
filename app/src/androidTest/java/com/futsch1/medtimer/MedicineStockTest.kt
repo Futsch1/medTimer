@@ -281,7 +281,7 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10")
         pressBack()
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         openNotification().use {
             device.wait(Until.findObject(By.textContains(TEST_MED)), 5_000)
             internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
@@ -382,7 +382,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.createReminder)
 
         checkNotificationWithTitle(device, notificationTitle, false)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(context))
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         checkNotificationWithTitle(device, notificationTitle, true)
     }
 }

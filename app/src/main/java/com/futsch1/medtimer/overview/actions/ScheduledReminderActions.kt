@@ -42,7 +42,7 @@ open class ScheduledReminderActions(
                     val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
 
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext.context, reminderNotificationData)
                 }
             }
     }
@@ -50,6 +50,6 @@ open class ScheduledReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext, scheduledReminder.reminder, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext.context, scheduledReminder.reminder, reminderEvent, taken)
     }
 }
