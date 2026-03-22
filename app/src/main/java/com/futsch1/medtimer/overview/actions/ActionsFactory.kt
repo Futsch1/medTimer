@@ -15,20 +15,22 @@ class ActionsFactory @Inject constructor(
     private val fragmentActivity: FragmentActivity
 ) {
     fun createActions(event: OverviewEvent): Actions? {
-        return if (event is OverviewReminderEvent) {
-            if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) {
-                StockEventActions(event, medicineRepository, fragmentActivity)
-            } else {
-                ReminderEventActions(event, medicineRepository, fragmentActivity)
-            }
-        } else if (event is OverviewScheduledReminderEvent) {
-            if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
-                ScheduledStockReminderActions(event, medicineRepository, fragmentActivity)
-            } else {
-                ScheduledReminderActions(event, medicineRepository, fragmentActivity)
-            }
-        } else {
-            null
+        return when (event) {
+            is OverviewReminderEvent if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) -> StockEventActions(
+                event,
+                medicineRepository,
+                fragmentActivity
+            )
+
+            is OverviewReminderEvent -> ReminderEventActions(event, medicineRepository, fragmentActivity)
+            is OverviewScheduledReminderEvent if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) -> ScheduledStockReminderActions(
+                event,
+                medicineRepository,
+                fragmentActivity
+            )
+
+            is OverviewScheduledReminderEvent -> ScheduledReminderActions(event, medicineRepository, fragmentActivity)
+            else -> null
         }
     }
 }
