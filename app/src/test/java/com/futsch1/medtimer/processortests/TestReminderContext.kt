@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Intent
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Build
@@ -33,7 +32,6 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.ArgumentMatchers.isNull
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.time.Instant
@@ -51,11 +49,13 @@ class MedicineRepositoryFake {
         `when`(mock.medicines).thenAnswer { buildFullMedicines() }
         `when`(mock.getReminderEventsForScheduling(anyList())).thenAnswer { reminderEvents }
         `when`(mock.getReminderEvent(anyInt())).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
-        `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
-            val reminderEvent = it.arguments[0] as ReminderEvent
-            reminderEvent.reminderEventId = reminderEvents.size + 1
-            reminderEvents.add(reminderEvent)
-            reminderEvent.reminderEventId.toLong()
+        runBlocking {
+            `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
+                val reminderEvent = it.arguments[0] as ReminderEvent
+                reminderEvent.reminderEventId = reminderEvents.size + 1
+                reminderEvents.add(reminderEvent)
+                reminderEvent.reminderEventId.toLong()
+            }
         }
         `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
         `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
@@ -173,9 +173,6 @@ class TestReminderContext {
         `when`(editMock.putInt(eq("notificationId"), anyInt())).then { notificationId = it.arguments[1] as Int; editMock }
 
         `when`(notificationChannelMock.id).thenReturn("channel")
-
-        `when`(mock.getIntent(anyString())).thenReturn(mock<Intent>())
-        `when`(mock.getIntent(isNull())).thenReturn(mock<Intent>())
 
         val spannableStringBuilderMock = mock<SpannableStringBuilder>()
         `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)

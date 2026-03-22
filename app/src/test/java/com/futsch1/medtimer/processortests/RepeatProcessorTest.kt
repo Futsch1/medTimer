@@ -9,6 +9,7 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 
 class RepeatProcessorTest {
     @Test
@@ -17,7 +18,7 @@ class RepeatProcessorTest {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
 
         runBlocking {
-            RepeatProcessor(reminderContext.mock).processRepeat(reminderNotificationData, 10)
+            RepeatProcessor(reminderContext.mock).processRepeat(reminderNotificationData, 10.seconds)
         }
 
         assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[0].remainingRepeats, -1)

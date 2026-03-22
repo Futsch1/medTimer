@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.RecyclerViewDragAction.drag
 import org.junit.Test
 
@@ -17,7 +18,7 @@ class MedicineHandlingTest : BaseTestHelper() {
 
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun medicineMoveTest() {
         AndroidTestHelper.createMedicine(TEST_MED_1)
         AndroidTestHelper.createMedicine(TEST_MED_2)

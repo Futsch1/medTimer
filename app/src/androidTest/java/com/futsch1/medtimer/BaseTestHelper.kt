@@ -1,16 +1,19 @@
 package com.futsch1.medtimer
 
+import android.Manifest
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 import android.os.RemoteException
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import com.futsch1.medtimer.utilities.grantAppPermission
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -25,7 +28,16 @@ abstract class BaseTestHelper {
 
     @Rule
     @JvmField
-    var mGrantPermissionRule: GrantPermissionRule? = permissionRule
+    var grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        *buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                add(Manifest.permission.USE_FULL_SCREEN_INTENT)
+            }
+        }.toTypedArray()
+    )
 
     @Rule
     @JvmField
@@ -46,7 +58,12 @@ abstract class BaseTestHelper {
             // Ignore
         }
 
-        dismissAllNotifications(device)
+        dismissAllNotifications()
+
+        // Grant permissions which cannot be granted via the GrantPermissionRule
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            device.grantAppPermission("SCHEDULE_EXACT_ALARM")
+        }
 
         device.pressHome()
         baristaRule.launchActivity()
@@ -59,27 +76,10 @@ abstract class BaseTestHelper {
         }
     }
 
-    private fun dismissAllNotifications(device: UiDevice) {
-        try {
-            device.openNotification()
-
-            val clearAllButtons = device.findObjects(
-                By.res("com.android.systemui:id/dismiss_text")
-            ) + device.findObjects(
-                By.res("com.android.systemui:id/dismiss_button")
-            ) + device.findObjects(
-                By.textContains("Clear all")
-            ) + device.findObjects(
-                By.textContains("CLEAR ALL")
-            ) + device.findObjects(
-                By.descContains("Clear all")
-            )
-            for (clearAllButton in clearAllButtons) {
-                clearAllButton.click()
-            }
-        } catch (_: Exception) {
-            device.pressBack()
-        }
+    private fun dismissAllNotifications() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
     }
 
     protected fun internalAssert(b: Boolean) {
@@ -114,16 +114,5 @@ abstract class BaseTestHelper {
                 // Intentionally empty
             }
         }
-
-        val permissionRule: GrantPermissionRule?
-            get() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    return GrantPermissionRule.grant(
-                        "android.permission.POST_NOTIFICATIONS",
-                        "android.permission.USE_FULL_SCREEN_INTENT"
-                    )
-                }
-                return null
-            }
     }
 }

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -26,6 +25,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
@@ -48,6 +48,7 @@ import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -65,6 +66,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @Inject
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
@@ -95,12 +100,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
         val navController = findNavController()
 
-        setupSelectIcon(fragmentView)
+        setupSelectIcon()
         enableColor = fragmentView.findViewById(R.id.enableColor)
         colorButton = fragmentView.findViewById(R.id.selectColor)
         notificationImportance = fragmentView.findViewById(R.id.notificationImportance)
 
-        val recyclerView = setupMedicineList(fragmentView)
+        val recyclerView = setupMedicineList()
         setupSwiping(recyclerView)
 
         val viewModel = medicineViewModel
@@ -120,9 +125,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 }
 
                 // Signal that entity was loaded
-                if (activity != null && onEntityLoaded(entity, fragmentView)) {
-                    setFragmentReady()
-                }
+                onEntityLoaded(entity)
             }
         }
 
@@ -153,17 +156,19 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         super.onStop()
         val entity = entity ?: return
         if (fragmentReady) {
-            ProcessLifecycleOwner.get().lifecycleScope.launch {
+            applicationScope.launch {
                 val entityBefore = Gson().toJson(entity)
-                fillEntityData(entity, fragmentView)
-                if (entityBefore != Gson().toJson(entity)) {
+                fillEntityData(entity)
+
+                val entityAfter = Gson().toJson(entity)
+                if (entityBefore != entityAfter) {
                     medicineViewModel.medicineRepository.updateMedicine(entity.medicine)
                 }
             }
         }
     }
 
-    private fun onEntityLoaded(entity: FullMedicine, fragmentView: View): Boolean {
+    private fun onEntityLoaded(entity: FullMedicine) {
         val medicine = entity.medicine
 
         color = medicine.color
@@ -171,7 +176,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         notes = medicine.notes
 
         (requireActivity() as AppCompatActivity).supportActionBar?.title = medicine.name
-        fragmentView.findViewById<EditText>(R.id.editMedicineName).setText(medicine.name)
+        fragmentView.findViewById<EditText>(R.id.editMedicineName).apply {
+            setText(medicine.name)
+        }
 
         val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository)
 
@@ -180,12 +187,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupColorButton(medicine.useColor)
 
         setupNotificationImportance(medicine)
-        setupNotesButton(fragmentView, subMenus)
-        setupOpenCalendarButton(fragmentView, subMenus)
-        setupStockButton(fragmentView, subMenus)
-        setupTagsButton(fragmentView, subMenus)
+        setupNotesButton(subMenus)
+        setupOpenCalendarButton(subMenus)
+        setupStockButton(subMenus)
+        setupTagsButton(subMenus)
 
-        setupAddReminderButton(fragmentView, entity)
+        setupAddReminderButton(entity)
 
         adapter.setMedicine(entity)
 
@@ -195,13 +202,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 setFragmentReady()
             }
         }
-        return false
     }
 
-    private fun setupSelectIcon(fragmentView: View) {
+    private fun setupSelectIcon() {
         selectIconButton = fragmentView.findViewById(R.id.selectIcon)
 
-        selectIconButton.setOnClickListener { _: View? ->
+        selectIconButton.setOnClickListener {
             val fragmentManager = getChildFragmentManager()
             val dialog = fragmentManager.findFragmentByTag(ICON_DIALOG_TAG) as IconDialog?
             val builder = IconDialogSettings.Builder()
@@ -251,35 +257,35 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private fun setupNotesButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
+    private fun setupNotesButton(subMenus: EditMedicineSubmenus) {
         val openNotes = fragmentView.findViewById<MaterialButton>(R.id.openNotes)
-        openNotes.setOnClickListener { _: View? ->
+        openNotes.setOnClickListener {
             subMenus.open(EditMedicineSubmenus.Submenu.NOTES, findNavController(openNotes))
         }
     }
 
-    private fun setupOpenCalendarButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
+    private fun setupOpenCalendarButton(subMenus: EditMedicineSubmenus) {
         val openCalendar = fragmentView.findViewById<MaterialButton>(R.id.openCalendar)
-        openCalendar.setOnClickListener { _: View? ->
+        openCalendar.setOnClickListener {
             subMenus.open(EditMedicineSubmenus.Submenu.CALENDAR, findNavController(openCalendar))
         }
     }
 
-    private fun setupStockButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
+    private fun setupStockButton(subMenus: EditMedicineSubmenus) {
         val openStockTracking = fragmentView.findViewById<MaterialButton>(R.id.openStockTracking)
-        openStockTracking.setOnClickListener { _: View? ->
+        openStockTracking.setOnClickListener {
             subMenus.open(EditMedicineSubmenus.Submenu.STOCK_TRACKING, findNavController(openStockTracking))
         }
     }
 
-    private fun setupTagsButton(fragmentView: View, subMenus: EditMedicineSubmenus) {
+    private fun setupTagsButton(subMenus: EditMedicineSubmenus) {
         val openTags = fragmentView.findViewById<MaterialButton>(R.id.openTags)
-        openTags.setOnClickListener { _: View? ->
+        openTags.setOnClickListener {
             subMenus.open(EditMedicineSubmenus.Submenu.TAGS, findNavController(openTags))
         }
     }
 
-    private fun setupMedicineList(fragmentView: View): RecyclerView {
+    private fun setupMedicineList(): RecyclerView {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
         adapter = ReminderViewAdapter(requireActivity())
         recyclerView.setAdapter(adapter)
@@ -296,9 +302,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             .attachToRecyclerView(recyclerView)
     }
 
-    private fun setupAddReminderButton(fragmentView: View, fullMedicine: FullMedicine) {
+    private fun setupAddReminderButton(fullMedicine: FullMedicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { _: View? -> NewReminderTypeDialog(requireActivity(), fullMedicine, this.medicineViewModel.medicineRepository) }
+        fab.setOnClickListener { NewReminderTypeDialog(requireActivity(), fullMedicine, this.medicineViewModel.medicineRepository) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {
@@ -319,19 +325,19 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private suspend fun fillEntityData(entity: FullMedicine, fragmentView: View) {
+    private suspend fun fillEntityData(entity: FullMedicine) {
         val medicine = entity.medicine
-        medicine.name = (fragmentView.findViewById<View?>(R.id.editMedicineName) as EditText).getText().toString().trim()
+        medicine.name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim()
         medicine.useColor = enableColor.isChecked
         medicine.color = color
         importanceIndexToMedicine(notificationImportance.selectedItemPosition, medicine)
         medicine.iconId = iconId
         medicine.notes = notes
 
-        updateReminders(fragmentView)
+        updateReminders()
     }
 
-    private suspend fun updateReminders(fragmentView: View) {
+    private suspend fun updateReminders() {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
         for (i in 0..<recyclerView.size) {
             val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder

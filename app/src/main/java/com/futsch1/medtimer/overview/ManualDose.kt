@@ -30,8 +30,7 @@ class ManualDose(
     private val activity: FragmentActivity,
     private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
     suspend fun logManualDose() {
         val medicines = medicineViewModel.medicines.value
@@ -135,15 +134,18 @@ class ManualDose(
             reminderEvent.remindedTimestamp =
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-            activity.lifecycleScope.launch(ioDispatcher) {
+            activity.lifecycleScope.launch {
                 medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
+
             }
 
-            if (medicineId != -1) {
-                val amount = MedicineHelper.parseAmount(reminderEvent.amount)
-                if (amount != null) {
-                    ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
-                }
+            if (medicineId == -1) {
+                return@show
+            }
+
+            val amount = MedicineHelper.parseAmount(reminderEvent.amount)
+            if (amount != null) {
+                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
             }
         }
     }
@@ -181,8 +183,8 @@ class ManualDose(
         }
 
         private fun amendName() {
-            if (amount != null && !amount.isBlank()) {
-                this.name = this.baseName + " (" + amount + ")"
+            if (!amount.isNullOrBlank()) {
+                this.name = "${this.baseName} ($amount)"
             } else {
                 this.name = this.baseName
             }

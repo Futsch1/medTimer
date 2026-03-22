@@ -22,27 +22,22 @@ class ReminderNotificationProcessor(
     val reminderContext: ReminderContext
 ) {
     suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
-        var r = false
-
         // Create reminder events and filter those that are already processed
-        var reminderNotification =
-            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed()
+        val reminderNotification =
+            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed() ?: return false
 
-        if (reminderNotification != null) {
-            reminderNotification = handleAutomaticallyTaken(reminderNotification)
-            if (reminderNotification.reminderNotificationParts.isEmpty()) {
-                Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
-            } else {
-                Log.d(LogTags.REMINDER, "Processing reminder notification $reminderNotification")
-                notificationAction(reminderNotification)
-            }
-            r = true
-
-            val processedEvents = reminderNotification.reminderNotificationParts.map { it.reminderEvent }
-            ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder(processedEvents)
+        val nonTakenReminderNotification = handleAutomaticallyTaken(reminderNotification)
+        if (nonTakenReminderNotification.reminderNotificationParts.isEmpty()) {
+            Log.d(LogTags.REMINDER, "No reminders left to process in $nonTakenReminderNotification")
+        } else {
+            Log.d(LogTags.REMINDER, "Processing reminder notification $nonTakenReminderNotification")
+            notificationAction(nonTakenReminderNotification)
         }
 
-        return r
+        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
+        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder(processedEvents)
+
+        return true
     }
 
     private suspend fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
@@ -75,10 +70,10 @@ class ReminderNotificationProcessor(
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
-        if (remainingRepeats != 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
+        if (remainingRepeats > 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
             RepeatProcessor(reminderContext).processRepeat(
                 reminderNotification.reminderNotificationData,
-                reminderContext.preferencesDataSource.preferences.value.numberOfRepetitions
+                reminderContext.preferencesDataSource.preferences.value.repeatDelay
             )
         }
     }

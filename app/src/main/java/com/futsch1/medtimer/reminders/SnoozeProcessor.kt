@@ -16,7 +16,7 @@ import java.time.Instant
 open class SnoozeProcessor(val reminderContext: ReminderContext) {
     val alarmSetter = AlarmProcessor(reminderContext)
 
-    suspend fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
+    suspend fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
