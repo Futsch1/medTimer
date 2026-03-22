@@ -14,10 +14,10 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Reminder.ReminderType
 import com.futsch1.medtimer.helpers.AmountTextWatcher
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.google.android.material.button.MaterialButton
@@ -31,6 +31,8 @@ import kotlinx.coroutines.withContext
 class ReminderViewHolder private constructor(
     itemView: View,
     private val fragmentActivity: FragmentActivity,
+    private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
+    private val timePickerDialogFactory: TimePickerDialogFactory,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
@@ -82,7 +84,7 @@ class ReminderViewHolder private constructor(
     private fun setupLongPress() {
         itemView.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(R.string.delete).setOnMenuItemClickListener {
-                LinkedReminderHandling(reminder, MedicineRepository(fragmentActivity), fragmentActivity.lifecycleScope).deleteReminder(
+                linkedReminderHandlingFactory.create(reminder, fragmentActivity.lifecycleScope).deleteReminder(
                     fragmentActivity,
                     { }, { }
                 )
@@ -97,7 +99,7 @@ class ReminderViewHolder private constructor(
             editTimeLayout.setHint(textId)
             timeEditor = TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, { minutes: Int? ->
                 reminder.timeInMinutes = minutes!!
-            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
+            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null, timePickerDialogFactory)
         } else {
             editTimeLayout.visibility = View.GONE
         }
@@ -191,10 +193,15 @@ class ReminderViewHolder private constructor(
 
     companion object {
         @JvmStatic
-        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity): ReminderViewHolder {
+        fun create(
+            parent: ViewGroup,
+            fragmentActivity: FragmentActivity,
+            linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
+            timePickerDialogFactory: TimePickerDialogFactory
+        ): ReminderViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.card_reminder, parent, false)
-            return ReminderViewHolder(view, fragmentActivity)
+            return ReminderViewHolder(view, fragmentActivity, linkedReminderHandlingFactory, timePickerDialogFactory)
         }
     }
 }

@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -19,9 +20,10 @@ import java.time.ZoneId
 open class ReminderEventActions(
     val event: OverviewReminderEvent,
     medicineRepository: MedicineRepository,
-    private val fragmentActivity: FragmentActivity
+    private val fragmentActivity: FragmentActivity,
+    timePickerDialogFactory: TimePickerDialogFactory
 ) :
-    ActionsBase(fragmentActivity, medicineRepository) {
+    ActionsBase(fragmentActivity, medicineRepository, timePickerDialogFactory) {
 
     init {
         if (event.state != OverviewState.TAKEN) {
@@ -55,8 +57,8 @@ open class ReminderEventActions(
 
     private fun processPostponeReminder(reminderEvent: ReminderEvent) {
         val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminderEvent.remindedTimestamp), ZoneId.systemDefault())
-        TimeHelper.TimePickerWrapper(fragmentActivity)
-            .show(localDateTime.hour, localDateTime.minute) { minutes ->
+        timePickerDialogFactory
+            .create(localDateTime.hour, localDateTime.minute) { minutes ->
                 val newReminderTime = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes)
                 fragmentActivity.lifecycleScope.launch(ioCoroutineDispatcher) {
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
@@ -66,7 +68,7 @@ open class ReminderEventActions(
                     medicineRepository.updateReminderEvent(reminderEvent)
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }
-            }
+            }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {

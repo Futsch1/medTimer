@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class AdvancedReminderSettingsMenuProvider(
     private val fragment: Fragment,
+    private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
 
@@ -42,7 +43,7 @@ class AdvancedReminderSettingsMenuProvider(
 
         menu.findItem(R.id.delete_reminder).setOnMenuItemClickListener { _: MenuItem? ->
             if (this::reminder.isInitialized) {
-                LinkedReminderHandling(reminder, medicineRepository, fragment.lifecycleScope).deleteReminder(
+                linkedReminderHandlingFactory.create(reminder, fragment.lifecycleScope).deleteReminder(
                     fragment.requireContext(),
                     { NavHostFragment.findNavController(fragment).navigateUp() }, { }
                 )

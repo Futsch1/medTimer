@@ -4,6 +4,7 @@ import android.content.Context
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.CoroutineDispatcher
@@ -36,6 +37,7 @@ interface Actions {
 abstract class ActionsBase(
     val context: Context,
     val medicineRepository: MedicineRepository,
+    val timePickerDialogFactory: TimePickerDialogFactory,
     val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : Actions {
 

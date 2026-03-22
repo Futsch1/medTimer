@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -9,8 +10,9 @@ import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 class StockEventActions(
     event: OverviewReminderEvent,
     medicineRepository: MedicineRepository,
-    fragmentActivity: FragmentActivity
-) : ReminderEventActions(event, medicineRepository, fragmentActivity) {
+    fragmentActivity: FragmentActivity,
+    timePickerDialogFactory: TimePickerDialogFactory
+) : ReminderEventActions(event, medicineRepository, fragmentActivity, timePickerDialogFactory) {
     init {
         visibleButtons.clear()
         if (event.state != OverviewState.RAISED) {

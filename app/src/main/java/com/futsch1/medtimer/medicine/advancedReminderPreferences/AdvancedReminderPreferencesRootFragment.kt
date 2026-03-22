@@ -10,9 +10,10 @@ import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.getCyclicReminderString
 import com.futsch1.medtimer.helpers.getIntervalTypeSummary
 import com.futsch1.medtimer.helpers.isReminderActive
@@ -26,20 +27,19 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 
-fun showDateEdit(activity: FragmentActivity, preference: Preference) {
+fun showDateEdit(activity: FragmentActivity, preference: Preference, datePickerDialogFactory: DatePickerDialogFactory) {
     val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
 
-    val datePickerWrapper = DatePickerWrapper(activity)
     val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
         TimeHelper.stringToLocalDate(activity, currentDateString)
     } else {
         LocalDate.now()
     }
 
-    datePickerWrapper.show(currentDate) { daysSinceEpoch: Long ->
+    datePickerDialogFactory.create(currentDate) { daysSinceEpoch: Long ->
         val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
         preference.preferenceDataStore?.putString(preference.key, newDateString)
-    }
+    }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
 }
 
 @AndroidEntryPoint
@@ -68,20 +68,27 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     @Inject
     override lateinit var medicineRepository: MedicineRepository
 
+    @Inject
+    lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
+
+    @Inject
+    lateinit var timePickerDialogFactory: TimePickerDialogFactory
+
+    @Inject
+    lateinit var datePickerDialogFactory: DatePickerDialogFactory
+
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "add_linked_reminder" to { activity, preference ->
                 val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
-                // TODO: replace with injected MedicineRepository when lambda-based DI is supported
-                val medicineRepository = MedicineRepository(activity.applicationContext)
-                LinkedReminderHandling(reminderDataStore.entity, medicineRepository, activity.lifecycleScope).addLinkedReminder(activity)
+                linkedReminderHandlingFactory.create(reminderDataStore.entity, activity.lifecycleScope).addLinkedReminder(activity)
             },
             "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
             "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
             "interval_daily_end_time" to { activity, preference -> showTimeEdit(activity, preference) }
         )
 
-    val menuProvider = AdvancedReminderSettingsMenuProvider(this)
+    val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
 
     override fun onEntityUpdated(entity: Reminder) {
         super.onEntityUpdated(entity)
@@ -162,35 +169,32 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     }
 
     private fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
-        val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
         val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)
         if (currentTimeString != null) {
             val currentTime = TimeHelper.timeStringToMinutes(activity, currentTimeString)
-            timePickerWrapper.show(currentTime / 60, currentTime % 60) { minutes: Int ->
+            timePickerDialogFactory.create(currentTime / 60, currentTime % 60) { minutes: Int ->
                 val newTimeString = TimeHelper.minutesToTimeString(activity, minutes.toLong())
                 preference.preferenceDataStore?.putString(preference.key, newTimeString)
-            }
+            }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
         }
     }
 
     private fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
-        val datePickerWrapper = DatePickerWrapper(activity)
         val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
         if (currentDateString != null) {
             val currentDateTime = TimeHelper.stringToSecondsSinceEpoch(activity, currentDateString)
             val startInstant = Instant.ofEpochSecond(currentDateTime)
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
-            datePickerWrapper.show(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
-                val timePickerWrapper = TimeHelper.TimePickerWrapper(activity)
-                timePickerWrapper.show(dateTime.hour, dateTime.minute) { minutes: Int ->
+            datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
+                timePickerDialogFactory.create(dateTime.hour, dateTime.minute) { minutes: Int ->
                     val selectedLocalDateTime = LocalDateTime.of(
                         LocalDate.ofEpochDay(daysSinceEpoch),
                         LocalTime.of(minutes / 60, minutes % 60)
                     )
                     val timeString = TimeHelper.localeDateTimeToDateTimeString(activity, selectedLocalDateTime)
                     preference.preferenceDataStore?.putString(preference.key, timeString)
-                }
-            }
+                }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+            }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
         }
     }
 

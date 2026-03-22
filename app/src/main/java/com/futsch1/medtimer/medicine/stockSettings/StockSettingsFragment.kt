@@ -18,11 +18,13 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
@@ -50,6 +52,12 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory
+
+    @Inject
+    lateinit var datePickerDialogFactory: DatePickerDialogFactory
     private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
     private val medicineViewModel: MedicineViewModel by viewModels()
 
@@ -57,8 +65,8 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
             "stock_refill_now" to { _, _ -> refillNow() },
-            "production_date" to { activity, preference -> showDateEdit(activity, preference) },
-            "expiration_date" to { activity, preference -> showDateEdit(activity, preference) },
+            "production_date" to { activity, preference -> showDateEdit(activity, preference, datePickerDialogFactory) },
+            "expiration_date" to { activity, preference -> showDateEdit(activity, preference, datePickerDialogFactory) },
             "clear_dates" to { _, _ ->
                 // TODO: direct store usage in UI code; all non-UI logic should be delegated to the viewmodel
                 dataStore.putLong("production_date", 0)
@@ -154,13 +162,13 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
         val reminder = Reminder(dataStore.entity.medicine.medicineId)
         reminder.outOfStockThreshold = if (dataStore.entity.medicine.amount > 0.0) dataStore.entity.medicine.amount else 1.0
         reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        NewReminderStockDialog(activity, dataStore.entity.medicine, medicineRepository, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.entity.medicine, reminder)
     }
 
     private fun showCreateNewReminderExpirationDateDialog(activity: FragmentActivity) {
         val reminder = Reminder(dataStore.entity.medicine.medicineId)
         reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        NewReminderStockDialog(activity, dataStore.entity.medicine, medicineRepository, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.entity.medicine, reminder)
     }
 }
 

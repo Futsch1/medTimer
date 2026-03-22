@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,7 +32,10 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     @Inject
     override lateinit var medicineRepository: MedicineRepository
 
-    val menuProvider = AdvancedReminderSettingsMenuProvider(this)
+    @Inject
+    lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
+
+    val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
     var fullMedicine: FullMedicine? = null
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>

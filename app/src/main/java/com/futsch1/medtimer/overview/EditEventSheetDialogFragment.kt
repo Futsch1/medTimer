@@ -15,10 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimeHelper.DatePickerWrapper
-import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -46,7 +45,10 @@ class EditEventSheetDialogFragment : DialogFragment() {
     private val viewModel: EditEventViewModel by viewModels()
 
     @javax.inject.Inject
-    lateinit var timeFormatter: TimeFormatter
+    lateinit var timePickerDialogFactory: TimePickerDialogFactory
+
+    @javax.inject.Inject
+    lateinit var datePickerDialogFactory: DatePickerDialogFactory
 
     companion object {
         fun newInstance(reminderEventId: Int): EditEventSheetDialogFragment {
@@ -148,13 +150,13 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) return@OnFocusChangeListener
             val startMinutes = getMinutes().takeIf { it >= 0 } ?: Reminder.DEFAULT_TIME
-            TimePickerWrapper(requireActivity()).show(startMinutes / 60, startMinutes % 60) { minutes ->
+            timePickerDialogFactory.create(startMinutes / 60, startMinutes % 60) { minutes ->
                 try {
                     onTimePicked(minutes)
                 } catch (_: IllegalStateException) {
                     // Intentionally empty
                 }
-            }
+            }.show(parentFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
         }
         editText.doAfterTextChanged { editable ->
             val text = editable?.toString() ?: return@doAfterTextChanged
@@ -166,9 +168,9 @@ class EditEventSheetDialogFragment : DialogFragment() {
     private fun setupDatePicker(editText: EditText, getDate: () -> LocalDate, onDatePicked: (LocalDate) -> Unit) {
         editText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) return@OnFocusChangeListener
-            DatePickerWrapper(requireActivity()).show(getDate()) { daysSinceEpoch ->
+            datePickerDialogFactory.create(getDate()) { daysSinceEpoch ->
                 onDatePicked(LocalDate.ofEpochDay(daysSinceEpoch))
-            }
+            }.show(parentFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
         }
         editText.visibility = View.VISIBLE
         editText.doAfterTextChanged { editable ->

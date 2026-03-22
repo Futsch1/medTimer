@@ -15,16 +15,21 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
 import com.futsch1.medtimer.helpers.TableHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReminderTableFragment : Fragment() {
     private lateinit var filterLayout: TextInputLayout
     private lateinit var filter: TextInputEditText
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
 
     private val medicineViewModel: MedicineViewModel by viewModels()
 
@@ -39,7 +44,7 @@ class ReminderTableFragment : Fragment() {
         val tableFilter = Filter(tableView)
         setupFilter(tableFilter)
 
-        val adapter = ReminderTableAdapter(tableView, requireActivity().supportFragmentManager)
+        val adapter = ReminderTableAdapter(tableView, requireActivity().supportFragmentManager, timeFormatter)
 
         tableView.setAdapter(adapter)
         adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))

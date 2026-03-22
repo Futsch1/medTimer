@@ -10,13 +10,14 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
-import com.futsch1.medtimer.helpers.TimeHelper.QuickSecondsSinceEpochFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
 
 class ReminderTableAdapter(
     private val tableView: TableView,
-    private val fragmentManager: FragmentManager
+    private val fragmentManager: FragmentManager,
+    private val timeFormatter: TimeFormatter
 ) : AbstractTableAdapter<String?, ReminderTableCellModel?, ReminderTableCellModel?>() {
     override fun onCreateCellViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
         return getTextCellViewHolder(parent)
@@ -82,7 +83,7 @@ class ReminderTableAdapter(
     fun submitList(reminderEvents: List<ReminderEvent>) {
         val cells = mutableListOf<List<ReminderTableCellModel?>>()
         val rows = mutableListOf<ReminderTableCellModel?>()
-        val formatter = QuickSecondsSinceEpochFormatter(tableView.context)
+        val formatter = timeFormatter
 
         for (reminderEvent in reminderEvents) {
             val cell = listOf(
@@ -129,7 +130,7 @@ class ReminderTableAdapter(
 
     private fun getStatusString(
         reminderEvent: ReminderEvent,
-        formatter: QuickSecondsSinceEpochFormatter
+        formatter: TimeFormatter
     ): String {
         return when (reminderEvent.status) {
             ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp)

@@ -8,14 +8,8 @@ import android.content.res.Resources
 import android.os.LocaleList
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import androidx.annotation.StringRes
-import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.DataSourcesEntryPoint
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.EntryPointAccessors
 import java.text.ParseException
 import java.time.DateTimeException
@@ -354,7 +348,7 @@ object TimeHelper {
         ).toLocalDate()
     }
 
-    private class LocaleContextWrapper(base: Context) : ContextWrapper(base) {
+    internal class LocaleContextWrapper(base: Context) : ContextWrapper(base) {
         init {
             buildContext(base)
         }
@@ -364,10 +358,12 @@ object TimeHelper {
         }
 
         companion object {
-            @SuppressLint("StaticFieldLeak") // No leak because this context is just a single copy of the enclosing context
+            // No leak because this context is just a single copy of the enclosing context
+            @SuppressLint("StaticFieldLeak")
             private var mLocaleAwareContext: Context? = null
 
-            @SuppressLint("AppBundleLocaleChanges") // This is ok because the locale is not changed for the complete context, only wrapped for the DateFormat calls
+            // This is ok because the locale is not changed for the complete context, only wrapped for the DateFormat calls
+            @SuppressLint("AppBundleLocaleChanges")
             @Synchronized
             private fun buildContext(base: Context) {
                 if (mLocaleAwareContext != null) {
@@ -390,74 +386,4 @@ object TimeHelper {
         }
     }
 
-    class TimePickerWrapper {
-        // TODO: should accept supportFragmentManager instead
-        val activity: FragmentActivity
-        private val titleText: Int?
-        private val timeFormat: Int
-
-        constructor(activity: FragmentActivity) {
-            this.activity = activity
-            this.titleText = null
-            this.timeFormat = if (DateFormat.is24HourFormat(LocaleContextWrapper(activity))) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-        }
-
-        constructor(activity: FragmentActivity, @StringRes titleText: Int, timeFormat: Int) {
-            this.activity = activity
-            this.titleText = titleText
-            this.timeFormat = timeFormat
-        }
-
-        fun show(hourOfDay: Int, minute: Int, timePickerResult: (minutes: Int) -> Unit) {
-            val builder = MaterialTimePicker.Builder()
-                .setTimeFormat(timeFormat)
-                .setHour(hourOfDay)
-                .setMinute(minute)
-                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-
-            if (titleText != null) {
-                builder.setTitleText(titleText)
-            }
-
-            val timePickerDialog = builder.build()
-            timePickerDialog.addOnPositiveButtonClickListener { timePickerResult(timePickerDialog.hour * 60 + timePickerDialog.minute) }
-
-            timePickerDialog.show(activity.supportFragmentManager, "time_picker")
-        }
-    }
-
-    data class DatePickerWrapper(val activity: FragmentActivity) {
-        fun show(startDate: LocalDate?, datePickerResult: (daysSinceEpoch: Long) -> Unit) {
-            var startDate = startDate
-            if (startDate == null) {
-                startDate = LocalDate.now()
-            }
-            val builder = MaterialDatePicker.Builder.datePicker()
-                .setSelection(startDate.toEpochDay() * DateUtils.DAY_IN_MILLIS)
-
-            val datePickerDialog = builder.build()
-            datePickerDialog.addOnPositiveButtonClickListener(MaterialPickerOnPositiveButtonClickListener { selectedDate: Long? ->
-                datePickerResult(
-                    selectedDate!! / DateUtils.DAY_IN_MILLIS
-                )
-            })
-
-            datePickerDialog.show(activity.supportFragmentManager, "date_picker")
-        }
-    }
-
-    class QuickSecondsSinceEpochFormatter(context: Context) {
-        var cachedDateFormat: java.text.DateFormat
-        var cachedTimeFormat: java.text.DateFormat
-
-        init {
-            val wrapper = LocaleContextWrapper(context)
-            cachedDateFormat = DateFormat.getDateFormat(wrapper)
-            cachedTimeFormat = DateFormat.getTimeFormat(wrapper)
-        }
-
-        fun secondsSinceEpochToDateTimeString(timeStamp: Long): String {
-            return secondsSinceEpochToDateTimeString(cachedDateFormat, cachedTimeFormat, timeStamp)
-        }
-    }
 }

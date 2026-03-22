@@ -19,15 +19,24 @@ import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
-class NewReminderStockDialog(
-    val activity: FragmentActivity,
-    val medicine: Medicine,
+class NewReminderStockDialog @AssistedInject constructor(
+    @Assisted val activity: FragmentActivity,
+    @Assisted val medicine: Medicine,
+    @Assisted val reminder: Reminder,
     val medicineRepository: MedicineRepository,
-    val reminder: Reminder
+    val timeEditorFactory: TimeEditor.Factory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderStockDialog
+    }
+
     private val dialog: Dialog = Dialog(activity)
 
     init {
@@ -100,7 +109,7 @@ class NewReminderStockDialog(
 
     private fun setupCreateReminder(
     ) {
-        val timeEditor = TimeEditor(
+        val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
             reminder.timeInMinutes,

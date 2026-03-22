@@ -71,6 +71,15 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
+    @Inject
+    lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
+
+    @Inject
+    lateinit var reminderViewAdapterFactory: ReminderViewAdapter.Factory
+
+    @Inject
+    lateinit var newReminderTypeDialogFactory: NewReminderTypeDialog.Factory
+
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
     private val medicineViewModel: MedicineViewModel by viewModels()
@@ -287,7 +296,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun setupMedicineList(): RecyclerView {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
-        adapter = ReminderViewAdapter(requireActivity())
+        adapter = reminderViewAdapterFactory.create(requireActivity())
         recyclerView.setAdapter(adapter)
         recyclerView.setLayoutManager(LinearLayoutManager(recyclerView.context))
         return recyclerView
@@ -304,7 +313,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun setupAddReminderButton(fullMedicine: FullMedicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { NewReminderTypeDialog(requireActivity(), fullMedicine, this.medicineViewModel.medicineRepository) }
+        fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), fullMedicine) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {
@@ -317,7 +326,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             val reminder = viewModel.medicineRepository.getReminder(itemId.toInt())
             if (reminder != null) {
                 withContext(mainDispatcher) {
-                    LinkedReminderHandling(reminder, viewModel.medicineRepository, lifecycleScope).deleteReminder(requireContext(), { }, {
+                    linkedReminderHandlingFactory.create(reminder, lifecycleScope).deleteReminder(requireContext(), { }, {
                         adapter.notifyItemChanged(adapterPosition)
                     })
                 }
