@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.MedicineRepository
@@ -14,10 +13,9 @@ import java.time.ZoneId
 
 open class ScheduledReminderActions(
     val event: OverviewScheduledReminderEvent,
-    context: Context,
     medicineRepository: MedicineRepository,
     private val fragmentActivity: FragmentActivity
-) : ActionsBase(context, medicineRepository) {
+) : ActionsBase(fragmentActivity, medicineRepository) {
     init {
         visibleButtons.add(Button.TAKEN)
         visibleButtons.add(Button.SKIPPED)

@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.overview.actions
 
-import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
@@ -19,11 +18,10 @@ import java.time.ZoneId
 
 open class ReminderEventActions(
     val event: OverviewReminderEvent,
-    context: Context,
     medicineRepository: MedicineRepository,
     private val fragmentActivity: FragmentActivity
 ) :
-    ActionsBase(context, medicineRepository) {
+    ActionsBase(fragmentActivity, medicineRepository) {
 
     init {
         if (event.state != OverviewState.TAKEN) {
