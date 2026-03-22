@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.reminders
 
-import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
@@ -9,7 +8,6 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,7 +15,6 @@ import javax.inject.Singleton
 
 @Singleton
 class RemoteInputReceiverService @Inject constructor(
-    @param:ApplicationContext private val context: Context,
     private val notificationProcessor: NotificationProcessor,
     private val medicineRepository: MedicineRepository,
     private val reminderContext: ReminderContext,
