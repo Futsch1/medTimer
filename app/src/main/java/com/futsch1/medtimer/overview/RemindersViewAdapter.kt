@@ -4,12 +4,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 
 class RemindersViewAdapter(
     diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
     val fragmentActivity: FragmentActivity,
-    val preferencesDataSource: PreferencesDataSource
+    val preferencesDataSource: PreferencesDataSource,
+    private val actionsFactory: ActionsFactory
 ) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder>(diffCallback),
     ReminderViewHolder.ClickDelegate {
@@ -30,7 +32,7 @@ class RemindersViewAdapter(
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        val holder = ReminderViewHolder.create(parent, fragmentActivity, preferencesDataSource, this)
+        val holder = ReminderViewHolder.create(parent, fragmentActivity, preferencesDataSource, this, actionsFactory)
         holder.contentContainer.setOnLongClickListener {
             clickListener?.onItemLongClick(holder.layoutPosition)
             true

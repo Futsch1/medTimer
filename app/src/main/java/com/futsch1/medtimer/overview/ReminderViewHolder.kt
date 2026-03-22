@@ -16,10 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
-import com.futsch1.medtimer.overview.actions.createActions
+import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.createActionsView
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.color.MaterialColors
 
 
@@ -28,7 +27,8 @@ class ReminderViewHolder(
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
     val preferencesDataSource: PreferencesDataSource,
-    val clickDelegate: ClickDelegate
+    val clickDelegate: ClickDelegate,
+    private val actionsFactory: ActionsFactory
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -46,11 +46,12 @@ class ReminderViewHolder(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
             preferencesDataSource: PreferencesDataSource,
-            clickDelegate: ClickDelegate
+            clickDelegate: ClickDelegate,
+            actionsFactory: ActionsFactory
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, preferencesDataSource, clickDelegate)
+            return ReminderViewHolder(view, parent, fragmentActivity, preferencesDataSource, clickDelegate, actionsFactory)
         }
     }
 
@@ -118,7 +119,7 @@ class ReminderViewHolder(
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val actions = createActions(event, ReminderContext(view.context), fragmentActivity)
+        val actions = actionsFactory.createActions(event)
         val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {

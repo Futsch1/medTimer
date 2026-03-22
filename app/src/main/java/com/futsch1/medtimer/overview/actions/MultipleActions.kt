@@ -1,11 +1,12 @@
 package com.futsch1.medtimer.overview.actions
 
-import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.overview.OverviewEvent
-import com.futsch1.medtimer.reminders.ReminderContext
 
-class MultipleActions(val events: List<OverviewEvent>, reminderContext: ReminderContext, fragmentActivity: FragmentActivity) : Actions {
-    val allActions = events.map { createActions(it, reminderContext, fragmentActivity) }
+class MultipleActions(
+    private val actionsFactory: ActionsFactory,
+    val events: List<OverviewEvent>
+) : Actions {
+    val allActions = events.map { actionsFactory.createActions(it) }
     override suspend fun buttonClicked(button: Button) {
         for (action in allActions) {
             action?.buttonClicked(button)

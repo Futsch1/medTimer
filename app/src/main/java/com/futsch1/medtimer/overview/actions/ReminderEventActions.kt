@@ -1,14 +1,15 @@
 package com.futsch1.medtimer.overview.actions
 
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.launch
@@ -18,10 +19,11 @@ import java.time.ZoneId
 
 open class ReminderEventActions(
     val event: OverviewReminderEvent,
-    val reminderContext: ReminderContext,
-    val fragmentActivity: FragmentActivity
+    context: Context,
+    medicineRepository: MedicineRepository,
+    private val fragmentActivity: FragmentActivity
 ) :
-    ActionsBase(reminderContext.medicineRepository, fragmentActivity) {
+    ActionsBase(context, medicineRepository) {
 
     init {
         if (event.state != OverviewState.TAKEN) {
@@ -64,20 +66,20 @@ open class ReminderEventActions(
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                     reminderEvent.remindedTimestamp = newReminderTime
                     medicineRepository.updateReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(reminderContext.context, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }
             }
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(reminderContext.context, null, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(context, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(context, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 medicineRepository.deleteReminderEvent(reminderEvent)
-                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(reminderContext.context)
+                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
             }
         }, {})
     }
