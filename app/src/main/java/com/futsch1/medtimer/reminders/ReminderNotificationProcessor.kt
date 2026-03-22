@@ -17,9 +17,14 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import java.time.ZoneId
 import java.util.stream.Collectors
+import javax.inject.Inject
 
-class ReminderNotificationProcessor(
-    val reminderContext: ReminderContext
+class ReminderNotificationProcessor @Inject constructor(
+    val reminderContext: ReminderContext,
+    val notifications: Notifications,
+    val notificationProcessor: NotificationProcessor,
+    val repeatProcessor: RepeatProcessor,
+    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor
 ) {
     suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
         // Create reminder events and filter those that are already processed
@@ -35,7 +40,7 @@ class ReminderNotificationProcessor(
         }
 
         val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
-        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder(processedEvents)
+        scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
 
         return true
     }
@@ -43,7 +48,7 @@ class ReminderNotificationProcessor(
     private suspend fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
-                NotificationProcessor(reminderContext).setReminderEventStatus(
+                notificationProcessor.setReminderEventStatus(
                     ReminderEvent.ReminderStatus.TAKEN,
                     listOf(reminderNotificationPart.reminderEvent)
                 )
@@ -62,7 +67,7 @@ class ReminderNotificationProcessor(
 
     private suspend fun notificationAction(reminderNotification: ReminderNotification) {
         if (reminderNotification.reminderNotificationData.notificationId != -1) {
-            NotificationProcessor(reminderContext).cancelNotification(reminderNotification.reminderNotificationData.notificationId)
+            notificationProcessor.cancelNotification(reminderNotification.reminderNotificationData.notificationId)
         }
 
         // Show notifications for all reminders
@@ -70,8 +75,8 @@ class ReminderNotificationProcessor(
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
-        if (remainingRepeats > 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
-            RepeatProcessor(reminderContext).processRepeat(
+        if (remainingRepeats != 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
+            repeatProcessor.processRepeat(
                 reminderNotification.reminderNotificationData,
                 reminderContext.preferencesDataSource.preferences.value.repeatDelay
             )
@@ -80,7 +85,6 @@ class ReminderNotificationProcessor(
 
     private suspend fun showNotification(reminderNotification: ReminderNotification) {
         if (canShowNotifications()) {
-            val notifications = Notifications(reminderContext)
             val notificationId =
                 notifications.showNotification(
                     reminderNotification

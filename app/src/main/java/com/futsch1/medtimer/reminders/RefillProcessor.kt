@@ -9,8 +9,9 @@ import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.util.stream.Collectors
+import javax.inject.Inject
 
-class RefillProcessor(val reminderContext: ReminderContext) {
+class RefillProcessor @Inject constructor(val reminderContext: ReminderContext, val notificationProcessor: NotificationProcessor) {
     private val medicineRepository = reminderContext.medicineRepository
 
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
@@ -28,7 +29,7 @@ class RefillProcessor(val reminderContext: ReminderContext) {
         medicineRepository.insertReminderEvent(refillEvent)
 
         if (reminderEvent != null) {
-            NotificationProcessor(reminderContext).processReminderEventsInNotification(
+            notificationProcessor.processReminderEventsInNotification(
                 ProcessedNotificationData.fromReminderEvents(listOf(reminderEvent)),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )

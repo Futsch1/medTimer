@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import javax.inject.Inject
 
 /**
  * Responsible for triggering the display of a medication reminder notification.
@@ -11,18 +12,20 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
  * specific reminder events is already active to prevent duplicates, and delegates
  * the actual notification scheduling to [AlarmProcessor].
  */
-class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
-    val alarmSetter = AlarmProcessor(reminderContext)
-
+class ShowReminderNotificationProcessor @Inject constructor(
+    val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor,
+    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
+    val notificationProcessor: NotificationProcessor
+) {
     suspend fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {
-            alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
+            alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
         }
 
-        ScheduleNextReminderNotificationProcessor(reminderContext).scheduleNextReminder()
+        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
     private suspend fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
@@ -36,7 +39,7 @@ class ShowReminderNotificationProcessor(val reminderContext: ReminderContext) {
                     LogTags.REMINDER,
                     "Notification nID ${reminderNotificationData.notificationId} found, but reminder was rescheduled"
                 )
-                NotificationProcessor(reminderContext).removeRemindersFromNotification(
+                notificationProcessor.removeRemindersFromNotification(
                     reminderNotificationData.notificationId,
                     reminderNotificationData.reminderEventIds.toList()
                 )

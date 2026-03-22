@@ -20,13 +20,14 @@ import java.time.Instant
 fun variableAmountDialog(
     activity: AppCompatActivity,
     intent: Intent,
+    notificationProcessor: NotificationProcessor,
+    reminderContext: ReminderContext,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
     val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
     activity.lifecycleScope.launch(dispatcher) {
-        val reminderContext = ReminderContext(activity)
         val medicineRepository = MedicineRepository(activity)
         val reminderNotification = ReminderNotification.fromReminderNotificationData(
             reminderContext,
@@ -49,7 +50,7 @@ fun variableAmountDialog(
                     amountLocal?.let {
                         reminderNotificationPart.reminderEvent.amount = it
                         activity.lifecycleScope.launch(dispatcher) {
-                            NotificationProcessor(reminderContext).setReminderEventStatus(
+                            notificationProcessor.setReminderEventStatus(
                                 ReminderEvent.ReminderStatus.TAKEN,
                                 listOf(reminderNotificationPart.reminderEvent)
                             )
@@ -67,7 +68,7 @@ fun variableAmountDialog(
             withContext(mainDispatcher) { dialogHelper.show() }
         }
 
-        NotificationProcessor(reminderContext).setReminderEventStatus(
+        notificationProcessor.setReminderEventStatus(
             ReminderEvent.ReminderStatus.TAKEN,
             reminderEvents,
         )

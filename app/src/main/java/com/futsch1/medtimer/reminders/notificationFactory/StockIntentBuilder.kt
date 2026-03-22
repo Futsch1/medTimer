@@ -14,7 +14,7 @@ class StockIntentBuilder(val reminderContext: ReminderContext, val reminderNotif
     val pendingRefill = getRefillPendingIntent()
 
     private fun getAcknowledgedPendingIntent(): PendingIntent {
-        val notifyAcknowledged = getAcknowledgedActionIntent(reminderContext, processedNotificationData)
+        val notifyAcknowledged = getAcknowledgedActionIntent(reminderContext.context, processedNotificationData)
         return reminderContext.getPendingIntentBroadcast(
             reminderNotification.reminderNotificationData.notificationId,
             notifyAcknowledged,
@@ -23,7 +23,7 @@ class StockIntentBuilder(val reminderContext: ReminderContext, val reminderNotif
     }
 
     private fun getRefillPendingIntent(): PendingIntent {
-        val notifyRefill = getRefillActionIntent(reminderContext, processedNotificationData)
+        val notifyRefill = getRefillActionIntent(reminderContext.context, processedNotificationData)
         return reminderContext.getPendingIntentBroadcast(
             reminderNotification.reminderNotificationData.notificationId,
             notifyRefill,

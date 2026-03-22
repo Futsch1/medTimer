@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicReference
 class ReminderTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
-    
+
     fun activeReminderTest() {
         val futureTime = Calendar.getInstance()
         val year = futureTime.get(Calendar.YEAR)

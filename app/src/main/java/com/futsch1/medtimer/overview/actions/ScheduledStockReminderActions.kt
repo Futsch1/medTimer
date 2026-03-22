@@ -9,7 +9,7 @@ import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 class ScheduledStockReminderActions(
     event: OverviewScheduledReminderEvent,
     medicineRepository: MedicineRepository,
-    fragmentActivity: FragmentActivity
+    private val fragmentActivity: FragmentActivity
 ) : ScheduledReminderActions(event, medicineRepository, fragmentActivity) {
     init {
         visibleButtons.clear()
@@ -31,6 +31,6 @@ class ScheduledStockReminderActions(
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder) {
         val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(context, reminderEvent)
+        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, reminderEvent)
     }
 }

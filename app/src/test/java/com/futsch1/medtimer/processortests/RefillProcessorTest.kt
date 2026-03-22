@@ -3,17 +3,45 @@ package com.futsch1.medtimer.processortests
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.RefillProcessor
+import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.Instant
+import javax.inject.Inject
 import kotlin.test.assertEquals
 
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
 class RefillProcessorTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Before
+    fun init() {
+        hiltRule.inject()
+    }
+
+    val reminderContext = TestReminderContext()
+
+    @BindValue
+    val boundReminderContext: ReminderContext = reminderContext.mock
+
+    @Inject
+    lateinit var refillProcessor: RefillProcessor
+
     @Test
     fun directRefill() {
-        val reminderContext = TestReminderContext()
         reminderContext.instant = Instant.ofEpochSecond(10)
 
         reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
@@ -21,7 +49,7 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.medicines[0].amount = 100.0
 
         runBlocking {
-            RefillProcessor(reminderContext.mock).processRefill(1)
+            refillProcessor.processRefill(1)
         }
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
@@ -33,8 +61,6 @@ class RefillProcessorTest {
 
     @Test
     fun refillViaEvent() {
-        val reminderContext = TestReminderContext()
-
         reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
         reminderContext.medicineRepositoryFake.medicines[0].refillSizes.add(10.0)
         reminderContext.medicineRepositoryFake.medicines[0].amount = 100.0
@@ -42,7 +68,7 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
 
         runBlocking {
-            RefillProcessor(reminderContext.mock).processRefill(ProcessedNotificationData(listOf(1)))
+            refillProcessor.processRefill(ProcessedNotificationData(listOf(1)))
         }
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)

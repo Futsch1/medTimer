@@ -6,18 +6,22 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
 import java.time.Instant
+import javax.inject.Inject
 
 /**
  * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
  */
-class AlarmProcessor(val reminderContext: ReminderContext) {
+class AlarmProcessor @Inject constructor(
+    val reminderContext: ReminderContext
+) {
     private val alarmManager: AlarmManager = reminderContext.alarmManager
     private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
-    suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
         // Apply debug rescheduling
         val originalInstant = scheduledReminderNotificationData.remindInstant
         scheduledReminderNotificationData.remindInstant = adjustTimestamp(reminderContext, originalInstant)
@@ -26,7 +30,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         alarmManager.cancel(
             reminderContext.getPendingIntentBroadcast(
                 0,
-                getReminderAction(reminderContext),
+                getReminderAction(reminderContext.context),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -45,12 +49,13 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
                     scheduledReminderNotificationData
                 )
             )
-            ReminderNotificationProcessor(reminderContext).processReminders(scheduledReminderNotificationData)
+            val reminderIntent = getReminderAction(reminderContext.context)
+            scheduledReminderNotificationData.toIntent(reminderIntent)
+            reminderContext.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
             return
         }
 
         val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
-
         if (canScheduleExactAlarms()) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
         } else {
@@ -71,7 +76,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
     fun cancelNextReminder() {
         // Pending reminders are distinguished by their request code, which is the reminder event id.
         // So if we cancel the reminderEventId 0, we cancel all the next reminder that was not yet raised.
-        val intent = getReminderAction(reminderContext)
+        val intent = getReminderAction(reminderContext.context)
         val pendingIntent = reminderContext.getPendingIntentBroadcast(0, intent, PendingIntent.FLAG_IMMUTABLE)
         alarmManager.cancel(pendingIntent)
     }
@@ -80,7 +85,7 @@ class AlarmProcessor(val reminderContext: ReminderContext) {
         alarmManager.cancel(
             reminderContext.getPendingIntentBroadcast(
                 reminderEventId,
-                getReminderAction(reminderContext),
+                getReminderAction(reminderContext.context),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         )

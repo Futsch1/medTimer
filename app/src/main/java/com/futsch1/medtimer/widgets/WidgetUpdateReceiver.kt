@@ -5,11 +5,21 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WidgetUpdateReceiver : BroadcastReceiver() {
+    @Inject
+    lateinit var nextRemindersWidgetProvider: NextRemindersWidgetProvider
+
+    @Inject
+    lateinit var latestRemindersWidgetProvider: LatestRemindersWidgetProvider
+
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
@@ -23,7 +33,7 @@ class WidgetUpdateReceiver : BroadcastReceiver() {
                     )
                 )
                 performWidgetUpdate(
-                    getNextReminderWidgetImpl(context), appWidgetIdsNextReminders, appWidgetManager
+                    nextRemindersWidgetProvider.getWidgetImpl(context), appWidgetIdsNextReminders, appWidgetManager
                 )
 
                 val appWidgetIdsLatestReminders = appWidgetManager.getAppWidgetIds(
@@ -33,7 +43,7 @@ class WidgetUpdateReceiver : BroadcastReceiver() {
                     )
                 )
                 performWidgetUpdate(
-                    getLatestReminderWidgetImpl(context), appWidgetIdsLatestReminders, appWidgetManager
+                    latestRemindersWidgetProvider.getWidgetImpl(context), appWidgetIdsLatestReminders, appWidgetManager
                 )
             } finally {
                 pendingResult.finish()

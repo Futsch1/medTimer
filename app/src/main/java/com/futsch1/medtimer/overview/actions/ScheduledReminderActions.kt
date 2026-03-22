@@ -15,7 +15,7 @@ open class ScheduledReminderActions(
     val event: OverviewScheduledReminderEvent,
     medicineRepository: MedicineRepository,
     private val fragmentActivity: FragmentActivity
-) : ActionsBase(medicineRepository, fragmentActivity) {
+) : ActionsBase(fragmentActivity, medicineRepository) {
     init {
         visibleButtons.add(Button.TAKEN)
         visibleButtons.add(Button.SKIPPED)

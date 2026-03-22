@@ -16,8 +16,12 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-open class ReminderEventActions(val event: OverviewReminderEvent, medicineRepository: MedicineRepository, val fragmentActivity: FragmentActivity) :
-    ActionsBase(medicineRepository, fragmentActivity) {
+open class ReminderEventActions(
+    val event: OverviewReminderEvent,
+    medicineRepository: MedicineRepository,
+    private val fragmentActivity: FragmentActivity
+) :
+    ActionsBase(fragmentActivity, medicineRepository) {
 
     init {
         if (event.state != OverviewState.TAKEN) {

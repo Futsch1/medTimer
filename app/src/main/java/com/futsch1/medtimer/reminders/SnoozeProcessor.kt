@@ -4,6 +4,7 @@ import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
+import javax.inject.Inject
 
 /**
  * Handles the snooze functionality for reminders.
@@ -13,18 +14,21 @@ import java.time.Instant
 
  * schedules a new alarm for the future.
  */
-open class SnoozeProcessor(val reminderContext: ReminderContext) {
-    val alarmSetter = AlarmProcessor(reminderContext)
+open class SnoozeProcessor @Inject constructor(
+    val reminderContext: ReminderContext,
+    val alarmProcessor: AlarmProcessor,
+    val notificationProcessor: NotificationProcessor
+) {
 
-    suspend fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
-        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
+    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
+        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm
-        alarmSetter.cancelPendingReminderNotifications(reminderNotificationData)
+        alarmProcessor.cancelPendingReminderNotifications(reminderNotificationData)
 
-        alarmSetter.setAlarmForReminderNotification(reminderNotificationData)
+        alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
 
-        NotificationProcessor(reminderContext).cancelNotification(reminderNotificationData.notificationId)
+        notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
     }
 }

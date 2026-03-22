@@ -8,26 +8,34 @@ import com.futsch1.medtimer.overview.OverviewEvent
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import kotlinx.coroutines.CoroutineScope
+import javax.inject.Inject
 
-fun createActions(event: OverviewEvent, fragmentActivity: FragmentActivity): Actions? {
-    val medicineRepository = MedicineRepository(fragmentActivity)
-    return if (event is OverviewReminderEvent) {
-        if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) {
-            StockEventActions(event, medicineRepository, fragmentActivity)
-        } else {
-            ReminderEventActions(event, medicineRepository, fragmentActivity)
+class ActionsFactory @Inject constructor(
+    private val medicineRepository: MedicineRepository,
+    private val fragmentActivity: FragmentActivity
+) {
+    fun createActions(event: OverviewEvent): Actions? {
+        return when (event) {
+            is OverviewReminderEvent if (event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder) -> StockEventActions(
+                event,
+                medicineRepository,
+                fragmentActivity
+            )
+
+            is OverviewReminderEvent -> ReminderEventActions(event, medicineRepository, fragmentActivity)
+            is OverviewScheduledReminderEvent if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) -> ScheduledStockReminderActions(
+                event,
+                medicineRepository,
+                fragmentActivity
+            )
+
+            is OverviewScheduledReminderEvent -> ScheduledReminderActions(event, medicineRepository, fragmentActivity)
+            else -> null
         }
-    } else if (event is OverviewScheduledReminderEvent) {
-        if (event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
-            ScheduledStockReminderActions(event, medicineRepository, fragmentActivity)
-        } else {
-            ScheduledReminderActions(event, medicineRepository, fragmentActivity)
-        }
-    } else {
-        null
     }
 }
 
 fun createActionsView(actions: Actions, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope): Boolean {
     return ActionsView(view, popupWindow, coroutineScope, actions).visible
 }
+

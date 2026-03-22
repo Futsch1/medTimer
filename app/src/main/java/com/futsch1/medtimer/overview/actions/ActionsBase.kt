@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.overview.actions
 
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
@@ -35,11 +34,10 @@ interface Actions {
 }
 
 abstract class ActionsBase(
+    val context: Context,
     val medicineRepository: MedicineRepository,
-    fragmentActivity: FragmentActivity,
     val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : Actions {
-    val context: Context = fragmentActivity
 
     override var visibleButtons: MutableList<Button> = mutableListOf()
 
