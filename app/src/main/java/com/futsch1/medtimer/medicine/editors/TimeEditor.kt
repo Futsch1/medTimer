@@ -4,19 +4,34 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.TimeFormat
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 private const val DEFAULT_TIME = 480
 
-class TimeEditor(
-    private val fragmentActivity: FragmentActivity,
-    private val timeEdit: TextInputEditText,
-    initialTimeMinutesOfDay: Int,
-    val timeChangedCallback: (minutes: Int) -> Unit,
-    private val durationHintText: Int?
+class TimeEditor @AssistedInject constructor(
+    @Assisted private val fragmentActivity: FragmentActivity,
+    @Assisted private val timeEdit: TextInputEditText,
+    @Assisted initialTimeMinutesOfDay: Int,
+    @Assisted val timeChangedCallback: (minutes: Int) -> Unit,
+    @Assisted private val durationHintText: Int?,
+    private val timePickerDialogFactory: TimePickerDialogFactory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            fragmentActivity: FragmentActivity,
+            timeEdit: TextInputEditText,
+            initialTimeMinutesOfDay: Int,
+            timeChangedCallback: (minutes: Int) -> Unit,
+            durationHintText: Int?
+        ): TimeEditor
+    }
+
     init {
         timeEdit.setText(
             if (durationHintText == null)
@@ -45,12 +60,12 @@ class TimeEditor(
         if (startMinutes < 0) {
             startMinutes = DEFAULT_TIME
         }
-        TimePickerWrapper(fragmentActivity, durationHintText!!, TimeFormat.CLOCK_24H)
-            .show(startMinutes / 60, startMinutes % 60) { minutes: Int ->
+        timePickerDialogFactory
+            .create(startMinutes / 60, startMinutes % 60, durationHintText!!, TimeFormat.CLOCK_24H) { minutes: Int ->
                 val selectedTime = TimeHelper.minutesToDurationString(minutes.toLong())
                 timeEdit.setText(selectedTime)
                 timeChangedCallback(minutes)
-            }
+            }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private fun editTime() {
@@ -59,14 +74,14 @@ class TimeEditor(
         if (startMinutes < 0) {
             startMinutes = Reminder.DEFAULT_TIME
         }
-        TimePickerWrapper(fragmentActivity).show(
+        timePickerDialogFactory.create(
             startMinutes / 60, startMinutes % 60
         ) { minutes: Int ->
             val selectedTime =
                 TimeHelper.minutesToTimeString(timeEdit.context, minutes.toLong())
             timeEdit.setText(selectedTime)
             timeChangedCallback(minutes)
-        }
+        }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     fun getMinutes(): Int {

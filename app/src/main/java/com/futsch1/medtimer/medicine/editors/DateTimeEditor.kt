@@ -2,20 +2,35 @@ package com.futsch1.medtimer.medicine.editors
 
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.textfield.TextInputEditText
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 
-class DateTimeEditor(
-    private val fragmentActivity: FragmentActivity,
-    private val dateTimeEdit: TextInputEditText,
-    initialDateTimeSecondsSinceEpoch: Long,
+class DateTimeEditor @AssistedInject constructor(
+    @Assisted private val fragmentActivity: FragmentActivity,
+    @Assisted private val dateTimeEdit: TextInputEditText,
+    @Assisted initialDateTimeSecondsSinceEpoch: Long,
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val datePickerDialogFactory: DatePickerDialogFactory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            fragmentActivity: FragmentActivity,
+            dateTimeEdit: TextInputEditText,
+            initialDateTimeSecondsSinceEpoch: Long
+        ): DateTimeEditor
+    }
+
     init {
         dateTimeEdit.setText(
             TimeHelper.secondsSinceEpochToDateTimeString(
@@ -33,11 +48,9 @@ class DateTimeEditor(
             val startInstant = Instant.ofEpochSecond(getDateTimeSecondsSinceEpoch())
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-            TimeHelper.DatePickerWrapper(fragmentActivity)
-                .show(
-                    dateTime.toLocalDate()
-                ) { selectedDate ->
-                    TimePickerWrapper(fragmentActivity).show(
+            datePickerDialogFactory
+                .create(dateTime.toLocalDate()) { selectedDate ->
+                    timePickerDialogFactory.create(
                         dateTime.hour, dateTime.minute
                     ) { selectedTime ->
                         val selectedLocalDateTime = LocalDateTime.of(
@@ -54,8 +67,8 @@ class DateTimeEditor(
                                 )
                             )
                         )
-                    }
-                }
+                    }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+                }.show(fragmentActivity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
         }
     }
 

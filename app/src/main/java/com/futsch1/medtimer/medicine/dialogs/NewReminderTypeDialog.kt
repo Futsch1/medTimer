@@ -9,14 +9,24 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.google.android.material.button.MaterialButton
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.Instant
 import java.time.LocalDate
 
-class NewReminderTypeDialog(
-    val activity: FragmentActivity,
-    val fullMedicine: FullMedicine,
-    val medicineRepository: MedicineRepository
+class NewReminderTypeDialog @AssistedInject constructor(
+    @Assisted val activity: FragmentActivity,
+    @Assisted val fullMedicine: FullMedicine,
+    val medicineRepository: MedicineRepository,
+    val newReminderDialogFactory: NewReminderDialog.Factory,
+    val newReminderStockDialogFactory: NewReminderStockDialog.Factory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(activity: FragmentActivity, fullMedicine: FullMedicine): NewReminderTypeDialog
+    }
+
     private val dialog: Dialog = Dialog(activity)
 
     private fun continueCreate(reminderType: Reminder.ReminderType) {
@@ -50,9 +60,9 @@ class NewReminderTypeDialog(
         dialog.dismiss()
 
         if (reminder.isOutOfStockOrExpirationReminder) {
-            NewReminderStockDialog(activity, fullMedicine.medicine, medicineRepository, reminder)
+            newReminderStockDialogFactory.create(activity, fullMedicine.medicine, reminder)
         } else {
-            NewReminderDialog(activity, fullMedicine, medicineRepository, reminder)
+            newReminderDialogFactory.create(activity, fullMedicine, reminder)
         }
     }
 

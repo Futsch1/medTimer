@@ -57,6 +57,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     @Inject
     lateinit var actionsFactory: ActionsFactory
 
+    @Inject
+    lateinit var manualDoseFactory: ManualDose.Factory
+
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
     private val medicineViewModel: MedicineViewModel by viewModels()
@@ -172,7 +175,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
             lifecycleScope.launch {
-                ManualDose(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day, persistentDataDataSource).logManualDose()
+                manualDoseFactory.create(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day).logManualDose()
             }
         }
     }

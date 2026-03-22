@@ -22,16 +22,26 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.time.Instant
 
 
-class NewReminderDialog(
-    val activity: FragmentActivity,
-    val fullMedicine: FullMedicine,
+class NewReminderDialog @AssistedInject constructor(
+    @Assisted val activity: FragmentActivity,
+    @Assisted val fullMedicine: FullMedicine,
+    @Assisted val reminder: Reminder,
     val medicineRepository: MedicineRepository,
-    val reminder: Reminder
+    val timeEditorFactory: TimeEditor.Factory,
+    val dateTimeEditorFactory: DateTimeEditor.Factory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(activity: FragmentActivity, fullMedicine: FullMedicine, reminder: Reminder): NewReminderDialog
+    }
+
     private val dialog: Dialog = Dialog(activity)
 
     init {
@@ -98,7 +108,7 @@ class NewReminderDialog(
 
     private fun setupCreateReminder(
     ) {
-        val timeEditor = TimeEditor(
+        val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
             reminder.timeInMinutes,
@@ -113,20 +123,20 @@ class NewReminderDialog(
             if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )
 
-        val intervalStartDateTimeEditor = DateTimeEditor(
+        val intervalStartDateTimeEditor = dateTimeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalStartDateTime),
             Instant.now().epochSecond
         )
 
-        val dailyStartTimeEditor = TimeEditor(
+        val dailyStartTimeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalDailyStartTime),
             reminder.intervalStartTimeOfDay,
             { _ -> },
             null
         )
-        val dailyEndTimeEditor = TimeEditor(
+        val dailyEndTimeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalDailyEndTime),
             reminder.intervalEndTimeOfDay,

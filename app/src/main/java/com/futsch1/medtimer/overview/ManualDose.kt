@@ -9,29 +9,44 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
-class ManualDose(
-    private val context: Context,
-    private val medicineViewModel: MedicineViewModel,
-    private val activity: FragmentActivity,
-    private val date: LocalDate,
+class ManualDose @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted private val medicineViewModel: MedicineViewModel,
+    @Assisted private val activity: FragmentActivity,
+    @Assisted private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            context: Context,
+            medicineViewModel: MedicineViewModel,
+            activity: FragmentActivity,
+            date: LocalDate
+        ): ManualDose
+    }
+
     suspend fun logManualDose() {
         val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
@@ -129,8 +144,7 @@ class ManualDose(
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
         val localDateTime = LocalDateTime.now()
-        val timePicker = TimePickerWrapper(activity)
-        timePicker.show(localDateTime.hour, localDateTime.minute) { minutes: Int ->
+        timePickerDialogFactory.create(localDateTime.hour, localDateTime.minute) { minutes: Int ->
             reminderEvent.remindedTimestamp =
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
@@ -140,14 +154,14 @@ class ManualDose(
             }
 
             if (medicineId == -1) {
-                return@show
+                return@create
             }
 
             val amount = MedicineHelper.parseAmount(reminderEvent.amount)
             if (amount != null) {
                 ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
             }
-        }
+        }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     class ManualDoseEntry {

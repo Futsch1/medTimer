@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -14,8 +15,9 @@ import java.time.ZoneId
 open class ScheduledReminderActions(
     val event: OverviewScheduledReminderEvent,
     medicineRepository: MedicineRepository,
-    private val fragmentActivity: FragmentActivity
-) : ActionsBase(fragmentActivity, medicineRepository) {
+    private val fragmentActivity: FragmentActivity,
+    timePickerDialogFactory: TimePickerDialogFactory
+) : ActionsBase(fragmentActivity, medicineRepository, timePickerDialogFactory) {
     init {
         visibleButtons.add(Button.TAKEN)
         visibleButtons.add(Button.SKIPPED)
@@ -34,8 +36,8 @@ open class ScheduledReminderActions(
     }
 
     protected fun scheduleReminder(scheduledReminder: ScheduledReminder) {
-        TimeHelper.TimePickerWrapper(fragmentActivity)
-            .show(scheduledReminder.reminder.timeInMinutes / 60, scheduledReminder.reminder.timeInMinutes % 60) { minutes ->
+        timePickerDialogFactory
+            .create(scheduledReminder.reminder.timeInMinutes / 60, scheduledReminder.reminder.timeInMinutes % 60) { minutes ->
                 val reminderTimeStamp =
                     TimeHelper.instantFromDateAndMinutes(minutes, scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).epochSecond
                 fragmentActivity.lifecycleScope.launch(ioCoroutineDispatcher) {
@@ -44,7 +46,7 @@ open class ScheduledReminderActions(
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }
-            }
+            }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     // Mark as suspend function as it performs async work and calls other suspend functions (withContext)

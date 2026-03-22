@@ -2,6 +2,7 @@ package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -9,8 +10,9 @@ import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 class ScheduledStockReminderActions(
     event: OverviewScheduledReminderEvent,
     medicineRepository: MedicineRepository,
-    private val fragmentActivity: FragmentActivity
-) : ScheduledReminderActions(event, medicineRepository, fragmentActivity) {
+    private val fragmentActivity: FragmentActivity,
+    timePickerDialogFactory: TimePickerDialogFactory
+) : ScheduledReminderActions(event, medicineRepository, fragmentActivity, timePickerDialogFactory) {
     init {
         visibleButtons.clear()
         visibleButtons.add(Button.ACKNOWLEDGED)

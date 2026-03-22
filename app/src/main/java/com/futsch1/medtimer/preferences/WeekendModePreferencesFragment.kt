@@ -10,8 +10,8 @@ import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.TimeHelper.TimePickerWrapper
 import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
+import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_MODE
@@ -27,6 +27,9 @@ import javax.inject.Inject
 class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var timePickerDialogFactory: TimePickerDialogFactory
 
     private var currentSettings: UserPreferences? = null
 
@@ -70,11 +73,11 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
         if (preference != null) {
             preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
                 val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
-                TimePickerWrapper(requireActivity()).show(weekendTime.hour, weekendTime.minute) { minutes: Int ->
+                timePickerDialogFactory.create(weekendTime.hour, weekendTime.minute) { minutes: Int ->
                     preferencesDataSource.setWeekendTime(LocalTime.of(minutes / 60, minutes % 60))
                     preference1!!.setSummary(minutesToTimeString(requireContext(), minutes.toLong()))
                     requestReschedule()
-                }
+                }.show(parentFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
                 true
             }
         }
