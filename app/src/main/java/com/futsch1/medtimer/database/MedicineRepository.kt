@@ -105,12 +105,16 @@ open class MedicineRepository(
         medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) }
     }
 
-    fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
+    suspend fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
         return medicineDao.insertReminderEvent(reminderEvent)
     }
 
     fun getReminderEvent(reminderEventId: Int): ReminderEvent? {
         return medicineDao.getReminderEvent(reminderEventId)
+    }
+
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?> {
+        return medicineDao.getReminderEventFlow(reminderEventId)
     }
 
     fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
@@ -121,7 +125,7 @@ open class MedicineRepository(
         medicineDao.updateReminderEvent(reminderEvent)
     }
 
-    fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
+    suspend fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
         medicineDao.updateReminderEvents(reminderEvents)
     }
 
@@ -212,7 +216,11 @@ open class MedicineRepository(
         medicineDao.updateMedicine(medicine)
     }
 
-    fun updateMedicines(medicines: List<Medicine>) {
+    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicine? {
+        return medicineDao.decreaseStock(medicineId, decreaseAmount)
+    }
+
+    suspend fun updateMedicines(medicines: List<Medicine>) {
         medicineDao.updateMedicines(medicines)
     }
 

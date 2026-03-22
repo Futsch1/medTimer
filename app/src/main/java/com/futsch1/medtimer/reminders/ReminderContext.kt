@@ -49,8 +49,6 @@ class ReminderContext @Inject constructor(@param:ApplicationContext val context:
         return PendingIntent.getActivity(context, requestCode, intent, flags)
     }
 
-    fun getIntent(action: String? = null): Intent = Intent(action)
-
     fun setIntentClass(intent: Intent, cls: Class<*>) {
         intent.setClass(context, cls)
     }

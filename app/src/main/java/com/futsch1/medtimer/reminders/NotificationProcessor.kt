@@ -54,8 +54,8 @@ class NotificationProcessor @Inject constructor(
     }
 
     suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
-        val notificationId = reminderEvents.firstOrNull()?.notificationId
-        if (notificationId != null && notificationId != -1) {
+        val notificationId = reminderEvents.firstOrNull()?.notificationId ?: return
+        if (notificationId != -1) {
             removeRemindersFromNotification(notificationId, reminderEvents.map { it.reminderEventId })
         }
     }
@@ -80,8 +80,27 @@ class NotificationProcessor @Inject constructor(
         val reminderNotification = ReminderNotification.fromReminderNotificationData(reminderContext, newReminderNotificationData)
         if (reminderNotification != null) {
             notifications.showNotification(reminderNotification, reminderNotificationData.notificationId)
+            rescheduleRepeat(newReminderNotificationData)
         } else {
             cancelNotification(reminderNotificationData.notificationId)
+        }
+    }
+
+    private suspend fun rescheduleRepeat(reminderNotificationData: ReminderNotificationData) {
+        val preferences = reminderContext.preferencesDataSource.preferences.value
+        if (!preferences.repeatReminders) {
+            return
+        }
+
+        val remainingRepeats = reminderContext.medicineRepository
+            .getReminderEvent(reminderNotificationData.reminderEventIds[0])
+            ?.remainingRepeats ?: return
+
+        if (remainingRepeats > 0) {
+            RepeatProcessor(reminderContext).processRepeat(
+                reminderNotificationData,
+                preferences.repeatDelay
+            )
         }
     }
 
@@ -110,21 +129,17 @@ class NotificationProcessor @Inject constructor(
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
         ) {
-            val reminder = reminderContext.medicineRepository.getReminder(reminderEvent.reminderId)
-            if (reminder != null) {
-                var amount: Double? = MedicineHelper.parseAmount(reminderEvent.amount)
-                if (amount != null) {
-                    if (reminderEvent.status == ReminderStatus.SKIPPED) {
-                        amount = -amount
-                    }
-                    reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-                    stockHandlingProcessor.processStock(
-                        amount,
-                        reminder.medicineRelId,
-                        Instant.ofEpochSecond(reminderEvent.processedTimestamp)
-                    )
-                }
+            val reminder = reminderContext.medicineRepository.getReminder(reminderEvent.reminderId) ?: return
+            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
+            if (reminderEvent.status == ReminderStatus.SKIPPED) {
+                amount = -amount
             }
+            reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
+                    stockHandlingProcessor.processStock(
+                amount,
+                reminder.medicineRelId,
+                Instant.ofEpochSecond(reminderEvent.processedTimestamp)
+            )
         }
     }
 }

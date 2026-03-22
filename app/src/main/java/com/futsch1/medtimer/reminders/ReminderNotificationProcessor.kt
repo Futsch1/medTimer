@@ -27,27 +27,23 @@ class ReminderNotificationProcessor @Inject constructor(
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor
 ) {
     suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
-        var r = false
-
         // Create reminder events and filter those that are already processed
-        var reminderNotification =
-            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed()
+        val reminderNotification =
+            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed() ?: return false
 
-        if (reminderNotification != null) {
-            reminderNotification = handleAutomaticallyTaken(reminderNotification)
-            if (reminderNotification.reminderNotificationParts.isEmpty()) {
-                Log.d(LogTags.REMINDER, "No reminders left to process in $reminderNotification")
-            } else {
-                Log.d(LogTags.REMINDER, "Processing reminder notification $reminderNotification")
-                notificationAction(reminderNotification)
-            }
-            r = true
+        val nonTakenReminderNotification = handleAutomaticallyTaken(reminderNotification)
+        if (nonTakenReminderNotification.reminderNotificationParts.isEmpty()) {
+            Log.d(LogTags.REMINDER, "No reminders left to process in $nonTakenReminderNotification")
+        } else {
+            Log.d(LogTags.REMINDER, "Processing reminder notification $nonTakenReminderNotification")
+            notificationAction(nonTakenReminderNotification)
+        }
 
-            val processedEvents = reminderNotification.reminderNotificationParts.map { it.reminderEvent }
+            val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
             scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
         }
 
-        return r
+        return true
     }
 
     private suspend fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {

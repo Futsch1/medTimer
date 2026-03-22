@@ -20,8 +20,8 @@ open class SnoozeProcessor @Inject constructor(
     val notificationProcessor: NotificationProcessor
 ) {
 
-    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Int) {
-        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60L)
+    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
+        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm

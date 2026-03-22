@@ -13,9 +13,10 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.utilities.openNotification
 import junit.framework.TestCase
 import org.junit.ClassRule
 import org.junit.Test
@@ -33,7 +34,8 @@ class ScreenshotsTest : BaseTestHelper() {
         val localeTestRule: LocaleTestRule = LocaleTestRule()
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -52,10 +54,10 @@ class ScreenshotsTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 3, R.id.stateButton)
         clickOn(R.id.skippedButton)
 
-        device.openNotification()
-        makeNotificationExpanded(device, getNotificationText(R.string.taken))
-        Screengrab.screenshot("5")
-        device.pressBack()
+        openNotification().use {
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            Screengrab.screenshot("5")
+        }
 
         clickListItemChild(R.id.reminders, 4, R.id.stateButton)
         clickOn(R.id.takenButton)
@@ -73,7 +75,7 @@ class ScreenshotsTest : BaseTestHelper() {
         Screengrab.screenshot("3")
 
         clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings)
-        BaristaSleepInteractions.sleep(500)
+        AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("4")
 
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)

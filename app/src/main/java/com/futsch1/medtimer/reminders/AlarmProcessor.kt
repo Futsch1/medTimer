@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
@@ -39,26 +40,8 @@ class AlarmProcessor @Inject constructor(
             }
         }
 
-        // If the alarm is in the future, schedule with alarm manager
-        if (scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
-            val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
-            if (canScheduleExactAlarms()) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-            } else {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-            }
-
-            Log.i(
-                LogTags.REMINDER,
-                String.format(
-                    "Set alarm for reminder notification: %s",
-                    scheduledReminderNotificationData
-                )
-            )
-
-            updateNextReminderWidget()
-        } else {
-            // Immediately remind
+        // Immediately remind if the alarm is not in the future
+        if (!scheduledReminderNotificationData.remindInstant.isAfter(reminderContext.timeAccess.now())) {
             Log.i(
                 LogTags.REMINDER,
                 String.format(
@@ -69,7 +52,25 @@ class AlarmProcessor @Inject constructor(
             val reminderIntent = getReminderAction(reminderContext)
             scheduledReminderNotificationData.toIntent(reminderIntent)
             reminderContext.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
+            return
         }
+
+        val pendingIntent = scheduledReminderNotificationData.getPendingIntent(reminderContext)
+        if (canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
+        } else {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
+        }
+
+        Log.i(
+            LogTags.REMINDER,
+            String.format(
+                "Set alarm for reminder notification: %s",
+                scheduledReminderNotificationData
+            )
+        )
+
+        updateNextReminderWidget()
     }
 
     fun cancelNextReminder() {
@@ -99,14 +100,14 @@ class AlarmProcessor @Inject constructor(
 
     private fun canScheduleExactAlarms(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            exactReminders && (reminderContext.sdkInt >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())
+            exactReminders && alarmManager.canScheduleExactAlarms()
         } else {
             exactReminders
         }
     }
 
     private fun updateNextReminderWidget() {
-        val intent = reminderContext.getIntent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
+        val intent = Intent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
         reminderContext.setIntentClass(intent, WidgetUpdateReceiver::class.java)
         reminderContext.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
     }

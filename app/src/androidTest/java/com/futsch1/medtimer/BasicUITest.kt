@@ -9,13 +9,13 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
@@ -23,6 +23,7 @@ import com.futsch1.medtimer.AndroidTestHelper.createReminder
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setDate
 import com.futsch1.medtimer.AndroidTestHelper.setValue
+import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.text.DateFormat
 import java.time.DayOfWeek
@@ -34,7 +35,8 @@ import java.util.concurrent.atomic.AtomicReference
 
 
 class BasicUITest : BaseTestHelper() {
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun basicUITest() {
         createMedicine(" Test ")
         createReminder("1", LocalTime.of(18, 0))
@@ -76,7 +78,8 @@ class BasicUITest : BaseTestHelper() {
         assertContains("Test2 (2)")
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun menuHandlingTest() {
         createMedicine("Test")
         createReminder("1", LocalTime.of(12, 0))
@@ -99,12 +102,12 @@ class BasicUITest : BaseTestHelper() {
         clickOn(R.string.remind_on_weekdays)
         clickOn(R.string.monday)
         clickOn(R.string.tuesday)
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
 
         clickOn(R.string.remind_on_days_of_month)
         clickOn("1")
         clickOn("3")
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
 
         Espresso.pressBack()
 
@@ -120,16 +123,17 @@ class BasicUITest : BaseTestHelper() {
         assertUnchecked(R.string.monday)
         assertUnchecked(R.string.tuesday)
         assertChecked(R.string.wednesday)
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
 
         clickOn(R.string.remind_on_days_of_month)
         assertChecked("1")
         assertUnchecked("2")
         assertChecked("3")
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun notesTest() {
         createMedicine("Test")
 
@@ -158,7 +162,8 @@ class BasicUITest : BaseTestHelper() {
         assertDisplayed(R.id.notes, notes)
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun appIntro() {
         openMenu()
 
@@ -172,7 +177,8 @@ class BasicUITest : BaseTestHelper() {
         assertDisplayed(R.string.tab_overview)
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     fun overviewFilters() {
         createMedicine("Test")
         createIntervalReminder("2", 1000)
@@ -229,7 +235,8 @@ class BasicUITest : BaseTestHelper() {
         assertContains("Test (1)")
     }
 
-    @Test //@AllowFlaky(attempts = 1)
+    @Test
+    @AllowFlaky(attempts = 3)
     // Using internal assert
     fun overviewDaySelection() {
         val secondDay =

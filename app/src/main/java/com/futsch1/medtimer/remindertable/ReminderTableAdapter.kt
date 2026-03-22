@@ -3,29 +3,20 @@ package com.futsch1.medtimer.remindertable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.FragmentManager
 import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.TimeHelper.QuickSecondsSinceEpochFormatter
-import com.futsch1.medtimer.overview.EditEventSheetDialog
+import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ReminderTableAdapter(
     private val tableView: TableView,
-    private val medicineViewModel: MedicineViewModel,
-    private val activity: FragmentActivity,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val fragmentManager: FragmentManager
 ) : AbstractTableAdapter<String?, ReminderTableCellModel?, ReminderTableCellModel?>() {
     override fun onCreateCellViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
         return getTextCellViewHolder(parent)
@@ -48,11 +39,8 @@ class ReminderTableAdapter(
         viewHolder.textView.tag = cellItemModel.viewTag
         viewHolder.setupEditButton(if (columnPosition == 1) object : OnEditClickListener {
             override fun onEditClick() {
-                activity.lifecycleScope.launch {
-                    navigateToEditEvent(
-                        cellItemModel.idAsInt.toLong()
-                    )
-                }
+                EditEventSheetDialogFragment.newInstance(cellItemModel.idAsInt)
+                    .show(fragmentManager, "EditEventDialog")
             }
         } else null)
     }
@@ -85,17 +73,6 @@ class ReminderTableAdapter(
         i: Int
     ) {
         onBindCellViewHolder(abstractViewHolder, s, i, i)
-    }
-
-    private suspend fun navigateToEditEvent(eventId: Long) {
-        val reminderEvent = withContext(ioDispatcher) {
-            medicineViewModel.medicineRepository.getReminderEvent(eventId.toInt())
-        }
-        if (reminderEvent != null) {
-            withContext(mainDispatcher) {
-                EditEventSheetDialog(activity, reminderEvent)
-            }
-        }
     }
 
     override fun onCreateCornerView(viewGroup: ViewGroup): View {

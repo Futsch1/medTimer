@@ -70,7 +70,7 @@ abstract class NotificationFactory(
     }
 
     fun getStartAppIntent(): PendingIntent {
-        val startApp = reminderContext.getIntent()
+        val startApp = Intent()
         reminderContext.setIntentClass(startApp, MainActivity::class.java)
         startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         return reminderContext.getPendingIntentActivity(

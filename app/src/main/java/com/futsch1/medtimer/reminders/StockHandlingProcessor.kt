@@ -22,21 +22,9 @@ class StockHandlingProcessor @Inject constructor(
     val medicineRepository = reminderContext.medicineRepository
 
     suspend fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
-        val medicine = medicineRepository.getMedicine(medicineId) ?: return
-
-        processStock(medicine, amount, processedInstant)
-    }
-
-    private suspend fun processStock(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
-        val medicine = fullMedicine.medicine
-        medicine.amount -= decreaseAmount
-        if (medicine.amount < 0) {
-            medicine.amount = 0.0
-        }
-        medicineRepository.updateMedicine(medicine)
-
-        checkForThreshold(fullMedicine, decreaseAmount, processedInstant)
-        Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $decreaseAmount resulting in ${medicine.amount}.")
+        val fullMedicine = medicineRepository.decreaseStock(medicineId, amount) ?: return
+        Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${fullMedicine.medicine.name} by $amount resulting in ${fullMedicine.medicine.amount}.")
+        checkForThreshold(fullMedicine, amount, processedInstant)
     }
 
     private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {

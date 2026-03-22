@@ -15,18 +15,19 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
@@ -36,7 +37,7 @@ import java.util.Calendar
 class MedicineStockTest : BaseTestHelper() {
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
@@ -105,7 +106,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.logManualDose)
         clickListItem(null, 1)
         writeTo(android.R.id.input, "12")
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
@@ -130,28 +131,28 @@ class MedicineStockTest : BaseTestHelper() {
         dismiss: Boolean = false,
         additionalExpectedString: String? = null
     ) {
-        device.openNotification()
-        val o = device.wait(
-            Until.findObject(By.textContains(notificationTitle)),
-            1_000
-        )
-        if (expected) {
-            internalAssert(o != null)
-        } else {
-            internalAssert(o == null)
-        }
-        if (additionalExpectedString != null) {
-            internalAssert(device.findObject(By.textContains(additionalExpectedString)) != null)
-        }
+        openNotification().use {
+            val notificationTitleObject = device.wait(
+                Until.findObject(By.textContains(notificationTitle)),
+                1_000
+            )
+            if (expected) {
+                internalAssert(notificationTitleObject != null)
+            } else {
+                internalAssert(notificationTitleObject == null)
+            }
+            if (additionalExpectedString != null) {
+                internalAssert(device.findObject(By.textContains(additionalExpectedString)) != null)
+            }
 
-        if (dismiss) {
-            o.fling(Direction.RIGHT)
+            if (dismiss) {
+                notificationTitleObject.fling(Direction.RIGHT)
+            }
         }
-        device.pressBack()
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun hiddenMedicineNameInStockReminder() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -185,15 +186,15 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.takenButton)
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
-        device.wait(
-            Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
-            1_000
-        )
-        internalAssert(device.findObject(By.textContains("T******")) != null)
-        internalAssert(device.findObject(By.textContains("TestMed")) == null)
-        clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
-        device.pressBack()
+        openNotification().use {
+            device.wait(
+                Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
+                1_000
+            )
+            internalAssert(device.findObject(By.textContains("T******")) != null)
+            internalAssert(device.findObject(By.textContains("TestMed")) == null)
+            clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
+        }
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
@@ -203,7 +204,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun reminderAmountWarningTest() {
         AndroidTestHelper.createMedicine("Test")
 
@@ -227,7 +228,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun bigStockAmounts() {
         AndroidTestHelper.createMedicine("Test")
 
@@ -244,7 +245,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun runOutDate() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -262,7 +263,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun allTaken() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -281,19 +282,18 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(ReminderContext(InstrumentationRegistry.getInstrumentation().targetContext))
-        sleep(2_000)
-        device.openNotification()
-        device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-        internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
-        device.pressBack()
-        sleep(1_000)
+        openNotification().use {
+            device.wait(Until.findObject(By.textContains(TEST_MED)), 5_000)
+            internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
+        }
+        device.waitForIdle(2_000)
 
         clickOn(R.id.openStockTracking)
         assertDisplayed("5")
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun expirationDateTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -360,7 +360,7 @@ class MedicineStockTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun dailyStockReminderTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext

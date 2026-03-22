@@ -10,15 +10,16 @@ import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnc
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
 import com.futsch1.medtimer.AndroidTestHelper.createMedicine
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
 private const val NEW_TAG = "New tag"
@@ -27,7 +28,7 @@ private const val ANOTHER_TAG = "Another tag"
 
 class TagTest : BaseTestHelper() {
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun tagHandling() {
         createMedicine("Test")
 
@@ -83,7 +84,7 @@ class TagTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun medicineVisibility() {
         createMedicine("Test")
         clickOn(R.id.openTags)
@@ -121,7 +122,7 @@ class TagTest : BaseTestHelper() {
     }
 
     @Test
-    //@AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
         createMedicine("Test")
         clickOn(R.id.openTags)

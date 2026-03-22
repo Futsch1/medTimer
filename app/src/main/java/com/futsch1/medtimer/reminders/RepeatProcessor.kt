@@ -13,8 +13,8 @@ import kotlin.time.Duration
  *
  */
 class RepeatProcessor @Inject constructor(val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor) {
-    suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatTimeSeconds: Duration) {
-        reminderNotificationData.remindInstant = reminderContext.timeAccess.now().plusSeconds(repeatTimeSeconds.inWholeSeconds)
+    suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatDelay: Duration) {
+        reminderNotificationData.remindInstant = reminderContext.timeAccess.now().plusSeconds(repeatDelay.inWholeSeconds)
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
         alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
