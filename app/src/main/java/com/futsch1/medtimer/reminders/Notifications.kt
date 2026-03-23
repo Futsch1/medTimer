@@ -17,7 +17,10 @@ import javax.inject.Inject
  * @property context The application context used to access system services and shared preferences.
  */
 @SuppressLint("DefaultLocale")
-class Notifications @Inject constructor(val reminderContext: ReminderContext) {
+class Notifications @Inject constructor(
+    val reminderContext: ReminderContext,
+    private val notificationSoundManager: NotificationSoundManager
+) {
     fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
         var notificationId = notificationId
         if (notificationId == -1) {
@@ -45,10 +48,8 @@ class Notifications @Inject constructor(val reminderContext: ReminderContext) {
         }
 
     private fun notify(notificationId: Int, notification: android.app.Notification) {
-        val soundManager = NotificationSoundManager(reminderContext)
-
         reminderContext.notificationManager.notify(notificationId, notification)
 
-        soundManager.restore()
+        notificationSoundManager.restore()
     }
 }

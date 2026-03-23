@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
@@ -135,7 +134,6 @@ class TestReminderContext {
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock()
-    val audioManagerMock: AudioManager = mock()
     val preferencesDataSourceMock: PreferencesDataSource = mock()
     val persistentDataDataSourceMock: PersistentDataDataSource = mock()
 
@@ -162,7 +160,6 @@ class TestReminderContext {
             override fun localDate(): LocalDate = localDate
             override fun now(): Instant = instant
         })
-        `when`(mock.audioManager).thenReturn(audioManagerMock)
         `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
         `when`(mock.icons).thenReturn(mock<MedicineIcons>())
         `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
