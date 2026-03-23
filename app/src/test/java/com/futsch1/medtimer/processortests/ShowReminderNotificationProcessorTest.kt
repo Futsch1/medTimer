@@ -1,10 +1,15 @@
 package com.futsch1.medtimer.processortests
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.media.AudioManager
+import com.futsch1.medtimer.di.SystemServicesModule
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -13,6 +18,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -21,6 +27,7 @@ import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 @HiltAndroidTest
+@UninstallModules(SystemServicesModule::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class ShowReminderNotificationProcessorTest {
@@ -36,6 +43,15 @@ class ShowReminderNotificationProcessorTest {
 
     @BindValue
     val boundReminderContext: ReminderContext = reminderContext.mock
+
+    @BindValue
+    val boundAlarmManager: AlarmManager = reminderContext.alarmManagerMock
+
+    @BindValue
+    val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
+
+    @BindValue
+    val boundAudioManager: AudioManager = mock()
 
     @Inject
     lateinit var showReminderNotificationProcessor: ShowReminderNotificationProcessor

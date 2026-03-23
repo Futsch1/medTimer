@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders
 
+import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -13,9 +14,11 @@ import javax.inject.Inject
  * the actual notification scheduling to [AlarmProcessor].
  */
 class ShowReminderNotificationProcessor @Inject constructor(
-    val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor,
+    val reminderContext: ReminderContext,
+    val alarmProcessor: AlarmProcessor,
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
-    val notificationProcessor: NotificationProcessor
+    val notificationProcessor: NotificationProcessor,
+    private val notificationManager: NotificationManager
 ) {
     suspend fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
@@ -57,7 +60,6 @@ class ShowReminderNotificationProcessor @Inject constructor(
     }
 
     private fun getNotificationData(notificationId: Int): ReminderNotificationData? {
-        val notificationManager = reminderContext.notificationManager
         for (notification in notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
                 return ReminderNotificationData.fromBundle(notification.notification.extras)

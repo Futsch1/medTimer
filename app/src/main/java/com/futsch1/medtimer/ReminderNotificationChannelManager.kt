@@ -5,9 +5,8 @@ import com.futsch1.medtimer.reminders.ReminderContext
 
 class ReminderNotificationChannelManager {
     companion object {
-        fun initialize(reminderContext: ReminderContext) {
+        fun initialize(reminderContext: ReminderContext, notificationManager: NotificationManager) {
             // Clean up previous notification settings
-            val notificationManager: NotificationManager = reminderContext.notificationManager
             var channelId = 1
             while (true) {
                 val channel = notificationManager.getNotificationChannel(
@@ -22,23 +21,26 @@ class ReminderNotificationChannelManager {
                 channelId++
             }
 
-            createChannel(reminderContext, Importance.DEFAULT)
-            createChannel(reminderContext, Importance.HIGH)
+            createChannel(reminderContext, notificationManager, Importance.DEFAULT)
+            createChannel(reminderContext, notificationManager, Importance.HIGH)
         }
 
         fun getNotificationChannel(
             reminderContext: ReminderContext,
+            notificationManager: NotificationManager,
             importance: Importance
         ): ReminderNotificationChannel {
-            return createChannel(reminderContext, importance)
+            return createChannel(reminderContext, notificationManager, importance)
         }
 
         private fun createChannel(
             reminderContext: ReminderContext,
+            notificationManager: NotificationManager,
             importance: Importance
         ): ReminderNotificationChannel {
             val channel = ReminderNotificationChannel(
                 reminderContext,
+                notificationManager,
                 importance.value,
                 if (importance == Importance.HIGH) R.string.high else R.string.default_
             )

@@ -8,8 +8,8 @@ import android.content.res.Resources
 import android.os.LocaleList
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import com.futsch1.medtimer.di.DataSourcesEntryPoint
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.DataSourcesEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import java.text.ParseException
 import java.time.DateTimeException

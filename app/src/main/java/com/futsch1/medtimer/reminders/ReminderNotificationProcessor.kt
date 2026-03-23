@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
@@ -15,11 +16,13 @@ import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.ZoneId
 import java.util.stream.Collectors
 import javax.inject.Inject
 
 class ReminderNotificationProcessor @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     val reminderContext: ReminderContext,
     val notifications: Notifications,
     val notificationProcessor: NotificationProcessor,
@@ -98,7 +101,7 @@ class ReminderNotificationProcessor @Inject constructor(
     }
 
     private fun canShowNotifications(): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || reminderContext.hasPermission(Manifest.permission.POST_NOTIFICATIONS)
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {

@@ -16,9 +16,9 @@ import javax.inject.Inject
  * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
  */
 class AlarmProcessor @Inject constructor(
-    val reminderContext: ReminderContext
+    private val reminderContext: ReminderContext,
+    private val alarmManager: AlarmManager
 ) {
-    private val alarmManager: AlarmManager = reminderContext.alarmManager
     private val exactReminders: Boolean = reminderContext.preferencesDataSource.preferences.value.exactReminders
 
     fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {

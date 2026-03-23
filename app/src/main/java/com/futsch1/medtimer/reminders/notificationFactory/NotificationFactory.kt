@@ -1,13 +1,14 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.MainActivity
-import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.getNotificationChannel
+import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.reminders.ReminderContext
@@ -20,13 +21,14 @@ import kotlin.time.Instant
 abstract class NotificationFactory(
     val reminderContext: ReminderContext,
     val notificationId: Int,
-    medicines: List<Medicine>
+    medicines: List<Medicine>,
+    notificationManager: NotificationManager
 ) {
     val builder: NotificationCompat.Builder
 
     init {
         val importance = getHighestImportance(medicines)
-        val notificationChannelId = getNotificationChannel(reminderContext, importance).id
+        val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(reminderContext, notificationManager, importance).id
         builder = reminderContext.getNotificationBuilder(notificationChannelId)
 
         val color = getColor(medicines)

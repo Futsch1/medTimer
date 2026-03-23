@@ -3,11 +3,13 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.media.AudioManager
 import android.os.Build
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Manages notification sound settings and "Do Not Disturb" overrides for reminders.
@@ -16,12 +18,12 @@ import kotlinx.coroutines.launch
  * policy to ensure that medication reminders are audible. It tracks the original state of the
  * audio settings and restores them after a brief delay once the reminder has been triggered.
  */
-class NotificationSoundManager(reminderContext: ReminderContext) {
-    private val notificationManager: NotificationManager =
-        reminderContext.notificationManager
-    private val audioManager: AudioManager =
-        reminderContext.audioManager
-    private val overrideDnd = reminderContext.preferencesDataSource.preferences.value.overrideDnd
+class NotificationSoundManager @Inject constructor(
+    private val audioManager: AudioManager,
+    private val notificationManager: NotificationManager,
+    preferencesDataSource: PreferencesDataSource
+) {
+    private val overrideDnd = preferencesDataSource.preferences.value.overrideDnd
 
     init {
         if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd

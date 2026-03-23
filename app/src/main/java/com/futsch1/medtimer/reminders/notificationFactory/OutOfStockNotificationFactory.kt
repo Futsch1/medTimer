@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.Notification
+import android.app.NotificationManager
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -8,11 +9,17 @@ import com.futsch1.medtimer.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class OutOfStockNotificationFactory(reminderContext: ReminderContext, val reminderNotification: ReminderNotification) :
+class OutOfStockNotificationFactory(
+    reminderContext: ReminderContext,
+    val reminderNotification: ReminderNotification,
+    notificationManager: NotificationManager
+) :
     NotificationFactory(
         reminderContext,
         reminderNotification.reminderNotificationData.notificationId,
-        reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
+        reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
+        notificationManager
+    ) {
 
     init {
         val contentIntent = getStartAppIntent()

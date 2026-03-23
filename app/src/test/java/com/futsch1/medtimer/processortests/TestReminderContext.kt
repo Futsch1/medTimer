@@ -6,8 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
@@ -135,7 +133,6 @@ class TestReminderContext {
     val medicineRepositoryFake = MedicineRepositoryFake()
     val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock()
-    val audioManagerMock: AudioManager = mock()
     val preferencesDataSourceMock: PreferencesDataSource = mock()
     val persistentDataDataSourceMock: PersistentDataDataSource = mock()
 
@@ -151,8 +148,6 @@ class TestReminderContext {
 
     init {
         `when`(mock.context).thenReturn(contextMock)
-        `when`(mock.alarmManager).thenReturn(alarmManagerMock)
-        `when`(mock.notificationManager).thenReturn(notificationManagerFake.mock)
         `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
         `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
         `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] }
@@ -162,8 +157,6 @@ class TestReminderContext {
             override fun localDate(): LocalDate = localDate
             override fun now(): Instant = instant
         })
-        `when`(mock.audioManager).thenReturn(audioManagerMock)
-        `when`(mock.sdkInt).thenReturn(Build.VERSION_CODES.S)
         `when`(mock.icons).thenReturn(mock<MedicineIcons>())
         `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
         `when`(mock.persistentDataDataSource).thenReturn(persistentDataDataSourceMock)
