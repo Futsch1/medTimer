@@ -16,7 +16,7 @@ class BigReminderNotificationFactory(
     reminderNotification,
     notificationManager
 ) {
-    val views: RemoteViews = RemoteViews(reminderContext.packageName, R.layout.notification)
+    val views: RemoteViews = RemoteViews(reminderContext.context.packageName, R.layout.notification)
 
     override fun build() {
         views.setTextViewText(

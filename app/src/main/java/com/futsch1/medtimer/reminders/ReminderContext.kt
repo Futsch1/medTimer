@@ -4,8 +4,6 @@ import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.text.SpannableStringBuilder
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.database.MedicineRepository
@@ -26,13 +24,11 @@ class ReminderContext @Inject constructor(
     val persistentDataDataSource: PersistentDataDataSource
 ) {
     val icons = MedicineIcons(context)
-    val packageName: String = context.packageName
     val timeAccess = object : TimeAccess {
         override fun systemZone(): ZoneId = ZoneId.systemDefault()
         override fun localDate(): LocalDate = LocalDate.now(systemZone())
         override fun now(): Instant = Instant.now()
     }
-    val sdkInt = Build.VERSION.SDK_INT
 
     fun getPendingIntentBroadcast(requestCode: Int, intent: Intent, flags: Int): PendingIntent {
         return PendingIntent.getBroadcast(context, requestCode, intent, flags)
@@ -51,8 +47,6 @@ class ReminderContext @Inject constructor(
     }
 
     fun buildNotificationChannel(id: String, name: CharSequence, importance: Int): NotificationChannel = NotificationChannel(id, name, importance)
-
-    fun hasPermission(permission: String): Boolean = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
     fun getString(id: Int, vararg formatArgs: Any): String = context.getString(id, *formatArgs)
 
