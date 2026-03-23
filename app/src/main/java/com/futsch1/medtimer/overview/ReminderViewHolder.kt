@@ -18,7 +18,6 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.createActionsView
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.color.MaterialColors
 
 
@@ -26,11 +25,9 @@ class ReminderViewHolder(
     itemView: View,
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
-    val preferencesDataSource: PreferencesDataSource,
     val clickDelegate: ClickDelegate,
     private val actionsFactory: ActionsFactory
-) :
-    RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
     val reminderIcon: ImageView = itemView.findViewById(R.id.reminderIcon)
@@ -45,13 +42,12 @@ class ReminderViewHolder(
         fun create(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
-            preferencesDataSource: PreferencesDataSource,
             clickDelegate: ClickDelegate,
             actionsFactory: ActionsFactory
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, preferencesDataSource, clickDelegate, actionsFactory)
+            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, actionsFactory)
         }
     }
 
@@ -100,7 +96,8 @@ class ReminderViewHolder(
                         (event as OverviewReminderEvent).reminderEvent.reminderEventId
                     ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")
                 } else {
-                    ShowMedicineSheetDialog(fragmentActivity, preferencesDataSource, event.reminderId)
+                    ShowMedicineSheetDialogFragment.newInstance(event.reminderId)
+                        .show(fragmentActivity.supportFragmentManager, "ShowMedicineDialog")
                 }
             }
         }
