@@ -5,7 +5,8 @@ import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument
@@ -16,13 +17,19 @@ import java.io.File
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: FragmentManager, val context: Context) : Export(fragmentManager) {
+class PDFMedicineExport(
+    val medicines: List<FullMedicine>,
+    fragmentManager: FragmentManager,
+    val context: Context,
+    private val timeFormatter: TimeFormatter,
+    private val reminderSummaryFormatter: ReminderSummaryFormatter
+) : Export(fragmentManager) {
     @OptIn(ExperimentalTime::class)
     override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
         simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
-        simplyPdfDocument.text.write(TimeHelper.secondsSinceEpochToDateTimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(timeFormatter.secondsSinceEpochToDateTimeString(Clock.System.now().epochSeconds) + "\n", standardTextProperties)
 
         for (medicine in medicines) {
             val activeReminders = getActiveReminders(medicine)
@@ -47,7 +54,7 @@ class PDFMedicineExport(val medicines: List<FullMedicine>, fragmentManager: Frag
             }
             val firstLine =
                 context.getString(R.string.dosage) + ": " + if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount
-            val secondLine = getExportReminderSummary(context, reminder)
+            val secondLine = reminderSummaryFormatter.formatExportReminderSummary(reminder)
 
             simplyPdfDocument.text.write(firstLine + "\n" + secondLine, bulletTextProperties)
         }

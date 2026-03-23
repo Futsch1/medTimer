@@ -6,23 +6,30 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
-import com.futsch1.medtimer.medicine.MedicineViewHolder.Companion.create
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Collections
 
 
-class MedicineViewAdapter(
-    private val activity: FragmentActivity,
+class MedicineViewAdapter @AssistedInject constructor(
+    @Assisted private val activity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
-    private val preferencesDataSource: PreferencesDataSource,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val medicineViewHolderFactory: MedicineViewHolder.Factory,
+    @param:Dispatcher(MedTimerDispatchers.IO) val dispatcher: CoroutineDispatcher
 ) :
     IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(activity: FragmentActivity): MedicineViewAdapter
+    }
 
     init {
         setHasStableIds(true)
@@ -30,7 +37,7 @@ class MedicineViewAdapter(
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
-        return create(parent, activity, preferencesDataSource)
+        return medicineViewHolderFactory.create(parent, activity)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -70,4 +77,3 @@ class MedicineViewAdapter(
         }
     }
 }
-

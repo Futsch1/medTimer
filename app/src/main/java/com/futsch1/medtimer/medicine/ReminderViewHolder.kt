@@ -16,27 +16,37 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Reminder.ReminderType
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.AmountTextWatcher
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.helpers.reminderSummary
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ReminderViewHolder private constructor(
-    itemView: View,
-    private val fragmentActivity: FragmentActivity,
+class ReminderViewHolder @AssistedInject constructor(
+    @Assisted parent: ViewGroup,
+    @Assisted private val fragmentActivity: FragmentActivity,
     private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
     private val timePickerDialogFactory: TimePickerDialogFactory,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) :
-    RecyclerView.ViewHolder(itemView) {
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
+) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_reminder, parent, false)) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(parent: ViewGroup, fragmentActivity: FragmentActivity): ReminderViewHolder
+    }
+
     private val editTime: TextInputEditText = itemView.findViewById(R.id.editReminderTime)
     private val editAmount: TextInputEditText = itemView.findViewById(R.id.editAmount)
     private val advancedSettings: MaterialButton = itemView.findViewById(R.id.openAdvancedSettings)
@@ -62,7 +72,7 @@ class ReminderViewHolder private constructor(
         }
 
         fragmentActivity.lifecycleScope.launch(dispatcher) {
-            val summary = reminderSummary(reminder, itemView.context)
+            val summary = reminderSummaryFormatter.formatReminderSummary(reminder)
             withContext(mainDispatcher) { advancedSettingsSummary.text = summary }
         }
 
@@ -189,19 +199,5 @@ class ReminderViewHolder private constructor(
             }
         }
         return reminder
-    }
-
-    companion object {
-        @JvmStatic
-        fun create(
-            parent: ViewGroup,
-            fragmentActivity: FragmentActivity,
-            linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
-            timePickerDialogFactory: TimePickerDialogFactory
-        ): ReminderViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.card_reminder, parent, false)
-            return ReminderViewHolder(view, fragmentActivity, linkedReminderHandlingFactory, timePickerDialogFactory)
-        }
     }
 }

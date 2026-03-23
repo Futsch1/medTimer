@@ -52,4 +52,7 @@ class TimeFormatter @Inject constructor(
 
     fun stringToSecondsSinceEpoch(dateTimeString: String): Long =
         TimeHelper.stringToSecondsSinceEpoch(context, dateTimeString)
+
+    fun minutesToDurationString(minutes: Long): String =
+        TimeHelper.minutesToDurationString(minutes)
 }

@@ -4,9 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.print.PrintAttributes
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.reminderSummary
 import com.wwdablu.soumya.simplypdf.SimplyPdf
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument
 import com.wwdablu.soumya.simplypdf.composers.properties.TextProperties
@@ -53,12 +50,4 @@ fun getDocument(context: Context, file: File): SimplyPdfDocument {
         .firstPageBackgroundColor(Color.WHITE)
         .paperOrientation(DocumentInfo.Orientation.PORTRAIT)
         .build()
-}
-
-suspend fun getExportReminderSummary(context: Context, reminder: Reminder): String {
-    var summary = ""
-    if (reminder.usesTimeInMinutes) {
-        summary = TimeHelper.minutesToTimeString(context, reminder.timeInMinutes.toLong()) + ", "
-    }
-    return summary + reminderSummary(reminder, context)
 }

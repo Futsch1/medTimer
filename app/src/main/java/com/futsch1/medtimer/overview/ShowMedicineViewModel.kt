@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ sealed interface ShowMedicineUiState {
     data class Loaded(
         val fullMedicine: FullMedicine,
         val reminder: Reminder,
+        val reminderSummaryText: String,
         val userPreferences: UserPreferences
     ) : ShowMedicineUiState
 }
@@ -33,6 +35,7 @@ sealed interface ShowMedicineUiState {
 class ShowMedicineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val medicineRepository: MedicineRepository,
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
     preferencesDataSource: PreferencesDataSource,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -59,9 +62,11 @@ class ShowMedicineViewModel @Inject constructor(
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
+            val summaryText = reminderSummaryFormatter.formatReminderSummary(reminder)
             _uiState.value = ShowMedicineUiState.Loaded(
                 fullMedicine = fullMedicine,
                 reminder = reminder,
+                reminderSummaryText = summaryText,
                 userPreferences = userPreferences
             )
         }

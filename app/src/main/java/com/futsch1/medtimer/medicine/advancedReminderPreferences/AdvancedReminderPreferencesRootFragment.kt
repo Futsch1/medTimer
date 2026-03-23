@@ -12,10 +12,9 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.helpers.getCyclicReminderString
-import com.futsch1.medtimer.helpers.getIntervalTypeSummary
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,6 +76,9 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     @Inject
     lateinit var datePickerDialogFactory: DatePickerDialogFactory
 
+    @Inject
+    lateinit var reminderSummaryFormatter: ReminderSummaryFormatter
+
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "add_linked_reminder" to { activity, preference ->
@@ -103,8 +105,8 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(entity)
         findPreference<Preference>("interval_start")?.summary =
             requireContext().getString(if (entity.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
-        findPreference<Preference>("interval_type")?.summary = getIntervalTypeSummary(entity, requireContext())
-        findPreference<Preference>("cyclic_reminder")?.summary = getCyclicReminderString(entity, requireContext())
+        findPreference<Preference>("interval_type")?.summary = reminderSummaryFormatter.getIntervalTypeSummary(entity)
+        findPreference<Preference>("cyclic_reminder")?.summary = reminderSummaryFormatter.getCyclicReminderString(entity)
     }
 
     private fun getDaysSummary(reminder: Reminder): String {

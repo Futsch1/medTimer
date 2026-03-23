@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.reminderSummary
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +57,7 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         return dialog
     }
 
-    private suspend fun bindData(
+    private fun bindData(
         dialog: AppCompatDialog,
         state: ShowMedicineUiState.Loaded
     ) {
@@ -78,7 +77,7 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         checkIfTextElseGone(notesTextView)
 
         val reminderTextView = dialog.requireViewById<TextView>(R.id.reminderText)
-        reminderTextView.text = reminderSummary(state.reminder, context)
+        reminderTextView.text = state.reminderSummaryText
         reminderTextView.setCompoundDrawablesWithIntrinsicBounds(
             state.reminder.reminderType.icon, 0, 0, 0
         )

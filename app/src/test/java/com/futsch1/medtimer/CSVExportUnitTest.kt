@@ -9,6 +9,9 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -177,7 +180,11 @@ internal class CSVExportUnitTest {
                             .thenReturn(utc)
 
                         // Create the CSVCreator object
-                        val csvExport = CSVMedicineExport(medicines, fragmentManager, context, Dispatchers.Unconfined)
+                        val mockPreferencesDataSource = Mockito.mock<PreferencesDataSource>()
+                        val timeFormatter = TimeFormatter(context, mockPreferencesDataSource)
+                        val mockMedicineRepository = Mockito.mock<com.futsch1.medtimer.database.MedicineRepository>()
+                        val reminderSummaryFormatter = ReminderSummaryFormatter(context, mockMedicineRepository, timeFormatter)
+                        val csvExport = CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined)
                         try {
                             // Call the create method
                             runBlocking { csvExport.exportInternal(file) }

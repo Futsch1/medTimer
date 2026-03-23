@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,6 +18,7 @@ class CSVMedicineExport(
     val medicines: List<FullMedicine>,
     fragmentManager: FragmentManager,
     val context: Context,
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : Export(fragmentManager) {
     @Throws(ExporterException::class)
@@ -46,7 +48,7 @@ class CSVMedicineExport(
                 "%s;%s;%s\n",
                 medicine.medicine.name,
                 if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount,
-                getExportReminderSummary(context, reminder)
+                reminderSummaryFormatter.formatExportReminderSummary(reminder)
             )
             withContext(ioDispatcher) {
                 csvFile.write(line)
