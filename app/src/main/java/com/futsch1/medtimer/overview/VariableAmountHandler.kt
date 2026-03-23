@@ -6,33 +6,34 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
+import javax.inject.Inject
 
-fun variableAmountDialog(
-    activity: AppCompatActivity,
-    intent: Intent,
-    notificationProcessor: NotificationProcessor,
-    reminderContext: ReminderContext,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+class VariableAmountHandler @Inject constructor(
+    private val medicineRepository: MedicineRepository,
+    private val notificationProcessor: NotificationProcessor,
+    private val reminderContext: ReminderContext,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
-    val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
+    suspend fun show(activity: AppCompatActivity, intent: Intent) {
+        val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
-    activity.lifecycleScope.launch(dispatcher) {
-        val medicineRepository = MedicineRepository(activity)
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(
-            reminderContext,
-            reminderNotificationData
-        ) ?: return@launch
+        val reminderNotification = withContext(ioDispatcher) {
+            ReminderNotification.fromReminderNotificationData(
+                reminderContext,
+                reminderNotificationData
+            )
+        } ?: return
 
         val reminderEvents = mutableListOf<ReminderEvent>()
 
@@ -42,14 +43,14 @@ fun variableAmountDialog(
                 continue
             }
 
-            val dialogHelper = DialogHelper(activity)
+            DialogHelper(activity)
                 .title(reminderNotificationPart.medicine.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {
                         reminderNotificationPart.reminderEvent.amount = it
-                        activity.lifecycleScope.launch(dispatcher) {
+                        activity.lifecycleScope.launch(ioDispatcher) {
                             notificationProcessor.setReminderEventStatus(
                                 ReminderEvent.ReminderStatus.TAKEN,
                                 listOf(reminderNotificationPart.reminderEvent)
@@ -58,27 +59,23 @@ fun variableAmountDialog(
                     }
                 }
                 .cancelCallback {
-                    activity.lifecycleScope.launch {
-                        touchReminderEvent(
-                            medicineRepository,
-                            reminderNotificationPart.reminderEvent
-                        )
+                    activity.lifecycleScope.launch(ioDispatcher) {
+                        touchReminderEvent(reminderNotificationPart.reminderEvent)
                     }
                 }
-            withContext(mainDispatcher) { dialogHelper.show() }
+                .show()
         }
 
-        notificationProcessor.setReminderEventStatus(
-            ReminderEvent.ReminderStatus.TAKEN,
-            reminderEvents,
-        )
+        withContext(ioDispatcher) {
+            notificationProcessor.setReminderEventStatus(
+                ReminderEvent.ReminderStatus.TAKEN,
+                reminderEvents,
+            )
+        }
     }
-}
 
-private suspend fun touchReminderEvent(
-    medicineRepository: MedicineRepository,
-    reminderEvent: ReminderEvent
-) {
-    reminderEvent.processedTimestamp = Instant.now().epochSecond
-    medicineRepository.updateReminderEvent(reminderEvent)
+    private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {
+        reminderEvent.processedTimestamp = Instant.now().epochSecond
+        medicineRepository.updateReminderEvent(reminderEvent)
+    }
 }
