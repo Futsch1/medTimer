@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @SuppressLint("DefaultLocale")
 class Notifications @Inject constructor(
     val reminderContext: ReminderContext,
-    private val notificationSoundManager: NotificationSoundManager
+    private val notificationSoundManager: NotificationSoundManager,
+    private val notificationManager: NotificationManager
 ) {
     fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
         var notificationId = notificationId
@@ -30,7 +32,8 @@ class Notifications @Inject constructor(
 
         val factory = getReminderNotificationFactory(
             reminderContext,
-            reminderNotification
+            reminderNotification,
+            notificationManager
         )
 
         notify(notificationId, factory.create())
@@ -48,7 +51,7 @@ class Notifications @Inject constructor(
         }
 
     private fun notify(notificationId: Int, notification: android.app.Notification) {
-        reminderContext.notificationManager.notify(notificationId, notification)
+        notificationManager.notify(notificationId, notification)
 
         notificationSoundManager.restore()
     }

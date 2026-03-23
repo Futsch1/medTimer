@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -13,26 +14,29 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 fun getReminderNotificationFactory(
     reminderContext: ReminderContext,
-    reminderNotification: ReminderNotification
+    reminderNotification: ReminderNotification,
+    notificationManager: NotificationManager
 ): NotificationFactory {
     return if (reminderNotification.isOutOfStockNotification()) {
         OutOfStockNotificationFactory(
             reminderContext,
-            reminderNotification
+            reminderNotification,
+            notificationManager
         )
     } else if (reminderNotification.isExpirationDateNotification()) {
         ExpirationDateNotificationFactory(
             reminderContext,
-            reminderNotification
+            reminderNotification,
+            notificationManager
         )
     } else {
         if (reminderContext.preferencesDataSource.preferences.value.bigNotifications) {
             BigReminderNotificationFactory(
-                reminderContext, reminderNotification
+                reminderContext, reminderNotification, notificationManager
             )
         } else {
             SimpleReminderNotificationFactory(
-                reminderContext, reminderNotification
+                reminderContext, reminderNotification, notificationManager
             )
         }
     }
@@ -40,11 +44,14 @@ fun getReminderNotificationFactory(
 
 abstract class ReminderNotificationFactory(
     reminderContext: ReminderContext,
-    val reminderNotification: ReminderNotification
+    val reminderNotification: ReminderNotification,
+    notificationManager: NotificationManager
 ) : NotificationFactory(
     reminderContext,
     reminderNotification.reminderNotificationData.notificationId,
-    reminderNotification.reminderNotificationParts.map { it.medicine.medicine }) {
+    reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
+    notificationManager
+) {
 
     val intents = NotificationIntentBuilder(
         reminderContext, reminderNotification

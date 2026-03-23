@@ -6,12 +6,12 @@ import com.futsch1.medtimer.reminders.ReminderContext
 
 class ReminderNotificationChannel(
     private val reminderContext: ReminderContext,
+    private val notificationManager: NotificationManager,
     private val importance: Int,
     private val nameId: Int
 ) {
     val id: String
         get() = notificationChannel.id
-    private val notificationManager: NotificationManager = reminderContext.notificationManager
     private var notificationChannel: NotificationChannel =
         getOrCreateChannel()
 

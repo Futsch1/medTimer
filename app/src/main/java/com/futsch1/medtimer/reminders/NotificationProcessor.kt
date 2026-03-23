@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders
 
+import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.ReminderEvent
@@ -28,7 +29,8 @@ class NotificationProcessor @Inject constructor(
     val notifications: Notifications,
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     val stockHandlingProcessor: StockHandlingProcessor,
-    val repeatProcessor: RepeatProcessor
+    val repeatProcessor: RepeatProcessor,
+    private val notificationManager: NotificationManager
 ) {
     suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
@@ -51,7 +53,7 @@ class NotificationProcessor @Inject constructor(
 
     fun cancelNotification(notificationId: Int) {
         Log.d(LogTags.REMINDER, "Cancel notification nID $notificationId")
-        reminderContext.notificationManager.cancel(notificationId)
+        notificationManager.cancel(notificationId)
     }
 
     suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
@@ -63,7 +65,7 @@ class NotificationProcessor @Inject constructor(
 
     suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
         Log.d(LogTags.REMINDER, "Remove reminders from notification nID $notificationId")
-        for (notification in reminderContext.notificationManager.activeNotifications) {
+        for (notification in notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
                 reminderNotificationData.notificationId = notificationId

@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
+import android.app.NotificationManager
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
@@ -8,10 +9,12 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 class BigReminderNotificationFactory(
     reminderContext: ReminderContext,
-    reminderNotification: ReminderNotification
+    reminderNotification: ReminderNotification,
+    notificationManager: NotificationManager
 ) : ReminderNotificationFactory(
     reminderContext,
-    reminderNotification
+    reminderNotification,
+    notificationManager
 ) {
     val views: RemoteViews = RemoteViews(reminderContext.packageName, R.layout.notification)
 

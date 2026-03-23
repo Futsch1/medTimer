@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.reminders
 
 import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -14,11 +13,7 @@ import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,7 +22,8 @@ import javax.inject.Inject
 class ReminderContext @Inject constructor(
     @param:ApplicationContext val context: Context,
     val medicineRepository: MedicineRepository,
-    val notificationManager: NotificationManager
+    val preferencesDataSource: PreferencesDataSource,
+    val persistentDataDataSource: PersistentDataDataSource
 ) {
     val icons = MedicineIcons(context)
     val packageName: String = context.packageName
@@ -65,23 +61,6 @@ class ReminderContext @Inject constructor(
 
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)
-
-    val preferencesDataSource: PreferencesDataSource by lazy {
-        // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPreferencesDataSource()
-    }
-
-    val persistentDataDataSource: PersistentDataDataSource by lazy {
-        // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
-    }
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface DataSourcesEntryPoint {
-    fun getPreferencesDataSource(): PreferencesDataSource
-    fun getPersistentDataDataSource(): PersistentDataDataSource
 }
 
 interface TimeAccess {

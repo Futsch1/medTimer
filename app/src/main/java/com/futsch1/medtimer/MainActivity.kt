@@ -4,6 +4,7 @@ import android.Manifest.permission
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.ApplicationExitInfo
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -65,6 +66,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var notificationProcessor: NotificationProcessor
 
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         this.enableEdgeToEdge()
 
-        initialize(reminderContext)
+        initialize(reminderContext, notificationManager)
 
         TimeHelper.onChangedUseSystemLocale()
 
