@@ -277,7 +277,7 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineViewModel.medicineRepository.medicines)
-    val exporter = if (isCSV) CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context, reminderSummaryFormatter) else PDFMedicineExport(
+        val exporter = if (isCSV) CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context, reminderSummaryFormatter) else PDFMedicineExport(
             medicines,
             fragment.getParentFragmentManager(),
             context,
