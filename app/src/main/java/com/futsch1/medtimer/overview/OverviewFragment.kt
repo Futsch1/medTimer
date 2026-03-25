@@ -139,7 +139,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     private fun setupReminders() {
         reminders = fragmentOverview.findViewById(R.id.reminders)
-        adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity(), preferencesDataSource, actionsFactory)
+        adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity(), actionsFactory)
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
         adapter.clickListener = this

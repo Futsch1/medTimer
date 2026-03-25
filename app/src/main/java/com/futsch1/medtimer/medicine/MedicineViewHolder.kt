@@ -16,29 +16,39 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockText
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
-import com.futsch1.medtimer.helpers.remindersSummary
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MedicineViewHolder private constructor(
-    holderItemView: View,
-    private val activity: FragmentActivity,
+class MedicineViewHolder @AssistedInject constructor(
+    @Assisted parent: ViewGroup,
+    @Assisted private val activity: FragmentActivity,
     private val preferencesDataSource: PreferencesDataSource,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
-) :
-    RecyclerView.ViewHolder(holderItemView) {
-    private val medicineNameView: TextView = holderItemView.findViewById(R.id.medicineName)
-    private val remindersSummaryView: TextView = holderItemView.findViewById(R.id.remindersSummary)
-    private val tags: FlexboxLayout = holderItemView.findViewById(R.id.tags)
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
+) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_medicine, parent, false)) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(parent: ViewGroup, activity: FragmentActivity): MedicineViewHolder
+    }
+
+    private val medicineNameView: TextView = itemView.findViewById(R.id.medicineName)
+    private val remindersSummaryView: TextView = itemView.findViewById(R.id.remindersSummary)
+    private val tags: FlexboxLayout = itemView.findViewById(R.id.tags)
 
     fun bind(medicine: FullMedicine) {
         medicineNameView.text = getMedicineNameWithStockText(itemView.context, preferencesDataSource, medicine)
@@ -67,7 +77,7 @@ class MedicineViewHolder private constructor(
             }
         } else {
             activity.lifecycleScope.launch(dispatcher) {
-                val summary = remindersSummary(activeReminders, itemView.context)
+                val summary = reminderSummaryFormatter.formatRemindersSummary(activeReminders)
                 withContext(mainDispatcher) { remindersSummaryView.text = summary }
             }
         }
@@ -105,15 +115,6 @@ class MedicineViewHolder private constructor(
             params.setMargins(margin, 0, margin, 0)
             chip.setLayoutParams(params)
             tags.addView(chip)
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun create(parent: ViewGroup, activity: FragmentActivity, preferencesDataSource: PreferencesDataSource): MedicineViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.card_medicine, parent, false)
-            return MedicineViewHolder(view, activity, preferencesDataSource)
         }
     }
 }

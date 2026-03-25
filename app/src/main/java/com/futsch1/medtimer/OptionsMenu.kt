@@ -32,7 +32,9 @@ import com.futsch1.medtimer.exporters.PDFMedicineExport
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.helpers.FileHelper
 import com.futsch1.medtimer.helpers.PathHelper.getExportFilename
+import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
@@ -52,6 +54,8 @@ class OptionsMenu @AssistedInject constructor(
     @Assisted private val hideFilter: Boolean,
     @Assisted private val medicineViewModel: MedicineViewModel,
     val backupManagerFactory: BackupManager.Factory,
+    private val timeFormatter: TimeFormatter,
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher
 ) : EntityEditOptionsMenu {
@@ -273,10 +277,12 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineViewModel.medicineRepository.medicines)
-        val exporter = if (isCSV) CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context) else PDFMedicineExport(
+        val exporter = if (isCSV) CSVMedicineExport(medicines, fragment.getParentFragmentManager(), context, reminderSummaryFormatter) else PDFMedicineExport(
             medicines,
             fragment.getParentFragmentManager(),
-            context
+            context,
+            timeFormatter,
+            reminderSummaryFormatter
         )
         export(exporter)
     }

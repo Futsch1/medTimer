@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.IdlingListAdapter
-import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.medicine.ReminderViewHolder.Companion.create
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,8 +13,7 @@ import dagger.assisted.AssistedInject
 
 class ReminderViewAdapter @AssistedInject constructor(
     @Assisted private val fragmentActivity: FragmentActivity,
-    private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
-    private val timePickerDialogFactory: TimePickerDialogFactory
+    private val reminderViewHolderFactory: ReminderViewHolder.Factory
 ) : IdlingListAdapter<Reminder, ReminderViewHolder>(ReminderDiff()) {
     @AssistedFactory
     interface Factory {
@@ -36,7 +33,7 @@ class ReminderViewAdapter @AssistedInject constructor(
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        return create(parent, fragmentActivity, linkedReminderHandlingFactory, timePickerDialogFactory)
+        return reminderViewHolderFactory.create(parent, fragmentActivity)
     }
 
     // Replace the contents of a view (invoked by the layout manager)

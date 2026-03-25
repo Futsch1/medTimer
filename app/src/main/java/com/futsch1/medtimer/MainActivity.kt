@@ -32,9 +32,9 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.ThemeSetting
+import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var reminderContext: ReminderContext
 
     @Inject
-    lateinit var notificationProcessor: NotificationProcessor
+    lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
             checkBatteryOptimization()
         }
 
-        dispatch(this, notificationProcessor, reminderContext, this.intent)
+        dispatch(this, variableAmountHandler, this.intent)
         this.intent = Intent()
 
         checkForceStopped()
@@ -233,7 +233,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        dispatch(this, notificationProcessor, reminderContext, intent)
+        lifecycleScope.launch {
+            dispatch(this@MainActivity, variableAmountHandler, intent)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
