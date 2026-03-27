@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders.notificationFactory
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -19,8 +20,9 @@ import kotlin.time.Instant
 
 
 abstract class NotificationFactory(
-    val reminderContext: ReminderContext,
-    val notificationId: Int,
+    protected val reminderContext: ReminderContext,
+    private val context: Context,
+    protected val notificationId: Int,
     medicines: List<Medicine>,
     notificationManager: NotificationManager
 ) {
@@ -72,9 +74,9 @@ abstract class NotificationFactory(
     }
 
     fun getStartAppIntent(): PendingIntent {
-        val startApp = Intent()
-        reminderContext.setIntentClass(startApp, MainActivity::class.java)
-        startApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val startApp = Intent(context, MainActivity::class.java).apply {
+            setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
         return reminderContext.getPendingIntentActivity(
             notificationId,
             startApp,

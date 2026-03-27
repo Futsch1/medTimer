@@ -111,8 +111,10 @@ class AlarmProcessor @Inject constructor(
     }
 
     private fun updateNextReminderWidget() {
-        val intent = Intent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
-        reminderContext.setIntentClass(intent, WidgetUpdateReceiver::class.java)
+        val intent = Intent(context, WidgetUpdateReceiver::class.java).apply {
+            action = "com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE"
+        }
+
         context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
     }
 

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
@@ -18,7 +19,7 @@ import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class NotificationIntentBuilder(val reminderContext: ReminderContext, val reminderNotification: ReminderNotification) {
+class NotificationIntentBuilder(val reminderContext: ReminderContext, private val context: Context, val reminderNotification: ReminderNotification) {
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
@@ -91,9 +92,9 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
         if (reminderContext.preferencesDataSource.preferences.value.snoozeDuration.inWholeSeconds > 0) {
             return null
         }
-        val resultIntent = Intent()
-        reminderContext.setIntentClass(resultIntent, RemoteInputReceiver::class.java)
-        resultIntent.action = ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
+        val resultIntent = Intent(context, RemoteInputReceiver::class.java).apply {
+            action = ActivityCodes.REMOTE_INPUT_SNOOZE_ACTION
+        }
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
         val resultPendingIntent =
@@ -114,9 +115,9 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, val remind
         if (reminderNotification.reminderNotificationParts.none { it.reminder.variableAmount }) {
             return null
         }
-        val resultIntent = Intent()
-        reminderContext.setIntentClass(resultIntent, RemoteInputReceiver::class.java)
-        resultIntent.action = ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
+        val resultIntent = Intent(context, RemoteInputReceiver::class.java).apply {
+            action = ActivityCodes.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION
+        }
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
         val resultPendingIntent = reminderContext.getPendingIntentBroadcast(
