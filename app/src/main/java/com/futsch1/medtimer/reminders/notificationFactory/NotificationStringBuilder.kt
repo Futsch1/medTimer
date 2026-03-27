@@ -18,7 +18,7 @@ class NotificationStringBuilder(
     val notificationString = buildNotificationString(reminderNotification.reminderNotificationParts)
 
     private fun buildBaseString(reminderNotificationParts: List<ReminderNotificationPart>): SpannableStringBuilder {
-        val builder = reminderContext.getStringBuilder()
+        val builder = SpannableStringBuilder()
         for (reminderNotificationPart in reminderNotificationParts) {
             builder.append(buildSingleBaseString(reminderNotificationPart))
             builder.append("\n")
@@ -27,7 +27,7 @@ class NotificationStringBuilder(
     }
 
     private fun buildNotificationString(reminderNotificationParts: List<ReminderNotificationPart>): SpannableStringBuilder {
-        val builder = reminderContext.getStringBuilder()
+        val builder = SpannableStringBuilder()
         for (reminderNotificationPart in reminderNotificationParts) {
             builder.append(buildSingleNotificationString(reminderNotificationPart, reminderNotificationParts.size > 3))
             builder.append("\n")
@@ -37,7 +37,7 @@ class NotificationStringBuilder(
     }
 
     private fun buildSingleNotificationString(reminderNotificationPart: ReminderNotificationPart, concise: Boolean = false): SpannableStringBuilder {
-        val builder = reminderContext.getStringBuilder()
+        val builder = SpannableStringBuilder()
         builder.append(buildSingleBaseString(reminderNotificationPart))
         val instructions = reminderNotificationPart.reminder.instructions
         val separatorChar = if (concise) ", " else "\n"
@@ -63,7 +63,7 @@ class NotificationStringBuilder(
     private fun buildSingleBaseString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
         val medicineNameString =
             MedicineHelper.getMedicineName(reminderNotificationPart.medicine.medicine, true, reminderContext.preferencesDataSource.preferences.value)
-        return reminderContext.getStringBuilder().bold { append(medicineNameString) }
+        return SpannableStringBuilder().bold { append(medicineNameString) }
             .append(if (reminderNotificationPart.reminder.amount.isNotEmpty()) " (${reminderNotificationPart.reminder.amount})" else "")
     }
 

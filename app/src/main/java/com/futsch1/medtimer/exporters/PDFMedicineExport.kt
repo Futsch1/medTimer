@@ -10,20 +10,28 @@ import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument
-import kotlinx.coroutines.CoroutineScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-class PDFMedicineExport(
-    val medicines: List<FullMedicine>,
-    fragmentManager: FragmentManager,
-    val context: Context,
+class PDFMedicineExport @AssistedInject constructor(
+    @Assisted val medicines: List<FullMedicine>,
+    @Assisted fragmentManager: FragmentManager,
+    @param:ApplicationContext val context: Context,
     private val timeFormatter: TimeFormatter,
     private val reminderSummaryFormatter: ReminderSummaryFormatter
 ) : Export(fragmentManager) {
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(medicines: List<FullMedicine>, fragmentManager: FragmentManager): PDFMedicineExport
+    }
     @OptIn(ExperimentalTime::class)
     override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
@@ -41,7 +49,7 @@ class PDFMedicineExport(
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             simplyPdfDocument.finish()
         }
     }

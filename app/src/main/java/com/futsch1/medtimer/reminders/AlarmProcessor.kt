@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
@@ -9,6 +10,7 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.widgets.WidgetUpdateReceiver
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import javax.inject.Inject
 
@@ -16,6 +18,8 @@ import javax.inject.Inject
  * Handles the scheduling and cancellation of alarms for medication reminders using [AlarmManager].
  */
 class AlarmProcessor @Inject constructor(
+    @param:ApplicationContext
+    private val context: Context,
     private val reminderContext: ReminderContext,
     private val alarmManager: AlarmManager
 ) {
@@ -51,7 +55,7 @@ class AlarmProcessor @Inject constructor(
             )
             val reminderIntent = getReminderAction(reminderContext.context)
             scheduledReminderNotificationData.toIntent(reminderIntent)
-            reminderContext.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
+            context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
             return
         }
 
@@ -109,7 +113,7 @@ class AlarmProcessor @Inject constructor(
     private fun updateNextReminderWidget() {
         val intent = Intent("com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE")
         reminderContext.setIntentClass(intent, WidgetUpdateReceiver::class.java)
-        reminderContext.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+        context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
     }
 
     companion object {

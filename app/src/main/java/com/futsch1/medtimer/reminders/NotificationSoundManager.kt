@@ -3,9 +3,9 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.media.AudioManager
 import android.os.Build
+import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +21,8 @@ import javax.inject.Inject
 class NotificationSoundManager @Inject constructor(
     private val audioManager: AudioManager,
     private val notificationManager: NotificationManager,
-    preferencesDataSource: PreferencesDataSource
+    preferencesDataSource: PreferencesDataSource,
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private val overrideDnd = preferencesDataSource.preferences.value.overrideDnd
 
@@ -33,14 +34,13 @@ class NotificationSoundManager @Inject constructor(
     }
 
     fun restore() {
-        restorePendingRingerMode(audioManager)
+        restorePendingRingerMode(audioManager, applicationScope)
     }
 
     companion object {
         private var pending = false
         private var pendingWasMuted = false
         private var restoreJob: Job? = null
-        private val scope = CoroutineScope(Dispatchers.Default)
 
         @Synchronized
         fun loadPendingRingerMode(
@@ -69,7 +69,8 @@ class NotificationSoundManager @Inject constructor(
 
         @Synchronized
         fun restorePendingRingerMode(
-            audioManager: AudioManager
+            audioManager: AudioManager,
+            scope: CoroutineScope
         ) {
             if (pending) {
                 restoreJob?.cancel()

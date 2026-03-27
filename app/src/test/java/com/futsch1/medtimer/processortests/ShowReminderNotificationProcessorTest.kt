@@ -1,8 +1,10 @@
 package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
+import android.app.Application
 import android.app.NotificationManager
 import android.media.AudioManager
+import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.di.SystemServicesModule
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
@@ -11,6 +13,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,6 +26,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import javax.inject.Inject
 
@@ -111,7 +115,8 @@ class ShowReminderNotificationProcessorTest {
         }
 
         // Send broadcast (one for the reminder and one for updating the widget)
-        verify(reminderContext.mock, times(2)).sendBroadcast(anyNotNull(), anyNotNull())
+        val broadcastIntents = shadowOf(ApplicationProvider.getApplicationContext<Application>()).broadcastIntents
+        assertEquals(2, broadcastIntents.size)
         // The actually requested reminder
         verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
         // And two times for tomorrow (twice is actually unnecessary, but to reduce complexity, scheduling is called more often)

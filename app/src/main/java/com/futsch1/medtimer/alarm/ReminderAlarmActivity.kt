@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.VibratorManager
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -38,19 +37,17 @@ class ReminderAlarmActivity : AppCompatActivity() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
 
+    @Inject
+    lateinit var vibrator: Vibrator
+
+    @Inject
+    lateinit var audioManager: AudioManager
+
     private var mediaPlayer: MediaPlayer? = null
-    private lateinit var vibrator: Vibrator
     private var buildMediaPlayerJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-        } else {
-            @Suppress("DEPRECATION")
-            getSystemService(VIBRATOR_SERVICE) as Vibrator
-        }
 
         setShowWhenLocked(true)
         setTurnScreenOn(true)
@@ -162,7 +159,6 @@ class ReminderAlarmActivity : AppCompatActivity() {
     private fun combinePreferenceAndRingerMode(preferenceValue: Boolean): Boolean {
         if (preferenceValue) {
             // If the silent mode is active, do not ring the alarm
-            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
             return audioManager.ringerMode != AudioManager.RINGER_MODE_SILENT
         }
         return true
