@@ -18,8 +18,20 @@ import com.futsch1.medtimer.reminders.getTakenActionIntent
 import com.futsch1.medtimer.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 
-class NotificationIntentBuilder(val reminderContext: ReminderContext, private val context: Context, val reminderNotification: ReminderNotification) {
+class NotificationIntentBuilder @AssistedInject constructor(
+    val reminderContext: ReminderContext,
+    @param:ApplicationContext private val context: Context,
+    @Assisted val reminderNotification: ReminderNotification
+) {
+    @AssistedFactory
+    fun interface Factory {
+        fun create(reminderNotification: ReminderNotification): NotificationIntentBuilder
+    }
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()

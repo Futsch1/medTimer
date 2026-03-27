@@ -20,15 +20,14 @@ import javax.inject.Inject
  */
 class NotificationSoundManager @Inject constructor(
     private val audioManager: AudioManager,
-    private val notificationManager: NotificationManager,
+    notificationManager: NotificationManager,
     preferencesDataSource: PreferencesDataSource,
-    @ApplicationScope private val applicationScope: CoroutineScope
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private val overrideDnd = preferencesDataSource.preferences.value.overrideDnd
 
     init {
-        if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd
-        ) {
+        if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd) {
             loadPendingRingerMode(audioManager, notificationManager)
         }
     }

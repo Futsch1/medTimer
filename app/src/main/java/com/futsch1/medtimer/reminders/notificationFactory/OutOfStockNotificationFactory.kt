@@ -16,7 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 class OutOfStockNotificationFactory @AssistedInject constructor(
     reminderContext: ReminderContext,
-    @param:ApplicationContext context: Context,
+    @ApplicationContext context: Context,
     @Assisted val reminderNotification: ReminderNotification,
     notificationManager: NotificationManager
 ) :

@@ -18,7 +18,8 @@ abstract class ReminderNotificationFactory(
     reminderContext: ReminderContext,
     private val context: Context,
     val reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    intentsFactory: NotificationIntentBuilder.Factory
 ) : NotificationFactory(
     reminderContext,
     context,
@@ -27,9 +28,7 @@ abstract class ReminderNotificationFactory(
     notificationManager
 ) {
 
-    val intents = NotificationIntentBuilder(
-        reminderContext, context, reminderNotification
-    )
+    val intents = intentsFactory.create(reminderNotification)
     val notificationStrings =
         NotificationStringBuilder(
             reminderContext,

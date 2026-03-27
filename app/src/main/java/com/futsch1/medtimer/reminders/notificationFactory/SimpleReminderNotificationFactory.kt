@@ -14,12 +14,14 @@ class SimpleReminderNotificationFactory @AssistedInject constructor(
     reminderContext: ReminderContext,
     @ApplicationContext context: Context,
     @Assisted reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    intentsFactory: NotificationIntentBuilder.Factory
 ) : ReminderNotificationFactory(
     reminderContext,
     context,
     reminderNotification,
-    notificationManager
+    notificationManager,
+    intentsFactory
 ) {
     @AssistedFactory
     fun interface Factory {

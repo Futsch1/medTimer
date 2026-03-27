@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
-import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
@@ -26,13 +25,14 @@ import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.TimeAccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -49,7 +49,7 @@ class MedicineRepositoryFake {
         `when`(mock.getReminderEventsForScheduling(anyList())).thenAnswer { reminderEvents }
         `when`(mock.getReminderEvent(anyInt())).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
         runBlocking {
-            `when`(mock.insertReminderEvent(anyNotNull())).thenAnswer {
+            `when`(mock.insertReminderEvent(any())).thenAnswer {
                 val reminderEvent = it.arguments[0] as ReminderEvent
                 reminderEvent.reminderEventId = reminderEvents.size + 1
                 reminderEvents.add(reminderEvent)
@@ -58,7 +58,7 @@ class MedicineRepositoryFake {
         }
         `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
         `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
-        `when`(runBlocking { mock.updateMedicine(anyNotNull()) }).thenAnswer {
+        `when`(runBlocking { mock.updateMedicine(any()) }).thenAnswer {
             val medicine = it.arguments[0] as Medicine
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
             medicines[index] = medicine
@@ -77,8 +77,6 @@ class MedicineRepositoryFake {
         }
         return fullMedicines
     }
-
-    fun <T> anyNotNull(): T = any()
 }
 
 class NotificationManagerFake {
@@ -113,17 +111,6 @@ class NotificationManagerFake {
     }
 }
 
-class NotificationBuilderFake {
-    val mock: NotificationCompat.Builder = mock()
-    val extrasMock: Bundle = mock()
-    val notificationMock: Notification = mock()
-
-    init {
-        `when`(mock.extras).thenReturn(extrasMock)
-        `when`(mock.build()).thenReturn(notificationMock)
-    }
-}
-
 class TestReminderContext {
     val alarmManagerMock: AlarmManager = mock()
     val notificationManagerFake = NotificationManagerFake()
@@ -131,7 +118,6 @@ class TestReminderContext {
     val mock: ReminderContext = mock()
     val contextMock: Context = mock()
     val medicineRepositoryFake = MedicineRepositoryFake()
-    val notificationBuilderFake = NotificationBuilderFake()
     val localPreferencesMock: SharedPreferences = mock()
     val preferencesDataSourceMock: PreferencesDataSource = mock()
     val persistentDataDataSourceMock: PersistentDataDataSource = mock()
@@ -148,10 +134,12 @@ class TestReminderContext {
 
     init {
         `when`(mock.context).thenReturn(contextMock)
+        `when`(contextMock.packageName).thenReturn("com.futsch1.medtimer")
         `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
         `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
-        `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] }
-        `when`(mock.getNotificationBuilder(anyString())).thenReturn(notificationBuilderFake.mock)
+        `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] ?: "" }
+        `when`(mock.minutesToTimeString(anyLong())).thenReturn("")
+        `when`(mock.daysSinceEpochToDateString(anyLong())).thenReturn("")
         `when`(mock.timeAccess).thenReturn(object : TimeAccess {
             override fun systemZone(): ZoneId = ZoneId.of("UTC")
             override fun localDate(): LocalDate = localDate
@@ -171,8 +159,7 @@ class TestReminderContext {
         `when`(notificationChannelMock.id).thenReturn("channel")
 
         val spannableStringBuilderMock = mock<SpannableStringBuilder>()
-        `when`(spannableStringBuilderMock.append(anyString())).thenReturn(spannableStringBuilderMock)
-        `when`(mock.getStringBuilder()).thenReturn(spannableStringBuilderMock)
+        `when`(spannableStringBuilderMock.append(any<CharSequence>())).thenReturn(spannableStringBuilderMock)
 
         `when`(preferencesDataSourceMock.preferences).thenAnswer { MutableStateFlow(userPreferences) }
         `when`(persistentDataDataSourceMock.data).thenAnswer { MutableStateFlow(persistentData) }

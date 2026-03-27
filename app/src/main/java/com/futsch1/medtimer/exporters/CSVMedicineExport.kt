@@ -24,7 +24,7 @@ class CSVMedicineExport @AssistedInject constructor(
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext val context: Context,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
-    @Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : Export(fragmentManager) {
 
     @AssistedFactory

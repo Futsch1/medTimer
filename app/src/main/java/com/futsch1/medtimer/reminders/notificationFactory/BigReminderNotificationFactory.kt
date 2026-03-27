@@ -16,12 +16,14 @@ class BigReminderNotificationFactory @AssistedInject constructor(
     reminderContext: ReminderContext,
     @param:ApplicationContext private val context: Context,
     @Assisted reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    intentsFactory: NotificationIntentBuilder.Factory
 ) : ReminderNotificationFactory(
     reminderContext,
     context,
     reminderNotification,
-    notificationManager
+    notificationManager,
+    intentsFactory
 ) {
     @AssistedFactory
     fun interface Factory {

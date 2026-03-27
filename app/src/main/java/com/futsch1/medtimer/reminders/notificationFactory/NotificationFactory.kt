@@ -31,7 +31,7 @@ abstract class NotificationFactory(
     init {
         val importance = getHighestImportance(medicines)
         val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(reminderContext, notificationManager, importance).id
-        builder = reminderContext.getNotificationBuilder(notificationChannelId)
+        builder = NotificationCompat.Builder(context, notificationChannelId)
 
         val color = getColor(medicines)
         val icon = getIcon(medicines)
