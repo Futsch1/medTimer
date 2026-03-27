@@ -5,7 +5,10 @@ import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.reminders.notificationFactory.getReminderNotificationFactory
+import com.futsch1.medtimer.reminders.notificationFactory.BigReminderNotificationFactory
+import com.futsch1.medtimer.reminders.notificationFactory.ExpirationDateNotificationFactory
+import com.futsch1.medtimer.reminders.notificationFactory.OutOfStockNotificationFactory
+import com.futsch1.medtimer.reminders.notificationFactory.SimpleReminderNotificationFactory
 import javax.inject.Inject
 
 /**
@@ -21,7 +24,11 @@ import javax.inject.Inject
 class Notifications @Inject constructor(
     val reminderContext: ReminderContext,
     private val notificationSoundManager: NotificationSoundManager,
-    private val notificationManager: NotificationManager
+    private val notificationManager: NotificationManager,
+    private val simpleReminderNotificationFactory: SimpleReminderNotificationFactory.Factory,
+    private val bigReminderNotificationFactory: BigReminderNotificationFactory.Factory,
+    private val outOfStockNotificationFactory: OutOfStockNotificationFactory.Factory,
+    private val expirationDateNotificationFactory: ExpirationDateNotificationFactory.Factory
 ) {
     fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
         var notificationId = notificationId
@@ -30,11 +37,12 @@ class Notifications @Inject constructor(
         }
         reminderNotification.reminderNotificationData.notificationId = notificationId
 
-        val factory = getReminderNotificationFactory(
-            reminderContext,
-            reminderNotification,
-            notificationManager
-        )
+        val factory = when {
+            reminderNotification.isOutOfStockNotification() -> outOfStockNotificationFactory.create(reminderNotification)
+            reminderNotification.isExpirationDateNotification() -> expirationDateNotificationFactory.create(reminderNotification)
+            reminderContext.preferencesDataSource.preferences.value.bigNotifications -> bigReminderNotificationFactory.create(reminderNotification)
+            else -> simpleReminderNotificationFactory.create(reminderNotification)
+        }
 
         notify(notificationId, factory.create())
         Log.d(LogTags.REMINDER, String.format("Show notification nID %d: %s", notificationId, reminderNotification))

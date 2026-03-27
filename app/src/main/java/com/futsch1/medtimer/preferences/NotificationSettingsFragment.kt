@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -27,6 +26,15 @@ import javax.inject.Inject
 class NotificationSettingsFragment : PreferencesFragment() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var powerManager: PowerManager
+
+    @Inject
+    lateinit var alarmManager: AlarmManager
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
 
     private var rootKey: String? = null
 
@@ -109,7 +117,6 @@ class NotificationSettingsFragment : PreferencesFragment() {
     @SuppressLint("BatteryLife")
     private fun setupBatteryOptimization() {
         val preference = preferenceScreen.findPreference<Preference?>("ignore_battery_optimization")
-        val powerManager = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
 
         if (powerManager.isIgnoringBatteryOptimizations(requireContext().packageName)) {
             preference?.isVisible = false
@@ -126,7 +133,6 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     private fun showExactReminderDialog() {
-        val alarmManager = requireContext().getSystemService(AlarmManager::class.java)
         if (!alarmManager.canScheduleExactAlarms()) {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(R.string.enable_alarm_dialog)
@@ -161,9 +167,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
 
     private fun showDndPermissions() {
-        if (!requireContext().getSystemService(NotificationManager::class.java)
-                .isNotificationPolicyAccessGranted
-        ) {
+        if (!notificationManager.isNotificationPolicyAccessGranted) {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage(R.string.enable_dnd_dialog)
             builder.setPositiveButton(R.string.ok) { _, _ ->
@@ -184,8 +188,6 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun resumeExactReminders() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager =
-                requireContext().getSystemService(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
                 resetBooleanPreferenceAndReload(EXACT_REMINDERS)
             }
@@ -193,10 +195,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resumeOverrideDnd() {
-        if (!requireContext().getSystemService(
-                NotificationManager::class.java
-            ).isNotificationPolicyAccessGranted
-        ) {
+        if (!notificationManager.isNotificationPolicyAccessGranted) {
             resetBooleanPreferenceAndReload(OVERRIDE_DND)
         }
     }

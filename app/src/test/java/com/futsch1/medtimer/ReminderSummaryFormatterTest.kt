@@ -1,5 +1,7 @@
 package com.futsch1.medtimer
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.Context
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
@@ -37,6 +39,12 @@ class ReminderSummaryFormatterTest {
 
     @BindValue
     val mockPreferenceDataSource: PreferencesDataSource = mock()
+
+    @BindValue
+    val boundAlarmManager: AlarmManager = mock()
+
+    @BindValue
+    val boundNotificationManager: NotificationManager = mock()
 
     private lateinit var mockMedicineRepository: MedicineRepository
     private lateinit var formatter: ReminderSummaryFormatter

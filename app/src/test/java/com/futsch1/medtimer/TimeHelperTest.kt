@@ -1,5 +1,7 @@
 package com.futsch1.medtimer
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.os.LocaleList
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.UserPreferences
@@ -36,6 +38,12 @@ class TimeHelperTest {
 
     @BindValue
     val mockPreferenceDataSource: PreferencesDataSource = mock()
+
+    @BindValue
+    val boundAlarmManager: AlarmManager = mock()
+
+    @BindValue
+    val boundNotificationManager: NotificationManager = mock()
 
     @Before
     fun setUp() {

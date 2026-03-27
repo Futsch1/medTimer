@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders.notificationFactory
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
@@ -12,50 +13,22 @@ import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
-fun getReminderNotificationFactory(
-    reminderContext: ReminderContext,
-    reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
-): NotificationFactory {
-    return if (reminderNotification.isOutOfStockNotification()) {
-        OutOfStockNotificationFactory(
-            reminderContext,
-            reminderNotification,
-            notificationManager
-        )
-    } else if (reminderNotification.isExpirationDateNotification()) {
-        ExpirationDateNotificationFactory(
-            reminderContext,
-            reminderNotification,
-            notificationManager
-        )
-    } else {
-        if (reminderContext.preferencesDataSource.preferences.value.bigNotifications) {
-            BigReminderNotificationFactory(
-                reminderContext, reminderNotification, notificationManager
-            )
-        } else {
-            SimpleReminderNotificationFactory(
-                reminderContext, reminderNotification, notificationManager
-            )
-        }
-    }
-}
 
 abstract class ReminderNotificationFactory(
     reminderContext: ReminderContext,
+    private val context: Context,
     val reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    intentsFactory: NotificationIntentBuilder.Factory
 ) : NotificationFactory(
     reminderContext,
+    context,
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
     notificationManager
 ) {
 
-    val intents = NotificationIntentBuilder(
-        reminderContext, reminderNotification
-    )
+    val intents = intentsFactory.create(reminderNotification)
     val notificationStrings =
         NotificationStringBuilder(
             reminderContext,
@@ -91,10 +64,11 @@ abstract class ReminderNotificationFactory(
 
     @SuppressLint("FullScreenIntentPolicy")
     private fun addFullScreenIntent() {
-        val pendingIntent = reminderContext.getPendingIntentActivity(
+        val pendingIntent = PendingIntent.getActivity(
+            context,
             0,
             ReminderAlarmActivity.getIntent(
-                reminderContext, reminderNotification.reminderNotificationData
+                context, reminderNotification.reminderNotificationData
             ),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

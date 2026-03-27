@@ -19,7 +19,7 @@ class AlarmProcessorTest {
         processedNotificationData.remindInstant = processedNotificationData.remindInstant.plusSeconds(10)
 
         runBlocking {
-            AlarmProcessor(reminderContext.mock, reminderContext.alarmManagerMock).setAlarmForReminderNotification(
+            AlarmProcessor(reminderContext.contextMock, reminderContext.mock, reminderContext.alarmManagerMock).setAlarmForReminderNotification(
                 processedNotificationData
             )
         }

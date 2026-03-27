@@ -1,10 +1,15 @@
 package com.futsch1.medtimer.di
 
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.AudioManager
+import android.os.Build
+import android.os.PowerManager
+import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
@@ -35,4 +40,24 @@ object SystemServicesModule {
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
+
+    @Provides
+    @Singleton
+    fun providePowerManager(@ApplicationContext context: Context): PowerManager =
+        context.getSystemService(PowerManager::class.java)
+
+    @Provides
+    @Singleton
+    fun provideActivityManager(@ApplicationContext context: Context): ActivityManager =
+        context.getSystemService(ActivityManager::class.java)
+
+    @Provides
+    @Singleton
+    fun provideVibrator(@ApplicationContext context: Context): Vibrator =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(VibratorManager::class.java).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Vibrator::class.java)
+        }
 }

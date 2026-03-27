@@ -69,6 +69,12 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var notificationManager: NotificationManager
 
+    @Inject
+    lateinit var powerManager: PowerManager
+
+    @Inject
+    lateinit var activityManager: ActivityManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -190,8 +196,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkBatteryOptimization() {
-        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-
         if (!powerManager.isIgnoringBatteryOptimizations(packageName) && !persistentDataDataSource.data.value.batteryWarningShown && !BuildConfig.DEBUG) {
             Log.d(LogTags.MAIN, "Show battery optimization")
             batteryOptimizationWarning?.visibility = View.VISIBLE
@@ -202,7 +206,6 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
             val exitInfos: List<ApplicationExitInfo> = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
 
             if (exitInfos.isNotEmpty() && exitInfos[0].reason == ApplicationExitInfo.REASON_USER_REQUESTED) {
@@ -215,7 +218,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         // hack for https://issuetracker.google.com/issues/113122354
         // taken from https://stackoverflow.com/questions/52013545/android-9-0-not-allowed-to-start-service-app-is-in-background-after-onresume
         val runningAppProcesses = activityManager.runningAppProcesses

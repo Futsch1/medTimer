@@ -2,10 +2,8 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import android.media.AudioManager
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.di.SystemServicesModule
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -13,7 +11,6 @@ import com.futsch1.medtimer.schedulertests.TestHelper
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +23,6 @@ import javax.inject.Inject
 import kotlin.test.assertEquals
 
 @HiltAndroidTest
-@UninstallModules(SystemServicesModule::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class RefillProcessorTest {
@@ -48,9 +44,6 @@ class RefillProcessorTest {
 
     @BindValue
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
-
-    @BindValue
-    val boundAudioManager: AudioManager = org.mockito.Mockito.mock()
 
     @Inject
     lateinit var refillProcessor: RefillProcessor

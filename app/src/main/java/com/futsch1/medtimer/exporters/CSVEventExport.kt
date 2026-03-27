@@ -3,23 +3,33 @@ package com.futsch1.medtimer.exporters
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper.getTableHeadersForEventExport
 import com.futsch1.medtimer.helpers.TimeHelper.minutesToDurationString
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToDateTimeString
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToISO8601DatetimeString
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-class CSVEventExport(
-    private val reminderEvents: List<ReminderEvent>,
-    fragmentManager: FragmentManager,
-    private val context: Context,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+class CSVEventExport @AssistedInject constructor(
+    @Assisted private val reminderEvents: List<ReminderEvent>,
+    @Assisted fragmentManager: FragmentManager,
+    @param:ApplicationContext private val context: Context,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : Export(fragmentManager) {
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(reminderEvents: List<ReminderEvent>, fragmentManager: FragmentManager): CSVEventExport
+    }
 
     @Throws(ExporterException::class)  // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
     public override suspend fun exportInternal(file: File) {

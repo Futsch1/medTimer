@@ -32,6 +32,9 @@ class AlarmFragment(
     @Inject
     lateinit var reminderContext: ReminderContext
 
+    @Inject
+    lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,10 +59,7 @@ class AlarmFragment(
                 Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
 
                 val notificationStrings = NotificationStringBuilder(reminderContext, reminderNotification, false)
-                val intents =
-                    NotificationIntentBuilder(
-                        reminderContext, reminderNotification
-                    )
+                val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {
                     setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock })

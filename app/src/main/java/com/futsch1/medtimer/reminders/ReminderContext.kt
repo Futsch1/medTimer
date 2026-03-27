@@ -4,8 +4,6 @@ import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.text.SpannableStringBuilder
-import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeHelper
@@ -34,24 +32,9 @@ class ReminderContext @Inject constructor(
         return PendingIntent.getBroadcast(context, requestCode, intent, flags)
     }
 
-    fun getPendingIntentActivity(requestCode: Int, intent: Intent, flags: Int): PendingIntent {
-        return PendingIntent.getActivity(context, requestCode, intent, flags)
-    }
-
-    fun setIntentClass(intent: Intent, cls: Class<*>) {
-        intent.setClass(context, cls)
-    }
-
-    fun sendBroadcast(intent: Intent, receiverPermission: String) {
-        context.sendBroadcast(intent, receiverPermission)
-    }
-
     fun buildNotificationChannel(id: String, name: CharSequence, importance: Int): NotificationChannel = NotificationChannel(id, name, importance)
 
     fun getString(id: Int, vararg formatArgs: Any): String = context.getString(id, *formatArgs)
-
-    fun getNotificationBuilder(channel: String): NotificationCompat.Builder = NotificationCompat.Builder(context, channel)
-    fun getStringBuilder(): SpannableStringBuilder = SpannableStringBuilder()
 
     fun minutesToTimeString(minutes: Long): String = TimeHelper.minutesToTimeString(context, minutes)
     fun daysSinceEpochToDateString(days: Long): String = TimeHelper.daysSinceEpochToDateString(context, days)

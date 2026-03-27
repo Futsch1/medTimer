@@ -5,9 +5,12 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,10 +22,17 @@ class WidgetUpdateReceiver : BroadcastReceiver() {
     @Inject
     lateinit var latestRemindersWidgetProvider: LatestRemindersWidgetProvider
 
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.IO)
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch {
+        applicationScope.launch(ioDispatcher) {
             try {
                 val appWidgetManager = AppWidgetManager.getInstance(context)
 
