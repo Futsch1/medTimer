@@ -77,11 +77,8 @@ abstract class NotificationFactory(
         val startApp = Intent(context, MainActivity::class.java).apply {
             setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
-        return reminderContext.getPendingIntentActivity(
-            notificationId,
-            startApp,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+
+        return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     @OptIn(ExperimentalTime::class)

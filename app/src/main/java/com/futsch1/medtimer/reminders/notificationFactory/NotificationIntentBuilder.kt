@@ -44,7 +44,8 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, private va
 
         return if (anyAskForAmount) {
             val notifyTaken = getVariableAmountActivityIntent(reminderContext.context, reminderNotification.reminderNotificationData)
-            reminderContext.getPendingIntentActivity(
+            PendingIntent.getActivity(
+                context,
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -75,9 +76,7 @@ class NotificationIntentBuilder(val reminderContext: ReminderContext, private va
             val snooze = getCustomSnoozeActionIntent(
                 reminderContext.context, reminderNotification.reminderNotificationData
             )
-            reminderContext.getPendingIntentActivity(
-                reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE
-            )
+            PendingIntent.getActivity(context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE)
         } else {
             val snooze = getSnoozeIntent(
                 reminderContext.context, reminderNotification.reminderNotificationData, snoozeDuration

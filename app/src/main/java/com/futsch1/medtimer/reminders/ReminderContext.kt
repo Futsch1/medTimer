@@ -33,10 +33,6 @@ class ReminderContext @Inject constructor(
         return PendingIntent.getBroadcast(context, requestCode, intent, flags)
     }
 
-    fun getPendingIntentActivity(requestCode: Int, intent: Intent, flags: Int): PendingIntent {
-        return PendingIntent.getActivity(context, requestCode, intent, flags)
-    }
-
     fun buildNotificationChannel(id: String, name: CharSequence, importance: Int): NotificationChannel = NotificationChannel(id, name, importance)
 
     fun getString(id: Int, vararg formatArgs: Any): String = context.getString(id, *formatArgs)
