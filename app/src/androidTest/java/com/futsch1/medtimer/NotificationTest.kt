@@ -394,9 +394,8 @@ class NotificationTest : BaseTestHelper() {
             dismissNotification(notification)
         }
 
-        val input = device.wait(Until.findObject(By.res("android", "input")), 2_000)
-        assertNotNull(input)
-        input.text = "5"
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        writeTo(android.R.id.input, "5")
         clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
