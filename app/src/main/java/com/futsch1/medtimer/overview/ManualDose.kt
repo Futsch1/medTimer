@@ -35,8 +35,7 @@ class ManualDose @AssistedInject constructor(
     @Assisted private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timePickerDialogFactory: TimePickerDialogFactory,
-    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher,
-    private val textInputDialogBuilder: TextInputDialogBuilder
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
     @AssistedFactory
     interface Factory {
@@ -101,12 +100,12 @@ class ManualDose @AssistedInject constructor(
         reminderEvent.iconId = entry.iconId
         reminderEvent.tags = entry.tags
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            textInputDialogBuilder.title(R.string.log_additional_dose).hint(R.string.medicine_name)
+            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String ->
                     reminderEvent.medicineName = name
                     entry.baseName = name
                     getAmountAndContinue(reminderEvent, entry)
-                }.show(context)
+                }.show()
         } else {
             if (entry.amount == null || entry.medicineId == -1) {
                 getAmountAndContinue(reminderEvent, entry)
@@ -129,7 +128,7 @@ class ManualDose @AssistedInject constructor(
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
-        textInputDialogBuilder.title(R.string.log_additional_dose).hint(R.string.dosage)
+        val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
                 reminderEvent.amount = amount!!
                 if (entry.medicineId == -1) {
@@ -138,9 +137,9 @@ class ManualDose @AssistedInject constructor(
                 getTimeAndLog(reminderEvent, entry.medicineId)
             }
         if (!entry.amount.isNullOrBlank()) {
-            textInputDialogBuilder.initialText(entry.amount)
+            dialogBuilder.initialText(entry.amount)
         }
-        textInputDialogBuilder.show(context)
+        dialogBuilder.show()
     }
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {

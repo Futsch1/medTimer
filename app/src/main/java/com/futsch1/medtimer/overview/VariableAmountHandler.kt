@@ -23,8 +23,7 @@ class VariableAmountHandler @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val notificationProcessor: NotificationProcessor,
     private val reminderContext: ReminderContext,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val textInputDialogBuilder: TextInputDialogBuilder
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun show(activity: AppCompatActivity, intent: Intent) {
         val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
@@ -44,7 +43,7 @@ class VariableAmountHandler @Inject constructor(
                 continue
             }
 
-            textInputDialogBuilder
+            TextInputDialogBuilder(activity)
                 .title(reminderNotificationPart.medicine.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
@@ -64,7 +63,7 @@ class VariableAmountHandler @Inject constructor(
                         touchReminderEvent(reminderNotificationPart.reminderEvent)
                     }
                 }
-                .show(activity)
+                .show()
         }
 
         withContext(ioDispatcher) {

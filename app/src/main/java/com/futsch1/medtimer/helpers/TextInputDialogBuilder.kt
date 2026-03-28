@@ -10,14 +10,13 @@ import com.futsch1.medtimer.BuildConfig
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class TextInputDialogBuilder @Inject constructor(
-    @param:ApplicationContext private val appContext: Context
+class TextInputDialogBuilder(
+    private val context: Context
 ) {
     private var titleString: String? = null
+    private var hasBeenShown = false
 
     @StringRes
     private var hint: Int? = null
@@ -34,7 +33,7 @@ class TextInputDialogBuilder @Inject constructor(
         fun cancel()
     }
 
-    fun title(@StringRes title: Int) = apply { this.titleString = appContext.resources.getString(title) }
+    fun title(@StringRes title: Int) = apply { this.titleString = context.resources.getString(title) }
 
     fun title(title: String) = apply { this.titleString = title }
 
@@ -49,7 +48,13 @@ class TextInputDialogBuilder @Inject constructor(
 
     fun inputType(inputType: Int) = apply { this.inputType = inputType }
 
-    fun show(context: Context) {
+    fun show() {
+        if (hasBeenShown) {
+            throw IllegalStateException("TextInputDialogBuilder can only be used once")
+        }
+
+        hasBeenShown = true
+
         val editText = TextInputEditText(context).apply {
             setSingleLine()
             showSoftInputOnFocus = true

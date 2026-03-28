@@ -73,9 +73,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
-    lateinit var textInputDialogBuilder: TextInputDialogBuilder
-
-    @Inject
     lateinit var notificationManager: NotificationManager
 
     @Inject
@@ -253,7 +250,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
                 if (reminderNotificationData.valid) {
-                    textInputDialogBuilder
+                    TextInputDialogBuilder(this)
                         .title(R.string.snooze_duration)
                         .hint(R.string.minutes_string)
                         .initialText("")
@@ -265,7 +262,7 @@ class MainActivity : AppCompatActivity() {
                         .cancelCallback {
                             Log.d(LogTags.REMINDER, "Snooze dialog cancelled")
                         }
-                        .show(this)
+                        .show()
                 }
             }
         }

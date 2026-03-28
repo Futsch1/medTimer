@@ -27,8 +27,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     val medicineRepository: MedicineRepository,
     @Assisted val coroutineScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) val dispatcher: CoroutineDispatcher,
-    val timePickerDialogFactory: TimePickerDialogFactory,
-    val textInputDialogBuilder: TextInputDialogBuilder
+    val timePickerDialogFactory: TimePickerDialogFactory
 ) {
     @AssistedFactory
     interface Factory {
@@ -36,13 +35,13 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        textInputDialogBuilder.title(R.string.add_linked_reminder)
+        TextInputDialogBuilder(fragmentActivity).title(R.string.add_linked_reminder)
             .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
                 this.createReminder(
                     fragmentActivity,
                     amount!!
                 )
-            }.show(fragmentActivity)
+            }.show()
     }
 
     private fun createReminder(fragmentActivity: FragmentActivity, amount: String) {

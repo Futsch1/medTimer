@@ -17,8 +17,7 @@ import dagger.assisted.AssistedInject
 
 
 class TagsFragment @AssistedInject constructor(
-    @Assisted private val tagDataProvider: TagDataProvider,
-    private val textInputDialogBuilder: TextInputDialogBuilder
+    @Assisted private val tagDataProvider: TagDataProvider
 ) :
     DialogFragment() {
 
@@ -63,7 +62,7 @@ class TagsFragment @AssistedInject constructor(
 
         addTagButton.visibility = View.VISIBLE
         addTagButton.setOnClickListener {
-            textInputDialogBuilder
+            TextInputDialogBuilder(requireContext())
                 .title(R.string.add_tag)
                 .hint(R.string.name)
                 .textSink { tagName: String? ->
@@ -72,7 +71,7 @@ class TagsFragment @AssistedInject constructor(
                         growWindow()
                     }
                 }
-                .show(requireContext())
+                .show()
         }
     }
 
