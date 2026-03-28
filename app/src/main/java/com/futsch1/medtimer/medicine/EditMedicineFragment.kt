@@ -43,6 +43,7 @@ import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
+import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -88,6 +89,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     @Inject
     lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var tagsFragmentFactory: TagsFragment.Factory
 
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
@@ -159,7 +163,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun setupMenu(navController: NavController, entity: FullMedicine) {
-        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController)
+        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController, tagsFragmentFactory)
     }
 
     override fun onDestroy() {
@@ -198,7 +202,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             setText(medicine.name)
         }
 
-        val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository)
+        val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository, tagsFragmentFactory)
 
         selectIconButton.setIcon(MedicineIcons(requireContext()).getIconDrawable(iconId))
         setupEnableColor(medicine.useColor)

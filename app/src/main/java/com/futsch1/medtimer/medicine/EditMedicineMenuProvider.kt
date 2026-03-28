@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
+import com.futsch1.medtimer.medicine.tags.TagsFragment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ class EditMedicineMenuProvider(
     private val fragment: EditMedicineFragment,
     private val medicineViewModel: MedicineViewModel,
     private val navController: NavController,
+    private val tagsFragmentFactory: TagsFragment.Factory,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : EntityEditOptionsMenu {
 
@@ -94,7 +96,7 @@ class EditMedicineMenuProvider(
     }
 
     private fun setupLinksMenu(menu: Menu) {
-        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineViewModel.medicineRepository)
+        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineViewModel.medicineRepository, tagsFragmentFactory)
         val idToSubmenu: Map<Int, EditMedicineSubmenus.Submenu> = mapOf(
             R.id.openCalendar to EditMedicineSubmenus.Submenu.CALENDAR,
             R.id.openStockTracking to EditMedicineSubmenus.Submenu.STOCK_TRACKING,

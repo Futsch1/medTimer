@@ -31,7 +31,7 @@ import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
-import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
-    lateinit var inputMethodManager: android.view.inputmethod.InputMethodManager
+    lateinit var textInputDialogBuilder: TextInputDialogBuilder
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
                 if (reminderNotificationData.valid) {
-                    DialogHelper(this, inputMethodManager)
+                    textInputDialogBuilder
                         .title(R.string.snooze_duration)
                         .hint(R.string.minutes_string)
                         .initialText("")
@@ -265,7 +265,7 @@ class MainActivity : AppCompatActivity() {
                         .cancelCallback {
                             Log.d(LogTags.REMINDER, "Snooze dialog cancelled")
                         }
-                        .show()
+                        .show(this)
                 }
             }
         }

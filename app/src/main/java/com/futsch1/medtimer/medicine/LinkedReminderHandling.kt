@@ -3,7 +3,6 @@ package com.futsch1.medtimer.medicine
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
@@ -11,7 +10,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
-import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
@@ -29,7 +28,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     @Assisted val coroutineScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) val dispatcher: CoroutineDispatcher,
     val timePickerDialogFactory: TimePickerDialogFactory,
-    val inputMethodManager: InputMethodManager
+    val textInputDialogBuilder: TextInputDialogBuilder
 ) {
     @AssistedFactory
     interface Factory {
@@ -37,13 +36,13 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        DialogHelper(fragmentActivity, inputMethodManager).title(R.string.add_linked_reminder)
+        textInputDialogBuilder.title(R.string.add_linked_reminder)
             .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
                 this.createReminder(
                     fragmentActivity,
                     amount!!
                 )
-            }.show()
+            }.show(fragmentActivity)
     }
 
     private fun createReminder(fragmentActivity: FragmentActivity, amount: String) {

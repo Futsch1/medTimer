@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.medicine
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,11 +20,15 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
+import com.futsch1.medtimer.helpers.dpToPx
+import com.futsch1.medtimer.helpers.showSoftKeyboard
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -43,6 +47,9 @@ class MedicinesFragment : Fragment() {
     @Inject
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var medicineRepository: MedicineRepository
 
     private lateinit var idlingResource: SimpleIdlingResource
     private val medicineViewModel: MedicineViewModel by viewModels()
@@ -140,7 +147,10 @@ class MedicinesFragment : Fragment() {
             editText.setHint(R.string.medicine_name)
             editText.setSingleLine()
             editText.setId(R.id.medicineName)
+            editText.postDelayed({ editText.showSoftKeyboard() }, 200)
+
             textInputLayout.addView(editText)
+            textInputLayout.setPadding(requireContext().resources.dpToPx(16f).toInt())
 
             val builder = getAlertBuilder(textInputLayout, editText)
             val dialog = builder.create()
@@ -148,25 +158,22 @@ class MedicinesFragment : Fragment() {
         }
     }
 
-    private fun getAlertBuilder(textInputLayout: TextInputLayout?, editText: TextInputEditText): AlertDialog.Builder {
-        val builder = AlertDialog.Builder(context)
-        builder.setView(textInputLayout)
-        builder.setTitle(R.string.add_medicine)
-        builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
-            val e = editText.getText()
-            if (e != null) {
-                val viewModel = medicineViewModel
+    private fun getAlertBuilder(textInputLayout: TextInputLayout?, editText: TextInputEditText): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setView(textInputLayout)
+            .setTitle(R.string.add_medicine)
+            .setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
+                val text = editText.getText() ?: return@setPositiveButton
+
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = viewModel.medicineRepository.highestMedicineSortOrder
-                    val medicine = Medicine(e.toString().trim())
+                    val highestSortOrder = medicineRepository.highestMedicineSortOrder
+                    val medicine = Medicine(text.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
-                    val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
+                    val medicineId = medicineRepository.insertMedicine(medicine).toInt()
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }
-        }
-        builder.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-        return builder
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
     }
 
     private fun navigateToMedicineId(medicineId: Int) {

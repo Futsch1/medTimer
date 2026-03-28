@@ -57,7 +57,8 @@ class OptionsMenu @AssistedInject constructor(
     private val pdfEventExportFactory: PDFEventExport.Factory,
     private val csvEventExportFactory: CSVEventExport.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
-    @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
+    val tagsFragmentFactory: TagsFragment.Factory
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent>
@@ -292,7 +293,7 @@ class OptionsMenu @AssistedInject constructor(
         item.isVisible = true
         item.setOnMenuItemClickListener { _ ->
             val tagDataFromPreferences = TagDataFromPreferences(fragment)
-            val dialog: DialogFragment = TagsFragment(tagDataFromPreferences)
+            val dialog: DialogFragment = tagsFragmentFactory.create(tagDataFromPreferences)
             dialog.show(fragment.getParentFragmentManager(), "tags")
             true
         }
