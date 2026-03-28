@@ -8,15 +8,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.button.MaterialButton
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 
-class TagsFragment(
-    private val tagDataProvider: TagDataProvider
+class TagsFragment @AssistedInject constructor(
+    @Assisted private val tagDataProvider: TagDataProvider
 ) :
     DialogFragment() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(tagDataProvider: TagDataProvider): TagsFragment
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,27 +50,28 @@ class TagsFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog!!.window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
     private fun setupAddTag(view: View) {
         val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
-        if (tagDataProvider.canAddTag()) {
-            addTagButton.visibility = View.VISIBLE
-            addTagButton.setOnClickListener {
-                DialogHelper(requireContext())
-                    .title(R.string.add_tag)
-                    .hint(R.string.name)
-                    .textSink { tagName: String? ->
-                        if (!tagName.isNullOrBlank()) {
-                            tagDataProvider.addTag(tagName)
-                            growWindow()
-                        }
-                    }
-                    .show()
-            }
-        } else {
+        if (!tagDataProvider.canAddTag()) {
             addTagButton.visibility = View.GONE
+            return
+        }
+
+        addTagButton.visibility = View.VISIBLE
+        addTagButton.setOnClickListener {
+            TextInputDialogBuilder(requireContext())
+                .title(R.string.add_tag)
+                .hint(R.string.name)
+                .textSink { tagName: String? ->
+                    if (!tagName.isNullOrBlank()) {
+                        tagDataProvider.addTag(tagName)
+                        growWindow()
+                    }
+                }
+                .show()
         }
     }
 

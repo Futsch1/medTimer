@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -43,7 +43,7 @@ class VariableAmountHandler @Inject constructor(
                 continue
             }
 
-            DialogHelper(activity)
+            TextInputDialogBuilder(activity)
                 .title(reminderNotificationPart.medicine.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)

@@ -8,7 +8,7 @@ import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 
-class EditMedicineSubmenus(val editMedicineFragment: EditMedicineFragment, val medicine: Medicine, val medicineRepository: MedicineRepository) {
+class EditMedicineSubmenus(val editMedicineFragment: EditMedicineFragment, val medicine: Medicine, val medicineRepository: MedicineRepository, val tagsFragmentFactory: TagsFragment.Factory) {
     enum class Submenu {
         NOTES,
         TAGS,
@@ -21,7 +21,7 @@ class EditMedicineSubmenus(val editMedicineFragment: EditMedicineFragment, val m
             Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
                 val tagDataFromMedicine = TagDataFromMedicine(editMedicineFragment, medicine.medicineId)
-                val dialog: DialogFragment = TagsFragment(tagDataFromMedicine)
+                val dialog: DialogFragment = tagsFragmentFactory.create(tagDataFromMedicine)
                 dialog.show(editMedicineFragment.getParentFragmentManager(), "tags")
             }
 

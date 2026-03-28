@@ -1,6 +1,10 @@
 package com.futsch1.medtimer.medicine
 
+import android.app.NotificationManager
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +15,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,12 +38,14 @@ import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
-import com.futsch1.medtimer.medicine.editMedicine.showEnablePermissionsDialog
+import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.gson.Gson
@@ -79,6 +86,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     @Inject
     lateinit var newReminderTypeDialogFactory: NewReminderTypeDialog.Factory
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var tagsFragmentFactory: TagsFragment.Factory
 
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
@@ -150,7 +163,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun setupMenu(navController: NavController, entity: FullMedicine) {
-        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController)
+        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, this.medicineViewModel, navController, tagsFragmentFactory)
     }
 
     override fun onDestroy() {
@@ -189,7 +202,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             setText(medicine.name)
         }
 
-        val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository)
+        val subMenus = EditMedicineSubmenus(this, medicine, this.medicineViewModel.medicineRepository, tagsFragmentFactory)
 
         selectIconButton.setIcon(MedicineIcons(requireContext()).getIconDrawable(iconId))
         setupEnableColor(medicine.useColor)
@@ -255,9 +268,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         notificationImportance.setSelection(importanceValueToIndex(medicine))
         notificationImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == 2) {
-                    showEnablePermissionsDialog(requireContext())
+                if (position != 2) {
+                    return
                 }
+                showEnablePermissionsDialog(notificationManager)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -369,5 +383,27 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {
         iconId = icons[0].id
         selectIconButton.setIcon(MedicineIcons(requireContext()).getIconDrawable(iconId))
+    }
+
+    fun showEnablePermissionsDialog(notificationManager: NotificationManager) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || notificationManager.canUseFullScreenIntent()) {
+            return
+        }
+
+        val context = requireContext()
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setMessage(R.string.enable_notification_alarm_dialog)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
+                    data = "package:${context.packageName}".toUri()
+                }
+                safeStartActivity(context, intent)
+            }
+
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                // Intentionally empty
+            }.create()
+
+        dialog.show()
     }
 }

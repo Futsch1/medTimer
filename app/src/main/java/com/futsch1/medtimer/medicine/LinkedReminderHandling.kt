@@ -10,7 +10,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
-import com.futsch1.medtimer.helpers.DialogHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
@@ -35,7 +35,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        DialogHelper(fragmentActivity).title(R.string.add_linked_reminder)
+        TextInputDialogBuilder(fragmentActivity).title(R.string.add_linked_reminder)
             .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
                 this.createReminder(
                     fragmentActivity,

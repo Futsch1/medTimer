@@ -340,16 +340,16 @@ class NotificationTest : BaseTestHelper() {
 
         openNotification().use {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
-            device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+            assertNotNull(device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000))
             clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
         }
 
-        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
         assertContains(TEST_MED)
         writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
-        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
         assertContains(SECOND_ONE)
         writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
@@ -394,7 +394,7 @@ class NotificationTest : BaseTestHelper() {
             dismissNotification(notification)
         }
 
-        device.wait(Until.findObject(By.displayId(android.R.id.input)), 2_000)
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
         writeTo(android.R.id.input, "5")
         clickDialogPositiveButton()
 

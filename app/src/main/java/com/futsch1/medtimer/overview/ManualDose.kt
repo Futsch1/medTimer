@@ -11,8 +11,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
@@ -100,7 +100,7 @@ class ManualDose @AssistedInject constructor(
         reminderEvent.iconId = entry.iconId
         reminderEvent.tags = entry.tags
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
+            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String ->
                     reminderEvent.medicineName = name
                     entry.baseName = name
@@ -128,7 +128,7 @@ class ManualDose @AssistedInject constructor(
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
-        var dialog = DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.dosage)
+        val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
                 reminderEvent.amount = amount!!
                 if (entry.medicineId == -1) {
@@ -137,9 +137,9 @@ class ManualDose @AssistedInject constructor(
                 getTimeAndLog(reminderEvent, entry.medicineId)
             }
         if (!entry.amount.isNullOrBlank()) {
-            dialog = dialog.initialText(entry.amount)
+            dialogBuilder.initialText(entry.amount)
         }
-        dialog.show()
+        dialogBuilder.show()
     }
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
