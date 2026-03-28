@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.content.Intent
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
@@ -23,7 +24,8 @@ class VariableAmountHandler @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val notificationProcessor: NotificationProcessor,
     private val reminderContext: ReminderContext,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val inputMethodManager: InputMethodManager
 ) {
     suspend fun show(activity: AppCompatActivity, intent: Intent) {
         val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
@@ -43,7 +45,7 @@ class VariableAmountHandler @Inject constructor(
                 continue
             }
 
-            DialogHelper(activity)
+            DialogHelper(activity, inputMethodManager)
                 .title(reminderNotificationPart.medicine.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)

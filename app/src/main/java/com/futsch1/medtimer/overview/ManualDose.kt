@@ -3,6 +3,7 @@ package com.futsch1.medtimer.overview
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
@@ -35,7 +36,8 @@ class ManualDose @AssistedInject constructor(
     @Assisted private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timePickerDialogFactory: TimePickerDialogFactory,
-    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher,
+    private val inputMethodManager: InputMethodManager
 ) {
     @AssistedFactory
     interface Factory {
@@ -100,7 +102,7 @@ class ManualDose @AssistedInject constructor(
         reminderEvent.iconId = entry.iconId
         reminderEvent.tags = entry.tags
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            DialogHelper(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
+            DialogHelper(context, inputMethodManager).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String ->
                     reminderEvent.medicineName = name
                     entry.baseName = name

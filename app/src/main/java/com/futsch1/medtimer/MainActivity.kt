@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.PowerManager
+import android.text.InputType
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -30,16 +31,21 @@ import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
+import com.futsch1.medtimer.helpers.DialogHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -67,6 +73,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
+    lateinit var inputMethodManager: android.view.inputmethod.InputMethodManager
+
+    @Inject
     lateinit var notificationManager: NotificationManager
 
     @Inject
@@ -74,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var activityManager: ActivityManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             checkBatteryOptimization()
         }
 
-        dispatch(this, variableAmountHandler, this.intent)
+        dispatchIntent(this.intent)
         this.intent = Intent()
 
         checkForceStopped()
@@ -233,10 +243,38 @@ class MainActivity : AppCompatActivity() {
         checkBatteryOptimization()
     }
 
+    private suspend fun dispatchIntent(intent: Intent) {
+        Log.d(LogTags.MAIN, "Dispatch intent: ${intent.action}")
+        when (intent.action) {
+            ActivityCodes.VARIABLE_AMOUNT_ACTIVITY -> {
+                variableAmountHandler.show(this, intent)
+            }
+
+            ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
+                val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
+                if (reminderNotificationData.valid) {
+                    DialogHelper(this, inputMethodManager)
+                        .title(R.string.snooze_duration)
+                        .hint(R.string.minutes_string)
+                        .initialText("")
+                        .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
+                        .textSink { snoozeTime: String? ->
+                            snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
+                                ?.let { ReminderProcessorBroadcastReceiver.requestSnooze(this, reminderNotificationData, it) }
+                        }
+                        .cancelCallback {
+                            Log.d(LogTags.REMINDER, "Snooze dialog cancelled")
+                        }
+                        .show()
+                }
+            }
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         lifecycleScope.launch {
-            dispatch(this@MainActivity, variableAmountHandler, intent)
+            dispatchIntent(intent)
         }
     }
 

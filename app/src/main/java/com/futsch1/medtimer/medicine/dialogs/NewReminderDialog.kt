@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
@@ -35,7 +34,8 @@ class NewReminderDialog @AssistedInject constructor(
     @Assisted val reminder: Reminder,
     val medicineRepository: MedicineRepository,
     val timeEditorFactory: TimeEditor.Factory,
-    val dateTimeEditorFactory: DateTimeEditor.Factory
+    val dateTimeEditorFactory: DateTimeEditor.Factory,
+    val inputMethodManager: InputMethodManager
 ) {
     @AssistedFactory
     interface Factory {
@@ -65,9 +65,7 @@ class NewReminderDialog @AssistedInject constructor(
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
         textInputEditText.requestFocus()
         textInputEditText.postDelayed({
-            val imm: InputMethodManager? =
-                getSystemService(activity, InputMethodManager::class.java)
-            imm?.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+            inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
         if (fullMedicine.isStockManagementActive) {
             textInputEditText.addTextChangedListener(

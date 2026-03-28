@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.view.inputmethod.InputMethodManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
@@ -50,6 +51,11 @@ object SystemServicesModule {
     @Singleton
     fun provideActivityManager(@ApplicationContext context: Context): ActivityManager =
         context.getSystemService(ActivityManager::class.java)
+
+    @Provides
+    @Singleton
+    fun provideInputMethodManager(@ApplicationContext context: Context): InputMethodManager =
+        context.getSystemService(InputMethodManager::class.java)
 
     @Provides
     @Singleton

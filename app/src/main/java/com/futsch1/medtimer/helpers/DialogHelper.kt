@@ -3,8 +3,6 @@ package com.futsch1.medtimer.helpers
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.res.Resources
-import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -13,7 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.roundToInt
 
-class DialogHelper(var context: Context) {
+class DialogHelper(var context: Context, private val inputMethodManager: InputMethodManager? = null) {
     var title: Int? = null
     var titleString: String? = null
     var hint: Int? = null
@@ -46,7 +44,7 @@ class DialogHelper(var context: Context) {
         layout(textInputLayout)
         hint?.let(editText::setHint)
         editText.setSingleLine()
-        editText.minimumHeight = dpToPx(context.resources, 48)
+        editText.minimumHeight = context.resources.dpToPx(48f).roundToInt()
         editText.id = android.R.id.input
         initialText?.let(editText::setText)
         inputType?.let(editText::setInputType)
@@ -69,10 +67,10 @@ class DialogHelper(var context: Context) {
         }
 
         if (!BuildConfig.DEBUG) {
-            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = inputMethodManager ?: context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             editText.postDelayed({
                 editText.requestFocus()
-                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
             }, 200)
         }
 
@@ -86,16 +84,7 @@ class DialogHelper(var context: Context) {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         textInputLayout.layoutParams = layoutParams
-        val padding = dpToPx(context.resources, 16)
+        val padding = context.resources.dpToPx(16f).roundToInt()
         textInputLayout.setPadding(padding, padding, padding, padding)
-    }
-
-    @Suppress("SameParameterValue")
-    private fun dpToPx(r: Resources, dp: Int): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            r.displayMetrics
-        ).roundToInt()
     }
 }
