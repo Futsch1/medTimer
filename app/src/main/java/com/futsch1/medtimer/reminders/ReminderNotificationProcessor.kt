@@ -109,7 +109,7 @@ class ReminderNotificationProcessor @Inject constructor(
     }
 
     companion object {
-        fun buildReminderEvent(
+        suspend fun buildReminderEvent(
             remindedTimeStamp: Long,
             medicine: FullMedicine,
             reminder: Reminder,
@@ -155,7 +155,7 @@ class ReminderNotificationProcessor @Inject constructor(
             return reminderEvent
         }
 
-        private fun getLastReminderEventTimeInMinutes(
+        private suspend fun getLastReminderEventTimeInMinutes(
             medicineRepository: MedicineRepository,
             reminderEvent: ReminderEvent,
             isWindowedInterval: Boolean

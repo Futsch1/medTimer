@@ -263,7 +263,7 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val reminderEvents: List<ReminderEvent> =
-            medicineViewModel.filterEvents(medicineRepository.allReminderEventsWithoutDeletedAndAcknowledged)
+            medicineViewModel.filterEvents(medicineRepository.getAllReminderEventsWithoutDeletedAndAcknowledged())
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
             fragment.getParentFragmentManager()
@@ -277,7 +277,7 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineRepository.medicines)
+        val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineRepository.getMedicines())
         val exporter = if (isCSV) csvMedicineExportFactory.create(medicines, fragment.getParentFragmentManager()) else pdfMedicineExportFactory.create(
             medicines,
             fragment.getParentFragmentManager()

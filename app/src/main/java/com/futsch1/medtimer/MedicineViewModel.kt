@@ -51,7 +51,7 @@ class MedicineViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            medicineRepository.medicineToTagsFlow.collect {
+            medicineRepository.getMedicineToTagsFlow().collect {
                 medicineToTags = it
             }
         }

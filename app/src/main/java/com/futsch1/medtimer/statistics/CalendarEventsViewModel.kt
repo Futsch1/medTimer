@@ -60,7 +60,7 @@ class CalendarEventsViewModel @Inject constructor(
 
         viewModelScope.launch(ioDispatcher) {
             reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
-            allMedicines = medicineRepository.medicines
+            allMedicines = medicineRepository.getMedicines()
             if (medicineId > 0) {
                 medicine = medicineRepository.getOnlyMedicine(medicineId)
                 allMedicines =

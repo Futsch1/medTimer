@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-class StatisticsProvider @Inject constructor(medicineRepository: MedicineRepository) {
+class StatisticsProvider @Inject constructor(private val medicineRepository: MedicineRepository) {
     companion object {
         private fun calculateDataEntries(
             days: Int,
@@ -30,10 +30,8 @@ class StatisticsProvider @Inject constructor(medicineRepository: MedicineReposit
         }
     }
 
-    private val reminderEvents: List<ReminderEvent> =
-        medicineRepository.allReminderEventsWithoutDeleted
-
-    fun getTakenSkippedData(days: Int): TakenSkipped {
+    suspend fun getTakenSkippedData(days: Int): TakenSkipped {
+        val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
         val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.TAKEN) }
         val skipped =
             reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.SKIPPED) }
@@ -60,13 +58,15 @@ class StatisticsProvider @Inject constructor(medicineRepository: MedicineReposit
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date)
     }
 
-    fun getLastDaysReminders(days: Int): List<SimpleXYSeries> {
+    suspend fun getLastDaysReminders(days: Int): List<SimpleXYSeries> {
         val medicineToDayCount = calculateMedicineToDayMap(days)
         return calculateDataEntries(days, medicineToDayCount)
     }
 
-    private fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {
+    private suspend fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {
         val earliestDate = LocalDate.now().minusDays(days.toLong())
+
+        val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
         return reminderEvents
             .filter {
                 it.status == ReminderStatus.TAKEN && wasAfter(

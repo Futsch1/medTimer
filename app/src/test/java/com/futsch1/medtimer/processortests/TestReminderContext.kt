@@ -38,19 +38,20 @@ class MedicineRepositoryFake {
     val mock: MedicineRepository = mock()
 
     init {
-        `when`(mock.medicines).thenAnswer { buildFullMedicines() }
-        `when`(mock.getReminderEventsForScheduling(anyList())).thenAnswer { reminderEvents }
-        `when`(mock.getReminderEvent(anyInt())).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
-        runBlocking {
-            `when`(mock.insertReminderEvent(any())).thenAnswer {
-                val reminderEvent = it.arguments[0] as ReminderEvent
-                reminderEvent.reminderEventId = reminderEvents.size + 1
-                reminderEvents.add(reminderEvent)
-                reminderEvent.reminderEventId.toLong()
-            }
+        `when`(runBlocking { mock.getMedicines() }).thenAnswer { buildFullMedicines() }
+        `when`(runBlocking { mock.getReminderEventsForScheduling(anyList()) }).thenAnswer { reminderEvents }
+        `when`(runBlocking { mock.getReminderEvent(anyInt()) }).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
+        `when`(runBlocking { mock.insertReminderEvent(any()) }).thenAnswer {
+            val reminderEvent = it.arguments[0] as ReminderEvent
+            reminderEvent.reminderEventId = reminderEvents.size + 1
+            reminderEvents.add(reminderEvent)
+            reminderEvent.reminderEventId.toLong()
         }
         `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
-        `when`(mock.getMedicine(anyInt())).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(runBlocking { mock.getMedicine(anyInt()) }
+
+
+        ).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
         `when`(runBlocking { mock.updateMedicine(any()) }).thenAnswer {
             val medicine = it.arguments[0] as Medicine
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }

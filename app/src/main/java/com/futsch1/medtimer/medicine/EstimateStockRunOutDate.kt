@@ -9,7 +9,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-fun estimateStockRunOutDate(
+suspend fun estimateStockRunOutDate(
     medicineRepository: MedicineRepository,
     medicineId: Int,
     currentAmount: Double? = null,

@@ -168,7 +168,7 @@ class MedicinesFragment : Fragment() {
                 val text = editText.getText() ?: return@setPositiveButton
 
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineRepository.highestMedicineSortOrder
+                    val highestSortOrder = medicineRepository.getHighestMedicineSortOrder()
                     val medicine = Medicine(text.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
                     val medicineId = medicineRepository.insertMedicine(medicine).toInt()

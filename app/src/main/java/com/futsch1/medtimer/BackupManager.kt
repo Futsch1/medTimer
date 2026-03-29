@@ -151,7 +151,7 @@ class BackupManager @AssistedInject constructor(
         openFileLauncher?.launch(intent)
     }
 
-    private fun performBackup(checkedItems: BooleanArray) {
+    private suspend fun performBackup(checkedItems: BooleanArray) {
         val progressDialogFragment = ProgressDialogFragment()
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
             fragmentManager?.let { progressDialogFragment.show(it, "backup") }
@@ -163,7 +163,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
                     JSONMedicineBackup(),
-                    medicineRepository.medicines
+                    medicineRepository.getMedicines()
                 )
             )
         }
@@ -171,7 +171,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 EVENT_KEY, createBackup(
                     JSONReminderEventBackup(),
-                    medicineRepository.allReminderEventsWithoutDeleted
+                    medicineRepository.getAllReminderEventsWithoutDeleted()
                 )
             )
         }
@@ -290,19 +290,19 @@ class BackupManager @AssistedInject constructor(
         }
     }
 
-    private fun performAutoBackup(directoryUri: Uri) {
+    private suspend fun performAutoBackup(directoryUri: Uri) {
         val gson = GsonBuilder().setPrettyPrinting().create()
         val jsonObject = JsonObject()
         jsonObject.add(
             MEDICINE_KEY, createBackup(
                 JSONMedicineBackup(),
-                medicineRepository.medicines
+                medicineRepository.getMedicines()
             )
         )
         jsonObject.add(
             EVENT_KEY, createBackup(
                 JSONReminderEventBackup(),
-                medicineRepository.allReminderEventsWithoutDeleted
+                medicineRepository.getAllReminderEventsWithoutDeleted()
             )
         )
 
