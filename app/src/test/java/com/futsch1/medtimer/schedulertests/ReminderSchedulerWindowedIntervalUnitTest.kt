@@ -2,16 +2,21 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.test.assertEquals
 
 class ReminderSchedulerWindowedIntervalUnitTest {
     @Test
     fun scheduleWindowedIntervalReminder() {
-        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -57,7 +62,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(0, scheduledReminders.size)
 
-        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 120).epochSecond))
         reminderEventList[2].processedTimestamp = TestHelper.on(2, 121).epochSecond
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -135,7 +140,10 @@ class ReminderSchedulerWindowedIntervalUnitTest {
 
     @Test
     fun scheduleWindowedIntervalReminderNextDay() {
-        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 600, 1)
@@ -179,7 +187,7 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         )
 
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 1000).epochSecond))
-        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
 
         assertReminded(

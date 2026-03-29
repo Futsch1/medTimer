@@ -182,7 +182,9 @@ internal class CSVExportUnitTest {
 
                         // Create the CSVCreator object
                         val mockPreferencesDataSource = Mockito.mock<PreferencesDataSource>()
-                        val timeFormatter = TimeFormatter(context, mockPreferencesDataSource, com.futsch1.medtimer.helpers.LocaleContextAccessor(context))
+                        val mockLocaleContextAccessor = Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>()
+                            .also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }
+                        val timeFormatter = TimeFormatter(context, mockPreferencesDataSource, mockLocaleContextAccessor)
                         val mockMedicineRepository = Mockito.mock<com.futsch1.medtimer.database.MedicineRepository>()
                         val reminderSummaryFormatter = ReminderSummaryFormatter(context, mockMedicineRepository, timeFormatter)
                         val csvExport =

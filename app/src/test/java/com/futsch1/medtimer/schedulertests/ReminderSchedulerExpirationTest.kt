@@ -3,10 +3,12 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.test.assertTrue
 
 class ReminderSchedulerExpirationTest {
@@ -33,7 +35,10 @@ class ReminderSchedulerExpirationTest {
 
     @Test
     fun scheduleExpirationReminderOnce() {
-        val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()
@@ -73,7 +78,7 @@ class ReminderSchedulerExpirationTest {
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
 
-        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
 

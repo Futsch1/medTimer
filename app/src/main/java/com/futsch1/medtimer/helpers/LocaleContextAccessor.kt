@@ -13,7 +13,7 @@ class LocaleContextAccessor @Inject constructor(
     @SuppressLint("AppBundleLocaleChanges")
     fun getLocaleAwareContext(): Context {
         val configuration = Configuration(base.resources.configuration)
-        configuration.setLocales(LocaleList(base.resources.configuration.getLocales()[0]))
+        configuration.setLocales(LocaleList(configuration.getLocales()[0]))
         return base.createConfigurationContext(configuration)
     }
 }

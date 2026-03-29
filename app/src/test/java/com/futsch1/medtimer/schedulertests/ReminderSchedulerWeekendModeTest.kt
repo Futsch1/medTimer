@@ -2,6 +2,8 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.reminders.TimeAccess
+import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
@@ -13,6 +15,7 @@ import org.mockito.Mockito
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 
 internal class ReminderSchedulerWeekendModeTest {
     @Test
@@ -40,7 +43,10 @@ internal class ReminderSchedulerWeekendModeTest {
     @Test
     fun weekendMode() {
         // 1.1.1970 is a Thursday
-        val scheduler = scheduler
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = getScheduler(mockTimeAccess)
 
         val userPreferences = UserPreferences.default().copy(
             weekendTime = LocalTime.of(10, 0),
@@ -63,7 +69,7 @@ internal class ReminderSchedulerWeekendModeTest {
         var scheduledReminders = scheduler.schedule(medicineList, emptyList())
         assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1)
 
-        Mockito.`when`(scheduler.timeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
 
         scheduledReminders = scheduler.schedule(medicineList, emptyList())
         assertReminded(
