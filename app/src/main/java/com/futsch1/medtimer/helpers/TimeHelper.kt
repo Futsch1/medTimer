@@ -2,15 +2,9 @@ package com.futsch1.medtimer.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.ContextWrapper
-import android.content.res.Configuration
-import android.content.res.Resources
-import android.os.LocaleList
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import com.futsch1.medtimer.di.DataSourcesEntryPoint
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import dagger.hilt.android.EntryPointAccessors
 import java.text.ParseException
 import java.time.DateTimeException
 import java.time.Instant
@@ -101,35 +95,31 @@ object TimeHelper {
      * @param daysSinceEpoch Days since epoch
      * @return Date string in local format
      */
-    @JvmStatic
-    fun daysSinceEpochToDateString(context: Context, daysSinceEpoch: Long): String {
+    fun daysSinceEpochToDateString(context: Context, daysSinceEpoch: Long, preferencesDataSource: PreferencesDataSource): String {
         val date = LocalDate.ofEpochDay(daysSinceEpoch)
-        return localDateToString(context, date)
+        return localDateToString(context, date, preferencesDataSource)
     }
 
     /**
      * @param context   Context to extract date format
      * @param localDate Local date
+     * @param preferencesDataSource Preferences data source for locale settings
      * @return Date string in local format
      */
-    fun localDateToString(context: Context, localDate: LocalDate): String {
+    fun localDateToString(context: Context, localDate: LocalDate, preferencesDataSource: PreferencesDataSource): String {
         val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-            .withLocale(getLocale(context))
+            .withLocale(getLocale(context, preferencesDataSource))
         return localDate.format(formatter)
     }
 
-    private fun getLocale(context: Context): Locale {
+    private fun getLocale(context: Context, preferencesDataSource: PreferencesDataSource): Locale {
         val localeList = context.resources.configuration.getLocales()
-        val locale = if (useSystemLocale(context) && localeList.size() > 1) {
+        val locale = if (preferencesDataSource.preferences.value.systemLocale && localeList.size() > 1) {
             localeList[1]
         } else {
             localeList[0]
         }
         return locale
-    }
-
-    private fun useSystemLocale(context: Context): Boolean {
-        return EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPreferencesDataSource().preferences.value.systemLocale
     }
 
     /**
@@ -283,16 +273,6 @@ object TimeHelper {
     }
 
     /**
-     * @param dateFormat DateFormat
-     * @param timeFormat DateFormat
-     * @param timeStamp  Time stamp in seconds since epoch
-     * @return Date and time string in local format
-     */
-    private fun secondsSinceEpochToDateTimeString(dateFormat: java.text.DateFormat, timeFormat: java.text.DateFormat, timeStamp: Long): String {
-        return secondSinceEpochToDateString(dateFormat, timeStamp) + " " + secondsSinceEpochToTimeString(timeFormat, timeStamp)
-    }
-
-    /**
      * @param context     Context to extract date and time formats
      * @param preferencesDataSource Preferences data source
      * @param timeStamp   Time stamp in seconds since epoch
@@ -348,42 +328,5 @@ object TimeHelper {
         ).toLocalDate()
     }
 
-    internal class LocaleContextWrapper(base: Context) : ContextWrapper(base) {
-        init {
-            buildContext(base)
-        }
-
-        override fun getResources(): Resources {
-            return mLocaleAwareContext!!.resources
-        }
-
-        companion object {
-            // No leak because this context is just a single copy of the enclosing context
-            @SuppressLint("StaticFieldLeak")
-            private var mLocaleAwareContext: Context? = null
-
-            // This is ok because the locale is not changed for the complete context, only wrapped for the DateFormat calls
-            @SuppressLint("AppBundleLocaleChanges")
-            @Synchronized
-            private fun buildContext(base: Context) {
-                if (mLocaleAwareContext != null) {
-                    return
-                }
-
-                if (base.resources != null && base.resources.configuration != null) {
-                    val configuration = Configuration(base.resources.configuration)
-                    configuration.setLocales(LocaleList(getLocale(base)))
-                    mLocaleAwareContext = base.createConfigurationContext(configuration)
-                } else {
-                    mLocaleAwareContext = base
-                }
-            }
-
-            @Synchronized
-            fun resetLocaleContextWrapper() {
-                mLocaleAwareContext = null
-            }
-        }
-    }
-
 }
+

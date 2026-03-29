@@ -13,8 +13,10 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.ZoneId
@@ -23,16 +25,18 @@ import javax.inject.Inject
 
 class ReminderNotificationProcessor @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    val reminderContext: ReminderContext,
     val notifications: Notifications,
     val notificationProcessor: NotificationProcessor,
     val repeatProcessor: RepeatProcessor,
-    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor
+    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
+    private val reminderNotificationFactory: ReminderNotificationFactory,
+    private val medicineRepository: MedicineRepository,
+    private val preferencesDataSource: PreferencesDataSource
 ) {
     suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
         // Create reminder events and filter those that are already processed
         val reminderNotification =
-            ReminderNotification.fromReminderNotificationData(reminderContext, reminderNotificationData)?.filterAlreadyProcessed() ?: return false
+            reminderNotificationFactory.create(reminderNotificationData)?.filterAlreadyProcessed() ?: return false
 
         val nonTakenReminderNotification = handleAutomaticallyTaken(reminderNotification)
         if (nonTakenReminderNotification.reminderNotificationParts.isEmpty()) {
@@ -78,10 +82,10 @@ class ReminderNotificationProcessor @Inject constructor(
 
         // Schedule remaining repeats for all reminders
         val remainingRepeats = reminderNotification.reminderNotificationParts[0].reminderEvent.remainingRepeats
-        if (remainingRepeats != 0 && reminderContext.preferencesDataSource.preferences.value.repeatReminders) {
+        if (remainingRepeats != 0 && preferencesDataSource.preferences.value.repeatReminders) {
             repeatProcessor.processRepeat(
                 reminderNotification.reminderNotificationData,
-                reminderContext.preferencesDataSource.preferences.value.repeatDelay
+                preferencesDataSource.preferences.value.repeatDelay
             )
         }
     }
@@ -95,7 +99,7 @@ class ReminderNotificationProcessor @Inject constructor(
 
             for (notificationReminderEvent in reminderNotification.reminderNotificationParts) {
                 notificationReminderEvent.reminderEvent.notificationId = notificationId
-                reminderContext.medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
+                medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
             }
         }
     }
@@ -110,7 +114,7 @@ class ReminderNotificationProcessor @Inject constructor(
             medicine: FullMedicine,
             reminder: Reminder,
             medicineRepository: MedicineRepository,
-            context: Context
+            timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
         ): ReminderEvent {
             val reminderEvent = ReminderEvent()
             reminderEvent.reminderId = reminder.reminderId
@@ -131,7 +135,7 @@ class ReminderNotificationProcessor @Inject constructor(
 
                 Reminder.ReminderType.EXPIRATION_DATE -> {
                     reminderEvent.amount =
-                        TimeHelper.daysSinceEpochToDateString(context, medicine.medicine.expirationDate)
+                        timeFormatter.daysSinceEpochToDateString(medicine.medicine.expirationDate)
                 }
 
                 else -> {

@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,9 +24,6 @@ abstract class EntityDataStore<T> : PreferenceDataStore() {
 
 abstract class EntityViewModel<T> : ViewModel() {
     abstract fun getFlow(id: Int): Flow<T?>
-
-    // TODO: view model should not expose the repository to the view logic; the repository be private
-    abstract val medicineRepository: MedicineRepository
 }
 
 abstract class EntityPreferencesFragment<T>(
@@ -45,7 +41,6 @@ abstract class EntityPreferencesFragment<T>(
     lateinit var mainDispatcher: CoroutineDispatcher
 
     lateinit var dataStore: EntityDataStore<T>
-    abstract val medicineRepository: MedicineRepository
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()

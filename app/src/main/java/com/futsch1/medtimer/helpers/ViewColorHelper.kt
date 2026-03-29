@@ -44,9 +44,9 @@ object ViewColorHelper {
         }
     }
 
-    fun setIconToImageView(view: View, imageView: ImageView, iconId: Int) {
+    fun setIconToImageView(medicineIcons: MedicineIcons, view: View, imageView: ImageView, iconId: Int) {
         if (iconId != 0) {
-            val iconDrawable = MedicineIcons(view.context).getIconDrawable(iconId)
+            val iconDrawable = medicineIcons.getIconDrawable(iconId)
             setDrawableTint(view, iconDrawable)
             imageView.setImageDrawable(iconDrawable)
             imageView.setVisibility(View.VISIBLE)

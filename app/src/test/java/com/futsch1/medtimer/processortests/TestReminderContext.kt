@@ -16,26 +16,20 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
-import com.futsch1.medtimer.reminders.TimeAccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
-import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 class MedicineRepositoryFake {
     val medicines = mutableListOf<Medicine>()
@@ -115,7 +109,6 @@ class TestReminderContext {
     val alarmManagerMock: AlarmManager = mock()
     val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock()
-    val mock: ReminderContext = mock()
     val contextMock: Context = mock()
     val medicineRepositoryFake = MedicineRepositoryFake()
     val localPreferencesMock: SharedPreferences = mock()
@@ -133,21 +126,7 @@ class TestReminderContext {
     var persistentData = PersistentData.default()
 
     init {
-        `when`(mock.context).thenReturn(contextMock)
         `when`(contextMock.packageName).thenReturn("com.futsch1.medtimer")
-        `when`(mock.medicineRepository).thenReturn(medicineRepositoryFake.mock)
-        `when`(mock.buildNotificationChannel(anyString(), anyString(), anyInt())).thenReturn(notificationChannelMock)
-        `when`(mock.getString(anyInt())).thenAnswer { stringList[it.arguments[0]] ?: "" }
-        `when`(mock.minutesToTimeString(anyLong())).thenReturn("")
-        `when`(mock.daysSinceEpochToDateString(anyLong())).thenReturn("")
-        `when`(mock.timeAccess).thenReturn(object : TimeAccess {
-            override fun systemZone(): ZoneId = ZoneId.of("UTC")
-            override fun localDate(): LocalDate = localDate
-            override fun now(): Instant = instant
-        })
-        `when`(mock.icons).thenReturn(mock<MedicineIcons>())
-        `when`(mock.preferencesDataSource).thenReturn(preferencesDataSourceMock)
-        `when`(mock.persistentDataDataSource).thenReturn(persistentDataDataSourceMock)
 
         `when`(alarmManagerMock.canScheduleExactAlarms()).thenReturn(true)
 

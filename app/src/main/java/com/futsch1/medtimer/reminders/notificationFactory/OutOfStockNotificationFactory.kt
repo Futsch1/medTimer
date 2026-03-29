@@ -7,7 +7,8 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineHelper.formatAmount
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -15,13 +16,14 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class OutOfStockNotificationFactory @AssistedInject constructor(
-    reminderContext: ReminderContext,
-    @ApplicationContext context: Context,
+    medicineIcons: MedicineIcons,
+    @param:ApplicationContext private val context: Context,
     @Assisted val reminderNotification: ReminderNotification,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    preferencesDataSource: PreferencesDataSource
 ) :
     NotificationFactory(
-        reminderContext,
+        medicineIcons,
         context,
         reminderNotification.reminderNotificationData.notificationId,
         reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
@@ -32,16 +34,16 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         val contentIntent = getStartAppIntent()
         val medicine = reminderNotification.reminderNotificationParts[0].medicine.medicine
 
-        val medicineNameString = MedicineHelper.getMedicineName(medicine, true, reminderContext.preferencesDataSource.preferences.value)
-        val notificationMessage = reminderContext.getString(
+        val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)
+        val notificationMessage = context.getString(
             R.string.out_of_stock_notification,
             medicineNameString,
             formatAmount(medicine.amount, medicine.unit)
         )
-        val intentBuilder = StockIntentBuilder(reminderContext, reminderNotification)
+        val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
         builder.setSmallIcon(R.drawable.box_seam)
-            .setContentTitle(reminderContext.getString(R.string.out_of_stock_notification_title))
+            .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)
             .setContentIntent(contentIntent)
@@ -50,7 +52,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
             .addAction(
                 R.drawable.cart2,
-                reminderContext.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
+                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
                 intentBuilder.pendingRefill
             )
     }

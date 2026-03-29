@@ -97,6 +97,10 @@ open class MedicineRepository(
         medicineDao.updateReminder(reminder)
     }
 
+    suspend fun updateReminders(reminder: List<Reminder>) {
+        medicineDao.updateReminders(reminder)
+    }
+
     suspend fun deleteReminder(reminderId: Int) {
         medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) }
     }

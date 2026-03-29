@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.MedicineHelper
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +19,9 @@ import kotlinx.coroutines.flow.take
 
 @AndroidEntryPoint
 class ShowMedicineSheetDialogFragment : DialogFragment() {
+
+    @javax.inject.Inject
+    lateinit var medicineStringFormatter: com.futsch1.medtimer.helpers.MedicineStringFormatter
 
     private val viewModel: ShowMedicineViewModel by viewModels()
 
@@ -64,12 +66,10 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         val context = requireContext()
 
         dialog.requireViewById<TextView>(R.id.medicineName).text =
-            MedicineHelper.getMedicineNameWithStockTextInternal(
-                context, state.userPreferences, state.fullMedicine
-            )
+            medicineStringFormatter.getMedicineNameWithStockText(state.userPreferences, state.fullMedicine)
 
         val datesTextView = dialog.requireViewById<TextView>(R.id.medicineDates)
-        datesTextView.text = MedicineHelper.getDatesText(context, state.fullMedicine)
+        datesTextView.text = medicineStringFormatter.getDatesText(state.fullMedicine)
         checkIfTextElseGone(datesTextView)
 
         val notesTextView = dialog.requireViewById<TextView>(R.id.medicineNotes)

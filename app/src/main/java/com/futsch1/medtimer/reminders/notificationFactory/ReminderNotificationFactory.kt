@@ -8,20 +8,23 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
+import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.DismissNotificationAction
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
-
 abstract class ReminderNotificationFactory(
-    reminderContext: ReminderContext,
+    medicineIcons: MedicineIcons,
     private val context: Context,
     val reminderNotification: ReminderNotification,
     notificationManager: NotificationManager,
-    intentsFactory: NotificationIntentBuilder.Factory
+    intentsFactory: NotificationIntentBuilder.Factory,
+    private val preferencesDataSource: PreferencesDataSource,
+    timeFormatter: TimeFormatter
 ) : NotificationFactory(
-    reminderContext,
+    medicineIcons,
     context,
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
@@ -31,7 +34,9 @@ abstract class ReminderNotificationFactory(
     val intents = intentsFactory.create(reminderNotification)
     val notificationStrings =
         NotificationStringBuilder(
-            reminderContext,
+            context,
+            preferencesDataSource,
+            timeFormatter,
             reminderNotification
         )
 
@@ -39,24 +44,21 @@ abstract class ReminderNotificationFactory(
         val contentIntent: PendingIntent = getStartAppIntent()
 
         builder.setSmallIcon(R.drawable.capsule)
-        builder.setContentTitle(reminderContext.getString(R.string.notification_title))
+        builder.setContentTitle(context.getString(R.string.notification_title))
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
         builder.setContentIntent(contentIntent)
 
         builder.setDeleteIntent(intents.pendingDismiss)
 
-        // Set group key to reminder notification time string so that same time reminders are grouped
         builder.setGroup(
             reminderNotification.reminderNotificationData.remindInstant.epochSecond.toString()
         )
 
-        // Later than Android 14, make notification ongoing so that it cannot be dismissed from the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && reminderContext.preferencesDataSource.preferences.value.stickyOnLockscreen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && preferencesDataSource.preferences.value.stickyOnLockscreen
         ) {
             builder.setOngoing(true)
         }
-        // If shown as alarm, add a full screen intent
         if (reminderNotification.reminderNotificationParts.any { it.medicine.medicine.showNotificationAsAlarm }) {
             addFullScreenIntent()
         }
@@ -89,7 +91,7 @@ abstract class ReminderNotificationFactory(
 
     fun buildActions(
     ) {
-        when (reminderContext.preferencesDataSource.preferences.value.dismissNotificationAction) {
+        when (preferencesDataSource.preferences.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
                 addTakenAction()
                 addSnoozeAction()
@@ -109,7 +111,7 @@ abstract class ReminderNotificationFactory(
 
     private fun addSkippedAction() {
         builder.addAction(
-            R.drawable.x_circle, reminderContext.getString(R.string.skipped), intents.pendingSkipped
+            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
         )
     }
 
@@ -119,7 +121,7 @@ abstract class ReminderNotificationFactory(
             builder.addAction(action)
         } else {
             builder.addAction(
-                R.drawable.hourglass_split, reminderContext.getString(R.string.snooze), intents.pendingSnooze
+                R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
             )
         }
     }
@@ -130,7 +132,7 @@ abstract class ReminderNotificationFactory(
             builder.addAction(action)
         } else {
             builder.addAction(
-                R.drawable.check2_circle, reminderContext.getString(R.string.taken), intents.pendingTaken
+                R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
             )
         }
     }

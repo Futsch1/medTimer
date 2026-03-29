@@ -10,9 +10,22 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.ManualDose.ManualDoseEntry
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class ManualDoseListEntryAdapter(context: Context, val resource: Int, entries: List<ManualDoseEntry>) :
-    ArrayAdapter<ManualDoseEntry>(context, resource, entries) {
+class ManualDoseListEntryAdapter @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted val resource: Int,
+    @Assisted entries: List<ManualDoseEntry>,
+    private val medicineIcons: MedicineIcons
+) : ArrayAdapter<ManualDoseEntry>(context, resource, entries) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(context: Context, resource: Int, entries: List<ManualDoseEntry>): ManualDoseListEntryAdapter
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(resource, parent, false)
 
@@ -26,8 +39,9 @@ class ManualDoseListEntryAdapter(context: Context, val resource: Int, entries: L
         } else {
             ViewColorHelper.setDefaultColors(textView, listOf(textView))
         }
+
         val iconDrawable = if (currentItem.iconId != 0) {
-            val iconDrawable = MedicineIcons(context).getIconDrawable(currentItem.iconId)
+            val iconDrawable = medicineIcons.getIconDrawable(currentItem.iconId)
             ViewColorHelper.setDrawableTint(textView, iconDrawable)
             iconDrawable
         } else null

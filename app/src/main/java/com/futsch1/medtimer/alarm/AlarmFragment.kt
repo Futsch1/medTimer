@@ -11,9 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.LogTags.ALARM
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.reminders.ReminderContext
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationStringBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,10 +29,16 @@ class AlarmFragment(
 ) : Fragment() {
     lateinit var reminderNotificationData: ReminderNotificationData
     @Inject
-    lateinit var reminderContext: ReminderContext
+    lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
 
     @Inject
-    lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
+    lateinit var reminderNotificationFactory: ReminderNotificationFactory
+
+    @Inject
+    lateinit var preferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource
+
+    @Inject
+    lateinit var timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +57,12 @@ class AlarmFragment(
 
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
-                val reminderNotification = ReminderNotification.fromReminderNotificationData(
-                    reminderContext,
+                val reminderNotification = reminderNotificationFactory.create(
                     reminderNotificationData
                 )!!
                 Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
 
-                val notificationStrings = NotificationStringBuilder(reminderContext, reminderNotification, false)
+                val notificationStrings = NotificationStringBuilder(requireContext(), preferencesDataSource, timeFormatter, reminderNotification, false)
                 val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {

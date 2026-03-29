@@ -19,15 +19,17 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,18 +60,36 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     lateinit var actionsFactory: ActionsFactory
 
     @Inject
+    lateinit var multipleActionsFactory: MultipleActions.Factory
+
+    @Inject
     lateinit var manualDoseFactory: ManualDose.Factory
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
+
+    @Inject
+    lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
+
+    @Inject
+    lateinit var medicineRepository: MedicineRepository
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
     private val medicineViewModel: MedicineViewModel by viewModels()
-    private val overviewViewModel: OverviewViewModel by viewModels {
-        OverviewViewModelFactory(
-            requireActivity().application,
-            preferencesDataSource,
-            medicineViewModel
-        )
-    }
+    private val overviewViewModel: OverviewViewModel by viewModels(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback<OverviewViewModel.Factory> { factory ->
+                factory.create(
+                    medicineViewModel.getLiveReminderEvents(
+                        Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60),
+                        com.futsch1.medtimer.database.statusValuesWithoutDelete
+                    ),
+                    medicineViewModel.scheduledReminders
+                )
+            }
+        }
+    )
 
     @Inject
     lateinit var optionsMenuFactory: OptionsMenu.Factory
@@ -101,7 +121,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        NextReminders(this, medicineViewModel, preferencesDataSource)
+        NextReminders(this, medicineViewModel, preferencesDataSource, medicineRepository)
 
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
 
@@ -139,7 +159,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     private fun setupReminders() {
         reminders = fragmentOverview.findViewById(R.id.reminders)
-        adapter = RemindersViewAdapter(RemindersViewAdapter.OverviewEventDiff(), requireActivity(), actionsFactory)
+        adapter = remindersViewAdapterFactory.create(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
         adapter.clickListener = this
@@ -225,7 +245,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             actionsMenu = null
         } else {
             actionMode?.title = selectedCount.toString()
-            val multipleActions = MultipleActions(actionsFactory, adapter.getSelectedItems())
+            val multipleActions = multipleActionsFactory.create(adapter.getSelectedItems(), requireActivity())
             actionsMenu = ActionsMenu(actionMode!!.menu, multipleActions)
         }
 

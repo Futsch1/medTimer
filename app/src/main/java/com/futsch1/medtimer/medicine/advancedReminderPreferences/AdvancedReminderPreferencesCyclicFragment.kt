@@ -5,9 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -21,14 +19,11 @@ class AdvancedReminderPreferencesCyclicFragment : AdvancedReminderPreferencesFra
     listOf("cycle_start_date", "cycle_consecutive_days", "cycle_pause_days")
 ) {
     @Inject
-    override lateinit var medicineRepository: MedicineRepository
-
-    @Inject
-    lateinit var datePickerDialogFactory: DatePickerDialogFactory
+    lateinit var dateEditHandler: DateEditHandler
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
-            "cycle_start_date" to { activity, preference -> showDateEdit(activity, preference, datePickerDialogFactory) },
+            "cycle_start_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
         )
 
     override fun customSetup(entity: Reminder) {

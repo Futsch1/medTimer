@@ -32,6 +32,9 @@ class ChartsFragment : Fragment() {
     @Inject
     lateinit var medicineRepository: MedicineRepository
 
+    @Inject
+    lateinit var medicinePerDayChartFactory: MedicinePerDayChart.Factory
+
     private lateinit var takenSkippedChartView: PieChart
     private lateinit var takenSkippedTotalChartView: PieChart
     private lateinit var medicinesPerDayChartView: XYPlot
@@ -86,9 +89,8 @@ class ChartsFragment : Fragment() {
 
     private fun setupMedicinesPerDayChart() {
         try {
-            this.medicinesPerDayChart = MedicinePerDayChart(
+            this.medicinesPerDayChart = medicinePerDayChartFactory.create(
                 medicinesPerDayChartView,
-                requireContext(),
                 medicineRepository.medicines
             )
         } catch (_: IllegalStateException) {

@@ -5,7 +5,9 @@ import android.content.Context
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -13,17 +15,21 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class BigReminderNotificationFactory @AssistedInject constructor(
-    reminderContext: ReminderContext,
+    medicineIcons: MedicineIcons,
     @param:ApplicationContext private val context: Context,
     @Assisted reminderNotification: ReminderNotification,
     notificationManager: NotificationManager,
-    intentsFactory: NotificationIntentBuilder.Factory
+    intentsFactory: NotificationIntentBuilder.Factory,
+    preferencesDataSource: PreferencesDataSource,
+    timeFormatter: TimeFormatter
 ) : ReminderNotificationFactory(
-    reminderContext,
+    medicineIcons,
     context,
     reminderNotification,
     notificationManager,
-    intentsFactory
+    intentsFactory,
+    preferencesDataSource,
+    timeFormatter
 ) {
     @AssistedFactory
     fun interface Factory {

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReminderViewModel @Inject constructor(
-    override val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository
 ) : EntityViewModel<Reminder>() {
 
     override fun getFlow(id: Int): Flow<Reminder?> = medicineRepository.getReminderFlow(id)

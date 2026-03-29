@@ -8,13 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.helpers.setAllRemindersActive
+import com.futsch1.medtimer.database.MedicineRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MedicinesMenu(
+    // TODO: replace the viewmodel with the app level coroutine scope
     private val medicineViewModel: MedicineViewModel,
+    private val medicineRepository: MedicineRepository,
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
 
@@ -45,7 +47,7 @@ class MedicinesMenu(
         medicineViewModel.viewModelScope.launch(dispatcher) {
             val medicines = sortFunction(medicines)
             medicines.stream().forEach { it.medicine.sortOrder = 1.0 + medicines.indexOf(it) }
-            medicineViewModel.medicineRepository.updateMedicines(medicines.stream().map { it.medicine }.toList())
+            medicineRepository.updateMedicines(medicines.stream().map { it.medicine }.toList())
         }
     }
 
@@ -53,16 +55,14 @@ class MedicinesMenu(
         medicineViewModel.viewModelScope.launch(dispatcher) {
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (fullMedicine in medicines) {
-                    val localMedicine = medicineViewModel.medicineRepository.getMedicine(fullMedicine.medicine.medicineId)
-                    setAllRemindersActive(localMedicine!!, medicineViewModel.medicineRepository, active)
+                    val localMedicine = medicineRepository.getMedicine(fullMedicine.medicine.medicineId)
+                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, medicineRepository, active)
                 }
             }
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return false
-    }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
 
     companion object {
         fun setupMenu(

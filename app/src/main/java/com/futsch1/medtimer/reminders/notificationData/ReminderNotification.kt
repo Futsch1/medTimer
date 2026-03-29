@@ -1,16 +1,9 @@
 package com.futsch1.medtimer.reminders.notificationData
 
-import android.content.Context
-import android.util.Log
-import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.reminders.ReminderContext
-import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
-import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -51,89 +44,12 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
         return TimeHelper.secondsSinceEpochToLocalTime(reminderNotificationData.remindInstant.epochSecond, ZoneId.systemDefault())
     }
 
-    fun getRemindTime(reminderContext: ReminderContext): String {
+    fun getRemindTime(timeFormatter: TimeFormatter): String {
         val remindTime = getRemindedTime()
-        return reminderContext.minutesToTimeString(remindTime.hour * 60L + remindTime.minute)
+        return timeFormatter.minutesToTimeString(remindTime.hour * 60L + remindTime.minute)
     }
 
     override fun toString(): String {
         return reminderNotificationData.toString()
-    }
-
-    companion object {
-        suspend fun fromReminderNotificationData(
-            reminderContext: ReminderContext,
-            reminderNotificationData: ReminderNotificationData
-        ): ReminderNotification? {
-            if (!reminderNotificationData.valid) {
-                return null
-            }
-
-            val result = mutableListOf<ReminderNotificationPart>()
-
-            val numberOfRepeats = getNumberOfRepeats(reminderContext)
-            for (i in reminderNotificationData.reminderIds.indices) {
-                val reminder = reminderContext.medicineRepository.getReminder(reminderNotificationData.reminderIds[i])
-                if (reminder == null) {
-                    Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderNotificationData.reminderIds[i]))
-                    return null
-                }
-
-                val medicine = reminderContext.medicineRepository.getMedicine(reminder.medicineRelId)
-                if (medicine == null) {
-                    Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
-                    return null
-                }
-
-                var reminderEvent =
-                    getEvent(reminderContext.medicineRepository, reminderNotificationData.reminderEventIds[i], reminder, reminderNotificationData.remindInstant)
-                if (reminderEvent == null) {
-                    reminderEvent =
-                        buildAndInsertReminderEvent(
-                            reminderContext.medicineRepository,
-                            reminderContext.context,
-                            medicine,
-                            reminder,
-                            reminderNotificationData.remindInstant,
-                            numberOfRepeats
-                        )
-                } else {
-                    reminderNotificationData.notificationId = reminderEvent.notificationId
-                }
-                reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
-                result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
-            }
-
-            return ReminderNotification(result, reminderNotificationData)
-        }
-
-        private fun getEvent(medicineRepository: MedicineRepository, reminderEventId: Int, reminder: Reminder, remindInstant: Instant): ReminderEvent? {
-            return if (reminderEventId != 0) {
-                medicineRepository.getReminderEvent(reminderEventId)
-            } else {
-                // We might have created the reminder event already
-                medicineRepository.getReminderEvent(reminder.reminderId, remindInstant.epochSecond)
-            }
-        }
-
-        private suspend fun buildAndInsertReminderEvent(
-            medicineRepository: MedicineRepository,
-            context: Context,
-            medicine: FullMedicine,
-            reminder: Reminder,
-            remindInstant: Instant,
-            numberOfRepeats: Int
-        ): ReminderEvent {
-            val reminderEvent: ReminderEvent =
-                ReminderNotificationProcessor.buildReminderEvent(remindInstant.epochSecond, medicine, reminder, medicineRepository, context)
-            reminderEvent.remainingRepeats = numberOfRepeats
-            reminderEvent.reminderEventId = medicineRepository.insertReminderEvent(reminderEvent).toInt()
-            return reminderEvent
-        }
-
-        private fun getNumberOfRepeats(reminderContext: ReminderContext): Int {
-            return reminderContext.preferencesDataSource.preferences.value.numberOfRepetitions
-        }
-
     }
 }

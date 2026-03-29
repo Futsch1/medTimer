@@ -5,6 +5,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.MedicineStringFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.schedulertests.TestHelper
@@ -72,7 +74,10 @@ class MedicineHelperTest {
     fun testMedicineNameWithStockText() {
         val contextMock = mock<Context>()
         val preferencesDataSource = mock<PreferencesDataSource>()
+        val timeFormatterMock = mock<TimeFormatter>()
         Mockito.`when`(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
+
+        val formatter = MedicineStringFormatter(contextMock, preferencesDataSource, timeFormatterMock)
 
         Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->
@@ -87,14 +92,14 @@ class MedicineHelperTest {
         medicine.unit = "pills"
         assertEquals(
             "test",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(fullMedicine).toString()
         )
 
         // Expired case
         medicine.expirationDate = LocalDate.now().toEpochDay() - 1
         assertEquals(
             "test (\uD83D\uDEAB)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(fullMedicine).toString()
         )
         medicine.expirationDate = 0
 
@@ -102,7 +107,7 @@ class MedicineHelperTest {
         medicine.amount = 12.0
         assertEquals(
             "test (12 pills left)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(fullMedicine).toString()
         )
 
         // Out of stock case
@@ -112,14 +117,14 @@ class MedicineHelperTest {
         fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(fullMedicine).toString()
         )
 
         // Out of stock and expired case
         medicine.expirationDate = LocalDate.now().toEpochDay() - 1
         assertEquals(
             "test (12 pills left ⚠ \uD83D\uDEAB)",
-            MedicineHelper.getMedicineNameWithStockText(contextMock, preferencesDataSource, fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(fullMedicine).toString()
         )
     }
 

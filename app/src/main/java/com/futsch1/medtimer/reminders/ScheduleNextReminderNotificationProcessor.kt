@@ -5,29 +5,22 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import javax.inject.Inject
 
-/**
- * Responsible for calculating and scheduling the next medicine reminder notification.
- *
- * This class retrieves all medicines and their history from the [MedicineRepository],
- * determines the next upcoming reminder(s) using [ReminderScheduler], and updates the
- * system alarm via [AlarmProcessor].
- *
- * It respects user preferences regarding notification combining:
- * - If notifications are combined, it schedules an alarm for all reminders occurring at the next time slot.
- * - If not combined, it schedules an alarm only for the single next reminder.
- *
- * If no future reminders are found, any existing next reminder alarm is cancelled.
- */
-class ScheduleNextReminderNotificationProcessor @Inject constructor(val reminderContext: ReminderContext, val alarmProcessor: AlarmProcessor) {
+class ScheduleNextReminderNotificationProcessor @Inject constructor(
+    private val alarmProcessor: AlarmProcessor,
+    private val medicineRepository: MedicineRepository,
+    private val timeAccess: TimeAccess,
+    private val preferencesDataSource: PreferencesDataSource
+) {
 
     fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
-        val fullMedicines = reminderContext.medicineRepository.medicines
-        val reminderEvents = reminderContext.medicineRepository.getReminderEventsForScheduling(fullMedicines)
+        val fullMedicines = medicineRepository.medicines
+        val reminderEvents = medicineRepository.getReminderEventsForScheduling(fullMedicines)
         val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }
 
         scheduleNextReminderInternal(fullMedicines, allEvents)
@@ -37,13 +30,13 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(val reminder
         fullMedicines: List<FullMedicine>,
         reminderEvents: List<ReminderEvent>
     ) {
-        val reminderScheduler = ReminderScheduler(reminderContext.timeAccess, reminderContext.preferencesDataSource)
+        val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
         val scheduledReminders: List<ScheduledReminder> =
             reminderScheduler.schedule(fullMedicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(
-                    if (reminderContext.preferencesDataSource.preferences.value.combineNotifications) scheduledReminders else listOf(
+                    if (preferencesDataSource.preferences.value.combineNotifications) scheduledReminders else listOf(
                         scheduledReminders[0]
                     )
                 )

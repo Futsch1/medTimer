@@ -24,10 +24,10 @@ import java.time.LocalDate
 
 class LinkedReminderHandling @AssistedInject constructor(
     @Assisted val reminder: Reminder,
-    val medicineRepository: MedicineRepository,
-    @Assisted val coroutineScope: CoroutineScope,
-    @param:Dispatcher(MedTimerDispatchers.IO) val dispatcher: CoroutineDispatcher,
-    val timePickerDialogFactory: TimePickerDialogFactory
+    private val medicineRepository: MedicineRepository,
+    @Assisted private val coroutineScope: CoroutineScope,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    private val timePickerDialogFactory: TimePickerDialogFactory
 ) {
     @AssistedFactory
     interface Factory {

@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.overview
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import androidx.fragment.app.FragmentActivity
@@ -8,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -18,6 +18,7 @@ import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -35,6 +36,8 @@ class ManualDose @AssistedInject constructor(
     @Assisted private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val manualDoseListEntryAdapterFactory: ManualDoseListEntryAdapter.Factory,
+    private val medicineRepository: MedicineRepository,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
     @AssistedFactory
@@ -50,10 +53,10 @@ class ManualDose @AssistedInject constructor(
     suspend fun logManualDose() {
         val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
-        val adapter = ManualDoseListEntryAdapter(context, R.layout.manual_dose_list_entry, entries)
+        val adapter = manualDoseListEntryAdapterFactory.create(context, R.layout.manual_dose_list_entry, entries)
 
         withContext(mainDispatcher) {
-            AlertDialog.Builder(context)
+            MaterialAlertDialogBuilder(context)
                 .setAdapter(adapter) { _: DialogInterface?, which: Int ->
                     startLogProcess(entries[which])
                 }
@@ -149,8 +152,7 @@ class ManualDose @AssistedInject constructor(
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             activity.lifecycleScope.launch {
-                medicineViewModel.medicineRepository.insertReminderEvent(reminderEvent)
-
+                medicineRepository.insertReminderEvent(reminderEvent)
             }
 
             if (medicineId == -1) {

@@ -11,14 +11,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.overview.actions.Actions
 import com.futsch1.medtimer.overview.actions.ActionsFactory
-import com.futsch1.medtimer.overview.actions.createActionsView
+import com.futsch1.medtimer.overview.actions.Button
 import com.google.android.material.color.MaterialColors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 class ReminderViewHolder(
@@ -26,7 +31,8 @@ class ReminderViewHolder(
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
     val clickDelegate: ClickDelegate,
-    private val actionsFactory: ActionsFactory
+    private val actionsFactory: ActionsFactory,
+    private val medicineIcons: MedicineIcons
 ) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -43,11 +49,12 @@ class ReminderViewHolder(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
             clickDelegate: ClickDelegate,
-            actionsFactory: ActionsFactory
+            actionsFactory: ActionsFactory,
+            medicineIcons: MedicineIcons
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, actionsFactory)
+            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, actionsFactory, medicineIcons)
         }
     }
 
@@ -58,7 +65,7 @@ class ReminderViewHolder(
         reminderText.text = event.text
         setBarsVisibility(event.eventPosition)
         setBackgrounds()
-        ViewColorHelper.setIconToImageView(contentContainer, reminderIcon, event.icon)
+        ViewColorHelper.setIconToImageView(medicineIcons, contentContainer, reminderIcon, event.icon)
 
         setStateButton(event.state)
         setupStateMenu()
@@ -116,7 +123,7 @@ class ReminderViewHolder(
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val actions = actionsFactory.createActions(event)
+        val actions = actionsFactory.createActions(event, fragmentActivity)
         val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {
@@ -131,6 +138,50 @@ class ReminderViewHolder(
             val popupTop = location[1] + view.height / 2 - popupView.measuredHeight / 2
             popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], popupTop)
         }
+    }
+
+    private fun createActionsView(actions: Actions, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope): Boolean {
+        view.setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+        // Depending on the number of visible buttons, set the angles of the anchors
+        // 4 buttons -> 30, 70, 110, 150
+        // 3 buttons -> 50, 90, 130
+        // 2 buttons -> 70, 110
+        // 1 button -> 90
+        val visibleButtons = actions.visibleButtons
+        val angleLists = mapOf(
+            4 to listOf(30f, 70f, 110f, 150f),
+            3 to listOf(50f, 90f, 130f),
+            2 to listOf(70f, 110f),
+            1 to listOf(90f)
+        )
+        var anglesIndex = 0
+        for (button in Button.entries) {
+            val buttonView = view.findViewById<View>(button.associatedId)
+            buttonView.setOnClickListener {
+                coroutineScope.launch {
+                    actions.buttonClicked(button)
+                }
+                popupWindow.dismiss()
+            }
+
+            val isVisible = visibleButtons.contains(button)
+            buttonView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+            if (!isVisible) {
+                continue
+            }
+
+            // Set the circular layout angle for the anchor view
+            val anchor = view.findViewById<View>(button.anchorId)
+            val layoutParams = anchor.layoutParams as ConstraintLayout.LayoutParams
+            val angles = angleLists[visibleButtons.size]!!
+            layoutParams.circleAngle = angles[anglesIndex++]
+            anchor.layoutParams = layoutParams
+        }
+
+        return visibleButtons.isNotEmpty()
     }
 
     private fun setStateButton(state: OverviewState) {
@@ -151,22 +202,8 @@ class ReminderViewHolder(
     }
 
     private fun setBarsVisibility(position: EventPosition) {
-        if (position == EventPosition.FIRST) {
-            topBar.visibility = View.GONE
-        } else {
-            topBar.visibility = View.VISIBLE
-        }
-
-        if (position == EventPosition.LAST) {
-            bottomBar.visibility = View.GONE
-        } else {
-            bottomBar.visibility = View.VISIBLE
-        }
-
-        if (position == EventPosition.ONLY) {
-            topBar.visibility = View.GONE
-            bottomBar.visibility = View.GONE
-        }
+        topBar.visibility = if (position == EventPosition.FIRST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
+        bottomBar.visibility = if (position == EventPosition.LAST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
     }
 
     fun interface ClickDelegate {

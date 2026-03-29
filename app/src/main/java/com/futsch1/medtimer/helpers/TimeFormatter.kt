@@ -21,10 +21,10 @@ class TimeFormatter @Inject constructor(
         minutesToTimeString(minutes.toLong())
 
     fun localDateToString(date: LocalDate): String =
-        TimeHelper.localDateToString(context, date)
+        TimeHelper.localDateToString(context, date, preferencesDataSource)
 
     fun daysSinceEpochToDateString(days: Long): String =
-        TimeHelper.daysSinceEpochToDateString(context, days)
+        TimeHelper.daysSinceEpochToDateString(context, days, preferencesDataSource)
 
     fun secondsSinceEpochToTimeString(timestamp: Long): String =
         TimeHelper.secondsSinceEpochToTimeString(context, timestamp)

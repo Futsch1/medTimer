@@ -18,7 +18,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -37,7 +36,6 @@ import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -49,8 +47,6 @@ import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val medicineViewModel: MedicineViewModel by viewModels()
-
     @Inject
     lateinit var autostartService: AutostartService
     private var appBarConfiguration: AppBarConfiguration? = null
@@ -65,9 +61,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var backupManagerFactory: BackupManager.Factory
-
-    @Inject
-    lateinit var reminderContext: ReminderContext
 
     @Inject
     lateinit var variableAmountHandler: VariableAmountHandler
@@ -99,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         this.enableEdgeToEdge()
 
-        initialize(reminderContext, notificationManager)
+        initialize(this, notificationManager)
 
         TimeHelper.onChangedUseSystemLocale()
 
@@ -235,7 +228,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        backupManagerFactory.create(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
+        backupManagerFactory.create(this, this, null, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
     }

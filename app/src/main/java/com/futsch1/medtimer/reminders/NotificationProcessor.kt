@@ -3,12 +3,14 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import java.time.Instant
 import javax.inject.Inject
 
@@ -24,19 +26,22 @@ import javax.inject.Inject
 
  */
 class NotificationProcessor @Inject constructor(
-    val reminderContext: ReminderContext,
     val alarmProcessor: AlarmProcessor,
     val notifications: Notifications,
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     val stockHandlingProcessor: StockHandlingProcessor,
     val repeatProcessor: RepeatProcessor,
-    private val notificationManager: NotificationManager
+    private val notificationManager: NotificationManager,
+    private val reminderNotificationFactory: ReminderNotificationFactory,
+    private val medicineRepository: MedicineRepository,
+    private val preferencesDataSource: PreferencesDataSource,
+    private val timeAccess: TimeAccess
 ) {
     suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
         val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
-            val reminderEvent = reminderContext.medicineRepository.getReminderEvent(reminderEventId)
+            val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
 
             if (reminderEvent != null) {
                 reminderEventsToUpdate.add(reminderEvent)
@@ -80,7 +85,7 @@ class NotificationProcessor @Inject constructor(
         reminderEventIds: List<Int>
     ) {
         val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(reminderEventIds)
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(reminderContext, newReminderNotificationData)
+        val reminderNotification = reminderNotificationFactory.create(newReminderNotificationData)
         if (reminderNotification != null) {
             notifications.showNotification(reminderNotification, reminderNotificationData.notificationId)
             rescheduleRepeat(newReminderNotificationData)
@@ -90,12 +95,12 @@ class NotificationProcessor @Inject constructor(
     }
 
     private suspend fun rescheduleRepeat(reminderNotificationData: ReminderNotificationData) {
-        val preferences = reminderContext.preferencesDataSource.preferences.value
+        val preferences = preferencesDataSource.preferences.value
         if (!preferences.repeatReminders) {
             return
         }
 
-        val remainingRepeats = reminderContext.medicineRepository
+        val remainingRepeats = medicineRepository
             .getReminderEvent(reminderNotificationData.reminderEventIds[0])
             ?.remainingRepeats ?: return
 
@@ -110,7 +115,7 @@ class NotificationProcessor @Inject constructor(
     suspend fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
         for (reminderEvent in reminderEvents) {
             reminderEvent.status = status
-            reminderEvent.processedTimestamp = reminderContext.timeAccess.now().epochSecond
+            reminderEvent.processedTimestamp = timeAccess.now().epochSecond
             doStockHandling(reminderEvent)
             Log.i(
                 LogTags.REMINDER, String.format(
@@ -124,7 +129,7 @@ class NotificationProcessor @Inject constructor(
             alarmProcessor.cancelPendingReminderNotifications(reminderEvent.reminderEventId)
         }
 
-        reminderContext.medicineRepository.updateReminderEvents(reminderEvents)
+        medicineRepository.updateReminderEvents(reminderEvents)
         removeRemindersFromNotification(reminderEvents)
     }
 
@@ -132,7 +137,7 @@ class NotificationProcessor @Inject constructor(
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
         ) {
-            val reminder = reminderContext.medicineRepository.getReminder(reminderEvent.reminderId) ?: return
+            val reminder = medicineRepository.getReminder(reminderEvent.reminderId) ?: return
             var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
             if (reminderEvent.status == ReminderStatus.SKIPPED) {
                 amount = -amount

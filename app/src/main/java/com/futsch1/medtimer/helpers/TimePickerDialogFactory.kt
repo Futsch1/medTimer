@@ -15,7 +15,7 @@ class TimePickerDialogFactory @Inject constructor(@ApplicationContext context: C
         const val DIALOG_TAG = "time_picker"
     }
 
-    private val localeAwareContext = TimeHelper.LocaleContextWrapper(context)
+    private val localeAwareContext = LocaleContextWrapper(context)
 
     private val autoTimeFormat: Int get() =
         if (DateFormat.is24HourFormat(localeAwareContext)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H

@@ -70,6 +70,9 @@ abstract class MedicineDao {
     @Update
     abstract suspend fun updateReminder(reminder: Reminder)
 
+    @Update
+    abstract suspend fun updateReminders(reminders: List<Reminder>)
+
     @Delete
     abstract suspend fun deleteMedicine(medicine: Medicine)
 

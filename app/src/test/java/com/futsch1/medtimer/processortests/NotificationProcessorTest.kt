@@ -4,8 +4,11 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationPart
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -14,12 +17,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.any
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.Instant
@@ -29,6 +33,11 @@ import kotlin.test.assertEquals
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
+@dagger.hilt.android.testing.UninstallModules(
+    com.futsch1.medtimer.di.DatabaseModule::class,
+    com.futsch1.medtimer.di.DatastoreModule::class,
+    com.futsch1.medtimer.di.TimeAccessModule::class
+)
 class NotificationProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -41,13 +50,59 @@ class NotificationProcessorTest {
     val testReminderContext = TestReminderContext()
 
     @BindValue
-    val reminderContext: ReminderContext = testReminderContext.mock
-
-    @BindValue
     val boundAlarmManager: AlarmManager = testReminderContext.alarmManagerMock
 
     @BindValue
     val boundNotificationManager: NotificationManager = testReminderContext.notificationManagerFake.mock
+
+    @BindValue
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = testReminderContext.medicineRepositoryFake.mock
+
+    @BindValue
+    val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = testReminderContext.preferencesDataSourceMock
+
+    @BindValue
+    val boundPersistentDataDataSource: com.futsch1.medtimer.preferences.PersistentDataDataSource = testReminderContext.persistentDataDataSourceMock
+
+    @BindValue
+    val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
+        override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
+        override fun localDate(): java.time.LocalDate = testReminderContext.localDate
+        override fun now(): Instant = testReminderContext.instant
+    }
+
+    @BindValue
+    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = mock()
+
+    @BindValue
+    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.DefaultPreferences
+    val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.MedTimerPreferencess
+    val boundMedTimerSharedPreferences: android.content.SharedPreferences = mock()
+
+    @BindValue
+    val boundReminderNotificationFactory: ReminderNotificationFactory = object : ReminderNotificationFactory(mock(), mock(), mock()) {
+        override suspend fun create(reminderNotificationData: ReminderNotificationData): ReminderNotification? {
+            if (!reminderNotificationData.valid) return null
+
+            val parts = mutableListOf<ReminderNotificationPart>()
+            for (i in reminderNotificationData.reminderIds.indices) {
+                val reminder = testReminderContext.medicineRepositoryFake.mock.getReminder(reminderNotificationData.reminderIds[i])
+                    ?: return null
+                val medicine = testReminderContext.medicineRepositoryFake.mock.getMedicine(reminder.medicineRelId)
+                    ?: return null
+                val event = testReminderContext.medicineRepositoryFake.mock.getReminderEvent(reminderNotificationData.reminderEventIds[i])
+                    ?: return null
+                parts.add(ReminderNotificationPart(reminder, event, medicine))
+            }
+            return ReminderNotification(parts, reminderNotificationData)
+        }
+    }
 
     @Inject
     lateinit var notificationProcessor: NotificationProcessor

@@ -10,8 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineWithTagsViewModel @Inject constructor(
-    // TODO: view model should not expose the repository to the view; the repository should be private
-    val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository
 ) : ViewModel() {
     fun getMedicineWithTags(medicineId: Int): Flow<FullMedicine?> =
         medicineRepository.getMedicineFlow(medicineId)

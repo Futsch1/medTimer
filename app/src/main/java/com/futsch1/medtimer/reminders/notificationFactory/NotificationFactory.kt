@@ -12,7 +12,7 @@ import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.helpers.MedicineIcons
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -20,7 +20,7 @@ import kotlin.time.Instant
 
 
 abstract class NotificationFactory(
-    protected val reminderContext: ReminderContext,
+    private val medicineIcons: MedicineIcons,
     private val context: Context,
     protected val notificationId: Int,
     medicines: List<Medicine>,
@@ -30,7 +30,7 @@ abstract class NotificationFactory(
 
     init {
         val importance = getHighestImportance(medicines)
-        val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(reminderContext, notificationManager, importance).id
+        val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(context, notificationManager, importance).id
         builder = NotificationCompat.Builder(context, notificationChannelId)
 
         val color = getColor(medicines)
@@ -48,7 +48,7 @@ abstract class NotificationFactory(
 
     private fun getIcon(medicines: List<Medicine>): Bitmap? {
         val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.toList()
-        return reminderContext.icons.getIconsBitmap(iconIds)
+        return medicineIcons.getIconsBitmap(iconIds)
     }
 
     private fun getHighestImportance(medicines: List<Medicine>): Importance {

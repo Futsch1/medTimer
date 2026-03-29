@@ -15,7 +15,6 @@ import javax.inject.Inject
  * schedules a new alarm for the future.
  */
 open class SnoozeProcessor @Inject constructor(
-    val reminderContext: ReminderContext,
     val alarmProcessor: AlarmProcessor,
     val notificationProcessor: NotificationProcessor
 ) {

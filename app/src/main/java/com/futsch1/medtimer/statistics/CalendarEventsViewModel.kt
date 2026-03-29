@@ -10,6 +10,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
@@ -35,7 +36,10 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext
     private val applicationContext: Context,
     private val medicineRepository: MedicineRepository,
-    private val preferencesDataSource: PreferencesDataSource
+    private val preferencesDataSource: PreferencesDataSource,
+    private val timeFormatter: TimeFormatter,
+    private val reminderEventFactory: OverviewReminderEvent.Factory,
+    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory
 ) : ViewModel() {
     private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()
@@ -117,11 +121,7 @@ class CalendarEventsViewModel @Inject constructor(
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
-        return OverviewScheduledReminderEvent(
-            applicationContext,
-            preferencesDataSource,
-            scheduledReminder
-        ).text
+        return scheduledReminderEventFactory.create(scheduledReminder).text
     }
 
 
@@ -147,10 +147,6 @@ class CalendarEventsViewModel @Inject constructor(
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
-        return OverviewReminderEvent(
-            applicationContext,
-            preferencesDataSource,
-            reminderEvent
-        ).text
+        return reminderEventFactory.create(reminderEvent).text
     }
 }

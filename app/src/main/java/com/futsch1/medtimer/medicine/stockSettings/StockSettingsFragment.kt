@@ -13,20 +13,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.TimeHelper
-
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
-import com.futsch1.medtimer.medicine.advancedReminderPreferences.showDateEdit
+import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -46,9 +43,8 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     ),
     listOf("stock_unit")
 ) {
-    // TODO: repository in a UI code; all repository operations should be delegated to the viewmodel
     @Inject
-    override lateinit var medicineRepository: MedicineRepository
+    lateinit var medicineRepository: MedicineRepository
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -57,16 +53,22 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory
 
     @Inject
-    lateinit var datePickerDialogFactory: DatePickerDialogFactory
+    lateinit var dateEditHandler: DateEditHandler
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
+
+    @Inject
+    lateinit var medicineDataStoreFactory: MedicineDataStore.Factory
+
     private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
-    private val medicineViewModel: MedicineViewModel by viewModels()
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
             "stock_refill_now" to { _, _ -> refillNow() },
-            "production_date" to { activity, preference -> showDateEdit(activity, preference, datePickerDialogFactory) },
-            "expiration_date" to { activity, preference -> showDateEdit(activity, preference, datePickerDialogFactory) },
+            "production_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
+            "expiration_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
             "clear_dates" to { _, _ ->
                 // TODO: direct store usage in UI code; all non-UI logic should be delegated to the viewmodel
                 dataStore.putLong("production_date", 0)
@@ -83,12 +85,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     override suspend fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
         val entityId = requireArguments.getInt("medicineId")
         val entity = medicineRepository.getMedicine(entityId)!!
-        return MedicineDataStore(
-            entity,
-            requireContext(),
-            medicineRepository,
-            lifecycleScope
-        )
+        return medicineDataStoreFactory.create(entity)
     }
 
     override fun getEntityViewModel(): EntityViewModel<FullMedicine> = stockMedicineViewModel
@@ -118,23 +115,22 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
             findPreference<Preference>("expiration_date")!!.icon = null
         }
         findPreference<Preference>("production_date")!!.summary = if (entity.medicine.productionDate != 0L) {
-            TimeHelper.daysSinceEpochToDateString(requireContext(), entity.medicine.productionDate)
+            timeFormatter.daysSinceEpochToDateString(entity.medicine.productionDate)
         } else {
             ""
         }
         findPreference<Preference>("expiration_date")!!.summary = if (entity.medicine.expirationDate != 0L) {
-            TimeHelper.daysSinceEpochToDateString(requireContext(), entity.medicine.expirationDate)
+            timeFormatter.daysSinceEpochToDateString(entity.medicine.expirationDate)
         } else {
             ""
         }
     }
 
     private fun calculateRunOutDate(entity: FullMedicine) {
-        val viewModel = medicineViewModel
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(viewModel, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource)
+            val runOutDate = estimateStockRunOutDate(medicineRepository, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource)
 
-            val runOutString = if (runOutDate != null && context != null) TimeHelper.localDateToString(requireContext(), runOutDate) else "---"
+            val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
 
             withContext(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
@@ -143,7 +139,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     }
 
     private fun addToCalendar() {
-        val date = TimeHelper.stringToLocalDate(requireContext(), findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
+        val date = timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent = createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.entity.medicine.name, date)
             try {

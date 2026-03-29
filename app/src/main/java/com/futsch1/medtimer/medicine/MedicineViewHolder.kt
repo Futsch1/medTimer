@@ -18,11 +18,11 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.helpers.MedicineHelper.getMedicineNameWithStockText
+import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.assisted.Assisted
@@ -35,8 +35,9 @@ import kotlinx.coroutines.withContext
 class MedicineViewHolder @AssistedInject constructor(
     @Assisted parent: ViewGroup,
     @Assisted private val activity: FragmentActivity,
-    private val preferencesDataSource: PreferencesDataSource,
+    private val medicineStringFormatter: MedicineStringFormatter,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
+    private val medicineIcons: MedicineIcons,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_medicine, parent, false)) {
@@ -51,7 +52,7 @@ class MedicineViewHolder @AssistedInject constructor(
     private val tags: FlexboxLayout = itemView.findViewById(R.id.tags)
 
     fun bind(medicine: FullMedicine) {
-        medicineNameView.text = getMedicineNameWithStockText(itemView.context, preferencesDataSource, medicine)
+        medicineNameView.text = medicineStringFormatter.getMedicineNameWithStockText(medicine)
         setupSummary(medicine)
 
         itemView.setOnClickListener { _: View? -> navigateToEditFragment(medicine) }
@@ -62,7 +63,7 @@ class MedicineViewHolder @AssistedInject constructor(
             ViewColorHelper.setDefaultColors(itemView, listOf(medicineNameView, remindersSummaryView))
         }
 
-        ViewColorHelper.setIconToImageView(itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId)
+        ViewColorHelper.setIconToImageView(medicineIcons, itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId)
 
         buildTags(medicine.tags)
     }

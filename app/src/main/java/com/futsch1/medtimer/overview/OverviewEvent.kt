@@ -1,32 +1,8 @@
 package com.futsch1.medtimer.overview
 
-import android.content.Context
 import android.text.Spanned
 import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.formatReminderEventString
-import com.futsch1.medtimer.helpers.formatScheduledReminderString
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import java.time.Instant
-
-
-enum class OverviewState {
-    PENDING,
-    RAISED,
-    TAKEN,
-    SKIPPED
-}
-
-
-enum class EventPosition {
-    FIRST,
-
-    @Suppress("unused")
-    MIDDLE,
-    LAST,
-    ONLY
-}
 
 
 abstract class OverviewEvent(val preferencesDataSource: PreferencesDataSource) {
@@ -60,63 +36,3 @@ abstract class OverviewEvent(val preferencesDataSource: PreferencesDataSource) {
     }
 }
 
-class OverviewReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val reminderEvent: ReminderEvent) :
-    OverviewEvent(preferencesDataSource) {
-    override val text: Spanned = formatReminderEventString(context, reminderEvent, preferencesDataSource)
-
-    override val id: Int
-        get() = reminderEvent.reminderEventId
-    override val timestamp: Long
-        get() = reminderEvent.remindedTimestamp
-    override val icon: Int
-        get() = reminderEvent.iconId
-    override val color: Int?
-        get() = if (reminderEvent.useColor) reminderEvent.color else null
-    override val state: OverviewState
-        get() = mapReminderEventState(reminderEvent)
-    override val reminderType: Reminder.ReminderType
-        get() = reminderEvent.reminderType
-    override val reminderId: Int
-        get() = reminderEvent.reminderId
-
-    private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
-        return when (reminderEvent.status) {
-            ReminderEvent.ReminderStatus.RAISED -> {
-                if (reminderEvent.remindedTimestamp <= Instant.now().toEpochMilli() / 1000) OverviewState.RAISED else OverviewState.PENDING
-            }
-
-            ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN
-            ReminderEvent.ReminderStatus.SKIPPED -> OverviewState.SKIPPED
-            ReminderEvent.ReminderStatus.ACKNOWLEDGED -> OverviewState.TAKEN
-            ReminderEvent.ReminderStatus.DELETED -> OverviewState.SKIPPED
-        }
-    }
-}
-
-class OverviewScheduledReminderEvent(context: Context, preferencesDataSource: PreferencesDataSource, val scheduledReminder: ScheduledReminder) :
-    OverviewEvent(preferencesDataSource) {
-    override val text: Spanned = formatScheduledReminderString(context, scheduledReminder, preferencesDataSource)
-    override val id: Int
-        get() = scheduledReminder.reminder.reminderId + 1_000_000
-
-    override val timestamp: Long
-        get() = scheduledReminder.timestamp.epochSecond
-    override val icon: Int
-        get() = scheduledReminder.medicine.medicine.iconId
-    override val color: Int?
-        get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
-    override val state: OverviewState
-        get() = OverviewState.PENDING
-    override val reminderType: Reminder.ReminderType
-        get() = scheduledReminder.reminder.reminderType
-    override val reminderId: Int
-        get() = scheduledReminder.reminder.reminderId
-}
-
-fun create(context: Context, preferencesDataSource: PreferencesDataSource, reminderEvent: ReminderEvent): OverviewEvent {
-    return OverviewReminderEvent(context, preferencesDataSource, reminderEvent)
-}
-
-fun create(context: Context, preferencesDataSource: PreferencesDataSource, scheduledReminder: ScheduledReminder): OverviewEvent {
-    return OverviewScheduledReminderEvent(context, preferencesDataSource, scheduledReminder)
-}

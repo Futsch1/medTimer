@@ -106,7 +106,7 @@ class MedicinesFragment : Fragment() {
 
         setupAddMedicineButton(fragmentView)
 
-        val medicinesMenu = MedicinesMenu(medicineViewModel)
+        val medicinesMenu = MedicinesMenu(medicineViewModel, medicineRepository)
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
 
         // Connect view model to recycler view adapter
@@ -134,7 +134,7 @@ class MedicinesFragment : Fragment() {
         DeleteHelper.deleteItem(
             context,
             R.string.are_you_sure_delete_medicine,
-            { lifecycleScope.launch { medicineViewModel.medicineRepository.deleteMedicine(itemId.toInt()) } },
+            { lifecycleScope.launch { medicineRepository.deleteMedicine(itemId.toInt()) } },
             { adapter.notifyItemChanged(adapterPosition) })
     }
 

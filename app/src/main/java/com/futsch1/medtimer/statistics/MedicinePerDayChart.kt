@@ -15,10 +15,14 @@ import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
 import com.androidplot.xy.XYSeries
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.helpers.TimeHelper.daysSinceEpochToDateString
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.dpToPx
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.R
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.DecimalFormat
 import java.text.FieldPosition
 import java.text.NumberFormat
@@ -27,11 +31,17 @@ import java.time.LocalDate
 import kotlin.math.ceil
 import kotlin.math.max
 
-class MedicinePerDayChart(
-    private val medicinesPerDayChart: XYPlot,
-    private val context: Context,
-    private val medicines: List<FullMedicine>
+class MedicinePerDayChart @AssistedInject constructor(
+    @Assisted private val medicinesPerDayChart: XYPlot,
+    @Assisted private val medicines: List<FullMedicine>,
+    @param:ApplicationContext private val context: Context,
+    private val timeFormatter: TimeFormatter
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(medicinesPerDayChart: XYPlot, medicines: List<FullMedicine>): MedicinePerDayChart
+    }
     private var colorIndex = 0
 
     companion object {
@@ -198,8 +208,8 @@ class MedicinePerDayChart(
     }
 
     private fun getDomainStepVal(numDomains: Long): Double {
-        return if (daysSinceEpochToDateString(
-                context, LocalDate.of(2024, 12, 31).toEpochDay()
+        return if (timeFormatter.daysSinceEpochToDateString(
+                LocalDate.of(2024, 12, 31).toEpochDay()
             ).length > 8
         ) {
             ceil((numDomains / 5.0f).toDouble())
@@ -235,7 +245,7 @@ class MedicinePerDayChart(
         override fun format(
             value: Double, buffer: StringBuffer, field: FieldPosition
         ): StringBuffer {
-            return buffer.append(daysSinceEpochToDateString(context, value.toLong()))
+            return buffer.append(timeFormatter.daysSinceEpochToDateString(value.toLong()))
         }
 
         override fun format(

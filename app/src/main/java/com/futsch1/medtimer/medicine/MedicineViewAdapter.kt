@@ -22,7 +22,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
     private val medicineViewHolderFactory: MedicineViewHolder.Factory,
-    @param:Dispatcher(MedTimerDispatchers.IO) val dispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) :
     IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 

@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
@@ -25,21 +24,6 @@ import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
 
-
-fun showDateEdit(activity: FragmentActivity, preference: Preference, datePickerDialogFactory: DatePickerDialogFactory) {
-    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
-
-    val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
-        TimeHelper.stringToLocalDate(activity, currentDateString)
-    } else {
-        LocalDate.now()
-    }
-
-    datePickerDialogFactory.create(currentDate) { daysSinceEpoch: Long ->
-        val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
-        preference.preferenceDataStore?.putString(preference.key, newDateString)
-    }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
-}
 
 @AndroidEntryPoint
 class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragment(
@@ -64,9 +48,6 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     mapOf(),
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
-    @Inject
-    override lateinit var medicineRepository: MedicineRepository
-
     @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
