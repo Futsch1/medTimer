@@ -35,6 +35,9 @@ class ChartsFragment : Fragment() {
     @Inject
     lateinit var medicinePerDayChartFactory: MedicinePerDayChart.Factory
 
+    @Inject
+    lateinit var statisticsProvider: StatisticsProvider
+
     private lateinit var takenSkippedChartView: PieChart
     private lateinit var takenSkippedTotalChartView: PieChart
     private lateinit var medicinesPerDayChartView: XYPlot
@@ -104,7 +107,7 @@ class ChartsFragment : Fragment() {
     }
 
     private suspend fun populateStatistics(days: Int) {
-        val statisticsProvider = StatisticsProvider(medicineRepository)
+        val statisticsProvider = this.statisticsProvider
         val medicinesPerDayChart = medicinesPerDayChart ?: return
         val takenSkippedChart = takenSkippedChart ?: return
         val takenSkippedTotalChart = takenSkippedTotalChart ?: return

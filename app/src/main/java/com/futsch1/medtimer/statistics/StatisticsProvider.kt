@@ -8,8 +8,9 @@ import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import javax.inject.Inject
 
-class StatisticsProvider(medicineRepository: MedicineRepository) {
+class StatisticsProvider @Inject constructor(medicineRepository: MedicineRepository) {
     companion object {
         private fun calculateDataEntries(
             days: Int,
