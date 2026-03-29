@@ -14,9 +14,9 @@ fun interface Scheduling {
 }
 
 abstract class SchedulingBase(
-    val reminder: Reminder,
-    val reminderEvents: List<ReminderEvent>,
-    val timeAccess: TimeAccess
+    protected val reminder: Reminder,
+    protected val reminderEvents: List<ReminderEvent>,
+    protected val timeAccess: TimeAccess
 ) : Scheduling {
     protected val systemZone = timeAccess.systemZone()
     protected val localDate = timeAccess.localDate()

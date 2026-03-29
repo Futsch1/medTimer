@@ -7,7 +7,7 @@ import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class EditIntervalDialog(context: Context, reminder: Reminder, val intervalUpdatedCallback: (Int) -> Unit) {
+class EditIntervalDialog(context: Context, reminder: Reminder, private val intervalUpdatedCallback: (Int) -> Unit) {
     private val dialog = MaterialAlertDialogBuilder(context)
         .setTitle(R.string.interval)
         .setPositiveButton(android.R.string.ok) { _, _ -> intervalUpdatedCallback(intervalEditor.getMinutes()) }

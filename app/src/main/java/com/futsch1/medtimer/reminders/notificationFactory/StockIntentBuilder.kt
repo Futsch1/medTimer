@@ -7,7 +7,7 @@ import com.futsch1.medtimer.reminders.getRefillActionIntent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
-class StockIntentBuilder(private val context: Context, val reminderNotification: ReminderNotification) {
+class StockIntentBuilder(private val context: Context, private val reminderNotification: ReminderNotification) {
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingAcknowledged = getAcknowledgedPendingIntent()

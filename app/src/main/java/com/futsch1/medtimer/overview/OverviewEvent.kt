@@ -5,7 +5,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 
 
-abstract class OverviewEvent(val preferencesDataSource: PreferencesDataSource) {
+abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataSource) {
     abstract val id: Int
     abstract val timestamp: Long
     abstract val text: Spanned

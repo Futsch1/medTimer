@@ -16,7 +16,7 @@ class WindowedIntervalScheduling(
         return adjustToPeriod(getNextScheduledTimeInternal())
     }
 
-    class Interval(reminder: Reminder, val date: LocalDate, val timeAccess: TimeAccess) {
+    class Interval(reminder: Reminder, private val date: LocalDate, private val timeAccess: TimeAccess) {
         val startInstant: Instant
         val endInstant: Instant
 

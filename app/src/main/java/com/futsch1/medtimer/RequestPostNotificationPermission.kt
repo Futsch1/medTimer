@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
-class RequestPostNotificationPermission(val activity: AppCompatActivity, val abortCallback: () -> Unit) {
+class RequestPostNotificationPermission(private val activity: AppCompatActivity, private val abortCallback: () -> Unit) {
     private val requestPermissionLauncher = activity.registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { result: Boolean ->

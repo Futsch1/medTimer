@@ -5,7 +5,7 @@ import android.text.TextWatcher
 import com.futsch1.medtimer.R
 import com.google.android.material.textfield.TextInputEditText
 
-class AmountTextWatcher(val textEditInputEditText: TextInputEditText) : TextWatcher {
+class AmountTextWatcher(private val textEditInputEditText: TextInputEditText) : TextWatcher {
     override fun beforeTextChanged(
         s: CharSequence?,
         start: Int,
