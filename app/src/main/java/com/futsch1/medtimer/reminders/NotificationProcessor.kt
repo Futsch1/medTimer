@@ -26,11 +26,11 @@ import javax.inject.Inject
 
  */
 class NotificationProcessor @Inject constructor(
-    val alarmProcessor: AlarmProcessor,
-    val notifications: Notifications,
-    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
-    val stockHandlingProcessor: StockHandlingProcessor,
-    val repeatProcessor: RepeatProcessor,
+    private val alarmProcessor: AlarmProcessor,
+    private val notifications: Notifications,
+    private val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
+    private val stockHandlingProcessor: StockHandlingProcessor,
+    private val repeatProcessor: RepeatProcessor,
     private val notificationManager: NotificationManager,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     private val medicineRepository: MedicineRepository,

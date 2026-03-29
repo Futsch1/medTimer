@@ -5,7 +5,7 @@ import com.futsch1.medtimer.R
 import javax.inject.Inject
 
 
-class LatestRemindersWidgetProvider @Inject constructor(val latestRemindersLineProvider: LatestRemindersLineProvider) : WidgetProvider() {
+class LatestRemindersWidgetProvider @Inject constructor(private val latestRemindersLineProvider: LatestRemindersLineProvider) : WidgetProvider() {
     override fun getWidgetImpl(context: Context): WidgetImpl {
         return WidgetImpl(
             context,
