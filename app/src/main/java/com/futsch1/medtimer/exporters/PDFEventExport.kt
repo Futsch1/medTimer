@@ -6,7 +6,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.wwdablu.soumya.simplypdf.composers.properties.TableProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.TextProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.cell.Cell
@@ -26,7 +26,8 @@ class PDFEventExport @AssistedInject constructor(
     @Assisted private val reminderEvents: List<ReminderEvent>,
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext private val context: Context,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val timeFormatter: TimeFormatter
 ) : Export(fragmentManager) {
 
     @AssistedFactory
@@ -58,7 +59,7 @@ class PDFEventExport @AssistedInject constructor(
             rows.add(row)
         }
 
-        simplyPdfDocument.text.write(TimeHelper.secondsSinceEpochToDateTimeString(context, Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(timeFormatter.secondsSinceEpochToDateTimeString(Clock.System.now().epochSeconds) + "\n", standardTextProperties)
         simplyPdfDocument.table.draw(rows, tableProperties)
 
         withContext(ioDispatcher) {
@@ -80,13 +81,12 @@ class PDFEventExport @AssistedInject constructor(
 
     private fun getCells(reminderEvent: ReminderEvent, textProperties: TextProperties, columnWidths: IntArray): LinkedList<Cell> {
         val row = LinkedList<Cell>()
-        row.add(TextCell(TimeHelper.secondsSinceEpochToDateTimeString(context, reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
+        row.add(TextCell(timeFormatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
         row.add(TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]))
         row.add(TextCell(reminderEvent.amount, textProperties, columnWidths[2]))
         row.add(
             TextCell(
-                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) TimeHelper.secondsSinceEpochToDateTimeString(
-                    context,
+                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
                     reminderEvent.processedTimestamp
                 ) else "", textProperties, columnWidths[3]
             )

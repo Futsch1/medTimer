@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.statistics
 
-import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
@@ -9,8 +8,9 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
@@ -19,8 +19,7 @@ import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -33,15 +32,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
-    @param:ApplicationContext
-    private val applicationContext: Context,
     private val medicineRepository: MedicineRepository,
     private val preferencesDataSource: PreferencesDataSource,
-    private val timeFormatter: TimeFormatter,
     private val reminderEventFactory: OverviewReminderEvent.Factory,
-    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory
+    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private var dispatcher = Dispatchers.IO
     private var reminderEvents: List<ReminderEvent> = listOf()
     private var allMedicines: List<FullMedicine> = listOf()
     private var medicine: Medicine? = null
@@ -62,7 +58,7 @@ class CalendarEventsViewModel @Inject constructor(
             .withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
         else 0
 
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
             allMedicines = medicineRepository.medicines
             if (medicineId > 0) {

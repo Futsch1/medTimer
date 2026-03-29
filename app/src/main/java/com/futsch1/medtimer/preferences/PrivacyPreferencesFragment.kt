@@ -5,8 +5,8 @@ import android.view.WindowManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.futsch1.medtimer.Biometrics
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.hasBiometrics
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.SECURE_WINDOW
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -39,7 +39,7 @@ class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
     private fun setupAppAuthentication() {
         val preference = preferenceScreen.findPreference<Preference>("app_authentication")
         if (preference != null) {
-            preference.isEnabled = Biometrics(this.requireActivity(), {}, {}).hasBiometrics()
+            preference.isEnabled = this.requireContext().hasBiometrics()
         }
     }
 

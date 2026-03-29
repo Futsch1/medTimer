@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
@@ -115,10 +114,6 @@ class TestReminderContext {
     val preferencesDataSourceMock: PreferencesDataSource = mock()
     val persistentDataDataSourceMock: PersistentDataDataSource = mock()
 
-    val stringList = mapOf(
-        R.string.high to "High",
-        R.string.default_ to "Default"
-    )
     var notificationId: Int = 1
     val localDate: LocalDate = LocalDate.ofEpochDay(0)
     var instant: Instant = Instant.ofEpochSecond(0)

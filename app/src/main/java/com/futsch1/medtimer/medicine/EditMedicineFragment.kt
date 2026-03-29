@@ -96,6 +96,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var medicineIcons: MedicineIcons
 
     @Inject
+    lateinit var linkedReminderAlgorithms: LinkedReminderAlgorithms
+
+    @Inject
     lateinit var medicineRepository: MedicineRepository
 
     private var entity: FullMedicine? = null
@@ -334,7 +337,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {
-        adapter.submitList(LinkedReminderAlgorithms().sortRemindersList(reminders))
+        adapter.submitList(linkedReminderAlgorithms.sortRemindersList(reminders))
     }
 
     private fun deleteItem(itemId: Long, adapterPosition: Int) {

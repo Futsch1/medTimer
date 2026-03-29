@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.di
 
 import android.content.Context
+import androidx.room.Room
 import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
+import com.futsch1.medtimer.database.MedicineRoomDatabase.Migration22To23
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +20,10 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideMedicineRoomDatabase(@ApplicationContext ctx: Context): MedicineRoomDatabase =
-        MedicineRoomDatabase.getDatabase(ctx)
+    fun provideMedicineRoomDatabase(@ApplicationContext context: Context): MedicineRoomDatabase =
+        Room.databaseBuilder(context, MedicineRoomDatabase::class.java, "medTimer")
+            .addMigrations(Migration22To23)
+            .build()
 
     @Provides
     fun provideMedicineDao(database: MedicineRoomDatabase): MedicineDao =

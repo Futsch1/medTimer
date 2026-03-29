@@ -8,8 +8,6 @@ class TagWithStateCollector(
 ) {
     private var allTags: Boolean = true
 
-    fun allTags(allTags: Boolean) = apply { this.allTags = allTags }
-
     var tags: List<Tag>? = null
         set(value) {
             field = value

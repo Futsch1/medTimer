@@ -58,6 +58,7 @@ class OptionsMenu @AssistedInject constructor(
     private val pdfEventExportFactory: PDFEventExport.Factory,
     private val csvEventExportFactory: CSVEventExport.Factory,
     private val medicineRepository: MedicineRepository,
+    private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
     val tagsFragmentFactory: TagsFragment.Factory
@@ -210,8 +211,7 @@ class OptionsMenu @AssistedInject constructor(
                 idlingResource.setBusy()
                 fragment.lifecycleScope.launch(ioDispatcher) {
                     medicineRepository.deleteAll()
-                    val generateTestData = GenerateTestData(medicineRepository, menuItem === itemWithEvents)
-                    generateTestData.generateTestMedicine()
+                    generateTestDataFactory.create(menuItem === itemWithEvents).generateTestMedicine()
                     requestScheduleNextNotification(context)
                     idlingResource.setIdle()
                 }

@@ -5,12 +5,24 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.Instant
 import java.time.LocalDate
 import java.time.Period
 import java.util.LinkedList
 
-class GenerateTestData(private val medicineRepository: MedicineRepository, val withEvents: Boolean) {
+class GenerateTestData @AssistedInject constructor(
+    private val medicineRepository: MedicineRepository,
+    @Assisted val withEvents: Boolean
+) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(withEvents: Boolean): GenerateTestData
+    }
+
     suspend fun generateTestMedicine() {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(

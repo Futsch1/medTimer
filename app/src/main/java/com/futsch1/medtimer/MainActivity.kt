@@ -31,7 +31,7 @@ import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.hasBiometrics
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
+    lateinit var biometricsFactory: Biometrics.Factory
+
+    @Inject
     lateinit var notificationManager: NotificationManager
 
     @Inject
@@ -94,8 +97,6 @@ class MainActivity : AppCompatActivity() {
 
         initialize(this, notificationManager)
 
-        TimeHelper.onChangedUseSystemLocale()
-
         lifecycleScope.launch {
             authenticate(preferencesDataSource)
         }
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun authenticate(preferencesDataSource: PreferencesDataSource) {
-        val biometrics = Biometrics(
+        val biometrics = biometricsFactory.create(
             this,
             {
                 lifecycleScope.launch {
@@ -121,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (preferencesDataSource.preferences.value.appAuthentication && biometrics.hasBiometrics()) {
+        if (preferencesDataSource.preferences.value.appAuthentication && this.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {

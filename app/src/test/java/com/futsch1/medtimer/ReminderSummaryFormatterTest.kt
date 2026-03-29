@@ -7,7 +7,6 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
@@ -53,10 +52,9 @@ class ReminderSummaryFormatterTest {
     @Before
     fun setUp() {
         hiltRule.inject()
-        TimeHelper.onChangedUseSystemLocale()
         mockMedicineRepository = mock()
         val app = RuntimeEnvironment.getApplication()
-        timeFormatter = TimeFormatter(app, mockPreferenceDataSource)
+        timeFormatter = TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.helpers.LocaleContextAccessor(app))
         formatter = ReminderSummaryFormatter(app, mockMedicineRepository, timeFormatter)
     }
 

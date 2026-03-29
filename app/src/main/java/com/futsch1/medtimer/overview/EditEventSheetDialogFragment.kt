@@ -16,7 +16,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -49,6 +49,9 @@ class EditEventSheetDialogFragment : DialogFragment() {
 
     @javax.inject.Inject
     lateinit var datePickerDialogFactory: DatePickerDialogFactory
+
+    @javax.inject.Inject
+    lateinit var timeFormatter: TimeFormatter
 
     companion object {
         fun newInstance(reminderEventId: Int): EditEventSheetDialogFragment {
@@ -160,7 +163,7 @@ class EditEventSheetDialogFragment : DialogFragment() {
         }
         editText.doAfterTextChanged { editable ->
             val text = editable?.toString() ?: return@doAfterTextChanged
-            val minutes = TimeHelper.timeStringToMinutes(requireContext(), text)
+            val minutes = timeFormatter.timeStringToMinutes(text)
             if (minutes >= 0 && minutes != getMinutes()) onTimePicked(minutes)
         }
     }
@@ -175,7 +178,7 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editText.visibility = View.VISIBLE
         editText.doAfterTextChanged { editable ->
             val text = editable?.toString() ?: return@doAfterTextChanged
-            val date = TimeHelper.stringToLocalDate(requireContext(), text)
+            val date = timeFormatter.stringToLocalDate(text)
             if (date != null && date != getDate()) onDatePicked(date)
         }
     }

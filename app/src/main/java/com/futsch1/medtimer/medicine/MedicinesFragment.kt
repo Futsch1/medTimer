@@ -51,6 +51,9 @@ class MedicinesFragment : Fragment() {
     @Inject
     lateinit var medicineRepository: MedicineRepository
 
+    @Inject
+    lateinit var medicinesMenu: MedicinesMenu
+
     private lateinit var idlingResource: SimpleIdlingResource
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
@@ -106,7 +109,6 @@ class MedicinesFragment : Fragment() {
 
         setupAddMedicineButton(fragmentView)
 
-        val medicinesMenu = MedicinesMenu(medicineViewModel, medicineRepository)
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
 
         // Connect view model to recycler view adapter

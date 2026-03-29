@@ -84,27 +84,3 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 }
 
-class LinkedReminderAlgorithms {
-    fun sortRemindersList(reminders: List<Reminder>): List<Reminder> {
-        return reminders.sortedBy { r -> getTotalTimeInMinutes(r, reminders) }
-    }
-
-    private fun getTotalTimeInMinutes(reminder: Reminder, reminders: List<Reminder>): Int {
-        var total = if (reminder.reminderType != Reminder.ReminderType.WINDOWED_INTERVAL) reminder.timeInMinutes else reminder.intervalStartTimeOfDay
-        for (r in reminders) {
-            if (r.reminderId == reminder.linkedReminderId) {
-                total += when (r.reminderType) {
-                    Reminder.ReminderType.LINKED -> {
-                        getTotalTimeInMinutes(r, reminders)
-                    }
-
-                    else -> {
-                        r.timeInMinutes
-                    }
-                }
-            }
-        }
-        return total
-    }
-
-}

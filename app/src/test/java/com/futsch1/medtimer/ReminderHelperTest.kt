@@ -33,10 +33,12 @@ class ReminderHelperTest {
     fun testFormatScheduledReminderString() {
         val contextMock = mock<Context>()
         val preferencesDataSourceMock = mock<PreferencesDataSource>()
-        val timeFormatterMock = mock<TimeFormatter>()
         Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
+        val localeContextAccessor = mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>()
+        Mockito.`when`(localeContextAccessor.getLocaleAwareContext()).thenReturn(contextMock)
+        val timeFormatter = TimeFormatter(contextMock, preferencesDataSourceMock, localeContextAccessor)
 
-        val formatter = ReminderStringFormatter(contextMock, preferencesDataSourceMock, timeFormatterMock)
+        val formatter = ReminderStringFormatter(contextMock, preferencesDataSourceMock, timeFormatter)
 
         val utc = TimeZone.getTimeZone("WET")
         val usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US)

@@ -6,8 +6,7 @@ import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper.getTableHeadersForEventExport
-import com.futsch1.medtimer.helpers.TimeHelper.minutesToDurationString
-import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToDateTimeString
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToISO8601DatetimeString
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -23,7 +22,8 @@ class CSVEventExport @AssistedInject constructor(
     @Assisted private val reminderEvents: List<ReminderEvent>,
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext private val context: Context,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val timeFormatter: TimeFormatter
 ) : Export(fragmentManager) {
 
     @AssistedFactory
@@ -41,18 +41,16 @@ class CSVEventExport @AssistedInject constructor(
                     for (reminderEvent in reminderEvents) {
                         val line = String.format(
                             "%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                            secondsSinceEpochToDateTimeString(
-                                context,
+                            timeFormatter.secondsSinceEpochToDateTimeString(
                                 reminderEvent.remindedTimestamp
                             ),
                             reminderEvent.medicineName,
                             reminderEvent.amount,
-                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToDateTimeString(
-                                context,
+                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
                                 reminderEvent.processedTimestamp
                             ) else "",
                             reminderEvent.tags.joinToString(", "),
-                            minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes.toLong()),
+                            timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes.toLong()),
                             reminderEvent.notes,
                             secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
                             if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(
