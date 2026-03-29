@@ -21,7 +21,7 @@ class ReminderSummaryFormatter @Inject constructor(
             return reminderSummary
         }
 
-        val time: String = timeFormatter.minutesToTimeString(reminder.timeInMinutes.toLong())
+        val time: String = timeFormatter.minutesToTimeString(reminder.timeInMinutes)
         return "$time, $reminderSummary"
     }
 
@@ -106,8 +106,8 @@ class ReminderSummaryFormatter @Inject constructor(
         return if (reminder.windowedInterval) {
             context.getString(
                 R.string.daily_from_to,
-                timeFormatter.minutesToTimeString(reminder.intervalStartTimeOfDay.toLong()),
-                timeFormatter.minutesToTimeString(reminder.intervalEndTimeOfDay.toLong())
+                timeFormatter.minutesToTimeString(reminder.intervalStartTimeOfDay),
+                timeFormatter.minutesToTimeString(reminder.intervalEndTimeOfDay)
             )
         } else {
             context.getString(
@@ -122,13 +122,13 @@ class ReminderSummaryFormatter @Inject constructor(
         var current = medicineRepository.getReminder(reminder.linkedReminderId) ?: return "?"
 
         while (current.reminderType == Reminder.ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes.toLong()))
+            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
             current = medicineRepository.getReminder(current.linkedReminderId) ?: return "?"
         }
 
         val base = context.getString(
             R.string.linked_reminder_summary,
-            timeFormatter.minutesToTimeString(current.timeInMinutes.toLong())
+            timeFormatter.minutesToTimeString(current.timeInMinutes)
         )
         return if (delays.isEmpty()) base
         else "$base + ${delays.reversed().joinToString(" + ")}"
@@ -139,12 +139,12 @@ class ReminderSummaryFormatter @Inject constructor(
         var current = reminder
 
         while (current.reminderType == Reminder.ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes.toLong()))
+            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
             val source = medicineRepository.getReminder(current.linkedReminderId) ?: return "?"
             current = source
         }
 
-        val base = timeFormatter.minutesToTimeString(current.timeInMinutes.toLong())
+        val base = timeFormatter.minutesToTimeString(current.timeInMinutes)
         return if (delays.isEmpty()) base
         else "$base + ${delays.reversed().joinToString(" + ")}"
     }
@@ -200,7 +200,7 @@ class ReminderSummaryFormatter @Inject constructor(
 
     private fun timeBasedRemindersSummary(reminders: List<Reminder>): List<String> {
         return reminders.map { r -> r.timeInMinutes }.sorted()
-            .map { timeFormatter.minutesToTimeString(it.toLong()) }
+            .map { timeFormatter.minutesToTimeString(it) }
     }
 
     private fun firstToLower(string: String): String {

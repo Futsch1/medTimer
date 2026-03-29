@@ -36,11 +36,9 @@ class TimeEditor @AssistedInject constructor(
 
     init {
         timeEdit.setText(
-            if (durationHintText == null)
-                timeFormatter.minutesToTimeString(
-                    initialTimeMinutesOfDay.toLong()
-                ) else
-                TimeHelper.minutesToDurationString(initialTimeMinutesOfDay.toLong())
+            if (durationHintText == null) timeFormatter.minutesToTimeString(initialTimeMinutesOfDay) else TimeHelper.minutesToDurationString(
+                initialTimeMinutesOfDay
+            )
         )
 
         timeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
@@ -63,7 +61,7 @@ class TimeEditor @AssistedInject constructor(
         }
         timePickerDialogFactory
             .create(startMinutes / 60, startMinutes % 60, durationHintText!!, TimeFormat.CLOCK_24H) { minutes: Int ->
-                val selectedTime = TimeHelper.minutesToDurationString(minutes.toLong())
+                val selectedTime = TimeHelper.minutesToDurationString(minutes)
                 timeEdit.setText(selectedTime)
                 timeChangedCallback(minutes)
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -79,7 +77,7 @@ class TimeEditor @AssistedInject constructor(
             startMinutes / 60, startMinutes % 60
         ) { minutes: Int ->
             val selectedTime =
-                timeFormatter.minutesToTimeString(minutes.toLong())
+                timeFormatter.minutesToTimeString(minutes)
             timeEdit.setText(selectedTime)
             timeChangedCallback(minutes)
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)

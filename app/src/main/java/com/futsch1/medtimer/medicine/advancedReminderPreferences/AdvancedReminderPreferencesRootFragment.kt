@@ -158,7 +158,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         if (currentTimeString != null) {
             val currentTime = timeFormatter.timeStringToMinutes(currentTimeString)
             timePickerDialogFactory.create(currentTime / 60, currentTime % 60) { minutes: Int ->
-                val newTimeString = timeFormatter.minutesToTimeString(minutes.toLong())
+                val newTimeString = timeFormatter.minutesToTimeString(minutes)
                 preference.preferenceDataStore?.putString(preference.key, newTimeString)
             }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
         }

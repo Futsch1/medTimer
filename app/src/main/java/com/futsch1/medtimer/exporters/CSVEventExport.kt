@@ -50,7 +50,7 @@ class CSVEventExport @AssistedInject constructor(
                                 reminderEvent.processedTimestamp
                             ) else "",
                             reminderEvent.tags.joinToString(", "),
-                            timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes.toLong()),
+                            timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
                             reminderEvent.notes,
                             secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
                             if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(

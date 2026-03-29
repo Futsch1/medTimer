@@ -16,7 +16,7 @@ object TimeHelper {
      * @return Time string in local format
      */
     @SuppressLint("DefaultLocale")
-    fun minutesToDurationString(minutes: Long): String {
+    fun minutesToDurationString(minutes: Int): String {
         return String.format("%d:%02d", minutes / 60, minutes % 60)
     }
 

@@ -46,7 +46,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
 
     fun getRemindTime(timeFormatter: TimeFormatter): String {
         val remindTime = getRemindedTime()
-        return timeFormatter.minutesToTimeString(remindTime.hour * 60L + remindTime.minute)
+        return timeFormatter.minutesToTimeString(remindTime.hour * 60 + remindTime.minute)
     }
 
     override fun toString(): String {

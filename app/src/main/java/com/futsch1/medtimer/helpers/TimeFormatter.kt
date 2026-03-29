@@ -34,26 +34,23 @@ class TimeFormatter @Inject constructor(
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
-    fun minutesToTimeString(minutes: Long): String {
+    fun minutesToTimeString(minutes: Int): String {
         try {
             val calendar = Calendar.getInstance()
             calendar.clear()
-            calendar.add(Calendar.MINUTE, minutes.toInt())
+            calendar.add(Calendar.MINUTE, minutes)
             return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(calendar.time)
         } catch (_: DateTimeException) {
             return minutesToDurationString(minutes)
         }
     }
 
-    fun minutesToTimeString(minutes: Int): String =
-        minutesToTimeString(minutes.toLong())
-
     /**
      * @param minutes Minutes since midnight
      * @return Time string in local format
      */
     @SuppressLint("DefaultLocale")
-    fun minutesToDurationString(minutes: Long): String {
+    fun minutesToDurationString(minutes: Int): String {
         return String.format("%d:%02d", minutes / 60, minutes % 60)
     }
 

@@ -81,8 +81,8 @@ class ReminderDataStore @AssistedInject constructor(
             "period_end_date" -> timeFormatter.daysSinceEpochToDateString(entity.periodEnd)
             "interval_start" -> if (entity.intervalStartsFromProcessed) "1" else "0"
             "interval_start_time" -> timeFormatter.secondsSinceEpochToDateTimeString(entity.intervalStart)
-            "interval_daily_start_time" -> timeFormatter.minutesToTimeString(entity.intervalStartTimeOfDay.toLong())
-            "interval_daily_end_time" -> timeFormatter.minutesToTimeString(entity.intervalEndTimeOfDay.toLong())
+            "interval_daily_start_time" -> timeFormatter.minutesToTimeString(entity.intervalStartTimeOfDay)
+            "interval_daily_end_time" -> timeFormatter.minutesToTimeString(entity.intervalEndTimeOfDay)
             "stock_threshold" -> MedicineHelper.formatAmount(entity.outOfStockThreshold, "")
             "stock_reminder" -> entity.outOfStockReminderType.ordinal.toString()
             "expiration_reminder" -> entity.expirationReminderType.ordinal.toString()
