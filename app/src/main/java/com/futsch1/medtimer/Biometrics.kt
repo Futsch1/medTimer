@@ -1,6 +1,7 @@
 package com.futsch1.medtimer
 
 import android.content.Context
+import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
@@ -42,53 +43,69 @@ class Biometrics @AssistedInject constructor(
 
     private val biometricManager = BiometricManager.from(context)
 
-    private val biometricPrompt: BiometricPrompt
+    // API 28-29 only supports BIOMETRIC_STRONG (with a negative button); DEVICE_CREDENTIAL
+    // as a standalone authenticator, and BIOMETRIC_STRONG | DEVICE_CREDENTIAL combined are
+    // only valid on API 30+.
+    private val biometricPromptInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(context.getString(R.string.login))
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+            .build()
+    } else {
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(context.getString(R.string.login))
+            .setAllowedAuthenticators(BIOMETRIC_STRONG)
+            .setNegativeButtonText(context.getString(android.R.string.cancel))
+            .build()
+    }
 
-    private val promptInfo: BiometricPrompt.PromptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle(context.getString(R.string.login))
-        .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-        .build()
+    private val deviceCredentialPromptInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle(context.getString(R.string.login))
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+            .build()
+    } else {
+        null
+    }
 
-    init {
-        biometricPrompt = BiometricPrompt(activity, context.mainExecutor, object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
+    private val biometricPrompt: BiometricPrompt = BiometricPrompt(activity, context.mainExecutor, object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            failureCallback()
+        }
+
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+
+            if (result.cryptoObject == null) {
+                Log.d(LogTags.BIOMETRICS, "Successfully authenticated with device credentials")
+                successCallback()
+                return
+            }
+
+            val resultCipher = result.cryptoObject?.cipher
+            if (resultCipher == null) {
+                Log.w(LogTags.BIOMETRICS, "Failed to authenticate with biometrics - no crypto object")
+                failureCallback()
+                return
+            }
+
+            try {
+                val testData = "medtimer_auth".toByteArray(Charsets.UTF_8)
+                resultCipher.doFinal(testData)
+                Log.d(LogTags.BIOMETRICS, "Successfully authenticated with biometrics")
+                successCallback()
+            } catch (e: Exception) {
+                Log.w(LogTags.BIOMETRICS, "Failed to authenticate with biometrics: $e")
                 failureCallback()
             }
+        }
 
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-
-                if (result.cryptoObject == null) {
-                    Log.d(LogTags.BIOMETRICS, "Successfully authenticated with device credentials")
-                    successCallback()
-                    return
-                }
-
-                val resultCipher = result.cryptoObject?.cipher
-                if (resultCipher == null) {
-                    Log.w(LogTags.BIOMETRICS, "Failed to authenticate with biometrics - no crypto object")
-                    failureCallback()
-                    return
-                }
-
-                try {
-                    val testData = "medtimer_auth".toByteArray(Charsets.UTF_8)
-                    resultCipher.doFinal(testData)
-                    Log.d(LogTags.BIOMETRICS, "Successfully authenticated with biometrics")
-                    successCallback()
-                } catch (e: Exception) {
-                    Log.w(LogTags.BIOMETRICS, "Failed to authenticate with biometrics: $e")
-                    failureCallback()
-                }
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                authenticate()
-            }
-        })
-    }
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            authenticate()
+        }
+    })
 
     private fun generateSecretKey() {
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
@@ -148,7 +165,7 @@ class Biometrics @AssistedInject constructor(
         val cryptoObject = generateCryptoObject(canUseStrong)
 
         if (cryptoObject != null) {
-            biometricPrompt.authenticate(promptInfo, cryptoObject)
+            biometricPrompt.authenticate(biometricPromptInfo, cryptoObject)
         } else {
             authenticateWithDeviceCredentials()
         }
@@ -174,6 +191,10 @@ class Biometrics @AssistedInject constructor(
 
     @SuppressWarnings("kotlin:S6293")
     private fun authenticateWithDeviceCredentials() {
-        biometricPrompt.authenticate(promptInfo)
+        if (deviceCredentialPromptInfo != null) {
+            biometricPrompt.authenticate(deviceCredentialPromptInfo)
+        } else {
+            failureCallback()
+        }
     }
 }
