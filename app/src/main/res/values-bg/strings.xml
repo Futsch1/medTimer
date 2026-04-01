@@ -160,6 +160,11 @@
         <item quantity="other">дни</item>
     </plurals>
     <string name="days_string">Дни</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Създаване на напомняне</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Начало на интервала</string>

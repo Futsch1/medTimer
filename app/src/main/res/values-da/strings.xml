@@ -156,6 +156,11 @@
         <item quantity="other">dage</item>
     </plurals>
     <string name="days_string">Dage</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Opret påmindelse</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval starttid</string>

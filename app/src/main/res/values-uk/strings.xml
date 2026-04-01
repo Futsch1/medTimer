@@ -144,9 +144,6 @@
     <string name="delete_re_raise_event">Ви хочете видалити цю подію і повторно підняти сповіщення?</string>
     <string name="time_based_reminder">Нагадування за розкладом</string>
     <string name="interval_based_reminder">Інтервальне нагадування</string>
-    <string name="minutes_string">Хвилини</string>
-    <string name="hours_string">Години</string>
-    <string name="days_string">Дні</string>
     <string name="create_reminder">Створити нагадування</string>
     <string name="interval">Інтервал</string>
     <string name="interval_start_time">Початок інтервалу</string>
@@ -172,6 +169,7 @@
         <item quantity="few">хвилини</item>
         <item quantity="many">хвилин</item>
     </plurals>
+    <string name="minutes_string">Хвилини</string>
     <plurals name="last_n_days">
         <item quantity="one" ns0:ignore="ImpliedQuantity">Останні 24 години</item>
         <item quantity="other">Останні %1$d дні</item>
@@ -184,12 +182,21 @@
         <item quantity="few">години</item>
         <item quantity="many">годин</item>
     </plurals>
+    <string name="hours_string">Години</string>
     <plurals name="days">
         <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
         <item quantity="other">дні</item>
         <item quantity="few">дні</item>
         <item quantity="many">днів</item>
     </plurals>
+    <string name="days_string">Дні</string>
+    <plurals name="months">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">???</item>
+        <item quantity="other">???</item>
+        <item quantity="few">???</item>
+        <item quantity="many">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="tags">Теги</string>
     <string name="add_tag">Додати тег</string>
     <string name="are_you_sure_delete_tag">Певні, що хочете видалити тег?</string>

@@ -147,15 +147,19 @@
     <plurals name="minutes">
         <item quantity="other">分钟</item>
     </plurals>
+    <string name="minutes_string">分钟</string>
     <plurals name="hours">
         <item quantity="other">小时</item>
     </plurals>
+    <string name="hours_string">小时</string>
     <plurals name="days">
         <item quantity="other">天</item>
     </plurals>
-    <string name="minutes_string">分钟</string>
-    <string name="hours_string">小时</string>
     <string name="days_string">天</string>
+    <plurals name="months">
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">创建提醒</string>
     <string name="interval">间隔</string>
     <string name="interval_start_time">间隔提醒起始时间</string>

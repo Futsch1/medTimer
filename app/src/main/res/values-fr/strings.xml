@@ -153,19 +153,25 @@
         <item quantity="other">minute</item>
         <item quantity="many">minutes</item>
     </plurals>
+    <string name="minutes_string">Minutes</string>
     <plurals name="hours">
         <item quantity="one" ns0:ignore="ImpliedQuantity">heure</item>
         <item quantity="other">heures</item>
         <item quantity="many">heures</item>
     </plurals>
+    <string name="hours_string">Heures</string>
     <plurals name="days">
         <item quantity="one" ns0:ignore="ImpliedQuantity">jour</item>
         <item quantity="other">jours</item>
         <item quantity="many">jours</item>
     </plurals>
-    <string name="minutes_string">Minutes</string>
-    <string name="hours_string">Heures</string>
     <string name="days_string">Jours</string>
+    <plurals name="months">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">???</item>
+        <item quantity="other">???</item>
+        <item quantity="many">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Créer un rappel</string>
     <string name="interval">Intervalle</string>
     <string name="interval_start_time">Heure de début de l\'intervalle</string>

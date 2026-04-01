@@ -164,6 +164,11 @@
         <item quantity="other">dagar</item>
     </plurals>
     <string name="days_string">Dagar</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Skapa påminnelse</string>
     <string name="interval">Intervall</string>
     <string name="interval_start_time">Starttid för intervall</string>

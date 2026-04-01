@@ -146,9 +146,6 @@
     <string name="delete_re_raise_event">இந்த நிகழ்வை நீக்கி அறிவிப்பை மீண்டும் உயர்த்த விரும்புகிறீர்களா?</string>
     <string name="time_based_reminder">நேர அடிப்படையிலான நினைவூட்டல்</string>
     <string name="interval_based_reminder">இடைவெளி அடிப்படையிலான நினைவூட்டல்</string>
-    <string name="minutes_string">Minutes</string>
-    <string name="hours_string">மணிகள்</string>
-    <string name="days_string">நாட்கள்</string>
     <string name="create_reminder">நினைவூட்டலை உருவாக்கவும்</string>
     <string name="interval">இடைவேளை</string>
     <string name="interval_start_time">இடைவெளி தொடக்க நேரம்</string>
@@ -172,14 +169,22 @@
         <item quantity="one">நிமிடம்</item>
         <item quantity="other">நிமிடங்கள்</item>
     </plurals>
+    <string name="minutes_string">Minutes</string>
     <plurals name="hours">
         <item quantity="one">மணிநேரம்</item>
         <item quantity="other">மணிநேரங்கள்</item>
     </plurals>
+    <string name="hours_string">மணிகள்</string>
     <plurals name="days">
         <item quantity="one">நாள்</item>
         <item quantity="other">நாட்கள்</item>
     </plurals>
+    <string name="days_string">நாட்கள்</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="tags">குறியீடுகள்</string>
     <string name="add_tag">குறியீட்டைச் சேர்</string>
     <string name="are_you_sure_delete_tag">குறியீட்டை நீக்க உறுதியாக இருக்கிறீர்களா?</string>
