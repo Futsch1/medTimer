@@ -166,6 +166,11 @@
         <item quantity="other">days</item>
     </plurals>
     <string name="days_string">Days</string>
+    <plurals name="months">
+        <item quantity="one">month</item>
+        <item quantity="other">months</item>
+    </plurals>
+    <string name="months_string">Months</string>
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>
