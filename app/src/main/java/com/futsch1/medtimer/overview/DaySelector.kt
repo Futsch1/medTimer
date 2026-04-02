@@ -21,19 +21,19 @@ import java.util.Locale
 class DaySelector(
     val context: Context,
     val calendarView: WeekCalendarView,
-    startDay: LocalDate,
+    var startDay: LocalDate,
     val daySelected: (LocalDate) -> Unit
 ) {
     private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
-    val startDate: LocalDate = LocalDate.now().minusDays(5)
-    val endDate: LocalDate = LocalDate.now().plusDays(1)
+    var rangeStartDay: LocalDate = LocalDate.now().minusDays(5)
+    var rangeEndDay: LocalDate = LocalDate.now().plusDays(1)
 
     init {
         setupDayBinder()
         calendarView.setup(
-            startDate,
-            endDate,
-            startDate.dayOfWeek
+            rangeStartDay,
+            rangeEndDay,
+            rangeStartDay.dayOfWeek
         )
     }
 
@@ -126,14 +126,29 @@ class DaySelector(
     }
 
     fun selectPreviousDay() {
-        if (currentDay.date.minusDays(1) >= startDate) {
+        if (currentDay.date.minusDays(1) >= rangeStartDay) {
             notifyDaySelected(WeekDay(currentDay.date.minusDays(1), WeekDayPosition.RangeDate))
         }
     }
 
     fun selectNextDay() {
-        if (currentDay.date.plusDays(1) <= endDate) {
+        if (currentDay.date.plusDays(1) <= rangeEndDay) {
             notifyDaySelected(WeekDay(currentDay.date.plusDays(1), WeekDayPosition.RangeDate))
+        }
+    }
+
+    fun updateWeekRange() {
+        // Check if the day selector is still matching the present day, potentially resetting the day selection if a day has passed since
+        if (rangeStartDay != LocalDate.now().minusDays(5)) {
+            startDay = LocalDate.now()
+            rangeStartDay = startDay.minusDays(5)
+            rangeEndDay = startDay.plusDays(1)
+            calendarView.setup(
+                rangeStartDay,
+                rangeEndDay,
+                rangeStartDay.dayOfWeek
+            )
+            notifyDaySelected(WeekDay(startDay, WeekDayPosition.RangeDate))
         }
     }
 }
