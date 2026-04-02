@@ -2,10 +2,14 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.di.DatabaseModule
+import com.futsch1.medtimer.di.DatastoreModule
+import com.futsch1.medtimer.di.TimeAccessModule
 import com.futsch1.medtimer.reminders.RepeatProcessor
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -25,7 +29,11 @@ import kotlin.time.Duration.Companion.seconds
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
-@dagger.hilt.android.testing.UninstallModules(com.futsch1.medtimer.di.DatabaseModule::class, com.futsch1.medtimer.di.DatastoreModule::class, com.futsch1.medtimer.di.TimeAccessModule::class)
+@UninstallModules(
+    DatabaseModule::class,
+    DatastoreModule::class,
+    TimeAccessModule::class
+)
 class RepeatProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)

@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.LogTags.ALARM
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder
@@ -35,10 +37,10 @@ class AlarmFragment(
     lateinit var reminderNotificationFactory: ReminderNotificationFactory
 
     @Inject
-    lateinit var preferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource
+    lateinit var preferencesDataSource: PreferencesDataSource
 
     @Inject
-    lateinit var timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
+    lateinit var timeFormatter: TimeFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

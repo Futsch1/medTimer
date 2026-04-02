@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -114,7 +115,7 @@ class ReminderNotificationProcessor @Inject constructor(
             medicine: FullMedicine,
             reminder: Reminder,
             medicineRepository: MedicineRepository,
-            timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
+            timeFormatter: TimeFormatter
         ): ReminderEvent {
             val reminderEvent = ReminderEvent()
             reminderEvent.reminderId = reminder.reminderId

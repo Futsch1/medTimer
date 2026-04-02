@@ -75,7 +75,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         preference =
             preferenceScreen.findPreference(OVERRIDE_DND)
         preference?.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, value: Any? ->
+            Preference.OnPreferenceChangeListener { _, value ->
                 if (true == value) {
                     showDndPermissions()
                 }
@@ -103,7 +103,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             preferenceScreen.findPreference<Preference?>(EXACT_REMINDERS) ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             preference.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _, newValue: Any? ->
+                Preference.OnPreferenceChangeListener { _, newValue ->
                     if (true == newValue) {
                         showExactReminderDialog()
                     }

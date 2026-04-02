@@ -20,10 +20,8 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
-import com.futsch1.medtimer.di.TimeFormatterEntryPoint
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import dagger.hilt.android.EntryPointAccessors
 import junit.framework.TestCase
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
@@ -38,15 +36,8 @@ import java.util.concurrent.atomic.AtomicReference
 
 
 class ReminderTest : BaseTestHelper() {
-
-    private fun timeFormatter(): com.futsch1.medtimer.helpers.TimeFormatter {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-        return EntryPointAccessors.fromApplication(context, TimeFormatterEntryPoint::class.java).timeFormatter()
-    }
-
     @Test
     @AllowFlaky(attempts = 3)
-
     fun activeReminderTest() {
         val futureTime = Calendar.getInstance()
         val year = futureTime.get(Calendar.YEAR)
@@ -290,8 +281,6 @@ class ReminderTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun editReminderTest() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         AndroidTestHelper.createMedicine("Test")
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)

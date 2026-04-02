@@ -22,12 +22,10 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
-import com.futsch1.medtimer.di.TimeFormatterEntryPoint
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.futsch1.medtimer.utilities.openNotification
-import dagger.hilt.android.EntryPointAccessors
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.time.LocalDate
@@ -35,12 +33,6 @@ import java.time.LocalTime
 import java.util.Calendar
 
 class MedicineStockTest : BaseTestHelper() {
-
-    private fun timeFormatter(): com.futsch1.medtimer.helpers.TimeFormatter {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-        return EntryPointAccessors.fromApplication(context, TimeFormatterEntryPoint::class.java).timeFormatter()
-    }
-
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineStockTest() {

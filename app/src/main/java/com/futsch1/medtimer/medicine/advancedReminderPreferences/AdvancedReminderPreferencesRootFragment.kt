@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
@@ -60,7 +61,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     lateinit var reminderSummaryFormatter: ReminderSummaryFormatter
 
     @Inject
-    lateinit var timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
+    lateinit var timeFormatter: TimeFormatter
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(

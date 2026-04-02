@@ -26,7 +26,7 @@ class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
         val preference = preferenceScreen.findPreference<SwitchPreferenceCompat>(SECURE_WINDOW)
         if (preference != null) {
             preference.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any ->
+                Preference.OnPreferenceChangeListener { _, newValue ->
                     requireActivity().window.setFlags(
                         if (java.lang.Boolean.TRUE == newValue) WindowManager.LayoutParams.FLAG_SECURE else 0,
                         WindowManager.LayoutParams.FLAG_SECURE

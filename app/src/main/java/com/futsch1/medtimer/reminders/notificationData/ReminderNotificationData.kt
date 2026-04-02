@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationData
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.ActivityCodes
@@ -46,7 +47,7 @@ class ReminderNotificationData(
         )
     }
 
-    fun getPendingIntent(context: android.content.Context): PendingIntent {
+    fun getPendingIntent(context: Context): PendingIntent {
         val reminderIntent = getReminderAction(context)
         toIntent(reminderIntent)
         return PendingIntent.getBroadcast(context, reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
