@@ -92,6 +92,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         return fragmentOverview
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Check if the day selector is still matching the present day, potentially resetting the day selection
+        daySelector.updateWeekRange()
+    }
+
     inner class OverviewOnSwipeListener : OnSwipeListener {
         override fun onSwipeLeft() {
             daySelector.selectNextDay()
@@ -142,7 +148,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
             val handler = Handler(thread.getLooper())
-            // Run the setup of the drop down in a separate thread to access the database
+            // Run the setup of the drop-down in a separate thread to access the database
             handler.post {
                 ManualDose(requireContext(), medicineViewModel, this.requireActivity(), overviewViewModel.day).logManualDose()
             }
