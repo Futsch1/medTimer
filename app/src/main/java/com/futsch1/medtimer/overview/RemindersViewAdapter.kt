@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.overview.actions.ActionsFactory
+import com.futsch1.medtimer.overview.model.OverviewEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

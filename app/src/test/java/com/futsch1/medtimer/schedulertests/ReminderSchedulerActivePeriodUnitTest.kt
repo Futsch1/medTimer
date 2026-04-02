@@ -3,7 +3,7 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.LocalDate

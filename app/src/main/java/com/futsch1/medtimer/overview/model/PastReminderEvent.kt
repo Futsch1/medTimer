@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
 import com.futsch1.medtimer.database.ReminderEntity
@@ -10,7 +10,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import java.time.Instant
 
-class OverviewReminderEvent @AssistedInject constructor(
+class PastReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     @Assisted val reminderEvent: ReminderEventEntity
@@ -19,7 +19,7 @@ class OverviewReminderEvent @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(reminderEvent: ReminderEventEntity): OverviewReminderEvent
+        fun create(reminderEvent: ReminderEventEntity): PastReminderEvent
     }
 
     override val text: Spanned = reminderStringFormatter.formatReminderEvent(reminderEvent)

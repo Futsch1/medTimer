@@ -13,7 +13,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject

@@ -7,7 +7,7 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import javax.inject.Inject

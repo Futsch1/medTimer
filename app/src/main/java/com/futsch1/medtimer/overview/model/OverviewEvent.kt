@@ -1,9 +1,8 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-
 
 abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataSource) {
     abstract val id: Int
@@ -35,4 +34,3 @@ abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataS
         return result
     }
 }
-

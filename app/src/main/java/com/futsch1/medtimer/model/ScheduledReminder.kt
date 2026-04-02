@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.reminders.scheduling
+package com.futsch1.medtimer.model
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity

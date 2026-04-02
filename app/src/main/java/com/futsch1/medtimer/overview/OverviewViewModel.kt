@@ -5,7 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.overview.model.EventPosition
+import com.futsch1.medtimer.overview.model.OverviewEvent
+import com.futsch1.medtimer.overview.model.PastReminderEvent
+import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -26,8 +30,8 @@ import java.time.LocalDate
 @HiltViewModel(assistedFactory = OverviewViewModel.Factory::class)
 class OverviewViewModel @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
-    private val reminderEventFactory: OverviewReminderEvent.Factory,
-    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
+    private val reminderEventFactory: PastReminderEvent.Factory,
+    private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
     @Assisted private val reminderEvents: Flow<List<ReminderEventEntity>>,
     @Assisted private val scheduledReminders: SharedFlow<List<ScheduledReminder>>
 ) : ViewModel() {

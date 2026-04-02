@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import javax.inject.Inject
 
 class ScheduleNextReminderNotificationProcessor @Inject constructor(

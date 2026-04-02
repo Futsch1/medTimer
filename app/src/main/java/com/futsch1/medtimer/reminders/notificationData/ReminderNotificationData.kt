@@ -7,7 +7,7 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.database.ReminderEventEntity
 
 import com.futsch1.medtimer.reminders.getReminderAction
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import java.time.Instant
 
 class ReminderNotificationData(

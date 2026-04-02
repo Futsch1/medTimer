@@ -12,11 +12,11 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
-import com.futsch1.medtimer.overview.OverviewReminderEvent
-import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.model.PastReminderEvent
+import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,8 +34,8 @@ import javax.inject.Inject
 class CalendarEventsViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val preferencesDataSource: PreferencesDataSource,
-    private val reminderEventFactory: OverviewReminderEvent.Factory,
-    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
+    private val reminderEventFactory: PastReminderEvent.Factory,
+    private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var reminderEvents: List<ReminderEventEntity> = listOf()

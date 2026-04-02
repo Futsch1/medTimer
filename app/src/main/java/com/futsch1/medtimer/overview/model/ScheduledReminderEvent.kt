@@ -1,15 +1,15 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-class OverviewScheduledReminderEvent @AssistedInject constructor(
+class ScheduledReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     @Assisted val scheduledReminder: ScheduledReminder
@@ -18,7 +18,7 @@ class OverviewScheduledReminderEvent @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(scheduledReminder: ScheduledReminder): OverviewScheduledReminderEvent
+        fun create(scheduledReminder: ScheduledReminder): ScheduledReminderEvent
     }
 
     override val text: Spanned = reminderStringFormatter.formatScheduledReminder(scheduledReminder)

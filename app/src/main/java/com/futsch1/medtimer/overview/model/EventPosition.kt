@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 enum class EventPosition {
     FIRST,

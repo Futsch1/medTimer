@@ -21,6 +21,10 @@ import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.Actions
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.Button
+import com.futsch1.medtimer.overview.model.EventPosition
+import com.futsch1.medtimer.overview.model.OverviewEvent
+import com.futsch1.medtimer.overview.model.OverviewState
+import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -83,7 +87,7 @@ class ReminderViewHolder(
                 ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
             stateButton.backgroundTintList = contentContainer.backgroundTintList
         } else {
-            if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.color != null) {
+            if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.color != null) {
                 contentContainer.backgroundTintList =
                     ColorStateList.valueOf(0x20000000)
                 contentContainer.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
@@ -98,9 +102,9 @@ class ReminderViewHolder(
     private fun setupEditEvent() {
         this.contentContainer.setOnClickListener {
             if (!clickDelegate.onItemClick(layoutPosition)) {
-                if (event is OverviewReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
+                if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
                     EditEventSheetDialogFragment.newInstance(
-                        (event as OverviewReminderEvent).reminderEvent.reminderEventId
+                        (event as PastReminderEvent).reminderEvent.reminderEventId
                     ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")
                 } else {
                     ShowMedicineSheetDialogFragment.newInstance(event.reminderId)

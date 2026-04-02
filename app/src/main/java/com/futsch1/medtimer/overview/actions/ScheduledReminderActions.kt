@@ -4,10 +4,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import com.futsch1.medtimer.model.ScheduledReminder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.time.ZoneId
 
 class ScheduledReminderActions @AssistedInject constructor(
-    @Assisted val event: OverviewScheduledReminderEvent,
+    @Assisted val event: ScheduledReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderEventCreator: ReminderEventCreator,
     private val timePickerDialogFactory: TimePickerDialogFactory
@@ -23,7 +23,7 @@ class ScheduledReminderActions @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(event: OverviewScheduledReminderEvent, fragmentActivity: FragmentActivity): ScheduledReminderActions
+        fun create(event: ScheduledReminderEvent, fragmentActivity: FragmentActivity): ScheduledReminderActions
     }
 
     private val isStockEvent = event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder

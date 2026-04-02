@@ -8,8 +8,8 @@ import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.overview.OverviewReminderEvent
-import com.futsch1.medtimer.overview.OverviewState
+import com.futsch1.medtimer.overview.model.OverviewState
+import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.assisted.Assisted
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ReminderEventActions @AssistedInject constructor(
-    @Assisted val event: OverviewReminderEvent,
+    @Assisted val event: PastReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
     private val timePickerDialogFactory: TimePickerDialogFactory
@@ -29,7 +29,7 @@ class ReminderEventActions @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(event: OverviewReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
+        fun create(event: PastReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
     }
 
     private val isStockEvent = event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder
